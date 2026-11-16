@@ -1,8 +1,8 @@
 ---
 name: adk-interface-contract-design
 description: "用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。"
-version: 1.3.6
-last_updated: 2026-11-15
+version: 1.3.7
+last_updated: 2026-11-16
 triggers:
   - "设计接口"
   - "API设计"
@@ -36,19 +36,7 @@ constraints:
 
 ## Workflow
 1. **接口清单**：请求、响应、错误码、幂等与异常的最小契约；C 示例按需读取 `references/details.md`。
-2. **版本协商机制**：接口版本兼容性自动检测。
-   ```c
-   /* 版本协商 */
-   #define IFACE_VERSION_MAJOR  2
-   #define IFACE_VERSION_MINOR  1
-   #define IFACE_VERSION_MAKE(maj, min) (((maj) << 8) | (min))
-   #define IFACE_VERSION_CUR    IFACE_VERSION_MAKE(2, 1)
-
-   bool iface_version_compatible(uint16_t remote_ver) {
-       uint8_t remote_major = remote_ver >> 8;
-       return (remote_major == IFACE_VERSION_MAJOR);
-   }
-   ```
+2. **版本与能力协商**：声明消费者最低需求、提供方兼容方向及支持窗口；同 major 不保证具备新能力，版本号不证明 wire/ABI 兼容。明确增量策略的 C 例子见 `references/details.md`。
 3. **错误码设计规范**：统一错误码空间，避免冲突。
    ```bash
    # 检查错误码定义一致性
@@ -57,36 +45,24 @@ constraints:
    rg --no-filename -o "= -[0-9]+" include/ | sort | uniq -d
    ```
    仅覆盖该负十进制写法；宏/表达式/别名/其他进制另核。同一命名空间才判断冲突；零候选不证明无冲突。
-4. **约束异常行为**：超时、限流、重试、降级必须来自目标协议、真实链路/设备预算与可证伪实验；不可把示例 1000ms/3 次重试当通用生产默认值。
-5. **受控生命周期契约（条件性）**：若操作跨越状态或独占资源，冻结 owner、状态、事件、资源、终止和 invariant；其中必须覆盖可见性、取消、超时、恢复、迟到完成与 generation/op-id 隔离。详见 [生命周期操作契约](references/lifecycle-operation-contract.md)。
-6. **工具与 handoff 副作用边界（条件性）**：按调用参数和目标身份在写入前授权；拒绝、未知结果和重放按 [工具与 handoff 副作用契约](references/tool-effect-contract.md) 处理。
-7. **结构化输出契约**：API、消息、工具或 handoff schema 必须记录 required fields、enum、additionalProperties=false、refusal handling 和 parse-failure 处理。
-8. **生成契约用例**：正常、边界、异常三类样例，给出项目真实构建/测试入口及可证伪断言；不输出伪造的编译命令。
-9. **双方案设计**：对风险较高或长期公共接口设计，至少比较两种合理的模块边界、外部可见约束、演进成本与验证 seam；只有一条路径可行时解释约束。
-10. **领域语义挑战**：对术语、状态和边界值用真实反例验证；仅在术语/决策发生变化时更新既有 glossary/ADR，不为模板新建文件。
-11. **Spec-to-Code 双向核对（有实现或修改现有协议时）**：按需读 `references/spec-code-bidirectional.md`，分别验证规格要求是否有实现、代码可观察行为是否有规格依据；未检查与未知不得计为通过。纯设计阶段只标待验证，不假定实现已存在。
-
-需要深模块比较或一次性原型验证时按需读取 `references/design-quality-methods.md`；接口范例仍按需读取 `references/details.md`。
+4. **异常预算**：超时、限流、重试、降级来自目标协议、链路/设备预算与可证伪实验，不采用通用固定值。
+5. **受控生命周期契约**：跨状态/独占资源操作明确唯一 owner、状态/事件/资源/终止/invariant，可见性、取消、超时、恢复、迟到完成与 generation/op-id 隔离；按需读 `references/lifecycle-operation-contract.md`。
+6. **副作用**：按参数和目标在写前授权；拒绝、未知结果、重放对账见 `references/tool-effect-contract.md`。
+7. **结构化输出**：机器消费的 API/消息/tool/handoff schema 声明 required fields、enum、additionalProperties=false、refusal handling 与 parse-failure。
+8. **契约用例**：至少含正常/边界/异常三类断言与真实构建/测试入口；覆盖最低版本、缺必需能力和跨 major，不虚构命令。
+9. **设计挑战**：高风险/长期公共接口比较两种模块边界、可见约束、演进成本与验证 seam；仅一条路径时说明限制。用反例固定术语/状态/边界，仅变化时更新既有 glossary/ADR。深模块/原型按需读 `references/design-quality-methods.md`。
+10. **Spec-to-Code 双向核对**：有实现时按 `references/spec-code-bidirectional.md` 核规格→实现及可观察行为→规格；未查/未知标 `not-checked`，纯设计标待验证。
 
 ## Quality Gate
-- 契约必须包含输入/输出/错误码/超时语义。
-- 词义冲突时用反例固定术语；深模块应隐藏可变复杂度，不建重复词汇/ADR。
-- 机器消费契约必须包含 strict schema、required fields、enum 和 refusal/parse-failure handling。
-- 必须给出版本兼容与迁移方案。
-- 必须附至少 3 条验证用例（正常/边界/异常）；若已存在实现，关键需求与未声明代码行为须有双向核对状态，缺证据标 `not-checked`。
-- 嵌入式接口必须验证结构体大小与对齐（`pahole` 或 `sizeof` 断言）。
-- 错误码必须覆盖所有可恢复与不可恢复场景。
-- 受控生命周期操作必须给出 owner × state × event × resource × termination × invariant 矩阵，并明确 generation/op-id、幂等、重试预算与 callback/cleanup 并发边界；缺失时不得进入实现或给出设计通过结论。
-- 有副作用的工具或 handoff 必须有授权点、目标绑定、拒绝和重放对账路径；审批不等于生效。
-
----
-
+- 契约含输入/输出/错误码/超时、兼容迁移和上述 schema/用例；错误码覆盖可恢复与不可恢复场景。
+- 嵌入式验证结构体大小/对齐（`pahole` 或 `sizeof` 断言）。
+- 受控操作给出 owner × state × event × resource × termination × invariant 矩阵，明确 generation/op-id、幂等、重试预算、callback/cleanup 并发；缺失不得实现或判通过。副作用须有目标绑定和对账路径，审批不等于生效。
 
 ## Failure Handling
 - 若调用方未确认兼容策略，结论置为 `needs-fix`。
 - 若错误语义不一致，先冻结接口变更并回到设计讨论。
 - 若 ABI 与线协议对齐冲突，优先区分内存表示与显式序列化，验证 `sizeof`/`offsetof`、目标架构非对齐访问和字节序；`packed` 不作为默认修复。
-- 若版本协商失败，回退到最低公共版本并记录兼容降级。
+- 降级只选择双方明确支持且满足必需语义/能力/安全约束的交集，并记录依据；无交集或证据不明则拒绝，不能自动回退到“最低公共版本”。
 
 
 ## Evidence Template
@@ -103,11 +79,4 @@ risks:
 - <remaining risk or none>
 ```
 
-## References
-- 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
-
-## 合理化借口拦截
-
-- “先实现再补状态语义”不成立：状态、owner 或终止语义不明时先冻结契约。
-- “回调最终会完成”不成立：超时、取消和迟到完成必须有可验证处理。
+状态/owner/终止不明时先冻结契约；“回调最终会完成”不能替代超时、取消和迟到完成验证。

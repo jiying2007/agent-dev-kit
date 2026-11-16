@@ -305,7 +305,7 @@ class SkillTriggerMatrixTests(unittest.TestCase):
 
         content = (ROOT / "skills/adk-repo-drift-remediation/SKILL.md").read_text(encoding="utf-8")
         commands = content.split("## Commands", 1)[1].split("## Evidence Template", 1)[0]
-        paths = re.findall(r"\brtk bash (scripts/[A-Za-z0-9_-]+\.sh)\b", commands)
+        paths = re.findall(r"(?m)^(?:rtk )?bash (scripts/[A-Za-z0-9_-]+\.sh)\b", commands)
         self.assertTrue(paths)
         for relative in paths:
             with self.subTest(script=relative):

@@ -3,11 +3,11 @@
 ## Snapshot commands
 
 ```bash
-rtk git rev-parse HEAD
-rtk git status --short
-rtk git diff --check
-rtk git diff --cached
-rtk git diff --check --cached
+git rev-parse HEAD
+git status --short
+git diff --check
+git diff --cached
+git diff --check --cached
 <project-lint-cmd> && <project-test-cmd>
 ```
 

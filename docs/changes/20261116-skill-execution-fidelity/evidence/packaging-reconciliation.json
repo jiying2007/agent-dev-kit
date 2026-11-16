@@ -1,0 +1,21 @@
+{
+  "schema": "adk-evidence-packaging-reconciliation/v1",
+  "recorded_at": "2026-11-16T00:23:57.561477Z",
+  "previous_input_index_sha256": "84ee017dd4044fe0dc9b393a41615c9169a3cca93e69baf4e6ce9109715d0bcf",
+  "change": "Lossless JSON wrapping of two whitespace-bearing raw RED logs; audit EOF blank line removed; no runtime source changes. Original logs and previous index remain in scratch.",
+  "verbatim_output_checks": [
+    {
+      "original_file": "matcher-red.log",
+      "container_file": "matcher-red.json",
+      "raw_sha256": "4ae29b3bf2665b3150089459453417799872433ec9493bba2e9768cbb74acd09",
+      "decoded_bytes_equal_original": true
+    },
+    {
+      "original_file": "matcher-identity-red.log",
+      "container_file": "matcher-identity-red.json",
+      "raw_sha256": "06777be68fcc16e9dc7b7456718340c0e7a246658d9b010a7d9d67ce182e1d9c",
+      "decoded_bytes_equal_original": true
+    }
+  ],
+  "gate": "git diff --cached --check required; no gate or attributes changed"
+}

@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.4",
+    "planned_release": "v11.3.5",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.4",
+      "merged_main_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "model_runs": 0,
+      "reason": "This author-exposed campaign remained unexecuted. The successor repairs source routing, portable commands and task-trial controls; local synthetic comparator timing and isolated conversational observations do not populate this campaign or qualify its holdout."
+    },
     {
       "planned_release": "v11.3.2",
       "merged_main_sha": "1282c78b145afca670cf8e5733d80bd3c61f5cfb",

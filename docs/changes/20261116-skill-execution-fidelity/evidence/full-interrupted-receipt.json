@@ -1,0 +1,18 @@
+{
+  "schema": "adk-local-interruption/v1",
+  "source_commit": "4f9346e488a37926df560fa39ad8a275873e6c21",
+  "command": [
+    "bash",
+    "tests/run_all.sh",
+    "--fail-fast",
+    "--timing-json",
+    "/workspace/scratch/2d6ca6dc3d38/audit-repros/full-timing.json"
+  ],
+  "observed_exit_code": 130,
+  "reason": "Stopped explicitly after independent review found Markdown/sigil identity-refusal bypass; source had not yet been edited. Incomplete run is not a full-suite pass.",
+  "recorded_at": "2026-11-16T00:12:00.090356Z",
+  "completed_pass_groups": 27,
+  "completed_fail_groups": 0,
+  "log_sha256": "d015845dfa254363fcab37c367a7e096a302790a2da485985db43dbd8682b8bf",
+  "timing_file_present": false
+}

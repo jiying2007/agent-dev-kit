@@ -42,13 +42,13 @@
 ## Snapshot Commands
 
 ```bash
-rtk git status --short
-rtk git rev-parse HEAD
-rtk git write-tree
-rtk git diff --stat
-rtk git diff --name-only
-rtk git diff -- <path>
-rtk git diff --cached --check
+git status --short
+git rev-parse HEAD
+git write-tree
+git diff --stat
+git diff --name-only
+git diff -- <path>
+git diff --cached --check
 <project-test-command>
 ```
 

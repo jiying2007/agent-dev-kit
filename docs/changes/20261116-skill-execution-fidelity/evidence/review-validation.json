@@ -1,0 +1,19 @@
+{
+  "validated_at": "2026-11-16T00:27:41.179663Z",
+  "validator": "agent_dev_kit.review_evidence.validate_review",
+  "status": "pass",
+  "record_sha256": "d464f81b6336ca19bcca2d2d3f9a74ec2574646e22ab61733b65fa072e4947b1",
+  "review_scope": "source-change",
+  "target": {
+    "base_commit": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+    "head_commit": "016d673331ef458ac94f72d08ec67537a000cc4b",
+    "original_patch_sha256": "2bc36b772f686958d9f5819377b9f3b4fd83a3e34989c77fee3e2b09cd4daad9"
+  },
+  "reviewed_at": "2026-11-16T00:26:16Z",
+  "evidence_completed_at": "2026-11-16T00:24:48.320519Z",
+  "source_references": 45,
+  "evidence_references": 15,
+  "human_review_performed": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false
+}

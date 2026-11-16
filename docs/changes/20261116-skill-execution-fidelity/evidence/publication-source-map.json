@@ -1,0 +1,30 @@
+{
+  "schema": "adk-publication-source-reconciliation/v1",
+  "recorded_at_utc": "2026-11-16 00:38:55 UTC",
+  "repository": "jiying2007/agent-dev-kit",
+  "base_commit": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+  "reviewed_source_commit": "016d673331ef458ac94f72d08ec67537a000cc4b",
+  "reviewed_source_tree": "5303d7fe381ffcbfc9ab83004a0b1157c24718f3",
+  "local_delivery_commit": "63e8f61ad9a023b4349851ebb4c9a6eca042a119",
+  "local_delivery_tree": "46070d6ce1a72bfd7a117bbac34a51c42cb1e167",
+  "connector_mirror_commit": "fad7ee69edf1d21d7a8e734aa6b08e33f10623ea",
+  "connector_mirror_tree": "46070d6ce1a72bfd7a117bbac34a51c42cb1e167",
+  "exact_tree_match": true,
+  "transport_reason": "Git CLI lacked authenticated transport. The connected GitHub Git Data API published the exact already-reviewed file tree under a new commit identity; original execution and review identities were not rewritten.",
+  "original_history": {
+    "path": "docs/changes/20261116-skill-execution-fidelity/evidence/source-history.bundle",
+    "git_blob": "123b297e3e39608571145d81bf8a0a9c3d87baef",
+    "sha256": "f4e8948b83228b8925388e565fbd4104379f8f7c4729bc5509b4e72cefe99cc0",
+    "bytes": 164171,
+    "format": "incremental git bundle",
+    "prerequisite_commit": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+    "local_bundle_verify": "pass"
+  },
+  "review_record": "docs/changes/20261116-skill-execution-fidelity/review-evidence.json",
+  "review_record_sha256": "d464f81b6336ca19bcca2d2d3f9a74ec2574646e22ab61733b65fa072e4947b1",
+  "platform_status_scope": "Previous blocked status is a historical observation; current explicit user authorization permits this push/PR/merge. Actual PR checks, merge, fresh-main CI and release are subsequent platform evidence.",
+  "added_files_scope": "Only this transport reconciliation and exact original Git history; runtime source and tests unchanged.",
+  "limitations": [
+    "Exact tree equality preserves content evidence; it does not forge identical commit metadata or predeclare remote CI/release success."
+  ]
+}

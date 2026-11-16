@@ -1,8 +1,8 @@
 ---
 name: adk-planning-execution-loop
 description: "用于按已批准多阶段计划实际执行、定向验证、断点恢复与目标收敛；不用于只读计划审查、CI 等待查询或生成 Goal 合同。"
-version: 1.4.4
-last_updated: 2026-11-14
+version: 1.4.5
+last_updated: 2026-11-16
 triggers:
   - "执行计划"
   - "按现有计划继续执行"
@@ -42,8 +42,8 @@ constraints:
 ## Commands
 仅在适用阶段、且已验证 ADK 源路径后使用：
 ```bash
-rtk bash scripts/devkit.sh goal state-check --state <current.json> --summary-json
-rtk bash scripts/devkit.sh verify --change <change-id>
+bash scripts/devkit.sh goal state-check --state <current.json> --summary-json
+bash scripts/devkit.sh verify --change <change-id>
 ```
 
 ## Failure Handling

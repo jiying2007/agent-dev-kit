@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping, Optional, Sequence, Tuple
@@ -91,7 +92,8 @@ def _is_locally_negated(
     local = prefix[clause_start + 1:]
     fillers = ("", "做", "进行", "执行", "重新", "再", "先", "去",
                "安排", "启动", "开始", "现在", "尝试", "继续",
-               "做一下", "先做", "先进行", "重新做", "重新进行")
+               "做一下", "先做", "先进行", "重新做", "重新进行",
+               "使用", "用", "调用", "加载", "触发", "use", "load", "invoke", "activate")
     candidates = tuple(_normalized(marker) for marker in markers if _normalized(marker)) + (
         "donot", "don't", "dont", "never", "avoid", "without",
     )
@@ -106,6 +108,23 @@ def _active_phrase_matches(
     return tuple(
         item for item in _all_phrase_matches(text, phrase_set) if not _is_locally_negated(text, item, markers)
     )
+
+
+def _skill_identity_declined(text: str, skill: str, markers: Sequence[str]) -> bool:
+    folded = text.casefold()
+    pattern = r"(?<![a-z0-9_-])" + re.escape(skill.casefold()) + r"(?![a-z0-9_-])"
+    for match in re.finditer(pattern, folded):
+        # Recognize only bounded display/call prefixes around this exact name;
+        # arbitrary punctuation elsewhere must retain the canonical polarity.
+        start = match.start()
+        if start > 0 and folded[start - 1] in "$@":
+            start -= 1
+        if start > 0 and folded[start - 1] == "`":
+            start -= 1
+        position = len(_normalized(folded[:start]))
+        if _is_locally_negated(text, (skill, position, 0), markers):
+            return True
+    return False
 
 
 @lru_cache(maxsize=512)
@@ -318,6 +337,42 @@ def _matched_skill_non_trigger(
     return None
 
 
+def _promotion_exclusion(
+    manifest: Manifest,
+    skill: str,
+    text: str,
+    markers: Sequence[str],
+) -> Optional[str]:
+    """Apply the primary's exclusions even when a supporting Skill matched.
+
+    Absence of a primary trigger is allowed: the same-group support supplied
+    it. An applicable non-trigger or an explicitly declined primary is not.
+    Use the canonical polarity rules rather than a second negation grammar.
+    """
+    if _matched_skill_non_trigger(manifest, skill, text, markers) is not None:
+        return "matched_non_trigger"
+    path = _specific_skill_path(manifest, skill, "auto")
+    if path is None:
+        return "skill_not_found"
+    if _skill_identity_declined(text, skill, markers):
+        return "negated_skill_identity"
+    phrases = list(_phrases(_frontmatter(path), "triggers"))
+    routing = _routing_ir(manifest)
+    classes = _routing_phrase_classes(routing, "phrase_classes") if routing else {}
+    for entry in routing.get("intents", []):
+        if not isinstance(entry, dict) or entry.get("primary_skill") != skill:
+            continue
+        phrase_set = entry.get("intent_zh")
+        if not isinstance(phrase_set, str):
+            continue
+        phrases.append(phrase_set)
+        if _phrase_matches(text, phrase_set) and _matching_negated_intent(text, entry, classes, markers):
+            return "negated_intent"
+    matching = any(_all_phrase_matches(text, phrase_set) for phrase_set in phrases)
+    active = any(_active_phrase_matches(text, phrase_set, markers) for phrase_set in phrases)
+    return "negated_trigger" if matching and not active else None
+
+
 def _strictest_permission(*values: Any) -> str:
     order = {
         "deny": 0,
@@ -416,6 +471,8 @@ def match_text(
         path = _specific_skill_path(manifest, skill, scope)
         if path is None:
             return {"match": False, "skill": skill, "reason": "skill_not_found"}
+        if _skill_identity_declined(text, skill, markers):
+            return {"match": False, "skill": skill, "reason": "negated_skill_identity"}
         frontmatter = _frontmatter(path)
         for phrase_set in _phrases(frontmatter, "non_triggers"):
             active = _active_phrase_matches(text, phrase_set, markers)
@@ -466,7 +523,8 @@ def match_text(
                     markers,
                 )
                 skill_non_trigger = _matched_skill_non_trigger(manifest, primary, text, markers)
-                if negated_rule is not None or skill_non_trigger is not None or not active_phrases:
+                if (negated_rule is not None or skill_non_trigger is not None or not active_phrases
+                        or _skill_identity_declined(text, primary, markers)):
                     negated_intents.append(str(entry.get("intent", primary)))
                     negated_skills.add(primary)
                     continue
@@ -494,7 +552,8 @@ def match_text(
 
     for section, source in (("skills", "skill_trigger"), ("optional_skills", "optional_skill_trigger")):
         for name, path in _managed_skill_entries(manifest, section):
-            if not path.is_file() or name in negated_skills:
+            if (not path.is_file() or name in negated_skills
+                    or _skill_identity_declined(text, name, markers)):
                 continue
             frontmatter = _frontmatter(path)
             non_trigger = _matched_skill_non_trigger(manifest, name, text, markers)

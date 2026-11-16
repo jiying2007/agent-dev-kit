@@ -1,0 +1,156 @@
+{
+  "schema": "adk-independent-local-review/v1",
+  "reviewer": "ai/root/research_skill_methods",
+  "reviewer_independence": "independent",
+  "review_mode": "whole-diff-review",
+  "implementation_changes_by_reviewer": false,
+  "reviewed_at": "2026-11-16T00:21:53Z",
+  "scope": "Frozen source and local evidence only; remote publication and product qualification excluded",
+  "repository": "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit",
+  "base_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+  "source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+  "spec_verdict": "pass",
+  "quality_verdict": "pass",
+  "source_and_local_evidence_approved": true,
+  "whole_task_complete": false,
+  "remote_publication_approved_or_completed": false,
+  "open_source_blocker_or_major_findings": [],
+  "findings_closed": [
+    {
+      "id": "R1-explicit-primary-name-declined",
+      "status": "closed",
+      "verification": "Original Chinese and English plain-name refusal reproductions reject in automatic and explicit paths; a positive token trigger cannot override the declined identity. Normal promotion and I did not reject remain valid."
+    },
+    {
+      "id": "R1-format-residual",
+      "detected_source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+      "resolved_source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "status": "closed",
+      "verification": "Original backtick Chinese/English and dollar reproductions, at-sign and supported backtick combinations independently reject in both automatic and explicit paths."
+    },
+    {
+      "id": "R1-identity-boundary",
+      "detected_source_sha": "4f9346e488a37926df560fa39ad8a275873e6c21",
+      "resolved_source_sha": "016d673331ef458ac94f72d08ec67537a000cc4b",
+      "status": "closed",
+      "verification": "The original affirmative canonical name followed by refusal of the -experimental identity now selects the canonical Skill. Different underscore, numeric and prefixed identities also do not suppress it."
+    }
+  ],
+  "spec_to_code_ledger": [
+    {
+      "requirement": 1,
+      "verdict": "pass",
+      "basis": "Canonical matcher eligibility applies to explicit, routing, lexical and same-group promotion paths. Exact identity matching operates on raw casefold text, strips only bounded display/call prefixes for polarity, and retains deny on automatic refusal. Applicable normal promotion remains available."
+    },
+    {
+      "requirement": 2,
+      "verdict": "pass",
+      "basis": "BSP example requires confirmed architecture, compiler prefix, defconfig, image/optional DT and positive jobs budget; existing output is preserved and config/build failures stop. C example states the same-major incremental compatibility assumption and checks minimum 2.1 plus ASYNC_CANCEL; no unconditional downgrade. Actual make fixtures and native C vectors support this example scope."
+    },
+    {
+      "requirement": 3,
+      "verdict": "pass",
+      "basis": "Questioning entrypoint preserves question identity, answer source and unresolved partial answers, invalidates dependent decisions on an upstream revision and exits discovery for an already concrete execution task. Saved qualitative observations retain their actual version and capture limitations."
+    },
+    {
+      "requirement": 4,
+      "verdict": "pass",
+      "basis": "Task comparison enforces registered <= window start <= run start <= run finish <= window end and retains existing as-of/future checks. Per-task acceptance and artifact guardrail name composition is consistent while result/evidence/order and other-task composition may vary. A validated contract is reused within one invocation and reloaded across calls; independent tests cover changed contract and schema. Timing claims remain local synthetic overhead."
+    },
+    {
+      "requirement": 5,
+      "verdict": "pass-within-source-and-local-evidence-scope",
+      "basis": "Changes use the existing Manifest, routing, export, validation and versioning mechanisms. Existing budget and release checks remain in force. Full local regression and independent review are supported; protected PR, main CI and Release verification remain the explicitly blocked T7 delivery stage."
+    },
+    {
+      "requirement": 6,
+      "verdict": "pass",
+      "basis": "Closeout entrypoint/reference permit traceable, unrevoked, explicit authorization for the same target/action/scope. Plans, silence and model summaries do not create authorization; uncovered deletion remains separately assessed. This is a semantic review, not evidence that a remote action was executed."
+    },
+    {
+      "requirement": 7,
+      "verdict": "pass",
+      "basis": "Distributed examples use original tools and preserve host wrapper requirements. ADK/llm_agent management commands require the verified source root. Real exported Review commands run without rtk or ADK in PATH, and rendered Skill shell blocks are scanned for undeclared wrappers."
+    }
+  ],
+  "code_to_spec_coverage": {
+    "scope": "All 45 changed source paths, the corrective 3-file increment, and finalized audit/verification/task documents were reviewed",
+    "routing_kernel_adapter_and_route_tests": [1],
+    "bsp_and_interface_skills_references_and_command_tests": [2],
+    "questioning_skill_and_content_trigger_contracts": [3],
+    "task_effect_evidence_modules_and_task_trial_tests": [4],
+    "version_manifest_campaign_fixture_and_contract_documentation": [5],
+    "branch_closeout_entrypoint_and_reference": [6],
+    "portable_skill_references_and_export_content_tests": [7],
+    "unexplained_changed_behavior_observed": false
+  },
+  "quality_basis": [
+    "The fixes reuse the canonical matcher and existing evaluation boundaries instead of introducing parallel routing or evaluation authorities.",
+    "Tests include actual catalog collision reproductions, exact-identity positive controls, independent native C vectors and GNU make argument/failure capture.",
+    "The contract optimization does not add a cross-call path cache or remove public-call validation; acceptance composition does not claim semantic identity.",
+    "Negative results, interrupted full regression, failed implementation attempts and wrongly named test module launches remain distinguishable from successful runs.",
+    "Source, benchmark, qualitative observation and platform limitations are stated with matching evidence scope."
+  ],
+  "independent_execution_on_frozen_source": {
+    "unittest_command": "PYTHONPATH=src:tests python3 -m unittest test_skill_governance test_task_trials test_task_evidence test_effect_trials test_skill_command_examples.BspBuildExampleTests test_skill_command_examples.InterfaceVersionExampleTests test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper test_skill_content_contract.SkillContentContractTests.test_distributed_skill_commands_have_no_undeclared_rtk_requirement -q",
+    "tests_run": 116,
+    "elapsed_seconds_reported_by_unittest": 22.180,
+    "exit_code": 0,
+    "additional_direct_matcher_checks": 27,
+    "additional_direct_matcher_result": "all-passed",
+    "diff_check": "pass"
+  },
+  "evidence_integrity": {
+    "evidence_completed_at": "2026-11-16T00:20:31.893746Z",
+    "input_index_sha256": "84ee017dd4044fe0dc9b393a41615c9169a3cca93e69baf4e6ce9109715d0bcf",
+    "input_files_checked": 35,
+    "input_file_byte_or_digest_mismatches": 0,
+    "frozen_source_digests_checked_against_git": 45,
+    "source_manifest_exactly_matches_base_to_source_changed_paths": true,
+    "runtime_source_changes_after_freeze": 0,
+    "post_run_tracked_document_change": "docs/changes/20261116-skill-execution-fidelity/tasks.md only",
+    "original_patch_exact_command": "git diff --binary --full-index 907080d5a0f6e49daa93e217f60383b23ed89d37..016d673331ef458ac94f72d08ec67537a000cc4b",
+    "original_patch_exact_match": true,
+    "original_patch_sha256": "2bc36b772f686958d9f5819377b9f3b4fd83a3e34989c77fee3e2b09cd4daad9",
+    "source_freeze_sha256": "8d523426e9eec6e778f4fbb69a92abc1c37ddd64591539003166f4a79b3d64a6",
+    "full_log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+    "full_timing_sha256": "23cc37b703188d2a5c34318b777a6b680225ace1584518bcf8885f6b96d3acf9",
+    "full_receipt_sha256": "f0237fcc0a931df36eeecc169d4148927638e7b808058430095cfa399378f0ed",
+    "final_gates_sha256": "231ed1d4b58aedf27a55e0f2c98e993048ba7e5999352b79f36e48f044c701be",
+    "platform_status_sha256": "b5745a28f67aa12fe4111dc98bcab4c5e33fff401b8b3b62bf5ebc555852dd90",
+    "full_regression_record": {
+      "executed_by_this_reviewer": false,
+      "inspection": "Raw compact log, all 102 timing entries and digest-bound receipt agree; source identities match the frozen commit",
+      "groups": 102,
+      "passed": 102,
+      "failed": 0,
+      "recorded_exit_code": 0,
+      "recorded_elapsed_seconds": 288.283988636
+    },
+    "portfolio_check": "65 unique catalog identities and 118 unique baseline file digests all match; this verifies the other reviewer's coverage manifest, not a claim of rereading all 118 complete files",
+    "benchmark_check": "Raw timing/profiling records and script read; four recorded candidate file hashes match frozen code; benchmark not rerun by this reviewer",
+    "final_document_sha256": {
+      "audit.md": "35ad9c48b2d2730e7f001f2af4fe0e415894b39d83d5fbd904b7899b64583730",
+      "verification.md": "6ab74a09e09168c323a5b06be3ad9a3c0bef22b33abd26968c15a0b9887bcc4b",
+      "tasks.md": "5c12dcc8725c781fd1eb5614cb35d57eb174d56f45e5e15187b09980f86e156a"
+    },
+    "review_check_correction": "The first byte comparison used git diff --binary without --full-index and reported differing index-line hash lengths. Repeating with the archived full-index format produced exact bytes. This was a reviewer command-format mismatch, not a source or archive defect."
+  },
+  "remaining_delivery_status": {
+    "T7": "blocked-by-automatic-approval-review",
+    "remote_writes_attempted_by_this_reviewer": 0,
+    "pr_main_ci_merge_tag_release_complete": false,
+    "platform_statement_basis": "Read the parent's timestamped platform-status.json and rejection explanation; this reviewer did not independently repeat external platform queries",
+    "final_packaging_check": "Pending the author's typed review record, T6 status synchronization and explicit inclusion of referenced controlled log files; no repeat implementation testing required if runtime sources remain unchanged"
+  },
+  "limitations": [
+    "This is source and local-evidence approval, not approval bypass or completed remote publication. T7 remains blocked and the overall task is not fully delivered remotely.",
+    "The full entrypoint has 102 test groups, not 102 individual assertions; its preserved output is compact and does not contain every successful child process log.",
+    "The 82.56 percent reduction is a three-sample median of local synthetic comparison overhead only; no model effect, provider Token, monetary cost or device performance was measured.",
+    "Acceptance names bind composition, not grader semantics. Observation timestamps and identities remain caller observations, not native attestation.",
+    "The partial-answer conversation used earlier pre-compression text; the revision conversation's text was compared later and has no runtime-captured hash or start/finish timestamps. Both are supplementary qualitative observations.",
+    "BSP tests use a GNU make fixture and interface tests compile local C vectors; real cross-compilation, target boot and hardware qualification were not performed.",
+    "Local ruff/mypy were unavailable and not executed; remote CI has not run for this change.",
+    "Negation handling supports a bounded lexical grammar and a finite identity display syntax, not complete natural-language or double-negation interpretation."
+  ]
+}

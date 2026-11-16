@@ -1,8 +1,8 @@
 ---
 name: adk-goal-authoring
 description: "用于新建或实质修订 Goal 合同、原验收映射和可关闭交付批次；不用于已有 Goal 的日常执行、CI 状态查询或只读计划。"
-version: 0.1.3
-last_updated: 2026-11-15
+version: 0.1.4
+last_updated: 2026-11-16
 triggers:
   - "生成Goal"
   - "Goal怎么写"
@@ -40,9 +40,9 @@ constraints:
 ## Commands
 从实际 ADK 源根调用；跨仓需核验源位置：
 ```bash
-rtk bash scripts/devkit.sh goal plan-check --plan <goal.json> --state <current.json>
-rtk bash scripts/devkit.sh goal render --plan <goal.json>
-rtk bash scripts/devkit.sh goal resume --plan <goal.json> --state <current.json>
+bash scripts/devkit.sh goal plan-check --plan <goal.json> --state <current.json>
+bash scripts/devkit.sh goal render --plan <goal.json>
+bash scripts/devkit.sh goal resume --plan <goal.json> --state <current.json>
 ```
 按需读取 [合同示例](references/goal-plan.json)。简单任务可用文字，不强制 JSON；这些命令均只读，不能验证业务证据或创建原生 Goal。
 

@@ -1,0 +1,1284 @@
+{
+  "schema": "adk-skill-portfolio-audit/1",
+  "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+  "baseline_version": "11.3.4",
+  "scope": "All 65 SKILL.md entrypoints and 53 direct references; metadata/README/license files were not claimed as reviewed.",
+  "method": "Read-only baseline review; retain means no selected reproducible gap in this domain audit, not proof of model effectiveness or exhaustive absence of defects.",
+  "excluded_prior_round": "docs/changes/20261115-external-skill-methods",
+  "rules_read": [
+    "AGENTS.md",
+    "docs/agent-operating-rules.md"
+  ],
+  "skills": [
+    {
+      "skill": "adk-data-fetch",
+      "entrypoint": "optional-skills/adk-data-fetch/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "父 Skill 只选择已安装子 Skill，不隐式安装或扩展访问权限。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-data-fetch/SKILL.md",
+          "baseline_sha256": "2b21813be53528c13eefee6add282615730d36fa712073bae3943370e069b0f0",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-email-imap-fetch",
+      "entrypoint": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "授权邮箱只读范围、凭据与输出最小化明确，不扩成发信或归档写操作。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+          "baseline_sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-fetch-url-content",
+      "entrypoint": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "指定公开 URL 提取、访问限制和内网/登录边界明确，不把抓取工具当搜索器。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+          "baseline_sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-external-practice-absorption",
+      "entrypoint": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "来源到评估/pilot/退役闭环有效，公开工具示例隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+          "baseline_sha256": "3d6a62b500113d0f0a88727c54fcfd0b7d0f692be1cd96d45d0590c5f0aee164",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-incident-rca-report",
+      "entrypoint": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "事故稳定后证据时间线、恢复与防复发路径明确，不伪造取证材料。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+          "baseline_sha256": "b653aafe11d25922f895874cc1e61989f7d1f8d892efec5e3b7f830c4fa09cb4",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-prose-revision",
+      "entrypoint": "optional-skills/adk-prose-revision/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "表达最小修订与事实核验/作者鉴别分离，review cases 没有明显范围冲突。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-prose-revision/SKILL.md",
+          "baseline_sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "optional-skills/adk-prose-revision/references/review-cases.md",
+          "baseline_sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-security-supply-chain",
+      "entrypoint": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "来源、权限及静态扫描覆盖限制明确，不把扫描通过当安全认证。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "baseline_sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+          "baseline_sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-skill-composition-governance",
+      "entrypoint": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "组合/路由/生命周期与行为评测引用保留，不新增第二路由权威。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+          "baseline_sha256": "d50c3fc1512a58337ab066e60107d17ef25ddcae1bfc0a9914f444b7a5469fad",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+          "baseline_sha256": "5aba1c61b0686bc0bb25818834eb01a91d60b05a0de91c40fb73cedda5e23de3",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+          "baseline_sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-test-flakiness-triage",
+      "entrypoint": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "真实样本退出码、环境脱敏和重跑预算已有可执行验证，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+          "baseline_sha256": "1b198f8b975bea9529552d899e38ae335ab2d6684e21e74c2eefcbb83f3898ba",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+          "baseline_sha256": "efaef84006e04c7b502837d7c2548459c86793c921f969824a593db1e4ab1f97",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-adr-writer",
+      "entrypoint": "skills/adk-adr-writer/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "已有取舍、替代方案及决策后果路径；未发现本轮可复现功能缺口。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-adr-writer/SKILL.md",
+          "baseline_sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-after-action-review",
+      "entrypoint": "skills/adk-after-action-review/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "复盘与交付前验证、知识候选发布分离，三个引用保留原始证据和审核边界。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-after-action-review/SKILL.md",
+          "baseline_sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/after-action-review.md",
+          "baseline_sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/codify-decision.md",
+          "baseline_sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/memory-candidate.md",
+          "baseline_sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-archive-governance",
+      "entrypoint": "skills/adk-archive-governance/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "元数据修复路径保留，但公开命令隐式依赖 rtk，导出后可直接 exit 127。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-archive-governance/SKILL.md",
+          "baseline_sha256": "c421043f058e6440a37a711ba198586a6d91b79abe8c8ae465b7248d4a553a42",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-artifact-gating",
+      "entrypoint": "skills/adk-artifact-gating/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "制品标签、状态、跨仓交接与发布资格区分清楚，入口和引用一致。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-artifact-gating/SKILL.md",
+          "baseline_sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-artifact-gating/references/details.md",
+          "baseline_sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-branch-closeout",
+      "entrypoint": "skills/adk-branch-closeout/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "引用禁止从任何 previous conversation 识别批准，与可追溯既有明确授权冲突，导致同范围重复询问。",
+      "findings": [
+        "F3-authorization-continuity"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-branch-closeout/SKILL.md",
+          "baseline_sha256": "297be37797361052529e78667e871fff5f10a8891b5f98ab9ec0dd3873000f8a",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-branch-closeout/references/closeout-options.md",
+          "baseline_sha256": "4bab5ac06d023ad9d764f537fd523147c089ef96f51bf691ef94fe6ddd58e3e6",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-bsp-analysis",
+      "entrypoint": "skills/adk-bsp-analysis/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "源码、硬件资料、历史 workaround 与证据化风险闭环完整，保留现有按需引用。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-bsp-analysis/SKILL.md",
+          "baseline_sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+          "baseline_sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-bsp-porting-playbook",
+      "entrypoint": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "Linux 示例固定 arm64/aarch64、通用 defconfig 与 nproc 并行度，忽略已确认目标与资源预算。",
+      "findings": [
+        "F1-bsp-target-budget"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+          "baseline_sha256": "9a9d368a3006d06e1de67feda480b78097e816fb1ce30904cfb29be1b37efa17",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-cmake-cross-build",
+      "entrypoint": "skills/adk-cmake-cross-build/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "已有真实工具链、配置隔离和 CPU/RAM 并行预算，不重复添加通用检查段落。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-cmake-cross-build/SKILL.md",
+          "baseline_sha256": "fe07fc732eabeaf8628f58c02bf37334964dfa6487ffc4fa03d8fab4f7dd19f1",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-code-review-loop",
+      "entrypoint": "skills/adk-code-review-loop/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "独立审查、反馈复核和证据生命周期有效；两个引用命令隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-code-review-loop/SKILL.md",
+          "baseline_sha256": "b0559782d71aed048fb96cd4aab019e90c79e444f221e1d88b6a635ccc435d4c",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+          "baseline_sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+          "baseline_sha256": "95c51b6f6fbad9782acc513e20d8cdda02436a5fb3789742d77cf50d832c4e7b",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+          "baseline_sha256": "a08bd0302b87b7186bfb4d641485d501c2cce666654e9d5a4194fa1685b73071",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-governance-details.md",
+          "baseline_sha256": "b75403ea56c108e170cea17f6cfdcaec40c4d940114a7e682fa349a8d48c823e",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-code-simplification",
+      "entrypoint": "skills/adk-code-simplification/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "等价性基线、可观察行为和深模块引用已覆盖方法差异，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-code-simplification/SKILL.md",
+          "baseline_sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-code-simplification/references/deep-module-design.md",
+          "baseline_sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-code-simplification/references/details.md",
+          "baseline_sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-commit-pr-quality-gate",
+      "entrypoint": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "提交前证据、独立 review 与受保护合并边界明确，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+          "baseline_sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+          "baseline_sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-component-api-stability",
+      "entrypoint": "skills/adk-component-api-stability/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "调用方清单、兼容矩阵与迁移回退路径有效，不扩成新的接口框架。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-component-api-stability/SKILL.md",
+          "baseline_sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-context-compress-handoff",
+      "entrypoint": "skills/adk-context-compress-handoff/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "交接保留来源、未完成事项与下一动作，不将摘要作为高风险原始证据。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-context-compress-handoff/SKILL.md",
+          "baseline_sha256": "697c701f0907297d5239d4669b8a6e2573422166a887d4e523ca283c8ddc34a1",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-context-engineering",
+      "entrypoint": "skills/adk-context-engineering/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "稳定规则、按需引用与并行隔离明确，没有发现需新增上下文层的证据。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-context-engineering/SKILL.md",
+          "baseline_sha256": "2036424ab37e7722043f8e41a662ff890108d5beae83c7f7fc0b19b64bef8038",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-cross-team-handoff",
+      "entrypoint": "skills/adk-cross-team-handoff/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "责任、接口、验收映射与外部动作边界明确，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-cross-team-handoff/SKILL.md",
+          "baseline_sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-driver-bringup-checklist",
+      "entrypoint": "skills/adk-driver-bringup-checklist/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "时钟/复位/probe/中断的依赖排查与设备写入许可分离，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+          "baseline_sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-driver-implementation",
+      "entrypoint": "skills/adk-driver-implementation/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "目标运行时、资源生命周期和定向回归覆盖具体驱动实现风险，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-driver-implementation/SKILL.md",
+          "baseline_sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-embedded-debug-transport",
+      "entrypoint": "skills/adk-embedded-debug-transport/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "调试连接证据与远程部署权限分开，不把连接成功当目标资格。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-embedded-debug-transport/SKILL.md",
+          "baseline_sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-embedded-diagnostic-harness",
+      "entrypoint": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "退出码与证据语义有效，但示例隐式依赖 rtk，需可移植原工具命令。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+          "baseline_sha256": "d71784d7b68812caca8aadd8119ea761072c2333cfd03dc0c007ed94f6975709",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-embedded-release-orchestration",
+      "entrypoint": "skills/adk-embedded-release-orchestration/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "多 MCU OTA 恢复和制品准备门禁保留；公开示例隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+          "baseline_sha256": "0d63a32211b37f318f87e8389f42c852bd7f6889010250f68eb01d45b6d7d889",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+          "baseline_sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-embedded-remote-debug-log-triage",
+      "entrypoint": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "先确认真实目标/连接/取证层次，ADB 引用对写入和 HIL 证据有单独边界。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+          "baseline_sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+          "baseline_sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-embedded-storage-layout-migration",
+      "entrypoint": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "存储演练与真实写权限分离，但 host 示例隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+          "baseline_sha256": "946eb383aca9f59b304c78ce1f7a4f9980ef876f6fb1bb1c269af8036dfeb026",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-engineering-growth-review",
+      "entrypoint": "skills/adk-engineering-growth-review/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "授权历史、工程证据与个人属性推断有明确边界，不把单次观察外推成趋势。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-engineering-growth-review/SKILL.md",
+          "baseline_sha256": "1cb57aaa0364e19ccb07717a9c2e9586de56eb0dae98c8c7f0921cda5e9aac99",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+          "baseline_sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-fault-injection-recovery",
+      "entrypoint": "skills/adk-fault-injection-recovery/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "有界故障注入、隔离、恢复与重放证据明确，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-fault-injection-recovery/SKILL.md",
+          "baseline_sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-goal-authoring",
+      "entrypoint": "skills/adk-goal-authoring/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "Goal 原验收和闭合批次已有约束；内部管理示例隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-goal-authoring/SKILL.md",
+          "baseline_sha256": "2af53b2706bab3d8ca14069a52ea3c51dc2b2d09e54ed46bb1a20ff1f3079e93",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-goal-authoring/references/goal-plan.json",
+          "baseline_sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-hardware-debugging",
+      "entrypoint": "skills/adk-hardware-debugging/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "硬件假设、Linux 与 MCU 分支及 fault/reset/wakeup 证据明确，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-hardware-debugging/SKILL.md",
+          "baseline_sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+          "baseline_sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-integration-hil-sil",
+      "entrypoint": "skills/adk-integration-hil-sil/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "真实 HIL/SIL 入口、设备授权与结果层次已有修复，不重复上轮内容。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-integration-hil-sil/SKILL.md",
+          "baseline_sha256": "02bf30ac9e91c5ea56cef5622e44a459b814190a9d534344755bc88339359fce",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-interface-contract-design",
+      "entrypoint": "skills/adk-interface-contract-design/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "示例只比较 major，未声明消费者最低 minor 能力；协商失败无条件降级缺少可用交集证据。",
+      "findings": [
+        "F2-interface-minimum-capability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-interface-contract-design/SKILL.md",
+          "baseline_sha256": "80cb37dab157fa767a32fdb73e074a2fe2cc819d9bb4ea949dae3fda325e7376",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+          "baseline_sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/details.md",
+          "baseline_sha256": "a1c98cdecc2f490f9b5177aabd8e5358b020b2831e785a346fd3d992c0bfd3a0",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+          "baseline_sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+          "baseline_sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+          "baseline_sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-interrupt-dma-patterns",
+      "entrypoint": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "缓存一致性、所有权、ISR/任务边界与诊断引用已经覆盖关键实现语义。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+          "baseline_sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+          "baseline_sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+          "baseline_sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-knowledge-archive",
+      "entrypoint": "skills/adk-knowledge-archive/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "新候选归档与既有元数据修复分工清楚，脱敏和原始证据指针保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-knowledge-archive/SKILL.md",
+          "baseline_sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-lightweight-planning",
+      "entrypoint": "skills/adk-lightweight-planning/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "只读方案与已批准执行互斥清楚，无需重新开启审批或创建执行资产。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-lightweight-planning/SKILL.md",
+          "baseline_sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-memory-curator",
+      "entrypoint": "skills/adk-memory-curator/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "候选记忆与正式发布边界有效，现有命令示例隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-memory-curator/SKILL.md",
+          "baseline_sha256": "4f1b1e136a0eeb07f0b407ca7cae406734b13b602b3fb292ad30e0967ab71f3a",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-offline-core-dump-triage",
+      "entrypoint": "skills/adk-offline-core-dump-triage/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "binary/BuildID/符号身份及离线证据限定明确，不虚构可置信堆栈。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+          "baseline_sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-parallel-agent-governance",
+      "entrypoint": "skills/adk-parallel-agent-governance/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "任务写集、共享契约和最终集成责任明确，两个引用保留可审核委派信息。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-parallel-agent-governance/SKILL.md",
+          "baseline_sha256": "79590645943c485b30a0807d08038918bc046d746bdf7d254efa224a81d7689b",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+          "baseline_sha256": "e1636ebb5af5a1c3f60f8d5711eb0d07b3ce52f9461d85dff4aa90017ad6afa7",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+          "baseline_sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-performance-profiling-embedded",
+      "entrypoint": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "上轮已补 call-chain 栈上界方法与测量证据，本轮不重复修改。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+          "baseline_sha256": "c4c6b3e039bc022224a832d146f833b4ca9b69eefc08ee6f3b4a7f53dbaf2a3a",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+          "baseline_sha256": "29add9e8e457932d195282b80364ecbc2f31e724d3fd509c0ba154e1fc3e486a",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-pilot-framework",
+      "entrypoint": "skills/adk-pilot-framework/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "有界试跑与正式产品认证分开，保留失败与回退判定。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-pilot-framework/SKILL.md",
+          "baseline_sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-pilot-framework/references/details.md",
+          "baseline_sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-planning-execution-loop",
+      "entrypoint": "skills/adk-planning-execution-loop/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "已批准计划的恢复与持续执行路径有效；源码管理示例隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-planning-execution-loop/SKILL.md",
+          "baseline_sha256": "dcb5d29a1cf0f7f849e390287a74b8167a1afa60849070bcba66148b5e1453bf",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+          "baseline_sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-production-field-readiness",
+      "entrypoint": "skills/adk-production-field-readiness/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "产测/OTA/现场维护与 pilot 证据层级明确，不从桌面测试推导量产就绪。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-production-field-readiness/SKILL.md",
+          "baseline_sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+          "baseline_sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-protocol-stack-integration",
+      "entrypoint": "skills/adk-protocol-stack-integration/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "跨层状态、错误、恢复与协议集成回归覆盖现有范围，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-protocol-stack-integration/SKILL.md",
+          "baseline_sha256": "7ac9b5cbb2b1a1a854063b86003c135d816f5a4a5a0a9400d0b6505cff1fa702",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-register-map-design",
+      "entrypoint": "skills/adk-register-map-design/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "位域访问权限、硬件来源与真实设备写入分离，本轮未选取需泛化规则修改的证据。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-register-map-design/SKILL.md",
+          "baseline_sha256": "3097750aaf1f6fabfd499b19335e888df8f23b791d9d591e2bc42216ff3b32fd",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-release-versioning",
+      "entrypoint": "skills/adk-release-versioning/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "历史枚举示例已有真实命令回归，不按提交类型过滤丢失变更，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-release-versioning/SKILL.md",
+          "baseline_sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-release-versioning/references/details.md",
+          "baseline_sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-repo-drift-remediation",
+      "entrypoint": "skills/adk-repo-drift-remediation/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "基线与漂移取证路径有效，但命令隐式依赖 rtk 且源仓内部脚本需限定上下文。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-repo-drift-remediation/SKILL.md",
+          "baseline_sha256": "94d2f317c59a61a0c80b75e20bf636b46b49b728af85dfa117beaa20bb1d5857",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-repo-prompt-analysis",
+      "entrypoint": "skills/adk-repo-prompt-analysis/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "不可信参考仓提示作为分析数据，保留来源而不执行外部脚本。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+          "baseline_sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-requirements-triage",
+      "entrypoint": "skills/adk-requirements-triage/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "已有明确任务不重开访谈，嵌入式与探索性 brief 按需分支有效。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-requirements-triage/SKILL.md",
+          "baseline_sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+          "baseline_sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+          "baseline_sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-rtos-task-design",
+      "entrypoint": "skills/adk-rtos-task-design/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "任务时序、优先级、同步与实时性测量要求明确，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-rtos-task-design/SKILL.md",
+          "baseline_sha256": "0c2a9cd2148878cfd8fd06c65789d3f015dc5139ed243ea46302089e2c99cea3",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-runtime-router",
+      "entrypoint": "skills/adk-runtime-router/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "入口策略保留；父任务独立发现并处理 matcher 同组提升实现缺口，本审查不重复裁决。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-runtime-router/SKILL.md",
+          "baseline_sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+          "baseline_sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-skill-deep-analysis",
+      "entrypoint": "skills/adk-skill-deep-analysis/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "只读发现、来源验证和有界可迁移价值分析有效，不把目录收录当质量证明。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-skill-deep-analysis/SKILL.md",
+          "baseline_sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-skill-deep-analysis/references/details.md",
+          "baseline_sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-static-analysis-c-cpp",
+      "entrypoint": "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "上轮已补静态到动态反例闭环，本轮不重复 sanitizer 方法。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+          "baseline_sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-structured-requirements-questioning",
+      "entrypoint": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "父任务单独处理部分回答/问题身份/上游修订缺口，本领域审查保留并转交该写集。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+          "baseline_sha256": "985fb9408ea393ec7322065f4bebc11541664b59d3ee63b026762f0c1282ff00",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+          "baseline_sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-systematic-debugging",
+      "entrypoint": "skills/adk-systematic-debugging/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "上轮 sanitizer/单变量反馈方法保留；入口命令隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-systematic-debugging/SKILL.md",
+          "baseline_sha256": "dec791825d8b05166718bfcc0e7190bd4d4da253d610ea45702bc81fe23b722e",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+          "baseline_sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+          "baseline_sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+          "baseline_sha256": "8f94f087b206d6bccb0a253231e9aa3bbe0a614b3be563e5d6c23d0da25672ab",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-task-breakdown",
+      "entrypoint": "skills/adk-task-breakdown/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "上轮 expand/migrate/contract 和纵切拆分已覆盖，本轮保留有效方法。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-task-breakdown/SKILL.md",
+          "baseline_sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-task-breakdown/references/task-packaging.md",
+          "baseline_sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+          "baseline_sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-test-strategy",
+      "entrypoint": "skills/adk-test-strategy/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "上轮独立期望值与检查器校准已覆盖，不将结构校验当真实效果认证。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-test-strategy/SKILL.md",
+          "baseline_sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+          "baseline_sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-token-context-governance",
+      "entrypoint": "skills/adk-token-context-governance/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "原始证据回退与 Token 预算门禁明确，本轮未发现需放宽门禁的依据。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-token-context-governance/SKILL.md",
+          "baseline_sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
+          "read_scope": "complete entrypoint"
+        }
+      ]
+    },
+    {
+      "skill": "adk-unit-test-embedded",
+      "entrypoint": "skills/adk-unit-test-embedded/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "上轮性质/状态序列与独立断言方法已补齐，不能用 host 结果替代 HIL 资格。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-unit-test-embedded/SKILL.md",
+          "baseline_sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+          "baseline_sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+          "baseline_sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-verification-before-completion",
+      "entrypoint": "skills/adk-verification-before-completion/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "fix",
+      "reason": "完成证据的身份与时效约束有效；详细引用中源码测试命令隐式依赖 rtk。",
+      "findings": [
+        "F4-distributed-command-portability"
+      ],
+      "read_paths": [
+        {
+          "path": "skills/adk-verification-before-completion/SKILL.md",
+          "baseline_sha256": "d60736e972a74d8d8843e80916cc8df30e83849effe13c48d14b60576903873d",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+          "baseline_sha256": "e1ba3b03082c917372d2b33800b0506304d1612e2e7c4216d1fe2689106873fd",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    },
+    {
+      "skill": "adk-worktree-governance",
+      "entrypoint": "skills/adk-worktree-governance/SKILL.md",
+      "baseline_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+      "decision": "retain",
+      "reason": "隔离基线、provenance 与脏工作树保护及两处引用一致，本轮保留。",
+      "findings": [],
+      "read_paths": [
+        {
+          "path": "skills/adk-worktree-governance/SKILL.md",
+          "baseline_sha256": "a9e7b174e1d9a65816d38b2ee0b56a08193a10d220a40d9c9bd38df064ec23ad",
+          "read_scope": "complete entrypoint"
+        },
+        {
+          "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+          "baseline_sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
+          "read_scope": "complete direct reference"
+        },
+        {
+          "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+          "baseline_sha256": "c155ad103636bb452163b52c06d036e1bf75f9ae34cb411467a38fb4c805dc8f",
+          "read_scope": "complete direct reference"
+        }
+      ]
+    }
+  ]
+}

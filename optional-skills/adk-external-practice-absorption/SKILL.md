@@ -1,8 +1,8 @@
 ---
 name: adk-external-practice-absorption
 description: 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。
-version: 1.0.1
-last_updated: 2026-11-14
+version: 1.0.2
+last_updated: 2026-11-16
 triggers:
   - "吸收外部实践"
   - "吸收外部成熟方法"
@@ -101,15 +101,16 @@ constraints:
 
 ## Commands
 
+先核验相应源码根与工具存在性；llm_agent 与 ADK 命令不能在同一未知目录串行照抄。纯 Skill 消费不依赖这些内部管理工具；缺少适用检查时记录 blocked，不安装未审查依赖。
 ```bash
-# llm_agent 中仅生成 report-only 证据
-rtk scripts/practice-intake.sh check --kind candidate --input <candidate-ledger>
-rtk scripts/practice-intake.sh check --kind decision --input <decision-ledger>
+# 已核验的 llm_agent 源根中仅生成 report-only 证据
+bash "${LLM_AGENT_SOURCE:?set verified llm_agent source root}/scripts/practice-intake.sh" check --kind candidate --input <candidate-ledger>
+bash "${LLM_AGENT_SOURCE:?set verified llm_agent source root}/scripts/practice-intake.sh" check --kind decision --input <decision-ledger>
 
-# 已批准后才创建并推进 ADK change
-rtk bash scripts/devkit.sh propose --change <id> --title "<目标>"
-rtk bash scripts/devkit.sh validate --strict
-rtk bash tests/run_all.sh --fail-fast
+# 切到已核验 ADK 源根；已有批准后才创建并推进 ADK change
+bash scripts/devkit.sh propose --change <id> --title "<目标>"
+bash scripts/devkit.sh validate --strict
+bash tests/run_all.sh --fail-fast
 ```
 
 ## Failure Handling

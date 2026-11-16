@@ -123,6 +123,65 @@ class SkillContentContractTests(unittest.TestCase):
                         self.assertTrue((ROOT / script).is_file(), (item["name"], script))
                 self.assertNotRegex(text, r"devkit\.sh\s+verify\s+--analysis")
 
+    def test_exported_review_commands_run_without_optional_wrapper(self) -> None:
+        """Exercise shipped instructions in a target repo without ADK or rtk."""
+        import os
+        import re
+        import shutil
+        import subprocess
+        import tempfile
+        from agent_dev_kit.model import Manifest
+        from agent_dev_kit.targets import load_target_contract, render_asset
+
+        manifest = Manifest.load(ROOT)
+        contract = load_target_contract(manifest, "claude-code")
+        asset = next(item for item in manifest.all_assets("skill")
+                     if item.name == "adk-code-review-loop")
+        files = render_asset(manifest, contract, asset)
+        reference = next(item for item in files
+                         if item.destination.endswith("/references/review-evidence-template.md"))
+        block = re.search(r"```bash\n(.*?)\n```", reference.content.decode(), re.DOTALL)
+        self.assertIsNotNone(block)
+        commands = block.group(1).split("<project-lint-cmd>", 1)[0]
+        self.assertIn("git rev-parse HEAD", commands)
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            subprocess.run(["git", "init", "-q", str(target)], check=True)
+            subprocess.run(["git", "-C", str(target), "-c", "user.name=Test",
+                            "-c", "user.email=test@example.invalid", "commit", "-qm",
+                            "fixture", "--allow-empty"], check=True)
+            binary = target / "bin"
+            binary.mkdir()
+            git = shutil.which("git")
+            bash = shutil.which("bash")
+            self.assertIsNotNone(git)
+            self.assertIsNotNone(bash)
+            (binary / "git").symlink_to(git)
+            environment = {**os.environ, "PATH": str(binary), "LC_ALL": "C"}
+            self.assertIsNone(shutil.which("rtk", path=environment["PATH"]))
+            run = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands],
+                                 cwd=target, env=environment, capture_output=True,
+                                 text=True, timeout=10)
+            self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+            self.assertRegex(run.stdout.splitlines()[0], r"^[0-9a-f]{40,64}$")
+
+    def test_distributed_skill_commands_have_no_undeclared_rtk_requirement(self) -> None:
+        import re
+        from agent_dev_kit.model import Manifest
+        from agent_dev_kit.targets import load_target_contract, render_asset
+
+        manifest = Manifest.load(ROOT)
+        contract = load_target_contract(manifest, "claude-code")
+        assets = manifest.all_assets("skill")  # Includes core and optional assets.
+        self.assertTrue(any(asset.optional for asset in assets))
+        for asset in assets:
+            for rendered in render_asset(manifest, contract, asset):
+                if not rendered.destination.endswith(".md"):
+                    continue
+                for block in re.findall(r"```(?:bash|sh)\n(.*?)\n```",
+                                        rendered.content.decode(), re.DOTALL):
+                    self.assertNotRegex(block, r"(?m)^\s*rtk\s+", rendered.destination)
+
     def test_fault_injection_defaults_never_write_live_device(self) -> None:
         import re
 

@@ -1,0 +1,59 @@
+.F.....FF...........F..EE
+======================================================================
+ERROR: test_matcher (unittest.loader._FailedTest.test_matcher)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_matcher
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'tests.test_matcher'
+
+
+======================================================================
+ERROR: test_matcher_negation (unittest.loader._FailedTest.test_matcher_negation)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_matcher_negation
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'tests.test_matcher_negation'
+
+
+======================================================================
+FAIL: test_displayed_skill_identity_refusal_preserves_all_selection_paths (tests.test_skill_governance.SkillGovernanceTests.test_displayed_skill_identity_refusal_preserves_all_selection_paths) (identity='adk-token-context-governance', prefix='context planning, do not use ', explicit=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/tests/test_skill_governance.py", line 132, in test_displayed_skill_identity_refusal_preserves_all_selection_paths
+    self.assertFalse(result.get("match"), result)
+AssertionError: True is not false : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-token-context-governance', 'trigger': 'selection-group:context-policy', 'selection_group_promoted': True, 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'context-policy', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_explicit_skill_identity_refusal_applies_without_promotion (tests.test_skill_governance.SkillGovernanceTests.test_explicit_skill_identity_refusal_applies_without_promotion) (prompt='token budget; do not use adk-token-context-governance', explicit=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/tests/test_skill_governance.py", line 119, in test_explicit_skill_identity_refusal_applies_without_promotion
+    self.assertFalse(result.get("match"), result)
+AssertionError: True is not false : {'match': True, 'source': 'routing', 'skill': 'adk-token-context-governance', 'intent': 'token_context_governance', 'intent_zh': '省token/上下文太大/压缩输出/工具输出太长/日志太长/回退原文/token budget', 'supporting_skills': ['adk-context-engineering', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'context-policy', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_explicit_skill_identity_refusal_applies_without_promotion (tests.test_skill_governance.SkillGovernanceTests.test_explicit_skill_identity_refusal_applies_without_promotion) (prompt='token budget; do not use adk-token-context-governance', explicit='adk-token-context-governance')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/tests/test_skill_governance.py", line 119, in test_explicit_skill_identity_refusal_applies_without_promotion
+    self.assertFalse(result.get("match"), result)
+AssertionError: True is not false : {'match': True, 'skill': 'adk-token-context-governance', 'reason': 'matched_trigger', 'phrase': 'token budget', 'runtime_role': 'primary', 'selection_group': 'context-policy', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'mutation_permission': 'deny', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_same_group_promotion_preserves_target_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_preserves_target_exclusions) (prompt='context planning, do not use adk-token-context-governance')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/2d6ca6dc3d38/agent-dev-kit/tests/test_skill_governance.py", line 91, in test_same_group_promotion_preserves_target_exclusions
+    self.assertFalse(result.get("match"), result)
+AssertionError: True is not false : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-token-context-governance', 'trigger': 'selection-group:context-policy', 'selection_group_promoted': True, 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'context-policy', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.295s
+
+FAILED (failures=4, errors=2)

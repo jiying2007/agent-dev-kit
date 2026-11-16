@@ -1,0 +1,32 @@
+{
+  "schema": "adk-platform-observation/v1",
+  "observed_at_utc": "2026-11-16 00:20:29 UTC",
+  "repository": "jiying2007/agent-dev-kit",
+  "intended_branch": "feat/skill-execution-efficiency-20261116",
+  "local_source_commit": "016d673331ef458ac94f72d08ec67537a000cc4b",
+  "remote_main_commit": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+  "intended_branch_present": false,
+  "matching_pull_requests": [],
+  "latest_published_release": "v11.3.4",
+  "publication_status": "blocked-by-automatic-approval-review",
+  "rejected_action": "git push --set-upstream origin feat/skill-execution-efficiency-20261116",
+  "rejection_count": 2,
+  "rejection_reason": "Automatic approval review did not accept retrieved prior-conversation authorization and read-only account/repository observations as trusted authorization for this current remote publication.",
+  "response": "Stopped remote writes after the second rejection; no alternate interface, force push, admin bypass, PR, merge or release attempted.",
+  "pending": [
+    "current-turn authorization accepted by approval review",
+    "push reviewed branch",
+    "ordinary PR and exact final-head required checks",
+    "normal merge",
+    "fresh main CI",
+    "immutable tag and canonical release verification"
+  ],
+  "read_only_sources": [
+    "https://api.github.com/repos/jiying2007/agent-dev-kit/branches?per_page=100",
+    "https://api.github.com/repos/jiying2007/agent-dev-kit/pulls?state=all&head=jiying2007%3Afeat%2Fskill-execution-efficiency-20261116",
+    "https://api.github.com/repos/jiying2007/agent-dev-kit/releases/latest"
+  ],
+  "limitations": [
+    "Read-only platform snapshot; no declaration of completed publication or remote CI."
+  ]
+}

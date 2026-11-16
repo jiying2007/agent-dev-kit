@@ -21,6 +21,7 @@ from ._matcher_kernel import (
     _classify_task_mode,
     _discover_root,
     _managed_skill_entries,
+    _promotion_exclusion,
     _resolved_policy,
     _routing_ir,
     _routing_markers,
@@ -308,6 +309,15 @@ def _next_primary_trigger(
         if grouped is None:
             return None
         name, source, metadata = grouped
+        excluded = _promotion_exclusion(manifest, name, text, markers)
+        if excluded is not None:
+            abstained = _abstain_result(routing, classified, [name])
+            abstained.update(
+                reason="promoted-primary-excluded",
+                excluded_skill=name,
+                exclusion_reason=excluded,
+            )
+            return abstained
         result: Dict[str, Any] = {
             "match": True,
             "source": source,

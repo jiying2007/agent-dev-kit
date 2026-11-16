@@ -1,0 +1,188 @@
+{
+  "schema": "adk-local-evidence-index/v1",
+  "source_commit": "016d673331ef458ac94f72d08ec67537a000cc4b",
+  "evidence_completed_at": "2026-11-16T00:23:57.562317Z",
+  "files": [
+    {
+      "path": "evidence/README.md",
+      "bytes": 3377,
+      "sha256": "3b1d5f22d4a6c76b56606306473f3ee9f967f8dbfebb27cdb0ecbe606d49cc8d"
+    },
+    {
+      "path": "evidence/benchmark_task_trials.py",
+      "bytes": 2337,
+      "sha256": "c0f9a8fc3a338a71d29ea36f8a5576f2bf9248eb5aea1a13cf44dd0ef2fd9344"
+    },
+    {
+      "path": "evidence/check_task_observations.py",
+      "bytes": 3039,
+      "sha256": "b5c62b93c7cb5aabf8025a884fbf7c81b7b7f2cc0412aba1b0ec5aeddf71ea57"
+    },
+    {
+      "path": "evidence/contract-reload-green.json",
+      "bytes": 541,
+      "sha256": "2dc9b1457ce326d8ee2608d7e6f823935db961b4f86382e8d82494d414675f4a"
+    },
+    {
+      "path": "evidence/domain-baseline-red.json",
+      "bytes": 1643,
+      "sha256": "016d114ab15472e4fe7b21637e6ddd4f6a2faf91e8af8d44a93b87535a27a8be"
+    },
+    {
+      "path": "evidence/domain-implementation-evidence.json",
+      "bytes": 12000,
+      "sha256": "bc23051eceacf9cf626217f628f22a271d1b3a05ad7967021a26f5bcb4cf6225"
+    },
+    {
+      "path": "evidence/final-gates.json",
+      "bytes": 1814,
+      "sha256": "231ed1d4b58aedf27a55e0f2c98e993048ba7e5999352b79f36e48f044c701be"
+    },
+    {
+      "path": "evidence/full-interrupted-receipt.json",
+      "bytes": 703,
+      "sha256": "05f39eb267585c600890bd4f49980297444b01cc56bc974f4a18f9ac815e385f"
+    },
+    {
+      "path": "evidence/full-interrupted.log",
+      "bytes": 793,
+      "sha256": "d015845dfa254363fcab37c367a7e096a302790a2da485985db43dbd8682b8bf"
+    },
+    {
+      "path": "evidence/full-receipt.json",
+      "bytes": 753,
+      "sha256": "f0237fcc0a931df36eeecc169d4148927638e7b808058430095cfa399378f0ed"
+    },
+    {
+      "path": "evidence/full-timing.json",
+      "bytes": 8218,
+      "sha256": "23cc37b703188d2a5c34318b777a6b680225ace1584518bcf8885f6b96d3acf9"
+    },
+    {
+      "path": "evidence/full.log",
+      "bytes": 3174,
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "path": "evidence/implementation-green-initial.json",
+      "bytes": 643,
+      "sha256": "6f236b64822af3f42acc877320c04f4712665dd1d4be66e1b4070bc34a26bbde"
+    },
+    {
+      "path": "evidence/implementation-red.json",
+      "bytes": 11872,
+      "sha256": "f3e40094aa8c9c9a21b422afed936edaa40a694567a148384bc0feb3a4816ed6"
+    },
+    {
+      "path": "evidence/independent-final-source.json",
+      "bytes": 10146,
+      "sha256": "9d5eb21ef3acd7a6a0a93719b89cf00cd585ab089cc2e075324c49aac9e5fd85"
+    },
+    {
+      "path": "evidence/matcher-display-final-green.log",
+      "bytes": 146,
+      "sha256": "675a34ba090e3f4c10c5f1c5cfd953f1511b3631eda646da7046391e7e111910"
+    },
+    {
+      "path": "evidence/matcher-display-green.log",
+      "bytes": 6931,
+      "sha256": "2c28b5e98b1d47c29c38723430f61209e34d193dd7a1d3c2f5c3caef32110462"
+    },
+    {
+      "path": "evidence/matcher-display-red.log",
+      "bytes": 31872,
+      "sha256": "da94568d1dd9597e6f8863863225c8081cc7f6b3fa59a8b468d5b6f53b8761e0"
+    },
+    {
+      "path": "evidence/matcher-identity-green.log",
+      "bytes": 7290,
+      "sha256": "1a5b68dd8d0667b82423e00b424deec7f1270d68bf9b0fc5d4017f1890ba77b7"
+    },
+    {
+      "path": "evidence/matcher-identity-red.json",
+      "bytes": 5714,
+      "sha256": "c1bac61cfb52af7ab820c00f77b640d786898cdee6582f0622dce1f095f882ce"
+    },
+    {
+      "path": "evidence/matcher-red.json",
+      "bytes": 8775,
+      "sha256": "4d5b48d328d3aee62a0c3f8761f3335d31f39fcd8396f7be6b42dbbd06c11047"
+    },
+    {
+      "path": "evidence/observation-consistency-results.json",
+      "bytes": 1071,
+      "sha256": "b694667d83284e76066309d8a9dc364ca3b487914d0a2bd31bbe97d4cd15824f"
+    },
+    {
+      "path": "evidence/original.patch",
+      "bytes": 114049,
+      "sha256": "2bc36b772f686958d9f5819377b9f3b4fd83a3e34989c77fee3e2b09cd4daad9"
+    },
+    {
+      "path": "evidence/packaging-reconciliation.json",
+      "bytes": 986,
+      "sha256": "5d995f1f9d04907f105c2a5d559adb693e68f52b23fa59e825846f5959f98b56"
+    },
+    {
+      "path": "evidence/performance-baseline.json",
+      "bytes": 3902,
+      "sha256": "0cd399d3f44ae8a92bd5e0fefbfb04f35cc5a3ccbb61249a122b3d90c9a9bbbb"
+    },
+    {
+      "path": "evidence/performance-candidate.json",
+      "bytes": 3904,
+      "sha256": "07b2a134931417e55a2c0895be8ea9f8dbc155b5ed5bc5d5d437fb06b3374742"
+    },
+    {
+      "path": "evidence/performance-comparison.json",
+      "bytes": 1337,
+      "sha256": "8b6c30429489f969df2f23e197c15b99fc4a76e24eda87ae76eec2cd35b83bee"
+    },
+    {
+      "path": "evidence/platform-status.json",
+      "bytes": 1701,
+      "sha256": "b5745a28f67aa12fe4111dc98bcab4c5e33fff401b8b3b62bf5ebc555852dd90"
+    },
+    {
+      "path": "evidence/portfolio-audit.json",
+      "bytes": 54575,
+      "sha256": "4a7eb7ad236fca039c4bb44ec8af9ce86475409cfe9c906f5672bc4a4d19a8c7"
+    },
+    {
+      "path": "evidence/preflight-final.log",
+      "bytes": 11379,
+      "sha256": "9c67e33e554297aca8c58232f1ef92abc66baaa5ef386f247bebaf2609dc5936"
+    },
+    {
+      "path": "evidence/profile-footprint.json",
+      "bytes": 11731,
+      "sha256": "5daf968c597e4347680f1f615c1cbd8a5d69ae10bd2ca6e47c325f03266c8535"
+    },
+    {
+      "path": "evidence/questioning-partial-observation.json",
+      "bytes": 8417,
+      "sha256": "adfeb68f20dceb0b347a89042fa64955c6d86201938964429440eff804bbe54c"
+    },
+    {
+      "path": "evidence/questioning-revision-observation.json",
+      "bytes": 6132,
+      "sha256": "184886498b986759fbdbc7425ea62690b410c7ae0c0061b8f233df457a5bb20d"
+    },
+    {
+      "path": "evidence/reproduce-domain-baseline.py",
+      "bytes": 3828,
+      "sha256": "0bc1569615d9c24b825677f151624bc6c2d2f45a4ca80bbe71a87ea127715a0d"
+    },
+    {
+      "path": "evidence/source-freeze-interrupted.json",
+      "bytes": 5406,
+      "sha256": "4516e61065970f6f723154e9effece18ed4ebf9b9306d14b0c10e52f15b70785"
+    },
+    {
+      "path": "evidence/source-freeze.json",
+      "bytes": 5406,
+      "sha256": "8d523426e9eec6e778f4fbb69a92abc1c37ddd64591539003166f4a79b3d64a6"
+    }
+  ],
+  "semantics": "Final raw input evidence after lossless packaging; formal review output excluded to avoid self-reference; original review input hash retained in packaging-reconciliation.json."
+}

@@ -1,0 +1,29 @@
+{
+  "metric": "local synthetic comparison overhead; no model, Token, device or production metric",
+  "baseline_median_seconds": 1.6229774099999759,
+  "candidate_median_seconds": 0.28311721900001885,
+  "relative_reduction": 0.8255568948430262,
+  "speedup": 5.73252808759706,
+  "baseline_contract_calls": [
+    39,
+    39,
+    39
+  ],
+  "candidate_contract_calls": [
+    1,
+    1,
+    1
+  ],
+  "baseline_source_hashes_from_git": {
+    "src/agent_dev_kit/task_evidence.py": "cf7e7fb9dbcec1b9750c0a63f585c7ac26698c25b2fc14a69f4611b8b06b68d3",
+    "src/agent_dev_kit/task_trials.py": "686342fa364ecf3d06d1cf5cbf504117513bf860777ab6ead72e63b1abd9d97b",
+    "src/agent_dev_kit/effect_trials.py": "eadbc1657592796e0b4c043437a64c1cb4ffdac6f146d88e77d906fa1a09143f",
+    "tests/test_task_trials.py": "9d8c9e2b13958bbac931215950546969bae4a98ea02ed0c8a7c884e65730d56e"
+  },
+  "candidate_source_hashes_after_run": {
+    "src/agent_dev_kit/task_evidence.py": "db7ccb927e7741fba8455f23bfb6c5df3bb42665771087e89a2bb2bc002501f2",
+    "src/agent_dev_kit/task_trials.py": "c9bbcbd2ea02fe6e1c9319df6dacee972dc3d50f0b55bd5a11ec2a9d2b65cecd",
+    "src/agent_dev_kit/effect_trials.py": "80859ab2551da967e3888790cbcd4c8516bf2aa39fbafb8737028ec4529abf01",
+    "tests/test_task_trials.py": "2417e5196dd628c7262cc17aec099e6ddc1e5aa825d13a3513513a0436e1429b"
+  }
+}

@@ -365,7 +365,7 @@ def _acceptance(value: Any, package: _Package, run: Mapping[str, Any],
     return status, grader
 
 
-def _import(package: _Package, manifest: Manifest) -> dict[str, Any]:
+def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any]) -> dict[str, Any]:
     raw = package.read(package.name)
     data = _object(loads(raw), {"schema_version", "provenance", "run", "input_snapshot", "workspace_snapshot",
                                "events", "acceptance", "artifacts", "skill_exposure"}, "observation")
@@ -446,7 +446,6 @@ def _import(package: _Package, manifest: Manifest) -> dict[str, Any]:
         if isinstance(outcome, OutcomeFact) and outcome.status == "blocked" else (),
         failure_pattern=failure_pattern, next_goal_ref=None, token_usage=token_usage, cost=cost, outcome=outcome,
     )
-    contract = load_contract(manifest.root / "manifests/agent_value_contracts.json")
     result = emit_run_evidence(RunEvidenceObservation(facts, finished), manifest, contract)
     return {
         "schema_version": "adk-task-evidence-import/v1", "status": "imported", "provenance": provenance,
@@ -474,9 +473,16 @@ class ImportedTaskEvidence:
 
 def read_task_evidence(input_path: Path, manifest: Manifest) -> ImportedTaskEvidence:
     """Read a local package without scanning, writing, executing or networking."""
+    contract = load_contract(manifest.root / "manifests/agent_value_contracts.json")
+    return _read_task_evidence(input_path, manifest, contract)
+
+
+def _read_task_evidence(input_path: Path, manifest: Manifest,
+                        contract: Mapping[str, Any]) -> ImportedTaskEvidence:
+    """Reuse one caller-validated snapshot only within a comparison invocation."""
     package = _Package(input_path)
     try:
-        report = _import(package, manifest)
+        report = _import(package, manifest, contract)
         return ImportedTaskEvidence(report, tuple(package.directory / name for name in package.cache), package.total)
     finally:
         package.close()

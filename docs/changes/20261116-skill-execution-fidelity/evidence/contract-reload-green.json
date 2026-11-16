@@ -1,0 +1,15 @@
+{
+  "started_at": "2026-11-15T23:59:49.678416+00:00",
+  "finished_at": "2026-11-15T23:59:51.008075+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "test_task_trials.TaskTrialsTest.test_contract_is_checked_once_and_reloaded_on_the_next_invocation"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.956s\n\nOK\n",
+  "expected_phase": "GREEN",
+  "synthetic": true
+}

@@ -1,0 +1,371 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261116-skill-execution-fidelity",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/research_skill_methods",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "evidence_completed_at": "2026-11-16T00:24:48.320519Z",
+  "reviewed_at": "2026-11-16T00:26:16Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "r1-explicit-name",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Independent Chinese/English reproductions found a directly declined primary could still be selected. Existing canonical polarity now applies across explicit, routed, lexical and same-group selection; final normal/refusal controls independently pass."
+    },
+    {
+      "id": "r2-displayed-name",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Independent review of the first freeze reproduced backtick and dollar-name refusal bypasses. Finite backtick/dollar/at prefixes now preserve canonical polarity; final independent checks cover both auto and explicit paths."
+    },
+    {
+      "id": "r3-exact-identity",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "A refusal of the distinct -experimental identity suppressed the canonical Skill. Raw casefold identifier boundaries now distinguish suffix, underscore, numeric and prefixed identities; original and additional positive controls independently pass."
+    },
+    {
+      "id": "p1-log-packaging",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Two verbatim RED logs contained trailing whitespace and failed the staged diff format check. Lossless JSON containers preserve all original bytes and raw digests; independent decoding and staging checks pass. Audit EOF was corrected without altering runtime sources or gates."
+    }
+  ],
+  "limitations": [
+    "This is source and local-evidence approval, not approval bypass or completed remote publication. T7 remains blocked and the overall task is not fully delivered remotely.",
+    "The full entrypoint has 102 test groups, not 102 individual assertions; its preserved output is compact and does not contain every successful child process log.",
+    "The 82.56 percent reduction is a three-sample median of local synthetic comparison overhead only; no model effect, provider Token, monetary cost or device performance was measured.",
+    "Acceptance names bind composition, not grader semantics. Observation timestamps and identities remain caller observations, not native attestation.",
+    "The partial-answer conversation used earlier pre-compression text; the revision conversation's text was compared later and has no runtime-captured hash or start/finish timestamps. Both are supplementary qualitative observations.",
+    "BSP tests use a GNU make fixture and interface tests compile local C vectors; real cross-compilation, target boot and hardware qualification were not performed.",
+    "Local ruff/mypy were unavailable and not executed; remote CI has not run for this change.",
+    "Negation handling supports a bounded lexical grammar and a finite identity display syntax, not complete natural-language or double-negation interpretation.",
+    "AI reviewer declarations and SHA256 bindings do not constitute a human signature, native attestation, or authority to bypass automatic approval.",
+    "The target commit binds runtime sources and four frozen contract documents. Subsequent changes are local evidence packaging and task-status records; remote T7 remains blocked."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+    "head_commit": "016d673331ef458ac94f72d08ec67537a000cc4b",
+    "original_patch_sha256": "2bc36b772f686958d9f5819377b9f3b4fd83a3e34989c77fee3e2b09cd4daad9"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "35abc8c3ac07c5a63b4f46c2a11736d7c1316f0dff93b1c37e193a7466cfcd1e"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "960df83dd6e7af78633e44dec0cf8651393fb72de81c17c038a679afdfb66771"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "25267f7a7c3b72c1e9544012c8f513844fea425df1499c96cab4a4d49d7504f3"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "ced668167f4e415c415ff5d9bd95388d6107b012c979309b1f9ea603f5dacdc3"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-execution-fidelity/design.md",
+      "sha256": "511461e071134fb13038dd9f4f40cf8b65f8741cbbe2145951df4f0e6b0994f2"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-execution-fidelity/negative-results.md",
+      "sha256": "3b09e7ea3312cb1025853c5ca2217f95e0d974c2657e499da99fdb1a519d07d6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-execution-fidelity/requirements.md",
+      "sha256": "1547bf6c9348849293d23302ff0b8dd0e3bd7667185ca6df0b153d60168a13fc"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-execution-fidelity/source-review.md",
+      "sha256": "8d51e9341ded7a9bb344fd2ebca18a9e88e8823ff077cc05cc892e00d9d3c3b6"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "49dcc1431c292214e3acb3aaa980be32a5e41f1d0b11b8fe2ca9f752f98716db"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "eb430cc12a4f4f12a5c4f308a88c3b84a9d5a2f0b5e344f9161b6bde569c2a09"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "4f0cc3343a9b0763f5eb232c8500398c5f77c0f064c1bc72ed8efc4adcd345f5"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "sha256": "ea121564230e9971ab16e53b048a80cdbbffb8e94347be6a932c62fac558dbd0"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "sha256": "0a488e462758f8be7aabf69fbb004b95628ee637a597e366120d93a6e2e98734"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-branch-closeout/references/closeout-options.md",
+      "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "sha256": "f74a81e74e37f743fddefc2f3ca175ca2245eaccfcfc4e9c3b83055bc20ce82e"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "sha256": "5c9550491f44aa9c9d07595bc637bafe199d98ed223c35e86384feb209a6fc05"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "sha256": "1020e8dd62dcb128827cf0ab89ece17dfef229abb6c05003b2b6c789b262e284"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+      "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-memory-curator/SKILL.md",
+      "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-planning-execution-loop/SKILL.md",
+      "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-repo-drift-remediation/SKILL.md",
+      "sha256": "26c808bd1bbd4b8133ed17ae66d8a93a7a747f7ba09b87056e0e2afd073b2073"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "sha256": "1d95806ea88d14ad27f3c925ed7b1d1b0b5e57e7eb0f4f8580221bb00c77a8d0"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "a16f36f9fb3faa4987ada72f72ee2a09a214cb2c3fcdf69636ba9ebc38f43c2f"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "sha256": "b3974e127572fd2cf6e9b2b58cb26b6b2b6287ba285d3e3887556723908b7055"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/effect_trials.py",
+      "sha256": "80859ab2551da967e3888790cbcd4c8516bf2aa39fbafb8737028ec4529abf01"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/matcher.py",
+      "sha256": "889aeab3d895aeabe03652e0c6eb3c1563a4d3081d9c2245d69dcb8ddf40847d"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/task_evidence.py",
+      "sha256": "db7ccb927e7741fba8455f23bfb6c5df3bb42665771087e89a2bb2bc002501f2"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/task_trials.py",
+      "sha256": "c9bbcbd2ea02fe6e1c9319df6dacee972dc3d50f0b55bd5a11ec2a9d2b65cecd"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "40ae38f2955900c95f61b2167e45a1536a75542d6db54a334ed6f91b13849615"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "a23531ee894c25ab09490c37a53d013dec8955bd239fb28fc1365a40641a1f89"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content_contract.py",
+      "sha256": "1c9890bfc7adcf05c949eaa44078936ba089430fb5cacd167501bae45a37bff9"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_governance.py",
+      "sha256": "c4ae0f3ad273b018d1ba9656345be661bb438ab9ab355275915e2aa08ec59d3d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "8fe60b9a87cfa52baead8afed8e4c70e7b4e0c3d85203e3f4b3e5f4ac193df4e"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_task_trials.py",
+      "sha256": "2417e5196dd628c7262cc17aec099e6ddc1e5aa825d13a3513513a0436e1429b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "2bc36b772f686958d9f5819377b9f3b4fd83a3e34989c77fee3e2b09cd4daad9"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/input-index.json",
+      "sha256": "86492ba513cbc6453d0ced0e875771e15914564a49f3ce0026ba82b933c8317f"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-freeze.json",
+      "sha256": "8d523426e9eec6e778f4fbb69a92abc1c37ddd64591539003166f4a79b3d64a6"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-receipt.json",
+      "sha256": "f0237fcc0a931df36eeecc169d4148927638e7b808058430095cfa399378f0ed"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-timing.json",
+      "sha256": "23cc37b703188d2a5c34318b777a6b680225ace1584518bcf8885f6b96d3acf9"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final-gates.json",
+      "sha256": "231ed1d4b58aedf27a55e0f2c98e993048ba7e5999352b79f36e48f044c701be"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-final-source.json",
+      "sha256": "9d5eb21ef3acd7a6a0a93719b89cf00cd585ab089cc2e075324c49aac9e5fd85"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-final-review.json",
+      "sha256": "b6baebaec6ce8384cb8c7e2c8503ecd8ac273475e8c38367ffc66309fb2e7fb3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-packaging-review.json",
+      "sha256": "cfe8e6f53a056ee830fddaa574e8d24881e81638d40b73193182599829bb1a2e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/packaging-reconciliation.json",
+      "sha256": "5d995f1f9d04907f105c2a5d559adb693e68f52b23fa59e825846f5959f98b56"
+    },
+    {
+      "base": "record",
+      "path": "audit.md",
+      "sha256": "7d41d1ddf6a85f474775903b5e33d6ad7ffe3dae1e8c0082c373c3205b4d6b54"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "be24f0252df1cd576802b346e7e80d4499a3a5e61102a876653d9b828ff9845e"
+    },
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "825b09374bbd8bd1a016ca812f690dda9d3a534cc4ee6fad17fa572995db9d9c"
+    },
+    {
+      "base": "record",
+      "path": "tasks.md",
+      "sha256": "d70c9896e3e833f7d318d8b532d5db9c718953604a31d4278d68124058f1c07d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/platform-status.json",
+      "sha256": "b5745a28f67aa12fe4111dc98bcab4c5e33fff401b8b3b62bf5ebc555852dd90"
+    }
+  ]
+}
