@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "record_sha256": "d6690b875f2796099b8d43d1c906eb26c39cef7f388ae9a66d292806b0248ead",
+  "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "checked_at": "2026-11-16T12:45:06.703548+00:00",
+  "source_references": 29,
+  "evidence_references": 5
+}

@@ -1,0 +1,177 @@
+{
+  "baseline_commit": "b20df018ca62436dd026daed6ec6944d4a45cbbd",
+  "tested_local_source": "5b253b8885447f35f015d63950db025b2d82b2ba",
+  "canonical_remote_source": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+  "identical_tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+  "original_patch_sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7",
+  "files": [
+    {
+      "path": ".version-lock",
+      "bytes": 84,
+      "sha256": "f920549db6535c8a689d4e88f1e7737e5fb0addf523a1a7bc87fa22394c1a967",
+      "git_blob": "d75f396e2789b3b3b8f944f611fd530c9b662532"
+    },
+    {
+      "path": "CONTEXT.md",
+      "bytes": 8644,
+      "sha256": "05591af2ed45633b2b904d72e62d3ec309ae0c7d3546acad99a7661e34017a18",
+      "git_blob": "7f1c2fdeb2470e97bf48020c9825be1e95542f3c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13087,
+      "sha256": "5ea3a5637c75ebdad376edf9340e5ab0c7c4659ed2a2b76b254b700eadcb3eb8",
+      "git_blob": "2236052e7749742ada5bc5f326747a8deb80db19"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/audit.md",
+      "bytes": 3680,
+      "sha256": "dcbb1d3a0c180d7639e15c6905f61885a107f2e13ac5a5d4cb18b85d79fb4477",
+      "git_blob": "d59f5a8e2f9cc8173a316f52c4cc411e3db3a4ef"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/design.md",
+      "bytes": 1828,
+      "sha256": "78149d3f51ae99d47504cb93932f47ab9a32c384d34933802fe8f9c99abbc65b",
+      "git_blob": "3abd2695c95d4bdebf54c349164facc8bafb95b1"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/external-sources.json",
+      "bytes": 4007,
+      "sha256": "dd81ba5989eb7bf4c1021a7c01e79a4dd9a34ed3bb7e20089c511f04ec0c0f42",
+      "git_blob": "b0c2007041656163903a027e30a7b61a024d696c"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/baseline-probe.json",
+      "bytes": 745,
+      "sha256": "4c694a2c1cf07d0a76d16e8abb31ef86804b1146293269fd5e2bd7d37dbc7409",
+      "git_blob": "178f7fc2c1c97eb48a256f0b89ac42b09e37b8a2"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/baseline_probe.py",
+      "bytes": 1310,
+      "sha256": "4b20d4c24b3e73530882e464454be8397544537adc146a28cda314f26906da1d",
+      "git_blob": "e82aa72fbb0b98b92ced70580906c59edc339a78"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/green-original-token-budget.json",
+      "bytes": 956,
+      "sha256": "b1584eced4a835823c1482ef2b42c2958fa711da45d34eb50e57e095c8c6cf5f",
+      "git_blob": "90bd714ab1da892cfbb1233e76c8203e07e13d3a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/green-published-method.json",
+      "bytes": 1161,
+      "sha256": "2c154f2f84a604fafebadcf49b1b9b90df4c5fa2f15bb35508e38bc80f21c488",
+      "git_blob": "8f84ced0caf26b8ecfe9cfb6f4a30b98dccaaefc"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/implementation-diff-check.json",
+      "bytes": 376,
+      "sha256": "4616526cce1f01f7fcd1df596fea322f2a2a0542aba7e73638e135b70f5410c7",
+      "git_blob": "89392df5108ab20259038d471eac0acd838900b4"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/record_command.py",
+      "bytes": 973,
+      "sha256": "2237a037d4dccbab0eed3fe182c55541de5dea14e37926478e6a689aa6606b84",
+      "git_blob": "ee233e85978f80479b5420d2392ac7c8c151f51e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/red-published-method.json",
+      "bytes": 4960,
+      "sha256": "513693af2dab32e1dd3e13818c26e7b8e8fe756cc04578c02f9fb875b2425698",
+      "git_blob": "9193b832021d94e027e846fcbe4ef3377aa48ab7"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/unchanged-context-budget.json",
+      "bytes": 1138,
+      "sha256": "da5531485cb44296b1f9e42bc42bfdf7e17a142dc29869c86e7d9122d02ae493",
+      "git_blob": "ec42ad2871584e7816e6a12550453027364bd053"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/portfolio-audit.json",
+      "bytes": 88073,
+      "sha256": "cbf7851b8938ab8fdd360e844063d2aad13035bb272cbd20b118f0a0b291fcda",
+      "git_blob": "10a0300d248a1b2a3574b368ee3391a08ad4eb21"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/evidence/retained-implementation.json",
+      "bytes": 2632,
+      "sha256": "0907fe7f82ebdbc0b4a69857f2df3748e7b050788be689410e900919677d6ff8",
+      "git_blob": "ea98797ca390469f515581d37fbc6f1287111ab7"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/negative-results.md",
+      "bytes": 1219,
+      "sha256": "5a50d3b8e668ece6f8f5bc8f2818ffcaea52888d25d5183b1c2ecf5e34d66907",
+      "git_blob": "5be3ef6968bf347a98b4680d40251a3618463583"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/requirements.md",
+      "bytes": 2010,
+      "sha256": "482ce481881ca850888fec8b299a5b0586e21a4e3ac1042653ed808000f01d54",
+      "git_blob": "e08c7bcd2a30fe08fc58803435ab00575e7abeac"
+    },
+    {
+      "path": "docs/changes/20261116-skill-serialization/tasks.md",
+      "bytes": 1513,
+      "sha256": "53a52b6764e4c0610031f0ff1c01cfdfd028279eda83cfb577a2a5747cf44c51",
+      "git_blob": "eda55ef35b5f09c7c6dc581152518a18b1a091db"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 90988,
+      "sha256": "982bb2b833e3379c34bc6b7677e0e9f158b29c3d07baad7a473ba98040dae0ea",
+      "git_blob": "c2c3870397e039911a145de90b1a956897aa01d4"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "bytes": 706,
+      "sha256": "769e1a88a83f244205eb00e9cd2b358e17c8f9b66560e29380d0ac9b25fb6d86",
+      "git_blob": "2546b07b9473b03bf10d1f239604f350f6a3c659"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "bytes": 8532,
+      "sha256": "37aab5ff6d970d6b7d2d534a64a9570d3183a3856f6dc4fc22c48c55682500bd",
+      "git_blob": "d8cde00b3102d225495aec70bbf8e88937a662fb"
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "bytes": 4724,
+      "sha256": "7ec6f5e8647af1a59fd7dfb249965df257f414c40d4076871688f48b612aaa3f",
+      "git_blob": "4646b0d5d1383cadacea0576f91e7e1e44aab404"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1310,
+      "sha256": "54d048608356fc390aca4758a8791c6d4f52a11876c98e3488519ec07041a55c",
+      "git_blob": "15e9940b6441ffc87f5a20b0f5a1661babe6a3f2"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "bytes": 71,
+      "sha256": "018da8c13e57663b8fc9f2464819f2ec98233ab9060492c5a2a5aa241b82a9a5",
+      "git_blob": "528d48eb4c52aa2c4c654a95b892f46069882f8e"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "bytes": 6638,
+      "sha256": "d47cc71aaecd15aef9465d2c2cf4fc654835e4f2053f8a2e343a45a309cd9098",
+      "git_blob": "4555cdcea52e0400b97ec7b9c5eaa327309674d9"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 1076,
+      "sha256": "2a3f4c1586dd29df7864e5db0c167badff0bf4831619b2abb1c40f5a63219507",
+      "git_blob": "e6d60c8db55130af49f2b548219e1b41c0035dc9"
+    },
+    {
+      "path": "tests/test_skill_serialization_methods.py",
+      "bytes": 5712,
+      "sha256": "2dc2faf41f0bd502819fb81c3e3d14f58117c5386b0ebb57bff994d3fd0e59a4",
+      "git_blob": "844e2fbf5fb195edc972830cd911ebba07df6de4"
+    }
+  ]
+}
