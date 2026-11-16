@@ -1,8 +1,8 @@
 ---
 name: adk-integration-hil-sil
 description: "用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。"
-version: 1.0.3
-last_updated: 2026-11-15
+version: 1.0.4
+last_updated: 2026-11-16
 triggers:
   - "集成测试"
   - "HIL测试"
@@ -20,64 +20,51 @@ constraints:
 # adk-integration-hil-sil
 
 ## Goal
-用目标工程的 SIL/HIL 验证系统行为与回归，保留可复跑证据。
+验证 SIL/HIL 系统行为并保留可复跑证据。
 
 ## Prerequisites
-- 锁定设备族、board revision、固件 hash、runner、资源占用、受控 HIL operator 和安全恢复路径。
-- 优先使用目标仓现有 build/test 工具；先查 CMake option、pytest 插件、脚本和工装，不假定 `TARGET_SIM`、`pytest --board`、`scripts/ci_test.sh` 存在。
-- 设备编程、主动探测、重启、断电和故障注入分别执行授权与效果分级。
+- 核设备族、board revision、固件 hash、runner、rig 占用、受控 operator 与恢复路径。
+- 查项目真实 build/test 入口和插件，不猜选项；编程、探测、重启、断电、故障注入分别核授权和效果。
 
 ## Workflow
-1. **分层**：区分 host-unit、compile-only、SIL/QEMU、HIL、人工板级和量产资格；哪层实测就只报告哪层。
-2. **执行后端**：按真实命令区分 compile-only/host/emulator/board-runner；未注册目标 runner 时 CTest 通过不证明板上运行。
-3. **资源隔离**：冻结构建输出、测试二进制、缓存、端口、串口、rig 和 device identity；共享资源禁止并行运行。
-4. **SIL**：按真实构建/仿真入口执行，采集架构、模拟精度、未覆盖硬件行为和原始证据。
-5. **HIL preflight**：只读核对 device/firmware、测试硬件、故障停止条件和健康恢复；需要刷写或改变设备状态时另交授权 operator。
-6. **逐级扩大**：单次 smoke→功能/异常回归→可选长稳；失联、身份漂移、core/fatal log 或恢复失败立即停止，不能重试刷到绿。
-7. **复验**：区分失败、跳过、未执行和预期负结果，记录命令、退出码、固件身份、串口/总线证据及 postcondition。
-8. **交付**：说明各层 pass/fail/not-run、依赖与残留缺口；本 Skill 不单独批准量产。
+1. **层次与后端**：分开 host-unit、compile-only、SIL/QEMU、HIL、人工板级及量产资格；没有目标 runner，CTest 绿不证明上板。
+2. **隔离**：冻结构建目录、二进制、缓存、端口/串口、rig 和设备身份，共享资源禁止并行。
+3. **SIL**：运行真实入口，记录架构、模拟精度和未覆盖的硬件行为。
+4. **HIL preflight**：只读核设备/固件、工装、停止条件与恢复；刷写或状态改变另交授权 operator。
+5. **逐级扩大**：smoke→功能/异常回归→适用长稳。失联、身份漂移、core/fatal log 或恢复失败停止，不重试刷绿。
+6. **资格与交付**：分开 pass/fail/skip/not-run，核必跑用例、日志、退出码与健康 postcondition；至少一条系统级异常恢复验证。SIL 不代 HIL/量产资格。
 
 ## Commands
-仅适用于已核实使用 CMake/CTest 的工程：
+仅用于已核 CMake/CTest ≥3.21 的 runner。`ADK_BINARY_DIR` 为本次绝对构建目录，`ADK_CONFIG` 为一致配置，`ADK_EVIDENCE_DIR` 为已有任务证据目录；筛选时保留参数和必跑身份。
 ```bash
-ctest --test-dir build/sil --show-only=json-v1
-ctest --test-dir build/sil --output-on-failure --no-tests=error
+# hil-sil-ctest:
+set -euo pipefail
+report_dir=$(mktemp -d "$ADK_EVIDENCE_DIR/ctest.XXXXXXXX")
+report="$report_dir/ctest.xml"
+printf 'CTest report: %s\n' "$report"
+ctest --test-dir "$ADK_BINARY_DIR" -C "$ADK_CONFIG" --output-on-failure --no-tests=error --output-junit "$report"
 ```
-发现与执行使用同一配置/筛选；空集/全禁用/筛空须失败，退出 0 不把 skip/not-run 变成 pass。
-pytest 工程须先检查实际插件/选项；目标不存在时不得猜测 `--board` 或 `--port`。现场命令、rig 与固件刷写由项目提供。
+此段只采集报告并保留命令失败，**不自动判整项通过**。读取新 JUnit 的每个 testcase：`run` 且无 failure/error/skipped 才是 pass；`notrun`/`skipped` 和 `disabled` 分列。缺失、畸形、未知状态、任一失败、零实际 pass 均不合格；混合 pass/skip 为 partial，缺必跑项 blocked。`--no-tests=error` 不拒绝全部动态 skip，不能只信 exit 0。沿用项目报告工具，不消费旧 JUnit；pytest 等使用其已核插件/报告格式。
 
 ## Budget / Retry
-- 按目标动作、恢复 SLA、硬件负载和阶段确定 timeout、退避及最大重试，不套用统一 30 秒/300 秒和三次重试。
-- 外部动作状态不明时先对账 artifact／boot_id／device status，不盲目重放。
-- 无设备或授权时只能 `not-run/blocked`，SIL 绿不代表 HIL 或 production-ready。
+- 按动作、恢复 SLA、负载和阶段定 timeout/退避/重试，不套统一秒数或次数。
+- 外部效果未知先对账 artifact、boot_id、device status；无设备/授权记 not-run/blocked。
 
 ## Evidence Template
 ```md
-- Coverage Split (HIL/SIL):
-  | Layer | Cases | Pass | Fail | Skip |
-  |-------|-------|------|------|------|
-  | SIL | __ | __ | __ | __ |
-  | HIL | __ | __ | __ | __ |
-- Environment Baseline:
-  - SIL: host compiler ____, test framework ____
-  - HIL: probe=____, board=____, firmware=____
-- Case Result Summary: [link to report]
-- Failure Repro Steps:
-  - [ ] SIL 可复现
-  - [ ] HIL 可复现
-  - [ ] 最小复现命令: ____
-- Release Readiness: [可发布/不可发布 + 理由]
+- Layer / Backend / Cases: selected / pass / fail / skip / disabled / not-run
+- Environment: toolchain / runner / rig / device / firmware hash
+- Command / Configuration / Selector / Exit / Duration / Fresh Report:
+- Required Cases / Missing Cases / Qualification:
+- Failure Reproduction / Serial-or-bus Evidence / Final Health:
+- Uncovered Hardware / Next Verification / Release-gate Owner:
 ```
 
 ## Failure Handling
-- HIL 资源不可用时，先以 SIL 保持回归连续性并标注硬件覆盖缺口。
-- HIL/SIL 结果冲突时，优先核对环境差异与 mock 假设是否偏离真实硬件行为。
-- HIL 测试超时，检查串口连接与目标板状态（可能 hang）。
-- 固件烧录失败，检查调试通道配置与目标板供电。
+- HIL 不可用可继续 SIL，保留硬件缺口；冲突先核环境与 mock 假设。
+- 超时保留日志再核连接与板状态；刷写失败按既定恢复路径核通道、供电和固件身份。
 
 ## Quality Gate
-- 必须说明 HIL 与 SIL 的覆盖分工。
-- 必须至少包含 1 条系统级异常恢复验证。
-- 发布准备应明确证据和未测缺口；最终 go/no-go 归项目发布门禁。
-- 纳入 CI 的适用 SIL 用例必须区分 pass/fail/skip/not-run，不以未执行或有未解释失败冒充 PASS。
-- HIL 报告记录固件/设备身份、原始证据（具备串口时包含串口日志）、退出码和最终健康状态。
+明确覆盖分工、异常恢复、固件/设备身份、用例结果与最终健康；有串口则附原始日志。未执行/未解释失败不算 PASS；go/no-go 归项目发布门禁。
+
+依据：[CTest JUnit](https://cmake.org/cmake/help/v3.21/manual/ctest.1.html)。

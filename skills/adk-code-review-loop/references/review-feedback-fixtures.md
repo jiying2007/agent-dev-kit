@@ -41,18 +41,7 @@
 
 ## Snapshot Commands
 
-```bash
-git status --short
-git rev-parse HEAD
-git write-tree
-git diff --stat
-git diff --name-only
-git diff -- <path>
-git diff --cached --check
-<project-test-command>
-```
-
-`diff --cached --check` 是机械门禁，不能替代语义审查。
+只使用 [Snapshot commands](review-evidence-template.md#snapshot-commands) 的目标选择与命令，不复制快照流程。机械检查不替代语义审查。
 
 ## 合理化借口拦截
 

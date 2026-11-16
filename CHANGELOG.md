@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### 11.3.7 — 自包含并行交接、真实测试结果与可诊断超时
+
+- 重新逐项复核全部 65 个 Skill 与 53 个随包参考资源，保留正确方法；从官方和原作者具体文件筛选差异，不整包导入外部 Skill。
+- 并行工作包默认使用随包合同，源仓模板成为已核存在的可选辅助；Review 反馈去除重复快照命令，复用不会刷新 index 的 canonical 路径。
+- 数据获取父入口保留 partial/not-verified、已取得内容和缺失原因；成长复盘 metadata/README 与 index-first 范围一致；未知归档 hash 差异先诊断，不能仅重算摘要后放行。
+- CMake preset/manual 共用一次真实 CTest 执行，用新 JUnit 区分实际通过、skip、disabled 和异常结果；全部动态 skip 不再冒充通过。该检查显式使用 CTest >=3.21 与 host Python 3，compile-only 不要求测试 preset 或 Python。SIL/HIL 保留同次报告及实际配置，命令成功与资格判断分开。
+- 命令示例测试维持 15 秒工作预算；超时保留两路输出、执行身份和耗时，并对本次进程组限时回收。旧 CMake 超时根因仍未明，不以诊断增强或一次成功重跑宣布修复。
+- 8 个原 profile 上限及发布门禁保持；真实工具反例、完整源码回归和最小上下文对话试用各自限定证据范围，不声称原生 runtime、板端或 Token/费用效果。
+
 ### 11.3.6 — 实际审查范围、独立交接与可靠嵌入式示例
 
 - 审查模板按 staged、working-tree 或已核分支基线取得对应 patch，保留 dirty/untracked 边界；纯 Skill 交接默认使用随包字段，源码 schema/template 改为有条件辅助。

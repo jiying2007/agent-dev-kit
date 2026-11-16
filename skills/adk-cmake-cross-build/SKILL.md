@@ -1,7 +1,7 @@
 ---
 name: adk-cmake-cross-build
 description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
-version: 1.0.5
+version: 1.0.6
 last_updated: 2026-11-16
 triggers:
   - "CMake"
@@ -23,43 +23,68 @@ constraints:
 # adk-cmake-cross-build
 
 ## Goal
-复现 ARM Cortex-M/A、RISC-V 等实际目标的 CMake 交叉构建。
+复现目标 CMake 交叉构建，区分构建与执行。
 
 ## Prerequisites
-- 核 host/build/target、编译器、toolchain/sysroot、ABI/依赖路径、CMake 版本与 generator；不把其他构建系统转为 CMake。
+核 host/build/target、toolchain/sysroot/ABI、generator、权限和自有目录。测试需 CTest ≥3.21 和 host Python 3 标准库；compile-only 不需 Python。
 
 ## Workflow
-1. **配置**：核执行授权和工具可用性；未授权只读规划。只用任务自有目录，不替换他人 build。
-2. **绑定**：preset 与手工配置二选一。preset 的 build/test 名称可不同，但 `configurePreset`、`binaryDir`、configuration 必须一致；缺匹配 presets 则按核实参数手工配置。见 [Presets](https://cmake.org/cmake/help/v3.27/manual/cmake-presets.7.html)。
-3. **后端**：先核 `host-unit | compile-only | emulator | board-runner`，emulator 含 `CROSSCOMPILING_EMULATOR`。没有已验证执行后端用 compile-only；host CTest 不证明板端运行。
-4. **产物**：从本次 binaryDir/configuration 定位实际 ELF 为 `ADK_ELF`，不猜 `build/<target>`；用实际目标工具链检查架构、段、符号/map。
+1. 选 `ADK_BUILD_MODE=preset|manual`。preset 名称可不同，但 `configurePreset`、`binaryDir`、configuration 须匹配；否则按核实参数手工配置。
+2. 核 `host-unit|compile-only|emulator|board-runner`；emulator 配真实 `CROSSCOMPILING_EMULATOR`。缺后端用 compile-only；host 不证明板端运行。
+3. 从本次 binaryDir/configuration 定位 `ADK_ELF`，不猜路径；目标工具核架构、段/符号/map。失败不消费旧产物。
 
 ## Commands
-在源码根选一段；变量须填实际值，目录用绝对路径。`ADK_CONFIG` 固定配置；单配置还设置 `CMAKE_BUILD_TYPE`。`ADK_BUILD_JOBS` 是按 CPU/RAM/CI 配额核定的正整数（`--parallel <resource-budget>`）。
+源码根运行，变量经核实、路径为绝对值。`ADK_CONFIG` 固定配置，`ADK_BUILD_JOBS` 按 CPU/RAM/CI 配额取正整数（`--parallel <resource-budget>`）。测试时 `ADK_EVIDENCE_DIR` 为已有任务证据目录，保留新 JUnit。
 ```bash
-# preset-build: 已核对 configure/build/test 引用与配置
+# cmake-build:
 set -euo pipefail
-cmake --preset "$ADK_CONFIGURE_PRESET"
-cmake --build --preset "$ADK_BUILD_PRESET" --config "$ADK_CONFIG" --parallel "$ADK_BUILD_JOBS"
+case "$ADK_BUILD_MODE" in
+  preset)
+    cmake --preset "$ADK_CONFIGURE_PRESET"
+    build_args=(--preset "$ADK_BUILD_PRESET") ;;
+  manual)
+    cmake -S "$ADK_SOURCE_DIR" -B "$ADK_BINARY_DIR" -G "$ADK_GENERATOR" \
+      -DCMAKE_TOOLCHAIN_FILE="$ADK_TOOLCHAIN_FILE" -DCMAKE_BUILD_TYPE="$ADK_CONFIG"
+    build_args=("$ADK_BINARY_DIR") ;;
+  *) exit 2 ;;
+esac
+cmake --build "${build_args[@]}" --config "$ADK_CONFIG" --parallel "$ADK_BUILD_JOBS"
 case "$ADK_TEST_BACKEND" in
-  host-unit|emulator|board-runner) ctest --preset "$ADK_TEST_PRESET" -C "$ADK_CONFIG" --output-on-failure --no-tests=error ;;
   compile-only) printf 'target tests: not-run\n' ;;
+  host-unit|emulator|board-runner)
+    if [[ "$ADK_BUILD_MODE" == preset ]]; then
+      test_args=(--preset "${ADK_TEST_PRESET:?}")
+    else
+      test_args=(--test-dir "$ADK_BINARY_DIR")
+    fi
+    report_dir=$(mktemp -d "$ADK_EVIDENCE_DIR/ctest.XXXXXXXX")
+    report="$report_dir/ctest.xml"
+    printf 'CTest report: %s\n' "$report"
+    ctest "${test_args[@]}" -C "$ADK_CONFIG" --output-on-failure --no-tests=error --output-junit "$report"
+    python3 - "$report" <<'PY'
+import sys, xml.etree.ElementTree as ET
+root = ET.parse(sys.argv[1]).getroot()
+cases = root.findall("testcase")
+states = [c.get("status") for c in cases]
+if root.tag != "testsuite" or len(cases) != int(root.get("tests", "-1")) or any(s not in ("run", "notrun", "disabled", "fail") for s in states):
+    raise SystemExit("invalid CTest report")
+if any(c.find(k) is not None for c in cases for k in ("failure", "error")) or "fail" in states:
+    raise SystemExit("CTest failures in report")
+if any(c.get("status") == "run" and c.find("skipped") is not None for c in cases):
+    raise SystemExit("invalid passing status")
+passed = states.count("run")
+status = "pass" if passed == len(cases) and passed else "partial"
+print(f"status={status} passed={passed} selected={len(cases)} skipped={states.count('notrun')} disabled={states.count('disabled')}")
+if not passed:
+    raise SystemExit("no executed passing tests: not-run")
+PY
+    ;;
   *) exit 2 ;;
 esac
 ```
-```bash
-# manual-build: 不再执行 preset 配置
-set -euo pipefail
-cmake -S "$ADK_SOURCE_DIR" -B "$ADK_BINARY_DIR" -G "$ADK_GENERATOR" \
-  -DCMAKE_TOOLCHAIN_FILE="$ADK_TOOLCHAIN_FILE" -DCMAKE_BUILD_TYPE="$ADK_CONFIG"
-cmake --build "$ADK_BINARY_DIR" --config "$ADK_CONFIG" --parallel "$ADK_BUILD_JOBS"
-case "$ADK_TEST_BACKEND" in
-  host-unit|emulator|board-runner) ctest --test-dir "$ADK_BINARY_DIR" -C "$ADK_CONFIG" --output-on-failure --no-tests=error ;;
-  compile-only) printf 'target tests: not-run\n' ;;
-  *) exit 2 ;;
-esac
-```
-成功构建后检查同一产物；`ADK_SIZE/ADK_OBJDUMP` 为已核实的目标工具路径：
+混合结果须核必跑用例；skip/disabled 不算通过，缺项保持 partial/blocked。`--no-tests=error` 不拒绝全部动态 skip。
+
+产物工具用已核实目标路径：
 ```bash
 # built-artifact:
 set -euo pipefail
@@ -67,22 +92,20 @@ file "$ADK_ELF"
 "$ADK_SIZE" -A "$ADK_ELF"
 "$ADK_OBJDUMP" -h "$ADK_ELF"
 ```
-按实际 build/config/filter 核执行数量；空集/全禁用/筛空须失败，skip/not-run 不算通过。见 [CTest](https://cmake.org/cmake/help/v3.20/manual/ctest.1.html)。
 
 ## Evidence Template
 ```md
 - Host / Target / Toolchain / Sysroot:
-- Preset Names or Manual Parameters / binaryDir / Configuration:
-- Commands / Exit Codes / Duration / Logs:
-- ELF Path / Hash / Architecture / Sections / Size:
-- Test Backend / Counts / Result / Not-run / Limitations:
+- Mode / Presets or Parameters / binaryDir / Configuration:
+- Commands / Exit Codes / Duration / Logs / JUnit:
+- ELF / Hash / Architecture / Sections / Size:
+- Backend / Selected / Pass / Skip / Disabled / Not-run / Limitations:
 ```
 
 ## Failure Handling
-- 依赖失败核 `CMAKE_FIND_ROOT_PATH`/sysroot；链接失败核 ABI/架构，不盲目重跑。
-- preset 失败核版本/JSON/引用链；host 工具混入时核 `find_program` 的 `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER`。
+依赖失败核 sysroot/`CMAKE_FIND_ROOT_PATH`；host 工具查找核 `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER`；链接失败核 ABI，preset 失败核版本/引用链，不盲重跑。
 
 ## Quality Gate
-- 至少一个目标交叉构建成功；未运行目标测试记 `not-run`，不混用 host/target 或配置的证据。
-- clean build 只清理任务自有构建目录；保留可复跑日志，toolchain 纳入版本控制。
-- 核 ELF 身份；裸 bin 不能仅靠 `file` 判断 CPU。失败不消费旧产物。
+目标构建成功；裸 bin 的 `file` 不证明 CPU，未运行测试记 not-run。只清理任务自有构建目录，保留日志及受版本控制的 toolchain。
+
+依据：[Presets](https://cmake.org/cmake/help/v3.27/manual/cmake-presets.7.html)、[CTest](https://cmake.org/cmake/help/v3.21/manual/ctest.1.html)。
