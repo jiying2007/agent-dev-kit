@@ -1,0 +1,18 @@
+{
+  "phase": "budget-before",
+  "command": [
+    "bash",
+    "scripts/check-token-budget.sh",
+    "--summary-json"
+  ],
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "started_at": "2026-11-16T01:01:52.316206+00:00",
+  "finished_at": "2026-11-16T01:01:54.508245+00:00",
+  "returncode": 0,
+  "stdout": "{\"status\":\"pass\",\"budget_status\":\"within-soft-limit\",\"estimate_method\":\"utf8-bytes-ceil-div-4\",\"agents_bytes\":2914,\"agents_soft_limit\":2975,\"agents_limit\":3500,\"agents_estimated_tokens\":729,\"skill_files\":65,\"max_skill_lines\":140,\"max_skill_file\":\"optional-skills/adk-security-supply-chain/SKILL.md\",\"doc_files\":885,\"max_doc_lines\":547,\"max_doc_file\":\"docs/comprehensive-analysis-embedded-harness.md\",\"summary_scripts\":3,\"compact_test_runner\":1,\"context_governance_assets\":11,\"warnings\":0,\"failures\":0}\n",
+  "stderr": "",
+  "entry_sha256": "d7bf180c0e288cb4450892f2b6ce0f61625735b43a89745bed0d5a6e76f62cf6",
+  "entry_bytes": 5888,
+  "sop_script_sha256": "9242b1b9e2dffd0bc5569c4eaca296df96439e213b674ed10e74c84a7380d962",
+  "source_head": "e0c3b97ef8382366939e3b5ed40263307604bd03"
+}

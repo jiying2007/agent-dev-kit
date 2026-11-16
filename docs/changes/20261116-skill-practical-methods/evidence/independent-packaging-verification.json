@@ -1,0 +1,348 @@
+{
+  "schema": "adk-independent-packaging-verification/v1",
+  "reviewer": "/root/external_skill_scan_v2",
+  "started_at": "2026-11-16T01:23:05.133812+00:00",
+  "completed_at": "2026-11-16T01:23:05.886570+00:00",
+  "source_head": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "source_base": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+  "source_reviewed_at_unchanged": "2026-11-16T01:12:41.916238Z",
+  "source_scope_unchanged": true,
+  "new_source_verdict": false,
+  "source_paths": [
+    {
+      "path": ".version-lock",
+      "sha256": "17b62daa713323c29d166eb57e90830981898445091d527e51b531e17db5ebcc"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "c72a667b5ca56ac9f92cc7edb9141d6aaa391e1df9e6688dee7292f36a113708"
+    },
+    {
+      "path": "CONTEXT.md",
+      "sha256": "ebc030dd782c12d7b314a6d965010513af2c9673c27bcda5ca562d9272a4a73f"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8cfc8d0d37f87d19496700f5ae45789948015ff8cd7fb51385f7318b7636d3e2"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/design.md",
+      "sha256": "a5786f6d76b3a920949760cf61d03ec3c47c4b676bd2cbfdc3878233828ce437"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/negative-results.md",
+      "sha256": "6165e719da4f52856059b8cc83438b5f42470170be16dc1fdd3c5b1b0e60666f"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/requirements.md",
+      "sha256": "2242052b60589fcf1dfa427dcd9371624b0d2208b124593ba2127a5692a46ed8"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/source-review.md",
+      "sha256": "8b80f4d07ad78da7772c92e0c4da977d3fa75018f7076b94b8c8b440b18a1c3a"
+    },
+    {
+      "path": "examples/embedded-test-matrix/CMakeLists.txt",
+      "sha256": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da"
+    },
+    {
+      "path": "examples/embedded-test-matrix/README.md",
+      "sha256": "e0a80a4380a4e491b8ab2ebce7dc2d0be239fd7923d76ab3f341a8d487542fee"
+    },
+    {
+      "path": "examples/embedded-test-matrix/cross-build/smoke-command.txt",
+      "sha256": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446"
+    },
+    {
+      "path": "examples/embedded-test-matrix/src/adc_scale.c",
+      "sha256": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e"
+    },
+    {
+      "path": "examples/embedded-test-matrix/src/adc_scale.h",
+      "sha256": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe"
+    },
+    {
+      "path": "examples/embedded-test-matrix/tests/test_adc_scale.c",
+      "sha256": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "a62b0eb9e27d2d2bce2f97b6bfb22eb00f42a197e0f33c69b1fa9bcd33607c6f"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "780589d3fb6a91df329627ac4ea8c9125bfcd94b305caa13a8aa36122d60f769"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "sha256": "7fec646e0f30fa1f69fa56ef677508ae0881596be0baf4f1b0e56eb532899dec"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "sha256": "c388887f84aba2ba5e55187586765b08f54c7eef0a064d9f9cd35352d71d4c9e"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "b346f959dc551558b9042581b14a342a03a75798bc396fd69568546102d7d9cf"
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "sha256": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841"
+    },
+    {
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d"
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "sha256": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79"
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c"
+    },
+    {
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5"
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "e62c18ad0300794718e7b582d54e0b44458df2e25a580b25fa9a5d7b5e7f92cc"
+    },
+    {
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "sha256": "f48e308097b2f7023ba4dc80ea8325dc4136939f688b48c60a5629a6d36ab8ef"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "c03511681929d10e6afa0b546a6a01442df3942597faf84aaa718d493740fb56"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "6e4dcdd1f5c9df89f6510991849b03f3194549df2462cf3886116886679d674f"
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a"
+    },
+    {
+      "path": "tests/test_skill_content_contract.py",
+      "sha256": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+    }
+  ],
+  "original_input_index_sha256": "cac7b9a72611378daa1fa67767731cccea844c024cf2627d22c080f0bb9c9021",
+  "original_inputs_count": 72,
+  "original_inputs_direct": 71,
+  "original_inputs_decoded": 1,
+  "all_original_inputs_match": true,
+  "container_sha256": "b339be847472106d5e13d55c8ccbc38c86b3142b3a14fe3f3914686a2c8de210",
+  "decoded_originals": [
+    {
+      "original_path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/original.patch",
+      "raw_bytes": 88541,
+      "raw_sha256": "0d41b45361ed9e003f43a326fcf5e48b83949090f2607eda031f2d1256c7fb4a"
+    },
+    {
+      "original_path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-source.json",
+      "raw_bytes": 25933,
+      "raw_sha256": "f1d38374edd20470e425bb07f243cbf9ec8c9a47fb1b6eb5d4461b5f443c55f6"
+    },
+    {
+      "original_path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-review.md",
+      "raw_bytes": 14006,
+      "raw_sha256": "7769e6eec80df35b2b49ee43c57266da1ece3cdea2f321c79e2a4bc7b5d3b835"
+    }
+  ],
+  "old_patch_equals_actual_base_to_old_head_diff": true,
+  "normalized_reports": [
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-source.json",
+      "original_bytes": 25933,
+      "normalized_bytes": 25932,
+      "original_sha256": "f1d38374edd20470e425bb07f243cbf9ec8c9a47fb1b6eb5d4461b5f443c55f6",
+      "normalized_sha256": "4f6e15cff0a3fae1f4f7fe79a2b19cd2bee5f495c3abafbd3f5824be23074048",
+      "exactly_one_final_lf_removed": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-review.md",
+      "original_bytes": 14006,
+      "normalized_bytes": 14005,
+      "original_sha256": "7769e6eec80df35b2b49ee43c57266da1ece3cdea2f321c79e2a4bc7b5d3b835",
+      "normalized_sha256": "c22c821f6f27449106ecb1cc8c01f6de32f0f87cfc2f2633b81ff66411406ca9",
+      "exactly_one_final_lf_removed": true
+    }
+  ],
+  "json_parsed_semantics_equal": true,
+  "markdown_equal_except_last_lf": true,
+  "policies_unchanged_from_base_head_index_worktree": [
+    {
+      "path": ".gitattributes",
+      "sha256": "91c37a6e96bb1c968597ef9b306db52ca282ea7cbbdaf13b8743c4162ad1ed03"
+    },
+    {
+      "path": ".adk/review-policy.json",
+      "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24"
+    },
+    {
+      "path": "scripts/check-format.sh",
+      "sha256": "5810e3880f2af51cf7b39f5e1c2caa49012c89ddfc7fc6224e74adf707249227"
+    },
+    {
+      "path": "src/agent_dev_kit/review_evidence.py",
+      "sha256": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47"
+    },
+    {
+      "path": "src/agent_dev_kit/strict_json.py",
+      "sha256": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5"
+    },
+    {
+      "path": "src/agent_dev_kit/readiness_evidence.py",
+      "sha256": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+    }
+  ],
+  "typed_review": {
+    "sha256": "333ff126348cc99fac590978a251f5f155d26e6a2e9cc03d39d359a87b84da56",
+    "status": "pass",
+    "references": 64,
+    "source_verdict_time_preserved": true,
+    "mechanical_projection_explicit": true,
+    "all_original_limits_preserved": true,
+    "product_release_authorized": false
+  },
+  "staged_snapshot": {
+    "paths": [
+      "docs/changes/20261116-skill-practical-methods/audit.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/attempt1/archive-receipt.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full-receipt.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full-timing.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full.log",
+      "docs/changes/20261116-skill-practical-methods/evidence/attempt1/pre-freeze-gates.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/attempt1/profile-budgets.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/attempt1/source-freeze.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/base-reconciliation.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/final-gates.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/full-receipt.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/full-timing.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/full.log",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/delivery-final.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-contracts.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-final.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-index-refresh.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-initial.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-stat-only-final.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/index-refresh-experiment.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/index.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red-stat-only.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/general/findings.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/general/reproduce_general_findings.py",
+      "docs/changes/20261116-skill-practical-methods/evidence/general/results.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/implementation-input-index.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-final-review.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-final-source.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-final-verification.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-general/independent-two-methods.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-general/review-snapshot.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-general/review.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-profile-budgets.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-snapshot-check.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/independent-targeted-verification.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/input-index.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/original.patch",
+      "docs/changes/20261116-skill-practical-methods/evidence/packaging-format-green.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/packaging-format-red.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/packaging-original-bytes.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/packaging-reconciliation.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-native-green.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-native-red.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-structural-check.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/cmake-ci-tool-refusal.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/cmake-shell-syntax.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/command-examples-final-local.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/command-examples-local.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/handoff.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/handoff.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/portfolio-local.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-boundaries.c",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-overflow-red.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical/audit.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical/cmake-preset-static-red.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical/inspect-cmake-preset-paths.py",
+      "docs/changes/20261116-skill-practical-methods/evidence/practical/reproduce-adc-overflow.py",
+      "docs/changes/20261116-skill-practical-methods/evidence/pre-freeze-gates.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/prior-publication.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/profile-budgets.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/research-input-index.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/research/design-review.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.py",
+      "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-findings.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/research/root-method-review.md",
+      "docs/changes/20261116-skill-practical-methods/evidence/review-input-ready.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/budget-before.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/delivery.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/green-sop.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/green-t2.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/red-sop.json",
+      "docs/changes/20261116-skill-practical-methods/evidence/source-freeze.json",
+      "docs/changes/20261116-skill-practical-methods/review-evidence.json",
+      "docs/changes/20261116-skill-practical-methods/review-findings.md",
+      "docs/changes/20261116-skill-practical-methods/tasks.md",
+      "docs/changes/20261116-skill-practical-methods/verification.md"
+    ],
+    "path_count": 78,
+    "all_within_change_docs": true,
+    "frozen_source_paths_in_staged_diff": [],
+    "patch_sha256": "26e096c3cbfcc2de42a3a737cfef7ee096a32619f229ae4d9c8238a0c6e7c830",
+    "index_sha256": "d6555948e528a96eedd784e5fd70cd1d28ba7c86ee49ac2a3d223bcb942261c1",
+    "unchanged_during_verification": true
+  },
+  "original_format_failure_retained": {
+    "sha256": "82bb2b331af5d1e18496fa01b219060236747fd81bddcdfcd92c923cafa0723d",
+    "exit_codes": [
+      2,
+      1
+    ],
+    "failure_types": [
+      "trailing whitespace",
+      "blank line at EOF"
+    ]
+  },
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-c",
+        "diff.autoRefreshIndex=false",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "started_at": "2026-11-16T01:23:05.565602+00:00",
+      "completed_at": "2026-11-16T01:23:05.570358+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "started_at": "2026-11-16T01:23:05.570370+00:00",
+      "completed_at": "2026-11-16T01:23:05.871991+00:00",
+      "exit_code": 0,
+      "stdout": "Format check passed\n",
+      "stderr": "[WARN] script is not executable: tests/run_all.sh\n[WARN] script is not executable: tests/test_agent_platform.sh\n[WARN] script is not executable: tests/test_agent_value_trust.sh\n[WARN] script is not executable: tests/test_archive_restore.sh\n[WARN] script is not executable: tests/test_asset_taxonomy.sh\n[WARN] script is not executable: tests/test_branch_gc.sh\n[WARN] script is not executable: tests/test_catalog.sh\n[WARN] script is not executable: tests/test_change_governance.sh\n[WARN] script is not executable: tests/test_effect_campaign_materializer.sh\n[WARN] script is not executable: tests/test_evidence_bridge.sh\n[WARN] script is not executable: tests/test_evidence_envelope.sh\n[WARN] script is not executable: tests/test_execution_policy.sh\n[WARN] script is not executable: tests/test_external_reference_binding.sh\n[WARN] script is not executable: tests/test_manifest_composition_cli.sh\n[WARN] script is not executable: tests/test_mcp_freshness_ssot.sh\n[WARN] script is not executable: tests/test_native_campaign.sh\n[WARN] script is not executable: tests/test_native_campaign_boundaries.sh\n[WARN] script is not executable: tests/test_native_campaign_diagnostics.sh\n[WARN] script is not executable: tests/test_native_trust.sh\n[WARN] script is not executable: tests/test_official_upstream_drift.sh\n[WARN] script is not executable: tests/test_optional_skills.sh\n[WARN] script is not executable: tests/test_performance_budgets.sh\n[WARN] script is not executable: tests/test_profile_coherence.sh\n[WARN] script is not executable: tests/test_profile_context_footprint.sh\n[WARN] script is not executable: tests/test_review_evidence.sh\n[WARN] script is not executable: tests/test_runtime_comparison_contract.sh\n[WARN] script is not executable: tests/test_schema_resource_sync.sh\n[WARN] script is not executable: tests/test_sigstore_blob.sh\n[WARN] script is not executable: tests/test_skill_content.sh\n[WARN] script is not executable: tests/test_skill_governance.sh\n[WARN] script is not executable: tests/test_target_adapter_spi.sh\n[WARN] script is not executable: tests/test_target_contracts.sh\n[WARN] script is not executable: tests/test_target_source_probe.sh\n[WARN] script is not executable: tests/test_token_context_governance.sh\n"
+    }
+  ],
+  "format_warning_count": 34,
+  "limitations": [
+    "Packaging verification only; the original source verdict and its timestamp are unchanged.",
+    "The five real CMake cases still require actual PR CI execution before merge.",
+    "No full regression, model, remote write, tool installation or platform publication was performed.",
+    "origin/main was read locally at the expected base; fresh remote API observation belongs to the integrator.",
+    "Format emitted existing non-executable-shell-script warnings, not errors; no modes were changed."
+  ]
+}

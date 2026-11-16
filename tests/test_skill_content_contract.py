@@ -157,7 +157,7 @@ class SkillContentContractTests(unittest.TestCase):
             self.assertIsNotNone(git)
             self.assertIsNotNone(bash)
             (binary / "git").symlink_to(git)
-            environment = {**os.environ, "PATH": str(binary), "LC_ALL": "C"}
+            environment = {**os.environ, "PATH": str(binary), "LC_ALL": "C", "review_target": "staged"}
             self.assertIsNone(shutil.which("rtk", path=environment["PATH"]))
             run = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands],
                                  cwd=target, env=environment, capture_output=True,
@@ -181,6 +181,156 @@ class SkillContentContractTests(unittest.TestCase):
                 for block in re.findall(r"```(?:bash|sh)\n(.*?)\n```",
                                         rendered.content.decode(), re.DOTALL):
                     self.assertNotRegex(block, r"(?m)^\s*rtk\s+", rendered.destination)
+
+    def test_exported_review_snapshot_captures_selected_target_without_staging(self) -> None:
+        """Exercise the shipped snapshot, including committed and mixed changes."""
+        import os
+        import re
+        import shutil
+        import subprocess
+        import tempfile
+        from agent_dev_kit.model import Manifest
+        from agent_dev_kit.targets import load_target_contract, render_asset
+
+        manifest = Manifest.load(ROOT)
+        asset = next(item for item in manifest.all_assets("skill")
+                     if item.name == "adk-code-review-loop")
+        git, bash = shutil.which("git"), shutil.which("bash")
+        self.assertIsNotNone(git)
+        self.assertIsNotNone(bash)
+        for runtime in ("claude-code", "opencode"):
+            files = render_asset(manifest, load_target_contract(manifest, runtime), asset)
+            reference = next(item for item in files if item.destination.endswith(
+                "/references/review-evidence-template.md"))
+            block = re.search(r"```bash\n(.*?)\n```", reference.content.decode(), re.DOTALL)
+            self.assertIsNotNone(block)
+            commands = block.group(1).split("<project-lint-cmd>", 1)[0]
+            for scenario, review_target in (
+                ("staged", "staged"), ("unstaged", "working-tree"),
+                ("committed", "whole-branch"), ("mixed", "working-tree"),
+            ):
+                with self.subTest(runtime=runtime, scenario=scenario), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    target = root / "consumer"
+                    target.mkdir()
+                    binary = root / "bin"
+                    binary.mkdir()
+                    (binary / "git").symlink_to(git)
+                    environment = {**os.environ, "PATH": str(binary), "LC_ALL": "C",
+                                   "review_target": review_target}
+                    environment.pop("review_base", None)
+
+                    def checked(*args: str) -> str:
+                        result = subprocess.run([git, *args], cwd=target, capture_output=True,
+                                                text=True, timeout=10)
+                        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                        return result.stdout
+
+                    def commit(message: str) -> None:
+                        checked("add", "fixture.py")
+                        checked("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
+                                "commit", "-qm", message)
+
+                    checked("init", "-q")
+                    fixture = target / "fixture.py"
+                    fixture.write_text("def dollars(cents):\n    return cents / 100\n", encoding="utf-8")
+                    if scenario == "unstaged":
+                        unchanged = target / "stat-only.txt"
+                        unchanged.write_text("same content\n", encoding="utf-8")
+                        checked("add", "stat-only.txt")
+                        checked("config", "diff.autoRefreshIndex", "true")
+                    commit("baseline")
+                    baseline = checked("rev-parse", "HEAD").strip()
+                    if scenario == "mixed":
+                        fixture.write_text("def dollars(cents):\n    return cents / 100.0  # STAGED_ONLY\n",
+                                           encoding="utf-8")
+                        checked("add", "fixture.py")
+                    fixture.write_text("def dollars(cents):\n    return cents / 1000  # TARGET_REGRESSION\n",
+                                       encoding="utf-8")
+                    if scenario == "staged":
+                        checked("add", "fixture.py")
+                    if scenario == "committed":
+                        commit("branch change")
+                        environment["review_base"] = baseline
+                        self.assertEqual(checked("status", "--porcelain"), "")
+                    if scenario == "unstaged":
+                        (target / "untracked.py").write_text("UNTRACKED_BODY\n", encoding="utf-8")
+                        previous = unchanged.stat()
+                        unchanged.write_text("same content\n", encoding="utf-8")
+                        os.utime(unchanged, ns=(previous.st_atime_ns, previous.st_mtime_ns + 2_000_000_000))
+                    # Even a mixed tree must remain byte-for-byte unchanged by review.
+                    index = target / ".git" / "index"
+                    before_index = index.read_bytes()
+                    before_source = fixture.read_bytes()
+                    run = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands],
+                                         cwd=target, env=environment, capture_output=True,
+                                         text=True, timeout=10)
+                    self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+                    self.assertIn("+    return cents / 1000  # TARGET_REGRESSION", run.stdout)
+                    self.assertIn("-    return cents / 100", run.stdout)
+                    self.assertNotIn("+    return cents / 100.0  # STAGED_ONLY", run.stdout)
+                    self.assertEqual(index.read_bytes(), before_index)
+                    self.assertEqual(fixture.read_bytes(), before_source)
+                    if scenario == "unstaged":
+                        self.assertIn("?? untracked.py", run.stdout)
+                        self.assertNotIn("UNTRACKED_BODY", run.stdout)
+                    if scenario == "committed":
+                        # Branch review must keep later dirty content separate from its patch.
+                        fixture.write_text("def dollars(cents):\n    return 0  # LOCAL_OVERLAY\n",
+                                           encoding="utf-8")
+                        overlay = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands],
+                                                 cwd=target, env=environment, capture_output=True,
+                                                 text=True, timeout=10)
+                        self.assertEqual(overlay.returncode, 0, overlay.stdout + overlay.stderr)
+                        self.assertIn(" M fixture.py", overlay.stdout)
+                        self.assertIn("+    return cents / 1000  # TARGET_REGRESSION", overlay.stdout)
+                        self.assertNotIn("LOCAL_OVERLAY", overlay.stdout)
+                        self.assertEqual(index.read_bytes(), before_index)
+                        for absent in ("", "refs/heads/unavailable-review-base"):
+                            rejected = subprocess.run(
+                                [bash, "--noprofile", "--norc", "-euc", commands], cwd=target,
+                                env={**environment, "review_base": absent}, capture_output=True,
+                                text=True, timeout=10)
+                            self.assertNotEqual(rejected.returncode, 0, rejected.stdout)
+                            self.assertNotIn("TARGET_REGRESSION", rejected.stdout)
+                        self.assertEqual(index.read_bytes(), before_index)
+
+    def test_exported_context_defaults_are_self_contained(self) -> None:
+        """Inspect actual consumer packages, which intentionally omit ADK source aids."""
+        import re
+        import tempfile
+        from agent_dev_kit.compiler import export_assets
+        from agent_dev_kit.model import Manifest
+
+        manifest = Manifest.load(ROOT)
+        cases = {
+            "adk-context-engineering": (
+                "schemas/agent-handoff-v1.schema.json", "Objective / Phase"),
+            "adk-context-compress-handoff": (
+                "templates/context/continuity-attestation.md", "Latest Goal"),
+        }
+        required = {"Confirmed Facts", "State / Blockers", "Scope / Permission",
+                    "Evidence / Fallback", "Next Actions"}
+        with tempfile.TemporaryDirectory() as directory:
+            for runtime in ("claude-code", "opencode"):
+                exported = export_assets(manifest, runtime, Path(directory), ["core"])
+                self.assertEqual(exported["status"], "pass")
+                consumer = Path(exported["output"])
+                for name, (source_aid, goal) in cases.items():
+                    with self.subTest(runtime=runtime, skill=name):
+                        skill = next(path for path in consumer.rglob("SKILL.md")
+                                     if path.parent.name == name)
+                        self.assertFalse((consumer / source_aid).exists())
+                        self.assertFalse((skill.parent / source_aid).exists())
+                        body = skill.read_text(encoding="utf-8")
+                        # A source-only aid cannot be an unconditional instruction.
+                        aid_line = next(line for line in body.splitlines() if source_aid in line)
+                        self.assertIn("源码根已确认且文件可读", aid_line)
+                        self.assertIn("默认使用下方模板", body)
+                        template = body.split("## Evidence Template", 1)[1]
+                        fields = set(re.findall(r"(?m)^- ([^:\n]+):", template))
+                        self.assertTrue(required | {goal} <= fields, (name, fields))
+                        self.assertIn("不扩大权限", body)
 
     def test_fault_injection_defaults_never_write_live_device(self) -> None:
         import re

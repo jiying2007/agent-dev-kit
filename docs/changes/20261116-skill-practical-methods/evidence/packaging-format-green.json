@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-11-16T01:21:18.779365Z",
+  "source_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "typed_review_sha256": "333ff126348cc99fac590978a251f5f155d26e6a2e9cc03d39d359a87b84da56",
+  "typed_review_validated": true,
+  "typed_review_scope": "source-change",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "started_at": "2026-11-16T01:21:18.479498Z",
+      "completed_at": "2026-11-16T01:21:18.484377Z",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "started_at": "2026-11-16T01:21:18.484386Z",
+      "completed_at": "2026-11-16T01:21:18.779346Z",
+      "exit_code": 0,
+      "stdout": "Format check passed\n",
+      "stderr": "[WARN] script is not executable: tests/run_all.sh\n[WARN] script is not executable: tests/test_agent_platform.sh\n[WARN] script is not executable: tests/test_agent_value_trust.sh\n[WARN] script is not executable: tests/test_archive_restore.sh\n[WARN] script is not executable: tests/test_asset_taxonomy.sh\n[WARN] script is not executable: tests/test_branch_gc.sh\n[WARN] script is not executable: tests/test_catalog.sh\n[WARN] script is not executable: tests/test_change_governance.sh\n[WARN] script is not executable: tests/test_effect_campaign_materializer.sh\n[WARN] script is not executable: tests/test_evidence_bridge.sh\n[WARN] script is not executable: tests/test_evidence_envelope.sh\n[WARN] script is not executable: tests/test_execution_policy.sh\n[WARN] script is not executable: tests/test_external_reference_binding.sh\n[WARN] script is not executable: tests/test_manifest_composition_cli.sh\n[WARN] script is not executable: tests/test_mcp_freshness_ssot.sh\n[WARN] script is not executable: tests/test_native_campaign.sh\n[WARN] script is not executable: tests/test_native_campaign_boundaries.sh\n[WARN] script is not executable: tests/test_native_campaign_diagnostics.sh\n[WARN] script is not executable: tests/test_native_trust.sh\n[WARN] script is not executable: tests/test_official_upstream_drift.sh\n[WARN] script is not executable: tests/test_optional_skills.sh\n[WARN] script is not executable: tests/test_performance_budgets.sh\n[WARN] script is not executable: tests/test_profile_coherence.sh\n[WARN] script is not executable: tests/test_profile_context_footprint.sh\n[WARN] script is not executable: tests/test_review_evidence.sh\n[WARN] script is not executable: tests/test_runtime_comparison_contract.sh\n[WARN] script is not executable: tests/test_schema_resource_sync.sh\n[WARN] script is not executable: tests/test_sigstore_blob.sh\n[WARN] script is not executable: tests/test_skill_content.sh\n[WARN] script is not executable: tests/test_skill_governance.sh\n[WARN] script is not executable: tests/test_target_adapter_spi.sh\n[WARN] script is not executable: tests/test_target_contracts.sh\n[WARN] script is not executable: tests/test_target_source_probe.sh\n[WARN] script is not executable: tests/test_token_context_governance.sh\n"
+    }
+  ]
+}

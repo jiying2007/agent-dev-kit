@@ -1,8 +1,8 @@
 ---
 name: adk-context-engineering
 description: "用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。"
-version: 2.0.1
-last_updated: 2026-11-03
+version: 2.0.2
+last_updated: 2026-11-16
 triggers:
   - 上下文工程
   - 上下文膨胀
@@ -32,15 +32,13 @@ constraints:
 # adk-context-engineering
 
 ## Goal
-为当前任务生成最小充分、可恢复、可追溯的 context policy，而不是把所有可用信息一次性装入模型。
+生成最小充分、可恢复、可追溯的 context policy。
 
 ## Use When
-- 当前上下文过大、互相冲突或含大量无关历史。
-- 长任务需要 checkpoint / resume / handoff。
-- 并行 Agent 需要共享 contract 与私有工作上下文隔离。
-- 模型因缺失关键事实、加载错误 reference 或过度压缩而反复误解任务。
+- 长任务需 checkpoint / resume / handoff，或并行 Agent 需共享 contract 与上下文隔离。
+- 上下文膨胀、冲突、缺证、错误 reference 或过度压缩导致误解。
 
-若任务只是“执行既有计划”“写代码”“跑测试”，且没有 context 边界问题，本 Skill 只作为 supporting capability，不抢 primary。
+没有 context 边界问题时仅作 supporting capability，不替代计划、编码或测试。
 
 ## Prerequisites
 - 明确当前 objective、phase、risk level 与候选 primary Skill。
@@ -58,7 +56,7 @@ constraints:
 2. 将信息标记为 `always | phase | on-demand | raw-pointer | exclude`。
 3. 删除重复、过期、低价值动态输出；冲突信息保留来源与 freshness，不静默覆盖。
 4. 为长任务写 summary-first checkpoint；raw output 仅保留 opaque/path pointer 和 retention decision。
-5. 并行/跨 Agent 时使用 `schemas/agent-handoff-v1.schema.json`，限制 scope 与 permission，不传播无关 history。
+5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选根下 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
 6. 验证恢复能力：新执行者只读取摘要和 refs 应能知道目标、已确认事实、未决问题和下一步；若不能，补缺失信息而不是扩大所有上下文。
 
 ## Failure / Abstain
@@ -76,14 +74,13 @@ constraints:
 ## Evidence Template
 ```md
 - Objective / Phase:
-- Context decisions:
-  - always:
-  - phase:
-  - on-demand:
-  - raw-pointer:
-  - excluded:
+- Confirmed Facts:
+- State / Blockers:
+- Scope / Permission:
+- Evidence / Fallback:
+- Next Actions:
+- Context decisions: always / phase / on-demand / raw-pointer / excluded
 - Missing / conflicting evidence:
-- Handoff boundary:
 - Recovery check: pass | needs-evidence
 - Efficiency observation: <optional; not a quality KPI>
 ```

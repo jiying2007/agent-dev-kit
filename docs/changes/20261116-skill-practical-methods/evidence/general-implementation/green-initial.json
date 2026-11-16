@@ -1,0 +1,30 @@
+{
+  "phase": "green-initial",
+  "started_at": "2026-11-16T00:49:52.759502+00:00",
+  "ended_at": "2026-11-16T00:49:53.431933+00:00",
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_context_defaults_are_self_contained",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper"
+  ],
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "test_exported_review_snapshot_captures_selected_target_without_staging (test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging)\nExercise the shipped snapshot, including committed and mixed changes. ... ok\ntest_exported_context_defaults_are_self_contained (test_skill_content_contract.SkillContentContractTests.test_exported_context_defaults_are_self_contained)\nInspect actual consumer packages, which intentionally omit ADK source aids. ... ok\ntest_exported_review_commands_run_without_optional_wrapper (test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper)\nExercise shipped instructions in a target repo without ADK or rtk. ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.550s\n\nOK\n",
+  "source_sha256": {
+    "skills/adk-code-review-loop/SKILL.md": "1f2385a57c5530ade694e4342d727f7dc637cf899c66d001cc5d32f17253ee25",
+    "skills/adk-code-review-loop/references/review-evidence-template.md": "4cf463e2cda11883e330d9c347327b2deec39f96e57ad229cc09fceea6948dfd",
+    "skills/adk-context-engineering/SKILL.md": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+    "skills/adk-context-compress-handoff/SKILL.md": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+    "tests/test_skill_content_contract.py": "8ea400eabad48bda1aa4fd7880a3338a11c187dc3d12e1368ab555bd1d3f8cc5"
+  },
+  "environment_limits": {
+    "rtk": "unavailable; task authorizes direct tools",
+    "knowledge/L2-domain/lessons.md": "absent",
+    "model_or_native_host_execution": "not-run"
+  }
+}

@@ -1,0 +1,413 @@
+{
+  "schema": "adk-evidence-packaging-reconciliation/v1",
+  "created_at": "2026-11-16T01:21:11.844786Z",
+  "scope": "lossless evidence formatting only; no new source verdict",
+  "source_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "frozen_source_count": 30,
+  "all_frozen_source_hashes_unchanged": true,
+  "original_input_index_sha256": "cac7b9a72611378daa1fa67767731cccea844c024cf2627d22c080f0bb9c9021",
+  "original_reviewed_input_count": 72,
+  "direct_original_inputs": 71,
+  "container_decoded_inputs": 1,
+  "all_original_input_bytes_and_hashes_match": true,
+  "container": {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/packaging-original-bytes.json",
+    "sha256": "b339be847472106d5e13d55c8ccbc38c86b3142b3a14fe3f3914686a2c8de210"
+  },
+  "historical_path_resolution": {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/original.patch",
+    "container_entry_original_path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/original.patch",
+    "raw_sha256": "0d41b45361ed9e003f43a326fcf5e48b83949090f2607eda031f2d1256c7fb4a",
+    "raw_bytes": 88541,
+    "decode": "Locate entry by original_path, then raw_text.encode(encoding)."
+  },
+  "normalized_report_copies": [
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-source.json",
+      "original_sha256": "f1d38374edd20470e425bb07f243cbf9ec8c9a47fb1b6eb5d4461b5f443c55f6",
+      "normalized_sha256": "4f6e15cff0a3fae1f4f7fe79a2b19cd2bee5f495c3abafbd3f5824be23074048",
+      "removed_bytes": 1,
+      "operation": "remove exactly one final LF",
+      "content_equal_before_final_LF": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-review.md",
+      "original_sha256": "7769e6eec80df35b2b49ee43c57266da1ece3cdea2f321c79e2a4bc7b5d3b835",
+      "normalized_sha256": "c22c821f6f27449106ecb1cc8c01f6de32f0f87cfc2f2633b81ff66411406ca9",
+      "removed_bytes": 1,
+      "operation": "remove exactly one final LF",
+      "content_equal_before_final_LF": true
+    }
+  ],
+  "original_formal_review_time": "2026-11-16T01:12:41.916238Z",
+  "typed_projection_before_sha256": "c68b49e095453284b586f85b14d66b8111780b7483ac9589cebdec23e9cfb4fd",
+  "typed_projection_after_sha256": "333ff126348cc99fac590978a251f5f155d26e6a2e9cc03d39d359a87b84da56",
+  "source_verdicts_unchanged": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "policy_and_validator_unchanged": true,
+  "format_failure_receipt": "evidence/packaging-format-red.json",
+  "resolved_inputs": [
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/audit.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/design.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/archive-receipt.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full-receipt.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full-timing.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/full.log",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/original.patch",
+      "via": "container-decoded",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/pre-freeze-gates.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/profile-budgets.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/attempt1/source-freeze.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/base-reconciliation.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/final-gates.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/full-receipt.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/full-timing.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/full.log",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general/findings.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general/reproduce_general_findings.py",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general/results.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/delivery-final.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-contracts.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-final.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-index-refresh.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-initial.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/green-stat-only-final.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/index-refresh-experiment.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/index.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red-stat-only.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/general-implementation/red.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/implementation-input-index.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-final-verification.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-general/independent-two-methods.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-general/review-snapshot.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-general/review.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-targeted-verification.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/original.patch",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-boundaries.c",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/adc-overflow-red.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/audit.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/cmake-preset-static-red.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/inspect-cmake-preset-paths.py",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical/reproduce-adc-overflow.py",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-native-green.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-native-red.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/adc-structural-check.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/cmake-ci-tool-refusal.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/cmake-shell-syntax.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/command-examples-final-local.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/command-examples-local.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/handoff.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/handoff.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/practical-implementation/portfolio-local.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/pre-freeze-gates.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/prior-publication.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/profile-budgets.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/research/design-review.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-counterexamples.py",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/research/external-skill-findings.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/research/root-method-review.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/research-input-index.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/budget-before.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/delivery.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/green-sop.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/green-t2.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/sop-contract-fix/red-sop.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/evidence/source-freeze.json",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/negative-results.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/requirements.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/review-findings.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/source-review.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/tasks.md",
+      "via": "original-file",
+      "match": true
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/verification.md",
+      "via": "original-file",
+      "match": true
+    }
+  ]
+}

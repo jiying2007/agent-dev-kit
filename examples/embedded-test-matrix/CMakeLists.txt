@@ -4,6 +4,7 @@ project(adk_embedded_test_matrix C)
 enable_testing()
 
 add_library(adc_scale src/adc_scale.c)
+target_compile_features(adc_scale PRIVATE c_std_11)
 target_include_directories(adc_scale PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_executable(test_adc_scale tests/test_adc_scale.c)

@@ -1,0 +1,156 @@
+{
+  "scope": "synthetic method counterexamples; not ADK agent outcome evaluation",
+  "memory": {
+    "scope": "exact logical live-payload model; no Memcheck/Massif execution and no RSS measurement",
+    "allocate_then_free_each": {
+      "allocation_count": 64,
+      "free_count": 64,
+      "total_payload_bytes_allocated": 67108864,
+      "final_live_payload_bytes": 0,
+      "peak_live_payload_bytes": 1048576
+    },
+    "retain_all_then_free": {
+      "allocation_count": 64,
+      "free_count": 64,
+      "total_payload_bytes_allocated": 67108864,
+      "final_live_payload_bytes": 0,
+      "peak_live_payload_bytes": 67108864
+    }
+  },
+  "order_dependence": {
+    "isolated_victim_fresh_process_outcomes": [
+      "passed",
+      "passed",
+      "passed",
+      "passed",
+      "passed",
+      "passed",
+      "passed",
+      "passed"
+    ],
+    "same_process_polluter_then_victim": [
+      {
+        "case": "polluter",
+        "outcome": "passed"
+      },
+      {
+        "case": "victim",
+        "outcome": "failed",
+        "observed_mode": "legacy"
+      }
+    ],
+    "same_process_victim_then_polluter": [
+      {
+        "case": "victim",
+        "outcome": "passed",
+        "observed_mode": "default"
+      },
+      {
+        "case": "polluter",
+        "outcome": "passed"
+      }
+    ]
+  },
+  "protocol": {
+    "scope": "integer fake time; 1000 ms local stage limits and 2000 ms operation limit",
+    "independent_stage_limits": {
+      "end_to_end_limit_ms": 2000,
+      "elapsed_ms": 2600,
+      "stages": [
+        {
+          "stage": "dns",
+          "spent_ms": 600,
+          "outcome": "completed"
+        },
+        {
+          "stage": "tcp",
+          "spent_ms": 700,
+          "outcome": "completed"
+        },
+        {
+          "stage": "tls",
+          "spent_ms": 600,
+          "outcome": "completed"
+        },
+        {
+          "stage": "application",
+          "spent_ms": 700,
+          "outcome": "completed"
+        }
+      ]
+    },
+    "propagated_deadline": {
+      "end_to_end_limit_ms": 2000,
+      "elapsed_ms": 2000,
+      "stages": [
+        {
+          "stage": "dns",
+          "spent_ms": 600,
+          "outcome": "completed"
+        },
+        {
+          "stage": "tcp",
+          "spent_ms": 700,
+          "outcome": "completed"
+        },
+        {
+          "stage": "tls",
+          "spent_ms": 600,
+          "outcome": "completed"
+        },
+        {
+          "stage": "application",
+          "spent_ms": 100,
+          "outcome": "timeout"
+        }
+      ]
+    },
+    "count_limited_retries_only": {
+      "end_to_end_limit_ms": 2000,
+      "elapsed_ms": 3400,
+      "attempts": [
+        {
+          "attempt": 1,
+          "spent_ms": 800,
+          "outcome": "transient-failure"
+        },
+        {
+          "attempt": 2,
+          "spent_ms": 800,
+          "outcome": "transient-failure"
+        },
+        {
+          "attempt": 3,
+          "spent_ms": 800,
+          "outcome": "transient-failure"
+        }
+      ]
+    },
+    "deadline_bounded_retries": {
+      "end_to_end_limit_ms": 2000,
+      "elapsed_ms": 2000,
+      "attempts": [
+        {
+          "attempt": 1,
+          "spent_ms": 800,
+          "outcome": "transient-failure"
+        },
+        {
+          "attempt": 2,
+          "spent_ms": 700,
+          "outcome": "deadline-timeout"
+        }
+      ]
+    },
+    "nested_retry_leaf_calls_3_layers_3_attempts": 27,
+    "one_retry_owner_leaf_calls_3_layers_3_attempts": 3
+  },
+  "checks": {
+    "memory_totals_equal_but_peaks_differ": true,
+    "fresh_process_repetition_misses_order_pollution": true,
+    "reverse_order_does_not_reproduce": true,
+    "per_stage_bounds_do_not_imply_overall_bound": true,
+    "attempt_count_does_not_imply_overall_bound": true,
+    "nested_attempts_multiply": true
+  }
+}

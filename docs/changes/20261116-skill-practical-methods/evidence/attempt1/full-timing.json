@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mode": "full",
+  "status": "fail",
+  "total": 6,
+  "pass": 5,
+  "fail": 1,
+  "elapsed_ms": 27379,
+  "slow_threshold_sec": 30,
+  "tests": [
+    {"name": "test_validate", "status": "pass", "elapsed_ms": 6649},
+    {"name": "test_manifest_contract", "status": "pass", "elapsed_ms": 12701},
+    {"name": "test_catalog", "status": "pass", "elapsed_ms": 1728},
+    {"name": "test_skill_content", "status": "pass", "elapsed_ms": 4959},
+    {"name": "test_skill_trigger_matrix", "status": "pass", "elapsed_ms": 1288},
+    {"name": "test_skill_sop_quality", "status": "fail", "elapsed_ms": 40}
+  ],
+  "slow_tests": [
+
+  ]
+}

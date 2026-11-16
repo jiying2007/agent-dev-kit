@@ -1,0 +1,136 @@
+{
+  "review_scope": "independent native ADC, C language boundary and local CI-tool-refusal",
+  "started_at_utc": "2026-11-16T01:03:23.633527+00:00",
+  "completed_at_utc": "2026-11-16T01:03:24.224518+00:00",
+  "observed_head": "e0c3b97ef8382366939e3b5ed40263307604bd03",
+  "native_adc_two_methods": {
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "tests/test_skill_command_examples.py",
+      "EmbeddedAdcExampleTests",
+      "-v"
+    ],
+    "expected_exit": 0,
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_native_endpoints_clamping_and_invalid_inputs (__main__.EmbeddedAdcExampleTests.test_native_endpoints_clamping_and_invalid_inputs) ... ok\ntest_native_endpoints_with_supported_ubsan (__main__.EmbeddedAdcExampleTests.test_native_endpoints_with_supported_ubsan) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.288s\n\nOK\n",
+    "matched_expected_exit": true
+  },
+  "missing_tool_ci_refusal_only": {
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "-B",
+      "tests/test_skill_command_examples.py",
+      "CmakeBuildExampleTests",
+      "-v"
+    ],
+    "expected_exit": 1,
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (__main__.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... FAIL\ntest_compile_only_preserves_not_run_without_invoking_ctest (__main__.CmakeBuildExampleTests.test_compile_only_preserves_not_run_without_invoking_ctest) ... FAIL\ntest_empty_ctest_selection_fails_after_a_real_successful_build (__main__.CmakeBuildExampleTests.test_empty_ctest_selection_fails_after_a_real_successful_build) ... FAIL\ntest_manual_directory_configuration_tests_and_elf_do_not_invoke_presets (__main__.CmakeBuildExampleTests.test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets) ... FAIL\ntest_preset_names_bind_binary_directory_configuration_tests_and_elf (__main__.CmakeBuildExampleTests.test_preset_names_bind_binary_directory_configuration_tests_and_elf) ... FAIL\n\n======================================================================\nFAIL: test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (__main__.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 497, in test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default\n    self.prepare()\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 388, in prepare\n    self.fail(reason + \"; GitHub Actions must execute this fixture\")\nAssertionError: real CMake example not executed; missing tools: cmake, ctest, ninja; GitHub Actions must execute this fixture\n\n======================================================================\nFAIL: test_compile_only_preserves_not_run_without_invoking_ctest (__main__.CmakeBuildExampleTests.test_compile_only_preserves_not_run_without_invoking_ctest)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 489, in test_compile_only_preserves_not_run_without_invoking_ctest\n    self.prepare(register_tests=False)\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 388, in prepare\n    self.fail(reason + \"; GitHub Actions must execute this fixture\")\nAssertionError: real CMake example not executed; missing tools: cmake, ctest, ninja; GitHub Actions must execute this fixture\n\n======================================================================\nFAIL: test_empty_ctest_selection_fails_after_a_real_successful_build (__main__.CmakeBuildExampleTests.test_empty_ctest_selection_fails_after_a_real_successful_build)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 481, in test_empty_ctest_selection_fails_after_a_real_successful_build\n    self.prepare(register_tests=False)\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 388, in prepare\n    self.fail(reason + \"; GitHub Actions must execute this fixture\")\nAssertionError: real CMake example not executed; missing tools: cmake, ctest, ninja; GitHub Actions must execute this fixture\n\n======================================================================\nFAIL: test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets (__main__.CmakeBuildExampleTests.test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 474, in test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets\n    self.prepare()\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 388, in prepare\n    self.fail(reason + \"; GitHub Actions must execute this fixture\")\nAssertionError: real CMake example not executed; missing tools: cmake, ctest, ninja; GitHub Actions must execute this fixture\n\n======================================================================\nFAIL: test_preset_names_bind_binary_directory_configuration_tests_and_elf (__main__.CmakeBuildExampleTests.test_preset_names_bind_binary_directory_configuration_tests_and_elf)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 446, in test_preset_names_bind_binary_directory_configuration_tests_and_elf\n    self.prepare()\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_command_examples.py\", line 388, in prepare\n    self.fail(reason + \"; GitHub Actions must execute this fixture\")\nAssertionError: real CMake example not executed; missing tools: cmake, ctest, ninja; GitHub Actions must execute this fixture\n\n----------------------------------------------------------------------\nRan 5 tests in 0.003s\n\nFAILED (failures=5)\n",
+    "matched_expected_exit": true,
+    "is_real_ci_or_cmake_execution": false,
+    "missing_tools": [
+      "cmake",
+      "ctest",
+      "ninja"
+    ]
+  },
+  "direct_c11_implementation_c90_consumer": [
+    {
+      "command": [
+        "/usr/bin/cc",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/scratch/2d6ca6dc3d38/adk-practical/examples/embedded-test-matrix/src",
+        "-std=c11",
+        "-c",
+        "/workspace/scratch/2d6ca6dc3d38/adk-practical/examples/embedded-test-matrix/src/adc_scale.c",
+        "-o",
+        "/tmp/adk-independent-c-language-9s31oslo/adc.o"
+      ],
+      "expected_exit": 0,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "matched_expected_exit": true
+    },
+    {
+      "command": [
+        "/usr/bin/cc",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/scratch/2d6ca6dc3d38/adk-practical/examples/embedded-test-matrix/src",
+        "-std=c90",
+        "-c",
+        "/workspace/scratch/2d6ca6dc3d38/adk-practical/examples/embedded-test-matrix/tests/test_adc_scale.c",
+        "-o",
+        "/tmp/adk-independent-c-language-9s31oslo/test.o"
+      ],
+      "expected_exit": 0,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "matched_expected_exit": true
+    },
+    {
+      "command": [
+        "/usr/bin/cc",
+        "/tmp/adk-independent-c-language-9s31oslo/adc.o",
+        "/tmp/adk-independent-c-language-9s31oslo/test.o",
+        "-o",
+        "/tmp/adk-independent-c-language-9s31oslo/adc-native"
+      ],
+      "expected_exit": 0,
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "matched_expected_exit": true
+    },
+    {
+      "command": [
+        "/tmp/adk-independent-c-language-9s31oslo/adc-native"
+      ],
+      "expected_exit": 0,
+      "exit_code": 0,
+      "stdout": "PASS zero expected=0 actual=0\nPASS full-scale expected=3300 actual=3300\nPASS invalid expected=-1 actual=-1\nPASS maximum-int-full-scale expected=2147483647 actual=2147483647\nPASS maximum-int-clamped expected=2147483647 actual=2147483647\nPASS maximum-int-zero expected=0 actual=0\nPASS clamped expected=3300 actual=3300\nPASS invalid-minimum expected=-1 actual=-1\nPASS zero-reference expected=-1 actual=-1\nPASS negative-reference expected=-1 actual=-1\nPASS zero-maximum expected=-1 actual=-1\nPASS negative-maximum expected=-1 actual=-1\nPASS 24-bit-full-scale expected=3300 actual=3300\nPASS 24-bit-clamped expected=3300 actual=3300\n",
+      "stderr": "",
+      "matched_expected_exit": true
+    }
+  ],
+  "source_sha256_before": {
+    "examples/embedded-test-matrix/src/adc_scale.c": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e",
+    "examples/embedded-test-matrix/src/adc_scale.h": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe",
+    "examples/embedded-test-matrix/tests/test_adc_scale.c": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d",
+    "examples/embedded-test-matrix/CMakeLists.txt": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da",
+    "examples/embedded-test-matrix/cross-build/smoke-command.txt": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446",
+    "tests/test_skill_command_examples.py": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a",
+    "skills/adk-cmake-cross-build/SKILL.md": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841"
+  },
+  "source_sha256_after": {
+    "examples/embedded-test-matrix/src/adc_scale.c": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e",
+    "examples/embedded-test-matrix/src/adc_scale.h": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe",
+    "examples/embedded-test-matrix/tests/test_adc_scale.c": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d",
+    "examples/embedded-test-matrix/CMakeLists.txt": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da",
+    "examples/embedded-test-matrix/cross-build/smoke-command.txt": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446",
+    "tests/test_skill_command_examples.py": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a",
+    "skills/adk-cmake-cross-build/SKILL.md": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841"
+  },
+  "source_unchanged": true,
+  "limits": [
+    "No real CMake/CTest execution",
+    "No ARM cross compilation",
+    "No device or model execution",
+    "No full-suite rerun"
+  ],
+  "review_checks_success": true
+}

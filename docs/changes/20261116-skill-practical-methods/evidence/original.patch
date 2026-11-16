@@ -1,0 +1,1334 @@
+diff --git a/.version-lock b/.version-lock
+index 9fb06bf..1af075c 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.3.5
+-locked_at: 2026-11-16T00:05:29Z
++version: 11.3.6
++locked_at: 2026-11-16T00:53:10Z
+ locked_by: ai/root
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index db2c9ad..bb3616d 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,14 @@
+ 
+ ## Unreleased
+ 
++### 11.3.6 — 实际审查范围、独立交接与可靠嵌入式示例
++
++- 审查模板按 staged、working-tree 或已核分支基线取得对应 patch，保留 dirty/untracked 边界；纯 Skill 交接默认使用随包字段，源码 schema/template 改为有条件辅助。
++- ADC 示例在乘法前拓宽，并以编译期整数范围约束、满量程/钳位/无效输入及真实 native/UBSan 回归覆盖溢出。
++- CMake 示例区分 preset 与手工路径，配置、构建、CTest 和 ELF 绑定同一 binaryDir/configuration；真实命令 fixture 的工具缺失不冒充执行通过。
++- 性能方法区分堆峰值、内存错误/泄漏和 RSS；flaky 方法按需保留 suite 顺序与共享进程；协议操作传播总剩余时限并核 SDK/调用层重试放大。
++- 从具体一手 Skill 与官方工具依据选择已证明的差距，压缩重复说明，保持 65 个身份、既有 Profile 上限、权限与发布门禁。源码/host/CI 证据不替代模型效果、Token/费用或板端资格。
++
+ ### 11.3.5 — Reliable Skill selection, portable methods and faster comparisons
+ 
+ - 修复辅助 Skill 同组提升绕过主 Skill 排除条件，以及中英文显式拒绝 Skill 身份仍可被选中的路径；正常匹配、read-only 与宿主权限边界保持。
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 5f58f9d..4011a42 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.3.5
++> 产品版本：11.3.6
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 6b46c4a..963766d 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.3.5`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.3.6`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/changes/20261116-skill-practical-methods/design.md b/docs/changes/20261116-skill-practical-methods/design.md
+new file mode 100644
+index 0000000..a58777f
+--- /dev/null
++++ b/docs/changes/20261116-skill-practical-methods/design.md
+@@ -0,0 +1,15 @@
++# 设计
++
++需求：@docs/changes/20261116-skill-practical-methods/requirements.md。
++
++- Review 在既有 reference 选择单一 diff 端点和对应 check，明确 whole-branch baseline 与 dirty overlay；真实导出模板在受控 Git 仓验证目标内容，不仅检查 exit 0。
++- Context 保留既有最小交接字段和证据/权限边界，将 ADK 源仓辅助文件改成可核条件；默认正文自足，避免重复 schema 或增加强制依赖。
++- ADC 在乘法前拓宽，并通过编译期约束声明可安全支持的 int 宽度；测试预期来自零点、满量程、钳位及无效输入，不复制实现公式。接入现有 command-example 测试，不新增顶层测试编排。
++- 实现集成补充（独立 reviewer 核可）：`_Static_assert` 位于 ADC 实现，既有 CMake 目标用 PRIVATE `c_std_11`，cross smoke 明确 `-std=c11`。公共头与测试不需传播额外标准要求；真实 ADC CMake 构建进入同一 fixture 类，本地缺工具仍不算执行。
++- 堆工具仅修正当前映射；不把 Valgrind 插桩时间当原生性能。flaky 细节放现有 optional reference；协议在既有 Retry boundary 中替换重复说明。三者是方法改进，受控逻辑反例只说明诊断维度，不冒充 agent A/B。
++- CMake 用互斥的 preset / manual 路径，传递实际构建目录与 configuration，分析实际 ELF；测试使用真实 CMake/CTest，单独记录宿主工具不足。保持 host-unit / compile-only / emulator / board-runner 的区别。
++- 逐 Skill 等量压缩重复说明；large-refactor 总源码目前仅余 6 B，所有原 ratchet 必须保持。研究、历史反例和审查说明放本 change，不进入运行时 Skill。
++
++职责：root 当前负责设计/集成与 protocol/flaky 方法；general 实现者负责 Review/context；practical 实现者负责 ADC、性能与 CMake；external 研究者保持独立只读审查。源码实现前先完成本设计预审。所有实现者只写分配路径，用 apply_patch；root 独占版本/fixture/catalog/最终提交。
++
++回滚：按本轮原子提交独立 revert，恢复上一不可变组件发布；不改历史测量或产品资格。发布仍走普通 PR、最终 HEAD 检查、main CI、tag/Release 核验。
+diff --git a/docs/changes/20261116-skill-practical-methods/negative-results.md b/docs/changes/20261116-skill-practical-methods/negative-results.md
+new file mode 100644
+index 0000000..ad52b2f
+--- /dev/null
++++ b/docs/changes/20261116-skill-practical-methods/negative-results.md
+@@ -0,0 +1,14 @@
++# 负结果与证据边界
++
++- `knowledge/L2-domain/lessons.md` 在源仓不存在，不能补造历史经验；使用既有变更记录和新反例。
++- Review 基线实际渲染的 Git 命令在 staged 阳性控制取得目标；working-tree、clean whole-branch、同文件 overlay 三组均 exit 0 却漏掉目标代码。这是模板证据范围缺陷，不能推断模型必然漏审。
++- 新增 stat-only 反例证实 Git 2.52.0 的 diff 可刷新 index；只加 `--no-optional-locks` 的中间修复仍失败，原 `green-stat-only-final.json` 虽带 green 字样，实际 exit 1，保持失败记录。逐命令矩阵定位后用命令局部 `diff.autoRefreshIndex=false` 修复；该次修复匹配 `green-index-refresh.json`，不是较早的 `green-final.json`。随后 SOP 字段恢复另有新回执，最终源码以最新 source-freeze 和 full-receipt 为准。
++- 首轮完整入口在冻结 `e0c3b97ef8382366939e3b5ed40263307604bd03` 上因既有 SOP 要求 `Snapshot ID:` 标识缺失失败（exit 1、27.405 秒）；原源码冻结、完整 patch、partial log/timing/receipt 原样保存在 `evidence/attempt1`。恢复原字段标识并保留所选目标语义，不改测试；后续完整验证必须绑定新冻结，旧 partial 结果不计完整 PASS。
++- Context 源仓 schema/template 存在，但 6 profiles × 2 targets 的产物不包含它们；两个 core 完整 export 均确认路径缺失。默认流程不能假设消费端保留 ADK 源码。
++- ADC 原 3 个测试通过；native C 在 24 位满量程/钳位返回 -28，INT_MAX 满量程返回 0；UBSan 报有符号溢出。期望来自端点不变量，未复用实现计算答案。
++- CMake/Ninja 和 Valgrind 本地不可用。CMake binaryDir 反例当前只完成静态命令/配置核对；逻辑堆负载仅说明峰值与泄漏口径差异，不是 Massif/RSS 实测。
++- 最终真实命令模块 26 项中，本地 21 项 PASS、5 个 CMake case 因缺工具明确 SKIP。模拟 GitHub Actions 缺工具环境的拒绝实验真实非零，只证明不允许 skip 变绿，不是 CI 实跑；真实 CMake/CTest 和 ADC CMake C11 接线仍须平台核验。ARM cross smoke 未执行。
++- 同进程状态模型、整数假时钟和嵌套尝试模型只证明方法缺口，不计入 ADK agent A/B、Token/费用或真实设备结果。
++- 普通 git fetch 已取得正确 PR HEAD 与文件树，但输出一条旧 object 无法读取警告；未擅自清理历史。新工作树的目标对象与源码摘要另行核验。
++- 后续普通 main fetch 因本地旧 object 缺失未成功更新 remote-main；未把串行 shell 最后一个读命令的 exit 0 当 fetch 成功。使用 `fetch.negotiationAlgorithm=noop` 直接取得已知 `008c789312ed374f38d6d71a113f8fc91f89e63c` 后，确认其 tree 为 `72fa9e545532d184185ed7193cbd1f594a227d9f`，与本轮初始 HEAD 相同；没有清理或补造旧历史。
++- 固定 GitHub blob 的 web open 有 DisabledError；读取相同固定 commit 的 GitHub contents 成功。没有把检索失败当作来源内容，采用依据仍来自原始文件及官方文档。
+diff --git a/docs/changes/20261116-skill-practical-methods/requirements.md b/docs/changes/20261116-skill-practical-methods/requirements.md
+new file mode 100644
+index 0000000..5c8a67e
+--- /dev/null
++++ b/docs/changes/20261116-skill-practical-methods/requirements.md
+@@ -0,0 +1,22 @@
++# Skill 实际执行方法修正
++
++## 目标与基线
++
++用户本轮明确允许推送合并，并要求继续全面深度优化所有 Skill。上一轮 11.3.5 已审交付经精确文件树同步成为 PR #270；本轮初始基线为其 HEAD `5b88ec5bce351f68d4756d765e69a4f40bde3f07`，运行资产与原 `63e8f61…` 一致。PR #270 合并后核对主线 tree，再按实际主线记录最终变更基线，不能冒充当前已发布。
++
++本轮选择已证实的执行对象、进程边界和资源测量缺口，改进现有 Skill/示例的实际用法。全量覆盖沿用上轮 65 项清单，本轮对新增方法重新深读，不用改动数量表示质量。
++
++## 验收
++
++1. Review 模板按明确目标取得 staged、working-tree 或已核基线到 HEAD 的真实 patch；同文件 staged/unstaged 并存、clean 已提交分支也不能漏掉目标。记录 overlay，不改 index、不猜 main、不扩展执行权限。
++2. 纯 Skill 导出中的 context/handoff 默认可依靠随包正文生成有效交接；源仓 schema/template 仅在核验源码根及文件可读时可用。保留目标、已确认事实、状态/阻塞、scope/permission、raw evidence 与下一动作，不新增资源副本或运行时。
++3. ADC 样例在其声明支持的整数宽度上保留错误返回和钳位行为；24 位及 INT_MAX 端点满足独立不变量，乘法中间量不发生有符号溢出。实际 native C 编译/执行进入既有测试入口，不把 host 结果当板端资格。
++4. 性能 Skill 按问题区分堆峰值/时间线、错误/泄漏和 RSS；采样/插桩扰动及工具可用性明确，不声称本机运行了缺失的 Valgrind。
++5. flaky 排障在 suite/独跑差异或共享状态线索下保留原顺序、seed、worker 和进程边界，比较污染前序与反序并缩小前序集合；新进程独跑全绿不单独证明同进程污染修复，不强制所有偶发问题套矩阵。
++6. 有完成时限的协议操作包含阶段、尝试及退避的剩余预算，识别 SDK/调用层叠加重试并明确责任。保留可重试语义、非幂等 UNKNOWN 对账、协议时序和长连接寿命边界，不跨主机传递本地单调钟绝对值。
++7. CMake configure/build/test/artifact 绑定同一实际 preset binaryDir 和 configuration；preset 名称可不同，preset/手工配置不混用。保留实际执行后端和空测试失败要求。本机 CMake/Ninja 不可用：本地静态反例不能称真实构建；增加可运行的真实 CMake fixture，并在具备工具的 CI 核验，缺失工具明确记录。
++8. 现有版本、预算和安全/发布门禁保持；新版本计划 11.3.6。原型/方法反例、真实源码回归、定性对话与平台发布分别记录，不推断模型 Token/费用或硬件收益。
++
++## 非目标
++
++不引入第三方 Skill 整包、新 runtime、付费/外部模型调用、Codex/ChatGPT Work Cloud/CLI 共享额度、定时巡检或 KWS/audio/safe 工作；不修改真实设备或生产服务，不放宽任何内容、审查或 CI 上限。
+diff --git a/docs/changes/20261116-skill-practical-methods/source-review.md b/docs/changes/20261116-skill-practical-methods/source-review.md
+new file mode 100644
+index 0000000..f438b52
+--- /dev/null
++++ b/docs/changes/20261116-skill-practical-methods/source-review.md
+@@ -0,0 +1,39 @@
++# 来源与采用决策
++
++本轮承接 @docs/changes/20261116-skill-execution-fidelity/audit.md 的 65 项 Skill / 118 个入口及直接参考路径覆盖，并针对新的真实缺口深入验证。检索范围包含官方规范、维护者的具体 Skill 文件及其原始技术依据；这是有范围的全网检索，不声称穷尽互联网。来源只用于比较和方法提炼，没有安装或执行第三方 Skill 包。
++
++## 从问题到改动
++
++| 当前任务问题 | 采用的方法 | 采用位置与验证边界 |
++|---|---|---|
++| review 声明 working-tree / whole-branch，但命令只取 cached patch | diff 端点与目标一致；未跟踪文件、dirty overlay 明确区分 | code-review-loop 既有 evidence reference；执行真实导出命令，断言 patch 内容和 index 不变 |
++| 纯 Skill 包不带 ADK 源仓 schema/template | 默认正文自足；源仓辅助资源须先核根目录与可读性 | context-engineering / context-compress-handoff；实际两目标 core export，无重复资源副本 |
++| ADC 12-bit 样例测试掩盖更大输入乘法溢出 | 先拓宽中间量，声明 int 支持范围，用端点/钳位作独立预期 | 原示例及既有 command-example 测试；host native / UBSan，不是板端验证 |
++| “堆用 memcheck”未区分峰值与内存错误 | Massif 对应堆峰值/时间线/分配点；Memcheck 对应错误/泄漏，RSS 单独量 | performance-profiling-embedded 原工具映射；本机 Valgrind 缺失，不称实测 |
++| 新进程重复不能重现同进程前序污染 | 条件性保留 suite 顺序、seed、worker、进程边界，做污染前序/反序对照 | flaky 现有按需 reference；原始状态模型只说明诊断维度 |
++| 分段 timeout 和次数上限不保证整体时限 | 阶段、重试及退避共用剩余预算；核已有 SDK 重试及总调用量 | protocol 原 Retry boundary；整数假时钟不是网络/设备测量 |
++| preset 配置目录与后续 build/test/artifact 不一致 | 互斥的 preset/manual 路径，绑定真实 binaryDir、configuration 与 ELF | cmake-cross-build；本地静态反例，真实 fixture 需具备 CMake 的平台执行 |
++
++## 一手来源
++
++检索日期：2026-11-16。仓库来源固定到实际读取的 commit；动态官方文档不虚构 commit。完整研究及原始反例保存于本 change 的 evidence。
++
++| 来源 | 固定身份或官方地址 | 采用或保留 |
++|---|---|---|
++| Git diff 官方文档 | https://git-scm.com/docs/git-diff | cached、HEAD 工作树、已核基线与 HEAD 的端点语义；无默认基线猜测 |
++| Agent Skills specification | https://agentskills.io/specification | Skill 目录与随包资源、按需加载；不把消费端当源仓 |
++| Valgrind 工具说明 | https://valgrind.org/info/tools.html | Memcheck 与 Massif 的用途区别 |
++| Massif 官方手册 | https://valgrind.org/docs/manual/ms-manual.html | 堆随时间变化、分配来源、采样局限；不把堆口径当 RSS |
++| CMake presets 官方文档 | https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html | build/test preset 经 configurePreset 关联配置，名称无需相同 |
++| Microsoft testfx / test-anti-patterns | [SKILL.md](https://github.com/microsoft/testfx/blob/74be6a61c1324c7b4810841ba2716040b47230f4/.agents/skills/test-anti-patterns/SKILL.md)，blob `5641f2ac231e8a2784d572f13b4be4798994d55d` | 只补本次查到的顺序依赖诊断；已有独立 oracle / mock 边界保持 |
++| GitHub awesome-copilot / cloud-design-patterns | [SKILL.md](https://github.com/github/awesome-copilot/blob/97d89fa3a1fdd84cc7d6c42fe82dbbf8ff2e3c20/skills/cloud-design-patterns/SKILL.md)，blob `b9a17433b9bedf95947bfe6624ef0a4bfa053021`；[reliability-resilience.md](https://github.com/github/awesome-copilot/blob/97d89fa3a1fdd84cc7d6c42fe82dbbf8ff2e3c20/skills/cloud-design-patterns/references/reliability-resilience.md)，blob `208b92d8697abb62f4396c889640ba19c913a19c` | Retry 的短暂/永久失败与幂等性；不引入整套云模式词典 |
++| Microsoft Azure Architecture Center | [transient-faults.md](https://github.com/MicrosoftDocs/architecture-center/blob/13861343a03580f08556f9eddf44a3223e01cfa0/docs/best-practices/transient-faults.md)，blob `165c153f14fc4870f5f088e8b31b126e821a95af`；[官方发布页](https://learn.microsoft.com/en-us/azure/architecture/best-practices/transient-faults) | 总时延包含 timeout 与等待；识别重叠重试，尊重 Retry-After |
++| AWS Builders Library | https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/ | 阶段覆盖、多层放大、backoff/jitter；不直接套云平台参数 |
++| GitHub awesome-copilot / test-gap-audit | [SKILL.md](https://github.com/github/awesome-copilot/blob/97d89fa3a1fdd84cc7d6c42fe82dbbf8ff2e3c20/skills/test-gap-audit/SKILL.md)，blob `31ea9fa996bf9efa3343a70f95efda34a1eb8cd7` | 已有风险选择和真实行为断言，不新增相似审计入口 |
++| humanlayer / design-control-loop | [SKILL.md](https://github.com/humanlayer/skills/blob/4d69d20f6e9b57b4fcf0d501ccfb1be961f0f329/plugins/design-control-loop/skills/design-control-loop/SKILL.md)，blob `c9abc1b884d6002b4b76a7f611cf7686e91d59c8` | 本地反馈与单一信息源已有覆盖；不引入定时 CI、外部 headless agent 或新凭据 |
++
++## 推论和拒绝项
++
++剩余预算取最小值、本地单调时钟边界、同进程前序/反序矩阵，是针对 ADK 现有缺口的设计推论，不冒充外部 Skill 的逐字内容。已覆盖项保留现状，不因外部仓库流行度或 Skill 数量增加重复资产。
++
++本轮不调用外部模型/API、Codex/ChatGPT Work CLI/Cloud 额度，不新增定时任务或真实设备变更。逻辑反例、源码回归、host 编译、真实 CI 与模型效果分别记录；模型成功率、Token、费用和板端性能仍未测量。
+diff --git a/examples/embedded-test-matrix/CMakeLists.txt b/examples/embedded-test-matrix/CMakeLists.txt
+index 54f3e2d..1cf7b62 100644
+--- a/examples/embedded-test-matrix/CMakeLists.txt
++++ b/examples/embedded-test-matrix/CMakeLists.txt
+@@ -4,6 +4,7 @@ project(adk_embedded_test_matrix C)
+ enable_testing()
+ 
+ add_library(adc_scale src/adc_scale.c)
++target_compile_features(adc_scale PRIVATE c_std_11)
+ target_include_directories(adc_scale PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+ 
+ add_executable(test_adc_scale tests/test_adc_scale.c)
+diff --git a/examples/embedded-test-matrix/README.md b/examples/embedded-test-matrix/README.md
+index ce83ba3..11125f4 100644
+--- a/examples/embedded-test-matrix/README.md
++++ b/examples/embedded-test-matrix/README.md
+@@ -2,14 +2,15 @@
+ 
+ This fixture demonstrates the minimum evidence shape expected by
+ `adk-test-strategy` for embedded full-stack projects. It is intentionally small
+-and deterministic: CI can inspect it without a toolchain, while real projects
+-can replace the commands with board-specific entries.
++and deterministic: structural checks need no toolchain; the command-example
++suite compiles and executes its host C tests. Real projects can replace the
++commands with board-specific entries.
+ 
+ ## Coverage
+ 
+ | Layer | Example Entry | Evidence |
+ |---|---|---|
+-| Host unit | `tests/test_adc_scale.c` | CMake + CTest command shape |
++| Host unit | `tests/test_adc_scale.c` | actual native C tests; CMake + CTest entry |
+ | Cross-build smoke | `cross-build/smoke-command.txt` | toolchain command is explicit |
+ | QEMU/SIL | `qemu-sil/boot-smoke.md` | boot smoke command and expected log |
+ | HIL manual | `hil/manual-record.md` | board, fixture, operator, pending evidence |
+@@ -20,8 +21,20 @@ can replace the commands with board-specific entries.
+ ```bash
+ cmake -S . -B build
+ cmake --build build
+-ctest --test-dir build --output-on-failure
++ctest --test-dir build --output-on-failure --no-tests=error
+ ```
+ 
++From the repository root, run optimized native tests and a separate UBSan case:
++
++```bash
++python tests/test_skill_command_examples.py EmbeddedAdcExampleTests -v
++```
++
++Missing sanitizer support is an explicit skip, not a sanitized pass.
++The C11 example requires `int64_t` and rejects `int` wider than 32 bits at
++compile time. Endpoint, clamping and invalid-input expectations are independent
++of the implementation formula; 24-bit cases run only when `int` can represent
++their inputs. Host results do not establish board behavior or timing.
++
+ Hardware-backed projects must add flash/readback, boot log, signal capture or
+ HIL controller logs before claiming production readiness.
+diff --git a/examples/embedded-test-matrix/cross-build/smoke-command.txt b/examples/embedded-test-matrix/cross-build/smoke-command.txt
+index 52fac3c..fd2b4f3 100644
+--- a/examples/embedded-test-matrix/cross-build/smoke-command.txt
++++ b/examples/embedded-test-matrix/cross-build/smoke-command.txt
+@@ -1 +1 @@
+-arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -I src -c src/adc_scale.c -o build/adc_scale.o
++arm-none-eabi-gcc -std=c11 -mcpu=cortex-m4 -mthumb -I src -c src/adc_scale.c -o build/adc_scale.o
+diff --git a/examples/embedded-test-matrix/src/adc_scale.c b/examples/embedded-test-matrix/src/adc_scale.c
+index 25a33bf..a80e952 100644
+--- a/examples/embedded-test-matrix/src/adc_scale.c
++++ b/examples/embedded-test-matrix/src/adc_scale.c
+@@ -1,5 +1,10 @@
+ #include "adc_scale.h"
+ 
++#include <limits.h>
++#include <stdint.h>
++
++_Static_assert(INT_MAX <= INT32_MAX, "adc_scale_mv requires int with at most 31 value bits");
++
+ int adc_scale_mv(int raw, int reference_mv, int max_count) {
+   if (raw < 0 || reference_mv <= 0 || max_count <= 0) {
+     return -1;
+@@ -7,5 +12,5 @@ int adc_scale_mv(int raw, int reference_mv, int max_count) {
+   if (raw > max_count) {
+     raw = max_count;
+   }
+-  return (raw * reference_mv) / max_count;
++  return (int)((int64_t)raw * reference_mv / max_count);
+ }
+diff --git a/examples/embedded-test-matrix/src/adc_scale.h b/examples/embedded-test-matrix/src/adc_scale.h
+index 608c850..9837fe7 100644
+--- a/examples/embedded-test-matrix/src/adc_scale.h
++++ b/examples/embedded-test-matrix/src/adc_scale.h
+@@ -1,6 +1,9 @@
+ #ifndef ADK_ADC_SCALE_H
+ #define ADK_ADC_SCALE_H
+ 
++/* C11 fixture: int <= 32 bits and int64_t are required by the implementation.
++ * Return -1 for raw < 0 or nonpositive reference/max; clamp raw above max.
++ * Valid results are truncated millivolts in [0, reference_mv]. */
+ int adc_scale_mv(int raw, int reference_mv, int max_count);
+ 
+ #endif
+diff --git a/examples/embedded-test-matrix/tests/test_adc_scale.c b/examples/embedded-test-matrix/tests/test_adc_scale.c
+index 0d011a7..1c5fda2 100644
+--- a/examples/embedded-test-matrix/tests/test_adc_scale.c
++++ b/examples/embedded-test-matrix/tests/test_adc_scale.c
+@@ -1,5 +1,6 @@
+ #include "adc_scale.h"
+ 
++#include <limits.h>
+ #include <stdio.h>
+ 
+ static int expect_equal(const char *name, int expected, int actual) {
+@@ -16,5 +17,26 @@ int main(void) {
+   failures += expect_equal("zero", 0, adc_scale_mv(0, 3300, 4095));
+   failures += expect_equal("full-scale", 3300, adc_scale_mv(4095, 3300, 4095));
+   failures += expect_equal("invalid", -1, adc_scale_mv(-1, 3300, 4095));
++  /* Endpoint and clamping invariants; do not duplicate the scaling formula. */
++  failures += expect_equal("maximum-int-full-scale", INT_MAX,
++                           adc_scale_mv(INT_MAX, INT_MAX, INT_MAX));
++  failures += expect_equal("maximum-int-clamped", INT_MAX,
++                           adc_scale_mv(INT_MAX, INT_MAX, INT_MAX - 1));
++  failures += expect_equal("maximum-int-zero", 0,
++                           adc_scale_mv(0, INT_MAX, INT_MAX));
++  failures += expect_equal("clamped", 3300, adc_scale_mv(4096, 3300, 4095));
++  failures += expect_equal("invalid-minimum", -1, adc_scale_mv(INT_MIN, 3300, 4095));
++  failures += expect_equal("zero-reference", -1, adc_scale_mv(1, 0, 4095));
++  failures += expect_equal("negative-reference", -1, adc_scale_mv(1, -1, 4095));
++  failures += expect_equal("zero-maximum", -1, adc_scale_mv(1, 3300, 0));
++  failures += expect_equal("negative-maximum", -1, adc_scale_mv(1, 3300, -1));
++#if INT_MAX >= 16777216
++  failures += expect_equal("24-bit-full-scale", 3300,
++                           adc_scale_mv(16777215, 3300, 16777215));
++  failures += expect_equal("24-bit-clamped", 3300,
++                           adc_scale_mv(16777216, 3300, 16777215));
++#else
++  puts("SKIP 24-bit cases: int cannot represent these inputs");
++#endif
+   return failures == 0 ? 0 : 1;
+ }
+diff --git a/manifest.json b/manifest.json
+index 1a6ae25..3faa883 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.5",
++  "version": "11.3.6",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 7542458..d44f336 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.3.5",
++  "campaign_id": "software-m5-11.3.6",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/optional-skills/adk-test-flakiness-triage/SKILL.md b/optional-skills/adk-test-flakiness-triage/SKILL.md
+index 7792ad4..8aba44f 100644
+--- a/optional-skills/adk-test-flakiness-triage/SKILL.md
++++ b/optional-skills/adk-test-flakiness-triage/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-test-flakiness-triage
+ description: "用于非确定性测试故障的复现、波动归因和消除不稳定方案验证；不用于把失败盲目重跑到绿或降低测试门禁。"
+-version: 1.0.4
+-last_updated: 2026-11-15
++version: 1.0.5
++last_updated: 2026-11-16
+ triggers:
+   - "测试波动"
+   - "flaky test"
+@@ -22,7 +22,6 @@ constraints:
+ 
+ ## Goal
+ - 定位测试波动根因并给出稳定化方案。
+-- 建立不稳定测试识别、分类、隔离和修复的完整流程。
+ 
+ 
+ ## Prerequisites
+@@ -34,9 +33,9 @@ constraints:
+ 1. 不稳定测试识别：从 CI 历史中提取失败率异常的测试。
+ 2. 失败模式聚类：按错误类型、失败阶段和环境条件分类。
+ 3. 建立假设矩阵：列出可能根因，单轮只验证一个假设。
+-4. 环境差异对比：检查依赖版本、资源状态和时序条件。
++4. 比较环境/时序；独跑与 suite 不同或疑似共享状态时，按 `references/details.md` 保留顺序、seed、worker 与同进程边界定位污染。
+ 5. 重试策略评估：确定是否需要重试、重试次数和退避策略。
+-6. 隔离方法实施：将不稳定测试隔离到独立执行环境。
++6. 按需隔离并验证边界，保留原失败状态。
+ 7. 根因分析：优先证伪可复现的候选假设，5-Why 仅在跨系统因果确有价值时使用，不为凑层数重复问答。
+ 8. 修复验证：确认修复后测试稳定性，回归验证通过。
+ 
+@@ -69,4 +68,3 @@ risks:
+ 
+ ## References
+ - 详细背景、命令、模板、示例和扩展检查项保存在 `references/details.md`。
+-- 入口文件只保留触发和执行所需的最小上下文，避免默认加载过多 token。
+diff --git a/optional-skills/adk-test-flakiness-triage/references/details.md b/optional-skills/adk-test-flakiness-triage/references/details.md
+index b3f0ef5..ef75b93 100644
+--- a/optional-skills/adk-test-flakiness-triage/references/details.md
++++ b/optional-skills/adk-test-flakiness-triage/references/details.md
+@@ -43,6 +43,8 @@ run_flaky_samples() (
+ 
+ ## 环境比较与最小诊断
+ 
++独跑与 suite 结果不同或有共享状态线索时，先保存原 runner 的顺序、seed、worker 和进程边界，再比较 victim 独跑、原 suite、可疑前序→victim 与反序；不把本来同进程的场景拆成新进程后宣称复现成功。逐步缩小前序集合，检查全局状态、环境、缓存、时钟和资源残留；多个污染者可能有非单调交互，普通二分不能保证定位。只改变待证伪变量，保留逐例原始报告。新进程全绿不单独证明同进程污染修复；若隔离本身是设计修复，另验证边界、成本与原失败路径。无顺序线索时不强制此矩阵。
++
+ 先比较版本、已脱敏配置和资源状态。以下仅列相关变量**名称**；需要值时逐项使用已核安全白名单，凭据值不进入日志。
+ 
+ ```bash
+diff --git a/pyproject.toml b/pyproject.toml
+index cc99b3e..5e50eae 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.3.5"
++version = "11.3.6"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/skills/adk-cmake-cross-build/SKILL.md b/skills/adk-cmake-cross-build/SKILL.md
+index 77e7727..2bb210b 100644
+--- a/skills/adk-cmake-cross-build/SKILL.md
++++ b/skills/adk-cmake-cross-build/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-cmake-cross-build
+ description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
+-version: 1.0.4
+-last_updated: 2026-11-15
++version: 1.0.5
++last_updated: 2026-11-16
+ triggers:
+   - "CMake"
+   - "CMake交叉编译"
+@@ -26,60 +26,63 @@ constraints:
+ 复现 ARM Cortex-M/A、RISC-V 等实际目标的 CMake 交叉构建。
+ 
+ ## Prerequisites
+-- 明确 host/build/target 三元组与编译器版本。
+-- 准备 toolchain file、sysroot、依赖路径映射。
+-- 确认实际使用 CMake（含 Buildroot/Yocto 的 CMake package），核版本与 generator；不将其他构建系统一概转为 CMake。
++- 核 host/build/target、编译器、toolchain/sysroot、ABI/依赖路径、CMake 版本与 generator；不把其他构建系统转为 CMake。
+ 
+ ## Workflow
+-1. **编写 toolchain 文件**：定义编译器、sysroot、查找路径和 ABI flags。
+-2. **固化 Presets**：用 `CMakePresets.json` 表达目标、构建类型和输出目录。
+-3. **执行构建**：仅在目标仓允许执行并且 toolchain/generator/sysroot 存在时使用 presets；无 presets 时显式传入 toolchain file。不得替换或删除不属于本任务的 build 目录；用户未授权执行时只读规划。
+-4. **执行后端判定**：在跑 CTest 前识别 host-unit、compile-only、emulator（含 `CROSSCOMPILING_EMULATOR`）、board-runner 四类。没有已验证的目标执行后端时，只能声称交叉构建成功；不能把主机上的 CTest 通过写成板端运行通过。
+-5. **产物检查**：用实际 toolchain 核 ELF 架构、段、符号/map；记录二进制、日志、失败点与诊断建议。
++1. **配置**：核执行授权和工具可用性；未授权只读规划。只用任务自有目录，不替换他人 build。
++2. **绑定**：preset 与手工配置二选一。preset 的 build/test 名称可不同，但 `configurePreset`、`binaryDir`、configuration 必须一致；缺匹配 presets 则按核实参数手工配置。见 [Presets](https://cmake.org/cmake/help/v3.27/manual/cmake-presets.7.html)。
++3. **后端**：先核 `host-unit | compile-only | emulator | board-runner`，emulator 含 `CROSSCOMPILING_EMULATOR`。没有已验证执行后端用 compile-only；host CTest 不证明板端运行。
++4. **产物**：从本次 binaryDir/configuration 定位实际 ELF 为 `ADK_ELF`，不猜 `build/<target>`；用实际目标工具链检查架构、段、符号/map。
+ 
+ ## Commands
++在源码根选一段；变量须填实际值，目录用绝对路径。`ADK_CONFIG` 固定配置；单配置还设置 `CMAKE_BUILD_TYPE`。`ADK_BUILD_JOBS` 是按 CPU/RAM/CI 配额核定的正整数（`--parallel <resource-budget>`）。
+ ```bash
+-cmake -S . -B build/<target> -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-<target>.cmake -G Ninja
+-cmake --preset <preset-name>
+-cmake --build build/<target> --parallel <resource-budget>  # 用实际 CPU/RAM/CI 配额定预算
+-file build/<target>/firmware.elf
+-arm-none-eabi-size build/<target>/firmware.elf
+-arm-none-eabi-objdump -h build/<target>/firmware.elf
+-# 仅在发现目标项目已有 host/emulator/board test runner 后运行：
+-ctest --test-dir build/<target> --output-on-failure --no-tests=error
++# preset-build: 已核对 configure/build/test 引用与配置
++set -euo pipefail
++cmake --preset "$ADK_CONFIGURE_PRESET"
++cmake --build --preset "$ADK_BUILD_PRESET" --config "$ADK_CONFIG" --parallel "$ADK_BUILD_JOBS"
++case "$ADK_TEST_BACKEND" in
++  host-unit|emulator|board-runner) ctest --preset "$ADK_TEST_PRESET" -C "$ADK_CONFIG" --output-on-failure --no-tests=error ;;
++  compile-only) printf 'target tests: not-run\n' ;;
++  *) exit 2 ;;
++esac
++```
++```bash
++# manual-build: 不再执行 preset 配置
++set -euo pipefail
++cmake -S "$ADK_SOURCE_DIR" -B "$ADK_BINARY_DIR" -G "$ADK_GENERATOR" \
++  -DCMAKE_TOOLCHAIN_FILE="$ADK_TOOLCHAIN_FILE" -DCMAKE_BUILD_TYPE="$ADK_CONFIG"
++cmake --build "$ADK_BINARY_DIR" --config "$ADK_CONFIG" --parallel "$ADK_BUILD_JOBS"
++case "$ADK_TEST_BACKEND" in
++  host-unit|emulator|board-runner) ctest --test-dir "$ADK_BINARY_DIR" -C "$ADK_CONFIG" --output-on-failure --no-tests=error ;;
++  compile-only) printf 'target tests: not-run\n' ;;
++  *) exit 2 ;;
++esac
++```
++成功构建后检查同一产物；`ADK_SIZE/ADK_OBJDUMP` 为已核实的目标工具路径：
++```bash
++# built-artifact:
++set -euo pipefail
++file "$ADK_ELF"
++"$ADK_SIZE" -A "$ADK_ELF"
++"$ADK_OBJDUMP" -h "$ADK_ELF"
+ ```
+ 按实际 build/config/filter 核执行数量；空集/全禁用/筛空须失败，skip/not-run 不算通过。见 [CTest](https://cmake.org/cmake/help/v3.20/manual/ctest.1.html)。
+ 
+ ## Evidence Template
+ ```md
+-- Toolchain Summary:
+-  - Compiler / Sysroot / Target Triple:
+-- Build Matrix:
+-  | Preset | Type | Status | Size |
+-  |--------|------|--------|------|
+-  | actual-preset | Debug/Release | PASS/FAIL | __ KB |
+-- Build Result: [link to build log]
+-- ELF Verification: `file` output, section sizes
+-- Test Result: [ctest summary]
+-- Known Limitations: [list]
++- Host / Target / Toolchain / Sysroot:
++- Preset Names or Manual Parameters / binaryDir / Configuration:
++- Commands / Exit Codes / Duration / Logs:
++- ELF Path / Hash / Architecture / Sections / Size:
++- Test Backend / Counts / Result / Not-run / Limitations:
+ ```
+ 
+ ## Failure Handling
+-- 找不到依赖时，优先校验 `CMAKE_FIND_ROOT_PATH` 与 sysroot 完整性。
+-- 链接失败时，先定位 ABI/架构不匹配（`file *.o`），再回滚最近构建参数变更。
+-- Presets 解析失败时，检查 CMake 版本与 JSON 语法。
+-- 交叉编译时 host 工具混入，确保 `find_program` 使用 `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER`。
++- 依赖失败核 `CMAKE_FIND_ROOT_PATH`/sysroot；链接失败核 ABI/架构，不盲目重跑。
++- preset 失败核版本/JSON/引用链；host 工具混入时核 `find_program` 的 `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER`。
+ 
+ ## Quality Gate
+-- 必须明确 host/build/target 区分与 toolchain 来源。
+-- 至少一个目标平台完成交叉构建；可执行测试按 host/emulator/board 单独记录，无法运行目标测试时标记 `not-run` 而不是伪称闭环。
+-- 构建日志需可复现同一结果（clean build 验证，且只清理任务自有构建目录）；跨编译环境/host/target 的产物不得混用。
+-- ELF 产物必须用目标工具链的 `file/readelf/size`（按实际可用工具）核验架构、段与大小，裸 bin 不能仅靠 `file` 判断 CPU 身份。
+-- toolchain 文件必须纳入版本控制。
+-
+----
+-
+-## 健壮性规范
+-- 执行前校验 CMake、generator、toolchain、sysroot 和目标 preset。
+-- 构建失败先定位 ABI/架构/sysroot，不盲目重跑。
+-- 记录命令、退出码、耗时、产物路径和失败日志。
++- 至少一个目标交叉构建成功；未运行目标测试记 `not-run`，不混用 host/target 或配置的证据。
++- clean build 只清理任务自有构建目录；保留可复跑日志，toolchain 纳入版本控制。
++- 核 ELF 身份；裸 bin 不能仅靠 `file` 判断 CPU。失败不消费旧产物。
+diff --git a/skills/adk-code-review-loop/SKILL.md b/skills/adk-code-review-loop/SKILL.md
+index 1fec9fb..cc28239 100644
+--- a/skills/adk-code-review-loop/SKILL.md
++++ b/skills/adk-code-review-loop/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-code-review-loop
+ description: "用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。"
+-version: 1.7.7
++version: 1.7.8
+ last_updated: 2026-11-16
+ triggers:
+   - "独立代码审查"
+@@ -31,33 +31,29 @@ constraints:
+ # adk-code-review-loop
+ 
+ ## Goal
+-- 审查必须能复现、能闭环。
+-- 区分缺陷、误报、越界建议与无法验证项。
+-- 机械、语义及 readiness 分别裁决。
++冻结对象、验证发现、复核修复；机械、语义及 readiness 分别裁决。
+ 
+ ## 输出语言
+ 
+-输出语言遵守用户请求或项目 locale；统一分级不变。表达提示按需读取 `references/review-communication-guidance.md`。
++按用户请求或项目 locale 输出，统一分级；表达提示见 `references/review-communication-guidance.md`。
+ 
+ ## Prerequisites
+ 
+ - 完整审查冻结目标、diff、测试、HEAD/index 与 `staged/working-tree/whole-branch` overlay；单条反馈仅绑定来源快照和相关证据。
+-- 标记 `independent` 或 `author-self-review`，不得以自审冒充独立复审。
+ - 生命周期变更需 Requirement Baseline，不适用时标 `not_applicable`。
+-- SCM comment 仅由结构化 findings 和可信 trigger/secret 边界生成。
+ 
+ ## Workflow
+ 1. **按意图分流**：`feedback-triage` 仅核单条/有限条反馈。只读来源快照、相关代码/测试/契约和反证；判 `valid / false-positive / question / cannot-verify-from-diff`。不强制 whole-diff/全量 CI/额外 reviewer，不修改文件或发 SCM comment，**不得**给 `Final Verdict: pass`、`Final Readiness: true`。跨文件、共享状态、生命周期、安全/权限及无界影响升级完整审查；缺证据不猜。
+-2. **定向复核**：`targeted-finding-review` 只核已知 finding 修复；更新 staged Snapshot ID、overlay、reopened；**不能**替代最终 `whole-diff-review` 或适用的 `whole-lifecycle-review`。
+-3. **最终完整审查**：`whole-diff-review` 冻结 HEAD/index/diff 和 Requirement/Domain Model/Verification Baseline；核机械 build/test/format 和语义正确性，同轮输出 Spec/Quality 双 verdict；共享生命周期追加 whole-lifecycle，保留独立 reviewer；大范围/高风险时记录 `Review Coverage Ledger`。
++2. **定向复核**：`targeted-finding-review` 只核已知 finding 修复；更新目标 Snapshot ID、overlay、reopened；**不能**替代最终 `whole-diff-review` 或适用的 `whole-lifecycle-review`。
++3. **最终完整审查**：`whole-diff-review` 冻结 HEAD/index/diff 和 Requirement/Domain Model/Verification Baseline；核机械 build/test/format 与语义，同轮输出 Spec/Quality 双 verdict；共享生命周期追加 whole-lifecycle 和独立 reviewer；大范围/高风险记录 `Review Coverage Ledger`。
+ 4. **设计变更分流与收敛**：按 blocker/major/minor/question/cannot-verify-from-diff 分类并附证据；owner/state/event/resource/termination 或取消/超时/恢复变更标 `design-change` 并 replan；记录 new/reopened/clean rounds，不顺带重构。
+ 5. **门禁交接**：最终 review 交 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；不自动批准；重复模式经 trace-feedback-eval-handoff/AAR 才成为 durable rule。
+ 
+-E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI 绿不等于真实有效；自审须标 `author-self-review`。
++E2/E3 对冻结合同的关键前提提出可复现证伪；优先减法，CI 绿不等于真实有效。
+ 
+ 连续两轮出现新的 blocker 或 major finding class，任一 finding 为 `design-change`，或同一逻辑任务 `author-self-review` 超过两轮时，必须停止局部补丁循环并 `replan`。
+ 
+-完整分级表、18-step 解释、收敛例外、CI/PR 发布边界见 `references/review-governance-details.md`；完整报告见 `references/review-evidence-template.md`；反馈样例见 `references/review-feedback-fixtures.md`。
++完整分级、收敛例外及 CI/PR 边界见 `references/review-governance-details.md`；反馈样例见 `references/review-feedback-fixtures.md`。
+ 
+ ## Failure Handling
+ - 反馈不清楚：改写成可验证命题；仍不清楚则 `question`。
+@@ -68,24 +64,18 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
+ 
+ ## Commands
+ 
+-只读取证命令和例外流程按需见 `references/review-governance-details.md`，不得由本 Skill 直接扩大权限。
++按目标取证见 `references/review-evidence-template.md`；不扩大权限。
+ 
+ ## Evidence Template
++完整字段见 `references/review-evidence-template.md`；未覆盖范围显式标记。
++
+ ```md
+-- Review Target: staged | working-tree | whole-branch
+-- Snapshot ID: <head + index_or_diff identity>
+-- Working Tree Overlay: <none | paths>
+-- latest_worktree_reviewed: true | false
++- Snapshot ID: <所选目标的 head + index/diff；分支另记 base/merge-base>
++- Working Tree Overlay: none | <paths>
+ - Reviewer Independence: independent | author-self-review
+-- Review Round / Mode: <n> / feedback-triage | targeted-finding-review | whole-diff-review | whole-lifecycle-review
+-- Finding Classes / New Finding Class Count / Reopened Finding Count / Consecutive Clean Reviews:
+-- Review Coverage Ledger: not-applicable | inspected / uninspected / evidence / risk-decision
+-- Lifecycle Operation Baseline: not_applicable | <path + digest>
+-- Contract Change Decision: none | design-change
+-- Replan Reason: <none | reason>
++- Review Round / Mode: <n> / <mode>; New Finding Class Count: <n>
+ - Mechanical Gate: pass | fail | not-run
+-- Spec Verdict / Quality Verdict:
+-- Final Verdict: pass | needs-fix
++- Contract Change Decision: none | design-change
+ ```
+ 
+ ## Quality Gate
+@@ -96,7 +86,6 @@ E2/E3 应对冻结合同的关键前提提出可复现证伪；优先减法，CI
+ - `cannot-verify-from-diff` 必须补证据、owner 接受风险或明确不适用；高风险必需范围若为 `uninspected` 且无 owner 风险决策不得 pass。
+ - 缺需求基线或 Spec↔Code 双向核对证据时，不得给完整 spec-compliance pass；细节见按需 reference。
+ - 受控生命周期操作缺 owner/state/event baseline，或 `design-change` 未回设计阶段时，spec-compliance 固定不通过。
+-- `targeted-finding-review` 不得替代 whole-diff 或适用的 whole-lifecycle review。
+ - reviewer 只读：不得修改工作树、切分支、执行破坏性操作，也不得被要求忽略发现或预设严重级别。
+ - Owner 显式委派时，独立 AI 可完成授权范围的 Spec/Quality 最终裁决；须记录 AI 身份、委派来源、快照与证据，不冒充人类。未委派的高风险或责任裁决仍交 owner。
+ - 机器发布 review comment 前必须有 schema-backed findings；不能从自由文本直接生成 SCM 写 payload；untrusted PR/fork/public PR 默认不接收 protected secrets，缺 trusted-trigger 决策时只允许只读分析；inline comment 位置无法验证时，必须降级为 summary finding。
+diff --git a/skills/adk-code-review-loop/references/review-evidence-template.md b/skills/adk-code-review-loop/references/review-evidence-template.md
+index 5a782de..fa83603 100644
+--- a/skills/adk-code-review-loop/references/review-evidence-template.md
++++ b/skills/adk-code-review-loop/references/review-evidence-template.md
+@@ -2,15 +2,30 @@
+ 
+ ## Snapshot commands
+ 
++先设置 `review_target`。whole-branch 的 `review_base` 须来自已核验的审查基线，不猜默认分支。working-tree 指 HEAD 到当前已跟踪文件的净差异（含 staged+unstaged），不包含 untracked 正文；按 scope 读取或记录排除项，不为取证改 index。
++
+ ```bash
+-git rev-parse HEAD
+-git status --short
+-git diff --check
+-git diff --cached
+-git diff --check --cached
++set -euo pipefail
++review_head=$(git rev-parse HEAD)
++printf '%s\n' "$review_head"
++git --no-optional-locks status --short --untracked-files=all
++case "${review_target:?set staged, working-tree or whole-branch}" in
++  staged) review_diff=(--cached "$review_head") ;;
++  working-tree) review_diff=("$review_head") ;;
++  whole-branch)
++    review_base=$(git rev-parse --verify --end-of-options "${review_base:?set verified baseline}^{commit}")
++    review_start=$(git merge-base "$review_base" "$review_head")
++    printf 'base %s merge-base %s\n' "$review_base" "$review_start"
++    review_diff=("$review_start" "$review_head") ;;
++  *) exit 2 ;;
++esac
++git -c diff.autoRefreshIndex=false diff "${review_diff[@]}"
++git -c diff.autoRefreshIndex=false diff --check "${review_diff[@]}"
+ <project-lint-cmd> && <project-test-cmd>
+ ```
+ 
++whole-branch 只含 merge-base 到 HEAD；status 中 dirty/untracked 为独立 overlay，未另审时 `latest_worktree_reviewed: false`。记录 base、merge-base、head 及实际 diff 身份；文件变化后重新取证。
++
+ ## Full report
+ 
+ ```md
+@@ -18,6 +33,7 @@ git diff --check --cached
+ - Review Target: staged | working-tree | whole-branch
+ - Snapshot ID:
+   - head:
++  - base / merge-base: <whole-branch only>
+   - index_or_diff:
+ - Working Tree Overlay:
+   - target_paths_with_unstaged_changes:
+diff --git a/skills/adk-context-compress-handoff/SKILL.md b/skills/adk-context-compress-handoff/SKILL.md
+index 38f94ed..7596082 100644
+--- a/skills/adk-context-compress-handoff/SKILL.md
++++ b/skills/adk-context-compress-handoff/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-context-compress-handoff
+ description: "用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。"
+-version: 1.0.1
+-last_updated: 2026-11-03
++version: 1.0.2
++last_updated: 2026-11-16
+ triggers:
+   - "上下文压缩"
+   - "会话接力"
+@@ -28,20 +28,18 @@ constraints:
+ # adk-context-compress-handoff
+ 
+ ## Goal
+-- 在长会话、上下文压力或目标切换前生成可恢复、可审计、低噪音的 handoff。
+-- 防止过期目标、失败假设和敏感材料混入下一轮 active context。
++生成可恢复、可审计的 handoff，排除过期目标、失败假设和敏感原文。
+ 
+ ## Prerequisites
+-- 当前任务已有可陈述的最新目标、验证状态和下一步。
+-- 已知道哪些原始证据路径可回读。
+-- 已识别需要排除的旧计划、错误事实或敏感内容。
++- 已知最新目标、验证状态、下一步及可回读证据。
++- 已识别需排除的旧计划、错误事实与敏感内容。
+ 
+ ## Workflow
+ 1. 确认最新目标：记录 latest goal，列出 invalidated goals。
+ 2. 分层压缩：stable、dynamic、evidence、excluded 分开写。
+-3. 连续性证明：记录 active plan、findings、progress、attestation 和 excluded context，可用 `templates/context/continuity-attestation.md`。
++3. 连续性证明：默认使用下方模板记录 active plan/findings/progress/attestation；仅在 ADK 源码根已确认且文件可读时，可选根下 `templates/context/continuity-attestation.md`。
+ 4. 证据索引：命令、路径、结果摘要和回退条件必须可追溯。
+-5. 风险与阻塞：列出 unresolved blockers、residual risks、manual approval points。
++5. 风险与阻塞：列出 unresolved blockers、residual risks、manual approval points；handoff 不扩大权限。
+ 6. 下一步：给出最多 3 个优先动作和第一条建议命令。
+ 7. 记忆边界：长期规则只输出 candidate，不直接写 memory 或 AGENTS。
+ 8. 恢复提示：生成新会话可直接粘贴的 resume prompt。
+@@ -51,11 +49,12 @@ constraints:
+ - Latest Goal:
+ - Invalidated Goals:
+ - Stable Context:
+-- Dynamic Context:
+-- Evidence:
++- Confirmed Facts:
++- State / Blockers:
++- Scope / Permission:
++- Evidence / Fallback:
+ - Continuity Attestation:
+ - Excluded Context:
+-- Open Blockers:
+ - Next Actions:
+ - Resume Prompt:
+ - Memory Candidates:
+diff --git a/skills/adk-context-engineering/SKILL.md b/skills/adk-context-engineering/SKILL.md
+index 7bf14b5..1b53fcb 100644
+--- a/skills/adk-context-engineering/SKILL.md
++++ b/skills/adk-context-engineering/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-context-engineering
+ description: "用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。"
+-version: 2.0.1
+-last_updated: 2026-11-03
++version: 2.0.2
++last_updated: 2026-11-16
+ triggers:
+   - 上下文工程
+   - 上下文膨胀
+@@ -32,15 +32,13 @@ constraints:
+ # adk-context-engineering
+ 
+ ## Goal
+-为当前任务生成最小充分、可恢复、可追溯的 context policy，而不是把所有可用信息一次性装入模型。
++生成最小充分、可恢复、可追溯的 context policy。
+ 
+ ## Use When
+-- 当前上下文过大、互相冲突或含大量无关历史。
+-- 长任务需要 checkpoint / resume / handoff。
+-- 并行 Agent 需要共享 contract 与私有工作上下文隔离。
+-- 模型因缺失关键事实、加载错误 reference 或过度压缩而反复误解任务。
++- 长任务需 checkpoint / resume / handoff，或并行 Agent 需共享 contract 与上下文隔离。
++- 上下文膨胀、冲突、缺证、错误 reference 或过度压缩导致误解。
+ 
+-若任务只是“执行既有计划”“写代码”“跑测试”，且没有 context 边界问题，本 Skill 只作为 supporting capability，不抢 primary。
++没有 context 边界问题时仅作 supporting capability，不替代计划、编码或测试。
+ 
+ ## Prerequisites
+ - 明确当前 objective、phase、risk level 与候选 primary Skill。
+@@ -58,7 +56,7 @@ constraints:
+ 2. 将信息标记为 `always | phase | on-demand | raw-pointer | exclude`。
+ 3. 删除重复、过期、低价值动态输出；冲突信息保留来源与 freshness，不静默覆盖。
+ 4. 为长任务写 summary-first checkpoint；raw output 仅保留 opaque/path pointer 和 retention decision。
+-5. 并行/跨 Agent 时使用 `schemas/agent-handoff-v1.schema.json`，限制 scope 与 permission，不传播无关 history。
++5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选根下 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
+ 6. 验证恢复能力：新执行者只读取摘要和 refs 应能知道目标、已确认事实、未决问题和下一步；若不能，补缺失信息而不是扩大所有上下文。
+ 
+ ## Failure / Abstain
+@@ -76,14 +74,13 @@ constraints:
+ ## Evidence Template
+ ```md
+ - Objective / Phase:
+-- Context decisions:
+-  - always:
+-  - phase:
+-  - on-demand:
+-  - raw-pointer:
+-  - excluded:
++- Confirmed Facts:
++- State / Blockers:
++- Scope / Permission:
++- Evidence / Fallback:
++- Next Actions:
++- Context decisions: always / phase / on-demand / raw-pointer / excluded
+ - Missing / conflicting evidence:
+-- Handoff boundary:
+ - Recovery check: pass | needs-evidence
+ - Efficiency observation: <optional; not a quality KPI>
+ ```
+diff --git a/skills/adk-performance-profiling-embedded/SKILL.md b/skills/adk-performance-profiling-embedded/SKILL.md
+index f72b388..99ffc27 100644
+--- a/skills/adk-performance-profiling-embedded/SKILL.md
++++ b/skills/adk-performance-profiling-embedded/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-performance-profiling-embedded
+ description: "用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。"
+-version: 1.1.5
+-last_updated: 2026-11-15
++version: 1.1.6
++last_updated: 2026-11-16
+ triggers:
+   - "性能分析"
+   - "性能优化"
+@@ -16,35 +16,35 @@ inputs:
+ outputs:
+   - 瓶颈定位与优化建议
+ constraints:
+-  - 优化效果必须可量化对比；只定位瓶颈时不要求已有候选改动
++  - 优化收益须量化对比；仅定位瓶颈不要求候选改动
+ ---
+ 
+ # adk-performance-profiling-embedded
+ 
+ ## Goal
+-固定基准场景与 KPI（时延、吞吐、CPU、内存、功耗），量化瓶颈或候选收益。
++固定场景/KPI（时延、吞吐、CPU、内存、功耗），量化瓶颈/收益。
+ 
+ ## Workflow
+-1. 核**真实负载**计数/正确输出；无活动 `run-validity=invalid`。固定源码/编译/输入 hash、设备、频率/温度/供电/预热、采样点/预算及扰动。
+-2. **定位瓶颈**：先低开销统计 CPU、等待/I/O、锁、内存，再采样原因；给证据、可证伪候选和最小实验，无候选不强制 A/B。
+-3. **比较候选**：等价输入输出、有效负载后 A/B/A/B，核波动/漂移。时延报 p50/p95/p99，吞吐报有效工作量/时间，Flash/RAM 报段/峰值，能耗按同工作量；段大小不用分位数。
+-4. 核功能、内存、功耗及热稳定，超预算回滚；有效候选做真实长稳复验。无效 `invalid`，样本不足/噪声不可分 `inconclusive`，有效证据支持无收益才 `no-gain`；均留原因、不宣传收益。噪声先查环境不刷分；只读诊断不授权优化/设备配置变更。
++1. 核真实负载计数/正确输出；无活动 `run-validity=invalid`。固定源码/编译/输入 hash、设备、频率/温度/供电/预热、采样预算及扰动。
++2. **定位瓶颈**：先低开销统计 CPU、等待/I/O、锁、内存，再按证据选可证伪候选/最小实验；无候选不强制 A/B。
++3. **比较候选**：等价输入输出/有效负载下 A/B/A/B，核波动/漂移。时延 p50/p95/p99，吞吐 有效工作量/时间，Flash/RAM 段/峰值，能耗按同工作量；段大小不用分位数。
++4. 核功能/内存/功耗/热稳定，超预算回滚；候选做真实长稳复验。无效 `invalid`，样本不足/噪声不可分 `inconclusive`，有效证据支持无收益才 `no-gain`；均留原因、不宣传收益。噪声先查环境；只读诊断不授权优化/设备配置变更。
+ 
+ ## Target Execution Gate
+-- `linux-embedded`：核内核/用户态、架构、计数器权限/资源；CPU 用 perf/flame graph，堆用 memcheck，I/O 用 strace -T/perf trace，锁用 perf lock/lockstat，LLC miss 用 perf stat -e cache-misses。先核采样计数；热点不等于整体收益，用户态工具不通用于内核/MCU。
++- `linux-embedded`：核内核/用户态、架构、计数器权限/资源。CPU 用 perf/flame graph；堆峰值/时间线用 Massif，核采样与时间单位；错误/泄漏用 Memcheck；RSS 含非堆常驻页，另测不互代。I/O 用 strace -T/perf trace，锁用 perf lock/lockstat，LLC miss 用 perf stat -e cache-misses。核采样计数；热点不等于整体收益，用户态工具不通用于内核/MCU。
+ - `mcu-rtos` / `mcu-baremetal`：按支持用板端计数/trace、DWT/ETM、GPIO timing、stack/heap high-water、ELF/map；host 分析不能替代板端 `not-measured`。
+-- 核工具、系统/编译身份和权限，不隐式注入/改配置。资源不足可选 host memcheck/ASan 或板端计数；不跨编译优化等级比较性能。
++- 核工具/系统/编译身份、权限和扰动；缺工具记 unavailable，不隐式注入/改配置。Valgrind 插桩耗时不当原生性能；不跨优化等级比较。
+ 
+ ## Commands
+-仅选支持工具和预算窗口，留命令/退出码/耗时；失败不消费旧结果：
++按工具/窗口预算执行，留命令/退出码/耗时；失败不消费旧结果：
+ ```bash
+ perf stat -p <pid> -- sleep <sample-window-seconds>
+ perf record -g -p <pid> -- sleep <sample-window-seconds> && perf report --stdio
+ valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary> && callgrind_annotate callgrind.out
+ ```
+-benchmark 使用项目真实命令，不假定通用参数。
++benchmark 用项目命令，不猜参数。
+ 
+ ## MCU 资源实测（按需）
+ Flash/RAM/stack、DMA/retention 或 KWS/音频读 `references/mcu-memory-footprint.md`：同工具链 ELF/map/size，区分 `.su` frame、调用链和实测余量，不从行数或 high-water 推断完整资源上界。
+ 
+-交付上述原始证据、样本数/KPI/不确定性和复现入口；无有效采样只给假设与缺口。
++交付原始证据、样本数/KPI/不确定性及复现入口；无有效采样只给假设与缺口。
+diff --git a/skills/adk-protocol-stack-integration/SKILL.md b/skills/adk-protocol-stack-integration/SKILL.md
+index 5452f04..0694a48 100644
+--- a/skills/adk-protocol-stack-integration/SKILL.md
++++ b/skills/adk-protocol-stack-integration/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-protocol-stack-integration
+ description: "用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。"
+-version: 1.0.4
+-last_updated: 2026-11-15
++version: 1.0.5
++last_updated: 2026-11-16
+ triggers:
+   - "协议栈"
+   - "协议集成"
+@@ -18,50 +18,33 @@ constraints:
+ 
+ # adk-protocol-stack-integration
+ 
+-## Goal
+-- 以可回归方式接入协议栈并稳定运行状态机。
+-
+-## Prerequisites
+-- 明确协议版本、时序约束、重传策略和异常语义。
+-- 确认链路容量与心跳/保活策略。
+-
+ ## Workflow
+-1. 定义状态机：连接、鉴权、收发、异常恢复全链路。
+-2. 设计编解码边界：输入校验、长度检查、校验和策略。
+-3. 超时与重试策略：退避算法、最大重试次数、熔断条件。
+-4. 兼容策略：协议版本协商与降级路径。
+-5. 联调验证：正常、乱序、丢包、断链重连场景回归。
++1. 核协议版本、时序、链路容量、重传/异常语义及保活；定义连接、鉴权、收发、恢复状态机。
++2. 明确输入、长度、校验和、版本协商与降级边界。
++3. 按下述预算设计 timeout/retry/backoff、熔断与恢复；回归正常、乱序、丢包、断链重连。
+ 
+ ## Execution Target Boundary
+-- 先分类 Linux 用户态、Linux kernel、RTOS/裸机、离线日志或仿真。主动 `tcpdump/tshark` 抓包须有实际接口、权限和数据范围；离线 `tshark` 不要求连接设备，MCU/RTOS 不默认具备这些工具。
+-- 无主动抓包许可时优先离线已有 trace、脱敏协议日志或仿真测试。丢包/乱序注入、网络配置修改与 live device 测试需要独立授权，不因需求是“集成测试”就自动放宽。
+-- 链路错误报告按 DNS、TCP/UDP、TLS、协议握手、keepalive 分层标 `measured|inferred|unknown`，抓包数据不得暗示应用根因已确认。
++- 区分 Linux 用户态/kernel、RTOS/裸机与离线/仿真。主动 `tcpdump/tshark` 须核接口、权限和数据范围；MCU/RTOS 不默认具备工具，离线分析无需设备。
++- 无主动许可用已有 trace、脱敏日志或仿真；丢包/乱序注入、网络配置与 live device 测试须独立授权。
++- 按 DNS、TCP/UDP、TLS、握手、keepalive 标 `measured|inferred|unknown`；抓包不能独证应用根因。
+ 
+ ## Commands
+-离线优先：核实 `PCAP` 来源，以实际问题的 `DISPLAY_FILTER` 分析：
++离线优先，核 `PCAP` 来源与 `DISPLAY_FILTER`：
+ ```bash
+ tshark -n -r "$PCAP" -Y "$DISPLAY_FILTER"
+ ```
+-主动抓包另需授权及接口/端口/脱敏核实；采样时间与包数取预算内正值，`PCAP` 用本轮新路径。可用项目已有有界入口；下例只在采集成功后分析，失败保留退出码，不消费旧文件：
++主动采集须授权并核接口/端口/脱敏；时间、包数取预算内正值，`PCAP` 用新路径。优先项目有界入口；以下只分析采集成功的新文件，失败留退出码：
+ ```bash
+ tshark -n -i "$IFACE" -f "port $PORT" -a "duration:$CAPTURE_SECONDS" -c "$PACKET_LIMIT" -w "$PCAP" &&
+   tshark -n -r "$PCAP" -Y "$DISPLAY_FILTER"
+ ```
+-保留退出码、帧号/时间及匹配包数。坏文件记读取失败；零字节、合法零包或筛选零匹配即使退出 0 也记 `partial: 无目标协议证据`。大文件按问题限定窗口；`-q` 仅与明确的 `-z` 统计项组合，不单独用作分析。参见 [TShark](https://www.wireshark.org/docs/man-pages/tshark.html)。
+-Scapy 是 Python API，须在已安装依赖的 Python 环境导入执行，不把 `scapy.all.sniff(...)` 粘入 Bash；发包/注入仍属主动操作。
++保留退出码、帧号/时间、匹配包数。坏文件记失败；零字节、零包或零匹配即使 exit 0 也记 `partial: 无目标协议证据`。大文件限窗口；`-q` 只配明确的 `-z` 统计。参见 [TShark](https://www.wireshark.org/docs/man-pages/tshark.html)。Scapy 是 Python API，需已装依赖的 Python 环境，不能粘入 Bash；发包/注入仍属主动操作。
+ 
+ ## Retry and timing boundary
+-- 分层记录 DNS、TCP、TLS、应用握手和 KeepAlive 的独立 timeout 与状态机。
+-- timeout/retry/backoff 由实际协议、链路和产品容错预算确定，不套用跨平台通用 30 秒、300 秒及三次重试。
+-- 非幂等外部操作状态未知时先对账，禁止盲目重复执行。
+-
+-## 分层测试策略
+-| 层级 | 测试重点 | 工具 |
+-|------|----------|------|
+-| 物理层 | 信号质量、误码率 | 示波器、频谱仪 |
+-| 链路层 | 帧收发、MAC 仲裁 | 抓包 + 帧注入器 |
+-| 传输层 | 连接管理、拥塞控制 | tc netem + iperf3 |
+-| 应用层 | 协议语义、状态机 | 模拟器 + Fuzz 测试 |
++- DNS、TCP、TLS、应用及 KeepAlive 保留独立 timeout/状态机；参数依据协议、链路与产品预算，不套固定秒数或次数。
++- 对有完成时限的操作，用本地单调钟计算剩余预算，阶段、尝试和退避均计入；每阶段限于本地 timeout 与剩余时长的较小者，耗尽不再尝试。跨主机传剩余时长或协议定义的 deadline，不传本地单调钟绝对值；长连接寿命另定。
++- 核 SDK/调用层已有重试，明确应用重试责任层及总 attempts（含首次）；多层确需重试则核总调用量/时延，不关闭协议必要重传。按错误语义区分短暂/永久失败；非幂等 UNKNOWN 先对账，不盲重放。退避/jitter 遵守协议时序及 Retry-After；超过剩余预算先结束本轮，业务延后另按语义处理，不延长已耗尽时限或缩短强制等待。
++- 用已核实现/仿真检查正常、短暂故障后成功、永久失败、退避耗尽、嵌套重试；未执行不计验证。按问题选物理测量、帧分析、传输或应用测试。
+ 
+ ## Evidence Template
+ ```md
+@@ -77,6 +60,5 @@ Scapy 是 Python API，须在已安装依赖的 Python 环境导入执行，不
+ - 若断链重连不稳定，降低并发并回到最小报文流程定位。
+ 
+ ## Quality Gate
+-- 必须包含连接、异常、重连三类状态定义。
+-- 必须给出有来源、符合目标协议和网络环境的超时及重试参数；未测值标记为待验证。
+-- 必须有至少 1 个已授权抓包、脱敏日志或模拟器验证证据；目标能力/许可不可用时标记 `not-tested`，不得假称已验证。
++- 定义连接、异常、重连；超时/重试参数有来源并匹配目标环境，未测值标待验证。
++- 至少 1 个已授权抓包、脱敏日志或模拟器证据；能力/许可不可用记 `not-tested`。
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index 93e4544..a5c87d3 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.3.5"
++__version__ = "11.3.6"
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 2bf4a20..e0ccb91 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.3.5",
++    "planned_release": "v11.3.6",
+     "source_sha": null
+   },
+   "case_groups": {
+@@ -67,6 +67,12 @@
+   },
+   "holdout_qualification": "development-fixture-only-after-author-exposure",
+   "unexecuted_candidate_history": [
++    {
++      "planned_release": "v11.3.5",
++      "merged_main_sha": "008c789312ed374f38d6d71a113f8fc91f89e63c",
++      "model_runs": 0,
++      "reason": "The source change merged without native model trials. Its synthetic comparator timings and this successor's Git/export/C/CTest method fixtures do not populate the author-exposed model campaign or qualify its holdout."
++    },
+     {
+       "planned_release": "v11.3.4",
+       "merged_main_sha": "907080d5a0f6e49daa93e217f60383b23ed89d37",
+diff --git a/tests/test_skill_command_examples.py b/tests/test_skill_command_examples.py
+index ece6e77..a465de2 100644
+--- a/tests/test_skill_command_examples.py
++++ b/tests/test_skill_command_examples.py
+@@ -17,6 +17,8 @@ RELEASE = "skills/adk-release-versioning/references/details.md"
+ FLAKY = "optional-skills/adk-test-flakiness-triage/references/details.md"
+ BSP = "skills/adk-bsp-porting-playbook/SKILL.md"
+ INTERFACE = "skills/adk-interface-contract-design/references/details.md"
++ADC = ROOT / "examples/embedded-test-matrix"
++CMAKE = "skills/adk-cmake-cross-build/SKILL.md"
+ 
+ 
+ def bash_example(path: str, marker: str) -> str:
+@@ -332,6 +334,185 @@ class BspBuildExampleTests(unittest.TestCase):
+         self.assertFalse((self.root / "relative-output").exists())
+ 
+ 
++class EmbeddedAdcExampleTests(unittest.TestCase):
++    """Compile and execute the shipped C tests; no target/device claim."""
++
++    def setUp(self):
++        self.compiler = shutil.which("cc")
++        self.assertIsNotNone(self.compiler, "the ADC example requires a real native C compiler")
++        self.temporary = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temporary.cleanup)
++        self.root = Path(self.temporary.name)
++
++    def compile_and_run(self, *flags):
++        executable = self.root / "adc-test"
++        result = subprocess.run(
++            [self.compiler, "-std=c11", "-Wall", "-Wextra", "-Werror", "-O2", *flags,
++             "-I", str(ADC / "src"), str(ADC / "src/adc_scale.c"),
++             str(ADC / "tests/test_adc_scale.c"), "-o", str(executable)],
++            capture_output=True, text=True, timeout=15)
++        self.assertEqual(0, result.returncode, result.stderr)
++        result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=15)
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        for name in ("zero", "full-scale", "invalid", "maximum-int-full-scale", "maximum-int-clamped"):
++            self.assertIn("PASS " + name + " ", result.stdout)
++
++    def test_native_endpoints_clamping_and_invalid_inputs(self):
++        self.compile_and_run("-DNDEBUG")
++
++    def test_native_endpoints_with_supported_ubsan(self):
++        flags = ("-fsanitize=signed-integer-overflow", "-fno-sanitize-recover=all")
++        probe = self.root / "sanitizer-probe.c"
++        probe.write_text("#include <limits.h>\nint main(void) { volatile int n = INT_MAX; return n + 1; }\n")
++        executable = self.root / "sanitizer-probe"
++        compiled = subprocess.run([self.compiler, *flags, str(probe), "-o", str(executable)],
++                                  capture_output=True, text=True, timeout=15)
++        if compiled.returncode:
++            self.skipTest("UBSan capability unavailable: " + compiled.stderr.strip())
++        result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=15)
++        if result.returncode == 0 or "signed integer overflow" not in result.stderr:
++            self.skipTest("UBSan runtime did not diagnose the overflow probe: " + result.stderr.strip())
++        # A failure in the actual example is a regression, never a capability skip.
++        self.compile_and_run(*flags)
++
++
++class CmakeBuildExampleTests(unittest.TestCase):
++    """Execute the current published blocks with real CMake/CTest and native ELF files."""
++
++    def prepare(self, *, register_tests=True):
++        required = ("cmake", "ctest", "ninja", "cc", "file", "size", "objdump")
++        missing = [tool for tool in required if shutil.which(tool) is None]
++        if missing:
++            reason = "real CMake example not executed; missing tools: " + ", ".join(missing)
++            if os.environ.get("GITHUB_ACTIONS") == "true":
++                self.fail(reason + "; GitHub Actions must execute this fixture")
++            self.skipTest(reason)
++        self.temporary = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temporary.cleanup)
++        self.root = Path(self.temporary.name)
++        self.source = self.root / "source project"
++        self.source.mkdir()
++        (self.source / "CMakeLists.txt").write_text(
++            'cmake_minimum_required(VERSION 3.21)\n'
++            'project(adk_command_example C)\n'
++            'enable_testing()\n'
++            'set(FIXTURE_ID "manual" CACHE STRING "")\n'
++            'add_executable(firmware main.c)\n'
++            'set_target_properties(firmware PROPERTIES SUFFIX ".elf")\n'
++            'file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/$<CONFIG>/identity.h"\n'
++            '  CONTENT "#define FIXTURE_ID \\\"${FIXTURE_ID}:$<CONFIG>\\\"\\n")\n'
++            'target_include_directories(firmware PRIVATE "${CMAKE_BINARY_DIR}/$<CONFIG>")\n'
++            + ('add_test(NAME identity COMMAND firmware "${CMAKE_BINARY_DIR}/ctest-identity.txt")\n'
++               if register_tests else ''))
++        (self.source / "main.c").write_text(
++            '#include <stdio.h>\n#include "identity.h"\n'
++            'int main(int argc, char **argv) {\n'
++            '  puts(FIXTURE_ID);\n'
++            '  if (argc == 2) {\n'
++            '    FILE *receipt = fopen(argv[1], "w");\n'
++            '    if (!receipt) return 2;\n'
++            '    int written = fprintf(receipt, "%s\\n", FIXTURE_ID);\n'
++            '    if (fclose(receipt) != 0 || written < 0) return 3;\n'
++            '  }\n'
++            '  return 0;\n}\n')
++        self.toolchain = self.source / "host toolchain.cmake"
++        self.toolchain.write_text('set(CMAKE_C_COMPILER "' + shutil.which("cc") + '")\n')
++        self.output = self.source / "out" / "manual build"
++        self.environment = dict(
++            os.environ, CC=shutil.which("cc"), ADK_SOURCE_DIR=str(self.source),
++            ADK_BINARY_DIR=str(self.output), ADK_GENERATOR="Ninja",
++            ADK_TOOLCHAIN_FILE=str(self.toolchain), ADK_CONFIG="Release", ADK_BUILD_JOBS="1",
++            ADK_TEST_BACKEND="host-unit", ADK_ELF=str(self.output / "firmware.elf"),
++            ADK_SIZE=shutil.which("size"), ADK_OBJDUMP=shutil.which("objdump"),
++            ADK_CONFIGURE_PRESET="unselected-configure", ADK_BUILD_PRESET="unselected-build",
++            ADK_TEST_PRESET="unselected-test")
++
++    def published(self, marker, **overrides):
++        return run_example(bash_example(CMAKE, marker), self.source,
++                           environment=dict(self.environment, **overrides))
++
++    def assert_identity(self, identity, output, artifact):
++        self.assertEqual(identity + "\n", (output / "ctest-identity.txt").read_text())
++        self.assertEqual(b"\x7fELF", artifact.read_bytes()[:4])
++        executed = subprocess.run([str(artifact)], capture_output=True, text=True, timeout=15)
++        self.assertEqual(0, executed.returncode, executed.stderr)
++        self.assertEqual(identity + "\n", executed.stdout)
++        inspected = self.published("# built-artifact:", ADK_ELF=str(artifact))
++        self.assertEqual(0, inspected.returncode, inspected.stdout + inspected.stderr)
++        self.assertIn(str(artifact), inspected.stdout)
++        self.assertIn(".text", inspected.stdout)
++
++    def test_preset_names_bind_binary_directory_configuration_tests_and_elf(self):
++        self.prepare()
++        old = self.source / "build" / "demo"
++        # A real, separately configured old build makes a wrong directory observable.
++        for command in (["cmake", "-S", str(self.source), "-B", str(old), "-G", "Ninja",
++                         "-DFIXTURE_ID=old", "-DCMAKE_BUILD_TYPE=Debug"],
++                        ["cmake", "--build", str(old), "--parallel", "1"]):
++            result = subprocess.run(command, env=self.environment, capture_output=True, text=True, timeout=15)
++            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        old_bytes = {p.relative_to(old): p.read_bytes() for p in old.rglob("*") if p.is_file()}
++        output = self.source / "out" / "preset build"
++        (self.source / "CMakePresets.json").write_text(json.dumps({
++            "version": 3,
++            "configurePresets": [{"name": "configure-board", "generator": "Ninja Multi-Config",
++                                  "binaryDir": "${sourceDir}/out/preset build",
++                                  "cacheVariables": {"FIXTURE_ID": "preset", "CMAKE_CONFIGURATION_TYPES": "Debug;Release"}}],
++            "buildPresets": [{"name": "compile-release", "configurePreset": "configure-board", "configuration": "Release"}],
++            "testPresets": [{"name": "run-release", "configurePreset": "configure-board", "configuration": "Release"}],
++        }))
++        result = self.published("# preset-build:", ADK_CONFIGURE_PRESET="configure-board",
++                                ADK_BUILD_PRESET="compile-release", ADK_TEST_PRESET="run-release",
++                                ADK_BINARY_DIR=str(self.source / "must-not-be-created"),
++                                ADK_TOOLCHAIN_FILE="missing-unselected-toolchain", ADK_GENERATOR="unselected")
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        self.assert_identity("preset:Release", output, output / "Release" / "firmware.elf")
++        self.assertFalse((self.source / "must-not-be-created").exists())
++        self.assertEqual(old_bytes, {p.relative_to(old): p.read_bytes() for p in old.rglob("*") if p.is_file()})
++
++    def test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets(self):
++        self.prepare()
++        result = self.published("# manual-build:", ADK_CONFIG="RelWithDebInfo")
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        self.assert_identity("manual:RelWithDebInfo", self.output, self.output / "firmware.elf")
++        self.assertFalse((self.source / "build").exists())
++
++    def test_empty_ctest_selection_fails_after_a_real_successful_build(self):
++        self.prepare(register_tests=False)
++        result = self.published("# manual-build:")
++        self.assertNotEqual(0, result.returncode)
++        self.assertTrue((self.output / "firmware.elf").is_file())
++        self.assertIn("No tests", result.stdout + result.stderr)
++        self.assertFalse((self.output / "ctest-identity.txt").exists())
++
++    def test_compile_only_preserves_not_run_without_invoking_ctest(self):
++        self.prepare(register_tests=False)
++        result = self.published("# manual-build:", ADK_TEST_BACKEND="compile-only")
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        self.assertIn("target tests: not-run", result.stdout)
++        self.assertTrue((self.output / "firmware.elf").is_file())
++        self.assertFalse((self.output / "ctest-identity.txt").exists())
++
++    def test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default(self):
++        self.prepare()
++        # The library needs C11; its consumer tests themselves remain valid C90.
++        self.toolchain.write_text(self.toolchain.read_text()
++                                  + 'set(CMAKE_C_STANDARD 90)\n'
++                                  + 'set(CMAKE_C_STANDARD_REQUIRED ON)\n'
++                                  + 'set(CMAKE_C_EXTENSIONS OFF)\n')
++        result = self.published("# manual-build:", ADK_SOURCE_DIR=str(ADC), CFLAGS="-pedantic-errors")
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        self.assertIn("adc_scale_host_unit", result.stdout)
++        executable = self.output / "test_adc_scale"
++        executed = subprocess.run([str(executable)], capture_output=True, text=True, timeout=15)
++        self.assertEqual(0, executed.returncode, executed.stdout + executed.stderr)
++        self.assertIn("PASS maximum-int-full-scale ", executed.stdout)
++        self.assertIn("PASS maximum-int-clamped ", executed.stdout)
++        inspected = self.published("# built-artifact:", ADK_ELF=str(executable))
++        self.assertEqual(0, inspected.returncode, inspected.stdout + inspected.stderr)
++        self.assertIn(str(executable), inspected.stdout)
++
++
+ class InterfaceVersionExampleTests(unittest.TestCase):
+     def test_compiled_consumer_requires_minor_21_and_async_cancel(self):
+         compiler = shutil.which("cc")
+diff --git a/tests/test_skill_content_contract.py b/tests/test_skill_content_contract.py
+index 3fa8eb3..6600573 100644
+--- a/tests/test_skill_content_contract.py
++++ b/tests/test_skill_content_contract.py
+@@ -157,7 +157,7 @@ class SkillContentContractTests(unittest.TestCase):
+             self.assertIsNotNone(git)
+             self.assertIsNotNone(bash)
+             (binary / "git").symlink_to(git)
+-            environment = {**os.environ, "PATH": str(binary), "LC_ALL": "C"}
++            environment = {**os.environ, "PATH": str(binary), "LC_ALL": "C", "review_target": "staged"}
+             self.assertIsNone(shutil.which("rtk", path=environment["PATH"]))
+             run = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands],
+                                  cwd=target, env=environment, capture_output=True,
+@@ -182,6 +182,156 @@ class SkillContentContractTests(unittest.TestCase):
+                                         rendered.content.decode(), re.DOTALL):
+                     self.assertNotRegex(block, r"(?m)^\s*rtk\s+", rendered.destination)
+ 
++    def test_exported_review_snapshot_captures_selected_target_without_staging(self) -> None:
++        """Exercise the shipped snapshot, including committed and mixed changes."""
++        import os
++        import re
++        import shutil
++        import subprocess
++        import tempfile
++        from agent_dev_kit.model import Manifest
++        from agent_dev_kit.targets import load_target_contract, render_asset
++
++        manifest = Manifest.load(ROOT)
++        asset = next(item for item in manifest.all_assets("skill")
++                     if item.name == "adk-code-review-loop")
++        git, bash = shutil.which("git"), shutil.which("bash")
++        self.assertIsNotNone(git)
++        self.assertIsNotNone(bash)
++        for runtime in ("claude-code", "opencode"):
++            files = render_asset(manifest, load_target_contract(manifest, runtime), asset)
++            reference = next(item for item in files if item.destination.endswith(
++                "/references/review-evidence-template.md"))
++            block = re.search(r"```bash\n(.*?)\n```", reference.content.decode(), re.DOTALL)
++            self.assertIsNotNone(block)
++            commands = block.group(1).split("<project-lint-cmd>", 1)[0]
++            for scenario, review_target in (
++                ("staged", "staged"), ("unstaged", "working-tree"),
++                ("committed", "whole-branch"), ("mixed", "working-tree"),
++            ):
++                with self.subTest(runtime=runtime, scenario=scenario), tempfile.TemporaryDirectory() as directory:
++                    root = Path(directory)
++                    target = root / "consumer"
++                    target.mkdir()
++                    binary = root / "bin"
++                    binary.mkdir()
++                    (binary / "git").symlink_to(git)
++                    environment = {**os.environ, "PATH": str(binary), "LC_ALL": "C",
++                                   "review_target": review_target}
++                    environment.pop("review_base", None)
++
++                    def checked(*args: str) -> str:
++                        result = subprocess.run([git, *args], cwd=target, capture_output=True,
++                                                text=True, timeout=10)
++                        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
++                        return result.stdout
++
++                    def commit(message: str) -> None:
++                        checked("add", "fixture.py")
++                        checked("-c", "user.name=Test", "-c", "user.email=test@example.invalid",
++                                "commit", "-qm", message)
++
++                    checked("init", "-q")
++                    fixture = target / "fixture.py"
++                    fixture.write_text("def dollars(cents):\n    return cents / 100\n", encoding="utf-8")
++                    if scenario == "unstaged":
++                        unchanged = target / "stat-only.txt"
++                        unchanged.write_text("same content\n", encoding="utf-8")
++                        checked("add", "stat-only.txt")
++                        checked("config", "diff.autoRefreshIndex", "true")
++                    commit("baseline")
++                    baseline = checked("rev-parse", "HEAD").strip()
++                    if scenario == "mixed":
++                        fixture.write_text("def dollars(cents):\n    return cents / 100.0  # STAGED_ONLY\n",
++                                           encoding="utf-8")
++                        checked("add", "fixture.py")
++                    fixture.write_text("def dollars(cents):\n    return cents / 1000  # TARGET_REGRESSION\n",
++                                       encoding="utf-8")
++                    if scenario == "staged":
++                        checked("add", "fixture.py")
++                    if scenario == "committed":
++                        commit("branch change")
++                        environment["review_base"] = baseline
++                        self.assertEqual(checked("status", "--porcelain"), "")
++                    if scenario == "unstaged":
++                        (target / "untracked.py").write_text("UNTRACKED_BODY\n", encoding="utf-8")
++                        previous = unchanged.stat()
++                        unchanged.write_text("same content\n", encoding="utf-8")
++                        os.utime(unchanged, ns=(previous.st_atime_ns, previous.st_mtime_ns + 2_000_000_000))
++                    # Even a mixed tree must remain byte-for-byte unchanged by review.
++                    index = target / ".git" / "index"
++                    before_index = index.read_bytes()
++                    before_source = fixture.read_bytes()
++                    run = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands],
++                                         cwd=target, env=environment, capture_output=True,
++                                         text=True, timeout=10)
++                    self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
++                    self.assertIn("+    return cents / 1000  # TARGET_REGRESSION", run.stdout)
++                    self.assertIn("-    return cents / 100", run.stdout)
++                    self.assertNotIn("+    return cents / 100.0  # STAGED_ONLY", run.stdout)
++                    self.assertEqual(index.read_bytes(), before_index)
++                    self.assertEqual(fixture.read_bytes(), before_source)
++                    if scenario == "unstaged":
++                        self.assertIn("?? untracked.py", run.stdout)
++                        self.assertNotIn("UNTRACKED_BODY", run.stdout)
++                    if scenario == "committed":
++                        # Branch review must keep later dirty content separate from its patch.
++                        fixture.write_text("def dollars(cents):\n    return 0  # LOCAL_OVERLAY\n",
++                                           encoding="utf-8")
++                        overlay = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands],
++                                                 cwd=target, env=environment, capture_output=True,
++                                                 text=True, timeout=10)
++                        self.assertEqual(overlay.returncode, 0, overlay.stdout + overlay.stderr)
++                        self.assertIn(" M fixture.py", overlay.stdout)
++                        self.assertIn("+    return cents / 1000  # TARGET_REGRESSION", overlay.stdout)
++                        self.assertNotIn("LOCAL_OVERLAY", overlay.stdout)
++                        self.assertEqual(index.read_bytes(), before_index)
++                        for absent in ("", "refs/heads/unavailable-review-base"):
++                            rejected = subprocess.run(
++                                [bash, "--noprofile", "--norc", "-euc", commands], cwd=target,
++                                env={**environment, "review_base": absent}, capture_output=True,
++                                text=True, timeout=10)
++                            self.assertNotEqual(rejected.returncode, 0, rejected.stdout)
++                            self.assertNotIn("TARGET_REGRESSION", rejected.stdout)
++                        self.assertEqual(index.read_bytes(), before_index)
++
++    def test_exported_context_defaults_are_self_contained(self) -> None:
++        """Inspect actual consumer packages, which intentionally omit ADK source aids."""
++        import re
++        import tempfile
++        from agent_dev_kit.compiler import export_assets
++        from agent_dev_kit.model import Manifest
++
++        manifest = Manifest.load(ROOT)
++        cases = {
++            "adk-context-engineering": (
++                "schemas/agent-handoff-v1.schema.json", "Objective / Phase"),
++            "adk-context-compress-handoff": (
++                "templates/context/continuity-attestation.md", "Latest Goal"),
++        }
++        required = {"Confirmed Facts", "State / Blockers", "Scope / Permission",
++                    "Evidence / Fallback", "Next Actions"}
++        with tempfile.TemporaryDirectory() as directory:
++            for runtime in ("claude-code", "opencode"):
++                exported = export_assets(manifest, runtime, Path(directory), ["core"])
++                self.assertEqual(exported["status"], "pass")
++                consumer = Path(exported["output"])
++                for name, (source_aid, goal) in cases.items():
++                    with self.subTest(runtime=runtime, skill=name):
++                        skill = next(path for path in consumer.rglob("SKILL.md")
++                                     if path.parent.name == name)
++                        self.assertFalse((consumer / source_aid).exists())
++                        self.assertFalse((skill.parent / source_aid).exists())
++                        body = skill.read_text(encoding="utf-8")
++                        # A source-only aid cannot be an unconditional instruction.
++                        aid_line = next(line for line in body.splitlines() if source_aid in line)
++                        self.assertIn("源码根已确认且文件可读", aid_line)
++                        self.assertIn("默认使用下方模板", body)
++                        template = body.split("## Evidence Template", 1)[1]
++                        fields = set(re.findall(r"(?m)^- ([^:\n]+):", template))
++                        self.assertTrue(required | {goal} <= fields, (name, fields))
++                        self.assertIn("不扩大权限", body)
++
+     def test_fault_injection_defaults_never_write_live_device(self) -> None:
+         import re
+ 

@@ -17,6 +17,8 @@ RELEASE = "skills/adk-release-versioning/references/details.md"
 FLAKY = "optional-skills/adk-test-flakiness-triage/references/details.md"
 BSP = "skills/adk-bsp-porting-playbook/SKILL.md"
 INTERFACE = "skills/adk-interface-contract-design/references/details.md"
+ADC = ROOT / "examples/embedded-test-matrix"
+CMAKE = "skills/adk-cmake-cross-build/SKILL.md"
 
 
 def bash_example(path: str, marker: str) -> str:
@@ -330,6 +332,185 @@ class BspBuildExampleTests(unittest.TestCase):
         result = self.build(BSP_OUTPUT_DIR="relative-output")
         self.assertNotEqual(0, result.returncode)
         self.assertFalse((self.root / "relative-output").exists())
+
+
+class EmbeddedAdcExampleTests(unittest.TestCase):
+    """Compile and execute the shipped C tests; no target/device claim."""
+
+    def setUp(self):
+        self.compiler = shutil.which("cc")
+        self.assertIsNotNone(self.compiler, "the ADC example requires a real native C compiler")
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+
+    def compile_and_run(self, *flags):
+        executable = self.root / "adc-test"
+        result = subprocess.run(
+            [self.compiler, "-std=c11", "-Wall", "-Wextra", "-Werror", "-O2", *flags,
+             "-I", str(ADC / "src"), str(ADC / "src/adc_scale.c"),
+             str(ADC / "tests/test_adc_scale.c"), "-o", str(executable)],
+            capture_output=True, text=True, timeout=15)
+        self.assertEqual(0, result.returncode, result.stderr)
+        result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=15)
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        for name in ("zero", "full-scale", "invalid", "maximum-int-full-scale", "maximum-int-clamped"):
+            self.assertIn("PASS " + name + " ", result.stdout)
+
+    def test_native_endpoints_clamping_and_invalid_inputs(self):
+        self.compile_and_run("-DNDEBUG")
+
+    def test_native_endpoints_with_supported_ubsan(self):
+        flags = ("-fsanitize=signed-integer-overflow", "-fno-sanitize-recover=all")
+        probe = self.root / "sanitizer-probe.c"
+        probe.write_text("#include <limits.h>\nint main(void) { volatile int n = INT_MAX; return n + 1; }\n")
+        executable = self.root / "sanitizer-probe"
+        compiled = subprocess.run([self.compiler, *flags, str(probe), "-o", str(executable)],
+                                  capture_output=True, text=True, timeout=15)
+        if compiled.returncode:
+            self.skipTest("UBSan capability unavailable: " + compiled.stderr.strip())
+        result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=15)
+        if result.returncode == 0 or "signed integer overflow" not in result.stderr:
+            self.skipTest("UBSan runtime did not diagnose the overflow probe: " + result.stderr.strip())
+        # A failure in the actual example is a regression, never a capability skip.
+        self.compile_and_run(*flags)
+
+
+class CmakeBuildExampleTests(unittest.TestCase):
+    """Execute the current published blocks with real CMake/CTest and native ELF files."""
+
+    def prepare(self, *, register_tests=True):
+        required = ("cmake", "ctest", "ninja", "cc", "file", "size", "objdump")
+        missing = [tool for tool in required if shutil.which(tool) is None]
+        if missing:
+            reason = "real CMake example not executed; missing tools: " + ", ".join(missing)
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                self.fail(reason + "; GitHub Actions must execute this fixture")
+            self.skipTest(reason)
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.source = self.root / "source project"
+        self.source.mkdir()
+        (self.source / "CMakeLists.txt").write_text(
+            'cmake_minimum_required(VERSION 3.21)\n'
+            'project(adk_command_example C)\n'
+            'enable_testing()\n'
+            'set(FIXTURE_ID "manual" CACHE STRING "")\n'
+            'add_executable(firmware main.c)\n'
+            'set_target_properties(firmware PROPERTIES SUFFIX ".elf")\n'
+            'file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/$<CONFIG>/identity.h"\n'
+            '  CONTENT "#define FIXTURE_ID \\\"${FIXTURE_ID}:$<CONFIG>\\\"\\n")\n'
+            'target_include_directories(firmware PRIVATE "${CMAKE_BINARY_DIR}/$<CONFIG>")\n'
+            + ('add_test(NAME identity COMMAND firmware "${CMAKE_BINARY_DIR}/ctest-identity.txt")\n'
+               if register_tests else ''))
+        (self.source / "main.c").write_text(
+            '#include <stdio.h>\n#include "identity.h"\n'
+            'int main(int argc, char **argv) {\n'
+            '  puts(FIXTURE_ID);\n'
+            '  if (argc == 2) {\n'
+            '    FILE *receipt = fopen(argv[1], "w");\n'
+            '    if (!receipt) return 2;\n'
+            '    int written = fprintf(receipt, "%s\\n", FIXTURE_ID);\n'
+            '    if (fclose(receipt) != 0 || written < 0) return 3;\n'
+            '  }\n'
+            '  return 0;\n}\n')
+        self.toolchain = self.source / "host toolchain.cmake"
+        self.toolchain.write_text('set(CMAKE_C_COMPILER "' + shutil.which("cc") + '")\n')
+        self.output = self.source / "out" / "manual build"
+        self.environment = dict(
+            os.environ, CC=shutil.which("cc"), ADK_SOURCE_DIR=str(self.source),
+            ADK_BINARY_DIR=str(self.output), ADK_GENERATOR="Ninja",
+            ADK_TOOLCHAIN_FILE=str(self.toolchain), ADK_CONFIG="Release", ADK_BUILD_JOBS="1",
+            ADK_TEST_BACKEND="host-unit", ADK_ELF=str(self.output / "firmware.elf"),
+            ADK_SIZE=shutil.which("size"), ADK_OBJDUMP=shutil.which("objdump"),
+            ADK_CONFIGURE_PRESET="unselected-configure", ADK_BUILD_PRESET="unselected-build",
+            ADK_TEST_PRESET="unselected-test")
+
+    def published(self, marker, **overrides):
+        return run_example(bash_example(CMAKE, marker), self.source,
+                           environment=dict(self.environment, **overrides))
+
+    def assert_identity(self, identity, output, artifact):
+        self.assertEqual(identity + "\n", (output / "ctest-identity.txt").read_text())
+        self.assertEqual(b"\x7fELF", artifact.read_bytes()[:4])
+        executed = subprocess.run([str(artifact)], capture_output=True, text=True, timeout=15)
+        self.assertEqual(0, executed.returncode, executed.stderr)
+        self.assertEqual(identity + "\n", executed.stdout)
+        inspected = self.published("# built-artifact:", ADK_ELF=str(artifact))
+        self.assertEqual(0, inspected.returncode, inspected.stdout + inspected.stderr)
+        self.assertIn(str(artifact), inspected.stdout)
+        self.assertIn(".text", inspected.stdout)
+
+    def test_preset_names_bind_binary_directory_configuration_tests_and_elf(self):
+        self.prepare()
+        old = self.source / "build" / "demo"
+        # A real, separately configured old build makes a wrong directory observable.
+        for command in (["cmake", "-S", str(self.source), "-B", str(old), "-G", "Ninja",
+                         "-DFIXTURE_ID=old", "-DCMAKE_BUILD_TYPE=Debug"],
+                        ["cmake", "--build", str(old), "--parallel", "1"]):
+            result = subprocess.run(command, env=self.environment, capture_output=True, text=True, timeout=15)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        old_bytes = {p.relative_to(old): p.read_bytes() for p in old.rglob("*") if p.is_file()}
+        output = self.source / "out" / "preset build"
+        (self.source / "CMakePresets.json").write_text(json.dumps({
+            "version": 3,
+            "configurePresets": [{"name": "configure-board", "generator": "Ninja Multi-Config",
+                                  "binaryDir": "${sourceDir}/out/preset build",
+                                  "cacheVariables": {"FIXTURE_ID": "preset", "CMAKE_CONFIGURATION_TYPES": "Debug;Release"}}],
+            "buildPresets": [{"name": "compile-release", "configurePreset": "configure-board", "configuration": "Release"}],
+            "testPresets": [{"name": "run-release", "configurePreset": "configure-board", "configuration": "Release"}],
+        }))
+        result = self.published("# preset-build:", ADK_CONFIGURE_PRESET="configure-board",
+                                ADK_BUILD_PRESET="compile-release", ADK_TEST_PRESET="run-release",
+                                ADK_BINARY_DIR=str(self.source / "must-not-be-created"),
+                                ADK_TOOLCHAIN_FILE="missing-unselected-toolchain", ADK_GENERATOR="unselected")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assert_identity("preset:Release", output, output / "Release" / "firmware.elf")
+        self.assertFalse((self.source / "must-not-be-created").exists())
+        self.assertEqual(old_bytes, {p.relative_to(old): p.read_bytes() for p in old.rglob("*") if p.is_file()})
+
+    def test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets(self):
+        self.prepare()
+        result = self.published("# manual-build:", ADK_CONFIG="RelWithDebInfo")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assert_identity("manual:RelWithDebInfo", self.output, self.output / "firmware.elf")
+        self.assertFalse((self.source / "build").exists())
+
+    def test_empty_ctest_selection_fails_after_a_real_successful_build(self):
+        self.prepare(register_tests=False)
+        result = self.published("# manual-build:")
+        self.assertNotEqual(0, result.returncode)
+        self.assertTrue((self.output / "firmware.elf").is_file())
+        self.assertIn("No tests", result.stdout + result.stderr)
+        self.assertFalse((self.output / "ctest-identity.txt").exists())
+
+    def test_compile_only_preserves_not_run_without_invoking_ctest(self):
+        self.prepare(register_tests=False)
+        result = self.published("# manual-build:", ADK_TEST_BACKEND="compile-only")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn("target tests: not-run", result.stdout)
+        self.assertTrue((self.output / "firmware.elf").is_file())
+        self.assertFalse((self.output / "ctest-identity.txt").exists())
+
+    def test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default(self):
+        self.prepare()
+        # The library needs C11; its consumer tests themselves remain valid C90.
+        self.toolchain.write_text(self.toolchain.read_text()
+                                  + 'set(CMAKE_C_STANDARD 90)\n'
+                                  + 'set(CMAKE_C_STANDARD_REQUIRED ON)\n'
+                                  + 'set(CMAKE_C_EXTENSIONS OFF)\n')
+        result = self.published("# manual-build:", ADK_SOURCE_DIR=str(ADC), CFLAGS="-pedantic-errors")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn("adc_scale_host_unit", result.stdout)
+        executable = self.output / "test_adc_scale"
+        executed = subprocess.run([str(executable)], capture_output=True, text=True, timeout=15)
+        self.assertEqual(0, executed.returncode, executed.stdout + executed.stderr)
+        self.assertIn("PASS maximum-int-full-scale ", executed.stdout)
+        self.assertIn("PASS maximum-int-clamped ", executed.stdout)
+        inspected = self.published("# built-artifact:", ADK_ELF=str(executable))
+        self.assertEqual(0, inspected.returncode, inspected.stdout + inspected.stderr)
+        self.assertIn(str(executable), inspected.stdout)
 
 
 class InterfaceVersionExampleTests(unittest.TestCase):

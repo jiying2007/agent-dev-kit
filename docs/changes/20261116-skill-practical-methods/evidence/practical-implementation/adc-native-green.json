@@ -1,0 +1,33 @@
+{
+  "schema": "adk-practical-command-observation/v1",
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "command": [
+    "python",
+    "tests/test_skill_command_examples.py",
+    "EmbeddedAdcExampleTests",
+    "-v"
+  ],
+  "started_at": "2026-11-16T00:50:52.204428+00:00",
+  "head": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+  "working_source_sha256": {
+    "examples/embedded-test-matrix/src/adc_scale.c": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e",
+    "examples/embedded-test-matrix/src/adc_scale.h": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe",
+    "examples/embedded-test-matrix/tests/test_adc_scale.c": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d",
+    "examples/embedded-test-matrix/README.md": "ebe8b53b32f845f41bc90d146fb604ab2ab9ee4275b1ce78f7297f5aaa365c01",
+    "tests/test_skill_command_examples.py": "ff10c114abda06c4450d0ba0cdd3caa7c643d1df5f01823af8a80e23ec79b39e",
+    "skills/adk-cmake-cross-build/SKILL.md": "fe07fc732eabeaf8628f58c02bf37334964dfa6487ffc4fa03d8fab4f7dd19f1",
+    "skills/adk-performance-profiling-embedded/SKILL.md": "c4c6b3e039bc022224a832d146f833b4ca9b69eefc08ee6f3b4a7f53dbaf2a3a"
+  },
+  "tools": {
+    "cc": "/usr/bin/cc",
+    "cmake": null,
+    "ctest": null,
+    "ninja": null,
+    "valgrind": null,
+    "rtk": null
+  },
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_native_endpoints_clamping_and_invalid_inputs (__main__.EmbeddedAdcExampleTests.test_native_endpoints_clamping_and_invalid_inputs) ... ok\ntest_native_endpoints_with_supported_ubsan (__main__.EmbeddedAdcExampleTests.test_native_endpoints_with_supported_ubsan) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.227s\n\nOK\n",
+  "finished_at": "2026-11-16T00:50:52.537877+00:00"
+}

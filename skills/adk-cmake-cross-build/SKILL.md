@@ -1,8 +1,8 @@
 ---
 name: adk-cmake-cross-build
 description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
-version: 1.0.4
-last_updated: 2026-11-15
+version: 1.0.5
+last_updated: 2026-11-16
 triggers:
   - "CMake"
   - "CMake交叉编译"
@@ -26,60 +26,63 @@ constraints:
 复现 ARM Cortex-M/A、RISC-V 等实际目标的 CMake 交叉构建。
 
 ## Prerequisites
-- 明确 host/build/target 三元组与编译器版本。
-- 准备 toolchain file、sysroot、依赖路径映射。
-- 确认实际使用 CMake（含 Buildroot/Yocto 的 CMake package），核版本与 generator；不将其他构建系统一概转为 CMake。
+- 核 host/build/target、编译器、toolchain/sysroot、ABI/依赖路径、CMake 版本与 generator；不把其他构建系统转为 CMake。
 
 ## Workflow
-1. **编写 toolchain 文件**：定义编译器、sysroot、查找路径和 ABI flags。
-2. **固化 Presets**：用 `CMakePresets.json` 表达目标、构建类型和输出目录。
-3. **执行构建**：仅在目标仓允许执行并且 toolchain/generator/sysroot 存在时使用 presets；无 presets 时显式传入 toolchain file。不得替换或删除不属于本任务的 build 目录；用户未授权执行时只读规划。
-4. **执行后端判定**：在跑 CTest 前识别 host-unit、compile-only、emulator（含 `CROSSCOMPILING_EMULATOR`）、board-runner 四类。没有已验证的目标执行后端时，只能声称交叉构建成功；不能把主机上的 CTest 通过写成板端运行通过。
-5. **产物检查**：用实际 toolchain 核 ELF 架构、段、符号/map；记录二进制、日志、失败点与诊断建议。
+1. **配置**：核执行授权和工具可用性；未授权只读规划。只用任务自有目录，不替换他人 build。
+2. **绑定**：preset 与手工配置二选一。preset 的 build/test 名称可不同，但 `configurePreset`、`binaryDir`、configuration 必须一致；缺匹配 presets 则按核实参数手工配置。见 [Presets](https://cmake.org/cmake/help/v3.27/manual/cmake-presets.7.html)。
+3. **后端**：先核 `host-unit | compile-only | emulator | board-runner`，emulator 含 `CROSSCOMPILING_EMULATOR`。没有已验证执行后端用 compile-only；host CTest 不证明板端运行。
+4. **产物**：从本次 binaryDir/configuration 定位实际 ELF 为 `ADK_ELF`，不猜 `build/<target>`；用实际目标工具链检查架构、段、符号/map。
 
 ## Commands
+在源码根选一段；变量须填实际值，目录用绝对路径。`ADK_CONFIG` 固定配置；单配置还设置 `CMAKE_BUILD_TYPE`。`ADK_BUILD_JOBS` 是按 CPU/RAM/CI 配额核定的正整数（`--parallel <resource-budget>`）。
 ```bash
-cmake -S . -B build/<target> -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-<target>.cmake -G Ninja
-cmake --preset <preset-name>
-cmake --build build/<target> --parallel <resource-budget>  # 用实际 CPU/RAM/CI 配额定预算
-file build/<target>/firmware.elf
-arm-none-eabi-size build/<target>/firmware.elf
-arm-none-eabi-objdump -h build/<target>/firmware.elf
-# 仅在发现目标项目已有 host/emulator/board test runner 后运行：
-ctest --test-dir build/<target> --output-on-failure --no-tests=error
+# preset-build: 已核对 configure/build/test 引用与配置
+set -euo pipefail
+cmake --preset "$ADK_CONFIGURE_PRESET"
+cmake --build --preset "$ADK_BUILD_PRESET" --config "$ADK_CONFIG" --parallel "$ADK_BUILD_JOBS"
+case "$ADK_TEST_BACKEND" in
+  host-unit|emulator|board-runner) ctest --preset "$ADK_TEST_PRESET" -C "$ADK_CONFIG" --output-on-failure --no-tests=error ;;
+  compile-only) printf 'target tests: not-run\n' ;;
+  *) exit 2 ;;
+esac
+```
+```bash
+# manual-build: 不再执行 preset 配置
+set -euo pipefail
+cmake -S "$ADK_SOURCE_DIR" -B "$ADK_BINARY_DIR" -G "$ADK_GENERATOR" \
+  -DCMAKE_TOOLCHAIN_FILE="$ADK_TOOLCHAIN_FILE" -DCMAKE_BUILD_TYPE="$ADK_CONFIG"
+cmake --build "$ADK_BINARY_DIR" --config "$ADK_CONFIG" --parallel "$ADK_BUILD_JOBS"
+case "$ADK_TEST_BACKEND" in
+  host-unit|emulator|board-runner) ctest --test-dir "$ADK_BINARY_DIR" -C "$ADK_CONFIG" --output-on-failure --no-tests=error ;;
+  compile-only) printf 'target tests: not-run\n' ;;
+  *) exit 2 ;;
+esac
+```
+成功构建后检查同一产物；`ADK_SIZE/ADK_OBJDUMP` 为已核实的目标工具路径：
+```bash
+# built-artifact:
+set -euo pipefail
+file "$ADK_ELF"
+"$ADK_SIZE" -A "$ADK_ELF"
+"$ADK_OBJDUMP" -h "$ADK_ELF"
 ```
 按实际 build/config/filter 核执行数量；空集/全禁用/筛空须失败，skip/not-run 不算通过。见 [CTest](https://cmake.org/cmake/help/v3.20/manual/ctest.1.html)。
 
 ## Evidence Template
 ```md
-- Toolchain Summary:
-  - Compiler / Sysroot / Target Triple:
-- Build Matrix:
-  | Preset | Type | Status | Size |
-  |--------|------|--------|------|
-  | actual-preset | Debug/Release | PASS/FAIL | __ KB |
-- Build Result: [link to build log]
-- ELF Verification: `file` output, section sizes
-- Test Result: [ctest summary]
-- Known Limitations: [list]
+- Host / Target / Toolchain / Sysroot:
+- Preset Names or Manual Parameters / binaryDir / Configuration:
+- Commands / Exit Codes / Duration / Logs:
+- ELF Path / Hash / Architecture / Sections / Size:
+- Test Backend / Counts / Result / Not-run / Limitations:
 ```
 
 ## Failure Handling
-- 找不到依赖时，优先校验 `CMAKE_FIND_ROOT_PATH` 与 sysroot 完整性。
-- 链接失败时，先定位 ABI/架构不匹配（`file *.o`），再回滚最近构建参数变更。
-- Presets 解析失败时，检查 CMake 版本与 JSON 语法。
-- 交叉编译时 host 工具混入，确保 `find_program` 使用 `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER`。
+- 依赖失败核 `CMAKE_FIND_ROOT_PATH`/sysroot；链接失败核 ABI/架构，不盲目重跑。
+- preset 失败核版本/JSON/引用链；host 工具混入时核 `find_program` 的 `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER`。
 
 ## Quality Gate
-- 必须明确 host/build/target 区分与 toolchain 来源。
-- 至少一个目标平台完成交叉构建；可执行测试按 host/emulator/board 单独记录，无法运行目标测试时标记 `not-run` 而不是伪称闭环。
-- 构建日志需可复现同一结果（clean build 验证，且只清理任务自有构建目录）；跨编译环境/host/target 的产物不得混用。
-- ELF 产物必须用目标工具链的 `file/readelf/size`（按实际可用工具）核验架构、段与大小，裸 bin 不能仅靠 `file` 判断 CPU 身份。
-- toolchain 文件必须纳入版本控制。
-
----
-
-## 健壮性规范
-- 执行前校验 CMake、generator、toolchain、sysroot 和目标 preset。
-- 构建失败先定位 ABI/架构/sysroot，不盲目重跑。
-- 记录命令、退出码、耗时、产物路径和失败日志。
+- 至少一个目标交叉构建成功；未运行目标测试记 `not-run`，不混用 host/target 或配置的证据。
+- clean build 只清理任务自有构建目录；保留可复跑日志，toolchain 纳入版本控制。
+- 核 ELF 身份；裸 bin 不能仅靠 `file` 判断 CPU。失败不消费旧产物。

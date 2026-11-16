@@ -1,0 +1,397 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261116-skill-practical-methods",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root",
+  "reviewer": {
+    "id": "ai/root/external_skill_scan_v2",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "evidence_completed_at": "2026-11-16T01:11:27.082036Z",
+  "reviewed_at": "2026-11-16T01:12:41.916238Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "f1",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Compacting the review entry removed seven existing SOP evidence markers. Actual compact evidence fields restored in 9a918fa; no tests or gates weakened. Final bound suite is 102/102 and independent final two exported-method checks are 2/2."
+    },
+    {
+      "id": "f2",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Retry-After language could be read as extending an expired operation deadline. Final source explicitly ends the current operation first; business deferral does not revive its expired budget."
+    },
+    {
+      "id": "f3",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Old flaky workflow wording prescribed isolation unconditionally. Final source makes isolation conditional, requires boundary validation, and preserves the original failure state."
+    },
+    {
+      "id": "f4",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "T2 task row described the older green-index-refresh receipt as the final source binding. Final tasks row distinguishes the historical 27-method receipt from the later SOP fix and latest full receipt; hash included in the 72-input index."
+    },
+    {
+      "id": "f5",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Review findings referenced nonexistent general/red.json. Final wrapper references the actual general/results.json and separate general-implementation/red.json; hash included in the 72-input index."
+    }
+  ],
+  "limitations": [
+    "Source approval does not assert completed platform, merge or release readiness.",
+    "Five CMake/CTest cases were skipped locally; the refusal experiment is not real CI execution.",
+    "No ARM cross-compilation, board/emulator/device actions, Valgrind profiling or hardware performance qualification occurred.",
+    "No model or native agent-host task execution, blind A/B, task success-rate, provider-token or cost improvement was measured.",
+    "The independent reviewer did not rerun the full suite; the integrator's exact final-source receipt was independently verified.",
+    "Native ADC checks establish the declared integer-domain behavior and local compiler execution, not every compiler/target's qualification.",
+    "Historical early reviews and green-named receipts retain their own source identities and failures; current approval binds only the specified final head and input index.",
+    "The 65 registered Skills are not all rewritten or newly behaviorally evaluated in this change; the complete diff covers seven existing Skills plus the ADC example and supporting contracts.",
+    "Prior 11.3.5 remote publication is integrator-provided evidence; this reviewer did not independently query those remote platform objects.",
+    "This typed record mechanically projects the original source verdict at its original review time. The two readable report copies each remove exactly one final LF; all original report bytes and the historical attempt1 patch are retained in packaging-original-bytes.json. The unchanged 72-input index resolves as 71 original files plus one decoded patch. Later packaging verification is separate from that source verdict; it does not redate or expand source approval."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+    "head_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+    "original_patch_sha256": "f25ae36bf5504c3a5127f07fdd6a3c54a032a6fb48beeb7d20ab0f74ebde4f57"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "17b62daa713323c29d166eb57e90830981898445091d527e51b531e17db5ebcc"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "c72a667b5ca56ac9f92cc7edb9141d6aaa391e1df9e6688dee7292f36a113708"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "ebc030dd782c12d7b314a6d965010513af2c9673c27bcda5ca562d9272a4a73f"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "8cfc8d0d37f87d19496700f5ae45789948015ff8cd7fb51385f7318b7636d3e2"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-practical-methods/design.md",
+      "sha256": "a5786f6d76b3a920949760cf61d03ec3c47c4b676bd2cbfdc3878233828ce437"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-practical-methods/negative-results.md",
+      "sha256": "6165e719da4f52856059b8cc83438b5f42470170be16dc1fdd3c5b1b0e60666f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-practical-methods/requirements.md",
+      "sha256": "2242052b60589fcf1dfa427dcd9371624b0d2208b124593ba2127a5692a46ed8"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-practical-methods/source-review.md",
+      "sha256": "8b80f4d07ad78da7772c92e0c4da977d3fa75018f7076b94b8c8b440b18a1c3a"
+    },
+    {
+      "base": "repository",
+      "path": "examples/embedded-test-matrix/CMakeLists.txt",
+      "sha256": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da"
+    },
+    {
+      "base": "repository",
+      "path": "examples/embedded-test-matrix/README.md",
+      "sha256": "e0a80a4380a4e491b8ab2ebce7dc2d0be239fd7923d76ab3f341a8d487542fee"
+    },
+    {
+      "base": "repository",
+      "path": "examples/embedded-test-matrix/cross-build/smoke-command.txt",
+      "sha256": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446"
+    },
+    {
+      "base": "repository",
+      "path": "examples/embedded-test-matrix/src/adc_scale.c",
+      "sha256": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e"
+    },
+    {
+      "base": "repository",
+      "path": "examples/embedded-test-matrix/src/adc_scale.h",
+      "sha256": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe"
+    },
+    {
+      "base": "repository",
+      "path": "examples/embedded-test-matrix/tests/test_adc_scale.c",
+      "sha256": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "a62b0eb9e27d2d2bce2f97b6bfb22eb00f42a197e0f33c69b1fa9bcd33607c6f"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "780589d3fb6a91df329627ac4ea8c9125bfcd94b305caa13a8aa36122d60f769"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "sha256": "7fec646e0f30fa1f69fa56ef677508ae0881596be0baf4f1b0e56eb532899dec"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "sha256": "c388887f84aba2ba5e55187586765b08f54c7eef0a064d9f9cd35352d71d4c9e"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "b346f959dc551558b9042581b14a342a03a75798bc396fd69568546102d7d9cf"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "sha256": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "sha256": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "e62c18ad0300794718e7b582d54e0b44458df2e25a580b25fa9a5d7b5e7f92cc"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "sha256": "f48e308097b2f7023ba4dc80ea8325dc4136939f688b48c60a5629a6d36ab8ef"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "c03511681929d10e6afa0b546a6a01442df3942597faf84aaa718d493740fb56"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "6e4dcdd1f5c9df89f6510991849b03f3194549df2462cf3886116886679d674f"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content_contract.py",
+      "sha256": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "f25ae36bf5504c3a5127f07fdd6a3c54a032a6fb48beeb7d20ab0f74ebde4f57"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/input-index.json",
+      "sha256": "cac7b9a72611378daa1fa67767731cccea844c024cf2627d22c080f0bb9c9021"
+    },
+    {
+      "base": "record",
+      "path": "evidence/review-input-ready.json",
+      "sha256": "39cf0f23fbfe5fb9831b1def5eef6142079dba2afb3bc8817e4af3040154a4f0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-freeze.json",
+      "sha256": "cd5c2717dc2323ed05364e91febac19c563b6490e497cb29fc319c2a45dc552a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-receipt.json",
+      "sha256": "11ff5e4bf00dbfa5b9fc3f17c3bcb8b6d397c207ab247b5e63f47cdb8055ac30"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-timing.json",
+      "sha256": "12c9c41389943439df3b447ecd7f99e3d0d1d08ccc36d9e8c4bb8971319f8593"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final-gates.json",
+      "sha256": "85df3a80427308583a2704bc742e95eb32d21dcfa8e7c2c885c97bc7d521a4e1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/general-implementation/red.json",
+      "sha256": "01b4d051114954e998101ac7ae53ecf70bc7ea0ae3c09269d910bbcc108c5a6b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/general-implementation/index-refresh-experiment.json",
+      "sha256": "6cd5db7b51af6f12bb9a3b0b19d502e86c5219a332a998d51b0b818dcb1eeb94"
+    },
+    {
+      "base": "record",
+      "path": "evidence/sop-contract-fix/green-sop.json",
+      "sha256": "1105e429a6d92ccc243a648728b4358b535fa2f934500741f13124e4c1676604"
+    },
+    {
+      "base": "record",
+      "path": "evidence/sop-contract-fix/green-t2.json",
+      "sha256": "04b07f64b90281bfd10c6db100b923b846e7b3856509f59e5821c0255c7425af"
+    },
+    {
+      "base": "record",
+      "path": "evidence/practical-implementation/adc-native-red.json",
+      "sha256": "ed4c8e131ddb9d54c0072063e870c949b9a9045e6b6839c31ff28341431a81de"
+    },
+    {
+      "base": "record",
+      "path": "evidence/practical-implementation/adc-native-green.json",
+      "sha256": "4f589055957fb109031994396a5581dcc1ac505899df44bcf5d543bb58324491"
+    },
+    {
+      "base": "record",
+      "path": "evidence/practical-implementation/command-examples-final-local.json",
+      "sha256": "959e065f480840e995b714fa2dbc3c0ecfccdd0f0fd5c392f2dfdc15651cc018"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-targeted-verification.json",
+      "sha256": "793d88854c38d26bc96a5b8d7520640178283ab89a05c3f6fd835740509d81da"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-final-verification.json",
+      "sha256": "23199f3716ec4674d0b5e21f497adf803c0b6030a05d8c5f167adfbbe7863c29"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-final-source.json",
+      "sha256": "4f6e15cff0a3fae1f4f7fe79a2b19cd2bee5f495c3abafbd3f5824be23074048"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-final-review.md",
+      "sha256": "c22c821f6f27449106ecb1cc8c01f6de32f0f87cfc2f2633b81ff66411406ca9"
+    },
+    {
+      "base": "record",
+      "path": "evidence/prior-publication.json",
+      "sha256": "d10454fdcac1773e4564e8e3ce77549f9c5ea7ac601541acfa00927054fa6499"
+    },
+    {
+      "base": "record",
+      "path": "evidence/attempt1/full-receipt.json",
+      "sha256": "984321b8df8d31ccf3140da9f5ebe3e9145be8e9faf14e2313d55cd2011b93b5"
+    },
+    {
+      "base": "record",
+      "path": "audit.md",
+      "sha256": "c8e1222690a89d33b261f0e4f09b05113ac8dbf98f36c50ac2882937efa7541d"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "6dacccdacb204172c26e32b2007feff7a35c5b4208c50bac7f9388fe95d25e4f"
+    },
+    {
+      "base": "record",
+      "path": "review-findings.md",
+      "sha256": "658e8c6b2df9d8adf5a078bc968aa8e23e11389f83a7f20e892ac84f8e0dd00e"
+    },
+    {
+      "base": "record",
+      "path": "tasks.md",
+      "sha256": "4c49c1f8bc8e2039e43d5a2f5c9be1744207f1953c35fbfe10034fc76680c1e1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/research/external-skill-findings.md",
+      "sha256": "2a1daf2fd12cd6bc4fae23c1e42e06b29bd54430778ee3ca4e83b3f248938c37"
+    },
+    {
+      "base": "record",
+      "path": "evidence/research/external-skill-counterexamples.json",
+      "sha256": "56fb088d18e6fdec6c0e3367c3658d15b5b9fe7f13de1c9bc64a4ef6439cc628"
+    },
+    {
+      "base": "record",
+      "path": "evidence/research/external-skill-counterexamples.py",
+      "sha256": "038332f8dcaf9ed2afd8748d4983cdc79df37e1648b10c431d952db31e6802ed"
+    },
+    {
+      "base": "record",
+      "path": "evidence/research/design-review.md",
+      "sha256": "fba02ef1bc5693d61bbbb41de0ae440a38662918ba9bff6e55a5889c4b628542"
+    },
+    {
+      "base": "record",
+      "path": "evidence/sop-contract-fix/delivery.json",
+      "sha256": "ade98fd1c5ea0ff7c281c25b45c9aa77f000eb05a50abc202c9b2e1b58b87401"
+    },
+    {
+      "base": "record",
+      "path": "evidence/base-reconciliation.json",
+      "sha256": "9ff6d27c7fe2a8103c3d521200d2c371934479a68d1e649e8d8b9ccdbd9ff32f"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-profile-budgets.json",
+      "sha256": "9b5242486c2c69048fbaf4e7992a999fbc846b7347d6d567747d3b032e33812b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-snapshot-check.json",
+      "sha256": "25bec83d3986c93b759ef01162249e39f481a703c2b970bd3501147f5f39e930"
+    },
+    {
+      "base": "record",
+      "path": "evidence/packaging-original-bytes.json",
+      "sha256": "b339be847472106d5e13d55c8ccbc38c86b3142b3a14fe3f3914686a2c8de210"
+    }
+  ]
+}

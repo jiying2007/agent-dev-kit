@@ -1,0 +1,22 @@
+{
+  "phase": "green-t2",
+  "command": [
+    "python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_context_defaults_are_self_contained",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper"
+  ],
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "started_at": "2026-11-16T01:03:27.996129+00:00",
+  "finished_at": "2026-11-16T01:03:28.741937+00:00",
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "test_exported_review_snapshot_captures_selected_target_without_staging (test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging)\nExercise the shipped snapshot, including committed and mixed changes. ... ok\ntest_exported_context_defaults_are_self_contained (test_skill_content_contract.SkillContentContractTests.test_exported_context_defaults_are_self_contained)\nInspect actual consumer packages, which intentionally omit ADK source aids. ... ok\ntest_exported_review_commands_run_without_optional_wrapper (test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper)\nExercise shipped instructions in a target repo without ADK or rtk. ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.637s\n\nOK\n",
+  "entry_sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d",
+  "entry_bytes": 6234,
+  "sop_script_sha256": "9242b1b9e2dffd0bc5569c4eaca296df96439e213b674ed10e74c84a7380d962",
+  "source_head": "e0c3b97ef8382366939e3b5ed40263307604bd03"
+}

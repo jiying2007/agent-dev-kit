@@ -1,0 +1,13 @@
+{
+  "archived_at": "2026-11-16T01:00:54.306288Z",
+  "reason": "Full source regression failed required Snapshot ID marker in review Skill. This partial result is not a complete pass.",
+  "files": {
+    "full-timing.json": "0091040493f95a108197bfb9c424191c2ea1da35270ec051ce80c7bbd472ad51",
+    "original.patch": "0d41b45361ed9e003f43a326fcf5e48b83949090f2607eda031f2d1256c7fb4a",
+    "full-receipt.json": "984321b8df8d31ccf3140da9f5ebe3e9145be8e9faf14e2313d55cd2011b93b5",
+    "profile-budgets.json": "a2ec8f4bb4f5fa1d7ace936eb4008d62fd280ced47a1dd5814e768fe90bebd70",
+    "source-freeze.json": "defc3602e26346978c8a5d705cadb16079d108298b419ce019ec73ae65844f2d",
+    "full.log": "e5f8e859452936a37c3f002ca14da86b308c6fcfa509536b9117ec0697f8588f",
+    "pre-freeze-gates.json": "f2182242249e0bc4d81fc5829a6fd0b06e40c2fd1cdf186bd4a9ac32c95b1fc2"
+  }
+}

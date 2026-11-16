@@ -1,0 +1,54 @@
+{
+  "schema": "adk-practical-static-counterexample/v1",
+  "source_commit": "63e8f61ad9a023b4349851ebb4c9a6eca042a119",
+  "source_path": "skills/adk-cmake-cross-build/SKILL.md",
+  "source_sha256": "fe07fc732eabeaf8628f58c02bf37334964dfa6487ffc4fa03d8fab4f7dd19f1",
+  "observed_at": "2026-11-16T00:38:49.308722+00:00",
+  "method": "Resolve the documented command arguments against one official-schema preset; no CMake process, build, test, or tool shim is executed.",
+  "fixture": {
+    "version": 3,
+    "configurePresets": [
+      {
+        "name": "demo-release",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/out/demo-release",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release"
+        }
+      }
+    ],
+    "buildPresets": [
+      {
+        "name": "demo-build",
+        "configurePreset": "demo-release"
+      }
+    ],
+    "testPresets": [
+      {
+        "name": "demo-test",
+        "configurePreset": "demo-release"
+      }
+    ]
+  },
+  "baseline_commands": [
+    "cmake -S . -B build/demo -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-demo.cmake -G Ninja",
+    "cmake --preset demo-release",
+    "cmake --build build/demo --parallel 1",
+    "file build/demo/firmware.elf",
+    "arm-none-eabi-size build/demo/firmware.elf",
+    "arm-none-eabi-objdump -h build/demo/firmware.elf",
+    "ctest --test-dir build/demo --output-on-failure --no-tests=error"
+  ],
+  "expected_configured_binary_dir": "/workspace/scratch/2d6ca6dc3d38/practical-v2/cmake-preset-counterexample/out/demo-release",
+  "actual_build_command_directory": "/workspace/scratch/2d6ca6dc3d38/practical-v2/cmake-preset-counterexample/build/demo",
+  "actual_test_command_directory": "/workspace/scratch/2d6ca6dc3d38/practical-v2/cmake-preset-counterexample/build/demo",
+  "actual_artifact_command_path": "/workspace/scratch/2d6ca6dc3d38/practical-v2/cmake-preset-counterexample/build/demo/firmware.elf",
+  "build_uses_configured_directory": false,
+  "test_uses_configured_directory": false,
+  "cmake_available": null,
+  "ninja_available": null,
+  "execution_status": "not-run: CMake and Ninja unavailable",
+  "interpretation": "Static path-contract counterexample only. Stale-directory build success or target execution is not claimed.",
+  "official_source": "https://cmake.org/cmake/help/v3.27/manual/cmake-presets.7.html",
+  "model_calls_executed_by_script": 0
+}

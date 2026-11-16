@@ -1,0 +1,197 @@
+{
+  "source_head": "e0c3b97ef8382366939e3b5ed40263307604bd03",
+  "changed_path": "skills/adk-code-review-loop/SKILL.md",
+  "entry_sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d",
+  "entry_bytes_before": 5888,
+  "entry_bytes_after": 6234,
+  "entry_byte_delta": 346,
+  "entry_limit": 7200,
+  "skill_version": "1.7.8",
+  "version_bumped_again": false,
+  "unchanged_source_sha256": {
+    "tests/test_skill_sop_quality.sh": "9242b1b9e2dffd0bc5569c4eaca296df96439e213b674ed10e74c84a7380d962",
+    "tests/test_skill_content_contract.py": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7",
+    "skills/adk-code-review-loop/references/review-evidence-template.md": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79"
+  },
+  "evidence": {
+    "red-sop": {
+      "path": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/sop-contract-fix/red-sop.json",
+      "sha256": "5e073d1b93f08c31dc0c4df7035e7cd9c9b4b9021f57f4d9904f8e534e9a5be2",
+      "returncode": 1,
+      "entry_sha256": "d7bf180c0e288cb4450892f2b6ce0f61625735b43a89745bed0d5a6e76f62cf6"
+    },
+    "green-sop": {
+      "path": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/sop-contract-fix/green-sop.json",
+      "sha256": "1105e429a6d92ccc243a648728b4358b535fa2f934500741f13124e4c1676604",
+      "returncode": 0,
+      "entry_sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d"
+    },
+    "green-t2": {
+      "path": "/workspace/scratch/2d6ca6dc3d38/audit-general-v2/implementation/sop-contract-fix/green-t2.json",
+      "sha256": "04b07f64b90281bfd10c6db100b923b846e7b3856509f59e5821c0255c7425af",
+      "returncode": 0,
+      "entry_sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d"
+    }
+  },
+  "profile_ratchets": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 98496,
+        "potential_full_source_bytes": 173552
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 83145,
+        "potential_full_source_bytes": 157226
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 113428,
+        "potential_full_source_bytes": 192221
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 211227,
+        "potential_full_source_bytes": 316321
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123962,
+        "potential_full_source_bytes": 211387
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 214252,
+        "potential_full_source_bytes": 323203
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30800,
+        "potential_full_source_bytes": 46556
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 65806,
+        "potential_full_source_bytes": 118021
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "git_diff_check_returncode": 0,
+  "scope": "Restore seven existing SOP evidence labels in one compact inline block; selected-target snapshot semantics retained.",
+  "limits": [
+    "The earlier full 102-entry run remains failed and unchanged.",
+    "This child reran the complete SOP script and three existing T2 test methods; the full suite is root-owned.",
+    "Earlier delivery records remain historical; this record supplies the restored entry hash."
+  ]
+}

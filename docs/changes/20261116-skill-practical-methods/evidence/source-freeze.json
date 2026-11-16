@@ -1,0 +1,130 @@
+{
+  "schema": "adk-source-freeze/v1",
+  "base_commit": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+  "head_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "tree": "bef1da3b91570b849d5e7373b9ab545e09b823aa",
+  "frozen_at": "2026-11-16T01:04:18.683602Z",
+  "patch_sha256": "f25ae36bf5504c3a5127f07fdd6a3c54a032a6fb48beeb7d20ab0f74ebde4f57",
+  "sources": [
+    {
+      "path": ".version-lock",
+      "sha256": "17b62daa713323c29d166eb57e90830981898445091d527e51b531e17db5ebcc"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "c72a667b5ca56ac9f92cc7edb9141d6aaa391e1df9e6688dee7292f36a113708"
+    },
+    {
+      "path": "CONTEXT.md",
+      "sha256": "ebc030dd782c12d7b314a6d965010513af2c9673c27bcda5ca562d9272a4a73f"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8cfc8d0d37f87d19496700f5ae45789948015ff8cd7fb51385f7318b7636d3e2"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/design.md",
+      "sha256": "a5786f6d76b3a920949760cf61d03ec3c47c4b676bd2cbfdc3878233828ce437"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/negative-results.md",
+      "sha256": "6165e719da4f52856059b8cc83438b5f42470170be16dc1fdd3c5b1b0e60666f"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/requirements.md",
+      "sha256": "2242052b60589fcf1dfa427dcd9371624b0d2208b124593ba2127a5692a46ed8"
+    },
+    {
+      "path": "docs/changes/20261116-skill-practical-methods/source-review.md",
+      "sha256": "8b80f4d07ad78da7772c92e0c4da977d3fa75018f7076b94b8c8b440b18a1c3a"
+    },
+    {
+      "path": "examples/embedded-test-matrix/CMakeLists.txt",
+      "sha256": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da"
+    },
+    {
+      "path": "examples/embedded-test-matrix/README.md",
+      "sha256": "e0a80a4380a4e491b8ab2ebce7dc2d0be239fd7923d76ab3f341a8d487542fee"
+    },
+    {
+      "path": "examples/embedded-test-matrix/cross-build/smoke-command.txt",
+      "sha256": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446"
+    },
+    {
+      "path": "examples/embedded-test-matrix/src/adc_scale.c",
+      "sha256": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e"
+    },
+    {
+      "path": "examples/embedded-test-matrix/src/adc_scale.h",
+      "sha256": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe"
+    },
+    {
+      "path": "examples/embedded-test-matrix/tests/test_adc_scale.c",
+      "sha256": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "a62b0eb9e27d2d2bce2f97b6bfb22eb00f42a197e0f33c69b1fa9bcd33607c6f"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "780589d3fb6a91df329627ac4ea8c9125bfcd94b305caa13a8aa36122d60f769"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "sha256": "7fec646e0f30fa1f69fa56ef677508ae0881596be0baf4f1b0e56eb532899dec"
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "sha256": "c388887f84aba2ba5e55187586765b08f54c7eef0a064d9f9cd35352d71d4c9e"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "b346f959dc551558b9042581b14a342a03a75798bc396fd69568546102d7d9cf"
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "sha256": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841"
+    },
+    {
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "sha256": "e47ea7c376430a10780a09d74ef689471228c220ae5660290f11a067d46f350d"
+    },
+    {
+      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "sha256": "14be3cf96eb1d9eed590eb18d216046aca4a09b6a1787a8d82cfc4cb8c4d2c79"
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c"
+    },
+    {
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5"
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "e62c18ad0300794718e7b582d54e0b44458df2e25a580b25fa9a5d7b5e7f92cc"
+    },
+    {
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "sha256": "f48e308097b2f7023ba4dc80ea8325dc4136939f688b48c60a5629a6d36ab8ef"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "c03511681929d10e6afa0b546a6a01442df3942597faf84aaa718d493740fb56"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "6e4dcdd1f5c9df89f6510991849b03f3194549df2462cf3886116886679d674f"
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a"
+    },
+    {
+      "path": "tests/test_skill_content_contract.py",
+      "sha256": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+    }
+  ]
+}

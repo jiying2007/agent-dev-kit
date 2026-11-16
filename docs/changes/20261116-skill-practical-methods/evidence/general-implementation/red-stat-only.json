@@ -1,0 +1,28 @@
+{
+  "phase": "red-stat-only",
+  "started_at": "2026-11-16T00:53:29.066353+00:00",
+  "ended_at": "2026-11-16T00:53:29.670559+00:00",
+  "cwd": "/workspace/scratch/2d6ca6dc3d38/adk-practical",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "test_exported_review_snapshot_captures_selected_target_without_staging (test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging)\nExercise the shipped snapshot, including committed and mixed changes. ... \n  test_exported_review_snapshot_captures_selected_target_without_staging (test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging) (runtime='claude-code', scenario='unstaged')\nExercise the shipped snapshot, including committed and mixed changes. ... FAIL\n  test_exported_review_snapshot_captures_selected_target_without_staging (test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging) (runtime='opencode', scenario='unstaged')\nExercise the shipped snapshot, including committed and mixed changes. ... FAIL\n\n======================================================================\nFAIL: test_exported_review_snapshot_captures_selected_target_without_staging (test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging) (runtime='claude-code', scenario='unstaged')\nExercise the shipped snapshot, including committed and mixed changes.\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_content_contract.py\", line 272, in test_exported_review_snapshot_captures_selected_target_without_staging\n    self.assertEqual(index.read_bytes(), before_index)\nAssertionError: b\"DIR[266 chars]\\t\\x18r\\x14ij\\xfaT\\x0b\\x17w\\x02N\\x00\\x00\\x00'\\[334 chars]byQ?\" != b\"DIR[266 chars]\\t\\x17w\\x02Nj\\xfaT\\t\\x17w\\x02N\\x00\\x00\\x00'\\x0[338 chars]xb58\"\n\n======================================================================\nFAIL: test_exported_review_snapshot_captures_selected_target_without_staging (test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging) (runtime='opencode', scenario='unstaged')\nExercise the shipped snapshot, including committed and mixed changes.\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d6ca6dc3d38/adk-practical/tests/test_skill_content_contract.py\", line 272, in test_exported_review_snapshot_captures_selected_target_without_staging\n    self.assertEqual(index.read_bytes(), before_index)\nAssertionError: b\"DIR[257 chars]faT\\t!1\\xe4Qj\\xfaT\\x0b p\\x19\\xea\\x00\\x00\\x00'\\[337 chars]\\xb5\" != b\"DIR[257 chars]faT\\t p\\x19\\xeaj\\xfaT\\t p\\x19\\xea\\x00\\x00\\x00'[338 chars]\\xc8\"\n\n----------------------------------------------------------------------\nRan 1 test in 0.468s\n\nFAILED (failures=2)\n",
+  "source_sha256": {
+    "skills/adk-code-review-loop/SKILL.md": "a23f6b64298f0993a3a0530e49f291499549eee42945b3ee3ee1719748613953",
+    "skills/adk-code-review-loop/references/review-evidence-template.md": "b23a66ba5f719cbb08967bec36954230e23e41207714e655e2ddfdaa836e9241",
+    "skills/adk-context-engineering/SKILL.md": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+    "skills/adk-context-compress-handoff/SKILL.md": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+    "tests/test_skill_content_contract.py": "822dcb61d0cbb8c1689247cc0a32f956e33cdc236f2504afff31ad7c6da462c7"
+  },
+  "environment_limits": {
+    "rtk": "unavailable; task authorizes direct tools",
+    "knowledge/L2-domain/lessons.md": "absent",
+    "model_or_native_host_execution": "not-run"
+  }
+}

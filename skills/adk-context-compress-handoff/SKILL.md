@@ -1,8 +1,8 @@
 ---
 name: adk-context-compress-handoff
 description: "用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。"
-version: 1.0.1
-last_updated: 2026-11-03
+version: 1.0.2
+last_updated: 2026-11-16
 triggers:
   - "上下文压缩"
   - "会话接力"
@@ -28,20 +28,18 @@ constraints:
 # adk-context-compress-handoff
 
 ## Goal
-- 在长会话、上下文压力或目标切换前生成可恢复、可审计、低噪音的 handoff。
-- 防止过期目标、失败假设和敏感材料混入下一轮 active context。
+生成可恢复、可审计的 handoff，排除过期目标、失败假设和敏感原文。
 
 ## Prerequisites
-- 当前任务已有可陈述的最新目标、验证状态和下一步。
-- 已知道哪些原始证据路径可回读。
-- 已识别需要排除的旧计划、错误事实或敏感内容。
+- 已知最新目标、验证状态、下一步及可回读证据。
+- 已识别需排除的旧计划、错误事实与敏感内容。
 
 ## Workflow
 1. 确认最新目标：记录 latest goal，列出 invalidated goals。
 2. 分层压缩：stable、dynamic、evidence、excluded 分开写。
-3. 连续性证明：记录 active plan、findings、progress、attestation 和 excluded context，可用 `templates/context/continuity-attestation.md`。
+3. 连续性证明：默认使用下方模板记录 active plan/findings/progress/attestation；仅在 ADK 源码根已确认且文件可读时，可选根下 `templates/context/continuity-attestation.md`。
 4. 证据索引：命令、路径、结果摘要和回退条件必须可追溯。
-5. 风险与阻塞：列出 unresolved blockers、residual risks、manual approval points。
+5. 风险与阻塞：列出 unresolved blockers、residual risks、manual approval points；handoff 不扩大权限。
 6. 下一步：给出最多 3 个优先动作和第一条建议命令。
 7. 记忆边界：长期规则只输出 candidate，不直接写 memory 或 AGENTS。
 8. 恢复提示：生成新会话可直接粘贴的 resume prompt。
@@ -51,11 +49,12 @@ constraints:
 - Latest Goal:
 - Invalidated Goals:
 - Stable Context:
-- Dynamic Context:
-- Evidence:
+- Confirmed Facts:
+- State / Blockers:
+- Scope / Permission:
+- Evidence / Fallback:
 - Continuity Attestation:
 - Excluded Context:
-- Open Blockers:
 - Next Actions:
 - Resume Prompt:
 - Memory Candidates:

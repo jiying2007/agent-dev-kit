@@ -1,0 +1,87 @@
+{
+  "schema": "adk-practical-implementation-handoff/v1",
+  "baseline_commit": "5b88ec5bce351f68d4756d765e69a4f40bde3f07",
+  "recorded_at": "2026-11-16T00:59:32.498395+00:00",
+  "files": [
+    {
+      "path": "examples/embedded-test-matrix/src/adc_scale.c",
+      "sha256": "0cdc5959b1782b31f7f79246cff7dd560f97b9016a7016aec5fbf1641cd72f5e",
+      "baseline_bytes": 255,
+      "current_bytes": 405,
+      "delta_bytes": 150
+    },
+    {
+      "path": "examples/embedded-test-matrix/src/adc_scale.h",
+      "sha256": "9ebff9bb1af11f9f19ec2f26a7ce9a3c8c1174454a1af3b38f18567d8a9977fe",
+      "baseline_bytes": 117,
+      "current_bytes": 339,
+      "delta_bytes": 222
+    },
+    {
+      "path": "examples/embedded-test-matrix/tests/test_adc_scale.c",
+      "sha256": "d2bb3325da8041f68fbd2bdba0b1030fc9fd91cb7d968709940edacc2a98827d",
+      "baseline_bytes": 607,
+      "current_bytes": 1898,
+      "delta_bytes": 1291
+    },
+    {
+      "path": "examples/embedded-test-matrix/README.md",
+      "sha256": "e0a80a4380a4e491b8ab2ebce7dc2d0be239fd7923d76ab3f341a8d487542fee",
+      "baseline_bytes": 1049,
+      "current_bytes": 1677,
+      "delta_bytes": 628
+    },
+    {
+      "path": "examples/embedded-test-matrix/CMakeLists.txt",
+      "sha256": "b2c094a53310e12a8fa1a1ac360adfb36eaa427e944f964cf0b7f0cc713b37da",
+      "baseline_bytes": 378,
+      "current_bytes": 430,
+      "delta_bytes": 52
+    },
+    {
+      "path": "examples/embedded-test-matrix/cross-build/smoke-command.txt",
+      "sha256": "8f9c8ca44f723b2fc1c264bae9ade786fbe26ee5fac6dc5c748f482c4faee446",
+      "baseline_bytes": 89,
+      "current_bytes": 98,
+      "delta_bytes": 9
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "3ded6eb0ada9bddeecc4f36daaefdf6eae6721c76617b27274dd582036e2891a",
+      "baseline_bytes": 20205,
+      "current_bytes": 31365,
+      "delta_bytes": 11160
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "sha256": "be35369d55aef6e5d4b0ac5ef371f9d773beb3aa05cf39d4a73607173b2b8841",
+      "baseline_bytes": 4127,
+      "current_bytes": 4125,
+      "delta_bytes": -2
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "e62c18ad0300794718e7b582d54e0b44458df2e25a580b25fa9a5d7b5e7f92cc",
+      "baseline_bytes": 3094,
+      "current_bytes": 3094,
+      "delta_bytes": 0
+    }
+  ],
+  "patch_sha256": "dc92d72cb08606ccdeaaca9a982e69d0861b06ceb983c56c75d3d29eef7af8a9",
+  "diff_check": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "source_writes_finished": true,
+  "native_adc": "real RED -> GREEN; optimized and UBSan execution",
+  "local_command_examples": {
+    "total": 26,
+    "passed": 21,
+    "skipped_cmake_tools_missing": 5
+  },
+  "cmake_runtime_status": "not-run locally; GitHub Actions must not skip missing tools",
+  "valgrind_runtime_status": "not-run; method mapped to official documentation",
+  "all_profiles_tested_by_this_agent": false,
+  "remote_writes_by_this_agent": 0
+}

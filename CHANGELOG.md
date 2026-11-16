@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### 11.3.6 — 实际审查范围、独立交接与可靠嵌入式示例
+
+- 审查模板按 staged、working-tree 或已核分支基线取得对应 patch，保留 dirty/untracked 边界；纯 Skill 交接默认使用随包字段，源码 schema/template 改为有条件辅助。
+- ADC 示例在乘法前拓宽，并以编译期整数范围约束、满量程/钳位/无效输入及真实 native/UBSan 回归覆盖溢出。
+- CMake 示例区分 preset 与手工路径，配置、构建、CTest 和 ELF 绑定同一 binaryDir/configuration；真实命令 fixture 的工具缺失不冒充执行通过。
+- 性能方法区分堆峰值、内存错误/泄漏和 RSS；flaky 方法按需保留 suite 顺序与共享进程；协议操作传播总剩余时限并核 SDK/调用层重试放大。
+- 从具体一手 Skill 与官方工具依据选择已证明的差距，压缩重复说明，保持 65 个身份、既有 Profile 上限、权限与发布门禁。源码/host/CI 证据不替代模型效果、Token/费用或板端资格。
+
 ### 11.3.5 — Reliable Skill selection, portable methods and faster comparisons
 
 - 修复辅助 Skill 同组提升绕过主 Skill 排除条件，以及中英文显式拒绝 Skill 身份仍可被选中的路径；正常匹配、read-only 与宿主权限边界保持。
