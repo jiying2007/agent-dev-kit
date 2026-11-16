@@ -1,8 +1,8 @@
 ---
 name: adk-worktree-governance
 description: "用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。"
-version: 1.3.0
-last_updated: 2026-11-13
+version: 1.3.1
+last_updated: 2026-11-16
 triggers:
   - "worktree"
   - "工作树"
@@ -36,7 +36,7 @@ constraints:
 - **automation**：只有实际无人值守执行才增加 owner、停止条件、`Automation Risk Decision` 与 `Heartbeat / Staleness Threshold`。普通只读规划不必生成伪心跳或周期巡检。
 
 ## Workflow
-1. 只读 `git status --short`、当前分支、`git worktree list`，区分已存在的用户修改与本任务。形成 `Dirty Worktree Decision`：继续当前分支、隔离、等待用户处理；**不得自动 commit、stash、reset 或清理用户工作**。
+1. 只读 `git --no-pager --no-optional-locks -c core.fsmonitor=false status --porcelain=v1 --untracked-files=all --ignore-submodules=none`、当前分支及 `git worktree list`，区分用户修改与本任务。形成 `Dirty Worktree Decision`：继续、隔离或等用户处理；**不得自动 commit、stash、reset 或清理用户工作**。
 2. 判断 worktree 是否提供实际冲突/复验收益；没有收益立即退出，避免安装依赖、生成额外环境或反复扫描。
 3. 如需创建，记录真实 base commit、new branch、受控隔离路径、`scope_write`、`must_not_touch`、验证和停止条件；不存在的目录不凭空声称已建立。
 4. 暂存/交接素材必须保留 provenance 和 source identity，禁止写入 `.git/`，必须位于忽略区域或显式排除提交。共享 contract、schema、root config 由单一 owner 收口。

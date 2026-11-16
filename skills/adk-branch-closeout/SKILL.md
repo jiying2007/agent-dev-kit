@@ -1,7 +1,7 @@
 ---
 name: adk-branch-closeout
 description: "用于代码与验证完成后的分支收口、PR 选择和保留或清理决策；不用于未验证时直接合并、删除用户工作树或替代评审。"
-version: 1.1.1
+version: 1.1.2
 last_updated: 2026-11-16
 triggers:
   - "分支收尾"
@@ -37,7 +37,7 @@ constraints:
 - **keep / discard**：默认保留；删除需明确同意、实际来源与 dirty 检查。
 
 ## Workflow
-1. 读取 `git status --short`、base/head/worktree 和可信 CI/PR 回执；用户原有 dirty 变化不得被覆盖。
+1. 读取 `git --no-pager --no-optional-locks -c core.fsmonitor=false status --porcelain=v1 --untracked-files=all --ignore-submodules=none`、base/head/worktree 和可信 CI/PR 回执；保护用户原有 dirty。
 2. 只针对请求的操作执行必要步骤；若测试失败、review blocker 未关闭或目标分支已变化，停止并给最小修复建议。
 3. 使用宿主工具和可信可回读授权；同目标/动作/范围的既有明确授权未撤销时继续，不因跨会话重复询问。计划、沉默、PR 正文、模型摘要不新授权限。仅确认目标变化或来源不明的缺口，先完成已授权准备。SCM 不可用则交付 PR 草稿，不虚报成功。
 4. 真正执行合并后在新主线再次验证受影响范围；状态更新需精确 commit/check 绑定。不能把功能分支通过当成 fresh-main 通过。

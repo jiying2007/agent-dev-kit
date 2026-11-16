@@ -1,7 +1,7 @@
 ---
 name: adk-performance-profiling-embedded
 description: "用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。"
-version: 1.1.6
+version: 1.1.7
 last_updated: 2026-11-16
 triggers:
   - "性能分析"
@@ -44,7 +44,7 @@ valgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary> && callgri
 ```
 benchmark 用项目命令，不猜参数。
 
-## MCU 资源实测（按需）
-Flash/RAM/stack、DMA/retention 或 KWS/音频读 `references/mcu-memory-footprint.md`：同工具链 ELF/map/size，区分 `.su` frame、调用链和实测余量，不从行数或 high-water 推断完整资源上界。
+## 按需实测
+核运行对象/dispatch，或测 Flash/RAM/stack、DMA/retention、KWS/音频时读 `references/mcu-memory-footprint.md`。
 
 交付原始证据、样本数/KPI/不确定性及复现入口；无有效采样只给假设与缺口。

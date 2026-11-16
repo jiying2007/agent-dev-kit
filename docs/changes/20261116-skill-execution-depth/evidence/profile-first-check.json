@@ -1,0 +1,208 @@
+{
+  "changed_files": [
+    {
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "before": 3838,
+      "after": 4029,
+      "delta": 191
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "before": 3094,
+      "after": 3075,
+      "delta": -19
+    },
+    {
+      "path": "skills/adk-register-map-design/SKILL.md",
+      "before": 3920,
+      "after": 3898,
+      "delta": -22
+    },
+    {
+      "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+      "before": 0,
+      "after": 2614,
+      "delta": 2614
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+      "before": 4583,
+      "after": 7666,
+      "delta": 3083
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "before": 3039,
+      "after": 3028,
+      "delta": -11
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "before": 4327,
+      "after": 6649,
+      "delta": 2322
+    }
+  ],
+  "profiles": {
+    "core": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 98475,
+        "potential_full_source_bytes": 173463
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "release-hardening": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "fail",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 83126,
+        "potential_full_source_bytes": 160214
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [
+        "potential_full_source_bytes grew: actual=160214 ratchet=159576"
+      ],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "personal-core": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 113557,
+        "potential_full_source_bytes": 192282
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "embedded-fullstack": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "fail",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 211488,
+        "potential_full_source_bytes": 322211
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [
+        "potential_full_source_bytes grew: actual=322211 ratchet=316854"
+      ],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "team-core": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 124091,
+        "potential_full_source_bytes": 211448
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "large-refactor": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "fail",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 214513,
+        "potential_full_source_bytes": 329093
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [
+        "potential_full_source_bytes grew: actual=329093 ratchet=323328"
+      ],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "incident-response": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "fail",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30781,
+        "potential_full_source_bytes": 49620
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [
+        "potential_full_source_bytes grew: actual=49620 ratchet=46612"
+      ],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    "research-intake": {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 65950,
+        "potential_full_source_bytes": 118089
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  }
+}

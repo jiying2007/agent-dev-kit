@@ -1,18 +1,24 @@
-# MCU Flash／RAM／stack 资源实测（按需）
+# 资源与运行对象实测
 
-## 基线与测量
-冻结芯片布局、链接脚本、toolchain/flags、源/配置/ELF hash、map及上板限制。构建失败记 blocked，不报节省。
-同工具链用 size -A、nm --print-size --size-sort、objdump/map及 -fstack-usage .su 核 .text/.rodata/.data/.bss、alignment、Flash初始化副本、DMA/uncached/retention区；stack/heap reserve与RTOS逐任务high-water分开核算。
+## 运行对象（装载/分派相关诊断）
+核实际binary/共享库/dispatch；源码/产物hash和测试数不证明跑到目标kernel。只读观察已授权Linux PID：
 
-## 栈证据
+```sh
+# profile-object-snapshot
+readlink -- "/proc/${profile_pid:?}/exe" &&
+  rg -F -- "${profile_object:?}" "/proc/$profile_pid/maps"
+```
 
-`.su` 逐函数、单位 bytes，按实际 GCC 版本解析列：`static` 固定 frame，`dynamic,bounded` 是该函数用量上界，只有 `dynamic` 时仅有界部分；均不自动含调用链。
+核完整路径、PID/starttime及前后变化；[maps](https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html)只是映射。退出/exec、(deleted)、匿名/JIT、转义/容器路径有歧义，不以同名文件hash/build-id代表加载内容；无匹配是未观察到，无权限记unavailable，不提权。再用已有符号采样/计数核实际ISA、精度、线程/模型分支；插桩、注入、换库/设备配置仍需授权。MCU核固件/上板记录和trace，host不替代板端。
+温漂难分时加不受候选影响的配置作对照；同向漂移仅支持环境假设，不排除混杂，不强制加开关/框架。
 
-从实际调用图/反汇编核同时存活 frame，不能取 max(frame) 或所有函数之和当任务峰值。递归深度、间接调用、VLA/alloca、库/汇编、优化/LTO、ABI 未定保留 unknown；按 port 区分任务/IRQ 栈，计嵌套、异常入栈、RTOS context/FPU，host 不能推出 MCU 上界。
+## 资源与栈
+冻结芯片/链接布局、toolchain/flags、源/配置/ELF hash、map及上板限制；构建失败blocked。同工具链以size -A、nm --print-size --size-sort、objdump/map、-fstack-usage核段/alignment/Flash初始化副本/DMA/uncached/retention；stack/heap reserve与RTOS high-water分开。
 
-high-water 只反映观测窗口/负载，核 API/port、单位与开销。上游 FreeRTOS `uxTaskGetStackHighWaterMark` 是自启动以来最小剩余 words（按 `StackType_t` 换算），vendor API 另核；Zephyr thread analyzer 也不证明未经历路径。余量非最坏上界，未上板 `not-measured`。
+`.su`单位bytes：`static`为固定frame，`dynamic,bounded`为该函数上界，`dynamic`只给有界部分；不自动包含调用链。按真实调用图/反汇编核同时存活frame，不能用最大frame或全函数之和作任务峰值。递归、间接调用、VLA/alloca、库/汇编、优化/LTO、ABI未定保留unknown；按port区分任务/IRQ栈，计嵌套、异常、RTOS context/FPU。
+high-water仅覆盖观测负载，核API/port、单位/扰动。FreeRTOS `uxTaskGetStackHighWaterMark`是启动以来最小剩余words，按`StackType_t`换算；vendor另核。Zephyr thread analyzer不证明未经历路径；余量非最坏上界，未上板`not-measured`。
 
-以下 `stack.c` 仅用于 host GCC x86-64 的 `.su` 反例：
+`stack.c`仅作host GCC x86-64反例：
 
 ```c
 #include <stddef.h>
@@ -37,18 +43,14 @@ __attribute__((noinline)) int dynamic_frame(size_t n) {
 gcc -std=c11 -O0 -fstack-usage -fno-omit-frame-pointer -mno-red-zone -c stack.c -o stack.o
 ```
 
-读取新 `stack.su`：caller 调 leaf 时数组仍存活；dynamic_frame 的 `dynamic` 数字不含完整 VLA。留实际 qualifier/数字，不写死 frame；缺产物/qualifier 先核支持。`-mno-red-zone` 仅属 x86-64；该例未验证 dynamic,bounded、IRQ 或真实 high-water。
+核新stack.su：caller调leaf时数组仍存活，dynamic_frame不含完整VLA。缺产物先核支持；-mno-red-zone仅x86-64。未测dynamic,bounded、IRQ/真实high-water。
 
-## 安全优化
-授权 scope 内先量化 const/rodata、buffer缩容、成员重排、库/section GC、libc/优化级别变更。不得用共享 static 代替可重入局部数组或随意移动 DMA/cache line、保留区/向量表；核 packed 非对齐风险，保留错误路径与可恢复性。
-输出 build identity、scope、before/after section bytes及重复测量、remaining risk；验证功能、latency/jitter、温升/功耗和回滚。无板端证据记 needs-runtime-evidence。
+## 优化与资产复用
+授权内量化const/rodata、buffer、成员布局、section GC、libc/优化级别；不以共享static破坏可重入性，不擅移DMA/cache line、保留区/向量表；核packed非对齐、错误恢复。交付build identity、scope、段大小/峰值和重复测量；复验功能、latency/jitter、热/功耗及回滚，缺板端记needs-runtime-evidence。
+KWS/音频复用先核可信清单/摘要、来源/许可、采样/声道、特征/量化及target profile；匹配才复用录音/特征/模型/ELF/回执，只重做stale/unverified部分。复用不证明新准确率/资源/时延。
 
-## KWS资产复用
-核可信清单、实际摘要、来源/许可、采样率/声道、特征/量化版本及目标 profile；匹配才复用录音/特征/模型/ELF基线和回执，只补缺失产物。摘要变化、不适配或无回执仅使相关资产 stale/unverified，按需重做对应步骤，不无故全量重建。复用输入不证明新准确率/资源/时延；仍须同口径实测，区分合成/host与真实录音/板端数据。
+## KWS／音频比较
+冻结标签、说话人/场景划分、噪声、采样/分帧/特征、量化校准来源、模型与阈值；同录音及派生片段不能跨训练/验证/测试。验证集选阈值，测试集只作冻结后的最终比较。
+剪辑分类给目标与unknown/silence混淆；流式监听使用各候选在验证集冻结的阈值/后处理，按同误唤醒预算或工作点比较误唤醒次数/负音频时长、漏检/延迟。不同分数尺度不强用同数值阈值，剪辑准确率不替代流式效果。共享输入核host/target前端、量化、后处理输出及容差，再测板端Flash/RAM、时延/功耗。仅合成/host数据须标覆盖，不启动未授权训练/服务。
 
-## KWS／音频推理比较（按需）
-先固定标签、录音划分、噪声条件、采样/分帧/特征配置、量化校准来源、模型与阈值。同一录音及派生片段不得跨训练/验证/测试集；按项目目标隔离说话人或采集场景。验证集选择阈值，冻结测试集作最终比较，不反复用测试集调参。
-
-剪辑分类报告目标类别与 unknown/silence 的混淆；连续监听冻结各候选在验证集确定的阈值/后处理，用一致的误唤醒预算或项目工作点比较误唤醒次数和负音频时长、漏检及触发延迟，不强求不同分数尺度采用同一数值阈值，也不能用剪辑准确率替代流式效果。前端、量化和后处理用共享输入核对 host/target 输出，注明容差；再测板端 Flash/RAM、时延和功耗。仅有合成特征或 host 数据时保留实际覆盖范围，不启动未授权训练/模型服务来补结果。
-
-参考：[size](https://sourceware.org/binutils/docs/binutils/size.html)、[GCC .su](https://gcc.gnu.org/onlinedocs/gcc/Developer-Options.html)、[FreeRTOS API](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/task.h)、[Zephyr analyzer](https://docs.zephyrproject.org/latest/services/debugging/thread-analyzer.html)、[Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)。
+参考：[size](https://sourceware.org/binutils/docs/binutils/size.html)、[GCC .su](https://gcc.gnu.org/onlinedocs/gcc/Developer-Options.html)、[FreeRTOS](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/task.h)、[Zephyr](https://docs.zephyrproject.org/latest/services/debugging/thread-analyzer.html)、[Speech Commands](https://www.tensorflow.org/datasets/catalog/speech_commands)。

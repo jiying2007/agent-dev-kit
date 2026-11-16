@@ -1,0 +1,23 @@
+{
+  "source": "5f442723e95fa7ca846b7c3ddc9f9995c7a27065",
+  "command": [
+    "python",
+    "-m",
+    "unittest",
+    "tests.test_skill_command_examples.CmakeBuildExampleTests",
+    "-v"
+  ],
+  "elapsed_seconds": 1.4033349270011968,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... ok\ntest_compile_only_preserves_not_run_without_invoking_ctest (tests.test_skill_command_examples.CmakeBuildExampleTests.test_compile_only_preserves_not_run_without_invoking_ctest) ... ok\ntest_empty_ctest_selection_fails_after_a_real_successful_build (tests.test_skill_command_examples.CmakeBuildExampleTests.test_empty_ctest_selection_fails_after_a_real_successful_build) ... ok\ntest_manual_directory_configuration_tests_and_elf_do_not_invoke_presets (tests.test_skill_command_examples.CmakeBuildExampleTests.test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets) ... ok\ntest_preset_names_bind_binary_directory_configuration_tests_and_elf (tests.test_skill_command_examples.CmakeBuildExampleTests.test_preset_names_bind_binary_directory_configuration_tests_and_elf) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 1.298s\n\nOK\n",
+  "tool_sha256": {
+    "/workspace/scratch/fe5385ca063a/verification-tools/ninja": "94f5318756260447ffb88d0bc31b67dbc07119f1dc0c8dc2cb58ea575a471025",
+    "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/cmake": "57452fa01ed0f69552c06d3e25edd0d9375347b982dfb709393526cb45396d6b",
+    "/workspace/scratch/771b38332ec2/domain-audit-tools/cmake-wheel/cmake/data/bin/ctest": "4757644d13a4460c2d46f591ff0693d7c66e73f01b92519850ef4b00cd21554e"
+  },
+  "source_sha256": {
+    "tests/test_skill_command_examples.py": "89ff11fbe1a8fe6accc915d0dad8f7de6f6a8f1f28078a0830ad832e92ab2bf0",
+    "skills/adk-cmake-cross-build/SKILL.md": "e884e89f047dfd47248413a0d0a7d32c3f8a4e7724a9fe1b6a368f77e28a710a"
+  }
+}

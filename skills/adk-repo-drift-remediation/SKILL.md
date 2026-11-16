@@ -1,7 +1,7 @@
 ---
 name: adk-repo-drift-remediation
 description: "用于全仓漂移、兼容残留、冗余目录和文档代码不一致的取证与修复计划；不用于跳过基线验证或清除用户未授权的改动。"
-version: 1.1.3
+version: 1.1.4
 last_updated: 2026-11-16
 triggers:
   - "仓库漂移"
@@ -48,7 +48,7 @@ constraints:
 ## Commands
 核实目标检查入口；以下 ADK 命令仅用于已核验源根。其他项目用既有验证，纯消费端无需 ADK Python。
 ```bash
-git status --short
+git --no-pager --no-optional-locks -c core.fsmonitor=false status --porcelain=v1 --untracked-files=all --ignore-submodules=none
 rg -n "TODO|FIXME|deprecated|legacy|stale|archive|manifest|registry" <repo>
 bash scripts/devkit.sh validate --strict
 bash scripts/devkit.sh doctor

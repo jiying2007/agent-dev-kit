@@ -16,24 +16,15 @@
 
 ## Detailed Review Workflow
 
-1. **冻结审查快照**：记录 Review Target、HEAD、index/diff 指纹、目标文件和 unstaged overlay；没有快照身份就不输出“已复审最新修复”。
-2. **重述变更目标**：确认 review 对照的是正确需求、非目标与验收，而不是泛泛挑刺。
-3. **分离机械与语义证据**：构建、测试、格式、`diff --check` 属于机械门禁；需求符合性、并发、生命周期、安全和边界属于语义审查；两者互不替代。
-4. **追踪受影响行为**：从 diff 找公开入口、真实调用者及数据/状态去向，读取必要上下文；先走正常路径，再检查相关输入边界、错误返回、资源清理和取消/恢复。不以 implementer rationale 代替代码事实，不为凑检查项扫描无关模块。
-5. **对照断言并列出发现**：检查测试是否断言需求中的行为，针对遗漏路径给最小输入或可核查控制流，说明 expected/observed 差异。每条 finding 给文件位置、触发条件、具体影响、证据、最小修复与验证；仅有风格偏好或未经证实的猜测不能报成缺陷。
-6. **双 verdict 审查**：同一次阅读输出 spec-compliance verdict 与 quality verdict，避免重复派发多个局部 reviewer。
-7. **固定 Review Context**：记录需求包、领域模型、非目标、验证基线、生命周期操作契约（如适用）和变更范围；缺失时降级为 `question`/`cannot-verify-from-diff`。
-8. **真实性核验**：判断 finding 是否可复现、有证据、在范围内；不能从 diff 判定时显式标记。
-9. **分级裁决**：按 blocker/major/minor/question/cannot-verify-from-diff 分类。
-10. **设计变更分流**：finding 若改变唯一 owner、状态转换、可见性、取消、超时、恢复或迟到完成语义，标记 `design-change`，停止普通补丁闭环并回到契约设计。
-11. **生成修复任务**：每个 blocker/major 对应最小修复动作和验证命令。
-12. **执行或交接修复**：不得顺带重构无关文件。
-13. **重新暂存并复审**：staged 目标修复后先重新 stage，再生成新的快照身份；旧快照结论不得覆盖新 index。
-14. **整体验证**：任务级 review 通过后仍需 whole-diff/whole-branch 视角；共享状态、异步完成或资源生命周期适用时做 whole-lifecycle-review。
-15. **独立性裁决**：优先 fresh independent review；只有自审时标记 `author-self-review`，高风险结论交 owner 或独立 reviewer 最终确认。
-16. **门禁交接**：将机械门禁和语义审查的独立结论交给 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`。
-17. **CI/PR 发布核验**：机器发布 SCM comment 前，按 `manifests/pr_review_governance_contracts.json` 核验 schema-backed findings、untrusted PR 隔离和 inline anchoring。
-18. **Review 改进闭环**：重复失败模式只能作为 trace-feedback-eval-handoff/AAR 候选，不得直接修改 durable guidance。
+1. **冻结对象与 Review Context**：按 `review-evidence-template.md` 记录目标/HEAD/index/diff/overlay、需求包、领域模型、非目标、验收/验证基线、范围及适用生命周期契约；缺失标 `question`/`cannot-verify-from-diff`，无新快照不声称复审最新修复。
+2. **区分证据**：build/test/format/`diff --check` 是机械结果；需求、并发、生命周期、安全与边界需语义审查，两者互不替代。
+3. **追踪行为**：从 diff 追公开入口、真实调用者及数据/状态；查正常、边界、错误、清理和取消/恢复。以代码事实为准，不以 implementer rationale 代替，不扫描无关模块凑项。
+4. **核对断言**：测试须断言需求行为；遗漏给最小输入或控制流及 expected/observed。finding 含位置、条件、影响、证据、最小修复与验证；风格偏好、猜测不算缺陷。按上表核真实性与级别。
+5. **双裁决**：同轮输出 spec-compliance verdict 与 quality verdict，不重复派多个局部 reviewer。
+6. **设计变更**：owner、状态转换、可见性、取消、超时、恢复或迟到语义改变，标 `design-change`，停止局部补丁并回契约设计。
+7. **修复交接**：每个 blocker/major 对应最小动作和验证命令，不带入无关重构。staged 修复由实施者重新 stage 后再生成快照，旧结论不覆盖新 index。
+8. **整体复核**：局部通过后仍核 whole-diff/whole-branch；共享状态、异步或资源生命周期追加 whole-lifecycle-review。优先 fresh independent review，自审标 `author-self-review`；高风险交 owner 或独立 reviewer。
+9. **交付**：机械/语义结论交 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；SCM comment 仍按下节及 `manifests/pr_review_governance_contracts.json` 校验。重复模式仅作 trace-feedback-eval-handoff/AAR 候选，不直接改 durable guidance。
 
 ## Convergence Protocol
 
@@ -71,17 +62,7 @@ AI/CI review 默认只是风险扫描，写入 SCM 属于独立的发布动作�
 
 ## Snapshot and Evidence Details
 
-完整字段模板见 `review-evidence-template.md`。完整反馈/误报/out-of-scope/re-review 样例见 `review-feedback-fixtures.md`。
-
-快照至少绑定：
-- HEAD。
-- index 或 diff identity。
-- Review Target。
-- Working Tree Overlay。
-- `latest_worktree_reviewed`。
-- reviewer independence。
-
-staged 文件出现 `MM` 时，必须显式列出 unstaged overlay。修复未重新 stage、Snapshot ID 未更新时，不得声称最新修复已复审。
+完整字段与取证命令只维护在 `review-evidence-template.md`，反馈/误报/out-of-scope/re-review 样例见 `review-feedback-fixtures.md`。staged 的 `MM` 必须列 unstaged overlay；重新 stage 和更新 Snapshot ID 前，结论不覆盖最新修复。
 
 ## Review Coverage Ledger（大范围/高风险按需加载）
 - 在 `whole-diff-review` 或 `whole-lifecycle-review` 中从 frozen diff/requirement/impact graph 定义可审查单元（文件、接口、受影响调用者、资源生命周期、外部证据）。避免仅按文件数宣称覆盖，也不因未知范围自动猜全。
