@@ -1,0 +1,37 @@
+{
+  "schema": "adk-publication-source-reconciliation/v1",
+  "recorded_at_utc": "2026-11-16 01:27:20 UTC",
+  "repository": "jiying2007/agent-dev-kit",
+  "base_commit": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+  "reviewed_source_commit": "9a918fa33e02313681649a52713d04750ef0bf0b",
+  "reviewed_source_tree": "bef1da3b91570b849d5e7373b9ab545e09b823aa",
+  "local_delivery_commit": "4985ddb5eb78c38e43d622bf8e1771ad4d806c25",
+  "local_delivery_tree": "5a18014ca7af42916a920bcc41570a8486890c72",
+  "connector_mirror_commit": "3c9c40171969477ab8d6374b4e0fa77ac86683b2",
+  "connector_mirror_tree": "5a18014ca7af42916a920bcc41570a8486890c72",
+  "exact_tree_match": true,
+  "transport_reason": "The local Git CLI lacks authenticated push transport. The connected GitHub Git Data API published the exact committed and independently reviewed delivery tree under a new commit identity. Original source execution/review identities remain unchanged and are preserved in the incremental bundle.",
+  "original_history": {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/source-history.bundle",
+    "git_blob": "d4e0e91ab65f1e611b81b9cd302006eb238bafc3",
+    "sha256": "a492e6df78d2f405f3d08981d0d0e7c843220db6ba80d2683cc9257b5c573c48",
+    "bytes": 248980,
+    "format": "incremental git bundle",
+    "prerequisite_commit": "008c789312ed374f38d6d71a113f8fc91f89e63c",
+    "local_bundle_verify": "pass"
+  },
+  "review_record": "docs/changes/20261116-skill-practical-methods/review-evidence.json",
+  "review_record_sha256": "333ff126348cc99fac590978a251f5f155d26e6a2e9cc03d39d359a87b84da56",
+  "independent_packaging_review": {
+    "path": "docs/changes/20261116-skill-practical-methods/evidence/independent-packaging-review.json",
+    "sha256": "9641b086844f4743dcb728231ca2e35a7aa1b0b50aad7fc587530959fa53ffb9",
+    "verdict": "pass",
+    "reviewed_at": "2026-11-16T01:24:10.994843Z"
+  },
+  "platform_status_scope": "The user has explicitly authorized push and merge. This publication creates a candidate for existing PR CI. The five real CMake scenarios require successful platform execution before ordinary merge, followed by fresh-main CI and automatic tag/Release. These later results are not predeclared here.",
+  "added_files_scope": "Only this transport reconciliation and the exact original Git history; reviewed runtime source, tests, policy and budgets unchanged.",
+  "limitations": [
+    "Exact tree equality preserves content evidence without claiming identical commit metadata or predeclaring platform CI/merge/release success.",
+    "The retained source/packaging review records preserve their original pre-platform observation times."
+  ]
+}
