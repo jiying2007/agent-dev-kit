@@ -10,7 +10,7 @@
 
 ## Creation Gate
 
-Blank rows are pending, not evidence; set decisions only from actual review results and link their evidence.
+Initialize with known Scope, the complete Creation Gate and a next review entry. Expand other sections only when the current stage and evidence require them; do not fill the whole template at once. Blank rows are pending; set decisions only from actual review results and link their evidence.
 
 | Gate | Decision | Evidence |
 |---|---|---|
