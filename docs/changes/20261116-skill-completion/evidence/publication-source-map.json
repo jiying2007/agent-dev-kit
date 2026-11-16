@@ -1,0 +1,40 @@
+{
+  "schema": "adk-publication-source-reconciliation/v1",
+  "recorded_at_utc": "2026-11-16 03:13:29 UTC",
+  "repository": "jiying2007/agent-dev-kit",
+  "base_commit": "e13bd4788d5638c1eb34c169870f19dfd5285b6b",
+  "reviewed_source_commit": "e90ffe27be645c343ee73762b709238e2e13713a",
+  "reviewed_source_tree": "3675a3993acc981d0181ece7fba302d50aff15e5",
+  "local_delivery_commit": "6a6722afa2efaabb860a27d35a3d43b70339ac35",
+  "local_delivery_tree": "9a6c86c65121168038bb5fe6c93b0f5c4500c05c",
+  "connector_mirror_commit": "82e3027dd33c2babeb4a336a47f5b1c214922bd4",
+  "connector_mirror_tree": "9a6c86c65121168038bb5fe6c93b0f5c4500c05c",
+  "exact_tree_match": true,
+  "transport_reason": "Authenticated GitHub Git Data API publishes the exact committed delivery tree under a new commit identity. Original frozen execution/review commits are retained without re-identification in the incremental bundle.",
+  "transport_observation": "create_commit returned only sha; an initial local response-shape assertion had no tree value to compare. A separate GET of the actual Git commit verified its complete tree and parent. No product or tree mismatch occurred.",
+  "original_history": {
+    "path": "docs/changes/20261116-skill-completion/evidence/source-history.bundle",
+    "git_blob": "6b5041fdfddf7d4e0e035cf4a9038dfcff716d78",
+    "sha256": "c8d3edd5aca68225adeb3f5a534a74d834c9b59a964539c440beb6d280817e25",
+    "bytes": 487047,
+    "format": "incremental git bundle",
+    "prerequisite_commit": "e13bd4788d5638c1eb34c169870f19dfd5285b6b",
+    "local_bundle_verify": "pass"
+  },
+  "review_record": "docs/changes/20261116-skill-completion/review-evidence.json",
+  "review_record_sha256": "1e397f16069b94ad16a668298995e6f3aa9eed5dcf0af1320bb6a6365fc5c589",
+  "independent_packaging_review": {
+    "container": "docs/changes/20261116-skill-completion/evidence/packaging-review/raw-evidence.json",
+    "container_sha256": "d1d6b79f8ddb17a78e44948b5cb39fcaee8576f519f35994a782d929686189a4",
+    "record_path": "packaging-review.json",
+    "sha256": "b4f1f73281f180d68d8161dc55418a99a0c124f042289ece63efd7ebfc384591",
+    "verdict": "pass",
+    "reviewed_at": "2026-11-16T03:11:10.946591+00:00"
+  },
+  "platform_status_scope": "User authorization covers push and ordinary merge. This candidate must pass existing exact PR CI, including the five locally skipped real Ninja cases, then fresh-main CI and automatic tag/Release. None of these later platform results is predeclared.",
+  "added_files_scope": "Only this transport reconciliation and exact original Git history are added to the mirrored delivery tree. Frozen runtime source, tests, policy and budgets remain byte-identical.",
+  "limitations": [
+    "Exact tree equality does not imply identical commit metadata.",
+    "Original source and packaging review times remain pre-platform observations."
+  ]
+}
