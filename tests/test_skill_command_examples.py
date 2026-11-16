@@ -18,6 +18,8 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = "skills/adk-release-versioning/references/details.md"
 FLAKY = "optional-skills/adk-test-flakiness-triage/references/details.md"
+SECURITY = "optional-skills/adk-security-supply-chain/SKILL.md"
+SUPPLY_RUNBOOK = "docs/runbooks/security-supply-chain.md"
 BSP = "skills/adk-bsp-porting-playbook/SKILL.md"
 INTERFACE = "skills/adk-interface-contract-design/references/details.md"
 ADC = ROOT / "examples/embedded-test-matrix"
@@ -217,6 +219,72 @@ class ReleaseHistoryExampleTests(unittest.TestCase):
                 self.assertEqual("", failed.stdout)
 
 
+class SecurityScanExampleTests(unittest.TestCase):
+    def setUp(self):
+        self.assertIsNotNone(shutil.which("rg"), "execute published scans with real ripgrep")
+        temporary = tempfile.TemporaryDirectory(prefix="adk scan evidence ")
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        self.sentinel = "SYNTHETIC_ONLY_NOT_A_CREDENTIAL_8713"
+        self.content = f'api_key="{self.sentinel}" license curl https writeFile BASE_URL\n'
+        self.commands = []
+        for source, count in ((SECURITY, 5), (SUPPLY_RUNBOOK, 2)):
+            commands = [line for line in bash_example(source, "<candidate_path>").splitlines()
+                        if line.startswith("rg ") and "<candidate_path>" in line]
+            self.assertEqual(count, len(commands), source)
+            self.commands.extend((source, index, command)
+                                 for index, command in enumerate(commands, 1))
+
+    def scan(self, command, candidate):
+        code = "set -euo pipefail\n" + command.replace("<candidate_path>", '"$1"')
+        return run_example(code, self.root, str(candidate), label="security-candidate-scan")
+
+    def test_all_scans_keep_candidate_paths_without_printing_matching_contents(self):
+        candidate = self.root / "candidate assets [fixture]"
+        candidate.mkdir()
+        paths = set()
+        for index in range(24):
+            path = candidate / f"asset-{index}.txt"
+            path.write_text(self.content)
+            paths.add(str(path))
+        for source, index, command in self.commands:
+            with self.subTest(source=source, command=index):
+                result = self.scan(command, candidate)
+                self.assertEqual(0, result.returncode, result.stderr)
+                self.assertFalse(self.sentinel in result.stdout + result.stderr,
+                                 "published scan printed synthetic file contents")
+                self.assertEqual(paths, set(result.stdout.splitlines()))
+
+    def test_no_match_and_io_errors_keep_distinct_status_and_diagnostics(self):
+        ordinary = self.root / "ordinary.txt"
+        ordinary.write_text("ordinary neutral prose\n")
+        absent = self.root / "missing candidate.txt"
+        for source, index, command in self.commands:
+            with self.subTest(source=source, command=index):
+                empty = self.scan(command, ordinary)
+                self.assertEqual(1, empty.returncode, empty.stderr)
+                self.assertEqual("", empty.stdout + empty.stderr)
+                error = self.scan(command, absent)
+                self.assertEqual(2, error.returncode, error.stderr)
+                self.assertEqual("", error.stdout)
+                self.assertIn(str(absent), error.stderr)
+
+    def test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion(self):
+        candidate = self.root / "candidate"
+        candidate.mkdir()
+        (candidate / ".git").mkdir()
+        (candidate / ".gitignore").write_text("ignored.txt\n")
+        for path in (candidate / ".env", candidate / "ignored.txt", candidate / ".git/config"):
+            path.write_text(self.content)
+        source, index, command = next(item for item in self.commands
+                                      if item[0] == SECURITY and "api[_-]?key" in item[2])
+        result = self.scan(command, candidate)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual({str(candidate / ".env"), str(candidate / "ignored.txt")},
+                         set(result.stdout.splitlines()))
+        self.assertNotIn(self.sentinel, result.stdout + result.stderr)
+
+
 class FlakySampleExampleTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
@@ -248,7 +316,7 @@ class FlakySampleExampleTests(unittest.TestCase):
 
     def test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports(self):
         literal_name = "test_items[case 1]; $(touch MUST_NOT_RUN)"
-        for codes in ([0, 0, 0], [9, 9, 9], [0, 1, 2, 0]):
+        for codes in ([0, 0, 0], [9, 9, 9], [0, 1, 2, 0], [0, 1, 9, 124]):
             with self.subTest(codes=codes):
                 result, output = self.sample(codes, literal_name, directory="runs-" + "-".join(map(str, codes)))
                 self.assertEqual(int(any(codes)), result.returncode, result.stderr)
@@ -263,6 +331,52 @@ class FlakySampleExampleTests(unittest.TestCase):
                     self.assertIn("stderr retained", log)
                     self.assertIn(literal_name, log)
                 self.assertFalse((self.root / "MUST_NOT_RUN").exists())
+
+    def test_reported_interrupt_status_stops_after_preserving_the_current_sample(self):
+        for status in (130, 143):
+            with self.subTest(status=status):
+                result, output = self.sample([status, 0, 0], directory=f"reported-{status}")
+                self.assertEqual(status, result.returncode, result.stderr)
+                self.assertEqual(f"attempt\texit_code\n1\t{status}\n",
+                                 (output / "results.tsv").read_text())
+                self.assertFalse((output / "run-2").exists())
+                self.assertEqual(["run-1"], sorted(path.name for path in output.glob("run-*")))
+                log = (output / "run-1/output.log").read_text()
+                self.assertIn("stderr retained", log)
+                self.assertIn("error test_items[case 1]", log)
+                self.assertTrue((output / "run-1/result.json").is_file())
+                self.assertNotIn("attempts=3", result.stdout)
+
+    def test_interrupt_after_an_observation_preserves_both_samples_and_stops(self):
+        for previous, status in ((0, 130), (9, 143)):
+            with self.subTest(previous=previous, status=status):
+                result, output = self.sample([previous, status, 0], directory=f"later-{status}")
+                self.assertEqual(status, result.returncode, result.stderr)
+                self.assertEqual(f"attempt\texit_code\n1\t{previous}\n2\t{status}\n",
+                                 (output / "results.tsv").read_text())
+                self.assertFalse((output / "run-3").exists())
+                for attempt in (1, 2):
+                    self.assertIn("stderr retained", (output / f"run-{attempt}/output.log").read_text())
+
+    def test_child_self_signals_stop_sampling_without_claiming_parent_signal_handling(self):
+        for signum, status in ((signal.SIGINT, 130), (signal.SIGTERM, 143)):
+            with self.subTest(signal=signum.name):
+                command = ("import os, signal, sys\n"
+                           "print('before child signal', flush=True)\n"
+                           "print('child stderr retained', file=sys.stderr, flush=True)\n"
+                           f"signal.signal({int(signum)}, signal.SIG_DFL)\n"
+                           f"os.kill(os.getpid(), {int(signum)})\n"
+                           "raise AssertionError('child continued after its signal')\n")
+                result, output = self.sample([status, 0, 0], directory=signum.name, code=command)
+                self.assertEqual(status, result.returncode, result.stderr)
+                self.assertEqual(f"attempt\texit_code\n1\t{status}\n",
+                                 (output / "results.tsv").read_text())
+                self.assertFalse((output / "run-2").exists())
+                self.assertEqual(["run-1"], sorted(path.name for path in output.glob("run-*")))
+                log = (output / "run-1/output.log").read_text()
+                self.assertIn("before child signal", log)
+                self.assertIn("child stderr retained", log)
+                self.assertNotIn("child continued", log)
 
     def test_existing_evidence_is_not_reused_or_overwritten(self):
         result, output = self.sample([0])

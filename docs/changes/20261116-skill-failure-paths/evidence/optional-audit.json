@@ -1,0 +1,1430 @@
+{
+  "schema": "adk-round3-optional-skill-audit/v1",
+  "role": "independent read-only reviewer; no implementation or ref operations",
+  "baseline": {
+    "version": "11.3.9",
+    "sha": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+    "worktree_clean_at_initial_read": true
+  },
+  "completed_at": "2026-11-16T07:47:00.244716+00:00",
+  "coverage": {
+    "skills_expected": 9,
+    "skills_fully_read": 9,
+    "tracked_files_expected": 15,
+    "tracked_files_fully_read": 15,
+    "bytes_fully_read": 66983,
+    "lines_fully_read": 1046,
+    "file_kinds": {
+      "SKILL.md": 9,
+      "references": 5,
+      "agents_yaml": 1,
+      "standalone_scripts": 0,
+      "assets": 0
+    },
+    "prior_portfolio_used": false,
+    "unread_optional_files": [],
+    "note": "All 15 optional tracked files read afresh; an initially truncated grouped response was followed by full smaller reads of affected skills. There are no tracked scripts/assets beyond the listed references and YAML; embedded code examples were included."
+  },
+  "files": [
+    {
+      "path": "optional-skills/adk-data-fetch/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "01e86153b30390e4a7e3c6a2f415d6a0810acc1e",
+      "sha256": "93f99ba41694cd8bc4931d67a7fcbaf4f62540c17811b2db41a14062430ab011",
+      "bytes": 4088,
+      "lines": 92,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          92
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "db1594b7ace1cf64c6bec55658369fd7f27929e5",
+      "sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
+      "bytes": 3047,
+      "lines": 57,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          57
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "54ecaeec74ef1356e29e48df1c7534f187d39fe5",
+      "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
+      "bytes": 2892,
+      "lines": 56,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          56
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "6a84b0ee88efaa1ba4542c15f037e997f91a9d25",
+      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b",
+      "bytes": 8664,
+      "lines": 129,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          129
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-external-practice-absorption/agents/openai.yaml",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "d5bfa4d04e441df464f7d93a819ca8254af1d6b4",
+      "sha256": "a3778c89b5a1937facc40e463d91966a70a0c8e7f31c2afbc50d4f302d8cb4fe",
+      "bytes": 337,
+      "lines": 6,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          6
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "a123dabd42d37fb08b803abf2a732bc7cd855512",
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405",
+      "bytes": 2416,
+      "lines": 48,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          48
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-prose-revision/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "382ed9cdf9aa6029d482d0e4a4a6b1fe3e43a51b",
+      "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
+      "bytes": 4503,
+      "lines": 71,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          71
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-prose-revision/references/review-cases.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "5feb15f8f3d14a0bb97a4f5156ac2d099e4766c6",
+      "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
+      "bytes": 1851,
+      "lines": 16,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          16
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "e123bcdb9c01b3fe3059f17fd5df710476561ba5",
+      "sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f",
+      "bytes": 8270,
+      "lines": 140,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          140
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "b3d5842fd23228b869bc568121dbd5c2db412850",
+      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
+      "bytes": 1879,
+      "lines": 11,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          11
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "52da1f2961c8235de2ded7578337caa3ea64d180",
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f",
+      "bytes": 6646,
+      "lines": 125,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          125
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "d402bbbd3dee0cd795f7d9fb41756058578addc8",
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
+      "bytes": 7050,
+      "lines": 106,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          106
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "204daead15aa9a7a67f6cf9ac6840bf15a42d235",
+      "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
+      "bytes": 8108,
+      "lines": 47,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          47
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "8bd63f87cf6837fc00967656e17e66e49e3eb1b2",
+      "sha256": "2a36680bf3a8d60159bcd8672a8cda6995b0740d425970615ecbe23163236acf",
+      "bytes": 2427,
+      "lines": 62,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          62
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    },
+    {
+      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "git_blob": "af110d715613b5f6ec5ec4798131d7cd75571cb6",
+      "sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0",
+      "bytes": 4805,
+      "lines": 80,
+      "read_scope": "full",
+      "read_ranges_inclusive": [
+        [
+          1,
+          80
+        ]
+      ],
+      "body_read_in_this_audit": true,
+      "prior_audit_conclusion_reused": false
+    }
+  ],
+  "supplemental_reads": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+      "git_blob": "1daed34102e7f167796abf36e9c44dc89d723735",
+      "bytes": 2914,
+      "read_scope": "full"
+    },
+    {
+      "path": "docs/agent-operating-rules.md",
+      "sha256": "dc517366846889f088f350fdf1466719c4d655e9651bd5f2e12323e7ae8a541b",
+      "git_blob": "b8ff7de94b6d18073514e830a390ea65f29011bb",
+      "bytes": 13278,
+      "read_scope": "full"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b1dfee0b243bded458d0ba3376c7dbcc3f7a349c76ebe9fdd090919fb1b76997",
+      "git_blob": "bffe23b1a7bf49bccb71025027f59dd5e0b73921",
+      "bytes": 13086,
+      "read_scope": "full"
+    },
+    {
+      "path": "rules/README.md",
+      "sha256": "5103b8fb8c7cda205557f3ebd94b4b731065ec9b3d44588cf92ce89e23ee3fc8",
+      "git_blob": "fc88e8082791854512ab7905820b4c84a79d22ad",
+      "bytes": 4609,
+      "read_scope": "full"
+    },
+    {
+      "path": "rules/00-global.md",
+      "sha256": "3eb37092121b3daee68ebf5c628cb5660f234e3923d5492b61277cea99d1ed8c",
+      "git_blob": "e725d67414fdac37a3177691335e21a30b8493f4",
+      "bytes": 4030,
+      "read_scope": "full"
+    },
+    {
+      "path": "docs/runbooks/security-supply-chain.md",
+      "sha256": "c6c541bab0b1ed71c2084903bfa365bea4d6a9fc3af7f6082c42a4a6182fa1fb",
+      "git_blob": "b8b0cd2ab3747671595d1d531da1cbff73151bb5",
+      "bytes": 6179,
+      "read_scope": "full"
+    },
+    {
+      "path": "docs/runbooks/optional-pilot-boundary.md",
+      "sha256": "5901ae425fad2f4ca9ea397fbbe1cebbb7e276c3e7b56036d64a86b95a0f9896",
+      "git_blob": "c4229becd46aae7e83afe2c2dd9f2a75fa3626dd",
+      "bytes": 1050,
+      "read_scope": "full"
+    },
+    {
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "89ff11fbe1a8fe6accc915d0dad8f7de6f6a8f1f28078a0830ad832e92ab2bf0",
+      "git_blob": "d93d4aa18aff627fa3224179b88fc5ddceaa92f1",
+      "bytes": 47008,
+      "read_scope": "excerpt: runner and FlakySampleExampleTests; large full-file output was truncated; no full-file claim"
+    }
+  ],
+  "skills": [
+    {
+      "skill": "adk-data-fetch",
+      "directory": "optional-skills/adk-data-fetch",
+      "decision": "KEEP",
+      "rationale": "父入口显式检查子 Skill 已安装、按已授权 origin/账号分派，并完整传播 pass/partial/not-verified/needs-fix；没有暗中扩大邮箱安装或权限。其范围路由和子结果保真已覆盖本轮发现的协议风险，无证据支持再增加入口或 Gate。",
+      "tracked_files_read": [
+        "optional-skills/adk-data-fetch/SKILL.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "adk-email-imap-fetch",
+        "adk-fetch-url-content"
+      ],
+      "boundary": "未真实调用 URL/邮箱；运行时安装发现与拒绝路径仍须宿主证据。",
+      "finding_ids": []
+    },
+    {
+      "skill": "adk-email-imap-fetch",
+      "directory": "optional-skills/adk-data-fetch/adk-email-imap-fetch",
+      "decision": "KEEP",
+      "rationale": "完整读后与 RFC9051 核对：mailbox+UIDVALIDITY+UID 身份、重连检查、EXAMINE、BODY.PEEK、逐封错误和预算均正确约束。禁止 STORE/COPY/MOVE/EXPUNGE，无法证明只读时不冒充 pass；没有新可复现缺陷。",
+      "tracked_files_read": [
+        "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "rfc9051-imap"
+      ],
+      "boundary": "无真实邮箱、凭据或 IMAP 网络请求；MIME/大报文/服务器规则效果未测。",
+      "finding_ids": []
+    },
+    {
+      "skill": "adk-fetch-url-content",
+      "directory": "optional-skills/adk-data-fetch/adk-fetch-url-content",
+      "decision": "KEEP",
+      "rationale": "每次重定向核 origin/IP、拒绝凭据转发与内网、有限正文、最终URL/base链接解析及截断 partial 已有明确边界。RFC9309 的 robots 并非权限、404与5xx不同语义，以及 RFC9110 的206/304可作为宿主未来验收样例；当前纯说明并未承诺错误行为，不把细节遗漏臆定成 bug。",
+      "tracked_files_read": [
+        "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "rfc9309-robots",
+        "rfc9110-http"
+      ],
+      "boundary": "没有实现或运行 HTTP fetcher；DNS rebinding、连接时IP绑定、压缩响应预算和真实页面提取未认证。",
+      "finding_ids": []
+    },
+    {
+      "skill": "adk-external-practice-absorption",
+      "directory": "optional-skills/adk-external-practice-absorption",
+      "decision": "KEEP",
+      "rationale": "source-only/scoped-adoption/portfolio/behavior 四路径已避免每次重开全量 intake；来源 SHA、许可、独立 owner、curator只读、效果未测和退役边界完整。agents/openai.yaml仅界面元数据，未增加权限。ToB collector 的账号检查、网络调用和平台流程不迁入通用ADK。",
+      "tracked_files_read": [
+        "optional-skills/adk-external-practice-absorption/SKILL.md",
+        "optional-skills/adk-external-practice-absorption/agents/openai.yaml"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "trailofbits-supply-chain",
+        "gemini-skills-best-practices"
+      ],
+      "boundary": "本审查不构成 owner adoption 或安装授权；仅将可核实方法与现有资产对照。",
+      "finding_ids": []
+    },
+    {
+      "skill": "adk-incident-rca-report",
+      "directory": "optional-skills/adk-incident-rca-report",
+      "decision": "KEEP",
+      "rationale": "事故稳定后分析、event/observed time及时钟不确定性、可选5-Why、事实/假设/unresolved及有owner验证行动均明确。与Google SRE按具体服务选分析方式、定位促成因素而非归罪的方向一致；不用模板凑组织原因。",
+      "tracked_files_read": [
+        "optional-skills/adk-incident-rca-report/SKILL.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "google-sre-postmortem"
+      ],
+      "boundary": "没有真实事故或现场证据，不能声称 RCA 质量/复发率已实测；Google原文仅reference，未复制。",
+      "finding_ids": []
+    },
+    {
+      "skill": "adk-prose-revision",
+      "directory": "optional-skills/adk-prose-revision",
+      "decision": "KEEP",
+      "rationale": "report/revise请求区分、事实与限定词不变、原引文/代码默认只读、正常对比与有意修辞保留，加上8个边界案例已覆盖泛化“去AI腔”的常见损害。ToB安全报告的无人称/禁止感叹等专用文体规则不适合迁入通用润色；保留作者原有语气。",
+      "tracked_files_read": [
+        "optional-skills/adk-prose-revision/SKILL.md",
+        "optional-skills/adk-prose-revision/references/review-cases.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "trailofbits-supply-chain"
+      ],
+      "boundary": "8个案例是source-only design fixtures，未跑真实模型编辑、盲评或Token对照。",
+      "finding_ids": []
+    },
+    {
+      "skill": "adk-security-supply-chain",
+      "directory": "optional-skills/adk-security-supply-chain",
+      "decision": "ENHANCE",
+      "rationale": "三层审查模式、逐项可达性/误报/覆盖和宿主权限职责保留；仅修复OPT-SEC-01这条实际命令输出路径，并同步既有runbook，避免静态secret检查本身造成再次泄露。",
+      "tracked_files_read": [
+        "optional-skills/adk-security-supply-chain/SKILL.md",
+        "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "gitleaks-readme",
+        "trailofbits-supply-chain",
+        "gemini-skills-best-practices"
+      ],
+      "boundary": "本轮只验证合成命令输出，不运行SBOM/CVE/签名器，不证明任何真实第三方包安全。",
+      "finding_ids": [
+        "OPT-SEC-01"
+      ]
+    },
+    {
+      "skill": "adk-skill-composition-governance",
+      "directory": "optional-skills/adk-skill-composition-governance",
+      "decision": "KEEP",
+      "rationale": "collision-only与composition-change分层，原生唯一primary、fallback安装边界、渐进加载、train/holdout隔离、任务timeout与基础设施失败区分及生命周期候选标签均完整；参考文档明确不新建registry或用关键词测试冒充效果。Google官方按脆弱度选自由度的建议已被现有分层覆盖。",
+      "tracked_files_read": [
+        "optional-skills/adk-skill-composition-governance/SKILL.md",
+        "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+        "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "gemini-skills-best-practices"
+      ],
+      "boundary": "未执行付费/真实宿主A/B；行为、效率、原生加载仍not-measured。",
+      "finding_ids": []
+    },
+    {
+      "skill": "adk-test-flakiness-triage",
+      "directory": "optional-skills/adk-test-flakiness-triage",
+      "decision": "ENHANCE",
+      "rationale": "按原生逐例报告统计、独立同分布边界、顺序污染、事件就绪及quarantine非PASS已有良好约束；仅补OPT-FLAKY-01的子命令中断停止语义，不能因20轮预算有限就自动忽略当前中断。",
+      "tracked_files_read": [
+        "optional-skills/adk-test-flakiness-triage/SKILL.md",
+        "optional-skills/adk-test-flakiness-triage/references/details.md"
+      ],
+      "source_ids_or_adjacent_skills": [
+        "bash-exit-status",
+        "bash-signals",
+        "aspire-flaky"
+      ],
+      "boundary": "只执行host合成子进程；不是真实flaky任务修复、统计稳定性或process-group取消认证。",
+      "finding_ids": [
+        "OPT-FLAKY-01"
+      ]
+    }
+  ],
+  "decision_counts": {
+    "KEEP": 7,
+    "ENHANCE": 2,
+    "OBSERVE": 0
+  },
+  "findings": [
+    {
+      "id": "OPT-SEC-01",
+      "severity": "high",
+      "confidence": "confirmed-command-behavior",
+      "skill": "adk-security-supply-chain",
+      "decision": "ENHANCE",
+      "title": "审查示例的普通内容搜索把同一行中的秘密回显到工具输出",
+      "locations": [
+        {
+          "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "lines": [
+            77,
+            80
+          ]
+        },
+        {
+          "path": "docs/runbooks/security-supply-chain.md",
+          "lines": [
+            42,
+            44
+          ]
+        }
+      ],
+      "source_to_sink": "candidate text containing a credential and a network/license/write/runtime keyword -> published rg -n command -> stdout/tool transcript; first dedicated secret scan using -l does not redact later commands",
+      "minimal_counterexample": "A scratch-only candidate line contains curl -H Authorization:Bearer plus a synthetic sentinel; invoke the actual published network scan with that candidate path. The sentinel appears in stdout. Similar fixtures reproduce all four Skill scans and both runbook scans.",
+      "observed": "Directly extracted seven published rg commands were run. Six -n commands printed the sentinel; the existing dedicated -l secret scan did not. Changing only the six -n occurrences to path-only output in an isolated experiment preserved every candidate path without sentinel in stdout/stderr. In all seven path-only experiments no-match returned 1; missing input returned 2 with a diagnostic.",
+      "source_ids": [
+        "gitleaks-readme",
+        "gitleaks-license"
+      ],
+      "official_crosscheck": "Gitleaks first-party documentation explicitly separates secret redaction for logs/stdout from reporting. No Gitleaks executable or dependency is needed for this repair. The local real rg execution is the direct behavioral evidence.",
+      "minimal_fix": "Keep the existing review responsibility and commands, but make initial scans list candidate paths rather than matching source lines in both Skill and runbook. Require any subsequent inspected excerpt to be reviewed/redacted before tool output. Preserve rg no-match versus error semantics and pipefail; do not add || true or install a scanner.",
+      "acceptance": [
+        "Extract and execute the published Skill/runbook commands against synthetic fixtures. Risky candidate paths must be returned; synthetic credentials must be absent from both stdout and stderr.",
+        "Assert no-match exit 1 remains distinct from an unreadable/missing input error exit 2; error diagnostics must remain visible.",
+        "Retain the existing hidden/ignored coverage statement and do not relabel path discovery as exhaustive secret scanning."
+      ],
+      "existing_test_home": "tests/test_skill_command_examples.py or an explicitly registered focused module in tests/test_skill_content.sh; parent owns registration",
+      "evidence_path": "/workspace/scratch/fe5385ca063a/round3-optional-probes.json",
+      "real_secret_exposure": "not observed; only synthetic sentinel fixtures used",
+      "implementation_status": "not implemented by this reviewer"
+    },
+    {
+      "id": "OPT-FLAKY-01",
+      "severity": "medium",
+      "confidence": "confirmed-child-status-behavior",
+      "skill": "adk-test-flakiness-triage",
+      "decision": "ENHANCE",
+      "title": "有界采样示例吞并子命令中断类退出状态并继续后续采样",
+      "locations": [
+        {
+          "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+          "lines": [
+            13,
+            38
+          ]
+        }
+      ],
+      "source_to_sink": "child result 130/143 -> result=$? -> failed=1 -> next loop iteration -> collector returns generic 1",
+      "minimal_counterexample": "Extract the published run_flaky_samples function unchanged and request three samples of a local child that returns 130 (or 143). All three child invocations occur, run-2 exists, results.tsv has three rows, and the collector returns 1.",
+      "observed": "Exit 0,1,9,124 controls preserve three rows and existing aggregate behavior. Explicit child exit 130/143 and child self-SIGINT/self-SIGTERM cases also run three times and aggregate to exit 1. Raw per-run logs, TSV, collector stdout/stderr are retained in scratch.",
+      "source_ids": [
+        "bash-exit-status",
+        "bash-signals",
+        "aspire-flaky"
+      ],
+      "official_crosscheck": "GNU Bash documents 128+N for fatal-signal termination; its separate Signals chapter distinguishes signals sent to the shell/process group from a child result. Aspire provides an independent example of preserving reproduction context and avoiding false success, but its project-specific CI actions are not imported.",
+      "minimal_fix": "After closing the current log descriptor and persisting its row, treat the documented child interruption statuses 130/143 as a stop condition and preserve their exit identity; report actual attempts and keep partial evidence. Do not begin another sample or label the interrupted collection stable. Preserve ordinary failure sampling and existing bounds.",
+      "acceptance": [
+        "Child returns 130 or 143 in attempt 1: exactly one log/row, no run-2, collector retains interruption status.",
+        "A successful first sample followed by cancellation: preserve both rows and no third invocation; partial evidence remains readable.",
+        "Ordinary success/mixed failure/9 and agreed timeout-status controls still obey pre-registered sample count and original nonzero reporting.",
+        "Retain no-overwrite, collection failure, command-array argument safety, and zero-report/selection evidence boundaries already tested by FlakySampleExampleTests."
+      ],
+      "existing_test_home": "tests/test_skill_command_examples.py::FlakySampleExampleTests",
+      "evidence_path": "/workspace/scratch/fe5385ca063a/round3-optional-probes.json",
+      "boundary": "This demonstrates handling of child-reported interruption statuses, including self-signalled children. No real user keyboard Ctrl-C/process-group cancellation or arbitrary descendant cleanup qualification is claimed. Exit numbers can also be application-chosen; document the convention.",
+      "implementation_status": "not implemented by this reviewer"
+    }
+  ],
+  "upstream_sources": [
+    {
+      "id": "gitleaks-readme",
+      "repository": "gitleaks/gitleaks",
+      "commit": "5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c",
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/gitleaks/gitleaks/5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c/README.md",
+      "final_url": "https://raw.githubusercontent.com/gitleaks/gitleaks/5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c/README.md",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gitleaks-readme.txt",
+      "bytes": 29328,
+      "lines": 630,
+      "sha256": "65e87e68f4a16aefa1f1fba55b2e7a9b9bc8716393b7ddb013fc7c7bef4e4bc1",
+      "retrieved_at": "2026-11-16T07:40:59.158769+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          117,
+          165
+        ],
+        [
+          569,
+          608
+        ],
+        [
+          620,
+          628
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn33search3"
+      ],
+      "license": "MIT",
+      "license_evidence_id": "gitleaks-license",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "gitleaks-license",
+      "repository": "gitleaks/gitleaks",
+      "commit": "5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c",
+      "file": "LICENSE",
+      "url": "https://raw.githubusercontent.com/gitleaks/gitleaks/5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c/LICENSE",
+      "final_url": "https://raw.githubusercontent.com/gitleaks/gitleaks/5f6ec56cfa6f8c67648d863582c7ae2f206d5c1c/LICENSE",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gitleaks-license.txt",
+      "bytes": 1069,
+      "lines": 21,
+      "sha256": "e3884b252b3bfc045e55be43a34d1e80da070bc6f804ac95bf4660e97d62ebc6",
+      "retrieved_at": "2026-11-16T07:40:59.095608+00:00",
+      "read_scope": "full",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          21
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [],
+      "license": "MIT",
+      "license_evidence_id": "gitleaks-license",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "trailofbits-supply-chain",
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "file": "plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "final_url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/trailofbits-supply-chain.txt",
+      "bytes": 6991,
+      "lines": 122,
+      "sha256": "a1254b7f8d3a1731a9a7e1f9cd6c67b59cf84ed6ef7c7fb455db9a14c528ceb4",
+      "retrieved_at": "2026-11-16T07:40:59.066926+00:00",
+      "read_scope": "full",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          122
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn33search0"
+      ],
+      "license": "CC-BY-SA-4.0",
+      "license_evidence_id": "trailofbits-license",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "trailofbits-supply-chain-readme",
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "file": "plugins/supply-chain-risk-auditor/README.md",
+      "url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/supply-chain-risk-auditor/README.md",
+      "final_url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/plugins/supply-chain-risk-auditor/README.md",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/trailofbits-supply-chain-readme.txt",
+      "bytes": 3404,
+      "lines": 67,
+      "sha256": "a1de260cf368cd1ab1e595ec5268876b9cc413187de9bbc808ae19c170f28fb8",
+      "retrieved_at": "2026-11-16T07:40:59.078603+00:00",
+      "read_scope": "full",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          67
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn33search1"
+      ],
+      "license": "CC-BY-SA-4.0",
+      "license_evidence_id": "trailofbits-license",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "trailofbits-license",
+      "repository": "trailofbits/skills",
+      "commit": "149d7b21f4067765b82e67029730b42d228ef4b4",
+      "file": "LICENSE",
+      "url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/LICENSE",
+      "final_url": "https://raw.githubusercontent.com/trailofbits/skills/149d7b21f4067765b82e67029730b42d228ef4b4/LICENSE",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/trailofbits-license.txt",
+      "bytes": 20131,
+      "lines": 427,
+      "sha256": "7abe19ec9bb73b36141b999b861d24ad855e808bafe0f81e84cce28556f6c297",
+      "retrieved_at": "2026-11-16T07:40:59.166409+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          10
+        ],
+        [
+          225,
+          299
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [],
+      "license": "CC-BY-SA-4.0",
+      "license_evidence_id": "trailofbits-license",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "aspire-flaky",
+      "repository": "microsoft/aspire",
+      "commit": "334b86dd6bde8d14dc971bdfda8df3f9812af935",
+      "file": ".agents/skills/fix-flaky-test/SKILL.md",
+      "url": "https://raw.githubusercontent.com/microsoft/aspire/334b86dd6bde8d14dc971bdfda8df3f9812af935/.agents/skills/fix-flaky-test/SKILL.md",
+      "final_url": "https://raw.githubusercontent.com/microsoft/aspire/334b86dd6bde8d14dc971bdfda8df3f9812af935/.agents/skills/fix-flaky-test/SKILL.md",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/aspire-flaky.txt",
+      "bytes": 50849,
+      "lines": 1046,
+      "sha256": "ce85a2ac940bc090a047e84f2eb73fb9365e0f2d7f322f5b94580e0ff61f18ca",
+      "retrieved_at": "2026-11-16T07:41:02.202804+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          236,
+          247
+        ],
+        [
+          675,
+          754
+        ],
+        [
+          1013,
+          1046
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn33search5"
+      ],
+      "license": "MIT",
+      "license_evidence_id": "aspire-license-resolved",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "aspire-license",
+      "repository": "microsoft/aspire",
+      "commit": "334b86dd6bde8d14dc971bdfda8df3f9812af935",
+      "file": "LICENSE",
+      "url": "https://raw.githubusercontent.com/microsoft/aspire/334b86dd6bde8d14dc971bdfda8df3f9812af935/LICENSE",
+      "status": "unavailable",
+      "reason": "HTTP Error 404: Not Found",
+      "read_scope": "unavailable",
+      "resolved_by": "aspire-license-resolved"
+    },
+    {
+      "id": "gemini-skills-best-practices",
+      "repository": "google-gemini/gemini-cli",
+      "commit": "4ed06ed0ddc523a6d356a4ad35ddfea331041888",
+      "file": "docs/cli/skills-best-practices.md",
+      "url": "https://raw.githubusercontent.com/google-gemini/gemini-cli/4ed06ed0ddc523a6d356a4ad35ddfea331041888/docs/cli/skills-best-practices.md",
+      "final_url": "https://raw.githubusercontent.com/google-gemini/gemini-cli/4ed06ed0ddc523a6d356a4ad35ddfea331041888/docs/cli/skills-best-practices.md",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gemini-skills-best-practices.txt",
+      "bytes": 3258,
+      "lines": 78,
+      "sha256": "a064fd7fb55eab56d44e74b7367ad122f93a2f48fdfa5442e658ff3ba07d34f0",
+      "retrieved_at": "2026-11-16T07:41:02.090459+00:00",
+      "read_scope": "full",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          78
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn32search20"
+      ],
+      "license": "Apache-2.0",
+      "license_evidence_id": "gemini-license",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "gemini-license",
+      "repository": "google-gemini/gemini-cli",
+      "commit": "4ed06ed0ddc523a6d356a4ad35ddfea331041888",
+      "file": "LICENSE",
+      "url": "https://raw.githubusercontent.com/google-gemini/gemini-cli/4ed06ed0ddc523a6d356a4ad35ddfea331041888/LICENSE",
+      "final_url": "https://raw.githubusercontent.com/google-gemini/gemini-cli/4ed06ed0ddc523a6d356a4ad35ddfea331041888/LICENSE",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/gemini-license.txt",
+      "bytes": 11357,
+      "lines": 202,
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "retrieved_at": "2026-11-16T07:41:02.130662+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          12
+        ],
+        [
+          88,
+          121
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [],
+      "license": "Apache-2.0",
+      "license_evidence_id": "gemini-license",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "bash-exit-status",
+      "repository": null,
+      "commit": null,
+      "file": "Exit-Status.html",
+      "url": "https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html",
+      "final_url": "https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/bash-exit-status.html",
+      "bytes": 5187,
+      "lines": 112,
+      "sha256": "b5489d3d21e32da01de356e7a63093ec276a60a020d616a05fffcc9b7b19d983",
+      "retrieved_at": "2026-11-16T07:41:03.803312+00:00",
+      "read_scope": "full-html-text",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          112
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn38search0"
+      ],
+      "license": "GFDL-1.3-or-later, no invariant/front/back cover texts",
+      "license_evidence_url": "https://www.gnu.org/s/bash/manual/bash.pdf",
+      "license_evidence_web_ref": "turn40search3",
+      "immutable_revision": "not available; exact retrieved page bytes pinned by SHA-256",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "bash-signals",
+      "repository": null,
+      "commit": null,
+      "file": "Signals.html",
+      "url": "https://www.gnu.org/software/bash/manual/html_node/Signals.html",
+      "final_url": "https://www.gnu.org/software/bash/manual/html_node/Signals.html",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/bash-signals.html",
+      "bytes": 8888,
+      "lines": 167,
+      "sha256": "304a2dd8a7d3cb9bd49a2cf361f5bbb99217276bc0da45ff9a1cfc18d02eacad",
+      "retrieved_at": "2026-11-16T07:41:03.910856+00:00",
+      "read_scope": "full-html-text",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          167
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn38search1"
+      ],
+      "license": "GFDL-1.3-or-later, no invariant/front/back cover texts",
+      "license_evidence_url": "https://www.gnu.org/s/bash/manual/bash.pdf",
+      "license_evidence_web_ref": "turn40search3",
+      "immutable_revision": "not available; exact retrieved page bytes pinned by SHA-256",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "rfc9051-imap",
+      "repository": null,
+      "commit": null,
+      "file": "rfc9051.txt",
+      "url": "https://www.rfc-editor.org/rfc/rfc9051.txt",
+      "final_url": "https://www.rfc-editor.org/rfc/rfc9051.txt",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/rfc9051-imap.txt",
+      "bytes": 367391,
+      "lines": 8659,
+      "sha256": "acf52a50eb748ea21b5ffdcb31c761d3fbba6242d53d4f53c2555de039c5c3cf",
+      "retrieved_at": "2026-11-16T07:41:07.996044+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          39,
+          56
+        ],
+        [
+          430,
+          520
+        ],
+        [
+          1868,
+          1901
+        ],
+        [
+          4395,
+          4447
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn32search4"
+      ],
+      "license": "IETF Trust Legal Provisions / BCP 78; source-specific copyright notice inspected",
+      "immutable_revision": "RFC9051",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "rfc9309-robots",
+      "repository": null,
+      "commit": null,
+      "file": "rfc9309.txt",
+      "url": "https://www.rfc-editor.org/rfc/rfc9309.txt",
+      "final_url": "https://www.rfc-editor.org/rfc/rfc9309.txt",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/rfc9309-robots.txt",
+      "bytes": 25265,
+      "lines": 607,
+      "sha256": "f633915daaa15b943cae56545d333bcf3ba4d156599e4555499686d6699fb207",
+      "retrieved_at": "2026-11-16T07:41:07.986774+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          39,
+          55
+        ],
+        [
+          90,
+          110
+        ],
+        [
+          350,
+          450
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn32search0"
+      ],
+      "license": "IETF Trust Legal Provisions / BCP 78; source-specific copyright notice inspected",
+      "immutable_revision": "RFC9309",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "rfc9110-http",
+      "repository": null,
+      "commit": null,
+      "file": "rfc9110.txt",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+      "final_url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/rfc9110-http.txt",
+      "bytes": 502941,
+      "lines": 10785,
+      "sha256": "21c1cdce6ab0e5509b04d84a28000836c7a087cf786efe6f04877ebfff47232a",
+      "retrieved_at": "2026-11-16T07:41:08.016842+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          34,
+          65
+        ],
+        [
+          7066,
+          7123
+        ],
+        [
+          7444,
+          7482
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn33search4"
+      ],
+      "license": "IETF Trust Legal Provisions / BCP 78; source-specific copyright notice inspected",
+      "immutable_revision": "RFC9110",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "aspire-license-resolved",
+      "repository": "microsoft/aspire",
+      "commit": "334b86dd6bde8d14dc971bdfda8df3f9812af935",
+      "file": "LICENSE.TXT",
+      "url": "https://raw.githubusercontent.com/microsoft/aspire/334b86dd6bde8d14dc971bdfda8df3f9812af935/LICENSE.TXT",
+      "final_url": "https://raw.githubusercontent.com/microsoft/aspire/334b86dd6bde8d14dc971bdfda8df3f9812af935/LICENSE.TXT",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/aspire-license-resolved.txt",
+      "bytes": 1115,
+      "lines": 23,
+      "sha256": "ae48df11a335dc1a615f4f938b69cba73bcf4485c4f97af49b38efb0f216353b",
+      "retrieved_at": "2026-11-16T07:42:42.669285+00:00",
+      "read_scope": "full",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          1,
+          23
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [],
+      "license": "MIT",
+      "license_evidence_id": "aspire-license-resolved",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    },
+    {
+      "id": "google-sre-postmortem",
+      "repository": null,
+      "commit": null,
+      "file": "",
+      "url": "https://sre.google/sre-book/postmortem-culture/",
+      "final_url": "https://sre.google/sre-book/postmortem-culture/",
+      "path": "/workspace/scratch/fe5385ca063a/round3-optional-upstream/google-sre-postmortem.txt",
+      "bytes": 55113,
+      "lines": 763,
+      "sha256": "ef876f0a0f09a88f3acc3294ec24eb922751b0059cba8be271aa6fe8474656c5",
+      "retrieved_at": "2026-11-16T07:42:45.869813+00:00",
+      "read_scope": "excerpt",
+      "status": "retrieved",
+      "read_ranges_inclusive": [
+        [
+          493,
+          563
+        ],
+        [
+          649,
+          649
+        ]
+      ],
+      "newly_retrieved_this_audit": true,
+      "raw_body_location": "scratch-only; no upstream text copied into ADK",
+      "web_discovery_refs": [
+        "turn39search2"
+      ],
+      "license": "CC-BY-NC-ND-4.0; copyright Google/OReilly, HTML line 649",
+      "immutable_revision": "not available; exact retrieved page bytes pinned by SHA-256",
+      "reuse_decision": "reference/method verification only; no installation, code import, or license compatibility approval"
+    }
+  ],
+  "external_method_decisions": [
+    {
+      "source_ids": [
+        "gitleaks-readme"
+      ],
+      "decision": "ENHANCE-existing",
+      "method": "Prevent raw-secret propagation through all discovery commands, not only a dedicated secret scan.",
+      "not_adopted": "No new Gitleaks dependency, mandatory scanner, runtime authority or new Gate."
+    },
+    {
+      "source_ids": [
+        "bash-exit-status",
+        "bash-signals"
+      ],
+      "decision": "ENHANCE-existing",
+      "method": "Preserve child interruption identity and stop subsequent sampling while retaining evidence.",
+      "not_adopted": "No claim that a status code alone proves user intent or that generic process-group cancellation is solved."
+    },
+    {
+      "source_ids": [
+        "trailofbits-supply-chain",
+        "trailofbits-supply-chain-readme"
+      ],
+      "decision": "OBSERVE/reference",
+      "method": "Coverage bounds clean verdicts; unavailable data does not imply risk or safety; measured data is separate from interpretation.",
+      "not_adopted": "No auth check, dependency collector, installation, upstream code copy, or universal impersonal style; existing ADK coverage already expresses most value."
+    },
+    {
+      "source_ids": [
+        "aspire-flaky"
+      ],
+      "decision": "OBSERVE/reference",
+      "method": "Match verification to reproduction environment, distinguish zero-selection/infra outcomes, retain quarantine evidence.",
+      "not_adopted": "No mandatory CI runs, push/PR/two-branch workflow, 21-day policy, polling, or fixed large repetition budget."
+    },
+    {
+      "source_ids": [
+        "gemini-skills-best-practices"
+      ],
+      "decision": "KEEP-existing",
+      "method": "Specific discovery description, deferred resources and instruction freedom proportional to task fragility.",
+      "not_adopted": "No provider-specific loading claim, fixed context/token target or blanket traceback suppression."
+    },
+    {
+      "source_ids": [
+        "rfc9051-imap",
+        "rfc9309-robots",
+        "rfc9110-http",
+        "google-sre-postmortem"
+      ],
+      "decision": "KEEP-existing/OBSERVE-host-tests",
+      "method": "Protocol identity/read-only/partial-response and causal-evidence checks support existing boundaries.",
+      "not_adopted": "No new fetch runtime, live mailbox test, automatic credential use, original-text copying, or generic postmortem template growth."
+    }
+  ],
+  "new_source_discovery": {
+    "methods": [
+      "system2 search discovery",
+      "system1 primary/official verification",
+      "public fixed-SHA raw fetch"
+    ],
+    "repositories_pinned": 4,
+    "searched_history_for_novelty": [
+      "docs",
+      "reports",
+      "references",
+      "knowledge",
+      "manifests",
+      "optional-skills"
+    ],
+    "exact_new_url_patterns_no_hits": [
+      "gitleaks/gitleaks",
+      "gnu.org/software/bash/manual/html_node/Exit-Status.html",
+      "gemini-cli/blob/.*/docs/cli/skills-best-practices",
+      "sre.google/sre-book/postmortem-culture"
+    ],
+    "novelty_limit": "Zero matches for these exact patterns is evidence of no matching prior citation in the searched directories, not proof that nobody previously read the source."
+  },
+  "probes": {
+    "schema": "round3-optional-probes/v1",
+    "secret_output": {
+      "fixture_only": true,
+      "real_credentials_read": false,
+      "fixture_directory": "/workspace/scratch/fe5385ca063a/optional-scan-probe-final-gmno7pu6",
+      "results": [
+        {
+          "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "line": 74,
+          "published_command": "rg --hidden --no-ignore -l --glob \"!**/.git/**\" \"api[_-]?key|token|secret|password|PRIVATE KEY\" <candidate_path>  # 不回显值",
+          "baseline_exit_code": 0,
+          "baseline_stdout_contains_synthetic_secret": false,
+          "baseline_stderr_contains_synthetic_secret": false,
+          "paths_only_exit_code": 0,
+          "paths_only_stdout_contains_synthetic_secret": false,
+          "paths_only_stderr_contains_synthetic_secret": false,
+          "paths_only_preserves_candidate": true,
+          "no_match_exit_code": 1,
+          "missing_path_error_exit_code": 2,
+          "missing_path_error_has_diagnostic": true
+        },
+        {
+          "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "line": 77,
+          "published_command": "rg -n \"license|LICENSE\" <candidate_path> | head -20",
+          "baseline_exit_code": 0,
+          "baseline_stdout_contains_synthetic_secret": true,
+          "baseline_stderr_contains_synthetic_secret": false,
+          "paths_only_exit_code": 0,
+          "paths_only_stdout_contains_synthetic_secret": false,
+          "paths_only_stderr_contains_synthetic_secret": false,
+          "paths_only_preserves_candidate": true,
+          "no_match_exit_code": 1,
+          "missing_path_error_exit_code": 2,
+          "missing_path_error_has_diagnostic": true
+        },
+        {
+          "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "line": 78,
+          "published_command": "rg -n \"curl|wget|fetch|http|https\" <candidate_path>",
+          "baseline_exit_code": 0,
+          "baseline_stdout_contains_synthetic_secret": true,
+          "baseline_stderr_contains_synthetic_secret": false,
+          "paths_only_exit_code": 0,
+          "paths_only_stdout_contains_synthetic_secret": false,
+          "paths_only_stderr_contains_synthetic_secret": false,
+          "paths_only_preserves_candidate": true,
+          "no_match_exit_code": 1,
+          "missing_path_error_exit_code": 2,
+          "missing_path_error_has_diagnostic": true
+        },
+        {
+          "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "line": 79,
+          "published_command": "rg -n \"writeFile|fs\\.write|os\\.path|open\\(\" <candidate_path>",
+          "baseline_exit_code": 0,
+          "baseline_stdout_contains_synthetic_secret": true,
+          "baseline_stderr_contains_synthetic_secret": false,
+          "paths_only_exit_code": 0,
+          "paths_only_stdout_contains_synthetic_secret": false,
+          "paths_only_stderr_contains_synthetic_secret": false,
+          "paths_only_preserves_candidate": true,
+          "no_match_exit_code": 1,
+          "missing_path_error_exit_code": 2,
+          "missing_path_error_has_diagnostic": true
+        },
+        {
+          "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+          "line": 80,
+          "published_command": "rg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" <candidate_path>",
+          "baseline_exit_code": 0,
+          "baseline_stdout_contains_synthetic_secret": true,
+          "baseline_stderr_contains_synthetic_secret": false,
+          "paths_only_exit_code": 0,
+          "paths_only_stdout_contains_synthetic_secret": false,
+          "paths_only_stderr_contains_synthetic_secret": false,
+          "paths_only_preserves_candidate": true,
+          "no_match_exit_code": 1,
+          "missing_path_error_exit_code": 2,
+          "missing_path_error_has_diagnostic": true
+        },
+        {
+          "source": "docs/runbooks/security-supply-chain.md",
+          "line": 42,
+          "published_command": "rg -n \"api[_-]?key|token|secret|password|PRIVATE KEY\" <candidate_path>",
+          "baseline_exit_code": 0,
+          "baseline_stdout_contains_synthetic_secret": true,
+          "baseline_stderr_contains_synthetic_secret": false,
+          "paths_only_exit_code": 0,
+          "paths_only_stdout_contains_synthetic_secret": false,
+          "paths_only_stderr_contains_synthetic_secret": false,
+          "paths_only_preserves_candidate": true,
+          "no_match_exit_code": 1,
+          "missing_path_error_exit_code": 2,
+          "missing_path_error_has_diagnostic": true
+        },
+        {
+          "source": "docs/runbooks/security-supply-chain.md",
+          "line": 44,
+          "published_command": "rg -n \"BASE_URL|base_url|mcp|hook|approval|sandbox\" <candidate_path>",
+          "baseline_exit_code": 0,
+          "baseline_stdout_contains_synthetic_secret": true,
+          "baseline_stderr_contains_synthetic_secret": false,
+          "paths_only_exit_code": 0,
+          "paths_only_stdout_contains_synthetic_secret": false,
+          "paths_only_stderr_contains_synthetic_secret": false,
+          "paths_only_preserves_candidate": true,
+          "no_match_exit_code": 1,
+          "missing_path_error_exit_code": 2,
+          "missing_path_error_has_diagnostic": true
+        }
+      ]
+    },
+    "sampling_cancellation": {
+      "source": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "source_sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0",
+      "requested_samples": 3,
+      "real_test_suite_run": false,
+      "user_keyboard_signal_simulated": false,
+      "cases": [
+        {
+          "child_case": "0",
+          "collector_exit": 0,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t0",
+            "2\t0",
+            "3\t0"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-0",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-0/results.tsv\n",
+          "later_run_directory_created": true
+        },
+        {
+          "child_case": "1",
+          "collector_exit": 1,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t1",
+            "2\t1",
+            "3\t1"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-1",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-1/results.tsv\n",
+          "later_run_directory_created": true
+        },
+        {
+          "child_case": "9",
+          "collector_exit": 1,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t9",
+            "2\t9",
+            "3\t9"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-9",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-9/results.tsv\n",
+          "later_run_directory_created": true
+        },
+        {
+          "child_case": "124",
+          "collector_exit": 1,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t124",
+            "2\t124",
+            "3\t124"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-124",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-124/results.tsv\n",
+          "later_run_directory_created": true
+        },
+        {
+          "child_case": "130",
+          "collector_exit": 1,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t130",
+            "2\t130",
+            "3\t130"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-130",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-130/results.tsv\n",
+          "later_run_directory_created": true
+        },
+        {
+          "child_case": "143",
+          "collector_exit": 1,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t143",
+            "2\t143",
+            "3\t143"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-143",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-143/results.tsv\n",
+          "later_run_directory_created": true
+        },
+        {
+          "child_case": "actual-sigint",
+          "collector_exit": 1,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t130",
+            "2\t130",
+            "3\t130"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigint",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigint/results.tsv\n",
+          "later_run_directory_created": true
+        },
+        {
+          "child_case": "actual-sigterm",
+          "collector_exit": 1,
+          "attempts_after_signal_or_failure": 3,
+          "result_rows": [
+            "1\t143",
+            "2\t143",
+            "3\t143"
+          ],
+          "raw_evidence_directory": "/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigterm",
+          "collector_stdout": "attempts=3\nrecords=/workspace/scratch/fe5385ca063a/optional-cancel-probe-final-63rja4lr/exit-actual-sigterm/results.tsv\n",
+          "later_run_directory_created": true
+        }
+      ]
+    }
+  },
+  "probe_runner": {
+    "path": "/workspace/scratch/fe5385ca063a/round3_optional_probe.py",
+    "sha256": "1d3472b80a82e496fde283afa5ff3ec60097bcf20c50d4e851f578bffbb6ac3d",
+    "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk python /workspace/scratch/fe5385ca063a/round3_optional_probe.py",
+    "exit_code": 0
+  },
+  "negative_results": [
+    {
+      "operation": "read rule paths listed by rules/README.md",
+      "result": "rules/security/00-general.md, rules/quality/01-review.md, rules/quality/02-documentation.md do not exist; actual tracked rules enumerated, rules/00-global.md read. No missing contents invented."
+    },
+    {
+      "operation": "fetch microsoft/aspire LICENSE",
+      "result": "404; directory metadata resolved actual LICENSE.TXT at same fixed commit; raw LICENSE.TXT read and hashed."
+    },
+    {
+      "operation": "public GitHub API contents request",
+      "result": "403; used public read-only connector directory response to resolve license filename; no credentials inspected."
+    },
+    {
+      "operation": "github fetch_commit discovery call",
+      "result": "missing commit_sha argument; no mutation; fixed source commits subsequently resolved through public API."
+    },
+    {
+      "operation": "inspect rtk launcher as text",
+      "result": "ELF binary; output truncated, no source/code inference made. All task shell commands still invoked via the required rtk executable."
+    }
+  ],
+  "authorization_and_runtime_boundaries": {
+    "repository_writes_by_reviewer": false,
+    "refs_changed_by_reviewer": false,
+    "external_messages_sent": false,
+    "real_mailbox_or_business_requests": false,
+    "credentials_read": false,
+    "device_actions": false,
+    "paid_models_or_codex_work_cli_cloud_jobs": false,
+    "upstream_scripts_executed_or_installed": false,
+    "allowed_activity": "read-only repository review, public first-party retrieval, scratch-only synthetic host probes and report generation",
+    "real_model_behavior": "not-measured",
+    "performance_or_token_improvement": "not-measured",
+    "native_optional_runtime_qualification": "not-run"
+  },
+  "handoff": {
+    "implementation_owner": "parent/main task after canonical contract is frozen",
+    "next_actions": [
+      "Implement accepted minimal fixes without adding skills/gates/dependencies.",
+      "Execute behavior-derived command/snippet regressions and preserve old valid paths.",
+      "Keep source-ready and real host/model qualification separate in completion claims."
+    ]
+  }
+}

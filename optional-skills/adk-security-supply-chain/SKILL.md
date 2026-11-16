@@ -1,8 +1,8 @@
 ---
 name: adk-security-supply-chain
 description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
-version: 1.1.4
-last_updated: 2026-11-14
+version: 1.1.5
+last_updated: 2026-11-16
 triggers:
   - "供应链审查"
   - "第三方引入"
@@ -70,14 +70,16 @@ constraints:
 - 缺少 deny-path guard test、隐藏工具或运行态清单漂移时，结论为 `needs-fix`。
 
 ## Commands
+以下 `rg` 仅列候选路径；后续限定范围，内容先脱敏再输出，路径本身仍需检查。逐条保留退出码：0 有候选、1 无匹配、2 扫描错误。
+
 ```bash
-rg --hidden --no-ignore -l --glob "!**/.git/**" "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>  # 不回显值
+rg --hidden --no-ignore -l --glob "!**/.git/**" "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>
 find <candidate_path> -type f -perm -111
 bash scripts/devkit.sh validate --strict
-rg -n "license|LICENSE" <candidate_path> | head -20
-rg -n "curl|wget|fetch|http|https" <candidate_path>
-rg -n "writeFile|fs\.write|os\.path|open\(" <candidate_path>
-rg -n "BASE_URL|base_url|mcp|hook|approval|sandbox" <candidate_path>
+rg -l "license|LICENSE" <candidate_path>
+rg -l "curl|wget|fetch|http|https" <candidate_path>
+rg -l "writeFile|fs\.write|os\.path|open\(" <candidate_path>
+rg -l "BASE_URL|base_url|mcp|hook|approval|sandbox" <candidate_path>
 syft <candidate_path> -o spdx-json > sbom.spdx.json
 grype sbom:sbom.spdx.json --output table
 trivy fs --security-checks vuln <candidate_path>

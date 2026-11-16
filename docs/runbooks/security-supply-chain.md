@@ -38,10 +38,12 @@
 
 ## 命令模板
 
+初筛仅列候选路径；后续限定范围，内容脱敏后输出，路径本身仍需检查。逐条保留 `rg` 0/1/2（有候选/无匹配/扫描错误），不得吞错。声明 hidden／ignored／binary／encrypted 覆盖与排除，未支持标 `not-scanned`，零命中不等于无秘密。
+
 ```bash
-rg -n "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>
+rg -l "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>
 find <candidate_path> -type f -perm -111
-rg -n "BASE_URL|base_url|mcp|hook|approval|sandbox" <candidate_path>
+rg -l "BASE_URL|base_url|mcp|hook|approval|sandbox" <candidate_path>
 bash scripts/devkit.sh validate --strict
 ```
 

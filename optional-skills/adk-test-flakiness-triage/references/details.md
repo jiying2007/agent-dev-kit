@@ -29,6 +29,7 @@ run_flaky_samples() (
     FLAKY_SAMPLE_DIR="$sample_dir" "$@" >&3 2>&1 || result=$?
     exec 3>&- || exit 2
     printf '%s\t%s\n' "$attempt" "$result" >> "$evidence/results.tsv" || exit 2
+    case "$result" in 130|143) exit "$result" ;; esac
     if (( result != 0 )); then failed=1; fi
   done
   printf 'attempts=%s\nrecords=%s\n' "$samples" "$evidence/results.tsv" || exit 2
@@ -36,7 +37,7 @@ run_flaky_samples() (
 )
 ```
 
-0仅表示命令均返回0，仍核真实报告/选择器；1至少一次非零，2参数/采集错误。保留已得样本；不append旧日志、不重跑到绿，采集不完整不判稳定。
+0仅表示命令均返回0，仍核报告/选择器；1有普通非零，2参数/采集错误。子命令130/143在日志/TSV落盘后停止并原码退出；不代表父shell/进程组取消传播已验证。保留样本，不append旧日志、不重跑到绿；采集不完整不判稳定。
 
 ## 就绪竞争（有证据时）
 日志/受控复现确认检查早于完成，才将猜测sleep改为原生event/barrier/condition，等待本次operation ID及明确ready。旧文件/旧响应不算完成，合法0/空结果不用truthiness判失败。需轮询时用monotonic截止期、适当间隔/取消；保留timeout/cancel与清理，不扩大超时掩盖缺陷。

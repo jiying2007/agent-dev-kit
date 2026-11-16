@@ -1,0 +1,2030 @@
+{
+  "schema": "adk-embedded-source-audit/v1",
+  "audit_id": "round3-embedded-20261116",
+  "baseline_commit": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+  "baseline_version": "11.3.9",
+  "repository": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "review_role": "read-only reviewer; repository files and refs were not modified by this reviewer",
+  "scope": "22 embedded core Skills; all tracked files in those directories, not only SKILL.md",
+  "scope_source": "Only group membership and skill names were reused from docs/changes/20261116-skill-timing-diagnosis/evidence/portfolio-audit.json. All conclusions below derive from fresh current-file reads and new evidence.",
+  "rules_read": [
+    "AGENTS.md (complete)",
+    "docs/agent-operating-rules.md (complete)",
+    "LICENSE (complete)",
+    "No skills/AGENTS.md or skills/README.md exists; rg found no descendant AGENTS.md under skills; all four in-scope README.md files were read completely."
+  ],
+  "population": {
+    "skill_count": 22,
+    "tracked_file_count": 45,
+    "bytes": 123379,
+    "lines": 2215,
+    "files_by_kind": {
+      "SKILL.md": 22,
+      "references": 11,
+      "README.md": 4,
+      "LICENSE": 4,
+      "agents/openai.yaml": 4,
+      "scripts": 0,
+      "assets": 0
+    },
+    "full_read_file_count": 45,
+    "partial_read_file_count": 0,
+    "tracked_population_exact_match": true,
+    "all_baseline_blob_bytes_match": true,
+    "all_current_source_bytes_unchanged_at_final_collection": true,
+    "initial_git_status": "clean",
+    "final_git_status": "?? docs/changes/20261116-skill-failure-paths/\n",
+    "final_head": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+    "decision_counts": {
+      "KEEP": 20,
+      "ENHANCE": 1,
+      "OBSERVE": 1
+    }
+  },
+  "local_files": [
+    {
+      "path": "skills/adk-bsp-analysis/SKILL.md",
+      "git_blob": "929e9ba760ad73979ba41e028385d7efaef2d5a4",
+      "sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
+      "bytes": 3928,
+      "lines": 81,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 81,
+          "byte_start": 0,
+          "byte_end_exclusive": 3928
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+      "git_blob": "b9016cd4f521354f72a6ec2abbf6a7b8fd425c67",
+      "sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
+      "bytes": 1666,
+      "lines": 38,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 38,
+          "byte_start": 0,
+          "byte_end_exclusive": 1666
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "git_blob": "2413d7cea3f01a73fc55a5d04067a5f2c79e51ca",
+      "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
+      "bytes": 5335,
+      "lines": 94,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 94,
+          "byte_start": 0,
+          "byte_end_exclusive": 5335
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "git_blob": "5f9fa8ac96f75a659245007135eb99f8c38f6268",
+      "sha256": "e884e89f047dfd47248413a0d0a7d32c3f8a4e7724a9fe1b6a368f77e28a710a",
+      "bytes": 4709,
+      "lines": 111,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 111,
+          "byte_start": 0,
+          "byte_end_exclusive": 4709
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+      "git_blob": "7f5154f2926ef55538983d455767208b96fb740b",
+      "sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
+      "bytes": 5457,
+      "lines": 100,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 100,
+          "byte_start": 0,
+          "byte_end_exclusive": 5457
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-driver-implementation/SKILL.md",
+      "git_blob": "e2a26df790d5f8f668caddf131e82838e7e0e564",
+      "sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
+      "bytes": 5130,
+      "lines": 96,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 96,
+          "byte_start": 0,
+          "byte_end_exclusive": 5130
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/LICENSE",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/README.md",
+      "git_blob": "c975880282efd85f55780b4c423efcedcdf58edf",
+      "sha256": "453bf2b168e3ba1a2c7176e59803709ac714749701f07809163c39614fc3220d",
+      "bytes": 391,
+      "lines": 7,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 391
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/SKILL.md",
+      "git_blob": "d4100591b2faa1f536bafce5b8a12837fcd31d09",
+      "sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
+      "bytes": 5745,
+      "lines": 101,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 101,
+          "byte_start": 0,
+          "byte_end_exclusive": 5745
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-debug-transport/agents/openai.yaml",
+      "git_blob": "a30652980d243b2de8379d1e02946e6ebfa18090",
+      "sha256": "5482eefa68e99a12a9c0a9ec90c1d958cfac588f30c516c419c216b7dfa7ae69",
+      "bytes": 173,
+      "lines": 3,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 173
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/LICENSE",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/README.md",
+      "git_blob": "6005feb11ddfc27c5db48f421e1e3e6986c0d04d",
+      "sha256": "37fc552aff1dd57ab25ce50cb3d2b669a6a59cd8e59cc70030139c63b9505751",
+      "bytes": 343,
+      "lines": 7,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 343
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "git_blob": "844be83933a5cfc9014468bb77d9506cf9757eaf",
+      "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526",
+      "bytes": 3079,
+      "lines": 76,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 76,
+          "byte_start": 0,
+          "byte_end_exclusive": 3079
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-diagnostic-harness/agents/openai.yaml",
+      "git_blob": "ddb21a32a52583d51156e186585bdb0801b196c5",
+      "sha256": "e994baf88b865d08f5808d321936ea25fdbf5b7ef42abf8d196ce433f211122a",
+      "bytes": 168,
+      "lines": 3,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 168
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/LICENSE",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/README.md",
+      "git_blob": "f093c89f695ebc73ecb8895680aab8bfd6ea0804",
+      "sha256": "e917b29015b779f128478eb2e450f27c0e1cd19d1be639321e7000677b08d5d0",
+      "bytes": 342,
+      "lines": 7,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 342
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+      "git_blob": "2e3275c050211de5e0f9f65b040327d92516165b",
+      "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5",
+      "bytes": 5245,
+      "lines": 91,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 91,
+          "byte_start": 0,
+          "byte_end_exclusive": 5245
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/agents/openai.yaml",
+      "git_blob": "3baaad6a3aeaf5a9b7728492c7681dcfec82a096",
+      "sha256": "42f5870f805301ab55c6d1a8fbcb378ecb1a9620cfc50c03dd297eddf82b1057",
+      "bytes": 177,
+      "lines": 3,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 177
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+      "git_blob": "ba9fd82c7e172aec3c58a666e7f4aad614f65367",
+      "sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
+      "bytes": 1698,
+      "lines": 18,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 18,
+          "byte_start": 0,
+          "byte_end_exclusive": 1698
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/LICENSE",
+      "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72",
+      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+      "bytes": 61,
+      "lines": 1,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 1,
+          "byte_start": 0,
+          "byte_end_exclusive": 61
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/README.md",
+      "git_blob": "b8ad51e75a696100dfc4381cba5db3c50b1fd7a4",
+      "sha256": "9aa267e1e3eda44db5c9fadba10ce9d422da36dca50183a6236a4266f1cb8487",
+      "bytes": 560,
+      "lines": 7,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 7,
+          "byte_start": 0,
+          "byte_end_exclusive": 560
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "git_blob": "9936e058634b407592f10e286ce3e3afa4e3ddb5",
+      "sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
+      "bytes": 6746,
+      "lines": 121,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 121,
+          "byte_start": 0,
+          "byte_end_exclusive": 6746
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/agents/openai.yaml",
+      "git_blob": "d50dba172a3732c982867bb1205024b2c193c2f2",
+      "sha256": "e627b547abc25a924ac9899add7d9158fa9f194a5f2a3cbf8cc4e4e30b1d380e",
+      "bytes": 189,
+      "lines": 3,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 3,
+          "byte_start": 0,
+          "byte_end_exclusive": 189
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+      "git_blob": "6b573675b3a48548fdbda7649397c0304af69d43",
+      "sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
+      "bytes": 3301,
+      "lines": 80,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 80,
+          "byte_start": 0,
+          "byte_end_exclusive": 3301
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "git_blob": "a8e5e5a4533ecff63b5753f67515d7a702d32299",
+      "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76",
+      "bytes": 5590,
+      "lines": 98,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 98,
+          "byte_start": 0,
+          "byte_end_exclusive": 5590
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-fault-injection-recovery/SKILL.md",
+      "git_blob": "01ef6c409bdfa9d4c00cef778dea3177bf2d7e09",
+      "sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
+      "bytes": 3559,
+      "lines": 84,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 84,
+          "byte_start": 0,
+          "byte_end_exclusive": 3559
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-hardware-debugging/SKILL.md",
+      "git_blob": "4207ed8d0f287c908963e0859728bd977380a040",
+      "sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+      "bytes": 2701,
+      "lines": 68,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 68,
+          "byte_start": 0,
+          "byte_end_exclusive": 2701
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+      "git_blob": "722fdb6ebfd3d5c68b48662a5750de5069c181f4",
+      "sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
+      "bytes": 1919,
+      "lines": 22,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 22,
+          "byte_start": 0,
+          "byte_end_exclusive": 1919
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-integration-hil-sil/SKILL.md",
+      "git_blob": "edfed5940559e83040789791776716bd3f30dbda",
+      "sha256": "8ae810e665542db4ca20c46a911bd98d859d70fa97caf5bd5615595ee75fb8f2",
+      "bytes": 3866,
+      "lines": 70,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 70,
+          "byte_start": 0,
+          "byte_end_exclusive": 3866
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "git_blob": "eb6d6b7ad74a355b2c049cef81477962244352b4",
+      "sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
+      "bytes": 5406,
+      "lines": 92,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 92,
+          "byte_start": 0,
+          "byte_end_exclusive": 5406
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+      "git_blob": "59b883b26bdd3a3dd27c4845ffa344e938aab24d",
+      "sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
+      "bytes": 1709,
+      "lines": 19,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 19,
+          "byte_start": 0,
+          "byte_end_exclusive": 1709
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+      "git_blob": "671a11e2df2fe49f98d2bdcd5401c123982d950d",
+      "sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
+      "bytes": 1645,
+      "lines": 13,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 13,
+          "byte_start": 0,
+          "byte_end_exclusive": 1645
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+      "git_blob": "bff5d56495dfacc6a986e9a211074b1a559d0958",
+      "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+      "bytes": 3562,
+      "lines": 75,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 75,
+          "byte_start": 0,
+          "byte_end_exclusive": 3562
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "git_blob": "1bd0416c8e0ab72f7099c09188cf3dd5c1a2bd78",
+      "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
+      "bytes": 2983,
+      "lines": 50,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 50,
+          "byte_start": 0,
+          "byte_end_exclusive": 2983
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+      "git_blob": "2c9c7b05532d2b28dc9d9585ee8e7a8788610700",
+      "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02",
+      "bytes": 4590,
+      "lines": 56,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 56,
+          "byte_start": 0,
+          "byte_end_exclusive": 4590
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "git_blob": "9963c190e57d1929448011b823bfe2d5cfb5b824",
+      "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
+      "bytes": 3084,
+      "lines": 48,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 48,
+          "byte_start": 0,
+          "byte_end_exclusive": 3084
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+      "git_blob": "d2208cf38c5a57788237be1872ecdb95080a76d6",
+      "sha256": "6006f23c5e1d8ae8b1ea185fb4f2613c13af55b92a33cdc881fd909c6a199b9c",
+      "bytes": 1135,
+      "lines": 9,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 9,
+          "byte_start": 0,
+          "byte_end_exclusive": 1135
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-register-map-design/SKILL.md",
+      "git_blob": "06a3fa96385ee6b994fc55c4b796f6e7c03517c3",
+      "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919",
+      "bytes": 3856,
+      "lines": 88,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 88,
+          "byte_start": 0,
+          "byte_end_exclusive": 3856
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "git_blob": "c447d6407ed33045e98770d24c9779ba6c44992c",
+      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482",
+      "bytes": 5718,
+      "lines": 75,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 75,
+          "byte_start": 0,
+          "byte_end_exclusive": 5718
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "git_blob": "4bbb10a5553d0aa849c5133dba2d6bffca96476a",
+      "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
+      "bytes": 3405,
+      "lines": 68,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 68,
+          "byte_start": 0,
+          "byte_end_exclusive": 3405
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-test-strategy/SKILL.md",
+      "git_blob": "786a30565cd7739340e497e0adb0e1c89100ab39",
+      "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
+      "bytes": 3612,
+      "lines": 53,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 53,
+          "byte_start": 0,
+          "byte_end_exclusive": 3612
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+      "git_blob": "05c40e1f1d6b19a3b98519dd3c542b4f2d3cde63",
+      "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
+      "bytes": 3247,
+      "lines": 48,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 48,
+          "byte_start": 0,
+          "byte_end_exclusive": 3247
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "git_blob": "b97d09d30973b1c54d0ad3067a1a405dd4c034e7",
+      "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
+      "bytes": 3068,
+      "lines": 55,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 55,
+          "byte_start": 0,
+          "byte_end_exclusive": 3068
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+      "git_blob": "c1fa37aa190a10f549117442b93abe053f2464d4",
+      "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
+      "bytes": 783,
+      "lines": 12,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 12,
+          "byte_start": 0,
+          "byte_end_exclusive": 783
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+      "git_blob": "83c5ad4c600bf8a6e46dcdfd7f693e399ddfbc10",
+      "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+      "bytes": 3315,
+      "lines": 61,
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 61,
+          "byte_start": 0,
+          "byte_end_exclusive": 3315
+        }
+      ],
+      "read_status": "full",
+      "current_sha256_matches_read_snapshot": true,
+      "baseline_blob_bytes_match_read_snapshot": true
+    }
+  ],
+  "external_sources": [
+    {
+      "repo": "ylongw/embedded-review",
+      "commit": "bb500aa00fc3e548365305b537b211663323a3d9",
+      "path": "SKILL.md",
+      "role": "discovered-skill",
+      "url": "https://raw.githubusercontent.com/ylongw/embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/SKILL.md",
+      "bytes": 8727,
+      "sha256": "edaaef437c52742e78e4d812ed8aee79728cfedd117fed42abacddcbf0b65aa7",
+      "git_blob": "ed3a5ea537396448c3c1b283c1e91b0d879ce1f4",
+      "lines": 264,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/ylongw__embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/SKILL.md",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 264,
+          "byte_start": 0,
+          "byte_end_exclusive": 8727
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 264,
+      "read_bytes": 8727,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "ylongw/embedded-review",
+      "commit": "bb500aa00fc3e548365305b537b211663323a3d9",
+      "path": "LICENSE",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/ylongw/embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/LICENSE",
+      "bytes": 1070,
+      "sha256": "e0512e5fdf9c0b51c3bf6452f4d0b788ba52149e30c2118f271ea99b5a528bf3",
+      "git_blob": "9b1c973dfd3cec755a018a9405e319ffdc2e687d",
+      "lines": 21,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/ylongw__embedded-review/bb500aa00fc3e548365305b537b211663323a3d9/LICENSE",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 21,
+          "byte_start": 0,
+          "byte_end_exclusive": 1070
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 21,
+      "read_bytes": 1070,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "mohitmishra786/low-level-dev-skills",
+      "commit": "d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058",
+      "path": "skills/build-systems/cmake/SKILL.md",
+      "role": "discovered-skill",
+      "url": "https://raw.githubusercontent.com/mohitmishra786/low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/build-systems/cmake/SKILL.md",
+      "bytes": 6732,
+      "sha256": "3dc7ad6d429baf208ae6615036b53957e4ed4490f310ee09060e6b197361aa5d",
+      "git_blob": "54f67082ff7f5ff29ff491182a3685e81b9913b9",
+      "lines": 241,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/mohitmishra786__low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/build-systems/cmake/SKILL.md",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 241,
+          "byte_start": 0,
+          "byte_end_exclusive": 6732
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 241,
+      "read_bytes": 6732,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "mohitmishra786/low-level-dev-skills",
+      "commit": "d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058",
+      "path": "skills/baremetal/dma-baremetal/SKILL.md",
+      "role": "discovered-skill",
+      "url": "https://raw.githubusercontent.com/mohitmishra786/low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/baremetal/dma-baremetal/SKILL.md",
+      "bytes": 2228,
+      "sha256": "53952a831378912af860b7f0ccbbabb48da99b126c080dccf3f6bd25bc1888e4",
+      "git_blob": "6459de27d061c8e32291bf464db0ce55d2bda139",
+      "lines": 73,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/mohitmishra786__low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/skills/baremetal/dma-baremetal/SKILL.md",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 73,
+          "byte_start": 0,
+          "byte_end_exclusive": 2228
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 73,
+      "read_bytes": 2228,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "mohitmishra786/low-level-dev-skills",
+      "commit": "d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058",
+      "path": "LICENSE",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/mohitmishra786/low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/LICENSE",
+      "bytes": 1065,
+      "sha256": "bff4c77f3ad34eeec1f1b00dc894d8f65ec529232cf1d9cec9f6429ba39069d7",
+      "git_blob": "026cd61daea26ee89b54f4d179c85e5a679f25fe",
+      "lines": 21,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/mohitmishra786__low-level-dev-skills/d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058/LICENSE",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 21,
+          "byte_start": 0,
+          "byte_end_exclusive": 1065
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 21,
+      "read_bytes": 1065,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "espressif/skills",
+      "commit": "ab44d6e1e34260b16de228aea1aa24169cbae53b",
+      "path": "README.md",
+      "role": "discovery-only-empty-skill-repository",
+      "url": "https://raw.githubusercontent.com/espressif/skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/README.md",
+      "bytes": 689,
+      "sha256": "bc507a7781aa82ba7522d13593abe0dda9543a870c26f60ae9594a32994786fd",
+      "git_blob": "53eeaafbc672b6decb7d906380d5c3efe704e1bf",
+      "lines": 29,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/README.md",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 29,
+          "byte_start": 0,
+          "byte_end_exclusive": 689
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 29,
+      "read_bytes": 689,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "espressif/skills",
+      "commit": "ab44d6e1e34260b16de228aea1aa24169cbae53b",
+      "path": "LICENSE",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/espressif/skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "git_blob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+      "lines": 202,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__skills/ab44d6e1e34260b16de228aea1aa24169cbae53b/LICENSE",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 15,
+          "byte_start": 0,
+          "byte_end_exclusive": 525
+        },
+        {
+          "line_start": 178,
+          "line_end_inclusive": 202,
+          "byte_start": 10174,
+          "byte_end_exclusive": 11358
+        }
+      ],
+      "read_status": "partial",
+      "read_lines": 40,
+      "read_bytes": 1709,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "espressif/esp-dl",
+      "commit": "512ed0b0dc5f5320f3d9ca5a5aea189803f87f31",
+      "path": "tools/agents/skills/espdl-operator/SKILL.md",
+      "role": "official-skill",
+      "url": "https://raw.githubusercontent.com/espressif/esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/tools/agents/skills/espdl-operator/SKILL.md",
+      "bytes": 35711,
+      "sha256": "bac0d99a6ef39ae409054bbcdb1bcb85e36659163fd10344b0e5859f8efe4682",
+      "git_blob": "2db62d9529094b9df71c08d8993a7819146a7bd7",
+      "lines": 773,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/tools/agents/skills/espdl-operator/SKILL.md",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 123,
+          "byte_start": 0,
+          "byte_end_exclusive": 6806
+        },
+        {
+          "line_start": 442,
+          "line_end_inclusive": 497,
+          "byte_start": 20594,
+          "byte_end_exclusive": 23503
+        },
+        {
+          "line_start": 556,
+          "line_end_inclusive": 582,
+          "byte_start": 25447,
+          "byte_end_exclusive": 26754
+        },
+        {
+          "line_start": 609,
+          "line_end_inclusive": 710,
+          "byte_start": 27696,
+          "byte_end_exclusive": 32319
+        },
+        {
+          "line_start": 739,
+          "line_end_inclusive": 773,
+          "byte_start": 33520,
+          "byte_end_exclusive": 35711
+        }
+      ],
+      "read_status": "partial",
+      "read_lines": 343,
+      "read_bytes": 17836,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "espressif/esp-dl",
+      "commit": "512ed0b0dc5f5320f3d9ca5a5aea189803f87f31",
+      "path": "LICENSE",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/espressif/esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/LICENSE",
+      "bytes": 1095,
+      "sha256": "3513f1605ebcc227f7364956f6c30a303412597e232648cb3090e76697ca5aa3",
+      "git_blob": "dc2be013b5edf43108b6081057b13b6ff276ffe5",
+      "lines": 21,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/espressif__esp-dl/512ed0b0dc5f5320f3d9ca5a5aea189803f87f31/LICENSE",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 21,
+          "byte_start": 0,
+          "byte_end_exclusive": 1095
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 21,
+      "read_bytes": 1095,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "beriberikix/zephyr-agent-skills",
+      "commit": "ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce",
+      "path": "SKILL.md",
+      "role": "discovered-skill",
+      "url": "https://raw.githubusercontent.com/beriberikix/zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/SKILL.md",
+      "bytes": 1475,
+      "sha256": "ed7256869f47aa7003f8df6fd84ebb75c073ee308b6e6f019fd9f110e94a9601",
+      "git_blob": "03df00f7bbe4b43367653e662298234e2b414f13",
+      "lines": 27,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/beriberikix__zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/SKILL.md",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 27,
+          "byte_start": 0,
+          "byte_end_exclusive": 1475
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 27,
+      "read_bytes": 1475,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "beriberikix/zephyr-agent-skills",
+      "commit": "ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce",
+      "path": "LICENSE",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/beriberikix/zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "git_blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "lines": 201,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/beriberikix__zephyr-agent-skills/ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce/LICENSE",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 15,
+          "byte_start": 0,
+          "byte_end_exclusive": 595
+        },
+        {
+          "line_start": 178,
+          "line_end_inclusive": 201,
+          "byte_start": 10174,
+          "byte_end_exclusive": 11357
+        }
+      ],
+      "read_status": "partial",
+      "read_lines": 39,
+      "read_bytes": 1778,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Help/variable/CMAKE_LANG_COMPILER.rst",
+      "role": "official-api",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/variable/CMAKE_LANG_COMPILER.rst",
+      "bytes": 852,
+      "sha256": "52b19a78ae0edb6fe8736dda7f5a095133d231943e0d5b23f3800a0dec1a3ade",
+      "git_blob": "db8f4e1fafc481f4e9706fd9f48fe4373390a65f",
+      "lines": 33,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/variable/CMAKE_LANG_COMPILER.rst",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 33,
+          "byte_start": 0,
+          "byte_end_exclusive": 852
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 33,
+      "read_bytes": 852,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Help/envvar/CMAKE_TOOLCHAIN_FILE.rst",
+      "role": "official-api",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/envvar/CMAKE_TOOLCHAIN_FILE.rst",
+      "bytes": 424,
+      "sha256": "eb0773e4164a11f05c9d7f9736cdae902f25aecc2dead344a556435dcd31c27c",
+      "git_blob": "7ea9cea3572100989b05f3d68379d817aeaa24b9",
+      "lines": 12,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Help/envvar/CMAKE_TOOLCHAIN_FILE.rst",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 12,
+          "byte_start": 0,
+          "byte_end_exclusive": 424
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 12,
+      "read_bytes": 424,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Modules/CMakeDetermineSystem.cmake",
+      "role": "official-implementation",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeDetermineSystem.cmake",
+      "bytes": 9367,
+      "sha256": "6b8e937c613dbedb64fd3acbc8305de861e57f8a9f7b030b6762b9305b57114a",
+      "git_blob": "b330ed9d509fceca4718ee30695a7ad65f669585",
+      "lines": 222,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeDetermineSystem.cmake",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 222,
+          "byte_start": 0,
+          "byte_end_exclusive": 9367
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 222,
+      "read_bytes": 9367,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Modules/CMakeSystem.cmake.in",
+      "role": "official-implementation",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeSystem.cmake.in",
+      "bytes": 563,
+      "sha256": "60b5167875d6a01de4fb96c784a4e01d56f365f096fa9a257c6b6b6d9669e49a",
+      "git_blob": "ef8aaa045032e95bce2d87609a1d5a7566be3458",
+      "lines": 15,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Modules/CMakeSystem.cmake.in",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 15,
+          "byte_start": 0,
+          "byte_end_exclusive": 563
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 15,
+      "read_bytes": 563,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "Kitware/CMake",
+      "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+      "path": "Copyright.txt",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/Kitware/CMake/859ca5c4d7396a011a462878179bc173e1283731/Copyright.txt",
+      "bytes": 5477,
+      "sha256": "0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8",
+      "git_blob": "2074109b019445458a65e6cd3935aa24a0878c7c",
+      "lines": 136,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/Kitware__CMake/859ca5c4d7396a011a462878179bc173e1283731/Copyright.txt",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 136,
+          "byte_start": 0,
+          "byte_end_exclusive": 5477
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 136,
+      "read_bytes": 5477,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "zephyrproject-rtos/zephyr",
+      "commit": "64e98eb5278d790f3b3e5279ca8b39b45097bbc0",
+      "path": "doc/kernel/services/threads/workqueue.rst",
+      "role": "official-api",
+      "url": "https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/doc/kernel/services/threads/workqueue.rst",
+      "bytes": 24794,
+      "sha256": "2c905ec3cea73fa0b4d6ce4e711081b24732dec859b98e897d7082aa64548895",
+      "git_blob": "18c1cf0e31a6329c7738ee4c7b053e3f5a8486aa",
+      "lines": 552,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/zephyrproject-rtos__zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/doc/kernel/services/threads/workqueue.rst",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 110,
+          "byte_start": 0,
+          "byte_end_exclusive": 5151
+        },
+        {
+          "line_start": 300,
+          "line_end_inclusive": 338,
+          "byte_start": 13017,
+          "byte_end_exclusive": 14706
+        },
+        {
+          "line_start": 390,
+          "line_end_inclusive": 552,
+          "byte_start": 17198,
+          "byte_end_exclusive": 24794
+        }
+      ],
+      "read_status": "partial",
+      "read_lines": 312,
+      "read_bytes": 14436,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "zephyrproject-rtos/zephyr",
+      "commit": "64e98eb5278d790f3b3e5279ca8b39b45097bbc0",
+      "path": "LICENSE",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/zephyrproject-rtos/zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/LICENSE",
+      "bytes": 11358,
+      "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+      "git_blob": "8f71f43fee3f78649d238238cbde51e6d7055c82",
+      "lines": 202,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/zephyrproject-rtos__zephyr/64e98eb5278d790f3b3e5279ca8b39b45097bbc0/LICENSE",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 15,
+          "byte_start": 0,
+          "byte_end_exclusive": 595
+        },
+        {
+          "line_start": 178,
+          "line_end_inclusive": 202,
+          "byte_start": 10174,
+          "byte_end_exclusive": 11358
+        }
+      ],
+      "read_status": "partial",
+      "read_lines": 40,
+      "read_bytes": 1779,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "torvalds/linux",
+      "commit": "7d0a66e4bb9081d75c82ec4957c50034cb0ea449",
+      "path": "Documentation/driver-api/dmaengine/client.rst",
+      "role": "official-api",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/Documentation/driver-api/dmaengine/client.rst",
+      "bytes": 13748,
+      "sha256": "c3c9727e2bf5af0d452c988f8309b13353cb84985a17e1ce6bf904b4728590b7",
+      "git_blob": "d491e385d61a98b8a804cd823caf254a2dc62cf4",
+      "lines": 388,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/torvalds__linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/Documentation/driver-api/dmaengine/client.rst",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 35,
+          "byte_start": 0,
+          "byte_end_exclusive": 912
+        },
+        {
+          "line_start": 110,
+          "line_end_inclusive": 170,
+          "byte_start": 3644,
+          "byte_end_exclusive": 5927
+        },
+        {
+          "line_start": 300,
+          "line_end_inclusive": 388,
+          "byte_start": 10509,
+          "byte_end_exclusive": 13748
+        }
+      ],
+      "read_status": "partial",
+      "read_lines": 185,
+      "read_bytes": 6434,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "torvalds/linux",
+      "commit": "7d0a66e4bb9081d75c82ec4957c50034cb0ea449",
+      "path": "LICENSES/preferred/GPL-2.0",
+      "role": "license",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/LICENSES/preferred/GPL-2.0",
+      "bytes": 18600,
+      "sha256": "8780e78a1a737e127f25a65f6d95269bffd36158dc261114de7859b490bfc5aa",
+      "git_blob": "ea8e93dc44bc462a2be34e484432cf2b9ec88527",
+      "lines": 357,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/torvalds__linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/LICENSES/preferred/GPL-2.0",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 25,
+          "byte_start": 0,
+          "byte_end_exclusive": 922
+        }
+      ],
+      "read_status": "partial",
+      "read_lines": 25,
+      "read_bytes": 922,
+      "sha256_reverified": true
+    },
+    {
+      "repo": "torvalds/linux",
+      "commit": "7d0a66e4bb9081d75c82ec4957c50034cb0ea449",
+      "path": "COPYING",
+      "role": "license-scope",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/COPYING",
+      "bytes": 496,
+      "sha256": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0",
+      "git_blob": "a635a38ef9405fdfcfe97f3a435393c1e9cae971",
+      "lines": 20,
+      "snapshot": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/torvalds__linux/7d0a66e4bb9081d75c82ec4957c50034cb0ea449/COPYING",
+      "status": "retrieved",
+      "read_ranges": [
+        {
+          "line_start": 1,
+          "line_end_inclusive": 20,
+          "byte_start": 0,
+          "byte_end_exclusive": 496
+        }
+      ],
+      "read_status": "full",
+      "read_lines": 20,
+      "read_bytes": 496,
+      "sha256_reverified": true
+    }
+  ],
+  "decisions": [
+    {
+      "skill": "adk-embedded-debug-transport",
+      "decision": "KEEP",
+      "reason": "Current source distinguishes passive observation, active probes, state change and destruction; GDB halt/continue and MMIO read side effects are explicitly classified. Credentials, target identity, channel fallback and next-skill handoff are covered. No new mechanism-backed gap was found.",
+      "evidence": [
+        "SKILL.md:43-72",
+        "SKILL.md:97-101",
+        "README.md:1-7",
+        "agents/openai.yaml:1-3"
+      ]
+    },
+    {
+      "skill": "adk-bsp-porting-playbook",
+      "decision": "KEEP",
+      "reason": "Linux/RTOS/bare-metal branches are separated. The Kbuild example already requires a newly created absolute output directory, preserves existing .config migrations, verifies compiler/ABI and budgets jobs using CPU/RAM. The CMake cache finding does not apply to this already explicit fresh-output contract. Device handoff and rollback remain independent.",
+      "evidence": [
+        "SKILL.md:31-42",
+        "SKILL.md:44-64",
+        "SKILL.md:88-94"
+      ]
+    },
+    {
+      "skill": "adk-register-map-design",
+      "decision": "KEEP",
+      "reason": "Reset type, inherited reset masks, defined versus undefined bits, zero-checkable-bit handling and read safety are already explicit. W1C/read-clear/FIFO and reserved-bit behavior do not use a generic RMW template. The current text does not claim a mask makes a destructive read safe.",
+      "evidence": [
+        "SKILL.md:22-29",
+        "SKILL.md:58-73",
+        "SKILL.md:84-88"
+      ]
+    },
+    {
+      "skill": "adk-embedded-remote-debug-log-triage",
+      "decision": "KEEP",
+      "reason": "The existing layered probes distinguish transport, shell and app; output semantics, retry budget, circuit breaker, post-recovery boot/PID/artifact identity and final health are explicit. The reference retains raw evidence hashes and does not treat connectivity recovery as deployment authority. No concrete new failing probe was identified.",
+      "evidence": [
+        "SKILL.md:79-108",
+        "references/remote-adb-hil-contract.md:3-49",
+        "references/remote-adb-hil-contract.md:51-80"
+      ]
+    },
+    {
+      "skill": "adk-embedded-release-orchestration",
+      "decision": "KEEP",
+      "reason": "Prepare, publish and device operations have separate authority and target receipts. Multi-component OTA already models compatibility, stage/activate/health, partial success, power loss, repeated update, rollback failure and unknown-effect reconciliation. No new verified omission warrants duplicating release or readiness gates.",
+      "evidence": [
+        "SKILL.md:35-50",
+        "SKILL.md:81-91",
+        "references/multi-mcu-ota-recovery.md:1-18"
+      ]
+    },
+    {
+      "skill": "adk-interrupt-dma-patterns",
+      "decision": "KEEP",
+      "reason": "Ownership, mapping direction, coherency versus memory ordering, producer/consumer stalls, partial transfer, cancel/reset/late completion and teardown are already required. Linux DMAEngine's async termination plus synchronization and Zephyr's cancel/snapshot races provide concrete API-level ways to satisfy the current runtime-specific lifecycle requirement, but no current ADK snippet asserts cancellation is a completion barrier. Do not add another generic lifecycle checklist solely for terminology coverage.",
+      "evidence": [
+        "SKILL.md:33-47",
+        "SKILL.md:80-92",
+        "references/rtos-isr-dma-diagnostics.md:8-13",
+        "references/details.md:1-19"
+      ],
+      "new_source_refs": [
+        "torvalds/linux:Documentation/driver-api/dmaengine/client.rst:303-328,369-388",
+        "zephyrproject-rtos/zephyr:doc/kernel/services/threads/workqueue.rst:390-529"
+      ]
+    },
+    {
+      "skill": "adk-fault-injection-recovery",
+      "decision": "KEEP",
+      "reason": "Fault classes are chosen by actual risk, not a fixed quota. The skill requires isolated authorized targets, resource bounds, stopping conditions, operator receipts, detection/recovery timing and post-recovery functional/data checks. The quality gate explicitly makes watchdog testing conditional, so the workflow heading is not evidence of mandatory unauthorized watchdog mutation.",
+      "evidence": [
+        "SKILL.md:31-43",
+        "SKILL.md:51-52",
+        "SKILL.md:68-84"
+      ]
+    },
+    {
+      "skill": "adk-performance-profiling-embedded",
+      "decision": "KEEP",
+      "reason": "The current source validates active workload and actual runtime binary/dispatch, holds operating conditions and input/output equivalence, distinguishes invalid/inconclusive/no-gain, and separates static frames from call-chain/IRQ stack bounds. Espressif's dtype/layout/dispatch alignment is useful project-specific corroboration, already represented by ADK's runtime-object and frontend/quantization/postprocessing checks; its device/autoinstall flow is not adopted.",
+      "evidence": [
+        "SKILL.md:27-36",
+        "references/mcu-memory-footprint.md:3-19",
+        "references/mcu-memory-footprint.md:48-56"
+      ],
+      "new_source_refs": [
+        "espressif/esp-dl:tools/agents/skills/espdl-operator/SKILL.md:609-710"
+      ]
+    },
+    {
+      "skill": "adk-embedded-storage-layout-migration",
+      "decision": "KEEP",
+      "reason": "Migration is separated from diagnosis; the config/layout/artifact chain, per-partition data preservation, host rehearsal, explicit operator handoff, interrupted-update recovery and single-device versus batch evidence are all present. Neither dry-run nor receipt consumption implies write authorization.",
+      "evidence": [
+        "SKILL.md:42-51",
+        "SKILL.md:63-98"
+      ]
+    },
+    {
+      "skill": "adk-unit-test-embedded",
+      "decision": "KEEP",
+      "reason": "The current skill separates host/compile-only/emulator/HIL, uses public behavior and independent expected values, requires valid nonempty state-sequence exploration, reset/replay and cancellation/late-completion ownership invariants. The bounded FIFO example states its exact alphabet, steps and limit; it is not represented as fuzzing or hardware proof.",
+      "evidence": [
+        "SKILL.md:30-40",
+        "SKILL.md:54-55",
+        "references/property-stateful-tests.md:1-61",
+        "references/embedded-tdd-matrix.md:1-12"
+      ]
+    },
+    {
+      "skill": "adk-driver-bringup-checklist",
+      "decision": "KEEP",
+      "reason": "Minimal, functional, soak and production stages have distinct completion evidence. Active bus probes and read-side-effect MMIO are classified explicitly; resource lifecycle, IRQ/DMA error recovery, post-write verification and not-run outcomes are retained. No generic external MCU example justifies weakening target-specific hardware checks.",
+      "evidence": [
+        "SKILL.md:30-60",
+        "SKILL.md:84-100"
+      ]
+    },
+    {
+      "skill": "adk-cmake-cross-build",
+      "decision": "ENHANCE",
+      "reason": "The manual workflow can reconfigure an existing binaryDir with a different toolchain file while configure/build succeed and the cache advertises the new file, yet the generated system/compiler state still uses the original toolchain. The current checks bind presets/binaryDir/configuration but do not state the build-tree cache identity boundary. A real CMake/Ninja host counterexample, forced rebuild and normal controls confirm the gap.",
+      "evidence": [
+        "SKILL.md:28-34",
+        "SKILL.md:36-51",
+        "SKILL.md:96-109"
+      ],
+      "finding_id": "EMB-R3-CMAKE-CACHE"
+    },
+    {
+      "skill": "adk-offline-core-dump-triage",
+      "decision": "KEEP",
+      "reason": "Binary/core/library association is proven by matching artifacts and mappings rather than filenames or source commits. The GDB example disables auto-load before files are loaded, sets sysroot early and retains partial frames/missing-library boundaries. No new source-backed executable mismatch was found.",
+      "evidence": [
+        "SKILL.md:33-40",
+        "SKILL.md:42-54",
+        "SKILL.md:74-75"
+      ]
+    },
+    {
+      "skill": "adk-static-analysis-c-cpp",
+      "decision": "KEEP",
+      "reason": "Changed headers select consuming TUs, real compile databases and target flags are mandatory, empty/invalid scans are not-scanned, and warnings/diagnostic-tool exits remain visible. Static and sanitizer evidence are explicitly separated. The CMake build-tree identity fix should live in the build skill, without duplicating that workflow here.",
+      "evidence": [
+        "SKILL.md:25-35",
+        "SKILL.md:47-68"
+      ]
+    },
+    {
+      "skill": "adk-protocol-stack-integration",
+      "decision": "KEEP",
+      "reason": "The current transport reference explicitly covers endian/length arithmetic overflow before allocation, bounded framing and backpressure, stream EOF versus empty datagrams, truncation, short writes, session cancellation/reconnect and non-refreshing deadlines. Nested retries and non-idempotent unknown effects are already addressed. These are concrete mechanisms; additional generic parser keywords would duplicate them.",
+      "evidence": [
+        "SKILL.md:21-27",
+        "SKILL.md:29-48",
+        "references/transport-boundaries.md:1-9"
+      ]
+    },
+    {
+      "skill": "adk-driver-implementation",
+      "decision": "KEEP",
+      "reason": "Runtime-specific primitives, owner/transition contracts, partial initialization, cancellation/reset, late completion, repeated start/stop and resource release are explicit. New Linux and Zephyr documentation reinforces verifying the actual cancel/flush primitive and callback context, but does not establish a contradictory ADK implementation. Keep the runtime-neutral ownership contract.",
+      "evidence": [
+        "SKILL.md:32-52",
+        "SKILL.md:69-96"
+      ],
+      "new_source_refs": [
+        "torvalds/linux:Documentation/driver-api/dmaengine/client.rst:303-328,369-388",
+        "zephyrproject-rtos/zephyr:doc/kernel/services/threads/workqueue.rst:317-335,390-529"
+      ]
+    },
+    {
+      "skill": "adk-rtos-task-design",
+      "decision": "KEEP",
+      "reason": "Fresh reading confirms v11.3.9 already distinguishes periodic APIs, tick conversion/range/rollover, at-time nonblocking from deadline miss, bounded overrun recovery, shared timer callback service and asynchronous stop/delete acceptance from quiescence. Existing response-time model assumptions and measured-versus-WCET limits are preserved; the prior enhancement is not proposed again.",
+      "evidence": [
+        "SKILL.md:25-46",
+        "SKILL.md:48-75"
+      ]
+    },
+    {
+      "skill": "adk-test-strategy",
+      "decision": "KEEP",
+      "reason": "Risk-based minimum verification, independent expected values and wrong-variant rejection, checker calibration, resource isolation and real execution receipts are explicit. A model/host success is not allowed to claim provider/device qualification. No new gate or broad mandatory testing is justified.",
+      "evidence": [
+        "SKILL.md:31-53",
+        "references/high-value-tdd.md:1-48"
+      ]
+    },
+    {
+      "skill": "adk-embedded-diagnostic-harness",
+      "decision": "OBSERVE",
+      "reason": "The dedicated harness template centers on command/suite/precondition/expected return/invoke_ret but does not itself prescribe an invocation-correlation field. A stale or interleaved reply is a plausible future failure surface; no native diagnostic implementation or schema was supplied to prove it is accepted here. Existing HIL/SIL and remote preflight skills already require target/firmware identity and fresh evidence. Retain the current skill, and inspect an actual diag adapter before proposing another identity field or rule.",
+      "evidence": [
+        "SKILL.md:34-46",
+        "SKILL.md:57-76",
+        "skills/adk-integration-hil-sil/SKILL.md:25-47",
+        "skills/adk-embedded-remote-debug-log-triage/SKILL.md:81-90"
+      ],
+      "observation_id": "EMB-R3-DIAG-CORRELATION",
+      "implementation_requested": false
+    },
+    {
+      "skill": "adk-hardware-debugging",
+      "decision": "KEEP",
+      "reason": "The current source binds a fault PC/function to the correct module/ELF and trustworthy address mapping, marks incomplete symbols partial, distinguishes Cortex-M implementations and accounts for reset-marker read side effects. Neither an addr2line exit code nor a plausible line number alone proves the root cause.",
+      "evidence": [
+        "SKILL.md:36-55",
+        "SKILL.md:66-68",
+        "references/mcu-fault-reset-wakeup.md:1-22"
+      ]
+    },
+    {
+      "skill": "adk-integration-hil-sil",
+      "decision": "KEEP",
+      "reason": "Backend, firmware and rig identity, resource isolation, fresh per-case JUnit state, required-case accounting and post-test health are explicit. Compile-only/zero-run/all-skip cannot be treated as board execution. This skill already covers system-test identity without needing the diagnostic template to duplicate all fields.",
+      "evidence": [
+        "SKILL.md:25-51",
+        "SKILL.md:53-70"
+      ]
+    },
+    {
+      "skill": "adk-bsp-analysis",
+      "decision": "KEEP",
+      "reason": "Analysis is scoped to relevant initialization/resource graphs, target runtime and authoritative hardware sections; patch history and confirmed/inferred/unknown are separated. The source explicitly avoids imposing Linux/Zephyr mechanisms on generic MCUs, and implementation/live debugging are handed to the proper skill.",
+      "evidence": [
+        "SKILL.md:37-65",
+        "references/bsp-analysis-details.md:1-38"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "EMB-R3-CMAKE-CACHE",
+      "priority": "P1",
+      "status": "confirmed-method-gap",
+      "title": "Changing CMAKE_TOOLCHAIN_FILE in an existing build tree can silently retain the original toolchain",
+      "target": "skills/adk-cmake-cross-build/SKILL.md",
+      "baseline_locations": [
+        [
+          28,
+          34
+        ],
+        [
+          36,
+          51
+        ],
+        [
+          96,
+          109
+        ]
+      ],
+      "mechanism": "CMake records initial system/toolchain state in CMakeFiles/<version>/CMakeSystem.cmake and compiler state in the build tree. Passing a different -DCMAKE_TOOLCHAIN_FILE updates the visible cache entry without necessarily reselecting that initialized toolchain. Successful configure/build and matching binaryDir/configuration therefore do not prove the requested compiler/configuration was used.",
+      "minimum_counterexample": "Toolchain A sets CMAKE_C_COMPILER=/usr/bin/gcc and CMAKE_C_FLAGS_INIT=-DTOOLCHAIN_ID=101. Toolchain B sets /usr/bin/cc and -DTOOLCHAIN_ID=202. Configure and build one tree with A, then run the same documented manual command with B and the same binaryDir. Cache advertises B, generated system file includes A, actual compile command uses gcc and 101, and the executable prints toolchain_id=101. A fresh B tree prints 202.",
+      "host_probe": {
+        "runner": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/run.py",
+        "main_evidence": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/evidence.json",
+        "forced_rebuild_evidence": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/forced-rebuild-evidence.json",
+        "tool": "CMake 3.31.6 with actual Ninja and host GCC",
+        "checks": [
+          "fresh A prints 101",
+          "unchanged A reuse prints 101",
+          "A-to-B reused tree cache names B",
+          "A-to-B reused tree still prints 101",
+          "fresh B prints 202"
+        ],
+        "check_count": 5,
+        "passed_count": 5,
+        "extra_control": "cmake --build build-reused --clean-first --parallel 1 --verbose recompiles with /usr/bin/gcc -DTOOLCHAIN_ID=101 and the result still prints 101, excluding a pure no-work/stale-object explanation.",
+        "all_configure_build_exit_codes": 0,
+        "identity_artifacts": [
+          "build-reused/CMakeCache.txt",
+          "build-reused/CMakeFiles/3.31.6/CMakeSystem.cmake",
+          "build-reused/compile_commands.json",
+          "build-fresh-b/CMakeCache.txt",
+          "build-fresh-b/compile_commands.json"
+        ],
+        "limits": "Controlled host CMake semantics only; /usr/bin/gcc and /usr/bin/cc may resolve to the same compiler installation. The deliberately different toolchain flag and actual command prove configuration provenance, not a measured cross-target ABI failure or firmware incident. No HIL, DMA, hard-real-time, or model-effect claim."
+      },
+      "official_crosscheck": [
+        {
+          "repo": "Kitware/CMake",
+          "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+          "path": "Help/variable/CMAKE_LANG_COMPILER.rst",
+          "lines": [
+            1,
+            33
+          ],
+          "meaning": "The compiler and required command options are initialized when the build tree is first configured; the compiler is not an in-place switch."
+        },
+        {
+          "repo": "Kitware/CMake",
+          "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+          "path": "Modules/CMakeDetermineSystem.cmake",
+          "lines": [
+            137,
+            222
+          ],
+          "meaning": "The discovered toolchain is included and its concrete include is emitted into the persisted system file."
+        },
+        {
+          "repo": "Kitware/CMake",
+          "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+          "path": "Modules/CMakeSystem.cmake.in",
+          "lines": [
+            1,
+            15
+          ],
+          "meaning": "Generated build-tree state includes that toolchain and marks the system loaded."
+        }
+      ],
+      "minimal_fix": [
+        "State that a binaryDir belongs to a specific source/toolchain/target/sysroot/ABI/generator identity; before reuse compare the existing initialized state and actual compiler invocation, not only intended variables or a new cache path.",
+        "For a material toolchain/target/compiler/sysroot/ABI or generator change, use a new task-owned binaryDir or matching preset. Preserve the old tree and evidence; do not teach in-place compiler/cache editing or destructive cleanup as the default recovery.",
+        "Record toolchain identity/hash and actual compiler command with build evidence. Allow ordinary compatible incremental rebuilds; do not turn all configuration changes into a mandatory clean rebuild."
+      ],
+      "executable_acceptance": [
+        "Use temporary isolated source/build trees with two literal expected identities (101/202), actual CMake and Ninja, and compile_commands plus executable output as the oracle.",
+        "The unsafe reuse path must reproduce the stale toolchain despite exit 0; the revised prescribed workflow must refuse using that tree or choose a fresh B tree that compiles/runs as 202.",
+        "Unchanged A reuse and fresh A/B controls remain valid; preserve prior evidence and project-owned directories.",
+        "Retain real command exit codes and empty/not-run/mixed-skip test semantics; do not replace the CMake execution probe with keyword assertions.",
+        "Run the existing targeted skill/example and routing checks after implementation. Changes to shared machinery require the repository's applicable regression gate, not a new parallel gate."
+      ],
+      "not_proven": [
+        "Every generator/platform/CMake release",
+        "same-path in-place toolchain edits",
+        "cross-architecture ABI breakage",
+        "user runtime or firmware deployment",
+        "real-model compliance improvement"
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "id": "EMB-R3-DIAG-CORRELATION",
+      "status": "observe-only",
+      "question": "Can a real diagnostic adapter accept an old/interleaved result with the correct invoke_ret but a different command, device, boot or invocation?",
+      "current_evidence": "Only generic command/suite templates exist in this skill; no native adapter, parse schema or captured ambiguous transcript was identified in the assigned source population.",
+      "next_step_if_encountered": "Read the actual adapter's request/reply schema and identity binding, then replay a good current result and a wrong-invocation or old-boot result through that existing checker. A general keyword requirement is not a substitute.",
+      "reason_no_change": "A concrete accepting consumer and oracle are missing, while HIL/SIL/remote skills already require identity/fresh evidence. Adding another universal gate or made-up run-id field is not supported."
+    }
+  ],
+  "discovery": {
+    "method": "Broad public web search first, then selected first-party repository files retrieved at immutable commit ids. Search/registry listings were discovery inputs only. No remote skill, installer, ACP session, model CLI, Docker job or hardware command was executed.",
+    "queries": [
+      "github embedded systems agent skills Zephyr FreeRTOS SKILL.md",
+      "github embedded firmware skills DMA interrupt driver review skill",
+      "github SKILL.md cmake embedded firmware protocol parser",
+      "github official embedded agent skills espressif zephyr SKILL.md",
+      "github agent skills CMake toolchain firmware build embedded",
+      "github embedded code review skill parser resource lifecycle DMA",
+      "site.cmake.org CMAKE_TOOLCHAIN_FILE first time build tree cache compiler cannot change once set",
+      "site.docs.kernel.org dmaengine_terminate_async dmaengine_synchronize callbacks terminate_sync deadlock",
+      "site.docs.zephyrproject.org workqueue cancel work sync pending race submit reschedule"
+    ],
+    "search_refs": [
+      "turn31search4",
+      "turn31search5",
+      "turn31search7",
+      "turn31search8",
+      "turn31search9",
+      "turn31search10",
+      "turn36search0",
+      "turn36search2",
+      "turn36search3",
+      "turn36search5",
+      "turn36search6",
+      "turn36search9",
+      "turn37search0",
+      "turn37search1",
+      "turn37search4",
+      "turn37search6",
+      "turn37search7",
+      "turn37search10",
+      "turn37search12",
+      "turn37search19",
+      "turn37search25",
+      "turn37search30",
+      "turn37search36"
+    ],
+    "selected_repository_decisions": [
+      {
+        "repo": "Kitware/CMake",
+        "commit": "859ca5c4d7396a011a462878179bc173e1283731",
+        "license": "BSD-3-Clause",
+        "decision": "Use official docs/implementation to substantiate the sole confirmed enhancement; no source code copied into ADK."
+      },
+      {
+        "repo": "zephyrproject-rtos/zephyr",
+        "commit": "64e98eb5278d790f3b3e5279ca8b39b45097bbc0",
+        "license": "Apache-2.0 repository license; selected documentation has no per-file override visible",
+        "decision": "Retain as runtime-specific verification guidance for work cancellation, self-resubmission, shared-state locks and status snapshots. Existing ADK lifecycle instructions already demand the corresponding checks."
+      },
+      {
+        "repo": "torvalds/linux",
+        "commit": "7d0a66e4bb9081d75c82ec4957c50034cb0ea449",
+        "license": "GPL-2.0 WITH Linux-syscall-note according to repository COPYING; GPL version 2 only; selected documentation has no explicit per-file SPDX header",
+        "decision": "Retain official API semantics for async termination/synchronization and callback context; do not import Linux APIs into RTOS/bare-metal defaults."
+      },
+      {
+        "repo": "espressif/esp-dl",
+        "commit": "512ed0b0dc5f5320f3d9ca5a5aea189803f87f31",
+        "license": "MIT",
+        "decision": "Useful concrete operator dtype/layout/export/runtime/ISA dispatch workflow. ADK already addresses actual dispatch and matching outputs. Reject automatic Docker installation and first-serial-port flash assumptions; a connected port is not target identity or write authorization."
+      },
+      {
+        "repo": "ylongw/embedded-review",
+        "commit": "bb500aa00fc3e548365305b537b211663323a3d9",
+        "license": "MIT",
+        "decision": "Target/runtime/compiler and memory/IRQ/hardware review framing is useful but already represented. Reject line-count-based mandatory paid-model/ACP cross-review and the claim that reviewer consensus proves a real bug; no ACP or external model was invoked."
+      },
+      {
+        "repo": "mohitmishra786/low-level-dev-skills",
+        "commit": "d0d0a13d4e3caec7afb2d647a1fffdb7cb1ee058",
+        "license": "MIT",
+        "decision": "Out-of-source builds, target-scoped flags and cross-compile separation are useful discovery material. Do not adopt unbudgeted nproc jobs, generic MCU register commands or cache-maintenance snippets as authoritative behavior; CMake and platform official sources control conclusions."
+      },
+      {
+        "repo": "beriberikix/zephyr-agent-skills",
+        "commit": "ed63cdfb8cdfbeb5946ea39c33f4aa6bcf3a5cce",
+        "license": "Apache-2.0",
+        "decision": "Entry skill is a registry/CLI router rather than direct embedded engineering guidance. No zephyr-cli installation or external registry loading is needed; ADK already has one primary router and should not duplicate it."
+      },
+      {
+        "repo": "espressif/skills",
+        "commit": "ab44d6e1e34260b16de228aea1aa24169cbae53b",
+        "license": "Apache-2.0",
+        "decision": "The resolved tree contained CONTRIBUTING.md, LICENSE, README.md and skills/.gitkeep only. Do not count its advertised collection as reviewed skill content; use the actual esp-dl operator source separately."
+      }
+    ],
+    "broader_discovered_not_pinned": [
+      "rovinax/embedded-skills",
+      "Mindrally/skills",
+      "MokeyingChen/cc-skills",
+      "HikerPan/embedded-development-skills",
+      "Victory-7291/project-scaffold-setup-skills",
+      "DragonTang0718/zephyr-agent-skills",
+      "brunofbloq/embedded-agent-skills",
+      "iharhl/embedded-agent-skills",
+      "xentron-bit/stm32-embedded-skill",
+      "chopinfeng/awesome-hardware-skills"
+    ],
+    "broad_discovery_limit": "Unpinned candidates above were discovery-only, not treated as fully audited or as technical authorities. Search ranking, star counts and aggregator quality labels were not evidence of effectiveness.",
+    "pin_method": "GitHub read-only commit/tree metadata where available, then read-only git ls-remote to resolve annotated tag commits when GitHub API returned 403; no local or remote refs were written. Raw files fetched by immutable commit URL and hashed independently."
+  },
+  "negative_results": [
+    {
+      "attempt": "rtk exec pwd",
+      "result": "rtk does not provide an exec subcommand; returned OS error 2. Switched to documented rtk run. No repository state changed."
+    },
+    {
+      "attempt": "First combined local-read/web result",
+      "result": "Combined tool display was truncated; affected local files were reread in full in a separate output. No partial display was counted as a complete read."
+    },
+    {
+      "attempt": "GitHub API source pinning",
+      "result": "Some read-only API requests returned HTTP 403. Used read-only remote ref resolution and immutable raw URLs; did not install, authenticate, change permissions, or retry blocked API requests indefinitely."
+    },
+    {
+      "attempt": "DMA/driver lifecycle and protocol parser new defect search",
+      "result": "Official sources and concrete failure surfaces were checked, but current v11.3.9 already covers the substantive invariants. No new implementation bug or platform failure was claimed."
+    },
+    {
+      "attempt": "Diagnostic stale-response hypothesis",
+      "result": "No concrete adapter/schema or actual failing consumer was identified. Kept observation only; no artificial universal correlation field was proposed."
+    }
+  ],
+  "limits": [
+    "All 45 assigned tracked local files were read completely; large external sources are selectively read, with exact per-file ranges recorded. Hashing or grep hits alone are not labeled full reading.",
+    "Read-only source and official-document audit plus one real host CMake configuration experiment; no user runtime, live device, Flash/MMIO write, HIL, DMA hardware, ISR timing or hard-real-time qualification.",
+    "No paid model, Codex/Work CLI or Cloud job, external message, repository implementation edit, commit, merge, push or ref mutation was performed by this reviewer.",
+    "No native agent/model A/B, token-cost saving, measured skill-compliance gain or product release approval is inferred.",
+    "External skill text is research data, not execution authority; original snapshots remain in scratch and no external source text is vendored into production assets.",
+    "Changes made concurrently by the parent are reported separately from this baseline-bound audit; a later implementation requires a fresh scoped review."
+  ],
+  "verified_at": "2026-11-16T07:47:29.392690+00:00",
+  "external_population": {
+    "repository_count": 8,
+    "retrieved_file_count": 21,
+    "snapshot_bytes": 167186,
+    "full_read_file_count": 14,
+    "partial_read_file_count": 7,
+    "read_lines": 2119,
+    "read_bytes": 85154,
+    "raw_manifest": {
+      "path": "/workspace/scratch/fe5385ca063a/round3-embedded-sources/manifest.json",
+      "bytes": 21261,
+      "sha256": "0cb5c1ce941e2413830ed3259d83f959eed2ebeb182b234df6b4707fd7474aff"
+    }
+  },
+  "probe_artifact_manifest": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/run.py",
+      "bytes": 3220,
+      "sha256": "e23170334f0265e061c56d23ab776750aef59b81b5f8a432edeef8f2b3005c7a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-a.cmake",
+      "bytes": 82,
+      "sha256": "1e501482f9d887f3d3d55a5d1ed15092511103795025ec26e64f671dbe4eb5c4"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/toolchain-b.cmake",
+      "bytes": 81,
+      "sha256": "487dd5ab578e8beb0d5d3591ab619c9f8e76d7ea9568c076a351e51b8162e814"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src/CMakeLists.txt",
+      "bytes": 277,
+      "sha256": "c226a0f2d62f5d49bb1fdbda5a08e20f85c03cd8f9ba1c784a2be04ada8db88b"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/src/main.c",
+      "bytes": 159,
+      "sha256": "0a6e2d23f7aa62ca5783822ee43fdc42ac2db71adce9cf3924aa255877b0ecbd"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/evidence.json",
+      "bytes": 12418,
+      "sha256": "30b1e0ab0d8157a7354ce33f5544d02cd05f6a09f63d409b45bff1218267b54d"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/forced-rebuild-evidence.json",
+      "bytes": 1327,
+      "sha256": "05f09c143e8a7c5ca2ce9e8d286f368ac938bf82496702cb58e7ba9066a3e5c4"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused/CMakeCache.txt",
+      "bytes": 13082,
+      "sha256": "d78a9f93ed052bfc2a82ee50c85e65b357bd4891ff5307a4ec6b455d8344fdcd"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused/compile_commands.json",
+      "bytes": 357,
+      "sha256": "7d34ef1a12e675b1d553225e6cee6cc76c8d293d236188421915e0faff8e9270"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-reused/CMakeFiles/3.31.6/CMakeSystem.cmake",
+      "bytes": 441,
+      "sha256": "1fe01dfa2582dc6ef09a09a365de4fb71f45984c454b0c470d90614debebde45"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b/CMakeCache.txt",
+      "bytes": 13057,
+      "sha256": "e6ef9efa8c5ada1e242e4e6a74ae8f0d3f7b09760c8c8351751da82da040e23a"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b/compile_commands.json",
+      "bytes": 357,
+      "sha256": "db9d223deb3d5b4e3d112d637fa9af08c651cd3d07ea873b5bef9d6be982632b"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round3-cmake-probe/build-fresh-b/CMakeFiles/3.31.6/CMakeSystem.cmake",
+      "bytes": 441,
+      "sha256": "a582ec37e23f82e678906a715c5a7cb087f2bbcc83192b2f91ca48afe1991617"
+    }
+  ],
+  "rules_manifest": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/AGENTS.md",
+      "bytes": 2914,
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+      "read_status": "full",
+      "lines": 38
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/docs/agent-operating-rules.md",
+      "bytes": 13278,
+      "sha256": "dc517366846889f088f350fdf1466719c4d655e9651bd5f2e12323e7ae8a541b",
+      "read_status": "full",
+      "lines": 174
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/agent-dev-kit/LICENSE",
+      "bytes": 1063,
+      "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
+      "read_status": "full",
+      "lines": 21
+    }
+  ]
+}

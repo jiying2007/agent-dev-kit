@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.9",
+    "planned_release": "v11.3.10",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.9",
+      "merged_main_sha": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+      "model_runs": 0,
+      "reason": "The source release and Root promotion completed without running this author-exposed campaign. The successor's scanner, child-status, CMake, validator and exported-template observations are separate from native A/B, provider-token, latency and cost results."
+    },
     {
       "planned_release": "v11.3.8",
       "merged_main_sha": "913b6b3a0838ccddae252a3a8536ac7d41598810",
