@@ -1,0 +1,89 @@
+{
+  "retrieved_at": "2026-11-16 12:27:56 UTC",
+  "scope": "Current targeted source checks; no exhaustive internet claim. External research agent performed full or targeted semantic reading. Raw upstream text not imported.",
+  "sources": [
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "path": "skills/secret-serialization/SKILL.md",
+      "blob_sha": "030e3c0a0c158e9d7d5acf5962d52f3a17e7f43b",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/secret-serialization/SKILL.md",
+      "purpose": "method verification",
+      "retrieved": true
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "path": "skills/secret-serialization/references/python.md",
+      "purpose": "method verification",
+      "blob_sha": "679c8598a5006385213db8304aa65f1f389d37ac",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/secret-serialization/references/python.md",
+      "retrieved": true,
+      "read_by": "external_skill_research",
+      "root_retrieval_verified": true
+    },
+    {
+      "repository": "getsentry/skills",
+      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+      "path": "LICENSE",
+      "purpose": "license",
+      "blob_sha": "753a6c03c60a9232405d05170bd3ad3cab49a1ef",
+      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/LICENSE",
+      "retrieved": true,
+      "read_by": "external_skill_research",
+      "root_retrieval_verified": true
+    },
+    {
+      "repository": "addyosmani/agent-skills",
+      "commit": "39b723ceebf81474d0557c1fecd01eddab585563",
+      "path": "evals/README.md",
+      "purpose": "existing coverage comparison",
+      "blob_sha": "831993579ce92effc1e6b99f2927e3cbc46aa196",
+      "url": "https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/evals/README.md",
+      "retrieved": true,
+      "read_by": "external_skill_research",
+      "root_retrieval_verified": true
+    },
+    {
+      "repository": "anthropics/skills",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "path": "skills/skill-creator/agents/analyzer.md",
+      "purpose": "existing evaluation comparison",
+      "blob_sha": "14e41d6068635f4dd3fb878fd1626312395dda63",
+      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/agents/analyzer.md",
+      "retrieved": true,
+      "read_by": "external_skill_research",
+      "root_retrieval_verified": true
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "path": "skills/productivity/writing-for-agents/SKILL.md",
+      "purpose": "progressive disclosure comparison",
+      "blob_sha": "a37608daf6e835e767deecfb498facecaaba82ba",
+      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/writing-for-agents/SKILL.md",
+      "retrieved": true,
+      "read_by": "external_skill_research",
+      "root_retrieval_verified": true
+    },
+    {
+      "repository": "obra/superpowers",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "path": "skills/subagent-driven-development/scripts/review-package",
+      "purpose": "scope identity comparison",
+      "blob_sha": "04c2b918c6289b49e716fe1faa0afc98a4e465f9",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/subagent-driven-development/scripts/review-package",
+      "retrieved": true,
+      "read_by": "external_skill_research",
+      "root_retrieval_verified": true
+    }
+  ],
+  "official_semantics": {
+    "url": "https://docs.python.org/3.12/library/dataclasses.html",
+    "sections": [
+      "dataclasses.field repr",
+      "dataclasses.asdict recursive conversion"
+    ],
+    "mutable_page": true
+  }
+}

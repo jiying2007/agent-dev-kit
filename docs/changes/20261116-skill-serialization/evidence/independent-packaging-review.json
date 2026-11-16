@@ -1,0 +1,872 @@
+{
+  "schema": "adk-independent-packaging-review/v1",
+  "subject": "20261116-skill-serialization",
+  "scope": "evidence-packaging",
+  "reviewer": {
+    "id": "ai/root/delivery_review",
+    "role": "independent packaging reviewer",
+    "human_review_performed": false
+  },
+  "started_at": "2026-11-16T12:45:00.191999+00:00",
+  "reviewed_at": "2026-11-16T12:49:36.245150+00:00",
+  "verdict": "pass",
+  "open_counts": {
+    "blocker": 0,
+    "major": 0,
+    "minor": 0
+  },
+  "source": {
+    "baseline_commit": "b20df018ca62436dd026daed6ec6944d4a45cbbd",
+    "tested_local_source": "5b253b8885447f35f015d63950db025b2d82b2ba",
+    "canonical_remote_source": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+    "source_tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+    "same_tree_not_same_commit": true,
+    "frozen_source_paths": 28,
+    "working_and_indexed_frozen_paths_equal_canonical_source": true,
+    "canonical_patch_sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7",
+    "source_reviewed_at": "2026-11-16T12:40:08.744429+00:00",
+    "source_review_verdicts": {
+      "spec": "pass",
+      "quality": "pass"
+    },
+    "source_report_identities": [
+      {
+        "path": "/workspace/scratch/2d4d08f07657/independent-review.json",
+        "bytes": 26917,
+        "sha256": "901ba57d1a79dbe3514ed41ccf4551214af3bfd602e4c97515ef0a4f9ccf4909"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/independent-review.md",
+        "bytes": 6301,
+        "sha256": "59448db4d0a9bdeb6c33ad6ce0d1b9361d5b0ba8aad7ebde7b7eeadd83bc07f2"
+      }
+    ],
+    "source_report_copies_byte_exact": true
+  },
+  "final_packaging_snapshot": {
+    "head": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+    "head_tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+    "status": "A  docs/changes/20261116-skill-serialization/evidence/execution-bundle.json\nA  docs/changes/20261116-skill-serialization/evidence/execution-summary.json\nA  docs/changes/20261116-skill-serialization/evidence/independent-source-review.json\nA  docs/changes/20261116-skill-serialization/evidence/independent-source-review.md\nA  docs/changes/20261116-skill-serialization/evidence/original.patch\nA  docs/changes/20261116-skill-serialization/evidence/review-validation.json\nA  docs/changes/20261116-skill-serialization/evidence/source-bindings.json\nA  docs/changes/20261116-skill-serialization/review-evidence.json\nA  docs/changes/20261116-skill-serialization/verification.md\n",
+    "staged_additions": 9,
+    "working_diff_empty": true,
+    "files": [
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/review-evidence.json",
+        "bytes": 9498,
+        "sha256": "d6690b875f2796099b8d43d1c906eb26c39cef7f388ae9a66d292806b0248ead"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/verification.md",
+        "bytes": 4752,
+        "sha256": "64c384c7ac7d4abb0074f16d36ceda3e0ad988596c87a1aa96cc50128fb3c80b"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/source-bindings.json",
+        "bytes": 7474,
+        "sha256": "df6b73b457ede661d74a342b39340be60548eafcb78ed80a3149a165e6dc5e04"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/original.patch",
+        "bytes": 144014,
+        "sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-bundle.json",
+        "bytes": 61324,
+        "sha256": "851f5891f4044649dcc11ff1e0a8fec08a13a0e03cd3c2b06b3c9c432a1bade4"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-summary.json",
+        "bytes": 1793,
+        "sha256": "0b4c7789c060ab448536c3c893e05946fa88f74da874d61f20e2e8de4e84d36c"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/review-validation.json",
+        "bytes": 497,
+        "sha256": "67d59d95ae963ba98692ef498d07a93b92be7a208c1c127473699a4ac6b4a2fb"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/independent-source-review.json",
+        "bytes": 26917,
+        "sha256": "901ba57d1a79dbe3514ed41ccf4551214af3bfd602e4c97515ef0a4f9ccf4909"
+      },
+      {
+        "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/independent-source-review.md",
+        "bytes": 6301,
+        "sha256": "59448db4d0a9bdeb6c33ad6ce0d1b9361d5b0ba8aad7ebde7b7eeadd83bc07f2"
+      }
+    ],
+    "staged_diff_sha256": "7205ebc8b6ea1654b0ec2d170e2fd540fac436e72e2d4ade6874aeb056cc9a10",
+    "staging_was_performed_by_parent": true
+  },
+  "actual_read_scope": [
+    "All nine proposed additive packaging files, including full verification prose, typed record, bindings, summary, saved validation, original patch, and exact source-review copies.",
+    "All 28 frozen source paths mechanically matched by bytes, SHA256 and canonical Git blob; full original patch compared with baseline-to-canonical git diff. The completed source review supplies the semantic source verdict.",
+    "All 14 gzip+base64 members decoded with strict base64 validation and a 16 MiB output ceiling, checked against declared lengths/SHA256 and original scratch bytes.",
+    "Initial and final packaging checker source and outputs; original six-mutant reviewer runner; parent amendment script; the recovered first-13 serialized bundle identity.",
+    "Actual full regression receipt, timing and log identities as packaged; original source before/after identity and 102/102 result remain bound to local 5b253b.",
+    "Supplied consumer prompt, fixture files, raw consumer report and explicit missing-complete-transcript limitation; no second consumer execution.",
+    "Actual post-staging format/security receipts and logs checked against the current complete nine-file staged diff; HEAD/status/diff snapshots agree. Security before.indexed_tree contains a retained exit-128 lock error and cannot be described as a complete successful before snapshot.",
+    "Read-only GitHub workflow jobs result for release run 43867568341, including retry job 133303201333 failure and skipped publish step."
+  ],
+  "checks": {
+    "frozen_source_unchanged": "pass",
+    "review_copies_exact": "pass",
+    "source_bindings": "pass",
+    "full_index_binary_patch": "pass",
+    "lossless_bundle_14_of_14": "pass",
+    "original_13_serialized_bundle_sha256": "050ae015582cd6a29e863e825094d9fc34836df42c1c3be0bb3d951878bac885",
+    "original_13_unchanged": "pass",
+    "summary_matches_raw_execution": "pass",
+    "production_typed_validator": {
+      "status": "pass",
+      "record_sha256": "d6690b875f2796099b8d43d1c906eb26c39cef7f388ae9a66d292806b0248ead",
+      "source_references": 29,
+      "evidence_references": 5,
+      "clock_override_used": false,
+      "source_review_time_preserved": true,
+      "validation_api": "agent_dev_kit.review_evidence.validate_review",
+      "expected_subject": "20261116-skill-serialization",
+      "expected_scope": "source-change"
+    },
+    "visible_historical_exit_erratum": "pass",
+    "test_source_packaging_release_separation": "pass",
+    "post_stage_format_receipt": "pass",
+    "post_stage_security_receipt": "pass"
+  },
+  "findings": [
+    {
+      "id": "SER-PACKAGING-01",
+      "severity": "minor",
+      "status": "closed",
+      "disposition": "fixed",
+      "finding": "Draft bundle preserved the six-mutant results but omitted the already executed reviewer probe source needed to inspect the exact replacement rules.",
+      "resolution": "Appended the original reviewer-serialization-probe.py as item 14, byte-for-byte; all original 13 complete serialized records remain unchanged. Refreshed bundle/summary/typed evidence hashes and passed the production validator. No source edit or test rerun.",
+      "resolved_evidence": {
+        "original_path": "/workspace/scratch/2d4d08f07657/reviewer-serialization-probe.py",
+        "name": "reviewer-serialization-probe.py",
+        "bytes": 7159,
+        "sha256": "f6efe6f8de6852ebc0dae68d7a37f6ae5340d088cc78e159261d3f2b02d785f7",
+        "encoding": "gzip+base64"
+      }
+    },
+    {
+      "id": "SER-REVIEW-01",
+      "severity": "minor",
+      "status": "closed",
+      "disposition": "visible_append_only_erratum",
+      "origin": "Original independent source review",
+      "finding": "Frozen negative-results.md wrote exit 2 for unsupported --profile although the retained raw command returncode is 1.",
+      "resolution": "verification.md opens with an explicit correction to actual exit 1. Original frozen sentence and original failing receipt remain intact; source finding is not erased."
+    }
+  ],
+  "release_status": {
+    "package_scope_pass_is_not_release_completion": true,
+    "release_run_id": 43867568341,
+    "retry_job_id": 133303201333,
+    "retry_conclusion": "failure",
+    "validate_and_smoke": "failure",
+    "publish_github_release": "skipped",
+    "workflow_url": "https://github.com/jiying2007/agent-dev-kit/actions/runs/43867568341",
+    "observed_result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Action completed."
+        }
+      ],
+      "structuredContent": {
+        "jobs": [
+          {
+            "id": 133303201333,
+            "name": "release / package",
+            "status": "completed",
+            "conclusion": "failure",
+            "run_id": 43867568341,
+            "logs_url": null,
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Set up Python",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Validate tag-bound release identity",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Validate successful main CI reuse",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Install CI dependencies",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 6
+              },
+              {
+                "name": "Validate synchronized source version identity",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 7
+              },
+              {
+                "name": "Validate and smoke",
+                "status": "completed",
+                "conclusion": "failure",
+                "number": 8
+              },
+              {
+                "name": "Build reproducible release",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 9
+              },
+              {
+                "name": "Validate release manifest, SBOM and source identities",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 10
+              },
+              {
+                "name": "Validate complete release artifact bundle",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 11
+              },
+              {
+                "name": "Attest release provenance",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 12
+              },
+              {
+                "name": "Upload artifact",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 13
+              },
+              {
+                "name": "Publish GitHub Release",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 14
+              },
+              {
+                "name": "Post Set up Python",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 27
+              },
+              {
+                "name": "Post Checkout",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 28
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 29
+              }
+            ]
+          },
+          {
+            "id": 133303203629,
+            "name": "promote-tag",
+            "status": "completed",
+            "conclusion": "success",
+            "run_id": 43867568341,
+            "logs_url": null,
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Checkout exact successful main source",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Validate exact main and synchronized version identity",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Promote immutable version tag",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Upload tag promotion evidence",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Post Checkout exact successful main source",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 10
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 11
+              }
+            ]
+          },
+          {
+            "id": 133305573819,
+            "name": "discover-orphaned-releases",
+            "status": "completed",
+            "conclusion": "skipped",
+            "run_id": 43867568341,
+            "logs_url": null,
+            "steps": null
+          },
+          {
+            "id": 133305574604,
+            "name": "repair-orphaned-release",
+            "status": "completed",
+            "conclusion": "skipped",
+            "run_id": 43867568341,
+            "logs_url": null,
+            "steps": null
+          }
+        ]
+      },
+      "isError": false
+    },
+    "observed_result_identity": {
+      "path": "/workspace/scratch/2d4d08f07657/independent-packaging-release-status.json",
+      "bytes": 5193,
+      "sha256": "52c3c8151ab7ad2a34bcfeca8ba6b297392254be6569ab32d1a75533ea58b259"
+    },
+    "verification_prose": "Correctly records the failed bounded retry, skipped publication, local-only reruns and unresolved cause. Ninja [1/4] alone does not identify a stuck first compiler command.",
+    "diagnosis_boundary": "This packaging review did not independently diagnose the CI timeout or rerun the release. Local different-toolchain success cannot establish its cause."
+  },
+  "remaining_delivery_dependencies": [
+    "Exact remote v11.3.11 protected PR/main checks and final packaging commit identity remain separate delivery evidence.",
+    "An immutable official successful release is not established by this source or packaging pass; observed v11.3.10 retry failed before publication.",
+    "Root source-only promotion requires its own authorized exact-version evidence and receipt; no live/runtime/M5 upgrade is certified here."
+  ],
+  "limitations": [
+    "This is a read-only AI review, not human approval, provider execution, field verification or product-release authorization.",
+    "No complete 102-entry rerun or new consumer run was performed for packaging. Existing raw full-run evidence and source review were verified and preserved.",
+    "The fresh-context consumer is one observation. Complete execution transcript was not retained; supplied fork configuration and prompt do not prove transcript-level isolation, paired A/B or causal improvement.",
+    "No token, cost, latency, native-runtime or production-incident claim is established by source byte counts or synthetic tests.",
+    "All 14 bundle items are recoverable, but the bundle is not an exhaustive transcript of every shell/tool interaction.",
+    "Post-stage security command succeeded, but its separate before.indexed_tree observation failed with exit 128/index.lock. Format has complete equal before/after snapshots; security HEAD/status/staged_diff agree and its after tree is valid. The report uses that combined bounded integrity evidence, not a claim that security alone recorded a complete before/after tree.",
+    "The final JSON/Markdown review files are intentionally outside their own reviewed nine-file identity set. Appending exact copies requires integrity checks only; the reports make no circular self-hash claim."
+  ],
+  "review_execution": {
+    "source_mutated": false,
+    "index_or_refs_mutated_by_reviewer": false,
+    "remote_mutation": false,
+    "full_suite_rerun": false,
+    "external_codex_or_work_started": false,
+    "initial_check": {
+      "identity": {
+        "path": "/workspace/scratch/2d4d08f07657/independent-packaging-initial-checks.json",
+        "bytes": 9575,
+        "sha256": "1c55e69e1aed7dc7c75a6e4eb8ce3121e51c84731609672a2dfdcb16dbcae492"
+      },
+      "raw": {
+        "schema": "adk-independent-packaging-checks/v1",
+        "phase": "initial",
+        "started_at": "2026-11-16T12:45:00.191999+00:00",
+        "completed_at": "2026-11-16T12:45:00.369442+00:00",
+        "status": "pass",
+        "before": {
+          "head": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+          "tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+          "status": "?? docs/changes/20261116-skill-serialization/evidence/execution-bundle.json\n?? docs/changes/20261116-skill-serialization/evidence/execution-summary.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.md\n?? docs/changes/20261116-skill-serialization/evidence/original.patch\n?? docs/changes/20261116-skill-serialization/evidence/review-validation.json\n?? docs/changes/20261116-skill-serialization/evidence/source-bindings.json\n?? docs/changes/20261116-skill-serialization/review-evidence.json\n?? docs/changes/20261116-skill-serialization/verification.md\n"
+        },
+        "after": {
+          "head": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+          "tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+          "status": "?? docs/changes/20261116-skill-serialization/evidence/execution-bundle.json\n?? docs/changes/20261116-skill-serialization/evidence/execution-summary.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.md\n?? docs/changes/20261116-skill-serialization/evidence/original.patch\n?? docs/changes/20261116-skill-serialization/evidence/review-validation.json\n?? docs/changes/20261116-skill-serialization/evidence/source-bindings.json\n?? docs/changes/20261116-skill-serialization/review-evidence.json\n?? docs/changes/20261116-skill-serialization/verification.md\n"
+        },
+        "frozen_source_files_verified": 28,
+        "review_copies_byte_identical": true,
+        "bundle_members": [
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/started.json",
+            "name": "full-regression/started.json",
+            "bytes": 754,
+            "sha256": "c59ab6824581b42ec71468d4195b401286f3d1e850f45da3385d182bdcb58b63",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/receipt.json",
+            "name": "full-regression/receipt.json",
+            "bytes": 1613,
+            "sha256": "784190caf19a87688e9c296a5f629deebe384f77337069388ddc4d9de589af0a",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/timing.json",
+            "name": "full-regression/timing.json",
+            "bytes": 8224,
+            "sha256": "9c67ac846bd18ecf4fcfa3fabdca6f85a06461bf46fbb71d0a2646b092ace36d",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/stdout.log",
+            "name": "full-regression/stdout.log",
+            "bytes": 34242,
+            "sha256": "621c0bd6048df285caeb1bc93549ecb2e8ecc2b334caa2669ea9ab9ebcb17bdb",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/stderr.log",
+            "name": "full-regression/stderr.log",
+            "bytes": 59337,
+            "sha256": "8271d289edb49714864b71029b3d2917628c517b1bb4b59f1ab51b57d43ea518",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/profile-checks.json",
+            "name": "profile-checks.json",
+            "bytes": 13100,
+            "sha256": "6f776cb3d5a6a99297a81ef52033aff9c2331e4e0a1d6a214c33206890d7bbe8",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/check_profiles.py",
+            "name": "check_profiles.py",
+            "bytes": 2602,
+            "sha256": "edf0c9dd9a35b91890a3df0ee07c536621aec6e7c1168b4cb2e0f785599eac11",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-review.json",
+            "name": "consumer-review.json",
+            "bytes": 20904,
+            "sha256": "601466feed3a8345351871bc9ff8dcccf70266d92ce9705177026de49109bbca",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/independent-probe.json",
+            "name": "independent-probe.json",
+            "bytes": 46412,
+            "sha256": "a60f8ac8f3ed68789485ecc72ef9cd1469732317e07f1a1cb59ac1285f48efd2",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-fixture/README.md",
+            "name": "consumer-fixture/README.md",
+            "bytes": 673,
+            "sha256": "270bc27637504f6fccfec4bc43d67089accef6d1436e94a186509364bf00d9f0",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-fixture/models.py",
+            "name": "consumer-fixture/models.py",
+            "bytes": 203,
+            "sha256": "2d4d9f78848b114ec487595136075a12336c500872826e99728a1322df781797",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-fixture/diagnostics.py",
+            "name": "consumer-fixture/diagnostics.py",
+            "bytes": 261,
+            "sha256": "80eacc91d3eb04c29902b8e21c0bf1de0625fff504ac534c3933508354aca32e",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/fe5385ca063a/run_command_receipt.py",
+            "name": "run_command_receipt.py",
+            "bytes": 2718,
+            "sha256": "ca62aaa075d5a60c87b66af987543d2b14f9813f0228684b7a1379a7b6c5ecfe",
+            "encoding": "gzip+base64"
+          }
+        ],
+        "bundle_items_verified": 13,
+        "bundle_consumer_task": {
+          "fork_turns": "none",
+          "complete_execution_transcript_retained": false,
+          "prompt": "请使用 /workspace/scratch/2d4d08f07657/adk/optional-skills/adk-security-supply-chain/SKILL.md 审查一个准备引入的第三方 adapter 候选。候选仓库在 /workspace/scratch/2d4d08f07657/consumer-fixture，最后一个提交为待审改动；README描述调用用途。做源码 adoption preflight，只读检查代码与必要相关文件，不安装、不运行候选代码，不访问真实凭证或网络。给出可执行的审查结论：具体位置、证据、范围、建议、未验证项；区分确认问题与无法证实的问题。不要修改候选或Skill。Shell可用 /workspace/scratch/fe5385ca063a/verification-tools/rtk bypass。完成后将你的原始报告和实际读取文件列表写到 /workspace/scratch/2d4d08f07657/consumer-review.json（报告可JSON字符串），并在最终回复说明结果。",
+          "fixture_commit": "6fdd5cdf80e0135e76a33ac509e7c232bfd4b077",
+          "fixture_parent": "a5142165f5833a57039599ade53805995762ea7c",
+          "boundary": "One fresh-context source-review observation; not paired A/B or a native-runtime qualification."
+        },
+        "summary_identity": {
+          "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-summary.json",
+          "bytes": 1559,
+          "sha256": "69ba29be6635a88caed0f0e222303aff054d58f23bac7065aac1d3a49f3b1c52"
+        },
+        "typed_status": "pass",
+        "typed_record_sha256": "90956400de0ce28d6c47ef9c7cf826e269135c934529f8892e0b66dda04de543",
+        "typed_references": {
+          "sources": 29,
+          "evidence": 5
+        },
+        "packaging_identities": [
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/review-evidence.json",
+            "bytes": 9498,
+            "sha256": "90956400de0ce28d6c47ef9c7cf826e269135c934529f8892e0b66dda04de543"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/verification.md",
+            "bytes": 4482,
+            "sha256": "3a217183f797250629422c0a298f7d661c512d033ca8b2ea3bad9956467ec742"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/source-bindings.json",
+            "bytes": 7474,
+            "sha256": "df6b73b457ede661d74a342b39340be60548eafcb78ed80a3149a165e6dc5e04"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/original.patch",
+            "bytes": 144014,
+            "sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-bundle.json",
+            "bytes": 57281,
+            "sha256": "050ae015582cd6a29e863e825094d9fc34836df42c1c3be0bb3d951878bac885"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-summary.json",
+            "bytes": 1559,
+            "sha256": "69ba29be6635a88caed0f0e222303aff054d58f23bac7065aac1d3a49f3b1c52"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/review-validation.json",
+            "bytes": 497,
+            "sha256": "e2f35c769e13e5bb50f318a2ee8a8a0fbbdd0104d40292841afe9ea0c5e0414d"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/independent-source-review.json",
+            "bytes": 26917,
+            "sha256": "901ba57d1a79dbe3514ed41ccf4551214af3bfd602e4c97515ef0a4f9ccf4909"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/independent-source-review.md",
+            "bytes": 6301,
+            "sha256": "59448db4d0a9bdeb6c33ad6ce0d1b9361d5b0ba8aad7ebde7b7eeadd83bc07f2"
+          }
+        ],
+        "known_initial_omission": "reviewer-serialization-probe.py absent from original13; final check requires appending it byte-exactly."
+      }
+    },
+    "final_check": {
+      "identity": {
+        "path": "/workspace/scratch/2d4d08f07657/independent-packaging-final-checks.json",
+        "bytes": 9862,
+        "sha256": "a6fb9c8ca7a22bc6fe07cacd7a7114d50a14c70892e5dbc09c791879875a82f2"
+      },
+      "raw": {
+        "schema": "adk-independent-packaging-checks/v1",
+        "phase": "final",
+        "started_at": "2026-11-16T12:45:16.702972+00:00",
+        "completed_at": "2026-11-16T12:45:16.890748+00:00",
+        "status": "pass",
+        "before": {
+          "head": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+          "tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+          "status": "?? docs/changes/20261116-skill-serialization/evidence/execution-bundle.json\n?? docs/changes/20261116-skill-serialization/evidence/execution-summary.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.md\n?? docs/changes/20261116-skill-serialization/evidence/original.patch\n?? docs/changes/20261116-skill-serialization/evidence/review-validation.json\n?? docs/changes/20261116-skill-serialization/evidence/source-bindings.json\n?? docs/changes/20261116-skill-serialization/review-evidence.json\n?? docs/changes/20261116-skill-serialization/verification.md\n"
+        },
+        "after": {
+          "head": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+          "tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+          "status": "?? docs/changes/20261116-skill-serialization/evidence/execution-bundle.json\n?? docs/changes/20261116-skill-serialization/evidence/execution-summary.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.json\n?? docs/changes/20261116-skill-serialization/evidence/independent-source-review.md\n?? docs/changes/20261116-skill-serialization/evidence/original.patch\n?? docs/changes/20261116-skill-serialization/evidence/review-validation.json\n?? docs/changes/20261116-skill-serialization/evidence/source-bindings.json\n?? docs/changes/20261116-skill-serialization/review-evidence.json\n?? docs/changes/20261116-skill-serialization/verification.md\n"
+        },
+        "frozen_source_files_verified": 28,
+        "review_copies_byte_identical": true,
+        "bundle_members": [
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/started.json",
+            "name": "full-regression/started.json",
+            "bytes": 754,
+            "sha256": "c59ab6824581b42ec71468d4195b401286f3d1e850f45da3385d182bdcb58b63",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/receipt.json",
+            "name": "full-regression/receipt.json",
+            "bytes": 1613,
+            "sha256": "784190caf19a87688e9c296a5f629deebe384f77337069388ddc4d9de589af0a",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/timing.json",
+            "name": "full-regression/timing.json",
+            "bytes": 8224,
+            "sha256": "9c67ac846bd18ecf4fcfa3fabdca6f85a06461bf46fbb71d0a2646b092ace36d",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/stdout.log",
+            "name": "full-regression/stdout.log",
+            "bytes": 34242,
+            "sha256": "621c0bd6048df285caeb1bc93549ecb2e8ecc2b334caa2669ea9ab9ebcb17bdb",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/full-regression/stderr.log",
+            "name": "full-regression/stderr.log",
+            "bytes": 59337,
+            "sha256": "8271d289edb49714864b71029b3d2917628c517b1bb4b59f1ab51b57d43ea518",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/profile-checks.json",
+            "name": "profile-checks.json",
+            "bytes": 13100,
+            "sha256": "6f776cb3d5a6a99297a81ef52033aff9c2331e4e0a1d6a214c33206890d7bbe8",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/check_profiles.py",
+            "name": "check_profiles.py",
+            "bytes": 2602,
+            "sha256": "edf0c9dd9a35b91890a3df0ee07c536621aec6e7c1168b4cb2e0f785599eac11",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-review.json",
+            "name": "consumer-review.json",
+            "bytes": 20904,
+            "sha256": "601466feed3a8345351871bc9ff8dcccf70266d92ce9705177026de49109bbca",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/independent-probe.json",
+            "name": "independent-probe.json",
+            "bytes": 46412,
+            "sha256": "a60f8ac8f3ed68789485ecc72ef9cd1469732317e07f1a1cb59ac1285f48efd2",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-fixture/README.md",
+            "name": "consumer-fixture/README.md",
+            "bytes": 673,
+            "sha256": "270bc27637504f6fccfec4bc43d67089accef6d1436e94a186509364bf00d9f0",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-fixture/models.py",
+            "name": "consumer-fixture/models.py",
+            "bytes": 203,
+            "sha256": "2d4d9f78848b114ec487595136075a12336c500872826e99728a1322df781797",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/consumer-fixture/diagnostics.py",
+            "name": "consumer-fixture/diagnostics.py",
+            "bytes": 261,
+            "sha256": "80eacc91d3eb04c29902b8e21c0bf1de0625fff504ac534c3933508354aca32e",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/fe5385ca063a/run_command_receipt.py",
+            "name": "run_command_receipt.py",
+            "bytes": 2718,
+            "sha256": "ca62aaa075d5a60c87b66af987543d2b14f9813f0228684b7a1379a7b6c5ecfe",
+            "encoding": "gzip+base64"
+          },
+          {
+            "original_path": "/workspace/scratch/2d4d08f07657/reviewer-serialization-probe.py",
+            "name": "reviewer-serialization-probe.py",
+            "bytes": 7159,
+            "sha256": "f6efe6f8de6852ebc0dae68d7a37f6ae5340d088cc78e159261d3f2b02d785f7",
+            "encoding": "gzip+base64"
+          }
+        ],
+        "bundle_items_verified": 14,
+        "bundle_consumer_task": {
+          "fork_turns": "none",
+          "complete_execution_transcript_retained": false,
+          "prompt": "请使用 /workspace/scratch/2d4d08f07657/adk/optional-skills/adk-security-supply-chain/SKILL.md 审查一个准备引入的第三方 adapter 候选。候选仓库在 /workspace/scratch/2d4d08f07657/consumer-fixture，最后一个提交为待审改动；README描述调用用途。做源码 adoption preflight，只读检查代码与必要相关文件，不安装、不运行候选代码，不访问真实凭证或网络。给出可执行的审查结论：具体位置、证据、范围、建议、未验证项；区分确认问题与无法证实的问题。不要修改候选或Skill。Shell可用 /workspace/scratch/fe5385ca063a/verification-tools/rtk bypass。完成后将你的原始报告和实际读取文件列表写到 /workspace/scratch/2d4d08f07657/consumer-review.json（报告可JSON字符串），并在最终回复说明结果。",
+          "fixture_commit": "6fdd5cdf80e0135e76a33ac509e7c232bfd4b077",
+          "fixture_parent": "a5142165f5833a57039599ade53805995762ea7c",
+          "boundary": "One fresh-context source-review observation; not paired A/B or a native-runtime qualification."
+        },
+        "summary_identity": {
+          "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-summary.json",
+          "bytes": 1793,
+          "sha256": "0b4c7789c060ab448536c3c893e05946fa88f74da874d61f20e2e8de4e84d36c"
+        },
+        "typed_status": "pass",
+        "typed_record_sha256": "d6690b875f2796099b8d43d1c906eb26c39cef7f388ae9a66d292806b0248ead",
+        "typed_references": {
+          "sources": 29,
+          "evidence": 5
+        },
+        "packaging_identities": [
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/review-evidence.json",
+            "bytes": 9498,
+            "sha256": "d6690b875f2796099b8d43d1c906eb26c39cef7f388ae9a66d292806b0248ead"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/verification.md",
+            "bytes": 4752,
+            "sha256": "64c384c7ac7d4abb0074f16d36ceda3e0ad988596c87a1aa96cc50128fb3c80b"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/source-bindings.json",
+            "bytes": 7474,
+            "sha256": "df6b73b457ede661d74a342b39340be60548eafcb78ed80a3149a165e6dc5e04"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/original.patch",
+            "bytes": 144014,
+            "sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-bundle.json",
+            "bytes": 61324,
+            "sha256": "851f5891f4044649dcc11ff1e0a8fec08a13a0e03cd3c2b06b3c9c432a1bade4"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/execution-summary.json",
+            "bytes": 1793,
+            "sha256": "0b4c7789c060ab448536c3c893e05946fa88f74da874d61f20e2e8de4e84d36c"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/review-validation.json",
+            "bytes": 497,
+            "sha256": "67d59d95ae963ba98692ef498d07a93b92be7a208c1c127473699a4ac6b4a2fb"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/independent-source-review.json",
+            "bytes": 26917,
+            "sha256": "901ba57d1a79dbe3514ed41ccf4551214af3bfd602e4c97515ef0a4f9ccf4909"
+          },
+          {
+            "path": "/workspace/scratch/2d4d08f07657/adk/docs/changes/20261116-skill-serialization/evidence/independent-source-review.md",
+            "bytes": 6301,
+            "sha256": "59448db4d0a9bdeb6c33ad6ce0d1b9361d5b0ba8aad7ebde7b7eeadd83bc07f2"
+          }
+        ],
+        "known_initial_omission": "reviewer-serialization-probe.py absent from original13; final check requires appending it byte-exactly."
+      }
+    },
+    "checker": {
+      "identity": {
+        "path": "/workspace/scratch/2d4d08f07657/check-independent-packaging.py",
+        "bytes": 7201,
+        "sha256": "309e54c799d72813b35a56ed53a83069b5b72d44c2599988d439be3fa337d0f3"
+      },
+      "source": "\"\"\"Read-only identity and lossless packaging verification for this review.\"\"\"\nfrom __future__ import annotations\n\nimport base64\nfrom datetime import datetime, timezone\nimport gzip\nimport hashlib\nimport io\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\n\nWORK = Path('/workspace/scratch/2d4d08f07657')\nROOT = WORK/'adk'\nCHANGE = ROOT/'docs/changes/20261116-skill-serialization'\nSOURCE = 'a94ae0d551a8ede9f8387e4cd03eb41daf1894b1'\nBASE = 'b20df018ca62436dd026daed6ec6944d4a45cbbd'\nsys.path.insert(0,str(ROOT/'src'))\nsys.dont_write_bytecode = True\nfrom agent_dev_kit.review_evidence import validate_review\n\ndef sha(raw):\n    return hashlib.sha256(raw).hexdigest()\n\ndef ident(path):\n    raw=path.read_bytes()\n    return {'path':str(path),'bytes':len(raw),'sha256':sha(raw)}\n\ndef git(*args):\n    return subprocess.check_output(['git','-C',str(ROOT),*args])\n\nphase=sys.argv[1]\nassert phase in ['initial','final']\nstarted=datetime.now(timezone.utc).isoformat()\nbefore={'head':git('rev-parse','HEAD').decode().strip(),'tree':git('rev-parse','HEAD^{tree}').decode().strip(),'status':git('status','--short').decode()}\nassert before['head']==SOURCE\nsource_review=json.loads((WORK/'independent-review.json').read_text())\nfor original,retained in [('independent-review.json','independent-source-review.json'),('independent-review.md','independent-source-review.md')]:\n    assert (WORK/original).read_bytes()==(CHANGE/'evidence'/retained).read_bytes()\nbindings=json.loads((CHANGE/'evidence/source-bindings.json').read_text())\nassert bindings['canonical_remote_source']==SOURCE and bindings['baseline_commit']==BASE\nassert bindings['identical_tree']==before['tree']==source_review['source']['source_tree']\nassert len(bindings['files'])==28\nsource_paths=[]\nfor row in bindings['files']:\n    name=row['path'];raw=(ROOT/name).read_bytes(); frozen=git('show',SOURCE+':'+name)\n    assert raw==frozen\n    assert len(raw)==row['bytes'] and sha(raw)==row['sha256']\n    assert git('rev-parse',SOURCE+':'+name).decode().strip()==row['git_blob']\n    source_paths.append(name)\nassert sorted(source_paths)==git('diff','--name-only',BASE,SOURCE).decode().splitlines()\npatch=git('diff','--binary','--full-index',BASE,SOURCE,'--')\nassert patch==(CHANGE/'evidence/original.patch').read_bytes()\nassert sha(patch)==bindings['original_patch_sha256']==source_review['source']['canonical_patch_sha256']\nbundle_path=CHANGE/'evidence/execution-bundle.json'\nbundle=json.loads(bundle_path.read_text())\nassert bundle['schema']=='adk-lossless-execution-bundle/v1'\nrows=bundle['files'];assert len({r['name'] for r in rows})==len(rows)\ndecoded={};records=[]\nfor row in rows:\n    assert row['encoding']=='gzip+base64'\n    assert 0<=row['bytes']<=16*1024*1024\n    compressed=base64.b64decode(row['data'],validate=True)\n    with gzip.GzipFile(fileobj=io.BytesIO(compressed),mode='rb') as stream:\n        raw=stream.read(16*1024*1024+1)\n    assert len(raw)==row['bytes'] and sha(raw)==row['sha256'],row['name']\n    assert raw==Path(row['original_path']).read_bytes(),row['name']\n    decoded[row['name']]=raw\n    records.append({k:v for k,v in row.items() if k!='data'})\nsummary=json.loads((CHANGE/'evidence/execution-summary.json').read_text())\nassert summary['raw_bundle_sha256']==sha(bundle_path.read_bytes())\nassert summary['source_bindings_sha256']==sha((CHANGE/'evidence/source-bindings.json').read_bytes())\nassert summary['original_patch_sha256']==sha(patch)\nfull=json.loads(decoded['full-regression/receipt.json'])\ntiming=json.loads(decoded['full-regression/timing.json'])\nassert full['exit_code']==0 and not full['timed_out']\nassert summary['test_counts']=={k:timing[k] for k in ['total','pass','fail','status']}\nassert summary['full_regression']=={k:full[k] for k in ['started_at','finished_at','elapsed_seconds','exit_code','timed_out','logs']}\nfor name,meta in full['logs'].items():\n    raw=decoded['full-regression/'+name]\n    assert len(raw)==meta['bytes'] and sha(raw)==meta['sha256']\nrecord_path=CHANGE/'review-evidence.json'\nrecord=json.loads(record_path.read_text())\nvalidation=validate_review(ROOT,record_path,expected_subject='20261116-skill-serialization',expected_scope='source-change')\nassert validation['status']=='pass'\nrecorded=json.loads((CHANGE/'evidence/review-validation.json').read_text())\nassert recorded['status']=='pass' and recorded['record_sha256']==validation['record_sha256']\nassert record['verdicts']==source_review['verdicts'] and record['reviewer']['id']==source_review['reviewer']['id']\nassert record['reviewed_at'].replace('Z','+00:00')==source_review['reviewed_at']\nassert record['limitations']==source_review['limitations']\nassert record['target']['head_commit']==SOURCE\nassert len(record['sources'])==29 and len(record['evidence'])==5\nverification=(CHANGE/'verification.md').read_text()\nassert 'exit 1' in verification and '笔误' in verification and '**1**' in verification\nassert '没有将本地运行伪写为远端 SHA 执行' in verification\nassert '完整执行transcript未留存' in verification\nassert not bundle['consumer_task']['complete_execution_transcript_retained']\nafter={'head':git('rev-parse','HEAD').decode().strip(),'tree':git('rev-parse','HEAD^{tree}').decode().strip(),'status':git('status','--short').decode()}\nassert before['head']==after['head'] and before['tree']==after['tree']\nif phase=='final':\n    initial=json.loads((WORK/'independent-packaging-initial-checks.json').read_text())\n    assert records[:13]==initial['bundle_members'], 'original13 metadata changed'\n    assert len(rows)==14 and 'reviewer-serialization-probe.py' in decoded\n    assert decoded['reviewer-serialization-probe.py']==(WORK/'reviewer-serialization-probe.py').read_bytes()\n    assert '133303201333' in verification or '复验' in verification\nresult={'schema':'adk-independent-packaging-checks/v1','phase':phase,'started_at':started,\n        'completed_at':datetime.now(timezone.utc).isoformat(),'status':'pass',\n        'before':before,'after':after,'frozen_source_files_verified':28,\n        'review_copies_byte_identical':True,'bundle_members':records,'bundle_items_verified':len(rows),\n        'bundle_consumer_task':bundle['consumer_task'],'summary_identity':ident(CHANGE/'evidence/execution-summary.json'),\n        'typed_status':validation['status'],'typed_record_sha256':validation['record_sha256'],\n        'typed_references':{'sources':len(record['sources']),'evidence':len(record['evidence'])},\n        'packaging_identities':[ident(p) for p in [record_path,CHANGE/'verification.md',CHANGE/'evidence/source-bindings.json',CHANGE/'evidence/original.patch',bundle_path,CHANGE/'evidence/execution-summary.json',CHANGE/'evidence/review-validation.json',CHANGE/'evidence/independent-source-review.json',CHANGE/'evidence/independent-source-review.md']],\n        'known_initial_omission': 'reviewer-serialization-probe.py absent from original13; final check requires appending it byte-exactly.'}\nout=WORK/('independent-packaging-'+phase+'-checks.json')\nout.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')\nprint(json.dumps({'status':result['status'],'bundle_items':len(rows),'typed':validation['status'],'report':ident(out)},ensure_ascii=False))\n"
+    },
+    "post_stage_parent_gate_receipts_verified": [
+      {
+        "receipt_identity": {
+          "path": "/workspace/scratch/2d4d08f07657/packaging-format/receipt.json",
+          "bytes": 566658,
+          "sha256": "d6c6862225a1caa14c11500e36f60160c5bbecfe398d9829f431abca96061925"
+        },
+        "command": [
+          "bash",
+          "scripts/check-format.sh"
+        ],
+        "started_at": "2026-11-16T12:45:57.967237+00:00",
+        "finished_at": "2026-11-16T12:45:58.570205+00:00",
+        "elapsed_seconds": 0.5662206939960015,
+        "exit_code": 0,
+        "timed_out": false,
+        "head_status_staged_diff_before_after_equal": true,
+        "complete_before_after_equal": true,
+        "indexed_tree_before": {
+          "exit_code": 0,
+          "stdout": "b669c27045616f6691bd9d888e15c61bd6d86ff4\n",
+          "stderr": ""
+        },
+        "indexed_tree_after": {
+          "exit_code": 0,
+          "stdout": "b669c27045616f6691bd9d888e15c61bd6d86ff4\n",
+          "stderr": ""
+        },
+        "staged_diff_sha256": "7205ebc8b6ea1654b0ec2d170e2fd540fac436e72e2d4ade6874aeb056cc9a10",
+        "logs": {
+          "stdout.log": {
+            "bytes": 20,
+            "sha256": "e9164f6e26a94c516e08caffa2e6a611fb00b5ea8833ac84da6e8744a75c4a8d",
+            "text": "Format check passed\n"
+          },
+          "stderr.log": {
+            "bytes": 2231,
+            "sha256": "ba241a80ee282a69548178ca731ea45dd3def86ad87431abfc4ae7d5be4b41aa",
+            "text": "[WARN] script is not executable: tests/run_all.sh\n[WARN] script is not executable: tests/test_agent_platform.sh\n[WARN] script is not executable: tests/test_agent_value_trust.sh\n[WARN] script is not executable: tests/test_archive_restore.sh\n[WARN] script is not executable: tests/test_asset_taxonomy.sh\n[WARN] script is not executable: tests/test_branch_gc.sh\n[WARN] script is not executable: tests/test_catalog.sh\n[WARN] script is not executable: tests/test_change_governance.sh\n[WARN] script is not executable: tests/test_effect_campaign_materializer.sh\n[WARN] script is not executable: tests/test_evidence_bridge.sh\n[WARN] script is not executable: tests/test_evidence_envelope.sh\n[WARN] script is not executable: tests/test_execution_policy.sh\n[WARN] script is not executable: tests/test_external_reference_binding.sh\n[WARN] script is not executable: tests/test_manifest_composition_cli.sh\n[WARN] script is not executable: tests/test_mcp_freshness_ssot.sh\n[WARN] script is not executable: tests/test_native_campaign.sh\n[WARN] script is not executable: tests/test_native_campaign_boundaries.sh\n[WARN] script is not executable: tests/test_native_campaign_diagnostics.sh\n[WARN] script is not executable: tests/test_native_trust.sh\n[WARN] script is not executable: tests/test_official_upstream_drift.sh\n[WARN] script is not executable: tests/test_optional_skills.sh\n[WARN] script is not executable: tests/test_performance_budgets.sh\n[WARN] script is not executable: tests/test_profile_coherence.sh\n[WARN] script is not executable: tests/test_profile_context_footprint.sh\n[WARN] script is not executable: tests/test_review_evidence.sh\n[WARN] script is not executable: tests/test_runtime_comparison_contract.sh\n[WARN] script is not executable: tests/test_schema_resource_sync.sh\n[WARN] script is not executable: tests/test_sigstore_blob.sh\n[WARN] script is not executable: tests/test_skill_content.sh\n[WARN] script is not executable: tests/test_skill_governance.sh\n[WARN] script is not executable: tests/test_target_adapter_spi.sh\n[WARN] script is not executable: tests/test_target_contracts.sh\n[WARN] script is not executable: tests/test_target_source_probe.sh\n[WARN] script is not executable: tests/test_token_context_governance.sh\n"
+          }
+        }
+      },
+      {
+        "receipt_identity": {
+          "path": "/workspace/scratch/2d4d08f07657/packaging-security/receipt.json",
+          "bytes": 567039,
+          "sha256": "bc4d3f796069574bf272860c6e2b566bfd2ec931195168fa0acd536373b3f2cb"
+        },
+        "command": [
+          "bash",
+          "scripts/devkit.sh",
+          "security",
+          "check"
+        ],
+        "started_at": "2026-11-16T12:45:57.970142+00:00",
+        "finished_at": "2026-11-16T12:45:59.268842+00:00",
+        "elapsed_seconds": 1.268460163002601,
+        "exit_code": 0,
+        "timed_out": false,
+        "head_status_staged_diff_before_after_equal": true,
+        "complete_before_after_equal": false,
+        "indexed_tree_before": {
+          "exit_code": 128,
+          "stdout": "",
+          "stderr": "fatal: Unable to create '/workspace/scratch/fe5385ca063a/agent-dev-kit/.git/worktrees/adk/index.lock': File exists.\n\nAnother git process seems to be running in this repository, e.g.\nan editor opened by 'git commit'. Please make sure all processes\nare terminated then try again. If it still fails, a git process\nmay have crashed in this repository earlier:\nremove the file manually to continue.\n"
+        },
+        "indexed_tree_after": {
+          "exit_code": 0,
+          "stdout": "b669c27045616f6691bd9d888e15c61bd6d86ff4\n",
+          "stderr": ""
+        },
+        "staged_diff_sha256": "7205ebc8b6ea1654b0ec2d170e2fd540fac436e72e2d4ade6874aeb056cc9a10",
+        "logs": {
+          "stdout.log": {
+            "bytes": 159,
+            "sha256": "17f5f7795e4e21bca8e3b3fc17a96b0887b8b1945c5732db91f0a515cb152901",
+            "text": "{\n  \"schema_version\": 1,\n  \"status\": \"pass\",\n  \"failures\": [],\n  \"warnings\": [],\n  \"inventory_source\": \"git\",\n  \"files_scanned\": 2615,\n  \"scan_limit\": 50000\n}\n"
+          },
+          "stderr.log": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "text": ""
+          }
+        }
+      }
+    ],
+    "report_builder_observed_failure": "The first report-builder invocation exited 1 when an overly broad before==after assertion exposed the actual security before.indexed_tree exit-128 lock observation. The assertion and report were narrowed to observed head/status/diff agreement and the explicit retained tree-observation limitation. No gate rerun or receipt/source modification followed.",
+    "read_output_note": "One attempt to print whole post-stage command receipts included their large staged diffs and exceeded the tool output budget. Compact parsed receipt/log fields were then read successfully; this was output truncation, not a command/test failure or source modification."
+  }
+}

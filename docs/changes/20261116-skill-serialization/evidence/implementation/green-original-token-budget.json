@@ -1,0 +1,15 @@
+{
+  "command": [
+    "bash",
+    "scripts/check-token-budget.sh",
+    "--summary-json"
+  ],
+  "cwd": "/workspace/scratch/2d4d08f07657/adk",
+  "started_at": "2026-11-16T12:29:11.372414+00:00",
+  "elapsed_seconds": 2.5424502469977597,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "returncode": 0,
+  "stdout": "{\"status\":\"pass\",\"budget_status\":\"within-soft-limit\",\"estimate_method\":\"utf8-bytes-ceil-div-4\",\"agents_bytes\":2914,\"agents_soft_limit\":2975,\"agents_limit\":3500,\"agents_estimated_tokens\":729,\"skill_files\":65,\"max_skill_lines\":140,\"max_skill_file\":\"optional-skills/adk-security-supply-chain/SKILL.md\",\"doc_files\":936,\"max_doc_lines\":547,\"max_doc_file\":\"docs/comprehensive-analysis-embedded-harness.md\",\"summary_scripts\":3,\"compact_test_runner\":1,\"context_governance_assets\":11,\"warnings\":0,\"failures\":0}\n",
+  "stderr": ""
+}

@@ -1,0 +1,39 @@
+{
+  "source_tree_match": true,
+  "tested_local_source": "5b253b8885447f35f015d63950db025b2d82b2ba",
+  "canonical_remote_source": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+  "source_tree": "35fa327dff1c4339c5637a427be64ca6c810f705",
+  "full_regression": {
+    "started_at": "2026-11-16T12:31:46.026615+00:00",
+    "finished_at": "2026-11-16T12:37:28.154870+00:00",
+    "elapsed_seconds": 342.1068980210039,
+    "exit_code": 0,
+    "timed_out": false,
+    "logs": {
+      "stdout.log": {
+        "bytes": 34242,
+        "sha256": "621c0bd6048df285caeb1bc93549ecb2e8ecc2b334caa2669ea9ab9ebcb17bdb"
+      },
+      "stderr.log": {
+        "bytes": 59337,
+        "sha256": "8271d289edb49714864b71029b3d2917628c517b1bb4b59f1ab51b57d43ea518"
+      }
+    }
+  },
+  "test_counts": {
+    "total": 102,
+    "pass": 102,
+    "fail": 0,
+    "status": "pass"
+  },
+  "profiles_status": "pass",
+  "raw_bundle_sha256": "851f5891f4044649dcc11ff1e0a8fec08a13a0e03cd3c2b06b3c9c432a1bade4",
+  "source_bindings_sha256": "df6b73b457ede661d74a342b39340be60548eafcb78ed80a3149a165e6dc5e04",
+  "original_patch_sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7",
+  "corrections": [
+    "negative-results.md says exit 2 for unsupported --profile; original receipt records exit 1.",
+    "One source-tree transfer read was truncated and JSON parsing failed. Bounded chunk reads succeeded; GitHub returned the exact local tree identity.",
+    "Independent packaging review found the already executed six-mutant probe runner missing from the draft bundle; its unchanged original bytes were appended as item 14. Original 13 records remain unchanged, and no test was rerun."
+  ],
+  "boundary": "Local execution and method observations only; exact remote PR/main and release checks remain separate."
+}

@@ -1,0 +1,2785 @@
+diff --git a/.version-lock b/.version-lock
+index 9a1031322bfbacc3f7f619df51f5d015c041bd37..d75f396e2789b3b3b8f944f611fd530c9b662532 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.3.10
+-locked_at: 2026-11-16T07:54:57Z
+-locked_by: root-skill-failure-paths
++version: 11.3.11
++locked_at: 2026-11-16T12:26:59Z
++locked_by: owner-delegated-ai/root
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 1740675c16a3e54c741e550b987833ee4e4bd6ea..7f1c2fdeb2470e97bf48020c9825be1e95542f3c 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.3.10
++> 产品版本：11.3.11
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index f0ce1553ad464eeb6df0d3f5a19ffae4d79f456e..2236052e7749742ada5bc5f326747a8deb80db19 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.3.10`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.3.11`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/changes/20261116-skill-serialization/audit.md b/docs/changes/20261116-skill-serialization/audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..d59f5a8e2f9cc8173a316f52c4cc411e3db3a4ef
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/audit.md
+@@ -0,0 +1,31 @@
++# 全体 Skill 增量复查与外部对照
++
++本轮承接已合并的 v11.3.10（PR276）。此前五项修复的全量证据见 `../20261116-skill-failure-paths/`：19 个固定仓库与 6 个官方网页、54 个去重文件/页面。当前重新审查 65 个入口；没有声称穷尽互联网上所有 Skill。
++
++## 实际覆盖
++
++独立只读审计 `portfolio_optimization` 全文重读 65 个 SKILL.md：34 个通用核心、22 个嵌入式核心、9 个可选；定向全文重读 14 份 bundled reference。153 个资产、422513 bytes 的清单与摘要机械对账，49 条入口内直接 reference 路径缺失 0。153 个文件的哈希不等于本轮全文阅读，准确范围与逐 Skill 判断见 `evidence/portfolio-audit.json`。
++
++该审计以 v11.3.10 的 `fa012817` 树为对象（与合并后的 `b20df018` 同树），结论 62 KEEP / 3 OBSERVE，没有证明新的通用或嵌入式缺陷；不构成对本轮 serializer 修改的批准。单独的外部方法研究发现隐式序列化缺口，作为本变更唯一 ENHANCE 候选。
++
++Goal/Loop 已有状态变化触发、当前身份的验证复用、1–4 个交付批次、最多 3 个下一动作、8 KiB 恢复输出和按收益决定并行。本轮保留这些控制，不把源码字节或静态规则写成真实 Token、成本和时延收益。
++
++三项已知观察继续保留：E1 需要可信低风险来源及拒绝路径；旧 worktree 冲突模板的真实消费未证实；多人累计 human_active_minutes 口径缺少生产方证据。另排除了 goal_ref 必须等于计划路径的误判：原设计允许引用需求文件。
++
++## 外部候选决定
++
++固定提交、文件路径和本轮 GitHub 回读的 blob identity 见 `evidence/external-sources.json`。仅吸收方法，不导入上游完整正文、脚本或依赖。
++
++| 来源 | 决定 | 本轮依据 |
++|---|---|---|
++| Sentry secret-serialization，`a582c51ee29d0f35e6ac321340796f77d43da733`，Apache-2.0 | ENHANCE | 标准库反例证明 repr 隐藏与 asdict 输出保护不同；已有供应链参考缺具体路径，补 holder/serializer/sink 与合法字段控制 |
++| Addy Osmani evals，`39b723ceebf81474d0557c1fecd01eddab585563`，MIT | KEEP / OBSERVE | expected owner/collision 已覆盖；真实执行流 terminal 与 grader identity 待实际 adapter 场景，不新增第二评测引擎 |
++| Anthropic Skill Creator analyzer，`1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064`，具体 Skill Apache-2.0 | KEEP | ADK 已有训练/留出、盲评、负控制、固定试验与成本归因；缺真实观测不能靠重写流程补齐 |
++| Matt Pocock writing-for-agents，`5863806dd4e15c63174bee4e7515a4256792ecfa`，MIT | KEEP | 按分支读取参考、条件入口和减少重复已有覆盖；只对当前具体缺口补导航 |
++| Superpowers review-package，`22f0b463e7a5e579904dd6211a520321035526f7`，MIT | OBSERVE | ADK 使用固定 HEAD/merge-base；直接强加 base 是祖先会错拒分叉 PR，未证明空 diff 导致实际放行缺陷 |
++
++Python 官方 `dataclasses.field` 与 `dataclasses.asdict` 文档核验了 repr 与递归转换语义。上游许可由研究者实际读取；Anthropic 根 LICENSE 路径失败后读取具体 Skill 的许可，不能推断整仓许可一致。部分 immutable GitHub 页面在网页工具不可读，GitHub connector 的精确 ref 文件回读成功，失败不改写为成功。
++
++## 验证边界
++
++本轮有合成方法反例、发布示例执行和独立源码消费者任务；没有付费模型 A/B、真实 Token/成本/时延、设备/HIL、生产运行态 discovery/load/trigger 或 M5 新资格。普通用户使用 Skill 不需要运行 ADK 的源码发布检查。
+diff --git a/docs/changes/20261116-skill-serialization/design.md b/docs/changes/20261116-skill-serialization/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..3abd2695c95d4bdebf54c349164facc8bafb95b1
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/design.md
+@@ -0,0 +1,19 @@
++# 设计
++
++基线为 `b20df018ca62436dd026daed6ec6944d4a45cbbd`（v11.3.10）。已有供应链 Skill 具备 source-to-sink 和范围门，但没有说明生成序列化的字段保护差异。采用方法级补充，保留原责任边界。
++
++## 变更边界
++
++1. 主入口只用现有敏感信息步骤的等行替换提示条件与参考文件，版本按 patch 前移；不扩大原 140 行上限。
++2. 在现有 `references/skill-scan-coverage.md` 内增加精简检查步骤及 Python 标准库示例。检查源头、holder、serializer 和 sink，不以关键词/单处 repr 的成功代替通路证明。
++3. 使用显式允许的非敏感字段生成遥测/响应对象；生产修复仍由具体合同决定，示例不是可覆盖所有类型的脱敏库。
++4. 通过现有 Skill 内容测试入口执行发布示例，覆盖嵌套值、正常控制与无泄漏报告；按实际需要补 export 读取检查。只添加能发现示例错误/丢失引用的测试。
++5. 复用原版本同步、回归、审核、发布与 Root source-only 事务；共享 manifest/版本/证据由集成者串行更新。
++
++## 来源、风险与回滚
++
++Sentry `secret-serialization` 的原始 Skill 与语言参考提供 holder/serializer/sink 思路；Python 官方 dataclasses 文档用于核验 repr/asdict 语义。固定来源与许可记录在本变更的审查记录中，仅吸收方法，中文说明及最小示例独立撰写。
++
++主要风险是把潜在 holder 当成已证实泄漏，或将 allowlist 示例误作任意对象安全保证。通过明确可达性、`unverified`、合成数据和合法字段控制约束。缺少真实模型对照时不宣布发现率或效率提升。
++
++回滚以受保护 PR 恢复受影响 Skill/reference/test 和对应版本投影；不重写已发布 tag、资产或历史验证记录。
+diff --git a/docs/changes/20261116-skill-serialization/evidence/external-sources.json b/docs/changes/20261116-skill-serialization/evidence/external-sources.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..b0c2007041656163903a027e30a7b61a024d696c
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/external-sources.json
+@@ -0,0 +1,89 @@
++{
++  "retrieved_at": "2026-11-16 12:27:56 UTC",
++  "scope": "Current targeted source checks; no exhaustive internet claim. External research agent performed full or targeted semantic reading. Raw upstream text not imported.",
++  "sources": [
++    {
++      "repository": "getsentry/skills",
++      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
++      "path": "skills/secret-serialization/SKILL.md",
++      "blob_sha": "030e3c0a0c158e9d7d5acf5962d52f3a17e7f43b",
++      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/secret-serialization/SKILL.md",
++      "purpose": "method verification",
++      "retrieved": true
++    },
++    {
++      "repository": "getsentry/skills",
++      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
++      "path": "skills/secret-serialization/references/python.md",
++      "purpose": "method verification",
++      "blob_sha": "679c8598a5006385213db8304aa65f1f389d37ac",
++      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/secret-serialization/references/python.md",
++      "retrieved": true,
++      "read_by": "external_skill_research",
++      "root_retrieval_verified": true
++    },
++    {
++      "repository": "getsentry/skills",
++      "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
++      "path": "LICENSE",
++      "purpose": "license",
++      "blob_sha": "753a6c03c60a9232405d05170bd3ad3cab49a1ef",
++      "url": "https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/LICENSE",
++      "retrieved": true,
++      "read_by": "external_skill_research",
++      "root_retrieval_verified": true
++    },
++    {
++      "repository": "addyosmani/agent-skills",
++      "commit": "39b723ceebf81474d0557c1fecd01eddab585563",
++      "path": "evals/README.md",
++      "purpose": "existing coverage comparison",
++      "blob_sha": "831993579ce92effc1e6b99f2927e3cbc46aa196",
++      "url": "https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/evals/README.md",
++      "retrieved": true,
++      "read_by": "external_skill_research",
++      "root_retrieval_verified": true
++    },
++    {
++      "repository": "anthropics/skills",
++      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
++      "path": "skills/skill-creator/agents/analyzer.md",
++      "purpose": "existing evaluation comparison",
++      "blob_sha": "14e41d6068635f4dd3fb878fd1626312395dda63",
++      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/agents/analyzer.md",
++      "retrieved": true,
++      "read_by": "external_skill_research",
++      "root_retrieval_verified": true
++    },
++    {
++      "repository": "mattpocock/skills",
++      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
++      "path": "skills/productivity/writing-for-agents/SKILL.md",
++      "purpose": "progressive disclosure comparison",
++      "blob_sha": "a37608daf6e835e767deecfb498facecaaba82ba",
++      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/writing-for-agents/SKILL.md",
++      "retrieved": true,
++      "read_by": "external_skill_research",
++      "root_retrieval_verified": true
++    },
++    {
++      "repository": "obra/superpowers",
++      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
++      "path": "skills/subagent-driven-development/scripts/review-package",
++      "purpose": "scope identity comparison",
++      "blob_sha": "04c2b918c6289b49e716fe1faa0afc98a4e465f9",
++      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/subagent-driven-development/scripts/review-package",
++      "retrieved": true,
++      "read_by": "external_skill_research",
++      "root_retrieval_verified": true
++    }
++  ],
++  "official_semantics": {
++    "url": "https://docs.python.org/3.12/library/dataclasses.html",
++    "sections": [
++      "dataclasses.field repr",
++      "dataclasses.asdict recursive conversion"
++    ],
++    "mutable_page": true
++  }
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/baseline-probe.json b/docs/changes/20261116-skill-serialization/evidence/implementation/baseline-probe.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..178f7fc2c1c97eb48a256f0b89ac42b09e37b8a2
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/baseline-probe.json
+@@ -0,0 +1,14 @@
++{
++  "command": [
++    "python3",
++    "/workspace/scratch/2d4d08f07657/serialization-implementation/baseline_probe.py"
++  ],
++  "cwd": "/workspace/scratch/2d4d08f07657/adk",
++  "started_at": "2026-11-16T12:28:09.359837+00:00",
++  "elapsed_seconds": 0.05214867400354706,
++  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
++  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
++  "returncode": 0,
++  "stdout": "{\"allowlist_excludes_synthetic_value\": true, \"allowlist_preserves_public_fields\": true, \"asdict_json_contains_synthetic_value\": true, \"baseline_has_serialization_guidance\": false, \"lessons_available\": false, \"nested_asdict_contains_synthetic_value\": true, \"repr_hides_synthetic_value\": true}\n",
++  "stderr": ""
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/baseline_probe.py b/docs/changes/20261116-skill-serialization/evidence/implementation/baseline_probe.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..e82aa72fbb0b98b92ced70580906c59edc339a78
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/baseline_probe.py
+@@ -0,0 +1,28 @@
++"""Synthetic serialization counterexample; never inspect real credentials."""
++from dataclasses import asdict, dataclass, field
++import json
++from pathlib import Path
++
++@dataclass
++class Holder:
++    endpoint: str
++    credential: str = field(repr=False)
++
++@dataclass
++class Envelope:
++    component: str
++    client: Holder
++
++holder = Holder("https://example.invalid", "SYNTHETIC_SERIALIZATION_PROBE")
++envelope = Envelope("fixture", holder)
++safe = {"component": envelope.component, "client": {"endpoint": holder.endpoint}}
++reference = Path("optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md").read_text()
++print(json.dumps({
++    "repr_hides_synthetic_value": holder.credential not in repr(holder),
++    "asdict_json_contains_synthetic_value": holder.credential in json.dumps(asdict(holder)),
++    "nested_asdict_contains_synthetic_value": holder.credential in json.dumps(asdict(envelope)),
++    "allowlist_excludes_synthetic_value": holder.credential not in json.dumps(safe),
++    "allowlist_preserves_public_fields": safe["component"] == envelope.component and safe["client"]["endpoint"] == holder.endpoint,
++    "baseline_has_serialization_guidance": "asdict" in reference and "repr=False" in reference,
++    "lessons_available": Path("knowledge/L2-domain/lessons.md").is_file(),
++}, sort_keys=True))
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/green-original-token-budget.json b/docs/changes/20261116-skill-serialization/evidence/implementation/green-original-token-budget.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..90bd714ab1da892cfbb1233e76c8203e07e13d3a
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/green-original-token-budget.json
+@@ -0,0 +1,15 @@
++{
++  "command": [
++    "bash",
++    "scripts/check-token-budget.sh",
++    "--summary-json"
++  ],
++  "cwd": "/workspace/scratch/2d4d08f07657/adk",
++  "started_at": "2026-11-16T12:29:11.372414+00:00",
++  "elapsed_seconds": 2.5424502469977597,
++  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
++  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
++  "returncode": 0,
++  "stdout": "{\"status\":\"pass\",\"budget_status\":\"within-soft-limit\",\"estimate_method\":\"utf8-bytes-ceil-div-4\",\"agents_bytes\":2914,\"agents_soft_limit\":2975,\"agents_limit\":3500,\"agents_estimated_tokens\":729,\"skill_files\":65,\"max_skill_lines\":140,\"max_skill_file\":\"optional-skills/adk-security-supply-chain/SKILL.md\",\"doc_files\":936,\"max_doc_lines\":547,\"max_doc_file\":\"docs/comprehensive-analysis-embedded-harness.md\",\"summary_scripts\":3,\"compact_test_runner\":1,\"context_governance_assets\":11,\"warnings\":0,\"failures\":0}\n",
++  "stderr": ""
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/green-published-method.json b/docs/changes/20261116-skill-serialization/evidence/implementation/green-published-method.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..8f84ced0caf26b8ecfe9cfb6f4a30b98dccaaefc
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/green-published-method.json
+@@ -0,0 +1,17 @@
++{
++  "command": [
++    "python3",
++    "-m",
++    "unittest",
++    "tests.test_skill_serialization_methods",
++    "-v"
++  ],
++  "cwd": "/workspace/scratch/2d4d08f07657/adk",
++  "started_at": "2026-11-16T12:28:58.576970+00:00",
++  "elapsed_seconds": 0.7299940200027777,
++  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
++  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
++  "returncode": 0,
++  "stdout": "",
++  "stderr": "test_actual_published_allowlist_preserves_changed_nested_public_fields (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_actual_published_allowlist_preserves_changed_nested_public_fields) ... ok\ntest_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) ... ok\ntest_published_example_exercises_paths_without_echoing_values (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_published_example_exercises_paths_without_echoing_values) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.521s\n\nOK\n"
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/implementation-diff-check.json b/docs/changes/20261116-skill-serialization/evidence/implementation/implementation-diff-check.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..89392df5108ab20259038d471eac0acd838900b4
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/implementation-diff-check.json
+@@ -0,0 +1,15 @@
++{
++  "command": [
++    "git",
++    "diff",
++    "--check"
++  ],
++  "cwd": "/workspace/scratch/2d4d08f07657/adk",
++  "started_at": "2026-11-16T12:28:58.575068+00:00",
++  "elapsed_seconds": 0.017342422994261142,
++  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
++  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
++  "returncode": 0,
++  "stdout": "",
++  "stderr": ""
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/record_command.py b/docs/changes/20261116-skill-serialization/evidence/implementation/record_command.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..ee233e85978f80479b5420d2392ac7c8c151f51e
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/record_command.py
+@@ -0,0 +1,29 @@
++"""Record actual local command results for this implementation task."""
++from datetime import datetime, timezone
++import json
++from pathlib import Path
++import platform
++import subprocess
++import sys
++import time
++
++directory = Path(__file__).resolve().parent
++label, *command = sys.argv[1:]
++started = datetime.now(timezone.utc).isoformat()
++clock = time.monotonic()
++completed = subprocess.run(command, text=True, capture_output=True, check=False)
++record = {
++    "command": command,
++    "cwd": str(Path.cwd()),
++    "started_at": started,
++    "elapsed_seconds": time.monotonic() - clock,
++    "python": sys.version,
++    "platform": platform.platform(),
++    "returncode": completed.returncode,
++    "stdout": completed.stdout,
++    "stderr": completed.stderr,
++}
++path = directory / (label + ".json")
++path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
++print(json.dumps({"receipt": str(path), "returncode": completed.returncode}))
++raise SystemExit(completed.returncode)
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/red-published-method.json b/docs/changes/20261116-skill-serialization/evidence/implementation/red-published-method.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..9193b832021d94e027e846fcbe4ef3377aa48ab7
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/red-published-method.json
+@@ -0,0 +1,17 @@
++{
++  "command": [
++    "python3",
++    "-m",
++    "unittest",
++    "tests.test_skill_serialization_methods",
++    "-v"
++  ],
++  "cwd": "/workspace/scratch/2d4d08f07657/adk",
++  "started_at": "2026-11-16T12:28:10.178891+00:00",
++  "elapsed_seconds": 0.4294079579995014,
++  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
++  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
++  "returncode": 1,
++  "stdout": "",
++  "stderr": "test_actual_published_allowlist_preserves_changed_nested_public_fields (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_actual_published_allowlist_preserves_changed_nested_public_fields) ... FAIL\ntest_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) ... \n  test_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) (target='claude-code') ... FAIL\n  test_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) (target='opencode') ... FAIL\ntest_published_example_exercises_paths_without_echoing_values (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_published_example_exercises_paths_without_echoing_values) ... FAIL\n\n======================================================================\nFAIL: test_actual_published_allowlist_preserves_changed_nested_public_fields (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_actual_published_allowlist_preserves_changed_nested_public_fields)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d4d08f07657/adk/tests/test_skill_serialization_methods.py\", line 61, in test_actual_published_allowlist_preserves_changed_nested_public_fields\n    script.write_text(example(DIRECTORY / REFERENCE), encoding=\"utf-8\")\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/2d4d08f07657/adk/tests/test_skill_serialization_methods.py\", line 29, in example\n    raise AssertionError(\"expected one published synthetic serialization example\")\nAssertionError: expected one published synthetic serialization example\n\n======================================================================\nFAIL: test_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) (target='claude-code')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d4d08f07657/adk/tests/test_skill_serialization_methods.py\", line 105, in test_conditional_reference_survives_explicit_optional_export\n    self.assertIn(\"涉及\", step)\nAssertionError: '涉及' not found in '7. 敏感信息审查：检查密钥、token、个人路径和内部域名。'\n\n======================================================================\nFAIL: test_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) (target='opencode')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d4d08f07657/adk/tests/test_skill_serialization_methods.py\", line 105, in test_conditional_reference_survives_explicit_optional_export\n    self.assertIn(\"涉及\", step)\nAssertionError: '涉及' not found in '7. 敏感信息审查：检查密钥、token、个人路径和内部域名。'\n\n======================================================================\nFAIL: test_published_example_exercises_paths_without_echoing_values (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_published_example_exercises_paths_without_echoing_values)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/2d4d08f07657/adk/tests/test_skill_serialization_methods.py\", line 35, in test_published_example_exercises_paths_without_echoing_values\n    code = example(DIRECTORY / REFERENCE)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/2d4d08f07657/adk/tests/test_skill_serialization_methods.py\", line 29, in example\n    raise AssertionError(\"expected one published synthetic serialization example\")\nAssertionError: expected one published synthetic serialization example\n\n----------------------------------------------------------------------\nRan 3 tests in 0.181s\n\nFAILED (failures=4)\n"
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/implementation/unchanged-context-budget.json b/docs/changes/20261116-skill-serialization/evidence/implementation/unchanged-context-budget.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..ec42ad2871584e7816e6a12550453027364bd053
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/implementation/unchanged-context-budget.json
+@@ -0,0 +1,17 @@
++{
++  "command": [
++    "bash",
++    "scripts/check-token-budget.sh",
++    "--profile",
++    "large-refactor",
++    "--summary-json"
++  ],
++  "cwd": "/workspace/scratch/2d4d08f07657/adk",
++  "started_at": "2026-11-16T12:28:58.579473+00:00",
++  "elapsed_seconds": 0.01155712800391484,
++  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
++  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
++  "returncode": 1,
++  "stdout": "",
++  "stderr": "[FAIL] unknown argument: --profile\nUsage:\n  ./scripts/check-token-budget.sh [--summary-json] [--max-skill-lines <n>] [--max-doc-lines <n>]\n\nChecks active adk assets for token-budget regressions:\n  - SKILL.md entry files stay compact; long details belong in references/.\n  - active docs stay below a hard line budget; archive reports are excluded.\n  - high-signal governance scripts expose --summary-json.\n  - full regression runner defaults to compact bounded output.\n  - context compression assets preserve raw evidence and fallback rules.\n  - context budget profiles declare mode, risk, read tier and raw fallback.\n  - root AGENTS and task-cost routing contracts stay bounded.\n"
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/portfolio-audit.json b/docs/changes/20261116-skill-serialization/evidence/portfolio-audit.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..10a0300d248a1b2a3574b368ee3391a08ad4eb21
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/portfolio-audit.json
+@@ -0,0 +1,1970 @@
++{
++  "schema": "adk-readonly-incremental-portfolio-observation/v1",
++  "reviewer": "ai/root/portfolio_optimization",
++  "recorded_at_utc": "2026-11-16T12:29:04.105313+00:00",
++  "repository": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
++  "head": "fa012817b098423768a492c356874539d1020609",
++  "tree": "74b68a1be6c5978cb1ed4d6f8b526ad0006c3e58",
++  "source_worktree_status": "",
++  "coverage": {
++    "entry_body_count": 65,
++    "selected_references_full_read_count": 14,
++    "tracked_asset_population_count": 153,
++    "tracked_asset_population_bytes": 422513,
++    "direct_reference_path_checks": 49,
++    "missing_direct_local_references": [],
++    "full_entry_reading_scope": "65 complete SKILL.md entries (frontmatter and body); bundled resources only the 14 listed selected references were reread",
++    "population_reading_scope": "153 tracked assets inventoried and hashed; hashing is not full-text semantic review"
++  },
++  "entries": [
++    {
++      "name": "adk-data-fetch",
++      "path": "optional-skills/adk-data-fetch/SKILL.md",
++      "group": "optional",
++      "bytes": 4088,
++      "sha256": "93f99ba41694cd8bc4931d67a7fcbaf4f62540c17811b2db41a14062430ab011",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "父子可选安装分离；缺子能力停止，partial/not-verified 状态原样保留，未看到需新建路由的缺口。",
++      "reason_basis": [
++        "optional-skills/adk-data-fetch/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-email-imap-fetch",
++      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
++      "group": "optional",
++      "bytes": 3047,
++      "sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "EXAMINE、UIDVALIDITY、BODY.PEEK、分批预算及逐封失败保留明确，未把邮件读取扩权为写邮箱。",
++      "reason_basis": [
++        "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-fetch-url-content",
++      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
++      "group": "optional",
++      "bytes": 2892,
++      "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "HTTP(S)/origin/IP/重定向边界与有界正文、相对链接、空壳/截断处理齐备；不把搜索或登录当获取正文。",
++      "reason_basis": [
++        "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-external-practice-absorption",
++      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
++      "group": "optional",
++      "bytes": 8664,
++      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "已有 scoped-adoption 与复用来源/PR 路径，curator/owner/implementer 分离，不重复为已批准续做重启 intake。",
++      "reason_basis": [
++        "optional-skills/adk-external-practice-absorption/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-incident-rca-report",
++      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
++      "group": "optional",
++      "bytes": 2416,
++      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "已分事件与采集时间，未知偏差保留；单因果可短链，不强制五层因果或凑全行动类别。",
++      "reason_basis": [
++        "optional-skills/adk-incident-rca-report/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-prose-revision",
++      "path": "optional-skills/adk-prose-revision/SKILL.md",
++      "group": "optional",
++      "bytes": 4503,
++      "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "report/revise 分流、最小局部修改、事实与限定语保真、不判断AI作者及不外传原稿均明确。",
++      "reason_basis": [
++        "optional-skills/adk-prose-revision/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-security-supply-chain",
++      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
++      "group": "optional",
++      "bytes": 8413,
++      "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "当前正文已有分层适用性、source-to-sink、扫描只列路径与覆盖边界；本审计未产生新确认缺陷。父任务随后提出 serializer 变体另由其独立实验/审查决定。",
++      "reason_basis": [
++        "optional-skills/adk-security-supply-chain/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-skill-composition-governance",
++      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
++      "group": "optional",
++      "bytes": 6646,
++      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "collision-only 与 composition-change 分开；独立holdout/真实trace边界清楚，不以路由绿代替行为提升。",
++      "reason_basis": [
++        "optional-skills/adk-skill-composition-governance/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-test-flakiness-triage",
++      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
++      "group": "optional",
++      "bytes": 2427,
++      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "发布采样函数保留单轮日志和退出码并对130/143停止；区分进程结果与测试报告，保留统计假设及父进程取消未证边界。",
++      "reason_basis": [
++        "optional-skills/adk-test-flakiness-triage/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-adr-writer",
++      "path": "skills/adk-adr-writer/SKILL.md",
++      "group": "core-general",
++      "bytes": 3680,
++      "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "风险分层与冷读检查避免默认多轮模型；决定状态、读者理解与实际授权/证据分别核验。",
++      "reason_basis": [
++        "skills/adk-adr-writer/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-after-action-review",
++      "path": "skills/adk-after-action-review/SKILL.md",
++      "group": "core-general",
++      "bytes": 3785,
++      "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "lite/standard/promotion 分开；无复用价值允许空候选，不把普通复盘升级成全套晋级门禁。",
++      "reason_basis": [
++        "skills/adk-after-action-review/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-archive-governance",
++      "path": "skills/adk-archive-governance/SKILL.md",
++      "group": "core-general",
++      "bytes": 2687,
++      "sha256": "a950a9e9916c4ec1377a4f56dbc55bb12e1c3198a89be677540d783544c62876",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "hash mismatch 先留旧/实测/内容证据并核授权，未知差异不靠重算hash洗白；已有归档与新建知识职责分开。",
++      "reason_basis": [
++        "skills/adk-archive-governance/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-artifact-gating",
++      "path": "skills/adk-artifact-gating/SKILL.md",
++      "group": "core-general",
++      "bytes": 2061,
++      "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "限定跨仓/跨角色标签交接；approved 与 PASS 分开，签收不替代真实验证。",
++      "reason_basis": [
++        "skills/adk-artifact-gating/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-branch-closeout",
++      "path": "skills/adk-branch-closeout/SKILL.md",
++      "group": "core-general",
++      "bytes": 3095,
++      "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "按status/create-pr/merge/keep-discard选择实际操作，沿用同范围授权，精确HEAD/check与fresh-main及清理授权分开。",
++      "reason_basis": [
++        "skills/adk-branch-closeout/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-bsp-analysis",
++      "path": "skills/adk-bsp-analysis/SKILL.md",
++      "group": "embedded",
++      "bytes": 3928,
++      "sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "Linux/RTOS/裸机分流，按问题追启动/资源/历史并标确认/推断/未知，不机械全扫BSP。",
++      "reason_basis": [
++        "skills/adk-bsp-analysis/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-bsp-porting-playbook",
++      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
++      "group": "embedded",
++      "bytes": 5335,
++      "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "真实目标参数、任务新目录、CPU/RAM预算与失败现场保留明确；源码构建不授予设备刷写。",
++      "reason_basis": [
++        "skills/adk-bsp-porting-playbook/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-cmake-cross-build",
++      "path": "skills/adk-cmake-cross-build/SKILL.md",
++      "group": "embedded",
++      "bytes": 5264,
++      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "已修cache路径与实际toolchain身份混淆；同身份增量/身份变化新目录、fresh JUnit实际执行数和host/target分离齐备。",
++      "reason_basis": [
++        "skills/adk-cmake-cross-build/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-code-review-loop",
++      "path": "skills/adk-code-review-loop/SKILL.md",
++      "group": "core-general",
++      "bytes": 6235,
++      "sha256": "c9f9a8149babf7f51786a8b1d86f38f10b629051efcb355a0965b1ad8b1aa9fd",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "feedback-triage/targeted/whole-diff 分开，绑定快照overlay、Spec/Quality与独立性；无需为单条反馈重审全仓。",
++      "reason_basis": [
++        "skills/adk-code-review-loop/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-code-simplification",
++      "path": "skills/adk-code-simplification/SKILL.md",
++      "group": "core-general",
++      "bytes": 3025,
++      "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "以公开行为与调用负担为目标、单模式等价简化和定向回归，不以行数直接宣称收益。",
++      "reason_basis": [
++        "skills/adk-code-simplification/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-commit-pr-quality-gate",
++      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
++      "group": "core-general",
++      "bytes": 3821,
++      "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "message-only/PR-readiness/high-risk 分流，复用同快照回执，专项门禁仅按实际影响启用。",
++      "reason_basis": [
++        "skills/adk-commit-pr-quality-gate/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-component-api-stability",
++      "path": "skills/adk-component-api-stability/SKILL.md",
++      "group": "core-general",
++      "bytes": 5451,
++      "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "源码API、旧二进制ABI、运行行为分别验证，保留旧object/executable，不以重编通过冒充ABI。",
++      "reason_basis": [
++        "skills/adk-component-api-stability/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-context-compress-handoff",
++      "path": "skills/adk-context-compress-handoff/SKILL.md",
++      "group": "core-general",
++      "bytes": 2578,
++      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "保存最新目标、无效旧目标、权限/阻塞/raw pointer及最多3动作；模板根路径仅在源码可用时读取。",
++      "reason_basis": [
++        "skills/adk-context-compress-handoff/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-context-engineering",
++      "path": "skills/adk-context-engineering/SKILL.md",
++      "group": "core-general",
++      "bytes": 3927,
++      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "stable/task/evidence/on-demand 分层与子任务最小上下文明确，恢复失败补缺失事实而非扩大全部上下文。",
++      "reason_basis": [
++        "skills/adk-context-engineering/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-cross-team-handoff",
++      "path": "skills/adk-cross-team-handoff/SKILL.md",
++      "group": "core-general",
++      "bytes": 3069,
++      "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "lite/formal 与真实接收方签收分开，冷读限定有歧义/正式场景，不为普通交接增加默认模型轮次。",
++      "reason_basis": [
++        "skills/adk-cross-team-handoff/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-driver-bringup-checklist",
++      "path": "skills/adk-driver-bringup-checklist/SKILL.md",
++      "group": "embedded",
++      "bytes": 5457,
++      "sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "阶段minimal/functional/soak/production分开；MMIO读副作用、主动探测和设备写须按真实效果分类。",
++      "reason_basis": [
++        "skills/adk-driver-bringup-checklist/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-driver-implementation",
++      "path": "skills/adk-driver-implementation/SKILL.md",
++      "group": "embedded",
++      "bytes": 5130,
++      "sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "先声明runtime与资源生命周期，覆盖partial init、超时/取消/晚到完成、回收；workspace与设备权限分开。",
++      "reason_basis": [
++        "skills/adk-driver-implementation/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-embedded-debug-transport",
++      "path": "skills/adk-embedded-debug-transport/SKILL.md",
++      "group": "embedded",
++      "bytes": 5745,
++      "sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "按实际通道与命令风险治理，GDB attach/halt和有读副作用MMIO不误称被动读取。",
++      "reason_basis": [
++        "skills/adk-embedded-debug-transport/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-embedded-diagnostic-harness",
++      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
++      "group": "embedded",
++      "bytes": 3079,
++      "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "strict/env、预期返回与真实故障分开；先校harness后判产品，现阶段没有真实adapter输入证实新关联缺陷。",
++      "reason_basis": [
++        "skills/adk-embedded-diagnostic-harness/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-embedded-release-orchestration",
++      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
++      "group": "embedded",
++      "bytes": 5245,
++      "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "prepare/publish/flash 三域与制品身份、凭证、恢复、部分成功核验分开，未把准备权限升级设备发布。",
++      "reason_basis": [
++        "skills/adk-embedded-release-orchestration/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-embedded-remote-debug-log-triage",
++      "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
++      "group": "embedded",
++      "bytes": 6746,
++      "sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "分层连通性、ADB语义、失联熔断和恢复后preflight明确，不用ping或单退出码判断就绪。",
++      "reason_basis": [
++        "skills/adk-embedded-remote-debug-log-triage/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-embedded-storage-layout-migration",
++      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
++      "group": "embedded",
++      "bytes": 5590,
++      "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "故障解释与实际迁移分流；现场数据保留、host检查和独立operator设备写/扩批证据分开。",
++      "reason_basis": [
++        "skills/adk-embedded-storage-layout-migration/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-engineering-growth-review",
++      "path": "skills/adk-engineering-growth-review/SKILL.md",
++      "group": "core-general",
++      "bytes": 3853,
++      "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "index-first、授权时间窗和单次/长期趋势分开，不默认扫全历史、生成课程或外发。",
++      "reason_basis": [
++        "skills/adk-engineering-growth-review/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-fault-injection-recovery",
++      "path": "skills/adk-fault-injection-recovery/SKILL.md",
++      "group": "embedded",
++      "bytes": 3559,
++      "sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "按真实风险选故障模型，隔离operator、预算/恢复与实测回执限定，不默认改生产配置或凑故障类型。",
++      "reason_basis": [
++        "skills/adk-fault-injection-recovery/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-goal-authoring",
++      "path": "skills/adk-goal-authoring/SKILL.md",
++      "group": "core-general",
++      "bytes": 3704,
++      "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "已有合同只改受影响项，原验收分母与1–4纵向批次/8KiB恢复保留；预算未知诚实为null。",
++      "reason_basis": [
++        "skills/adk-goal-authoring/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-hardware-debugging",
++      "path": "skills/adk-hardware-debugging/SKILL.md",
++      "group": "embedded",
++      "bytes": 2701,
++      "sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "按实际内核/模块映射和匹配ELF解析地址，MCU能力按型号核实；缺符号/映射保持partial。",
++      "reason_basis": [
++        "skills/adk-hardware-debugging/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-integration-hil-sil",
++      "path": "skills/adk-integration-hil-sil/SKILL.md",
++      "group": "embedded",
++      "bytes": 3866,
++      "sha256": "8ae810e665542db4ca20c46a911bd98d859d70fa97caf5bd5615595ee75fb8f2",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "host/compile-only/SIL/HIL分层，资源隔离与新JUnit逐case状态/必跑缺口核验，零实际通过不放行。",
++      "reason_basis": [
++        "skills/adk-integration-hil-sil/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-interface-contract-design",
++      "path": "skills/adk-interface-contract-design/SKILL.md",
++      "group": "core-general",
++      "bytes": 4317,
++      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "生命周期/副作用/接口兼容与消费者schema方言对应，组合闭合路径已明确，不统一强套additionalProperties。",
++      "reason_basis": [
++        "skills/adk-interface-contract-design/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-interrupt-dma-patterns",
++      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
++      "group": "embedded",
++      "bytes": 5406,
++      "sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "以实测预算与CPU/device ownership选择模式，cache/ISR/teardown及异常恢复完整，不套固定速率阈值。",
++      "reason_basis": [
++        "skills/adk-interrupt-dma-patterns/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-knowledge-archive",
++      "path": "skills/adk-knowledge-archive/SKILL.md",
++      "group": "core-general",
++      "bytes": 2236,
++      "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "仅保存有复用价值脱敏事实与证据指针，既有归档修复另路由，长期规则不自动晋升。",
++      "reason_basis": [
++        "skills/adk-knowledge-archive/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-lightweight-planning",
++      "path": "skills/adk-lightweight-planning/SKILL.md",
++      "group": "core-general",
++      "bytes": 2158,
++      "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "计划请求保持只读且按真实规模最少动作；实施请求退出，未默认创建巡检或额外模型调用。",
++      "reason_basis": [
++        "skills/adk-lightweight-planning/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-memory-curator",
++      "path": "skills/adk-memory-curator/SKILL.md",
++      "group": "core-general",
++      "bytes": 3530,
++      "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "报告与候选只读，冲突/失效/脱敏先核，扫描仅列路径并声明覆盖，长期写入有确认/回滚。",
++      "reason_basis": [
++        "skills/adk-memory-curator/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-offline-core-dump-triage",
++      "path": "skills/adk-offline-core-dump-triage/SKILL.md",
++      "group": "embedded",
++      "bytes": 3562,
++      "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "制品匹配与候选线索分开，先设sysroot并关闭不可信autoload，exit0不冒充根因。",
++      "reason_basis": [
++        "skills/adk-offline-core-dump-triage/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-parallel-agent-governance",
++      "path": "skills/adk-parallel-agent-governance/SKILL.md",
++      "group": "core-general",
++      "bytes": 4292,
++      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "实际收益准入、最少并行数、唯一写owner、data-only交接和最终集成明确；空审核行已改not-run。",
++      "reason_basis": [
++        "skills/adk-parallel-agent-governance/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-performance-profiling-embedded",
++      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
++      "group": "embedded",
++      "bytes": 2983,
++      "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "有效负载、等价输入输出、环境漂移和A/B边界明确；栈frame与调用链、host与板端指标不混用。",
++      "reason_basis": [
++        "skills/adk-performance-profiling-embedded/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-pilot-framework",
++      "path": "skills/adk-pilot-framework/SKILL.md",
++      "group": "core-general",
++      "bytes": 3765,
++      "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "smoke与优劣比较分开，实际验收与环境健康分开，保留失败/重试且不挑成功轮。",
++      "reason_basis": [
++        "skills/adk-pilot-framework/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-planning-execution-loop",
++      "path": "skills/adk-planning-execution-loop/SKILL.md",
++      "group": "core-general",
++      "bytes": 4415,
++      "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "恢复仅读current-state/变化，选择ready纵向交付，inline单执行者优先，复用同身份回执并对未知外部效果先对账。",
++      "reason_basis": [
++        "skills/adk-planning-execution-loop/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-production-field-readiness",
++      "path": "skills/adk-production-field-readiness/SKILL.md",
++      "group": "core-general",
++      "bytes": 5395,
++      "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "observe-existing-gap",
++      "new_confirmed_findings": 0,
++      "reason": "量产/设备放行仍需真实六类证据；pilot reference 的human-active<=wall-clock已有歧义观察，缺producer多人累计定义，保留待证而不单改阈值。",
++      "reason_basis": [
++        "skills/adk-production-field-readiness/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-protocol-stack-integration",
++      "path": "skills/adk-protocol-stack-integration/SKILL.md",
++      "group": "embedded",
++      "bytes": 3084,
++      "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "分帧与partial I/O、层级错误及单调deadline/嵌套重试责任明确；离线抓包零包/零匹配不算成功。",
++      "reason_basis": [
++        "skills/adk-protocol-stack-integration/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-register-map-design",
++      "path": "skills/adk-register-map-design/SKILL.md",
++      "group": "embedded",
++      "bytes": 3856,
++      "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "手册/勘误、复位条件和有效位/undefined分开，W1C/读清/FIFO拒用普通RMW；零可核位不算pass。",
++      "reason_basis": [
++        "skills/adk-register-map-design/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-release-versioning",
++      "path": "skills/adk-release-versioning/SKILL.md",
++      "group": "core-general",
++      "bytes": 2776,
++      "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "真实正式baseline与完整提交正文保留，shallow拒绝，版本/发布/immutable tag链分开，不过滤revert或未知类型。",
++      "reason_basis": [
++        "skills/adk-release-versioning/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-repo-drift-remediation",
++      "path": "skills/adk-repo-drift-remediation/SKILL.md",
++      "group": "core-general",
++      "bytes": 3021,
++      "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "先issue map再按风险修复，保护dirty，源码/live和旧overview保真分开，不盲清兼容历史。",
++      "reason_basis": [
++        "skills/adk-repo-drift-remediation/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-repo-prompt-analysis",
++      "path": "skills/adk-repo-prompt-analysis/SKILL.md",
++      "group": "core-general",
++      "bytes": 3300,
++      "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "索引与callsite追踪实际prompt构造，可信policy与外部输入分开，未看全仓不声称穷尽。",
++      "reason_basis": [
++        "skills/adk-repo-prompt-analysis/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-requirements-triage",
++      "path": "skills/adk-requirements-triage/SKILL.md",
++      "group": "core-general",
++      "bytes": 3400,
++      "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "brief/execution/high-risk分开，区分阻塞未知与可逆假设，不重复访谈已明确任务。",
++      "reason_basis": [
++        "skills/adk-requirements-triage/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-rtos-task-design",
++      "path": "skills/adk-rtos-task-design/SKILL.md",
++      "group": "embedded",
++      "bytes": 5718,
++      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "任务/ISR模型适用性、WCET上界、tick量化/回绕与timer异步停止语义均明确，不以host算术冒充硬实时。",
++      "reason_basis": [
++        "skills/adk-rtos-task-design/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-runtime-router",
++      "path": "skills/adk-runtime-router/SKILL.md",
++      "group": "core-general",
++      "bytes": 5443,
++      "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "observe-existing-gap",
++      "new_confirmed_findings": 0,
++      "reason": "现有唯一primary/fit/按需加载与已批准续行保留；E1低风险实现路由不可达为已知能力缺口，缺可信风险来源不能凭micro标签启用。",
++      "reason_basis": [
++        "skills/adk-runtime-router/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-skill-deep-analysis",
++      "path": "skills/adk-skill-deep-analysis/SKILL.md",
++      "group": "core-general",
++      "bytes": 5613,
++      "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "有界来源发现、具体实现/许可/反例与现有能力对比；无真实问题允许RETAIN/OBSERVE，不为凑改动造规则。",
++      "reason_basis": [
++        "skills/adk-skill-deep-analysis/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-static-analysis-c-cpp",
++      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
++      "group": "embedded",
++      "bytes": 3405,
++      "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "按TU/头文件消费者及真实编译库选择范围，工具失败/空扫描不算通过，静态与动态检查分开。",
++      "reason_basis": [
++        "skills/adk-static-analysis-c-cpp/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-structured-requirements-questioning",
++      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
++      "group": "core-general",
++      "bytes": 3458,
++      "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "Explore先Why、Challenge依赖frontier、稳定问题ID及部分回答/修订处理明确，直接执行不重开访谈。",
++      "reason_basis": [
++        "skills/adk-structured-requirements-questioning/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-systematic-debugging",
++      "path": "skills/adk-systematic-debugging/SKILL.md",
++      "group": "core-general",
++      "bytes": 2801,
++      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "最小红信号与单变量实验、重跑前保存易失证据、二分good/bad/untestable及错误中止明确。",
++      "reason_basis": [
++        "skills/adk-systematic-debugging/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-task-breakdown",
++      "path": "skills/adk-task-breakdown/SKILL.md",
++      "group": "core-general",
++      "bytes": 3659,
++      "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "single/multi/machine-dispatched按需要选择，Ready Frontier核依赖/权限/写冲突，不强制固定任务量与估时。",
++      "reason_basis": [
++        "skills/adk-task-breakdown/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-test-strategy",
++      "path": "skills/adk-test-strategy/SKILL.md",
++      "group": "embedded",
++      "bytes": 3612,
++      "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "按风险选择L0/L1/L2最少充分验证，独立expected与checker校准仅在新增/可疑时执行，禁止扩大无关回归。",
++      "reason_basis": [
++        "skills/adk-test-strategy/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-token-context-governance",
++      "path": "skills/adk-token-context-governance/SKILL.md",
++      "group": "core-general",
++      "bytes": 7699,
++      "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "按真实trace瓶颈优化并分离资产字节与Token/成本；deferred loading、原文回退和同状态复用已具备。",
++      "reason_basis": [
++        "skills/adk-token-context-governance/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-unit-test-embedded",
++      "path": "skills/adk-unit-test-embedded/SKILL.md",
++      "group": "embedded",
++      "bytes": 3068,
++      "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "公开契约/独立性质/有效输入与状态复位明确，设计与测试实施分开；host断言不证明HIL性能。",
++      "reason_basis": [
++        "skills/adk-unit-test-embedded/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-verification-before-completion",
++      "path": "skills/adk-verification-before-completion/SKILL.md",
++      "group": "core-general",
++      "bytes": 4508,
++      "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "retain",
++      "new_confirmed_findings": 0,
++      "reason": "checkpoint与goal-final分开，复用有效校准与原始回执，保留原验收/独立验证及未查范围，缺证不pass。",
++      "reason_basis": [
++        "skills/adk-verification-before-completion/SKILL.md"
++      ]
++    },
++    {
++      "name": "adk-worktree-governance",
++      "path": "skills/adk-worktree-governance/SKILL.md",
++      "group": "core-general",
++      "bytes": 3746,
++      "sha256": "68ce46730100ce4cedbb3438747bd134666561dca1c00790bb3e2329a3461242",
++      "reading": "complete SKILL.md frontmatter and body, read in separate bounded calls; this is a reviewer declaration, not inferred from hashing",
++      "incremental_decision": "observe-existing-gap",
++      "new_confirmed_findings": 0,
++      "reason": "active入口按stay-current/isolated/automation最小化；旧未默认链接task-package仍预填low/parallel，消费路径未证实，保留已知观察而不改无用模板。",
++      "reason_basis": [
++        "skills/adk-worktree-governance/SKILL.md"
++      ]
++    }
++  ],
++  "selected_references_read": [
++    {
++      "path": "skills/adk-goal-authoring/references/goal-plan.json",
++      "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b"
++    },
++    {
++      "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
++      "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375"
++    },
++    {
++      "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
++      "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1"
++    },
++    {
++      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
++      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be"
++    },
++    {
++      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
++      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3"
++    },
++    {
++      "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
++      "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4"
++    },
++    {
++      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
++      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1"
++    },
++    {
++      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
++      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
++    },
++    {
++      "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
++      "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd"
++    },
++    {
++      "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
++      "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4"
++    },
++    {
++      "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
++      "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02"
++    },
++    {
++      "path": "skills/adk-release-versioning/references/details.md",
++      "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed"
++    },
++    {
++      "path": "skills/adk-test-strategy/references/high-value-tdd.md",
++      "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f"
++    },
++    {
++      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
++      "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355"
++    }
++  ],
++  "confirmed_new_findings": [],
++  "observations": [
++    {
++      "id": "O1",
++      "topic": "E1 implementation routing remains unreachable",
++      "status": "previously documented; no safe automatic low-risk authorization inferred",
++      "evidence": [
++        "docs/agent-operating-rules.md",
++        "docs/changes/20261115-skill-task-usability/audit.md"
++      ]
++    },
++    {
++      "id": "O2",
++      "topic": "Detached old worktree package defaults to low/parallel",
++      "status": "known observation; active linked path uses different template; no consumer failure proven",
++      "evidence": [
++        "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
++        "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
++        "docs/changes/20261116-skill-failure-paths/audit.md"
++      ]
++    },
++    {
++      "id": "O3",
++      "topic": "Production pilot human-active time aggregation",
++      "status": "existing observation retained; no producer semantics for single human versus aggregate person-minutes",
++      "evidence": [
++        "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
++        "docs/changes/20261116-skill-failure-paths/audit.md"
++      ]
++    },
++    {
++      "id": "O4",
++      "topic": "Native task success/token/cost/latency improvement",
++      "status": "not-measured; source compression and static regression are separate evidence",
++      "evidence": [
++        "skills/adk-token-context-governance/SKILL.md",
++        "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md"
++      ]
++    }
++  ],
++  "rejected_new_findings": [
++    {
++      "topic": "Require plan/current-state goal_ref lexical path equality",
++      "reason": "Existing approved design explicitly preserves original-requirement references and declines path equality; no contract violation established.",
++      "evidence": "docs/changes/20261115-skill-task-usability/design.md"
++    }
++  ],
++  "recommendation": "Finish protected publication and consume the final independently verified version once; retain existing helpers unless an independent concrete counterexample justifies a scoped enhancement.",
++  "limitations": [
++    "This is incremental source-method review, not a release approval or independent behavior evaluation.",
++    "65 complete entry texts and 14 selected bundled references were read; remaining bundled resources were inventoried/hashed, not reread.",
++    "No new full regression, model A/B, runtime/HIL or paid provider run performed.",
++    "No repository files edited; no remote writes performed."
++  ],
++  "decision_counts": {
++    "retain": 62,
++    "observe-existing-gap": 3,
++    "new-confirmed-findings": 0
++  },
++  "asset_population": [
++    {
++      "path": "optional-skills/adk-data-fetch/SKILL.md",
++      "bytes": 4088,
++      "sha256": "93f99ba41694cd8bc4931d67a7fcbaf4f62540c17811b2db41a14062430ab011",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
++      "bytes": 3047,
++      "sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
++      "bytes": 2892,
++      "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
++      "bytes": 8664,
++      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-external-practice-absorption/agents/openai.yaml",
++      "bytes": 337,
++      "sha256": "a3778c89b5a1937facc40e463d91966a70a0c8e7f31c2afbc50d4f302d8cb4fe",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
++      "bytes": 2416,
++      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-prose-revision/SKILL.md",
++      "bytes": 4503,
++      "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-prose-revision/references/review-cases.md",
++      "bytes": 1851,
++      "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
++      "bytes": 8413,
++      "sha256": "2d8453ce4525d0793ce1ee89a9503001189c4819fa3966588b561d8eb9a0474e",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
++      "bytes": 1879,
++      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
++      "bytes": 6646,
++      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
++      "bytes": 7050,
++      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
++      "bytes": 8108,
++      "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
++      "bytes": 2427,
++      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
++      "bytes": 4957,
++      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-adr-writer/SKILL.md",
++      "bytes": 3680,
++      "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-after-action-review/SKILL.md",
++      "bytes": 3785,
++      "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-after-action-review/references/after-action-review.md",
++      "bytes": 436,
++      "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-after-action-review/references/codify-decision.md",
++      "bytes": 651,
++      "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-after-action-review/references/memory-candidate.md",
++      "bytes": 1707,
++      "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-archive-governance/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-archive-governance/README.md",
++      "bytes": 301,
++      "sha256": "f0d5f306b1d8ddafa6065d4c07883ae6bcfd123857e0cdec22fcdec7ba0036c6",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-archive-governance/SKILL.md",
++      "bytes": 2687,
++      "sha256": "a950a9e9916c4ec1377a4f56dbc55bb12e1c3198a89be677540d783544c62876",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-archive-governance/agents/openai.yaml",
++      "bytes": 161,
++      "sha256": "1a49a5ab0c79fab66f27c547d8dd7ea85307a96e214062611c4f8e4da8f90b96",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-artifact-gating/SKILL.md",
++      "bytes": 2061,
++      "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-artifact-gating/references/details.md",
++      "bytes": 2316,
++      "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-branch-closeout/SKILL.md",
++      "bytes": 3095,
++      "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-branch-closeout/references/closeout-options.md",
++      "bytes": 908,
++      "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-bsp-analysis/SKILL.md",
++      "bytes": 3928,
++      "sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
++      "bytes": 1666,
++      "sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
++      "bytes": 5335,
++      "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-cmake-cross-build/SKILL.md",
++      "bytes": 5264,
++      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-code-review-loop/SKILL.md",
++      "bytes": 6235,
++      "sha256": "c9f9a8149babf7f51786a8b1d86f38f10b629051efcb355a0965b1ad8b1aa9fd",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
++      "bytes": 1917,
++      "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
++      "bytes": 3907,
++      "sha256": "a82255232e618f5fd00f4532aa884c6df54f2dd97806da633d092286bc9d0af6",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
++      "bytes": 2229,
++      "sha256": "731f4b0dd24c9c3baea0e7d76bbeef6eeeb746d23335cf96893c694b68e91fa4",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-code-review-loop/references/review-governance-details.md",
++      "bytes": 8750,
++      "sha256": "b82d16825e3a0ee15e4b6cd08f1f4e736e32d63c93fdf7381922ffab60c0a2ea",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-code-simplification/SKILL.md",
++      "bytes": 3025,
++      "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-code-simplification/references/deep-module-design.md",
++      "bytes": 1275,
++      "sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-code-simplification/references/details.md",
++      "bytes": 2582,
++      "sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
++      "bytes": 3821,
++      "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
++      "bytes": 1429,
++      "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-component-api-stability/SKILL.md",
++      "bytes": 5451,
++      "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-context-compress-handoff/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-context-compress-handoff/README.md",
++      "bytes": 324,
++      "sha256": "4c76f8c71b05435bc10d614b20011d643f798be03ecb57d0c192a6852886ee14",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-context-compress-handoff/SKILL.md",
++      "bytes": 2578,
++      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-context-compress-handoff/agents/openai.yaml",
++      "bytes": 174,
++      "sha256": "60e59ca0c78d7202172eea257a23803188f8017776d18d58851ef4934090e00c",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-context-engineering/SKILL.md",
++      "bytes": 3927,
++      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-cross-team-handoff/SKILL.md",
++      "bytes": 3069,
++      "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-driver-bringup-checklist/SKILL.md",
++      "bytes": 5457,
++      "sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-driver-implementation/SKILL.md",
++      "bytes": 5130,
++      "sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-embedded-debug-transport/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-debug-transport/README.md",
++      "bytes": 391,
++      "sha256": "453bf2b168e3ba1a2c7176e59803709ac714749701f07809163c39614fc3220d",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-debug-transport/SKILL.md",
++      "bytes": 5745,
++      "sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-embedded-debug-transport/agents/openai.yaml",
++      "bytes": 173,
++      "sha256": "5482eefa68e99a12a9c0a9ec90c1d958cfac588f30c516c419c216b7dfa7ae69",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-diagnostic-harness/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-diagnostic-harness/README.md",
++      "bytes": 343,
++      "sha256": "37fc552aff1dd57ab25ce50cb3d2b669a6a59cd8e59cc70030139c63b9505751",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
++      "bytes": 3079,
++      "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-embedded-diagnostic-harness/agents/openai.yaml",
++      "bytes": 168,
++      "sha256": "e994baf88b865d08f5808d321936ea25fdbf5b7ef42abf8d196ce433f211122a",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-release-orchestration/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-release-orchestration/README.md",
++      "bytes": 342,
++      "sha256": "e917b29015b779f128478eb2e450f27c0e1cd19d1be639321e7000677b08d5d0",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
++      "bytes": 5245,
++      "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-embedded-release-orchestration/agents/openai.yaml",
++      "bytes": 177,
++      "sha256": "42f5870f805301ab55c6d1a8fbcb378ecb1a9620cfc50c03dd297eddf82b1057",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
++      "bytes": 1698,
++      "sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-remote-debug-log-triage/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-remote-debug-log-triage/README.md",
++      "bytes": 560,
++      "sha256": "9aa267e1e3eda44db5c9fadba10ce9d422da36dca50183a6236a4266f1cb8487",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
++      "bytes": 6746,
++      "sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-embedded-remote-debug-log-triage/agents/openai.yaml",
++      "bytes": 189,
++      "sha256": "e627b547abc25a924ac9899add7d9158fa9f194a5f2a3cbf8cc4e4e30b1d380e",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
++      "bytes": 3301,
++      "sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
++      "bytes": 5590,
++      "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-engineering-growth-review/LICENSE",
++      "bytes": 1063,
++      "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-engineering-growth-review/README.md",
++      "bytes": 745,
++      "sha256": "ba06dc6db2436cac1e51707248013dc732ee228c074d8730c7ee5d7703981f63",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-engineering-growth-review/SKILL.md",
++      "bytes": 3853,
++      "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-engineering-growth-review/agents/openai.yaml",
++      "bytes": 163,
++      "sha256": "17530036dc4d53ee862d6030d03cea86392d1e3ed1a4ce2e9178df4e8458bc05",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
++      "bytes": 1266,
++      "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-fault-injection-recovery/SKILL.md",
++      "bytes": 3559,
++      "sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-goal-authoring/SKILL.md",
++      "bytes": 3704,
++      "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-goal-authoring/references/goal-plan.json",
++      "bytes": 1844,
++      "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-hardware-debugging/SKILL.md",
++      "bytes": 2701,
++      "sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
++      "bytes": 1919,
++      "sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-integration-hil-sil/SKILL.md",
++      "bytes": 3866,
++      "sha256": "8ae810e665542db4ca20c46a911bd98d859d70fa97caf5bd5615595ee75fb8f2",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-interface-contract-design/SKILL.md",
++      "bytes": 4317,
++      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
++      "bytes": 1598,
++      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-interface-contract-design/references/details.md",
++      "bytes": 2611,
++      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
++      "bytes": 2393,
++      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
++      "bytes": 2238,
++      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
++      "bytes": 2845,
++      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
++      "bytes": 5406,
++      "sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-interrupt-dma-patterns/references/details.md",
++      "bytes": 1709,
++      "sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
++      "bytes": 1645,
++      "sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-knowledge-archive/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-knowledge-archive/README.md",
++      "bytes": 329,
++      "sha256": "07d5563a38ec220a6937c32a7339cd866942df34936c366ddfb1e4f2c4fde8ea",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-knowledge-archive/SKILL.md",
++      "bytes": 2236,
++      "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-knowledge-archive/agents/openai.yaml",
++      "bytes": 156,
++      "sha256": "c915127f7ac46ebdce1bd6afd512c0039cfea00a6fa6dc5fc8d5f4a653b5a7ba",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-lightweight-planning/LICENSE",
++      "bytes": 1063,
++      "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-lightweight-planning/README.md",
++      "bytes": 554,
++      "sha256": "8df5c88632885b07dc4a341b6904b57d687de144db79f2bf06d39e31dd0e2985",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-lightweight-planning/SKILL.md",
++      "bytes": 2158,
++      "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-lightweight-planning/agents/openai.yaml",
++      "bytes": 127,
++      "sha256": "29a33d35e237437b617366384e22e09a6b7c489fae8054f88c44dd51e25f20b5",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-memory-curator/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-memory-curator/README.md",
++      "bytes": 310,
++      "sha256": "1c9f71a0511b8f6979e38c9825fd7aaaedcb62e62686316f9edeb1b55bf96933",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-memory-curator/SKILL.md",
++      "bytes": 3530,
++      "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-memory-curator/agents/openai.yaml",
++      "bytes": 165,
++      "sha256": "24ec7d756319b13019ccdb7b227d67f23066beae23e05e02e5339d4340231acc",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-offline-core-dump-triage/SKILL.md",
++      "bytes": 3562,
++      "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-parallel-agent-governance/SKILL.md",
++      "bytes": 4292,
++      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
++      "bytes": 1716,
++      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
++      "bytes": 738,
++      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
++      "bytes": 2983,
++      "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
++      "bytes": 4590,
++      "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-pilot-framework/SKILL.md",
++      "bytes": 3765,
++      "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-pilot-framework/references/details.md",
++      "bytes": 3632,
++      "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-planning-execution-loop/SKILL.md",
++      "bytes": 4415,
++      "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
++      "bytes": 5155,
++      "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-production-field-readiness/SKILL.md",
++      "bytes": 5395,
++      "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
++      "bytes": 1793,
++      "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-protocol-stack-integration/SKILL.md",
++      "bytes": 3084,
++      "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
++      "bytes": 1135,
++      "sha256": "6006f23c5e1d8ae8b1ea185fb4f2613c13af55b92a33cdc881fd909c6a199b9c",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-register-map-design/SKILL.md",
++      "bytes": 3856,
++      "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-release-versioning/SKILL.md",
++      "bytes": 2776,
++      "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-release-versioning/references/details.md",
++      "bytes": 2471,
++      "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-repo-drift-remediation/LICENSE",
++      "bytes": 61,
++      "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-repo-drift-remediation/README.md",
++      "bytes": 303,
++      "sha256": "64a339900700aa3444f589aa9549d082124f2bf20e40ea58270d7ce8066bafa7",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-repo-drift-remediation/SKILL.md",
++      "bytes": 3021,
++      "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-repo-drift-remediation/agents/openai.yaml",
++      "bytes": 166,
++      "sha256": "daf474758479bf0bbfbd6350e6215c76dfbe7d23233e613c262f0a9f2e149470",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-repo-prompt-analysis/SKILL.md",
++      "bytes": 3300,
++      "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-requirements-triage/SKILL.md",
++      "bytes": 3400,
++      "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
++      "bytes": 1558,
++      "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
++      "bytes": 579,
++      "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-rtos-task-design/SKILL.md",
++      "bytes": 5718,
++      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-runtime-router/SKILL.md",
++      "bytes": 5443,
++      "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
++      "bytes": 7296,
++      "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-skill-deep-analysis/SKILL.md",
++      "bytes": 5613,
++      "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-skill-deep-analysis/references/details.md",
++      "bytes": 2096,
++      "sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
++      "bytes": 3405,
++      "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
++      "bytes": 3458,
++      "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
++      "bytes": 967,
++      "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-systematic-debugging/SKILL.md",
++      "bytes": 2801,
++      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
++      "bytes": 2793,
++      "sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
++      "bytes": 2463,
++      "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
++      "bytes": 1524,
++      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-task-breakdown/SKILL.md",
++      "bytes": 3659,
++      "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-task-breakdown/references/task-packaging.md",
++      "bytes": 1534,
++      "sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
++      "bytes": 3796,
++      "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-test-strategy/SKILL.md",
++      "bytes": 3612,
++      "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-test-strategy/references/high-value-tdd.md",
++      "bytes": 3247,
++      "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-token-context-governance/SKILL.md",
++      "bytes": 7699,
++      "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-unit-test-embedded/SKILL.md",
++      "bytes": 3068,
++      "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
++      "bytes": 783,
++      "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
++      "bytes": 3315,
++      "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-verification-before-completion/SKILL.md",
++      "bytes": 4508,
++      "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
++      "bytes": 8933,
++      "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa",
++      "reading_scope": "mechanical inventory/hash only"
++    },
++    {
++      "path": "skills/adk-worktree-governance/SKILL.md",
++      "bytes": 3746,
++      "sha256": "68ce46730100ce4cedbb3438747bd134666561dca1c00790bb3e2329a3461242",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
++      "bytes": 654,
++      "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
++      "reading_scope": "full text"
++    },
++    {
++      "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
++      "bytes": 1789,
++      "sha256": "2ab200477eab8f816df4c958623030337693f05b3c5ea0dd2d23e1a36fe1eaa2",
++      "reading_scope": "mechanical inventory/hash only"
++    }
++  ],
++  "baseline_boundary": "This audit is bound to v11.3.10 candidate source fa012817; it does not preapprove the parent's subsequently identified serializer-specific v11.3.11 change.",
++  "source_worktree_status_at_completion": ""
++}
+diff --git a/docs/changes/20261116-skill-serialization/evidence/retained-implementation.json b/docs/changes/20261116-skill-serialization/evidence/retained-implementation.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..ea98797ca390469f515581d37fbc6f1287111ab7
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/evidence/retained-implementation.json
+@@ -0,0 +1,58 @@
++{
++  "artifacts": [
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/portfolio-audit.json",
++      "retained_path": "portfolio-audit.json",
++      "bytes": 88073,
++      "sha256": "cbf7851b8938ab8fdd360e844063d2aad13035bb272cbd20b118f0a0b291fcda"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/baseline-probe.json",
++      "retained_path": "implementation/baseline-probe.json",
++      "bytes": 745,
++      "sha256": "4c694a2c1cf07d0a76d16e8abb31ef86804b1146293269fd5e2bd7d37dbc7409"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/baseline_probe.py",
++      "retained_path": "implementation/baseline_probe.py",
++      "bytes": 1310,
++      "sha256": "4b20d4c24b3e73530882e464454be8397544537adc146a28cda314f26906da1d"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/green-original-token-budget.json",
++      "retained_path": "implementation/green-original-token-budget.json",
++      "bytes": 956,
++      "sha256": "b1584eced4a835823c1482ef2b42c2958fa711da45d34eb50e57e095c8c6cf5f"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/green-published-method.json",
++      "retained_path": "implementation/green-published-method.json",
++      "bytes": 1161,
++      "sha256": "2c154f2f84a604fafebadcf49b1b9b90df4c5fa2f15bb35508e38bc80f21c488"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/implementation-diff-check.json",
++      "retained_path": "implementation/implementation-diff-check.json",
++      "bytes": 376,
++      "sha256": "4616526cce1f01f7fcd1df596fea322f2a2a0542aba7e73638e135b70f5410c7"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/record_command.py",
++      "retained_path": "implementation/record_command.py",
++      "bytes": 973,
++      "sha256": "2237a037d4dccbab0eed3fe182c55541de5dea14e37926478e6a689aa6606b84"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/red-published-method.json",
++      "retained_path": "implementation/red-published-method.json",
++      "bytes": 4960,
++      "sha256": "513693af2dab32e1dd3e13818c26e7b8e8fe756cc04578c02f9fb875b2425698"
++    },
++    {
++      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/unchanged-context-budget.json",
++      "retained_path": "implementation/unchanged-context-budget.json",
++      "bytes": 1138,
++      "sha256": "da5531485cb44296b1f9e42bc42bfdf7e17a142dc29869c86e7d9122d02ae493"
++    }
++  ]
++}
+diff --git a/docs/changes/20261116-skill-serialization/negative-results.md b/docs/changes/20261116-skill-serialization/negative-results.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..5be3ef6968bf347a98b4680d40251a3618463583
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/negative-results.md
+@@ -0,0 +1,8 @@
++# 负结果与证据边界
++
++- Build 前按 `security|serializ|scan` 检索 `knowledge/L2-domain/lessons.md`，该文件不存在（rg exit 2）；没有借用或伪造历史教训。
++- 本轮初始外部对照发现 Addy 的 owner-negative 路由与行为评测完整性建议已在 ADK 有对应检查，保留现有实现；不为重复方法增加规则。
++- 初始只读查询不存在的 `references/details.md` 及 `manifests/content_architecture.json` 返回未找到；随后使用实际现有 `skill-scan-coverage.md` 和仓库索引定位，不因此修改合同。
++- 既有 v11.3.10 的独立 source/packaging review 和 PR CI 可以复用为其交付证据，不作为本轮新增修改的测试结果。
++- 新方法测试在未修复内容上实际执行：3 个测试出现 4 个失败（无发布示例和两个目标缺条件导航），exit 1；修复后同一入口 3/3 通过，详见 `evidence/implementation/{red,green}-published-method.json`。
++- 实现者曾向 `check-token-budget.sh` 传入不支持的 `--profile`，exit 2；读取实际 help 后改用原 `--summary-json`，预算通过。错误命令和后续实际结果分别保留，没有修改脚本、阈值或测试来消除失败。
+diff --git a/docs/changes/20261116-skill-serialization/requirements.md b/docs/changes/20261116-skill-serialization/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..e08c7bcd2a30fe08fc58803435ab00575e7abeac
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/requirements.md
+@@ -0,0 +1,22 @@
++# 目标与验收
++
++在已完成全体 65 Skills 审查的 v11.3.10 上，补齐第三方资产安全审查中的隐式序列化路径。此变更来自本轮外部原始 Skill 对照与标准库反例；不以全覆盖为由重复修改已满足要求的 Skill。
++
++## 目标
++
++- R1：已有 `adk-security-supply-chain` 在适用的源码审查中识别 credential holder、生成的 serializer 与日志/追踪/响应等 sink，并检查当前 diff 之外的另一端。
++- R2：明确 `repr=False` 仅影响 repr，不能证明 `asdict` 或其他序列化输出安全；嵌套对象也需要按实际输出路径检查。
++- R3：只在所审资产涉及相应类型或整对象输出时加载细节。保留 source-only/adoption/runtime 三种范围，不引入新 Skill、路由、扫描器、运行依赖或统一追加门禁。
++- R4：演示与验证只使用合成 sentinel；在受控输出中确认敏感值被排除，同时保留必要的非敏感字段。报告只写路径、符号和结论，不回显凭证值。
++- R5：未证明 serializer 到 sink 可达时报告 `unverified`；没有字段名称命中不构成无泄漏证明，不自动执行不可信候选代码。
++
++## 验收
++
++1. 从最终发布 reference 提取的可执行示例实际区分 repr、asdict/嵌套输出与显式 allowlist，并验证合法字段保留。
++2. Skill 主入口提供有条件的 reference 导航；导出后 reference 与正文仍可用，原 line/profile 字节阈值不变。
++3. 现有完整回归通过；独立只读 Spec/Quality review 无未关闭 blocker/major；真实失败及修复分别保留。
++4. 受保护 PR、精确主线 CI、不可变发布和消费端 source-only 接入全部取得各自回执；源码检查不冒充模型 A/B、Token 降幅或运行态认证。
++
++## 非目标
++
++不导入外部 Skill 的完整正文或脚本；不自动安装、执行第三方包；不扩大供应链 Skill 到全部产品安全任务；不新增模型调用、付费评测、定时巡检或设备操作。
+diff --git a/docs/changes/20261116-skill-serialization/tasks.md b/docs/changes/20261116-skill-serialization/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..eda55ef35b5f09c7c6dc581152518a18b1a091db
+--- /dev/null
++++ b/docs/changes/20261116-skill-serialization/tasks.md
+@@ -0,0 +1,12 @@
++# 任务与当前状态
++
++当前职责：实现与增量全量审查完成，集成者正在冻结源码并验证；本轮已授权推送、合并与 source-only 接入。运行态 Knowledge Provider / Execution Policy 仍不可用，沿用已授权 source-only 边界，不把它们标为成功。此文件保留冻结时状态；后续准确测试、审核和交付观察见本目录 verification.md 与实际 PR/Release 回执。
++
++- [x] R1–R5 需求、边界与验收冻结；verify：本目录 requirements/design 可读，v11.3.10 基线已合并。
++- [x] 固定外部来源并复现隐式序列化反例；verify：evidence/external-sources.json 与 implementation/baseline-probe.json，原始命令、环境、布尔判定与来源摘要可复核。
++- [x] 增强现有 Skill/reference 并补实际示例测试；verify：3/3 新方法测试通过，两个目标 optional 导出与原140行预算通过；完整回归另行记录。
++- [ ] 汇总 65 Skills 本轮覆盖决定，版本串行前移，冻结并验证；verify：清单覆盖准确 Git population，全量回归和 8 profile 原预算通过。
++- [ ] 独立 Spec/Quality 审核并保留证据；verify：真实审查、源码摘要与 typed 校验一致。
++- [ ] 受保护合并、主线 CI、实际发布包校验和 Root 接入；verify：每个阶段取得实际回执。
++
++下一动作：冻结源码并运行完整回归与8 profile原预算；取得独立源码/消费者裁决；完成受保护发布并将最终版本一次接入 Root。
+diff --git a/manifest.json b/manifest.json
+index 609e37e7322060b3368d0a0648bc67c5c9f1aca6..c2c3870397e039911a145de90b1a956897aa01d4 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.10",
++  "version": "11.3.11",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index c60daa2c0681ed0d7a01a9344f9af838479d3324..2546b07b9473b03bf10d1f239604f350f6a3c659 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.3.10",
++  "campaign_id": "software-m5-11.3.11",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/optional-skills/adk-security-supply-chain/SKILL.md b/optional-skills/adk-security-supply-chain/SKILL.md
+index ae75786916c5a04d7de20be32239685f77dc045d..d8cde00b3102d225495aec70bbf8e88937a662fb 100644
+--- a/optional-skills/adk-security-supply-chain/SKILL.md
++++ b/optional-skills/adk-security-supply-chain/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-security-supply-chain
+ description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
+-version: 1.1.5
++version: 1.1.6
+ last_updated: 2026-11-16
+ triggers:
+   - "供应链审查"
+@@ -43,7 +43,7 @@ constraints:
+ 4. SBOM 生成：生成软件物料清单，记录所有直接与间接依赖。
+ 5. CVE 扫描：检查已知漏洞，评估影响范围与修复状态。
+ 6. 脚本审查：列出可执行脚本、危险命令、网络访问和写入路径。
+-7. 敏感信息审查：检查密钥、token、个人路径和内部域名。
++7. 敏感信息审查：检查密钥、token、个人路径和内部域名；涉及凭证对象或整对象输出时，按 `references/skill-scan-coverage.md` 的 Generated serialization 检查。
+ 8. 签名验证：验证资产完整性与发布者身份。
+ 9. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
+ 10. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
+diff --git a/optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md b/optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md
+index b3d5842fd23228b869bc568121dbd5c2db412850..4646b0d5d1383cadacea0576f91e7e1e44aab404 100644
+--- a/optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md
++++ b/optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md
+@@ -9,3 +9,56 @@
+ 5. 回滚：记录 `tool_version / policy_rev / source_sha / allowed_scope / deny_path / sandbox / rollback`。源码审查合格只提供晋级候选；执行权限仍由宿主 policy 和 owner 控制。
+ 
+ 本参考沿用已有 `adk-security-supply-chain` 的外部资产审查责任，不构成新 Skill 或第二套安全扫描引擎。
++
++## Generated serialization
++
++仅在候选资产涉及凭证对象或整对象输出时使用本节，沿用上方 scope/权限；不执行不可信候选代码。
++
++1. 从字段类型、配置来源与调用方识别 credential holder，再追踪 serializer 到日志、trace、响应、缓存或队列 sink；字段名只是线索，零关键词命中不能证明安全。改动任一端都查当前 diff 外的另一端及嵌套对象。
++2. 区分每条输出路径：Python `repr=False` 仅排除 repr，`asdict` 仍递归包含字段；其他模型、JSON 或原始属性读取须核该版本的实际语义，不能推断受相同保护。未证明凭证到 sink 可达时标 `unverified`，不把字段存在直接判成已泄漏。
++3. 按实际输出合同显式选择允许的非敏感字段，用合成 sentinel 验证敏感值缺席、必要字段保留。允许字段本身也须确认不含凭证；此方法不是任意对象的通用脱敏库，不修改输入对象来掩盖泄漏。
++4. 只在已授权的隔离 fixture 中运行可信复现，使用 sink 的真实 serializer；报告记录路径、符号、通路、结论及未知项，不回显凭证值或原始整对象。不把示例运行当成第三方资产已通过审查。
++
++以下为 Python 标准库合成反例；保存为 `serialization_example.py` 后用 `python3 -I serialization_example.py` 执行。坏输出仅留内存，stdout 只有布尔结论；无 Python 时记录 `not-run`，不自动安装。
++
++```python
++from dataclasses import asdict, dataclass, field
++import json
++
++@dataclass
++class CredentialHolder:
++    endpoint: str
++    credential: str = field(repr=False)
++
++@dataclass
++class Event:
++    component: str
++    client: CredentialHolder
++    status: str
++
++def public_event(event):
++    # This fixture's public fields are known safe, not arbitrary user input.
++    return {"component": event.component,
++            "client": {"endpoint": event.client.endpoint},
++            "status": event.status}
++
++if __name__ == "__main__":
++    sentinel = "SYNTHETIC_SERIALIZATION_ONLY"
++    holder = CredentialHolder("https://example.invalid", sentinel)
++    event = Event("fixture", holder, "ready")
++    direct = json.dumps(asdict(holder))
++    nested = json.dumps(asdict(event))
++    public = public_event(event)
++    checks = {
++        "repr_excluded": sentinel not in repr(holder),
++        "direct_leak_observed": sentinel in direct,
++        "nested_leak_observed": sentinel in nested,
++        "allowlist_excluded": sentinel not in json.dumps(public),
++        "public_fields_preserved": public == {
++            "component": event.component,
++            "client": {"endpoint": holder.endpoint}, "status": event.status},
++    }
++    if not all(checks.values()):
++        raise RuntimeError("synthetic serialization checks failed")
++    print(json.dumps(checks, sort_keys=True))
++```
+diff --git a/pyproject.toml b/pyproject.toml
+index b89c46bef4f99846aba55b646f5a6cc67f527b5c..15e9940b6441ffc87f5a20b0f5a1661babe6a3f2 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.3.10"
++version = "11.3.11"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index ea35f74d1e27db49fc1812ce20cd801ff82ee526..528d48eb4c52aa2c4c654a95b892f46069882f8e 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.3.10"
++__version__ = "11.3.11"
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 325fcf6fc3e3de6c3d1eeda40aa65c3700893901..4555cdcea52e0400b97ec7b9c5eaa327309674d9 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.3.10",
++    "planned_release": "v11.3.11",
+     "source_sha": null
+   },
+   "case_groups": {
+@@ -67,6 +67,12 @@
+   },
+   "holdout_qualification": "development-fixture-only-after-author-exposure",
+   "unexecuted_candidate_history": [
++    {
++      "planned_release": "v11.3.10",
++      "merged_main_sha": "b20df018ca62436dd026daed6ec6944d4a45cbbd",
++      "model_runs": 0,
++      "reason": "The five failure-path source fixes merged without running this author-exposed model campaign. The successor's synthetic serialization probe is a separate deterministic method check, not native A/B, provider-token, latency or cost evidence."
++    },
+     {
+       "planned_release": "v11.3.9",
+       "merged_main_sha": "80f8b2ea2885e3f62dcea455c45a2e8ebf071b2b",
+diff --git a/tests/test_skill_content.sh b/tests/test_skill_content.sh
+index 988ea6e7a4ba1757cd711624380df035615998e3..e6d60c8db55130af49f2b548219e1b41c0035dc9 100644
+--- a/tests/test_skill_content.sh
++++ b/tests/test_skill_content.sh
+@@ -4,5 +4,5 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ export PYTHONPATH="$ROOT_DIR/src"
+ cd "$ROOT_DIR"
+ # Content v2 has no universal SOP headings or minimum line count.
+-python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_bisect_methods tests.test_skill_rtos_methods tests.test_skill_contract_methods tests.test_skill_cmake_methods tests.test_optional_incident_lifecycle tests.test_skill_openai_metadata tests.test_commit_message_policy -v
++python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_bisect_methods tests.test_skill_rtos_methods tests.test_skill_contract_methods tests.test_skill_cmake_methods tests.test_optional_incident_lifecycle tests.test_skill_serialization_methods tests.test_skill_openai_metadata tests.test_commit_message_policy -v
+ echo "[PASS] Skills content v2, OpenAI metadata and Commit Policy"
+diff --git a/tests/test_skill_serialization_methods.py b/tests/test_skill_serialization_methods.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..844e2fbf5fb195edc972830cd911ebba07df6de4
+--- /dev/null
++++ b/tests/test_skill_serialization_methods.py
+@@ -0,0 +1,120 @@
++"""Execute shipped synthetic examples; this is not model or scanner evaluation."""
++from __future__ import annotations
++
++from dataclasses import asdict
++import contextlib
++import io
++import json
++from pathlib import Path
++import re
++import runpy
++import subprocess
++import sys
++import tempfile
++import unittest
++
++from agent_dev_kit.compiler import export_assets
++from agent_dev_kit.model import Manifest
++
++
++ROOT = Path(__file__).resolve().parents[1]
++SKILL = "adk-security-supply-chain"
++DIRECTORY = ROOT / "optional-skills" / SKILL
++REFERENCE = "references/skill-scan-coverage.md"
++
++
++def example(reference: Path) -> str:
++    blocks = re.findall(r"(?ms)^```python\n(.*?)^```\s*$", reference.read_text(encoding="utf-8"))
++    if len(blocks) != 1:
++        raise AssertionError("expected one published synthetic serialization example")
++    return blocks[0]
++
++
++class SkillSerializationMethodTests(unittest.TestCase):
++    def test_published_example_exercises_paths_without_echoing_values(self) -> None:
++        code = example(DIRECTORY / REFERENCE)
++        expected = {
++            "repr_excluded": True,
++            "direct_leak_observed": True,
++            "nested_leak_observed": True,
++            "allowlist_excluded": True,
++            "public_fields_preserved": True,
++        }
++        with tempfile.TemporaryDirectory() as temporary:
++            script = Path(temporary) / "serialization_example.py"
++            script.write_text(code, encoding="utf-8")
++            for optimization in ([], ["-O"], ["-OO"]):
++                with self.subTest(optimization=optimization):
++                    completed = subprocess.run(
++                        [sys.executable, "-I", *optimization, str(script)],
++                        cwd=temporary, capture_output=True, text=True, timeout=10,
++                        check=False,
++                    )
++                    self.assertEqual(completed.returncode, 0, completed.stderr)
++                    self.assertEqual(completed.stderr, "")
++                    # Exact boolean-only output rejects leaked fixture values too.
++                    self.assertEqual(json.loads(completed.stdout), expected)
++
++    def test_actual_published_allowlist_preserves_changed_nested_public_fields(self) -> None:
++        with tempfile.TemporaryDirectory() as temporary:
++            script = Path(temporary) / "serialization_example.py"
++            script.write_text(example(DIRECTORY / REFERENCE), encoding="utf-8")
++            output = io.StringIO()
++            with contextlib.redirect_stdout(output), contextlib.redirect_stderr(output):
++                namespace = runpy.run_path(str(script))
++            self.assertEqual(output.getvalue(), "")
++            holder_type = namespace["CredentialHolder"]
++            event_type = namespace["Event"]
++            public_event = namespace["public_event"]
++            for index, sentinel in enumerate(("SYNTHETIC_ALPHA", "SYNTHETIC_β", "")):
++                with self.subTest(case=index):
++                    endpoint = f"https://host-{index}.example.invalid"
++                    holder = holder_type(endpoint, sentinel)
++                    event = event_type(f"component-{index}", holder, f"status-{index}")
++                    before = asdict(event)
++                    if sentinel:
++                        self.assertNotIn(sentinel, repr(holder))
++                        self.assertIn(sentinel, json.dumps(asdict(holder), ensure_ascii=False))
++                        self.assertIn(sentinel, json.dumps(before, ensure_ascii=False))
++                    safe = public_event(event)
++                    self.assertEqual(safe, {
++                        "component": event.component,
++                        "client": {"endpoint": endpoint},
++                        "status": event.status,
++                    })
++                    encoded = json.dumps(safe, ensure_ascii=False)
++                    if sentinel:
++                        self.assertNotIn(sentinel, encoded)
++                    self.assertNotIn("credential", safe["client"])
++                    self.assertEqual(asdict(event), before, "output filtering must not mutate input")
++
++    def test_conditional_reference_survives_explicit_optional_export(self) -> None:
++        manifest = Manifest.load(ROOT)
++        with tempfile.TemporaryDirectory() as temporary:
++            for target in ("claude-code", "opencode"):
++                with self.subTest(target=target):
++                    exported = export_assets(
++                        manifest, target, Path(temporary), ["core"],
++                        optional_skills=[SKILL],
++                    )
++                    self.assertEqual(exported["status"], "pass")
++                    entry = next(path for path in Path(exported["output"]).rglob("SKILL.md")
++                                 if path.parent.name == SKILL)
++                    body = entry.read_text(encoding="utf-8")
++                    step = next(line for line in body.splitlines() if line.startswith("7. 敏感信息审查"))
++                    self.assertIn("涉及", step)
++                    self.assertIn("整对象输出", step)
++                    self.assertIn(REFERENCE, step)
++                    reference = entry.parent / REFERENCE
++                    self.assertTrue(reference.is_file())
++                    self.assertEqual(example(reference), example(DIRECTORY / REFERENCE))
++                    guidance = reference.read_text(encoding="utf-8")
++                    self.assertIn("repr=False", guidance)
++                    self.assertIn("unverified", guidance)
++                    self.assertIn("diff", guidance)
++                    self.assertIn("不执行", guidance)
++                    self.assertIn("不回显", guidance)
++
++
++if __name__ == "__main__":
++    unittest.main()

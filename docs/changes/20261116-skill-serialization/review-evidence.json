@@ -1,0 +1,220 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261116-skill-serialization",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-skill-serialization",
+  "reviewer": {
+    "id": "ai/root/delivery_review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-16T12:40:08.744429Z",
+  "evidence_completed_at": "2026-11-16T12:37:28.154870Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "ser-review-01",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Frozen narrative says the unsupported --profile command exited 2; the original preserved receipt records returncode 1. Explicit erratum in this independent report: the actual exit code is 1. Treat the unchanged raw receipt as authoritative. The old source sentence remains a frozen historical error; no original failure, test result, policy or limit is rewritten."
+    }
+  ],
+  "limitations": [
+    "This is an independent AI source Spec/Quality review. It is not a human review, field certification, source-to-live refresh or product release authorization.",
+    "The added method addresses an audit-guidance gap. Synthetic leak paths are not evidence of an ADK production credential breach.",
+    "The consumer is one static task. No paired baseline/model repetitions or transcript-level context-isolation proof was evaluated; do not claim causal effectiveness, modelA/B or cost improvement.",
+    "No paid model, Codex/Work CLI/Cloud job, device/HIL, actual credential, or target runtime discovery/load/trigger was used.",
+    "Full regression names containing native/field/M5 do not establish actual target or field qualification; the102 registered shell entries and new method subtests are what was verified.",
+    "The exact source reviewed is the28-path frozen tree. Future evidence packaging, typed review record, protected PR/mainCI, release assets and Root promotion require their own checks.",
+    "One minor narrative exit-code error is visibly corrected in this report while preserving the original frozen sentence and raw returncode1 evidence. Packaging must carry the erratum forward."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "b20df018ca62436dd026daed6ec6944d4a45cbbd",
+    "head_commit": "a94ae0d551a8ede9f8387e4cd03eb41daf1894b1",
+    "original_patch_sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "f920549db6535c8a689d4e88f1e7737e5fb0addf523a1a7bc87fa22394c1a967"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "05591af2ed45633b2b904d72e62d3ec309ae0c7d3546acad99a7661e34017a18"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "5ea3a5637c75ebdad376edf9340e5ab0c7c4659ed2a2b76b254b700eadcb3eb8"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/audit.md",
+      "sha256": "dcbb1d3a0c180d7639e15c6905f61885a107f2e13ac5a5d4cb18b85d79fb4477"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/design.md",
+      "sha256": "78149d3f51ae99d47504cb93932f47ab9a32c384d34933802fe8f9c99abbc65b"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/external-sources.json",
+      "sha256": "dd81ba5989eb7bf4c1021a7c01e79a4dd9a34ed3bb7e20089c511f04ec0c0f42"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/baseline-probe.json",
+      "sha256": "4c694a2c1cf07d0a76d16e8abb31ef86804b1146293269fd5e2bd7d37dbc7409"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/baseline_probe.py",
+      "sha256": "4b20d4c24b3e73530882e464454be8397544537adc146a28cda314f26906da1d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/green-original-token-budget.json",
+      "sha256": "b1584eced4a835823c1482ef2b42c2958fa711da45d34eb50e57e095c8c6cf5f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/green-published-method.json",
+      "sha256": "2c154f2f84a604fafebadcf49b1b9b90df4c5fa2f15bb35508e38bc80f21c488"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/implementation-diff-check.json",
+      "sha256": "4616526cce1f01f7fcd1df596fea322f2a2a0542aba7e73638e135b70f5410c7"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/record_command.py",
+      "sha256": "2237a037d4dccbab0eed3fe182c55541de5dea14e37926478e6a689aa6606b84"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/red-published-method.json",
+      "sha256": "513693af2dab32e1dd3e13818c26e7b8e8fe756cc04578c02f9fb875b2425698"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/implementation/unchanged-context-budget.json",
+      "sha256": "da5531485cb44296b1f9e42bc42bfdf7e17a142dc29869c86e7d9122d02ae493"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/portfolio-audit.json",
+      "sha256": "cbf7851b8938ab8fdd360e844063d2aad13035bb272cbd20b118f0a0b291fcda"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/evidence/retained-implementation.json",
+      "sha256": "0907fe7f82ebdbc0b4a69857f2df3748e7b050788be689410e900919677d6ff8"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/negative-results.md",
+      "sha256": "5a50d3b8e668ece6f8f5bc8f2818ffcaea52888d25d5183b1c2ecf5e34d66907"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/requirements.md",
+      "sha256": "482ce481881ca850888fec8b299a5b0586e21a4e3ac1042653ed808000f01d54"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-serialization/tasks.md",
+      "sha256": "53a52b6764e4c0610031f0ff1c01cfdfd028279eda83cfb577a2a5747cf44c51"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "982bb2b833e3379c34bc6b7677e0e9f158b29c3d07baad7a473ba98040dae0ea"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "769e1a88a83f244205eb00e9cd2b358e17c8f9b66560e29380d0ac9b25fb6d86"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "sha256": "37aab5ff6d970d6b7d2d534a64a9570d3183a3856f6dc4fc22c48c55682500bd"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "sha256": "7ec6f5e8647af1a59fd7dfb249965df257f414c40d4076871688f48b612aaa3f"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "54d048608356fc390aca4758a8791c6d4f52a11876c98e3488519ec07041a55c"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "018da8c13e57663b8fc9f2464819f2ec98233ab9060492c5a2a5aa241b82a9a5"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "d47cc71aaecd15aef9465d2c2cf4fc654835e4f2053f8a2e343a45a309cd9098"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content.sh",
+      "sha256": "2a3f4c1586dd29df7864e5db0c167badff0bf4831619b2abb1c40f5a63219507"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_serialization_methods.py",
+      "sha256": "2dc2faf41f0bd502819fb81c3e3d14f58117c5386b0ebb57bff994d3fd0e59a4"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "446fcc6a3a599051177bfd00a5fd5590b3d270fbad41554d5dfc9752eba605e7"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/independent-source-review.json",
+      "sha256": "901ba57d1a79dbe3514ed41ccf4551214af3bfd602e4c97515ef0a4f9ccf4909"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-source-review.md",
+      "sha256": "59448db4d0a9bdeb6c33ad6ce0d1b9361d5b0ba8aad7ebde7b7eeadd83bc07f2"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "df6b73b457ede661d74a342b39340be60548eafcb78ed80a3149a165e6dc5e04"
+    },
+    {
+      "base": "record",
+      "path": "evidence/execution-bundle.json",
+      "sha256": "851f5891f4044649dcc11ff1e0a8fec08a13a0e03cd3c2b06b3c9c432a1bade4"
+    },
+    {
+      "base": "record",
+      "path": "evidence/execution-summary.json",
+      "sha256": "0b4c7789c060ab448536c3c893e05946fa88f74da874d61f20e2e8de4e84d36c"
+    }
+  ]
+}
