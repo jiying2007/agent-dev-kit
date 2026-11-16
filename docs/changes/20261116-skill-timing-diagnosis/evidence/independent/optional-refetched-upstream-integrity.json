@@ -1,0 +1,99 @@
+{
+  "checked_at": "2026-11-16T05:35:50.440808+00:00",
+  "checks": [
+    {
+      "repository": "cloudflare/skills",
+      "commit": "cbf893b954222276bf1af57e5f23379231e0efb9",
+      "path": "skills/workers-profiling/SKILL.md",
+      "actual": {
+        "bytes": 2204,
+        "sha256": "fec05a080c90f019e1e93e5e1ca3416bb89362655dfc158458301f461cb29839",
+        "git_blob": "792be905e836a3a892200f2c9f5a3ecbdc710314"
+      },
+      "audit_declared": {
+        "bytes": 2204,
+        "sha256": "fec05a080c90f019e1e93e5e1ca3416bb89362655dfc158458301f461cb29839",
+        "git_blob": "792be905e836a3a892200f2c9f5a3ecbdc710314"
+      },
+      "match": true,
+      "provider_reported_blob": "792be905e836a3a892200f2c9f5a3ecbdc710314",
+      "original_auditor_read_scope": "complete"
+    },
+    {
+      "repository": "supabase/agent-skills",
+      "commit": "c9be0e931b7930f7d02126d04774d904c381e7d7",
+      "path": "skills/supabase-postgres-best-practices/SKILL.md",
+      "actual": {
+        "bytes": 3231,
+        "sha256": "ad65e776f45e761bafc609d3f506c77c1032225aa65e0c4c02f241b8071e5855",
+        "git_blob": "6400792389dfcc82c81953054e546bd72ebcd259"
+      },
+      "audit_declared": {
+        "bytes": 3231,
+        "sha256": "ad65e776f45e761bafc609d3f506c77c1032225aa65e0c4c02f241b8071e5855",
+        "git_blob": "6400792389dfcc82c81953054e546bd72ebcd259"
+      },
+      "match": true,
+      "provider_reported_blob": "6400792389dfcc82c81953054e546bd72ebcd259",
+      "original_auditor_read_scope": "complete"
+    },
+    {
+      "repository": "github/awesome-copilot",
+      "commit": "dc0083dbe22133bfa7ce3500dee85e187e0cd47a",
+      "path": "skills/incident-postmortem/SKILL.md",
+      "actual": {
+        "bytes": 9902,
+        "sha256": "9f5f3da1d92ff4e798ce02f8540d9554b647039089903b041f4107455059689b",
+        "git_blob": "383e3ad302b42b0812514d302094b26f234eade8"
+      },
+      "audit_declared": {
+        "bytes": 9902,
+        "sha256": "9f5f3da1d92ff4e798ce02f8540d9554b647039089903b041f4107455059689b",
+        "git_blob": "383e3ad302b42b0812514d302094b26f234eade8"
+      },
+      "match": true,
+      "provider_reported_blob": "383e3ad302b42b0812514d302094b26f234eade8",
+      "original_auditor_read_scope": "complete"
+    },
+    {
+      "repository": "wshobson/agents",
+      "commit": "9c61ab243def98f72da12abd41cfcf5bcd91af9d",
+      "path": "plugins/incident-response/skills/postmortem-writing/SKILL.md",
+      "actual": {
+        "bytes": 6795,
+        "sha256": "1a9d5b19b9ab32acb6616fb0990b8307888da0169537929916762d91501b84e0",
+        "git_blob": "f68b37f973cbca925ce4503c656166968b7faf97"
+      },
+      "audit_declared": {
+        "bytes": 6795,
+        "sha256": "1a9d5b19b9ab32acb6616fb0990b8307888da0169537929916762d91501b84e0",
+        "git_blob": "f68b37f973cbca925ce4503c656166968b7faf97"
+      },
+      "match": true,
+      "provider_reported_blob": "f68b37f973cbca925ce4503c656166968b7faf97",
+      "original_auditor_read_scope": "complete"
+    },
+    {
+      "repository": "open-telemetry/opentelemetry-specification",
+      "commit": "a4e05d9704fc5218d85a4154fb5b143ea3f5340e",
+      "path": "specification/logs/data-model.md",
+      "actual": {
+        "bytes": 20155,
+        "sha256": "3ee2c391a5d3262130582df89a3dc5a5640d837d010734ea79458fe3ece31173",
+        "git_blob": "1e58b7f18fb547f45132b185f241f3b097f76bb0"
+      },
+      "audit_declared": {
+        "bytes": 20155,
+        "sha256": "3ee2c391a5d3262130582df89a3dc5a5640d837d010734ea79458fe3ece31173",
+        "git_blob": "1e58b7f18fb547f45132b185f241f3b097f76bb0"
+      },
+      "match": true,
+      "provider_reported_blob": "1e58b7f18fb547f45132b185f241f3b097f76bb0",
+      "original_auditor_read_scope": "complete"
+    }
+  ],
+  "all_match": true,
+  "retrieval_started": "2026-11-16 05:31:08 UTC",
+  "verification_observed_at": "2026-11-16 05:32:08 UTC",
+  "provenance": "Original transient tool stores unavailable after followup. This is a new retrieval, not a recovered original receipt."
+}

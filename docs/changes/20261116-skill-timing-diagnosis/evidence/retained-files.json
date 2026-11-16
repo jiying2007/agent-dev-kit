@@ -1,0 +1,144 @@
+{
+  "schema": "adk-evidence-retained-path-map/v1",
+  "files": [
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-full-regression/receipt.json",
+      "retained_path": "evidence/initial-regression.json",
+      "sha256": "1512f6f48d46ce2184540e9705b8742f4b894ae203c756ef79486d4f46cadcf1",
+      "bytes": 1635
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-full-regression/started.json",
+      "retained_path": "evidence/initial-regression-started.json",
+      "sha256": "69f0f56ab76f709676571afc489fb92348c2538ec4ed95807fcad539520a9c65",
+      "bytes": 775
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-full-regression/timing.json",
+      "retained_path": "evidence/initial-regression-timing.json",
+      "sha256": "5cbc2025b4eefe0e07ed0dd77c9a75f6f3668823b25a11a58321cc5fa2a665f6",
+      "bytes": 8224
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-full-regression/stdout.log",
+      "retained_path": "evidence/initial-regression.stdout.log",
+      "sha256": "151b260b95ae0c5d8032bb29cf72a2adeba321fe2f073ed16d27ac0e83be2126",
+      "bytes": 34272
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-full-regression/stderr.log",
+      "retained_path": "evidence/initial-regression.stderr.log",
+      "sha256": "39b0580de6273f72fb74e5f5d4a4af08708f9bbe1cc39319172f33172d9ac100",
+      "bytes": 54618
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/receipt.json",
+      "retained_path": "evidence/full-regression.json",
+      "sha256": "66d60a85d7cf375ce332cda4ec28fa5147b70b6e79dbc8a367a358984187bc51",
+      "bytes": 1639
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/started.json",
+      "retained_path": "evidence/full-regression-started.json",
+      "sha256": "b818694f72d6521945ef94035bfe0ee8adffd36f01a729e2341a5e2270aa2fe8",
+      "bytes": 780
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/timing.json",
+      "retained_path": "evidence/full-regression-timing.json",
+      "sha256": "97a9e4c497f445a9538f9c7399003b0e511a78660e2ab72c9a5dda76c30c992e",
+      "bytes": 8223
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/stdout.log",
+      "retained_path": "evidence/full-regression.stdout.log",
+      "sha256": "40dbe2627b1772643396d267621e4ffd497ac73765124158bd641c124fabfd82",
+      "bytes": 34272
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/stderr.log",
+      "retained_path": "evidence/full-regression.stderr.log",
+      "sha256": "712a3ea0e4032e78360408230692a32affbabd1014a2e29238df8a0b480327bd",
+      "bytes": 54618
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-core-probes.json",
+      "retained_path": "evidence/core-diagnostic-probes.json",
+      "sha256": "6f693938f68bb74579b866d170dddb4c3017f79f2093591e8d3a2a4358a2e30a",
+      "bytes": 19751
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/core-diagnostic-probes.py",
+      "retained_path": "evidence/core-diagnostic-probes.py",
+      "sha256": "044407f19352e719e7f265e0f09e58264fe637ef548347c15a91df38bfd5c90f",
+      "bytes": 5690
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-core-bisect-test-receipts.json",
+      "retained_path": "evidence/core-bisect-test-receipts.json",
+      "sha256": "fc8a0711d9a5291174e39395c2ae79fd84fb968e26f28f4c8bcd9984779967b4",
+      "bytes": 76480
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-core-implementation.json",
+      "retained_path": "evidence/core-implementation.json",
+      "sha256": "6a24285c3f4528dd46cba319fb1c84ecbc5daf0776d9cd25c68544df86f68d93",
+      "bytes": 25026
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-embedded-implementation.json",
+      "retained_path": "evidence/embedded-implementation.json",
+      "sha256": "56361af175a398c74049767bdea024598657dab75c59ed61fcde4de7fe7b0ff2",
+      "bytes": 13508
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/probe-observed.json",
+      "retained_path": "evidence/embedded-official-header-probes.json",
+      "sha256": "bcd8130b4392cdcbf74b787ce02cdfccff95f5bbcc12a783124fd3b2adb219bc",
+      "bytes": 4340
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-optional-implementation.json",
+      "retained_path": "evidence/optional-implementation.json",
+      "sha256": "53482b8c7abbd67a2562622a9185e36040062027f93a84a41baa1ded6bcc11b8",
+      "bytes": 19363
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-optional-minimal-record-fix.json",
+      "retained_path": "evidence/optional-minimal-record-fix.json",
+      "sha256": "aeea2b279d82615d1bb6a031a51c7d7dfc3071d349b683e047507b4b7fe964f3",
+      "bytes": 6341
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-consumer-task.md",
+      "retained_path": "evidence/consumer-task.md",
+      "sha256": "73947ee6a42c92ca276e399d79c2d74bbd92a319f89212fc5e32b16bfa8db9a7",
+      "bytes": 3251
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-consumer-response.json",
+      "retained_path": "evidence/consumer-response.json",
+      "sha256": "8fc03f3cf37379bfa3fc0ff9f1c16393b1aec2a34b902f1dde3b0d2dfb50f69e",
+      "bytes": 20302
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-consumer-c-followup-task.md",
+      "retained_path": "evidence/consumer-c-followup-task.md",
+      "sha256": "68a5f4020e0ec4af9de4976804f789a3311d8ef99804b50d8a906c4bf174a6c3",
+      "bytes": 1298
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-consumer-c-followup-response.json",
+      "retained_path": "evidence/consumer-c-followup-response.json",
+      "sha256": "42d1349c06feffa2575c78bb6a99c7566add8d62c12d6a64f0fdae06da8d0655",
+      "bytes": 4932
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-final-profile-results.json",
+      "retained_path": "evidence/profile-context-checks.json",
+      "sha256": "91d679e46ed340f1800614df49aef8df22c4ff8b55bc6bda5bd3a0d0fe943f17",
+      "bytes": 4917
+    }
+  ],
+  "boundary": "Original report paths describe the actual execution environment; this map locates byte-identical retained copies."
+}

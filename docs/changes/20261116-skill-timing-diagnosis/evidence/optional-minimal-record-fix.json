@@ -1,0 +1,95 @@
+{
+  "schema": "adk-optional-minimal-record-fix/v1",
+  "implementer": "ai/root/research_optional_effectiveness",
+  "record_prepared_at": "2026-11-16T05:32:55Z",
+  "change": {
+    "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+    "scope": "Only one existing reference paragraph replaced after parent confirmed the original frozen regression ended. No new gate, canonical enum, test or shared source edit.",
+    "before": {
+      "commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9",
+      "bytes": 6866,
+      "sha256": "d90e4f7a2bde8ca2a094edd7538a569def647933cb42d65584e50bbbe4e4c001"
+    },
+    "after": {
+      "bytes": 7050,
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0"
+    },
+    "bytes_delta": 184,
+    "before_text": "Blank rows are pending, not evidence; set decisions only from actual review results and link their evidence.",
+    "after_text": "Initialize with known Scope, the complete Creation Gate and a next review entry. Expand other sections only when the current stage and evidence require them; do not fill the whole template at once. Blank rows are pending; set decisions only from actual review results and link their evidence."
+  },
+  "timing": {
+    "patch_started_at": null,
+    "patch_completed_at": null,
+    "verification_command_started_at": null,
+    "verification_command_completed_at": null,
+    "results_observed_at": "2026-11-16T05:31:53Z",
+    "identity_and_original_response_rechecked_at": "2026-11-16T05:32:55Z",
+    "note": "No explicit start/end timestamps were sampled for apply_patch or individual commands. 05:31:53Z was returned by clock__curr_time after both verification results and the diff/hash inspection. Tool-return wall_time_seconds and unittest elapsed text below are preserved as returned; no start/end time has been backfilled."
+  },
+  "initial_failure": {
+    "path": "/workspace/scratch/fe5385ca063a/round2-consumer-response.json",
+    "file_sha256": "8fc03f3cf37379bfa3fc0ff9f1c16393b1aec2a34b902f1dde3b0d2dfb50f69e",
+    "case": "C",
+    "lines": 96,
+    "headings": 12,
+    "characters": 3894,
+    "answer_sha256": "736ed64d63954db3d9d6683468748ac6f2388f78595a261f3c64172ebcb9683c",
+    "request_path": "/workspace/scratch/fe5385ca063a/round2-consumer-task.md",
+    "status": "observed-output-scope-failure",
+    "finding": "Actual consumer C correctly left all ten Creation Gate checks pending, but expanded the requested minimal initialization into 96 lines and 12 headings with multiple all-pending sections.",
+    "forbidden_conflation": "This is not a fabricated case or a measured general token/cost effect. It does not mean Gate safety failed; the observed defect is output scope/overhead.",
+    "preservation": "The original task/response and earlier implementation receipt were left unchanged."
+  },
+  "verification": [
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "python3",
+        "-m",
+        "unittest",
+        "tests.test_optional_incident_lifecycle",
+        "-v"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "raw_tool_result": {
+        "chunk_id": "b19442",
+        "wall_time_seconds": 0.000033686,
+        "exit_code": 0,
+        "original_token_count": 218,
+        "output": "test_clock_uncertainty_cannot_be_erased_by_timezone_conversion (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_clock_uncertainty_cannot_be_erased_by_timezone_conversion) ... ok\ntest_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok\ntest_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok\ntest_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n"
+      },
+      "result": "4/4 passed",
+      "boundary": "Two source-template invariants and two timestamp arithmetic design cases. These tests do not establish that lifecycle consumer output became shorter."
+    },
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bash",
+        "tests/test_optional_skills.sh"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "raw_tool_result": {
+        "chunk_id": "039a58",
+        "wall_time_seconds": 0.8394384,
+        "exit_code": 0,
+        "original_token_count": 14,
+        "output": "[PASS] optional skills install through canonical CLI\n"
+      },
+      "result": "canonical optional installation passed"
+    },
+    {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bash -lc 'git diff --check; git diff -- optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md; sha256sum optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md; wc -c optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md; git status --short'",
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "exit_code": 0,
+      "output_provenance": "The exact native tool result was displayed in the prior conversation but not retained in the functions store. This row is a summary, not a reconstructed raw receipt.",
+      "observed_summary": "git diff --check produced no whitespace diagnostics; exactly one lifecycle reference line changed; 7050 bytes and after SHA above; git status contained only that modified reference."
+    }
+  ],
+  "consumer_reverification": {
+    "status": "pending-independent-observation",
+    "ownership": "parent / fresh_lifecycle_consumer",
+    "note": "Parent reported a new no-history consumer thread had started. This implementer has not consumed its result and does not claim the output-scope defect is verified fixed."
+  },
+  "storage_boundary": "This is a new scratch receipt. round2-optional-implementation.json was not overwritten; no repository file is changed by this receipt."
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-git-bisect.adoc",
+    "url": "https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/Documentation/git-bisect.adoc",
+    "bytes": 18199,
+    "sha256": "9117f814e40ddc291c24a601899e458810427dea6e4be121f84c6d6a264d9820",
+    "blob": "b0078dda0eb05093aa86a56c6c69363ef3ab97d2",
+    "blob_matches_provider": true,
+    "matches_audit": true,
+    "read_scope": "full retrieved file; assessment uses bisect skip/run and log identity, or Timestamp/ObservedTimestamp sections",
+    "checked_at": "2026-11-16T05:30:35.486640+00:00"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-otel-data-model.md",
+    "url": "https://github.com/open-telemetry/opentelemetry-specification/blob/a4e05d9704fc5218d85a4154fb5b143ea3f5340e/specification/logs/data-model.md",
+    "bytes": 20155,
+    "sha256": "3ee2c391a5d3262130582df89a3dc5a5640d837d010734ea79458fe3ece31173",
+    "blob": "1e58b7f18fb547f45132b185f241f3b097f76bb0",
+    "blob_matches_provider": true,
+    "matches_audit": true,
+    "read_scope": "full retrieved file; assessment uses bisect skip/run and log identity, or Timestamp/ObservedTimestamp sections",
+    "checked_at": "2026-11-16T05:30:35.486737+00:00"
+  }
+]

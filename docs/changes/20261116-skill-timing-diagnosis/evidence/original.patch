@@ -1,0 +1,3651 @@
+diff --git a/.version-lock b/.version-lock
+index eb184449c84b3ed9d95b9105b0ae3808157f80b2..c9713f8a9c7835da436f7dbbbc5074e3a8b0652d 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.3.8
+-locked_at: 2026-11-16T03:52:17Z
+-locked_by: skill-execution-depth
++version: 11.3.9
++locked_at: 2026-11-16T05:15:45Z
++locked_by: root-skill-timing-diagnosis
+diff --git a/CONTEXT.md b/CONTEXT.md
+index cdfd0022c800d46cb6c0998fa48e8ff260312c0a..b4f52c8ef3c2c369d6714366922dd69fbe61d505 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.3.8
++> 产品版本：11.3.9
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 0928eca0dcfe05590ffb5172d9ae8d22bdb7f6f1..bffe23b1a7bf49bccb71025027f59dd5e0b73921 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.3.8`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.3.9`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/agent-skill-catalog.md b/docs/agent-skill-catalog.md
+index e5bedd125460af6726e7aad1985248e9161d4ad2..7981a87d1005041e6ab6cc75fee0f0b573d65964 100644
+--- a/docs/agent-skill-catalog.md
++++ b/docs/agent-skill-catalog.md
+@@ -64,7 +64,7 @@
+ | 50 | 10 | `implementation` | primary | playbook | `adk-driver-implementation` | 用于 Linux、RTOS 或裸机驱动代码实现、资源生命周期与定向回归；不用于仅做首板调试清单或未经授权的真实设备刷写。 | 驱动开发 | `skills/adk-driver-implementation/SKILL.md` |
+ | 50 | 20 | `implementation` | primary | playbook | `adk-driver-bringup-checklist` | 用于首板 bring-up 联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动代码或未经授权执行设备寄存器写操作。 | 驱动调试 | `skills/adk-driver-bringup-checklist/SKILL.md` |
+ | 50 | 30 | `implementation` | primary | playbook | `adk-bsp-porting-playbook` | 用于 BSP 移植涉及启动链、驱动依赖、构建环境和迁移风险时规划与验证；不用于未授权的设备刷写或纯源码阅读。 | BSP移植 | `skills/adk-bsp-porting-playbook/SKILL.md` |
+-| 50 | 40 | `implementation` | primary | playbook | `adk-rtos-task-design` | 用于 RTOS 任务优先级、时序约束、同步资源与调度风险设计；不用于纯裸机单循环程序或未经测量声称实时性达标。 | RTOS任务 | `skills/adk-rtos-task-design/SKILL.md` |
++| 50 | 40 | `implementation` | primary | playbook | `adk-rtos-task-design` | 用于 RTOS 任务优先级、周期唤醒、同步资源与调度风险设计；不用于裸机单循环或未经测量声称实时性达标。 | RTOS任务 | `skills/adk-rtos-task-design/SKILL.md` |
+ | 50 | 50 | `implementation` | primary | playbook | `adk-interrupt-dma-patterns` | 用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。 | 中断处理 | `skills/adk-interrupt-dma-patterns/SKILL.md` |
+ | 50 | 60 | `implementation` | primary | playbook | `adk-protocol-stack-integration` | 用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。 | 协议栈 | `skills/adk-protocol-stack-integration/SKILL.md` |
+ | 50 | 70 | `implementation` | primary | tool-wrapper | `adk-cmake-cross-build` | 用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。 | CMake | `skills/adk-cmake-cross-build/SKILL.md` |
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/audit.md b/docs/changes/20261116-skill-timing-diagnosis/audit.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..8da03e38bc8e156e05f7b626b0c73d03e2ec97d1
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/audit.md
+@@ -0,0 +1,81 @@
++# Skills 全量复审与处理决定
++
++基线 v11.3.8 / `913b6b3a0838ccddae252a3a8536ac7d41598810`。三组重新完整读取 **65 个 Skills、153 个文件、421,746 bytes**；主整合逐项验证 Git blob、SHA256、长度，清单与 Git 跟踪的 core/optional 文件严格相等。
++
++本轮选定 4 个已有 Skills 改进，其余 61 个保留并列出依据。上游索引覆盖 **16 个仓库、23 个具体固定版本文件**（包含许可文件；各文件完整/局部阅读范围见原记录）。不以热度或仓库数量证明质量。
++
++## 逐项决定
++
++| Skill | 分组 | 决定与依据 |
++|---|---|---|
++| `adk-adr-writer` | core | 保留：按风险写ADR，真实备选、保真和冷读边界完整。 |
++| `adk-after-action-review` | core | 保留：lite/standard/promotion分流，普通复盘无需长期晋级空字段。 |
++| `adk-archive-governance` | core | 保留：hash mismatch保留原值和可信原件，不盲重算；入口需核验。 |
++| `adk-artifact-gating` | core | 保留：READY/PASS与workflow阶段区分，真实通过才填PASS已澄清。 |
++| `adk-branch-closeout` | core | 保留：同范围授权延续、精确head/check及fresh-main已有，删除单独授权。 |
++| `adk-code-review-loop` | core | 保留：原始Git快照取证已落地，局部反馈/完整审查和双裁决保持。 |
++| `adk-code-simplification` | core | 保留：以理解负担而非行数判断，保留cleanup与副作用顺序。 |
++| `adk-commit-pr-quality-gate` | core | 保留：message-only/PR-readiness/专项门禁按实际影响加载。 |
++| `adk-component-api-stability` | core | 保留：源码API/二进制ABI/旧消费者/行为验证分离，保留真实退出码。 |
++| `adk-context-compress-handoff` | core | 保留：自包含恢复摘要、raw指针、excluded及最多3动作保持。 |
++| `adk-context-engineering` | core | 保留：stable/dynamic/evidence隔离、自包含交接与按需读取已覆盖。 |
++| `adk-cross-team-handoff` | core | 保留：lite/formal、真实receiver签收及冷读验收完整。 |
++| `adk-engineering-growth-review` | core | 保留：index-first、跨时点证据、不过度采集/外发，单次观察不代表长期能力。 |
++| `adk-goal-authoring` | core | 保留：原验收分母、可关闭批次、预算null与bounded resume已有。 |
++| `adk-interface-contract-design` | core | 保留：方向性版本/能力协商、生命周期/副作用与双向规格核对完整。 |
++| `adk-knowledge-archive` | core | 保留：新归档/治理分离，topic/路径/来源/隐私边界完整。 |
++| `adk-lightweight-planning` | core | 保留：只读计划按真实规模最小化，执行意图退出此skill。 |
++| `adk-memory-curator` | core | 保留：report-only、授权读取、仅文件名敏感扫描及冲突治理清晰。 |
++| `adk-parallel-agent-governance` | core | 保留：独立写集、data-only交接、summary-first与真实并行收益要求已有。 |
++| `adk-pilot-framework` | core | 保留：smoke与收益比较、失败/blocked/inconclusive区分，保留重试。 |
++| `adk-planning-execution-loop` | core | 保留：inline fast path、同快照复用、未知副作用对账和真实进展已有。 |
++| `adk-production-field-readiness` | core | 保留：设备六类证据/OTA回滚/生产签署边界完整；多人human-active定义疑点无真实消费依据，OBSERVE。 |
++| `adk-release-versioning` | core | 保留：正式baseline、完整历史、不可变tag与精确资产身份已有。 |
++| `adk-repo-drift-remediation` | core | 保留：源事实issue-map、共享配置串行、只读状态与残留理由已有。 |
++| `adk-repo-prompt-analysis` | core | 保留：实际callsite、role和动态输入信任边界完整，最小报告。 |
++| `adk-requirements-triage` | core | 保留：brief/execution/high-risk分流，既有批准直接进入执行。 |
++| `adk-runtime-router` | core | 保留：唯一primary、版本适配与optional真实加载边界完整。 |
++| `adk-skill-deep-analysis` | core | 保留：有界source-discovery、固定来源、净增益与可实施handoff已有。 |
++| `adk-structured-requirements-questioning` | core | 保留：Explore/Challenge、frontier、部分回答和依赖修订完整。 |
++| `adk-systematic-debugging` | core | 改进：二分oracle分类和重跑前证据保全需补，其余因果/单变量/领域方法保留。 |
++| `adk-task-breakdown` | core | 保留：纵向切片、expand/migrate/contract及Ready Frontier已有。 |
++| `adk-token-context-governance` | core | 保留：真实trace优先、raw回退，源码字节不冒充Token收益。 |
++| `adk-verification-before-completion` | core | 保留：checkpoint/goal-final、checker校准、实际运行与资格边界已覆盖。 |
++| `adk-worktree-governance` | core | 保留：上一轮Git只读取证已修，保留dirty保护与独立清理授权。 |
++| `adk-bsp-analysis` | embedded | 保留：保留：按问题展开的初始化/资源链、权威章节、历史workaround与confirmed/inferred/unknown分离。 |
++| `adk-bsp-porting-playbook` | embedded | 保留：保留：目标ABI、独立输出目录、Kbuild实际参数、资源预算及设备handoff完整。 |
++| `adk-cmake-cross-build` | embedded | 保留：保留：真实preset/binaryDir/config、JUnit执行状态、零/全skip、资源预算和工具链匹配已有真实测试。 |
++| `adk-driver-bringup-checklist` | embedded | 保留：保留：分阶段验收、主动探测/读副作用、异常恢复、not-run与未授权设备写边界。 |
++| `adk-driver-implementation` | embedded | 保留：保留：runtime-specific生命周期、IRQ/DMA引用、partial init/cancel/late completion与资源所有权足够明确。 |
++| `adk-embedded-debug-transport` | embedded | 保留：保留：已区分被动/主动/状态改变/破坏性通道，含GDB暂停与MMIO读取副作用。 |
++| `adk-embedded-diagnostic-harness` | embedded | 保留：保留：expected/harness/product/environment区分，strict/env套件与实际CLI返回语义明确。 |
++| `adk-embedded-release-orchestration` | embedded | 保留：保留：prepare/publish/device分权与多MCU部分成功恢复已有明确方法。 |
++| `adk-embedded-remote-debug-log-triage` | embedded | 保留：保留：分层健康、输出语义、熔断、恢复后身份与HIL阶段覆盖；按问题加载详细参考。 |
++| `adk-embedded-storage-layout-migration` | embedded | 保留：保留：文件系统问题分流、数据保护、host演练和独立operator写操作边界明确。 |
++| `adk-fault-injection-recovery` | embedded | 保留：保留：按实际风险选择故障、隔离授权、恢复SLA、功能/数据一致性及有条件watchdog验证。 |
++| `adk-hardware-debugging` | embedded | 保留：保留：目标ELF/地址归一化与MCU fault差异，保留实际板端边界。 |
++| `adk-integration-hil-sil` | embedded | 保留：保留：实际runner身份、资源隔离、新鲜JUnit/必跑项、实际执行状态与设备后置健康要求。 |
++| `adk-interrupt-dma-patterns` | embedded | 保留：保留：ownership、barrier、memory ordering与coherency分别要求；Linux官方coherent不保证顺序可作现有方法解释，未强行增改。 |
++| `adk-offline-core-dump-triage` | embedded | 保留：保留：身份/库匹配与GDB提前关闭auto-load、有限可信帧及partial结论完整。 |
++| `adk-performance-profiling-embedded` | embedded | 保留：保留：v11.3.8实际运行对象身份、栈边界、有效负载/工作点与不确定性已有执行证据。 |
++| `adk-protocol-stack-integration` | embedded | 保留：保留：v11.3.8帧边界/部分IO/截断/缓冲限制/全程deadline与分层状态机已落实。 |
++| `adk-register-map-design` | embedded | 保留：保留：v11.3.8已补复位条件/有效位/undefined和安全读取；未发现新执行缺口。 |
++| `adk-rtos-task-design` | embedded | 改进：改进：保留现有RTA模型，补实际周期API/单位量化与范围、到点与超期区别、有界超期策略，以及共享timer服务与异步stop/delete生命周期。 |
++| `adk-static-analysis-c-cpp` | embedded | 保留：保留：TU/头依赖、实际数据库、非空扫描、解析失败、警告升级与动态证据分层明确。 |
++| `adk-test-strategy` | embedded | 保留：保留：风险分级、独立expected/变体、checker校准、资源隔离及真实回执覆盖充分。 |
++| `adk-unit-test-embedded` | embedded | 保留：保留：独立oracle、有界状态序列、复位/回放、覆盖局限与host/target边界已具体化。 |
++| `adk-data-fetch` | optional | 保留：独立安装父/子Skill、授权范围、缺子技能停止及partial/not-verified状态传递已经完整，未发现本轮可证新增缺口。 |
++| `adk-email-imap-fetch` | optional | 保留：EXAMINE、UIDVALIDITY+UID、BODY.PEEK、重连重查和逐项partial已有明确约束；无需新增邮箱写权限。 |
++| `adk-external-practice-absorption` | optional | 保留：已有source-only/scoped-adoption/portfolio-intake，来源pin与独立decision边界完整；继续任务不重复intake规则存在。 |
++| `adk-fetch-url-content` | optional | 保留：重定向/IP、请求预算、真实内容类型、编码、相对链接/base语义、登录壳与截断状态均明确；不为研究增加爬虫或执行器。 |
++| `adk-incident-rca-report` | optional | 改进：简短RCA与证据因果方法保留；时间线缺乏事件/采集时间与时区/时钟偏差的明确区分，有有限可执行设计案例。 |
++| `adk-prose-revision` | optional | 保留：report/revise意图、事实与限定保真、原稿风格及无需修改路径完备，反例reference已清楚标记非模型实测。 |
++| `adk-security-supply-chain` | optional | 保留：source-only/adoption/runtime分层、source-to-sink、扫描遗漏与许可边界已有具体步骤；未以第三方词频或星数添加新的检查层。 |
++| `adk-skill-composition-governance` | optional | 改进：主流程/按需评测保留；生命周期Creation Gate模板10行无证据却预填pass，建议改为待验证默认状态。 |
++| `adk-test-flakiness-triage` | optional | 保留：v11.3.8新增原生Condition/readiness/0值/取消与预算边界完整，样本统计和顺序污染限制明确；不重复改动。 |
++
++## 可复核证据
++
++- [覆盖汇总与逐项决定](evidence/portfolio-audit.json)。
++- [通用 core 原始审查](evidence/core-audit.json)、[嵌入式原始审查](evidence/embedded-audit.json)、[optional 原始审查](evidence/optional-audit.json)。
++- [固定外部来源及采用/拒绝](source-review.md)。测试与发布观察分别记录，审查覆盖不等于所有业务场景已有真实运行效果。
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/design.md b/docs/changes/20261116-skill-timing-diagnosis/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6ba32ab9e71a28a47a8e62d526d982dfa4674a44
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/design.md
+@@ -0,0 +1,18 @@
++# 执行时序与诊断精度：设计
++
++## 边界
++沿用现有 Skills 和测试入口，不新增 Skill、运行时依赖或审批门禁。设计阶段由主 Agent 冻结验收，三组只读审查提供上游来源、实际探针和最小改动建议；实现任务再单独分派，最终由未实现候选的审查者只读复核。
++
++## 修改位置
++- `adk-rtos-task-design`：将周期唤醒与共享 timer 服务约束放入现有任务模型/运行验证路径；区分到点未阻塞和真正超期，stop/delete 入队成功不证明回调已停止，不提前释放回调上下文。精简重复概述，保留原响应时间公式及适用条件。
++- `adk-systematic-debugging`：在现有二分与按需反馈循环补充有效信号、skip/abort 和重跑前证据保全。只有 Git 二分场景使用 Git 退出码，不能套到一般模块/输入二分。
++- optional `adk-incident-rca-report`：强化现有时间线一步和报告字段，保持短报告默认，不增加强制大模板。
++- optional `adk-skill-composition-governance`：空白 Creation Gate 改为待验证；真实证据支持后才填写 pass，保持已运行/未运行语义。
++
++## 验证设计
++隔离 Git 历史验证真实回归、不可测修订、基础设施中止和歧义结果；隔离临时产物验证重跑前留存。RTOS 探针明确绑定实际 API/宏并区分算术/调度模型与目标板测量。事故案例固定异时区、迟到采集和未知时钟偏差。模板检查解析表格并验证空证据不预填成功。
++
++新增断言围绕禁止结果和可复现行为；不以只搜索新增口号的测试证明 Skill 有效。必要的静态契约与真实执行证据分开记录。保留已有成功路径及全部原 profile 阈值。
++
++## 交付与回滚
++修改的 Skills 提升 patch 版本，ADK 同步下一个 patch 版本；完整回归冻结后不再修改被测源文件。独立审查绑定准确 source/tree/patch。正常 PR、main CI、正式不可变 Release 和发布后归档核对完成后更新消费源指针；回滚通过独立 PR 恢复对应版本与生成投影，不覆盖历史资格证据。
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/evidence/core-audit.json b/docs/changes/20261116-skill-timing-diagnosis/evidence/core-audit.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..de54d4c8de69229268d04424c41360fc87c25ebb
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/evidence/core-audit.json
+@@ -0,0 +1,1051 @@
++{
++  "schema": "adk-core-skill-audit/v1",
++  "reviewer": "ai/root/audit_core_effectiveness",
++  "role": "read-only-auditor",
++  "source_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
++  "completed_at": "2026-11-16 05:13:36 UTC",
++  "coverage": {
++    "skills": 34,
++    "files": 93,
++    "bytes": 231726,
++    "body_and_reference_read": "all assigned files fully read; truncated middle blocks explicitly reread",
++    "git_blob_sha256_length_check": {
++      "status": "pass",
++      "skills": 34,
++      "files": 93
++    }
++  },
++  "skills": [
++    {
++      "skill": "adk-runtime-router",
++      "files": [
++        {
++          "path": "skills/adk-runtime-router/SKILL.md",
++          "bytes": 5443,
++          "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
++          "blob": "e4221a63cb951dfc206f9138c26141f5d8fd431f"
++        },
++        {
++          "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
++          "bytes": 7296,
++          "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
++          "blob": "f30031e24580c72f1247119cab40dc52d366ca88"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "唯一primary、版本适配与optional真实加载边界完整。"
++    },
++    {
++      "skill": "adk-context-engineering",
++      "files": [
++        {
++          "path": "skills/adk-context-engineering/SKILL.md",
++          "bytes": 3927,
++          "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
++          "blob": "1b53fcbe94688c5970e130017f6f1ab433be6522"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "stable/dynamic/evidence隔离、自包含交接与按需读取已覆盖。"
++    },
++    {
++      "skill": "adk-token-context-governance",
++      "files": [
++        {
++          "path": "skills/adk-token-context-governance/SKILL.md",
++          "bytes": 7699,
++          "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
++          "blob": "03a735d7faae07fa35db8491e9944ebe11c0f367"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "真实trace优先、raw回退，源码字节不冒充Token收益。"
++    },
++    {
++      "skill": "adk-requirements-triage",
++      "files": [
++        {
++          "path": "skills/adk-requirements-triage/SKILL.md",
++          "bytes": 3400,
++          "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
++          "blob": "43e6e6e463d026ecbc44e3404c716bc838913587"
++        },
++        {
++          "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
++          "bytes": 1558,
++          "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
++          "blob": "b3983557b95917a1093ffa0d64ffebc2e5fd332b"
++        },
++        {
++          "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
++          "bytes": 579,
++          "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
++          "blob": "c2358903d236fba94ecc1dba697386638280c37d"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "brief/execution/high-risk分流，既有批准直接进入执行。"
++    },
++    {
++      "skill": "adk-structured-requirements-questioning",
++      "files": [
++        {
++          "path": "skills/adk-structured-requirements-questioning/SKILL.md",
++          "bytes": 3458,
++          "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
++          "blob": "95be4669b9b91f8a6bd87f0bb97539656efea8d4"
++        },
++        {
++          "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
++          "bytes": 967,
++          "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
++          "blob": "654a449ba2d86c2ff16fd14a88a309ccc337faa1"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "Explore/Challenge、frontier、部分回答和依赖修订完整。"
++    },
++    {
++      "skill": "adk-repo-prompt-analysis",
++      "files": [
++        {
++          "path": "skills/adk-repo-prompt-analysis/SKILL.md",
++          "bytes": 3300,
++          "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
++          "blob": "8ae146546cb2806bc4d9e2f0b257572107f7b57a"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "实际callsite、role和动态输入信任边界完整，最小报告。"
++    },
++    {
++      "skill": "adk-skill-deep-analysis",
++      "files": [
++        {
++          "path": "skills/adk-skill-deep-analysis/SKILL.md",
++          "bytes": 5613,
++          "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
++          "blob": "0a66b30462bb56e3de2b57070c208316d8fa5f3a"
++        },
++        {
++          "path": "skills/adk-skill-deep-analysis/references/details.md",
++          "bytes": 2096,
++          "sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
++          "blob": "744430c8df357ad4cc16cf192cf37fa9554c5d9d"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "有界source-discovery、固定来源、净增益与可实施handoff已有。"
++    },
++    {
++      "skill": "adk-lightweight-planning",
++      "files": [
++        {
++          "path": "skills/adk-lightweight-planning/LICENSE",
++          "bytes": 1063,
++          "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
++          "blob": "3c2826303420c300cf2a933bd8c440bc511eeb77"
++        },
++        {
++          "path": "skills/adk-lightweight-planning/README.md",
++          "bytes": 554,
++          "sha256": "8df5c88632885b07dc4a341b6904b57d687de144db79f2bf06d39e31dd0e2985",
++          "blob": "411c8973c5fb8f81a24cdf9b11604b40a399eec7"
++        },
++        {
++          "path": "skills/adk-lightweight-planning/SKILL.md",
++          "bytes": 2158,
++          "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
++          "blob": "fb572637a11ce11e7ae5d3c89ff56a8c194d3726"
++        },
++        {
++          "path": "skills/adk-lightweight-planning/agents/openai.yaml",
++          "bytes": 127,
++          "sha256": "29a33d35e237437b617366384e22e09a6b7c489fae8054f88c44dd51e25f20b5",
++          "blob": "dfe6682034190c40960bfe36e2c1a89a3849a8fd"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "只读计划按真实规模最小化，执行意图退出此skill。"
++    },
++    {
++      "skill": "adk-task-breakdown",
++      "files": [
++        {
++          "path": "skills/adk-task-breakdown/SKILL.md",
++          "bytes": 3659,
++          "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
++          "blob": "67edcf4f519e6cebca1ef8847a64644920076eed"
++        },
++        {
++          "path": "skills/adk-task-breakdown/references/task-packaging.md",
++          "bytes": 1534,
++          "sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
++          "blob": "c8dd41e0caa444c5af571c2d66a62a96ed2556b2"
++        },
++        {
++          "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
++          "bytes": 3796,
++          "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
++          "blob": "1b0977d635e23911bd42a55e0b8354f78c11a0af"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "纵向切片、expand/migrate/contract及Ready Frontier已有。"
++    },
++    {
++      "skill": "adk-parallel-agent-governance",
++      "files": [
++        {
++          "path": "skills/adk-parallel-agent-governance/SKILL.md",
++          "bytes": 4292,
++          "sha256": "1336d4e8a3de6e7bf2f3aab4d09675f3ee794f7cb0476826076ffbebcf523b7c",
++          "blob": "332193235d528097389ee380b118c697ea0435ee"
++        },
++        {
++          "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
++          "bytes": 1716,
++          "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
++          "blob": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30"
++        },
++        {
++          "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
++          "bytes": 643,
++          "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
++          "blob": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "独立写集、data-only交接、summary-first与真实并行收益要求已有。"
++    },
++    {
++      "skill": "adk-worktree-governance",
++      "files": [
++        {
++          "path": "skills/adk-worktree-governance/SKILL.md",
++          "bytes": 3746,
++          "sha256": "68ce46730100ce4cedbb3438747bd134666561dca1c00790bb3e2329a3461242",
++          "blob": "f3c91613e6e5922bd452f9960e9f6f7976febf31"
++        },
++        {
++          "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
++          "bytes": 654,
++          "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
++          "blob": "bde4c96c974fdac56a09b50dd945e153081b6b4d"
++        },
++        {
++          "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
++          "bytes": 1789,
++          "sha256": "2ab200477eab8f816df4c958623030337693f05b3c5ea0dd2d23e1a36fe1eaa2",
++          "blob": "38d304e35e38587df7ee2e5e6313e3434cc1809c"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "上一轮Git只读取证已修，保留dirty保护与独立清理授权。"
++    },
++    {
++      "skill": "adk-context-compress-handoff",
++      "files": [
++        {
++          "path": "skills/adk-context-compress-handoff/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-context-compress-handoff/README.md",
++          "bytes": 324,
++          "sha256": "4c76f8c71b05435bc10d614b20011d643f798be03ecb57d0c192a6852886ee14",
++          "blob": "d1bf34ae8e15fa825bf64a85853bb639b61df22d"
++        },
++        {
++          "path": "skills/adk-context-compress-handoff/SKILL.md",
++          "bytes": 2578,
++          "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
++          "blob": "7596082ede5c535c724324fc2099c17968fc4c78"
++        },
++        {
++          "path": "skills/adk-context-compress-handoff/agents/openai.yaml",
++          "bytes": 174,
++          "sha256": "60e59ca0c78d7202172eea257a23803188f8017776d18d58851ef4934090e00c",
++          "blob": "44f79d2174ec6c1b0e4e1f8e16fa512210d27778"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "自包含恢复摘要、raw指针、excluded及最多3动作保持。"
++    },
++    {
++      "skill": "adk-interface-contract-design",
++      "files": [
++        {
++          "path": "skills/adk-interface-contract-design/SKILL.md",
++          "bytes": 4924,
++          "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
++          "blob": "166bd9fdf3eb061cc5bfb90110fb0de921e32f04"
++        },
++        {
++          "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
++          "bytes": 2184,
++          "sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
++          "blob": "e28a344dd8989179e39f83c8afa405dee4055f75"
++        },
++        {
++          "path": "skills/adk-interface-contract-design/references/details.md",
++          "bytes": 1938,
++          "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
++          "blob": "a30be6f0edee84c8f76cbcd3d8243ec650ef2880"
++        },
++        {
++          "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
++          "bytes": 2393,
++          "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
++          "blob": "dac285c357b87bda2cc468d64fc38d931330aa51"
++        },
++        {
++          "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
++          "bytes": 2238,
++          "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
++          "blob": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9"
++        },
++        {
++          "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
++          "bytes": 2845,
++          "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
++          "blob": "64865b9122ebf281971818bdea4f6446a1758ff0"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "方向性版本/能力协商、生命周期/副作用与双向规格核对完整。"
++    },
++    {
++      "skill": "adk-adr-writer",
++      "files": [
++        {
++          "path": "skills/adk-adr-writer/SKILL.md",
++          "bytes": 3680,
++          "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
++          "blob": "ae3a98b5a0e1999d43ee9a36a2cce07fc427d382"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "按风险写ADR，真实备选、保真和冷读边界完整。"
++    },
++    {
++      "skill": "adk-component-api-stability",
++      "files": [
++        {
++          "path": "skills/adk-component-api-stability/SKILL.md",
++          "bytes": 5451,
++          "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
++          "blob": "538407bb30b6e0579672f6234d793a0704e499a5"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "源码API/二进制ABI/旧消费者/行为验证分离，保留真实退出码。"
++    },
++    {
++      "skill": "adk-goal-authoring",
++      "files": [
++        {
++          "path": "skills/adk-goal-authoring/SKILL.md",
++          "bytes": 3704,
++          "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a",
++          "blob": "08ec29da584e10cab9510b897ae75428d55dd643"
++        },
++        {
++          "path": "skills/adk-goal-authoring/references/goal-plan.json",
++          "bytes": 1844,
++          "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
++          "blob": "7f35ee1caeb659b47cbc805f0107dd3284f123db"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "原验收分母、可关闭批次、预算null与bounded resume已有。"
++    },
++    {
++      "skill": "adk-planning-execution-loop",
++      "files": [
++        {
++          "path": "skills/adk-planning-execution-loop/SKILL.md",
++          "bytes": 4415,
++          "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca",
++          "blob": "0381bdee35c0801f87c15117f5ce578930b78d54"
++        },
++        {
++          "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
++          "bytes": 5155,
++          "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
++          "blob": "5d2b37d5b1fc692a86d3dbaa5a04304ff6d2c968"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "inline fast path、同快照复用、未知副作用对账和真实进展已有。"
++    },
++    {
++      "skill": "adk-code-simplification",
++      "files": [
++        {
++          "path": "skills/adk-code-simplification/SKILL.md",
++          "bytes": 3025,
++          "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
++          "blob": "42b1540590869156af4f462958687cd2aac8500b"
++        },
++        {
++          "path": "skills/adk-code-simplification/references/deep-module-design.md",
++          "bytes": 1275,
++          "sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
++          "blob": "7a294528019411649dfc84f5f5e79a7ab82e195f"
++        },
++        {
++          "path": "skills/adk-code-simplification/references/details.md",
++          "bytes": 2582,
++          "sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
++          "blob": "4f5ec1be3bb629581b05a7849c8e5234a23adaf8"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "以理解负担而非行数判断，保留cleanup与副作用顺序。"
++    },
++    {
++      "skill": "adk-systematic-debugging",
++      "files": [
++        {
++          "path": "skills/adk-systematic-debugging/SKILL.md",
++          "bytes": 3138,
++          "sha256": "1d95806ea88d14ad27f3c925ed7b1d1b0b5e57e7eb0f4f8580221bb00c77a8d0",
++          "blob": "eec456f4571df35a1eb01d6db6781e77bd56e055"
++        },
++        {
++          "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
++          "bytes": 2793,
++          "sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
++          "blob": "099940f7dad76c01971be181caab997a93897e50"
++        },
++        {
++          "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
++          "bytes": 2463,
++          "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
++          "blob": "fe9d0ac7e8bd9c53f7cedeca4a5d26ab64e8dbf5"
++        },
++        {
++          "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
++          "bytes": 1187,
++          "sha256": "8f94f087b206d6bccb0a253231e9aa3bbe0a614b3be563e5d6c23d0da25672ab",
++          "blob": "a4cd5e164cee269b2be25856c1e602623507f994"
++        }
++      ],
++      "decision": "ENHANCE",
++      "reason": "二分oracle分类和重跑前证据保全需补，其余因果/单变量/领域方法保留。"
++    },
++    {
++      "skill": "adk-artifact-gating",
++      "files": [
++        {
++          "path": "skills/adk-artifact-gating/SKILL.md",
++          "bytes": 2061,
++          "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
++          "blob": "da4328a303fe3b0ea9dd116350961a71882122f6"
++        },
++        {
++          "path": "skills/adk-artifact-gating/references/details.md",
++          "bytes": 2316,
++          "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
++          "blob": "ab51413bf831af643c805e7120fb23bd8d13866f"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "READY/PASS与workflow阶段区分，真实通过才填PASS已澄清。"
++    },
++    {
++      "skill": "adk-pilot-framework",
++      "files": [
++        {
++          "path": "skills/adk-pilot-framework/SKILL.md",
++          "bytes": 3765,
++          "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
++          "blob": "904b084359c8a1fe284d0c57ee5c886dcf077771"
++        },
++        {
++          "path": "skills/adk-pilot-framework/references/details.md",
++          "bytes": 3632,
++          "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
++          "blob": "e0a681a96a5a86b32dc8dd7f591657b0d42e8560"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "smoke与收益比较、失败/blocked/inconclusive区分，保留重试。"
++    },
++    {
++      "skill": "adk-verification-before-completion",
++      "files": [
++        {
++          "path": "skills/adk-verification-before-completion/SKILL.md",
++          "bytes": 4508,
++          "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
++          "blob": "1f185c64ec8d2070a07aa4d96fd1c7ceadcb8af2"
++        },
++        {
++          "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
++          "bytes": 8933,
++          "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa",
++          "blob": "611dc0ab9757c0b7faa45339b7000d9592db40a9"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "checkpoint/goal-final、checker校准、实际运行与资格边界已覆盖。"
++    },
++    {
++      "skill": "adk-code-review-loop",
++      "files": [
++        {
++          "path": "skills/adk-code-review-loop/SKILL.md",
++          "bytes": 6235,
++          "sha256": "c9f9a8149babf7f51786a8b1d86f38f10b629051efcb355a0965b1ad8b1aa9fd",
++          "blob": "68cdd62c005b0b69aedf9d9193dc83f18a16fac2"
++        },
++        {
++          "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
++          "bytes": 1917,
++          "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
++          "blob": "d52dfdd9db9f2a465df26414e8bb0023a9f45379"
++        },
++        {
++          "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
++          "bytes": 3907,
++          "sha256": "a82255232e618f5fd00f4532aa884c6df54f2dd97806da633d092286bc9d0af6",
++          "blob": "70206c8d3234ed46757e06b6a8e639d7c6b2a6d4"
++        },
++        {
++          "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
++          "bytes": 2229,
++          "sha256": "731f4b0dd24c9c3baea0e7d76bbeef6eeeb746d23335cf96893c694b68e91fa4",
++          "blob": "7de3c48c1d1961bd692797470fc5cb61523f7c45"
++        },
++        {
++          "path": "skills/adk-code-review-loop/references/review-governance-details.md",
++          "bytes": 8750,
++          "sha256": "b82d16825e3a0ee15e4b6cd08f1f4e736e32d63c93fdf7381922ffab60c0a2ea",
++          "blob": "ed88058086d3797b9ab5dd0a274b7c65ded9528f"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "原始Git快照取证已落地，局部反馈/完整审查和双裁决保持。"
++    },
++    {
++      "skill": "adk-repo-drift-remediation",
++      "files": [
++        {
++          "path": "skills/adk-repo-drift-remediation/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-repo-drift-remediation/README.md",
++          "bytes": 303,
++          "sha256": "64a339900700aa3444f589aa9549d082124f2bf20e40ea58270d7ce8066bafa7",
++          "blob": "bbb9ffc101cd6ac54317dac5183bd3ee015d85ea"
++        },
++        {
++          "path": "skills/adk-repo-drift-remediation/SKILL.md",
++          "bytes": 3021,
++          "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
++          "blob": "33c87bdfa806af97b0a8f11d7185be3bba76374c"
++        },
++        {
++          "path": "skills/adk-repo-drift-remediation/agents/openai.yaml",
++          "bytes": 166,
++          "sha256": "daf474758479bf0bbfbd6350e6215c76dfbe7d23233e613c262f0a9f2e149470",
++          "blob": "697f5074deb1d789d265e0de0416e504fdf9fac9"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "源事实issue-map、共享配置串行、只读状态与残留理由已有。"
++    },
++    {
++      "skill": "adk-commit-pr-quality-gate",
++      "files": [
++        {
++          "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
++          "bytes": 3821,
++          "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
++          "blob": "050cf95bc3c2f5b29f21e4658805ddb87c6058ee"
++        },
++        {
++          "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
++          "bytes": 1429,
++          "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
++          "blob": "cbd8582597fdc5d53b5d34701e48ed536f8cfde4"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "message-only/PR-readiness/专项门禁按实际影响加载。"
++    },
++    {
++      "skill": "adk-release-versioning",
++      "files": [
++        {
++          "path": "skills/adk-release-versioning/SKILL.md",
++          "bytes": 2776,
++          "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
++          "blob": "5b00d772ab95e0978d7c4039c304887d4173843d"
++        },
++        {
++          "path": "skills/adk-release-versioning/references/details.md",
++          "bytes": 2471,
++          "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
++          "blob": "b2c501842e5f22694538391f5d2ee617809290ee"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "正式baseline、完整历史、不可变tag与精确资产身份已有。"
++    },
++    {
++      "skill": "adk-production-field-readiness",
++      "files": [
++        {
++          "path": "skills/adk-production-field-readiness/SKILL.md",
++          "bytes": 5395,
++          "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
++          "blob": "d864336f23a9563fad78f27b08dfdbddeb2105f1"
++        },
++        {
++          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
++          "bytes": 1793,
++          "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
++          "blob": "faf4083758a12cda2fe4a0e1a965468e9ef8f4bd"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "设备六类证据/OTA回滚/生产签署边界完整；多人human-active定义疑点无真实消费依据，OBSERVE。"
++    },
++    {
++      "skill": "adk-cross-team-handoff",
++      "files": [
++        {
++          "path": "skills/adk-cross-team-handoff/SKILL.md",
++          "bytes": 3069,
++          "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
++          "blob": "3a99ac808bf02120abe6a5b508bef0010f673a28"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "lite/formal、真实receiver签收及冷读验收完整。"
++    },
++    {
++      "skill": "adk-branch-closeout",
++      "files": [
++        {
++          "path": "skills/adk-branch-closeout/SKILL.md",
++          "bytes": 3095,
++          "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
++          "blob": "39a29b979bebb31093acf4e78330ae64469ce2eb"
++        },
++        {
++          "path": "skills/adk-branch-closeout/references/closeout-options.md",
++          "bytes": 908,
++          "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
++          "blob": "4357bb2f6bb30e76734fd5954ef17c47d804468d"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "同范围授权延续、精确head/check及fresh-main已有，删除单独授权。"
++    },
++    {
++      "skill": "adk-after-action-review",
++      "files": [
++        {
++          "path": "skills/adk-after-action-review/SKILL.md",
++          "bytes": 3785,
++          "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
++          "blob": "cec7d4b51daf500be270581c790aef7eeabaf104"
++        },
++        {
++          "path": "skills/adk-after-action-review/references/after-action-review.md",
++          "bytes": 436,
++          "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
++          "blob": "33c0825776ab10105d8381f59ad3b6bc8c04d5e0"
++        },
++        {
++          "path": "skills/adk-after-action-review/references/codify-decision.md",
++          "bytes": 651,
++          "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
++          "blob": "52b1b474f54bc76b3d6fba1e8304e53e8f6d63ea"
++        },
++        {
++          "path": "skills/adk-after-action-review/references/memory-candidate.md",
++          "bytes": 1707,
++          "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
++          "blob": "702aced3a49cc5adddf33686afc081b7b1e8fb44"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "lite/standard/promotion分流，普通复盘无需长期晋级空字段。"
++    },
++    {
++      "skill": "adk-memory-curator",
++      "files": [
++        {
++          "path": "skills/adk-memory-curator/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-memory-curator/README.md",
++          "bytes": 310,
++          "sha256": "1c9f71a0511b8f6979e38c9825fd7aaaedcb62e62686316f9edeb1b55bf96933",
++          "blob": "a90db02f1be4fa9f456e24f4a931cdad259a6903"
++        },
++        {
++          "path": "skills/adk-memory-curator/SKILL.md",
++          "bytes": 3530,
++          "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5",
++          "blob": "b86d93a4421c4305b227053d7e6d63ae3fc2b820"
++        },
++        {
++          "path": "skills/adk-memory-curator/agents/openai.yaml",
++          "bytes": 165,
++          "sha256": "24ec7d756319b13019ccdb7b227d67f23066beae23e05e02e5339d4340231acc",
++          "blob": "db0b084970bff6d5eb5cdd0726a976262b4b8fb1"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "report-only、授权读取、仅文件名敏感扫描及冲突治理清晰。"
++    },
++    {
++      "skill": "adk-archive-governance",
++      "files": [
++        {
++          "path": "skills/adk-archive-governance/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-archive-governance/README.md",
++          "bytes": 301,
++          "sha256": "f0d5f306b1d8ddafa6065d4c07883ae6bcfd123857e0cdec22fcdec7ba0036c6",
++          "blob": "777dc00b02aa03d642041fb71a3e54a66ab94333"
++        },
++        {
++          "path": "skills/adk-archive-governance/SKILL.md",
++          "bytes": 2687,
++          "sha256": "a950a9e9916c4ec1377a4f56dbc55bb12e1c3198a89be677540d783544c62876",
++          "blob": "39c95599cd3084210e8eaa8be33072d2f9eb4c12"
++        },
++        {
++          "path": "skills/adk-archive-governance/agents/openai.yaml",
++          "bytes": 161,
++          "sha256": "1a49a5ab0c79fab66f27c547d8dd7ea85307a96e214062611c4f8e4da8f90b96",
++          "blob": "174e9523634c71615fc7ff3d7094548a3fc186d9"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "hash mismatch保留原值和可信原件，不盲重算；入口需核验。"
++    },
++    {
++      "skill": "adk-knowledge-archive",
++      "files": [
++        {
++          "path": "skills/adk-knowledge-archive/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-knowledge-archive/README.md",
++          "bytes": 329,
++          "sha256": "07d5563a38ec220a6937c32a7339cd866942df34936c366ddfb1e4f2c4fde8ea",
++          "blob": "de534394e4358dc6812dd3ac3a3d40410648d6c6"
++        },
++        {
++          "path": "skills/adk-knowledge-archive/SKILL.md",
++          "bytes": 2236,
++          "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
++          "blob": "73d8519350051b9c02aadaadfa1293deebc3b269"
++        },
++        {
++          "path": "skills/adk-knowledge-archive/agents/openai.yaml",
++          "bytes": 156,
++          "sha256": "c915127f7ac46ebdce1bd6afd512c0039cfea00a6fa6dc5fc8d5f4a653b5a7ba",
++          "blob": "2d3a49cb10ab7b49174564111133699c068bab1e"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "新归档/治理分离，topic/路径/来源/隐私边界完整。"
++    },
++    {
++      "skill": "adk-engineering-growth-review",
++      "files": [
++        {
++          "path": "skills/adk-engineering-growth-review/LICENSE",
++          "bytes": 1063,
++          "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
++          "blob": "3c2826303420c300cf2a933bd8c440bc511eeb77"
++        },
++        {
++          "path": "skills/adk-engineering-growth-review/README.md",
++          "bytes": 745,
++          "sha256": "ba06dc6db2436cac1e51707248013dc732ee228c074d8730c7ee5d7703981f63",
++          "blob": "689f3c5d738954df8e27c1daa992dba2318f01b8"
++        },
++        {
++          "path": "skills/adk-engineering-growth-review/SKILL.md",
++          "bytes": 3853,
++          "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd",
++          "blob": "0aedd7670b6bfb5743e6d2b9da14a73f166e19df"
++        },
++        {
++          "path": "skills/adk-engineering-growth-review/agents/openai.yaml",
++          "bytes": 163,
++          "sha256": "17530036dc4d53ee862d6030d03cea86392d1e3ed1a4ce2e9178df4e8458bc05",
++          "blob": "b66751d4185a004dce444b9a1e24ec82131f02ab"
++        },
++        {
++          "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
++          "bytes": 1266,
++          "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
++          "blob": "e6540e1e825e08448da2f7721aec84baa5663837"
++        }
++      ],
++      "decision": "RETAIN",
++      "reason": "index-first、跨时点证据、不过度采集/外发，单次观察不代表长期能力。"
++    }
++  ],
++  "external_sources": [
++    {
++      "repo": "anthropics/skills",
++      "path": "skills/skill-creator/SKILL.md",
++      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
++      "reported_git_blob": "65b3a402dbd09b8e83f9d637c6b553875189085c",
++      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/SKILL.md",
++      "bytes": 33168,
++      "sha256": "dcd4803e61e913e6fc27294184cd3a71f09f5e924ff20c8a9a20173e7b3c2bcf",
++      "git_blob": "65b3a402dbd09b8e83f9d637c6b553875189085c",
++      "read_scope": "full file",
++      "external_code_executed": false
++    },
++    {
++      "repo": "mattpocock/skills",
++      "path": "skills/productivity/grilling/SKILL.md",
++      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
++      "reported_git_blob": "d2f09a18e6a6c65c55f1271ba08dfeaf06f0bed3",
++      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/grilling/SKILL.md",
++      "bytes": 2077,
++      "sha256": "a146842ed93ca43d833550fa9adf02e58cb63c83fea9d4b4522995b82242d4e2",
++      "git_blob": "d2f09a18e6a6c65c55f1271ba08dfeaf06f0bed3",
++      "read_scope": "full file",
++      "external_code_executed": false
++    },
++    {
++      "repo": "obra/superpowers",
++      "path": "skills/systematic-debugging/SKILL.md",
++      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
++      "reported_git_blob": "62fc752aaef59a8bbed5d305f4cadc60f8ae07ed",
++      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/systematic-debugging/SKILL.md",
++      "bytes": 9530,
++      "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
++      "git_blob": "62fc752aaef59a8bbed5d305f4cadc60f8ae07ed",
++      "read_scope": "full file",
++      "external_code_executed": false
++    },
++    {
++      "repo": "git/git",
++      "path": "builtin/bisect.c",
++      "commit": "9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed",
++      "reported_git_blob": null,
++      "url": "https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/builtin/bisect.c",
++      "bytes": 38485,
++      "sha256": "efd4b7d0951ca9049c7e7aba2560605c74792408c609647ab2e88dd84636e9e0",
++      "git_blob": "ccff4e1a1b2483860f9ab9916365d921ff2d20f5",
++      "read_scope": "bisect_run and verify_good control flow",
++      "external_code_executed": false
++    },
++    {
++      "repo": "git/git",
++      "path": "Documentation/git-bisect.adoc",
++      "commit": "9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed",
++      "reported_git_blob": null,
++      "url": "https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/Documentation/git-bisect.adoc",
++      "bytes": 18199,
++      "sha256": "9117f814e40ddc291c24a601899e458810427dea6e4be121f84c6d6a264d9820",
++      "git_blob": "b0078dda0eb05093aa86a56c6c69363ef3ab97d2",
++      "read_scope": "Bisect run / Bisect skip",
++      "external_code_executed": false
++    },
++    {
++      "repo": "anthropics/skills",
++      "path": "skills/skill-creator/LICENSE.txt",
++      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
++      "reported_git_blob": null,
++      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/LICENSE.txt",
++      "bytes": 11345,
++      "sha256": "bc6b3af2f331cbc7fb0da1344efb2cbe5877a31498b4d70dbc7000f3405a1362",
++      "git_blob": "4f881c52d1f72f4cfb720e339e2d35c3058d01a9",
++      "read_scope": "full file",
++      "external_code_executed": false
++    },
++    {
++      "repo": "mattpocock/skills",
++      "path": "LICENSE",
++      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
++      "reported_git_blob": null,
++      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/LICENSE",
++      "bytes": 1068,
++      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
++      "git_blob": "f1dd2c09108dde1a5f56097cee8461b3ea834499",
++      "read_scope": "full file",
++      "external_code_executed": false
++    },
++    {
++      "repo": "obra/superpowers",
++      "path": "LICENSE",
++      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
++      "reported_git_blob": null,
++      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/LICENSE",
++      "bytes": 1070,
++      "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
++      "git_blob": "abf0390320aa14406af7a520b9b0739fdda9bf08",
++      "read_scope": "full file",
++      "external_code_executed": false
++    }
++  ],
++  "external_decisions": [
++    {
++      "source": "anthropics/skills",
++      "decision": "RETAIN",
++      "method": "Existing baseline/candidate/holdout, discriminating tasks, honest measured-vs-static evidence and lean references already match; do not adopt automatic paid CLI or indiscriminate model runs.",
++      "license": "Apache-2.0 in the skill-local LICENSE.txt"
++    },
++    {
++      "source": "mattpocock/skills",
++      "decision": "RETAIN",
++      "method": "Decision frontier and fact lookup already absorbed; ADK additionally handles partial answers and invalidation. Do not adopt unbounded interviews or implicit extra workers.",
++      "license": "MIT"
++    },
++    {
++      "source": "obra/superpowers",
++      "decision": "ENHANCE",
++      "method": "Retain single-hypothesis root-cause method, adopt preserve-before-rerun ordering corroborated by upstream issue and synthetic local probe.",
++      "license": "MIT"
++    },
++    {
++      "source": "git/git v2.52.0",
++      "decision": "ADOPT documented tool semantics",
++      "method": "0 good,1 target bad,125 revision untestable,128 explicit abort; current code additionally verifies known-good when initial raw status is126/127. No Git source copied.",
++      "license": "not assessed for redistribution; semantic reference only"
++    }
++  ],
++  "external_issue": {
++    "url": "https://github.com/obra/superpowers/issues/2232",
++    "created_at": "2026-08-31T06:57:02Z",
++    "updated_at": "2026-10-22T20:01:15Z",
++    "scope": "Author-reported single-project experience; independently corroborated only with our synthetic local artifact probe.",
++    "adopted_method": "Preserve volatile original failure artifacts before rerun.",
++    "not_adopted": "No unconditional soak, runner hook or claimed measured model effect."
++  },
++  "source_scope": {
++    "skill_candidate_repositories": [
++      "anthropics/skills",
++      "mattpocock/skills",
++      "obra/superpowers",
++      "getsentry/skills"
++    ],
++    "verified_skill_source_repositories": 3,
++    "unreviewed": [
++      {
++        "repo": "getsentry/skills",
++        "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
++        "reason": "Current commit only; no method claimed from unread source."
++      }
++    ],
++    "official_tool_reference": "git/git v2.52.0",
++    "web_refs": [
++      "turn24search0",
++      "turn24search1",
++      "turn24search4"
++    ],
++    "internet_exhaustive": false
++  },
++  "findings": [
++    {
++      "id": "CORE-D1",
++      "skill": "adk-systematic-debugging",
++      "classification": "confirmed method gap; no observed model failure",
++      "evidence": "Existing tight-feedback-loop reference recommends git bisect without oracle classification. Actual isolated Git2.52 fixture reports untestable step2 as first-bad with naive exit1; exit125 correctly locates semantic regression step4.",
++      "minimal_delta": "Calibrate good/bad on the intended property; map trusted pass/fail0/1, revision-only untestable125 and infrastructure/unknown abort128. Build failure is bad when buildability is the property. Retain skipped ambiguity and explicit bisect result, not checked-out HEAD.",
++      "verification": "Published mapping executed in real isolated histories including regression, skip, abort, ambiguity and build-as-target."
++    },
++    {
++      "id": "CORE-D2",
++      "skill": "adk-systematic-debugging",
++      "classification": "confirmed ordering gap; synthetic local file demonstration",
++      "evidence": "Current reference says reproduce/record but not preserve before destructive rerun. Synthetic runner deletes prior failure.json; pre-rerun copy keeps original SHA256.",
++      "minimal_delta": "Before rerun/clean/rebuild preserve volatile logs/dumps/inputs with identity and controlled destination. Missing original artifact leaves the root-cause hypothesis unproven.",
++      "verification": "Temporary-file actual runner fixture proves loss and byte-identical pre-rerun preservation; no production/model claim."
++    }
++  ],
++  "probe": {
++    "script": "/workspace/scratch/fe5385ca063a/core-diagnostic-probes.py",
++    "receipt": "/workspace/scratch/fe5385ca063a/round2-core-probes.json",
++    "execution": {
++      "chunk_id": "3ec5fc",
++      "wall_time_seconds": 0.219977485,
++      "exit_code": 0,
++      "original_token_count": 122,
++      "output": "{\"status\": \"pass\", \"output\": \"/workspace/scratch/fe5385ca063a/round2-core-probes.json\", \"naive_located_step\": 2, \"guarded_located_step\": 4, \"actual_semantic_regression_step\": 4, \"preservation\": {\"synthetic_runner\": true, \"raw_failure_after_rerun_exists\": false, \"copied_before_rerun\": true, \"original_sha256\": \"c998d87b76d649d176bba4070cb254815224e94c605127212affe61fc7e04535\", \"preserved_sha256\": \"c998d87b76d649d176bba4070cb254815224e94c605127212affe61fc7e04535\"}, \"command_count\": 32}\n"
++    },
++    "qualification": "Synthetic isolated Git/filesystem example; not deployed runtime/model A/B."
++  },
++  "negative_results": [
++    {
++      "kind": "invalid-fixture-assertion",
++      "observed_at": "2026-11-16T05:09:55Z",
++      "tool_chunk": "5b8545",
++      "exit": 1,
++      "detail": "First probe equated checked-out HEAD to identified first-bad. Git log already reported naive first-bad step2, while HEAD remained tested-good step1. Corrected reader to parse explicit '# first bad commit:'; no ADK defect.",
++      "raw_excerpt": "AssertionError: naive located_step 1; log # first bad commit: [353305fdacc2124d81bce90c0bacafd7fc79f3c9] synthetic step 2",
++      "retention": "Full original output remains in tool transcript chunk5b8545; only this excerpt is persisted."
++    },
++    {
++      "kind": "missing-local-lessons",
++      "path": "knowledge/L2-domain/lessons.md",
++      "observed": "unavailable",
++      "meaning": "No historical lesson inferred."
++    },
++    {
++      "kind": "tool-response-normalization",
++      "detail": "Initially JSON-parsed normalized plain-text GitHub content; corrected to reading content as text before drawing conclusions."
++    },
++    {
++      "kind": "evidence-hash-command-too-large",
++      "detail": "Initial combined hashing command exceeded OS argument length and never started; split independent per-file hashing succeeded. No source changed."
++    }
++  ],
++  "root_independent_review": {
++    "reviewed_at": "2026-11-16T05:06:55Z",
++    "base": "167b7cbce9ded6a8968518681c64e1da71235bd4",
++    "tree": "f20de0e0c5a6e7b96d44a82657be718b2f27ce62",
++    "scope": [
++      "agent-dev-kit",
++      "reports/current-status.md"
++    ],
++    "spec_verdict": "pass",
++    "quality_verdict": "pass",
++    "findings": [],
++    "release_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
++    "preserved": [
++      "release_authorized=false",
++      "requires_fresh_cross_repo_verification=true",
++      "current_product_maturity=unverified",
++      "current_software_m5_certified=false"
++    ],
++    "cannot_verify_from_diff": [
++      "fresh protected Root CI and gh attestation verify pending at review time",
++      "~/codex Provider and Execution Policy not-run with user-authorized source-only exception"
++    ],
++    "changed_root_files": false
++  },
++  "next_role": "Implementation after parent-authored requirements/design/tasks; no final independent review of own changes."
++}
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/evidence/embedded-audit.json b/docs/changes/20261116-skill-timing-diagnosis/evidence/embedded-audit.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..b40e79c024f294c91b23545364f61a95e27a582e
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/evidence/embedded-audit.json
+@@ -0,0 +1,584 @@
++{
++  "schema": "adk-round2-domain-audit/v1",
++  "baseline": "913b6b3a0838ccddae252a3a8536ac7d41598810",
++  "role": "read-only domain auditor; implementation authorized separately after this audit",
++  "skills": [
++    {
++      "skill": "adk-embedded-debug-transport",
++      "files": [
++        {
++          "path": "skills/adk-embedded-debug-transport/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-embedded-debug-transport/README.md",
++          "bytes": 391,
++          "sha256": "453bf2b168e3ba1a2c7176e59803709ac714749701f07809163c39614fc3220d",
++          "git_blob": "c975880282efd85f55780b4c423efcedcdf58edf"
++        },
++        {
++          "path": "skills/adk-embedded-debug-transport/SKILL.md",
++          "bytes": 5745,
++          "sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
++          "git_blob": "d4100591b2faa1f536bafce5b8a12837fcd31d09"
++        },
++        {
++          "path": "skills/adk-embedded-debug-transport/agents/openai.yaml",
++          "bytes": 173,
++          "sha256": "5482eefa68e99a12a9c0a9ec90c1d958cfac588f30c516c419c216b7dfa7ae69",
++          "git_blob": "a30652980d243b2de8379d1e02946e6ebfa18090"
++        }
++      ],
++      "decision": "保留：已区分被动/主动/状态改变/破坏性通道，含GDB暂停与MMIO读取副作用。"
++    },
++    {
++      "skill": "adk-bsp-porting-playbook",
++      "files": [
++        {
++          "path": "skills/adk-bsp-porting-playbook/SKILL.md",
++          "bytes": 5335,
++          "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
++          "git_blob": "2413d7cea3f01a73fc55a5d04067a5f2c79e51ca"
++        }
++      ],
++      "decision": "保留：目标ABI、独立输出目录、Kbuild实际参数、资源预算及设备handoff完整。"
++    },
++    {
++      "skill": "adk-register-map-design",
++      "files": [
++        {
++          "path": "skills/adk-register-map-design/SKILL.md",
++          "bytes": 3856,
++          "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919",
++          "git_blob": "06a3fa96385ee6b994fc55c4b796f6e7c03517c3"
++        }
++      ],
++      "decision": "保留：v11.3.8已补复位条件/有效位/undefined和安全读取；未发现新执行缺口。"
++    },
++    {
++      "skill": "adk-embedded-remote-debug-log-triage",
++      "files": [
++        {
++          "path": "skills/adk-embedded-remote-debug-log-triage/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-embedded-remote-debug-log-triage/README.md",
++          "bytes": 560,
++          "sha256": "9aa267e1e3eda44db5c9fadba10ce9d422da36dca50183a6236a4266f1cb8487",
++          "git_blob": "b8ad51e75a696100dfc4381cba5db3c50b1fd7a4"
++        },
++        {
++          "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
++          "bytes": 6746,
++          "sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
++          "git_blob": "9936e058634b407592f10e286ce3e3afa4e3ddb5"
++        },
++        {
++          "path": "skills/adk-embedded-remote-debug-log-triage/agents/openai.yaml",
++          "bytes": 189,
++          "sha256": "e627b547abc25a924ac9899add7d9158fa9f194a5f2a3cbf8cc4e4e30b1d380e",
++          "git_blob": "d50dba172a3732c982867bb1205024b2c193c2f2"
++        },
++        {
++          "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
++          "bytes": 3301,
++          "sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
++          "git_blob": "6b573675b3a48548fdbda7649397c0304af69d43"
++        }
++      ],
++      "decision": "保留：分层健康、输出语义、熔断、恢复后身份与HIL阶段覆盖；按问题加载详细参考。"
++    },
++    {
++      "skill": "adk-embedded-release-orchestration",
++      "files": [
++        {
++          "path": "skills/adk-embedded-release-orchestration/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-embedded-release-orchestration/README.md",
++          "bytes": 342,
++          "sha256": "e917b29015b779f128478eb2e450f27c0e1cd19d1be639321e7000677b08d5d0",
++          "git_blob": "f093c89f695ebc73ecb8895680aab8bfd6ea0804"
++        },
++        {
++          "path": "skills/adk-embedded-release-orchestration/SKILL.md",
++          "bytes": 5245,
++          "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5",
++          "git_blob": "2e3275c050211de5e0f9f65b040327d92516165b"
++        },
++        {
++          "path": "skills/adk-embedded-release-orchestration/agents/openai.yaml",
++          "bytes": 177,
++          "sha256": "42f5870f805301ab55c6d1a8fbcb378ecb1a9620cfc50c03dd297eddf82b1057",
++          "git_blob": "3baaad6a3aeaf5a9b7728492c7681dcfec82a096"
++        },
++        {
++          "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
++          "bytes": 1698,
++          "sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
++          "git_blob": "ba9fd82c7e172aec3c58a666e7f4aad614f65367"
++        }
++      ],
++      "decision": "保留：prepare/publish/device分权与多MCU部分成功恢复已有明确方法。"
++    },
++    {
++      "skill": "adk-interrupt-dma-patterns",
++      "files": [
++        {
++          "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
++          "bytes": 5406,
++          "sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
++          "git_blob": "eb6d6b7ad74a355b2c049cef81477962244352b4"
++        },
++        {
++          "path": "skills/adk-interrupt-dma-patterns/references/details.md",
++          "bytes": 1709,
++          "sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
++          "git_blob": "59b883b26bdd3a3dd27c4845ffa344e938aab24d"
++        },
++        {
++          "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
++          "bytes": 1645,
++          "sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
++          "git_blob": "671a11e2df2fe49f98d2bdcd5401c123982d950d"
++        }
++      ],
++      "decision": "保留：ownership、barrier、memory ordering与coherency分别要求；Linux官方coherent不保证顺序可作现有方法解释，未强行增改。"
++    },
++    {
++      "skill": "adk-fault-injection-recovery",
++      "files": [
++        {
++          "path": "skills/adk-fault-injection-recovery/SKILL.md",
++          "bytes": 3559,
++          "sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
++          "git_blob": "01ef6c409bdfa9d4c00cef778dea3177bf2d7e09"
++        }
++      ],
++      "decision": "保留：按实际风险选择故障、隔离授权、恢复SLA、功能/数据一致性及有条件watchdog验证。"
++    },
++    {
++      "skill": "adk-performance-profiling-embedded",
++      "files": [
++        {
++          "path": "skills/adk-performance-profiling-embedded/SKILL.md",
++          "bytes": 2983,
++          "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
++          "git_blob": "1bd0416c8e0ab72f7099c09188cf3dd5c1a2bd78"
++        },
++        {
++          "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
++          "bytes": 4590,
++          "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02",
++          "git_blob": "2c9c7b05532d2b28dc9d9585ee8e7a8788610700"
++        }
++      ],
++      "decision": "保留：v11.3.8实际运行对象身份、栈边界、有效负载/工作点与不确定性已有执行证据。"
++    },
++    {
++      "skill": "adk-embedded-storage-layout-migration",
++      "files": [
++        {
++          "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
++          "bytes": 5590,
++          "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76",
++          "git_blob": "a8e5e5a4533ecff63b5753f67515d7a702d32299"
++        }
++      ],
++      "decision": "保留：文件系统问题分流、数据保护、host演练和独立operator写操作边界明确。"
++    },
++    {
++      "skill": "adk-unit-test-embedded",
++      "files": [
++        {
++          "path": "skills/adk-unit-test-embedded/SKILL.md",
++          "bytes": 3068,
++          "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
++          "git_blob": "b97d09d30973b1c54d0ad3067a1a405dd4c034e7"
++        },
++        {
++          "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
++          "bytes": 783,
++          "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
++          "git_blob": "c1fa37aa190a10f549117442b93abe053f2464d4"
++        },
++        {
++          "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
++          "bytes": 3315,
++          "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
++          "git_blob": "83c5ad4c600bf8a6e46dcdfd7f693e399ddfbc10"
++        }
++      ],
++      "decision": "保留：独立oracle、有界状态序列、复位/回放、覆盖局限与host/target边界已具体化。"
++    },
++    {
++      "skill": "adk-driver-bringup-checklist",
++      "files": [
++        {
++          "path": "skills/adk-driver-bringup-checklist/SKILL.md",
++          "bytes": 5457,
++          "sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
++          "git_blob": "7f5154f2926ef55538983d455767208b96fb740b"
++        }
++      ],
++      "decision": "保留：分阶段验收、主动探测/读副作用、异常恢复、not-run与未授权设备写边界。"
++    },
++    {
++      "skill": "adk-cmake-cross-build",
++      "files": [
++        {
++          "path": "skills/adk-cmake-cross-build/SKILL.md",
++          "bytes": 4709,
++          "sha256": "e884e89f047dfd47248413a0d0a7d32c3f8a4e7724a9fe1b6a368f77e28a710a",
++          "git_blob": "5f9fa8ac96f75a659245007135eb99f8c38f6268"
++        }
++      ],
++      "decision": "保留：真实preset/binaryDir/config、JUnit执行状态、零/全skip、资源预算和工具链匹配已有真实测试。"
++    },
++    {
++      "skill": "adk-offline-core-dump-triage",
++      "files": [
++        {
++          "path": "skills/adk-offline-core-dump-triage/SKILL.md",
++          "bytes": 3562,
++          "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
++          "git_blob": "bff5d56495dfacc6a986e9a211074b1a559d0958"
++        }
++      ],
++      "decision": "保留：身份/库匹配与GDB提前关闭auto-load、有限可信帧及partial结论完整。"
++    },
++    {
++      "skill": "adk-static-analysis-c-cpp",
++      "files": [
++        {
++          "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
++          "bytes": 3405,
++          "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
++          "git_blob": "4bbb10a5553d0aa849c5133dba2d6bffca96476a"
++        }
++      ],
++      "decision": "保留：TU/头依赖、实际数据库、非空扫描、解析失败、警告升级与动态证据分层明确。"
++    },
++    {
++      "skill": "adk-protocol-stack-integration",
++      "files": [
++        {
++          "path": "skills/adk-protocol-stack-integration/SKILL.md",
++          "bytes": 3084,
++          "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
++          "git_blob": "9963c190e57d1929448011b823bfe2d5cfb5b824"
++        },
++        {
++          "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
++          "bytes": 1135,
++          "sha256": "6006f23c5e1d8ae8b1ea185fb4f2613c13af55b92a33cdc881fd909c6a199b9c",
++          "git_blob": "d2208cf38c5a57788237be1872ecdb95080a76d6"
++        }
++      ],
++      "decision": "保留：v11.3.8帧边界/部分IO/截断/缓冲限制/全程deadline与分层状态机已落实。"
++    },
++    {
++      "skill": "adk-driver-implementation",
++      "files": [
++        {
++          "path": "skills/adk-driver-implementation/SKILL.md",
++          "bytes": 5130,
++          "sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
++          "git_blob": "e2a26df790d5f8f668caddf131e82838e7e0e564"
++        }
++      ],
++      "decision": "保留：runtime-specific生命周期、IRQ/DMA引用、partial init/cancel/late completion与资源所有权足够明确。"
++    },
++    {
++      "skill": "adk-rtos-task-design",
++      "files": [
++        {
++          "path": "skills/adk-rtos-task-design/SKILL.md",
++          "bytes": 5815,
++          "sha256": "0c2a9cd2148878cfd8fd06c65789d3f015dc5139ed243ea46302089e2c99cea3",
++          "git_blob": "c018062338f5bd478f6fbcd71ef4e39582c6a800"
++        }
++      ],
++      "decision": "改进：保留现有RTA模型，补实际周期API/单位量化与范围、到点与超期区别、有界超期策略，以及共享timer服务与异步stop/delete生命周期。"
++    },
++    {
++      "skill": "adk-test-strategy",
++      "files": [
++        {
++          "path": "skills/adk-test-strategy/SKILL.md",
++          "bytes": 3612,
++          "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
++          "git_blob": "786a30565cd7739340e497e0adb0e1c89100ab39"
++        },
++        {
++          "path": "skills/adk-test-strategy/references/high-value-tdd.md",
++          "bytes": 3247,
++          "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
++          "git_blob": "05c40e1f1d6b19a3b98519dd3c542b4f2d3cde63"
++        }
++      ],
++      "decision": "保留：风险分级、独立expected/变体、checker校准、资源隔离及真实回执覆盖充分。"
++    },
++    {
++      "skill": "adk-embedded-diagnostic-harness",
++      "files": [
++        {
++          "path": "skills/adk-embedded-diagnostic-harness/LICENSE",
++          "bytes": 61,
++          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
++          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
++        },
++        {
++          "path": "skills/adk-embedded-diagnostic-harness/README.md",
++          "bytes": 343,
++          "sha256": "37fc552aff1dd57ab25ce50cb3d2b669a6a59cd8e59cc70030139c63b9505751",
++          "git_blob": "6005feb11ddfc27c5db48f421e1e3e6986c0d04d"
++        },
++        {
++          "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
++          "bytes": 3079,
++          "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526",
++          "git_blob": "844be83933a5cfc9014468bb77d9506cf9757eaf"
++        },
++        {
++          "path": "skills/adk-embedded-diagnostic-harness/agents/openai.yaml",
++          "bytes": 168,
++          "sha256": "e994baf88b865d08f5808d321936ea25fdbf5b7ef42abf8d196ce433f211122a",
++          "git_blob": "ddb21a32a52583d51156e186585bdb0801b196c5"
++        }
++      ],
++      "decision": "保留：expected/harness/product/environment区分，strict/env套件与实际CLI返回语义明确。"
++    },
++    {
++      "skill": "adk-hardware-debugging",
++      "files": [
++        {
++          "path": "skills/adk-hardware-debugging/SKILL.md",
++          "bytes": 2701,
++          "sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
++          "git_blob": "4207ed8d0f287c908963e0859728bd977380a040"
++        },
++        {
++          "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
++          "bytes": 1919,
++          "sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
++          "git_blob": "722fdb6ebfd3d5c68b48662a5750de5069c181f4"
++        }
++      ],
++      "decision": "保留：目标ELF/地址归一化与MCU fault差异，保留实际板端边界。"
++    },
++    {
++      "skill": "adk-integration-hil-sil",
++      "files": [
++        {
++          "path": "skills/adk-integration-hil-sil/SKILL.md",
++          "bytes": 3866,
++          "sha256": "8ae810e665542db4ca20c46a911bd98d859d70fa97caf5bd5615595ee75fb8f2",
++          "git_blob": "edfed5940559e83040789791776716bd3f30dbda"
++        }
++      ],
++      "decision": "保留：实际runner身份、资源隔离、新鲜JUnit/必跑项、实际执行状态与设备后置健康要求。"
++    },
++    {
++      "skill": "adk-bsp-analysis",
++      "files": [
++        {
++          "path": "skills/adk-bsp-analysis/SKILL.md",
++          "bytes": 3928,
++          "sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
++          "git_blob": "929e9ba760ad73979ba41e028385d7efaef2d5a4"
++        },
++        {
++          "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
++          "bytes": 1666,
++          "sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
++          "git_blob": "b9016cd4f521354f72a6ec2abbf6a7b8fd425c67"
++        }
++      ],
++      "decision": "保留：按问题展开的初始化/资源链、权威章节、历史workaround与confirmed/inferred/unknown分离。"
++    }
++  ],
++  "external_sources": [
++    {
++      "repo": "Jeffallan/claude-skills",
++      "path": "skills/embedded-systems/SKILL.md",
++      "copy": "jeffallan-embedded.md",
++      "decision": "借鉴按问题加载参考的组织方式（ADK已有）；拒绝直接移植ISR/IRQ模板、固定优先级/栈水位门槛及不检查所有返回值的示例。",
++      "commit": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
++      "url": "https://github.com/Jeffallan/claude-skills/blob/078a25cc5bfd8011459be7b91d004e900c1d02d3/skills/embedded-systems/SKILL.md",
++      "sha256": "26695ca78cdbbfd3657dc143b28308a293e798399df430cee6116e758cc3f4a8",
++      "bytes": 6295,
++      "read": true,
++      "read_scope": "whole file",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/jeffallan-embedded.md"
++    },
++    {
++      "repo": "Mindrally/skills",
++      "path": "embedded-stm32/SKILL.md",
++      "copy": "mindrally-embedded-stm32.md",
++      "decision": "借鉴generated/user边界、资源所有权与分层测试（ADK已有）；拒绝同一RX buffer在消费者读取前重新交给DMA的示例，也不跨MCU套用CFSR/HFSR。",
++      "commit": "7682ca77710e0971eab4e0ae5dddfa281aea0ba5",
++      "url": "https://github.com/Mindrally/skills/blob/7682ca77710e0971eab4e0ae5dddfa281aea0ba5/embedded-stm32/SKILL.md",
++      "sha256": "dcc30759b8225eb0b0b091c057e305f6dd7c32bc76fdcaea4b63be48a6e8dac7",
++      "bytes": 9302,
++      "read": true,
++      "read_scope": "whole file",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/mindrally-embedded-stm32.md"
++    },
++    {
++      "repo": "rovinax/embedded-skills",
++      "path": "skills/embedded-rtos-design/SKILL.md",
++      "copy": "rovinax-embedded-rtos.md",
++      "decision": "采用固定周期意图，经官方API纠正；拒绝双参osDelayUntil、ticks=ms、固定任务优先级/禁止所有ISR控制计算和无条件拆任务。",
++      "commit": "022ce31b469b1a1d0c1261c2c8d0f3e07b2c0bbc",
++      "url": "https://github.com/rovinax/embedded-skills/blob/022ce31b469b1a1d0c1261c2c8d0f3e07b2c0bbc/skills/embedded-rtos-design/SKILL.md",
++      "sha256": "894e75a646c44e54447933cd67c494e9a6712529b82837da962893f19afdb0d6",
++      "bytes": 9790,
++      "read": true,
++      "read_scope": "whole file",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/rovinax-embedded-rtos.md"
++    },
++    {
++      "repo": "FreeRTOS/FreeRTOS-Kernel",
++      "path": "include/projdefs.h",
++      "copy": "projdefs.h",
++      "decision": "核默认pdMS_TO_TICKS整数除法、宏可覆盖及最终TickType_t收窄；真实头文件编译运行30向量。",
++      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
++      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/projdefs.h",
++      "sha256": "87e8328c5d844abde3593291b36a2c235b2ae6e41402c0314fb54f933d32c4b9",
++      "bytes": 7364,
++      "read": true,
++      "read_scope": "whole file",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/projdefs.h"
++    },
++    {
++      "repo": "FreeRTOS/FreeRTOS-Kernel",
++      "path": "include/task.h",
++      "copy": "task.h",
++      "decision": "核相对vTaskDelay与绝对xTaskDelayUntil、previous wake更新和return值只表示是否阻塞。",
++      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
++      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/task.h",
++      "sha256": "463d29016b1c11dd7c5f9e67b41bf8c1897d9c2dcc510cdc37e3158f32584222",
++      "bytes": 170813,
++      "read": true,
++      "read_scope": "vTaskDelay and xTaskDelayUntil",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/task.h"
++    },
++    {
++      "repo": "FreeRTOS/FreeRTOS-Kernel",
++      "path": "tasks.c",
++      "copy": "tasks.c",
++      "decision": "只审读xTaskDelayUntil实现，确认到点now==wake时pdFALSE、每次均推进previous wake；本地保存对应原始函数摘录。",
++      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
++      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/tasks.c",
++      "sha256": "6de295f333f31818de546d6eb72b877c5a6964980f14f80bc1e17b19b7ff9fc4",
++      "bytes": 365244,
++      "read": true,
++      "read_scope": "xTaskDelayUntil",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/tasks.c"
++    },
++    {
++      "repo": "FreeRTOS/FreeRTOS-Kernel",
++      "path": "include/timers.h",
++      "copy": "timers.h",
++      "decision": "核xTimerStop/Delete pdPASS仅成功投递timer command queue，不证明共享回调context已无使用者。",
++      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
++      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/timers.h",
++      "sha256": "aff317a330935160abbd00a3a60a973653921e3a022216dcb04d804678c375b8",
++      "bytes": 66027,
++      "read": true,
++      "read_scope": "xTimerStop and xTimerDelete",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/timers.h"
++    },
++    {
++      "repo": "FreeRTOS/FreeRTOS-Kernel-Book",
++      "path": "ch06.md",
++      "copy": "freertos-book-ch06.md",
++      "decision": "审读6.2、6.4及命令入队语义；FreeRTOS timer callback共享daemon task且不能进入Blocked。",
++      "commit": "ba20b2f820926587d5ee20ce312b3789d63f795c",
++      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel-Book/blob/ba20b2f820926587d5ee20ce312b3789d63f795c/ch06.md",
++      "sha256": "319e7a420fc9e788e3740ac4c2c2addd351fa9cb08560cb6c693dfe6e46f8403",
++      "bytes": 50991,
++      "read": true,
++      "read_scope": "sections 6.2, 6.4 and command queue semantics",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/freertos-book-ch06.md"
++    },
++    {
++      "repo": "ARM-software/CMSIS_6",
++      "path": "CMSIS/RTOS2/Include/cmsis_os2.h",
++      "copy": "cmsis_os2.h",
++      "decision": "核osDelayUntil单absolute-tick参数；用实际头文件编译确认双参错误和单参合法。",
++      "commit": "69b5aa343e618b74ffb40ca2b13f73a0cda7ab76",
++      "url": "https://github.com/ARM-software/CMSIS_6/blob/69b5aa343e618b74ffb40ca2b13f73a0cda7ab76/CMSIS/RTOS2/Include/cmsis_os2.h",
++      "sha256": "0de5e6ff219ee13bcd1b1ca2b6446d68cb56b6a11e16494e9577bb2ffdd52a70",
++      "bytes": 42623,
++      "read": true,
++      "read_scope": "whole file",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/cmsis_os2.h"
++    },
++    {
++      "repo": "torvalds/linux",
++      "path": "Documentation/core-api/dma-api-howto.rst",
++      "copy": "dma-api-howto.rst",
++      "decision": "审读coherent DMA与ordering段；现ADK明确memory ordering，作为保留依据，不额外扩写。",
++      "commit": "aebb7274476403040d582c61478df8f4a7bf9cd3",
++      "url": "https://github.com/torvalds/linux/blob/aebb7274476403040d582c61478df8f4a7bf9cd3/Documentation/core-api/dma-api-howto.rst",
++      "sha256": "92070ca3b5e150580c26d39be990b109053951a767fb3fd1d695aece478bbff2",
++      "bytes": 35316,
++      "read": true,
++      "read_scope": "coherent DMA ordering and cache line sharing",
++      "raw_copy_bytes_equal_retrieval": true,
++      "git_blob": null,
++      "git_blob_verification": "not-performed",
++      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/dma-api-howto.rst"
++    }
++  ],
++  "observations": {
++    "host_probe": "round2-embedded-evidence/probe-observed.json",
++    "source_evidence": "round2-embedded-evidence/",
++    "native_scheduler_executed": false,
++    "device_executed": false,
++    "scope": "22 core Skills, all tracked files under those skill directories; upstream whole files fetched, relevant sections reviewed; no external code installed or imported to ADK"
++  },
++  "negative_results": [
++    "knowledge/L2-domain/lessons.md absent; no historical lesson invented.",
++    "External rovinax osDelayUntil double-argument example failed actual CMSIS header syntax validation; the failure is external example evidence, not an ADK regression.",
++    "First probe executed successfully before raw receipt persistence; second identical bounded execution was retained in probe-observed.json. No performance/reliability claim from repeats."
++  ],
++  "recommendation": "Modify only adk-rtos-task-design, keep 21 other assigned Skills. Net directory bytes should not increase; keep RTA formula/preconditions and independent priorities/IRQ/stack/queue budgets. Tests and evidence must label host arithmetic/compile/model vs actual RTOS scheduling/HIL."
++}
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/evidence/optional-audit.json b/docs/changes/20261116-skill-timing-diagnosis/evidence/optional-audit.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..c9e63aff89c1ee1817b240ff243e60714df2826f
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/evidence/optional-audit.json
+@@ -0,0 +1,454 @@
++{
++  "schema": "adk-readonly-optional-research/v1",
++  "reviewer": "ai/root/research_optional_effectiveness",
++  "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
++  "observed_at": "2026-11-16T05:08:38Z",
++  "role": "read-only audit and source research",
++  "scope": {
++    "skills": 9,
++    "files": 15,
++    "file_reads": "complete",
++    "source_skills": 4,
++    "source_primary_specifications": 1,
++    "repo_mutations": false,
++    "external_scripts_executed": false,
++    "paid_models": false,
++    "optional_diff_at_observation": ""
++  },
++  "files": [
++    {
++      "path": "optional-skills/adk-data-fetch/SKILL.md",
++      "bytes": 4088,
++      "sha256": "93f99ba41694cd8bc4931d67a7fcbaf4f62540c17811b2db41a14062430ab011",
++      "git_blob": "01e86153b30390e4a7e3c6a2f415d6a0810acc1e",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
++      "bytes": 3047,
++      "sha256": "3cff893650e3fa6da6ec383a3eb05bd18468f5de7794c3c2d9f1f067c2f7d373",
++      "git_blob": "db1594b7ace1cf64c6bec55658369fd7f27929e5",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
++      "bytes": 2892,
++      "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
++      "git_blob": "54ecaeec74ef1356e29e48df1c7534f187d39fe5",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
++      "bytes": 8664,
++      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b",
++      "git_blob": "6a84b0ee88efaa1ba4542c15f037e997f91a9d25",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-external-practice-absorption/agents/openai.yaml",
++      "bytes": 337,
++      "sha256": "a3778c89b5a1937facc40e463d91966a70a0c8e7f31c2afbc50d4f302d8cb4fe",
++      "git_blob": "d5bfa4d04e441df464f7d93a819ca8254af1d6b4",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
++      "bytes": 2301,
++      "sha256": "b653aafe11d25922f895874cc1e61989f7d1f8d892efec5e3b7f830c4fa09cb4",
++      "git_blob": "1942cac37965917b5979283eb8108f9bbdc5be5f",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-prose-revision/SKILL.md",
++      "bytes": 4503,
++      "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
++      "git_blob": "382ed9cdf9aa6029d482d0e4a4a6b1fe3e43a51b",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-prose-revision/references/review-cases.md",
++      "bytes": 1851,
++      "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
++      "git_blob": "5feb15f8f3d14a0bb97a4f5156ac2d099e4766c6",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
++      "bytes": 8270,
++      "sha256": "acff83f54f2f15e0160d18b3e6b3e84f09be4b75b4d06e8b459c2b3345bc635f",
++      "git_blob": "e123bcdb9c01b3fe3059f17fd5df710476561ba5",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
++      "bytes": 1879,
++      "sha256": "6fc92933a7ea418d824d2e92eb64bdd26e0e25e53969d4dd3ce95de0c54b0d15",
++      "git_blob": "b3d5842fd23228b869bc568121dbd5c2db412850",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
++      "bytes": 6646,
++      "sha256": "d50c3fc1512a58337ab066e60107d17ef25ddcae1bfc0a9914f444b7a5469fad",
++      "git_blob": "fbf4f9c71205fc5c018831dc26b4e28eb7fd7672",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
++      "bytes": 6726,
++      "sha256": "5aba1c61b0686bc0bb25818834eb01a91d60b05a0de91c40fb73cedda5e23de3",
++      "git_blob": "16bee5898462338d40cb2b07f6b4eac67b3d48a5",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
++      "bytes": 8108,
++      "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
++      "git_blob": "204daead15aa9a7a67f6cf9ac6840bf15a42d235",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
++      "bytes": 2427,
++      "sha256": "2a36680bf3a8d60159bcd8672a8cda6995b0740d425970615ecbe23163236acf",
++      "git_blob": "8bd63f87cf6837fc00967656e17e66e49e3eb1b2",
++      "read": "complete"
++    },
++    {
++      "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
++      "bytes": 4805,
++      "sha256": "7723c6f6caa2c86a3ada3ccf95aaadf5ab7ea2a0003087f80c2e0ed9355959f0",
++      "git_blob": "af110d715613b5f6ec5ec4798131d7cd75571cb6",
++      "read": "complete"
++    }
++  ],
++  "decisions": [
++    {
++      "skill": "adk-data-fetch",
++      "version": "1.0.3",
++      "decision": "RETAIN",
++      "reason": "独立安装父/子Skill、授权范围、缺子技能停止及partial/not-verified状态传递已经完整，未发现本轮可证新增缺口。"
++    },
++    {
++      "skill": "adk-fetch-url-content",
++      "version": "1.0.3",
++      "decision": "RETAIN",
++      "reason": "重定向/IP、请求预算、真实内容类型、编码、相对链接/base语义、登录壳与截断状态均明确；不为研究增加爬虫或执行器。"
++    },
++    {
++      "skill": "adk-email-imap-fetch",
++      "version": "1.0.3",
++      "decision": "RETAIN",
++      "reason": "EXAMINE、UIDVALIDITY+UID、BODY.PEEK、重连重查和逐项partial已有明确约束；无需新增邮箱写权限。"
++    },
++    {
++      "skill": "adk-external-practice-absorption",
++      "version": "1.0.2",
++      "decision": "RETAIN",
++      "reason": "已有source-only/scoped-adoption/portfolio-intake，来源pin与独立decision边界完整；继续任务不重复intake规则存在。"
++    },
++    {
++      "skill": "adk-incident-rca-report",
++      "version": "1.1.0",
++      "decision": "ENHANCE_CANDIDATE",
++      "reason": "简短RCA与证据因果方法保留；时间线缺乏事件/采集时间与时区/时钟偏差的明确区分，有有限可执行设计案例。"
++    },
++    {
++      "skill": "adk-prose-revision",
++      "version": "1.0.0",
++      "decision": "RETAIN",
++      "reason": "report/revise意图、事实与限定保真、原稿风格及无需修改路径完备，反例reference已清楚标记非模型实测。"
++    },
++    {
++      "skill": "adk-security-supply-chain",
++      "version": "1.1.4",
++      "decision": "RETAIN",
++      "reason": "source-only/adoption/runtime分层、source-to-sink、扫描遗漏与许可边界已有具体步骤；未以第三方词频或星数添加新的检查层。"
++    },
++    {
++      "skill": "adk-skill-composition-governance",
++      "version": "1.1.6",
++      "decision": "ENHANCE_CANDIDATE",
++      "reason": "主流程/按需评测保留；生命周期Creation Gate模板10行无证据却预填pass，建议改为待验证默认状态。"
++    },
++    {
++      "skill": "adk-test-flakiness-triage",
++      "version": "1.0.6",
++      "decision": "RETAIN",
++      "reason": "v11.3.8新增原生Condition/readiness/0值/取消与预算边界完整，样本统计和顺序污染限制明确；不重复改动。"
++    }
++  ],
++  "external_sources": [
++    {
++      "repo": "cloudflare/skills",
++      "path": "skills/workers-profiling/SKILL.md",
++      "commit": "cbf893b954222276bf1af57e5f23379231e0efb9",
++      "blob": "792be905e836a3a892200f2c9f5a3ecbdc710314",
++      "url": "https://github.com/cloudflare/skills/blob/cbf893b954222276bf1af57e5f23379231e0efb9/skills/workers-profiling/SKILL.md",
++      "license_blob": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
++      "bytes": 2204,
++      "sha256": "fec05a080c90f019e1e93e5e1ca3416bb89362655dfc158458301f461cb29839",
++      "read": "complete",
++      "decision": "RETAIN",
++      "adk_target": "adk-performance-profiling-embedded",
++      "reason": "实际部署版本、profile source map和采样证据支持最小改动的方法与现有实运行身份/符号映射边界相符；不引入Cloudflare专属CLI或产品路由。"
++    },
++    {
++      "repo": "supabase/agent-skills",
++      "path": "skills/supabase-postgres-best-practices/SKILL.md",
++      "commit": "c9be0e931b7930f7d02126d04774d904c381e7d7",
++      "blob": "6400792389dfcc82c81953054e546bd72ebcd259",
++      "url": "https://github.com/supabase/agent-skills/blob/c9be0e931b7930f7d02126d04774d904c381e7d7/skills/supabase-postgres-best-practices/SKILL.md",
++      "license_blob": "d3c9e94fbc6c28f66ecb5a01407d543c99c811b6",
++      "bytes": 3231,
++      "sha256": "ad65e776f45e761bafc609d3f506c77c1032225aa65e0c4c02f241b8071e5855",
++      "read": "complete",
++      "decision": "OBSERVE",
++      "adk_target": "none",
++      "reason": "Postgres专属规则不属于现有ADK嵌入式技能职责；按影响分类与按需读reference已存在，不新增数据库skill或强制广触发。"
++    },
++    {
++      "repo": "github/awesome-copilot",
++      "path": "skills/incident-postmortem/SKILL.md",
++      "commit": "dc0083dbe22133bfa7ce3500dee85e187e0cd47a",
++      "blob": "383e3ad302b42b0812514d302094b26f234eade8",
++      "url": "https://github.com/github/awesome-copilot/blob/dc0083dbe22133bfa7ce3500dee85e187e0cd47a/skills/incident-postmortem/SKILL.md",
++      "license_blob": "89bc5e962c9944cdb050887062afdaaf89be504a",
++      "bytes": 9902,
++      "sha256": "9f5f3da1d92ff4e798ce02f8540d9554b647039089903b041f4107455059689b",
++      "read": "complete",
++      "decision": "ENHANCE_CANDIDATE",
++      "adk_target": "adk-incident-rca-report",
++      "reason": "可按需吸收UTC时间线与检测/缓解/预防行动区分；不采用每次必做鱼骨/5Why、逐节阻塞追问、固定输出目录或外部转换安装。"
++    },
++    {
++      "repo": "wshobson/agents",
++      "path": "plugins/incident-response/skills/postmortem-writing/SKILL.md",
++      "commit": "9c61ab243def98f72da12abd41cfcf5bcd91af9d",
++      "blob": "f68b37f973cbca925ce4503c656166968b7faf97",
++      "url": "https://github.com/wshobson/agents/blob/9c61ab243def98f72da12abd41cfcf5bcd91af9d/plugins/incident-response/skills/postmortem-writing/SKILL.md",
++      "license_blob": "326f0a55c96e672fedf9d807ca043c00df05ba0e",
++      "bytes": 6795,
++      "sha256": "1a9d5b19b9ab32acb6616fb0990b8307888da0169537929916762d91501b84e0",
++      "read": "complete",
++      "decision": "RETAIN",
++      "adk_target": "adk-incident-rca-report",
++      "reason": "保留基于证据的简短RCA，不吸收强制五层追问、固定会议/日程或把文档与测试缺失机械判根因；细节下沉方法现已存在。"
++    },
++    {
++      "repo": "open-telemetry/opentelemetry-specification",
++      "path": "specification/logs/data-model.md",
++      "commit": "a4e05d9704fc5218d85a4154fb5b143ea3f5340e",
++      "blob": "1e58b7f18fb547f45132b185f241f3b097f76bb0",
++      "url": "https://github.com/open-telemetry/opentelemetry-specification/blob/a4e05d9704fc5218d85a4154fb5b143ea3f5340e/specification/logs/data-model.md",
++      "bytes": 20155,
++      "sha256": "3ee2c391a5d3262130582df89a3dc5a5640d837d010734ea79458fe3ece31173",
++      "read": "complete",
++      "decision": "ENHANCE_CANDIDATE",
++      "adk_target": "adk-incident-rca-report",
++      "reason": "事件发生Timestamp与采集ObservedTimestamp语义不同；可补齐时间来源和时区/时钟偏差边界，不能用观察顺序制造因果。"
++    }
++  ],
++  "additional_primary_web_sources": [
++    {
++      "url": "https://sre.google/workbook/postmortem-culture/",
++      "ref": "turn23search0",
++      "coverage": "searched official primary page; concrete action ownership, priority and measurable end state corroboration"
++    },
++    {
++      "url": "https://sre.google/resources/practices-and-processes/incident-management-guide/",
++      "ref": "turn23search1",
++      "coverage": "searched official primary page; detection/mitigation/coordination improvement corroboration"
++    },
++    {
++      "url": "https://opentelemetry.io/docs/specs/otel/logs/data-model/",
++      "ref": "turn23search2",
++      "coverage": "searched official primary page then fetched complete commit-pinned source"
++    }
++  ],
++  "candidates": [
++    {
++      "id": "optional-rca-time-evidence",
++      "skill": "adk-incident-rca-report",
++      "classification": "design-case; missing explicit method, not reproduced model failure",
++      "minimal_change": "在现有Workflow第1步加入事件发生/采集时间、原时区、统一比较基准及未知时钟偏差；发生时间未知不把采集时刻当真实起点，不凭排序证明因果。第5步仅针对已观察缺口区分检测/缓解/预防行动；不强制三类全填。",
++      "acceptance": [
++        "对给定跨时区事件与迟到采集记录，正确区分两种顺序，避免把后发生部署归为前发生故障的充分根因。",
++        "时间或时钟偏差不明保持unknown；即便因果未证实，仍可提出与已证检测/缓解缺口对应的行动。",
++        "单因果短RCA、事实/假设/未决区分、已有权限与原始证据继续保留。"
++      ],
++      "actual_probe": {
++        "kind": "design-case-not-model-evaluation",
++        "event_order": [
++          "fault",
++          "deployment"
++        ],
++        "observed_order": [
++          "deployment",
++          "fault"
++        ],
++        "utc_event_times": {
++          "fault": "2026-11-16T04:00:10+00:00",
++          "deployment": "2026-11-16T04:00:40+00:00"
++        },
++        "deployment_after_fault_seconds": 30
++      },
++      "probe_exit": 0,
++      "model_behavior_effect": "not-measured"
++    },
++    {
++      "id": "optional-lifecycle-unproven-pass-default",
++      "skill": "adk-skill-composition-governance",
++      "classification": "observed template defect; no model failure claim",
++      "minimal_change": "Creation Gate空白模板默认待验证/not-run，而非pass；加入填写真实decision与evidence提示。",
++      "actual_observation": {
++        "predeclared_pass_rows": 10,
++        "rows": [
++          {
++            "gate": "Duplicate skill checked",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Trigger overlap checked",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Profile ownership decided",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Reuse threshold met",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Pilot requirement declared",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Fallback / replaced_by declared",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Output contract declared",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Deterministic guard declared",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Evolution evidence declared",
++            "default_decision": "pass",
++            "evidence": ""
++          },
++          {
++            "gate": "Distribution channel reviewed",
++            "default_decision": "pass",
++            "evidence": ""
++          }
++        ]
++      },
++      "acceptance": [
++        "未填证据的原始模板不能包含成功裁决默认值。",
++        "实际填写的通过裁决必须有证据；现有生命周期与行为资格边界不变。"
++      ],
++      "model_behavior_effect": "not-measured"
++    }
++  ],
++    "minimal_patch_suggestions": [
++      {
++        "path": "optional-skills/adk-incident-rca-report/SKILL.md",
++        "version": "1.1.0 -> 1.1.1",
++        "changes": [
++          {
++            "anchor": "Workflow 1",
++            "replacement": "1. 固定事件范围、版本、影响与证据；时间线保留原时区，区分事件发生与采集时间，仅可比时统一时基。未知时间/时钟偏差记 `unknown`，不凭排序断定因果。"
++          },
++          {
++            "anchor": "Workflow 5",
++            "replacement": "5. 按实际缺口选择检测/缓解/预防行动，给具体改进、复验信号与实际 owner（未知则待确认），不强制三类齐全。生产、安全、数据写入或回滚仍维持原权限与恢复边界。"
++          },
++          {
++            "anchor": "Report Incident field",
++            "replacement": "- Incident / status / time range + time source / timezone / uncertainty:"
++          },
++          {
++            "anchor": "Report Remediation field",
++            "replacement": "- Action (detect | mitigate | prevent) / owner / verification:"
++          }
++        ],
++        "preserve": "Workflow 2/3/4/6的短因果链、可选5-Why、unresolved、短报告默认；全部约束与文档保真保持。"
++      },
++      {
++        "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
++        "related_version": "adk-skill-composition-governance 1.1.6 -> 1.1.7",
++        "changes": [
++          {
++            "anchor": "Creation Gate table",
++            "replacement": "10个空白Evidence行的Decision从pass改为pending。"
++          },
++          {
++            "anchor": "Creation Gate intro",
++            "replacement": "仅按需增加一句：Blank rows are pending, not evidence; set a decision only from actual review results and link its evidence."
++          }
++        ],
++        "preserve": "不变更Canonical Manifest生命周期enum，不增加Gate/registry/engine；下方原行为与资格边界保留。"
++      }
++    ],
++    "existing_tests_and_assertions_to_preserve": [
++      {
++        "path": "tests/test_document_authoring_skills.py",
++        "assertions": [
++          "DocumentAuthoringSkillTests.test_known_overconstraint_regressions: RCA包含“5-Why 为可选分析工具”和“unresolved”，不包含“5-Why 分析必须至少穿透到第 3 层”。",
++          "test_preserve_evidence_and_optional_prose_boundary: RCA保留“文档保真”。",
++          "source cases schema adk-document-authoring-source-cases/v1、evaluation_status not-measured、unique IDs与原8种skill集合不变。"
++        ]
++      },
++      {
++        "path": "tests/fixtures/document_authoring_cases.json",
++        "assertions": [
++          "保留rca-confirmed、rca-unknown、rca-negative旧成功/未知/无设备边界；可追加一个迟到日志跨时区design case，保持not-measured。"
++        ]
++      },
++      {
++        "path": "tests/test_skill_quality_methods.py",
++        "assertions": [
++          "test_reader_first_acceptance_and_feedback_are_source_only所需生命周期markers继续存在：failure_trace_ref/source_sha/design-case/not-measured/holdout/Lifecycle Review (report-only)/required_and_forbidden_footprint/owner_decision。"
++        ]
++      },
++      {
++        "path": "manifests/skill_content_contracts_v2.json",
++        "assertions": [
++          "RCA support/fallback/read-only/explicit-only与composition meta/primary/read-only均不改变。"
++        ]
++      },
++      {
++        "path": "tests/test_optional_skills.sh + tests/test_convert.sh + tests/test_install.sh",
++        "assertions": [
++          "RCA仍仅显式选择安装并能转换；不引入平台依赖。"
++        ]
++      }
++    ],
++    "proposed_verification": [
++      "模板结构检查可以解析Creation Gate表，验证任何Evidence为空的模板行都没有pass/accepted等肯定结果；这是空证据不得预授成功的结构不变量，不以新增标语字符串作为唯一验收。",
++      "RCA时间设计案例沿用datetime实际比较，独立消费者只收到原日志与候选Skill；应输出真实UTC事件顺序、区分采集顺序、保留根因未知。不得把这个少量案例升级为真实模型A/B或生产效果证明。",
++      "运行既有document-authoring/skill-quality/optional/content定向测试；具体全回归由主Agent统筹，不重复全量执行。"
++    ],
++  "rejected_or_deferred": [
++    "不凭Skill仓数量/星数或官方品牌保证质量。",
++    "不复制上游完整Skill包、脚本或执行器。",
++    "不引入Supabase/Cloudflare平台专属运行与安装依赖。",
++    "不采用wshobson固定5-Why深度和固定事故会议时间表。",
++    "不采用awesome-copilot每次强制鱼骨、三组输入未齐便阻塞、固定文档目录和自动转换安装。",
++    "不以synthetic datetime设计案例冒充模型A/B、生产事故或RCA效果实测。",
++    "不为已充分覆盖的7项Optional制造改动。"
++  ]
++}
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/evidence/portfolio-audit.json b/docs/changes/20261116-skill-timing-diagnosis/evidence/portfolio-audit.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..f5462ddc91fa331928cafeb2ca87b96493750c3e
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/evidence/portfolio-audit.json
+@@ -0,0 +1,455 @@
++{
++  "schema": "adk-skill-followup-audit/v1",
++  "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
++  "verified_at": "2026-11-16T05:17:01.056736+00:00",
++  "skill_count": 65,
++  "file_count": 153,
++  "baseline_bytes": 421746,
++  "baseline_coverage": "all tracked core and optional files; blob/SHA256/bytes verified",
++  "selected_skills": [
++    "adk-incident-rca-report",
++    "adk-rtos-task-design",
++    "adk-skill-composition-governance",
++    "adk-systematic-debugging"
++  ],
++  "retained_count": 61,
++  "external_repository_count": 16,
++  "external_file_count": 23,
++  "external_repositories": [
++    "ARM-software/CMSIS_6",
++    "FreeRTOS/FreeRTOS-Kernel",
++    "FreeRTOS/FreeRTOS-Kernel-Book",
++    "Jeffallan/claude-skills",
++    "Mindrally/skills",
++    "anthropics/skills",
++    "cloudflare/skills",
++    "git/git",
++    "github/awesome-copilot",
++    "mattpocock/skills",
++    "obra/superpowers",
++    "open-telemetry/opentelemetry-specification",
++    "rovinax/embedded-skills",
++    "supabase/agent-skills",
++    "torvalds/linux",
++    "wshobson/agents"
++  ],
++  "audit_sources": [
++    {
++      "path": "evidence/core-audit.json",
++      "sha256": "273cf660b7ab6cb1f67bb0319c8ea911f370b38b075441e7ee757ab195fbb4f6",
++      "bytes": 44073
++    },
++    {
++      "path": "evidence/embedded-audit.json",
++      "sha256": "52330f35937ff3915296c6065e9945b4a08ba900dfa1a3d65776436547bd2fb9",
++      "bytes": 26856
++    },
++    {
++      "path": "evidence/optional-audit.json",
++      "sha256": "483124b8f8e08474da9db0670b70f25d7958ba6b60501063e1cdcb9e4579b32c",
++      "bytes": 20703
++    }
++  ],
++  "decisions": [
++    {
++      "skill": "adk-runtime-router",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "唯一primary、版本适配与optional真实加载边界完整。"
++    },
++    {
++      "skill": "adk-context-engineering",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "stable/dynamic/evidence隔离、自包含交接与按需读取已覆盖。"
++    },
++    {
++      "skill": "adk-token-context-governance",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "真实trace优先、raw回退，源码字节不冒充Token收益。"
++    },
++    {
++      "skill": "adk-requirements-triage",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "brief/execution/high-risk分流，既有批准直接进入执行。"
++    },
++    {
++      "skill": "adk-structured-requirements-questioning",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "Explore/Challenge、frontier、部分回答和依赖修订完整。"
++    },
++    {
++      "skill": "adk-repo-prompt-analysis",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "实际callsite、role和动态输入信任边界完整，最小报告。"
++    },
++    {
++      "skill": "adk-skill-deep-analysis",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "有界source-discovery、固定来源、净增益与可实施handoff已有。"
++    },
++    {
++      "skill": "adk-lightweight-planning",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "只读计划按真实规模最小化，执行意图退出此skill。"
++    },
++    {
++      "skill": "adk-task-breakdown",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "纵向切片、expand/migrate/contract及Ready Frontier已有。"
++    },
++    {
++      "skill": "adk-parallel-agent-governance",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "独立写集、data-only交接、summary-first与真实并行收益要求已有。"
++    },
++    {
++      "skill": "adk-worktree-governance",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "上一轮Git只读取证已修，保留dirty保护与独立清理授权。"
++    },
++    {
++      "skill": "adk-context-compress-handoff",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "自包含恢复摘要、raw指针、excluded及最多3动作保持。"
++    },
++    {
++      "skill": "adk-interface-contract-design",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "方向性版本/能力协商、生命周期/副作用与双向规格核对完整。"
++    },
++    {
++      "skill": "adk-adr-writer",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "按风险写ADR，真实备选、保真和冷读边界完整。"
++    },
++    {
++      "skill": "adk-component-api-stability",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "源码API/二进制ABI/旧消费者/行为验证分离，保留真实退出码。"
++    },
++    {
++      "skill": "adk-goal-authoring",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "原验收分母、可关闭批次、预算null与bounded resume已有。"
++    },
++    {
++      "skill": "adk-planning-execution-loop",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "inline fast path、同快照复用、未知副作用对账和真实进展已有。"
++    },
++    {
++      "skill": "adk-code-simplification",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "以理解负担而非行数判断，保留cleanup与副作用顺序。"
++    },
++    {
++      "skill": "adk-systematic-debugging",
++      "group": "core",
++      "decision": "ENHANCE",
++      "reason": "二分oracle分类和重跑前证据保全需补，其余因果/单变量/领域方法保留。"
++    },
++    {
++      "skill": "adk-artifact-gating",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "READY/PASS与workflow阶段区分，真实通过才填PASS已澄清。"
++    },
++    {
++      "skill": "adk-pilot-framework",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "smoke与收益比较、失败/blocked/inconclusive区分，保留重试。"
++    },
++    {
++      "skill": "adk-verification-before-completion",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "checkpoint/goal-final、checker校准、实际运行与资格边界已覆盖。"
++    },
++    {
++      "skill": "adk-code-review-loop",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "原始Git快照取证已落地，局部反馈/完整审查和双裁决保持。"
++    },
++    {
++      "skill": "adk-repo-drift-remediation",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "源事实issue-map、共享配置串行、只读状态与残留理由已有。"
++    },
++    {
++      "skill": "adk-commit-pr-quality-gate",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "message-only/PR-readiness/专项门禁按实际影响加载。"
++    },
++    {
++      "skill": "adk-release-versioning",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "正式baseline、完整历史、不可变tag与精确资产身份已有。"
++    },
++    {
++      "skill": "adk-production-field-readiness",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "设备六类证据/OTA回滚/生产签署边界完整；多人human-active定义疑点无真实消费依据，OBSERVE。"
++    },
++    {
++      "skill": "adk-cross-team-handoff",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "lite/formal、真实receiver签收及冷读验收完整。"
++    },
++    {
++      "skill": "adk-branch-closeout",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "同范围授权延续、精确head/check及fresh-main已有，删除单独授权。"
++    },
++    {
++      "skill": "adk-after-action-review",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "lite/standard/promotion分流，普通复盘无需长期晋级空字段。"
++    },
++    {
++      "skill": "adk-memory-curator",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "report-only、授权读取、仅文件名敏感扫描及冲突治理清晰。"
++    },
++    {
++      "skill": "adk-archive-governance",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "hash mismatch保留原值和可信原件，不盲重算；入口需核验。"
++    },
++    {
++      "skill": "adk-knowledge-archive",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "新归档/治理分离，topic/路径/来源/隐私边界完整。"
++    },
++    {
++      "skill": "adk-engineering-growth-review",
++      "group": "core",
++      "decision": "RETAIN",
++      "reason": "index-first、跨时点证据、不过度采集/外发，单次观察不代表长期能力。"
++    },
++    {
++      "skill": "adk-embedded-debug-transport",
++      "group": "embedded",
++      "decision": "保留：已区分被动/主动/状态改变/破坏性通道，含GDB暂停与MMIO读取副作用。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-bsp-porting-playbook",
++      "group": "embedded",
++      "decision": "保留：目标ABI、独立输出目录、Kbuild实际参数、资源预算及设备handoff完整。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-register-map-design",
++      "group": "embedded",
++      "decision": "保留：v11.3.8已补复位条件/有效位/undefined和安全读取；未发现新执行缺口。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-embedded-remote-debug-log-triage",
++      "group": "embedded",
++      "decision": "保留：分层健康、输出语义、熔断、恢复后身份与HIL阶段覆盖；按问题加载详细参考。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-embedded-release-orchestration",
++      "group": "embedded",
++      "decision": "保留：prepare/publish/device分权与多MCU部分成功恢复已有明确方法。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-interrupt-dma-patterns",
++      "group": "embedded",
++      "decision": "保留：ownership、barrier、memory ordering与coherency分别要求；Linux官方coherent不保证顺序可作现有方法解释，未强行增改。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-fault-injection-recovery",
++      "group": "embedded",
++      "decision": "保留：按实际风险选择故障、隔离授权、恢复SLA、功能/数据一致性及有条件watchdog验证。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-performance-profiling-embedded",
++      "group": "embedded",
++      "decision": "保留：v11.3.8实际运行对象身份、栈边界、有效负载/工作点与不确定性已有执行证据。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-embedded-storage-layout-migration",
++      "group": "embedded",
++      "decision": "保留：文件系统问题分流、数据保护、host演练和独立operator写操作边界明确。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-unit-test-embedded",
++      "group": "embedded",
++      "decision": "保留：独立oracle、有界状态序列、复位/回放、覆盖局限与host/target边界已具体化。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-driver-bringup-checklist",
++      "group": "embedded",
++      "decision": "保留：分阶段验收、主动探测/读副作用、异常恢复、not-run与未授权设备写边界。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-cmake-cross-build",
++      "group": "embedded",
++      "decision": "保留：真实preset/binaryDir/config、JUnit执行状态、零/全skip、资源预算和工具链匹配已有真实测试。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-offline-core-dump-triage",
++      "group": "embedded",
++      "decision": "保留：身份/库匹配与GDB提前关闭auto-load、有限可信帧及partial结论完整。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-static-analysis-c-cpp",
++      "group": "embedded",
++      "decision": "保留：TU/头依赖、实际数据库、非空扫描、解析失败、警告升级与动态证据分层明确。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-protocol-stack-integration",
++      "group": "embedded",
++      "decision": "保留：v11.3.8帧边界/部分IO/截断/缓冲限制/全程deadline与分层状态机已落实。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-driver-implementation",
++      "group": "embedded",
++      "decision": "保留：runtime-specific生命周期、IRQ/DMA引用、partial init/cancel/late completion与资源所有权足够明确。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-rtos-task-design",
++      "group": "embedded",
++      "decision": "改进：保留现有RTA模型，补实际周期API/单位量化与范围、到点与超期区别、有界超期策略，以及共享timer服务与异步stop/delete生命周期。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-test-strategy",
++      "group": "embedded",
++      "decision": "保留：风险分级、独立expected/变体、checker校准、资源隔离及真实回执覆盖充分。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-embedded-diagnostic-harness",
++      "group": "embedded",
++      "decision": "保留：expected/harness/product/environment区分，strict/env套件与实际CLI返回语义明确。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-hardware-debugging",
++      "group": "embedded",
++      "decision": "保留：目标ELF/地址归一化与MCU fault差异，保留实际板端边界。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-integration-hil-sil",
++      "group": "embedded",
++      "decision": "保留：实际runner身份、资源隔离、新鲜JUnit/必跑项、实际执行状态与设备后置健康要求。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-bsp-analysis",
++      "group": "embedded",
++      "decision": "保留：按问题展开的初始化/资源链、权威章节、历史workaround与confirmed/inferred/unknown分离。",
++      "reason": ""
++    },
++    {
++      "skill": "adk-data-fetch",
++      "version": "1.0.3",
++      "decision": "RETAIN",
++      "reason": "独立安装父/子Skill、授权范围、缺子技能停止及partial/not-verified状态传递已经完整，未发现本轮可证新增缺口。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-fetch-url-content",
++      "version": "1.0.3",
++      "decision": "RETAIN",
++      "reason": "重定向/IP、请求预算、真实内容类型、编码、相对链接/base语义、登录壳与截断状态均明确；不为研究增加爬虫或执行器。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-email-imap-fetch",
++      "version": "1.0.3",
++      "decision": "RETAIN",
++      "reason": "EXAMINE、UIDVALIDITY+UID、BODY.PEEK、重连重查和逐项partial已有明确约束；无需新增邮箱写权限。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-external-practice-absorption",
++      "version": "1.0.2",
++      "decision": "RETAIN",
++      "reason": "已有source-only/scoped-adoption/portfolio-intake，来源pin与独立decision边界完整；继续任务不重复intake规则存在。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-incident-rca-report",
++      "version": "1.1.0",
++      "decision": "ENHANCE_CANDIDATE",
++      "reason": "简短RCA与证据因果方法保留；时间线缺乏事件/采集时间与时区/时钟偏差的明确区分，有有限可执行设计案例。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-prose-revision",
++      "version": "1.0.0",
++      "decision": "RETAIN",
++      "reason": "report/revise意图、事实与限定保真、原稿风格及无需修改路径完备，反例reference已清楚标记非模型实测。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-security-supply-chain",
++      "version": "1.1.4",
++      "decision": "RETAIN",
++      "reason": "source-only/adoption/runtime分层、source-to-sink、扫描遗漏与许可边界已有具体步骤；未以第三方词频或星数添加新的检查层。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-skill-composition-governance",
++      "version": "1.1.6",
++      "decision": "ENHANCE_CANDIDATE",
++      "reason": "主流程/按需评测保留；生命周期Creation Gate模板10行无证据却预填pass，建议改为待验证默认状态。",
++      "group": "optional"
++    },
++    {
++      "skill": "adk-test-flakiness-triage",
++      "version": "1.0.6",
++      "decision": "RETAIN",
++      "reason": "v11.3.8新增原生Condition/readiness/0值/取消与预算边界完整，样本统计和顺序污染限制明确；不重复改动。",
++      "group": "optional"
++    }
++  ],
++  "boundary": "Source audit and explicit design/diagnostic probes; not a native model A/B, token/cost, board or product qualification result."
++}
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/negative-results.md b/docs/changes/20261116-skill-timing-diagnosis/negative-results.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..02f97bce4c7a9cae79d9e85c90ed5cfd355b132c
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/negative-results.md
+@@ -0,0 +1,13 @@
++# 负结果与证据边界
++
++- Build 前检索入口 `knowledge/L2-domain/lessons.md` 不存在，未获得可复用历史条目；不伪造历史经验。
++- 本轮从 v11.3.8 继续审查，不把上轮已通过的 65 项审计视为本轮新模型效果实测。
++- 外部仓库身份、热度或 Skill 数量不是质量结论；有 API/时序错误的示例不采用。具体固定来源及探针随研究完成补记。
++- 真实硬件、原生 runtime、模型 A/B 与 Token/成本收益尚未测量；源码方法检查不能替代这些证据。
++- 原始 Git 诊断的首次本地断言错误地用停留 HEAD 代替 bisect 日志中的 first-bad；修正为读取明确裁决后重跑。该错误属于探针准备，不是 ADK 缺陷；原始记录保留。
++- Git 示例测试初次 RED 因发布引用尚无示例标记，在 setUpClass 失败，执行测试数为 0；不把它称为模型行为 RED。已有 naive/skip 对照使用真实 Git 历史，独立保留。
++- RTOS 首次组合测试遗漏 `PYTHONPATH=src`，造成既有 governance 模块导入失败，新增三个 C 方法测试当时通过。补齐执行配置后组合测试通过，不修改测试接受条件。
++- optional 空白模板的原始解析测试实际发现 10 行无证据却预填 pass；改为 pending 后验证通过。RCA 的时区/迟到案例是设计探针，不是已观察的模型失败。
++- 首次受限消费任务 C 的 10 项 Creation Gate 均正确保持 pending，但“最小初始化记录”实际展开为 96 行、12 个标题、3,894 字符，含多组没有输入的章节。独立审查将语义正确与输出范围不合格分开，不能写三案全部通过；原回答保留。
++- 针对该实际输出缺口，仅在既有生命周期引用中限定初始化范围：已知 Scope、完整 Creation Gate、下一审核入口，其余章节按当前阶段与证据需要展开。已有结构测试与安装检查通过不等于消费效果通过；独立新线程复验另附真实回答。
++- 初始完整回归绑定 `7e47130c77e0c2def86c5f8057a69c53b3423bf9` / tree `8df5f5652a02c2ae5c0d37f5600d1a5525731e53`，102/102 通过，运行前后 clean。之后的一行模板修补形成新来源身份；不把初始回归冒充新来源完整验证。
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/requirements.md b/docs/changes/20261116-skill-timing-diagnosis/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..b1afd73beaf2c85be84707e6806cd2984437daf7
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/requirements.md
+@@ -0,0 +1,15 @@
++# 执行时序与诊断精度：需求
++
++## 目标与授权
++用户在 2026-11-16 授权完成既定 Root source-only 接入，并要求继续全面优化所有 Skills、检索成熟外部方法、推进 ADK 落地。ADK 基线为 v11.3.8 / `913b6b3a0838ccddae252a3a8536ac7d41598810`。本轮重新审读 56 core + 9 optional，只有存在可说明的执行缺口才修改。
++
++## 验收
++1. RTOS 周期任务区分毫秒和 tick、相对延迟和绝对周期，检查量化/零周期/范围；超期策略有界，软件 timer callback 不阻塞共享服务。
++2. 调试二分先验证信号：不可测修订不标 bad，测试基础设施故障停止；跳过造成的不确定区间不伪称唯一根因。重跑可能清空故障产物时先保留原始证据。
++3. 事故时间线区分发生与采集时间、时区及来源时钟的不确定性，不从采集顺序推断因果。
++4. 空白 Skill 生命周期模板的检查结论保持待验证，不能预填成功。
++5. 保留各 Skill 已通过的方法和权限边界；原有 profile 容量门槛不变；采用官方 API 或固定上游源码，拒绝无法核实的社区示例。
++6. 有实际定向执行、独立审查、完整回归和正常受保护发布；源码校验、人工构造案例、Agent 消费案例、运行态/产品资格分别报告。
++
++## 非目标
++不安装外部 Skill 包、不执行外部安装脚本，不启动付费模型、Codex/ChatGPT Work CLI/Cloud 或新巡检；不改真实设备、宿主运行资产或产品资格。当前没有模型 A/B、板端时序或成本测量，不作相应效果声明。
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/source-review.md b/docs/changes/20261116-skill-timing-diagnosis/source-review.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f9eb0bdabc3c90c2a293b2e924ecbb063c81487a
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/source-review.md
+@@ -0,0 +1,40 @@
++# 外部方法：固定来源与采用边界
++
++用户要求继续检索成熟 Skills。本轮先对照现有方法，再用官方 API、实现或可执行探针核查候选。外部 Skill 不整体导入；错误示例不采纳。来源文件的 SHA256、阅读范围和许可核对在三组原始审查中保留。
++
++| 分组 | 固定来源文件 | 判断 / 核查用途 |
++|---|---|---|
++| core | [anthropics/skills / skills/skill-creator/SKILL.md](https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/SKILL.md) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| core | [mattpocock/skills / skills/productivity/grilling/SKILL.md](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/grilling/SKILL.md) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| core | [obra/superpowers / skills/systematic-debugging/SKILL.md](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/systematic-debugging/SKILL.md) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| core | [git/git / builtin/bisect.c](https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/builtin/bisect.c) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| core | [git/git / Documentation/git-bisect.adoc](https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/Documentation/git-bisect.adoc) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| core | [anthropics/skills / skills/skill-creator/LICENSE.txt](https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/LICENSE.txt) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| core | [mattpocock/skills / LICENSE](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/LICENSE) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| core | [obra/superpowers / LICENSE](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/LICENSE) | 具体采用/拒绝理由见该组原始审查的 external_decisions；不复制外部生产实现。 |
++| embedded | [Jeffallan/claude-skills / skills/embedded-systems/SKILL.md](https://github.com/Jeffallan/claude-skills/blob/078a25cc5bfd8011459be7b91d004e900c1d02d3/skills/embedded-systems/SKILL.md) | 借鉴按问题加载参考的组织方式（ADK已有）；拒绝直接移植ISR/IRQ模板、固定优先级/栈水位门槛及不检查所有返回值的示例。 |
++| embedded | [Mindrally/skills / embedded-stm32/SKILL.md](https://github.com/Mindrally/skills/blob/7682ca77710e0971eab4e0ae5dddfa281aea0ba5/embedded-stm32/SKILL.md) | 借鉴generated/user边界、资源所有权与分层测试（ADK已有）；拒绝同一RX buffer在消费者读取前重新交给DMA的示例，也不跨MCU套用CFSR/HFSR。 |
++| embedded | [rovinax/embedded-skills / skills/embedded-rtos-design/SKILL.md](https://github.com/rovinax/embedded-skills/blob/022ce31b469b1a1d0c1261c2c8d0f3e07b2c0bbc/skills/embedded-rtos-design/SKILL.md) | 采用固定周期意图，经官方API纠正；拒绝双参osDelayUntil、ticks=ms、固定任务优先级/禁止所有ISR控制计算和无条件拆任务。 |
++| embedded | [FreeRTOS/FreeRTOS-Kernel / include/projdefs.h](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/projdefs.h) | 核默认pdMS_TO_TICKS整数除法、宏可覆盖及最终TickType_t收窄；真实头文件编译运行30向量。 |
++| embedded | [FreeRTOS/FreeRTOS-Kernel / include/task.h](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/task.h) | 核相对vTaskDelay与绝对xTaskDelayUntil、previous wake更新和return值只表示是否阻塞。 |
++| embedded | [FreeRTOS/FreeRTOS-Kernel / tasks.c](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/tasks.c) | 只审读xTaskDelayUntil实现，确认到点now==wake时pdFALSE、每次均推进previous wake；本地保存对应原始函数摘录。 |
++| embedded | [FreeRTOS/FreeRTOS-Kernel / include/timers.h](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/timers.h) | 核xTimerStop/Delete pdPASS仅成功投递timer command queue，不证明共享回调context已无使用者。 |
++| embedded | [FreeRTOS/FreeRTOS-Kernel-Book / ch06.md](https://github.com/FreeRTOS/FreeRTOS-Kernel-Book/blob/ba20b2f820926587d5ee20ce312b3789d63f795c/ch06.md) | 审读6.2、6.4及命令入队语义；FreeRTOS timer callback共享daemon task且不能进入Blocked。 |
++| embedded | [ARM-software/CMSIS_6 / CMSIS/RTOS2/Include/cmsis_os2.h](https://github.com/ARM-software/CMSIS_6/blob/69b5aa343e618b74ffb40ca2b13f73a0cda7ab76/CMSIS/RTOS2/Include/cmsis_os2.h) | 核osDelayUntil单absolute-tick参数；用实际头文件编译确认双参错误和单参合法。 |
++| embedded | [torvalds/linux / Documentation/core-api/dma-api-howto.rst](https://github.com/torvalds/linux/blob/aebb7274476403040d582c61478df8f4a7bf9cd3/Documentation/core-api/dma-api-howto.rst) | 审读coherent DMA与ordering段；现ADK明确memory ordering，作为保留依据，不额外扩写。 |
++| optional | [cloudflare/skills / skills/workers-profiling/SKILL.md](https://github.com/cloudflare/skills/blob/cbf893b954222276bf1af57e5f23379231e0efb9/skills/workers-profiling/SKILL.md) | 实际部署版本、profile source map和采样证据支持最小改动的方法与现有实运行身份/符号映射边界相符；不引入Cloudflare专属CLI或产品路由。 |
++| optional | [supabase/agent-skills / skills/supabase-postgres-best-practices/SKILL.md](https://github.com/supabase/agent-skills/blob/c9be0e931b7930f7d02126d04774d904c381e7d7/skills/supabase-postgres-best-practices/SKILL.md) | Postgres专属规则不属于现有ADK嵌入式技能职责；按影响分类与按需读reference已存在，不新增数据库skill或强制广触发。 |
++| optional | [github/awesome-copilot / skills/incident-postmortem/SKILL.md](https://github.com/github/awesome-copilot/blob/dc0083dbe22133bfa7ce3500dee85e187e0cd47a/skills/incident-postmortem/SKILL.md) | 可按需吸收UTC时间线与检测/缓解/预防行动区分；不采用每次必做鱼骨/5Why、逐节阻塞追问、固定输出目录或外部转换安装。 |
++| optional | [wshobson/agents / plugins/incident-response/skills/postmortem-writing/SKILL.md](https://github.com/wshobson/agents/blob/9c61ab243def98f72da12abd41cfcf5bcd91af9d/plugins/incident-response/skills/postmortem-writing/SKILL.md) | 保留基于证据的简短RCA，不吸收强制五层追问、固定会议/日程或把文档与测试缺失机械判根因；细节下沉方法现已存在。 |
++| optional | [open-telemetry/opentelemetry-specification / specification/logs/data-model.md](https://github.com/open-telemetry/opentelemetry-specification/blob/a4e05d9704fc5218d85a4154fb5b143ea3f5340e/specification/logs/data-model.md) | 事件发生Timestamp与采集ObservedTimestamp语义不同；可补齐时间来源和时区/时钟偏差边界，不能用观察顺序制造因果。 |
++
++## 本轮吸收
++
++- 系统调试：不可测修订与目标回归分开；受控 bisect 退出码、歧义区间与重跑前保存原始故障产物。
++- RTOS：单位/量化/范围、绝对周期和超期策略、共享 timer 服务与取消生命周期。
++- RCA：事件时间和采集时间、时区与时钟偏差，按实际缺口选择检测/缓解/预防行动。
++- 生命周期模板的空白结论由本地解析直接发现，默认待验证；不归因于外部效果实验。
++
++## 明确拒绝
++
++社区示例中的双参数 CMSIS `osDelayUntil`、tick 当毫秒、未保存原状态便无条件开启 IRQ、DMA 消费前重用同一缓冲区，不作为可执行推荐。固定优先级、固定水位百分比和云平台专用工具也不跨目标复制。Linux coherent DMA 的顺序约束现有 Skill 已覆盖，因此保留，不重复扩写。
+diff --git a/docs/changes/20261116-skill-timing-diagnosis/tasks.md b/docs/changes/20261116-skill-timing-diagnosis/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6890f983012b0d405ccf30f8bd203b1c9647aa3b
+--- /dev/null
++++ b/docs/changes/20261116-skill-timing-diagnosis/tasks.md
+@@ -0,0 +1,12 @@
++# 执行时序与诊断精度：任务
++
++本文为冻结执行合同。T1–T3 已完成源方法与定向验证；准确源码冻结后的 T4–T6 结果追加到本目录 `verification.md`、证据回执及 PR，不预填完成。三组实现互不重叠，主 Agent 整合共享入口；实现者不担任最终独立审查者。
++
++- [x] T1 全量复审与外部研究：34 通用 core、22 领域 core、9 optional；verify：153 文件清单与基线 blob/SHA256/bytes 覆盖相等，16 仓库/23 来源文件固定版本，采用/拒绝有理由，见 audit.md。
++- [x] T2 诊断与周期方法：verify：5 项真实隔离 Git 验收、3 项已发布 host C 算术测试及原有领域测试通过；RTOS真实调度/板端仍未测量。
++- [x] T3 事故时间与空白模板：verify：迟到/异时区/未知偏差设计案例、Creation Gate 原始10子项RED→修复后结构检查；新增与既有组合21项通过，canonical optional安装通过。
++- T4 集成版本、目录与冻结验证：verify：全部被测源文件身份、定向测试、完整回归、原 8 组容量门槛。
++- T5 独立 Spec/Quality 审查：verify：准确 source/tree/patch、真实发现和裁决；实现者不是唯一裁判。
++- T6 受保护交付：verify：PR/main CI、不可变发布和实际归档身份；平台结果在 PR 中按发生时间补记。
++
++冻结后的顺序：完整回归；独立审查；受保护交付。对应真实完成结果见追加验证记录。
+diff --git a/manifest.json b/manifest.json
+index 212df095c1dc05fb9adb08e46b50d5655a324103..c4316d8123a6487f86155d90ff6bcf202adc5fb7 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.8",
++  "version": "11.3.9",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 88d2791a1a77aea40d8517c524ccf3d7c9e0c7db..025c788be69f9eccc099284708b41aa15b1b67a1 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.3.8",
++  "campaign_id": "software-m5-11.3.9",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/optional-skills/adk-incident-rca-report/SKILL.md b/optional-skills/adk-incident-rca-report/SKILL.md
+index 1942cac37965917b5979283eb8108f9bbdc5be5f..a123dabd42d37fb08b803abf2a732bc7cd855512 100644
+--- a/optional-skills/adk-incident-rca-report/SKILL.md
++++ b/optional-skills/adk-incident-rca-report/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-incident-rca-report
+ description: "用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。"
+-version: 1.1.0
+-last_updated: 2026-11-13
++version: 1.1.1
++last_updated: 2026-11-16
+ triggers:
+   - "线上事故"
+   - "故障复盘"
+@@ -22,23 +22,23 @@ constraints:
+ # adk-incident-rca-report
+ 
+ ## Goal
+-在事故止损后基于证据解释事件、原因与防复发。报告质量取决于因果证据，而不是 5-Why 的层数。
++事故止损后凭证据解释因果与防复发；不以 5-Why 层数评判质量。
+ 
+ ## Workflow
+-1. 固定事件范围、已确认版本、证据指针和影响；时间不明则写 `unknown`，不编造分钟级时间线。
++1. 固定事件范围、版本、影响与证据；保留原时区，区分事件发生与采集时间，仅可比时统一时基。未知时间/时钟偏差记 `unknown`，不凭采集顺序断因果。
+ 2. 单一原因已复现时使用“触发 → 失效机制 → 影响 → 修复/验证”短链。
+ 3. 多因素场景才按需用 5-Why、故障树或事件序列分析；**5-Why 为可选分析工具**，不强制凑三层/五层，不能因为模板把责任推给组织。
+ 4. 根因没有确认时标 `unresolved`；分别记录事实、假设、被证伪方向、下一步取证，不编造概率或确定性判断。
+-5. 产出具体改进与复验信号、实际 owner（未知则待确认）。涉及生产变更、安全、数据写入或回滚时维持真实的权限审批与恢复边界，不擅自操作。
+-6. 短报告为默认；确有正式事故档案/多方协调需求时才补 RACI、完整影响核算和长期复查。
++5. 按实际缺口选择检测/缓解/预防行动，给改进、复验信号及实际 owner（未知则待确认），不强制三类齐全。生产、安全、数据写入或回滚仍维持原权限与恢复边界。
++6. 默认短报告；需正式档案/多方协调时才补 RACI、影响核算与长期复查。
+ 
+ ## Report
+ ```md
+-- Incident / status / time range:
++- Incident / status / time range (event_time / observed_time / timezone / clock_uncertainty):
+ - Verified impact / unknown:
+ - Facts and evidence pointers:
+ - Causal chain: confirmed | hypothesis | unresolved
+-- Remediation / owner / verification:
++- Action (detect | mitigate | prevent) / owner / verification:
+ - Open questions / residual risks:
+ ```
+ 
+diff --git a/optional-skills/adk-skill-composition-governance/SKILL.md b/optional-skills/adk-skill-composition-governance/SKILL.md
+index fbf4f9c71205fc5c018831dc26b4e28eb7fd7672..52da1f2961c8235de2ded7578337caa3ea64d180 100644
+--- a/optional-skills/adk-skill-composition-governance/SKILL.md
++++ b/optional-skills/adk-skill-composition-governance/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-skill-composition-governance
+ description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
+-version: 1.1.6
+-last_updated: 2026-11-14
++version: 1.1.7
++last_updated: 2026-11-16
+ triggers:
+   - "技能组合"
+   - "触发冲突"
+diff --git a/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md b/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md
+index 16bee5898462338d40cb2b07f6b4eac67b3d48a5..d402bbbd3dee0cd795f7d9fb41756058578addc8 100644
+--- a/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md
++++ b/optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md
+@@ -10,18 +10,20 @@
+ 
+ ## Creation Gate
+ 
++Initialize with known Scope, the complete Creation Gate and a next review entry. Expand other sections only when the current stage and evidence require them; do not fill the whole template at once. Blank rows are pending; set decisions only from actual review results and link their evidence.
++
+ | Gate | Decision | Evidence |
+ |---|---|---|
+-| Duplicate skill checked | pass |  |
+-| Trigger overlap checked | pass |  |
+-| Profile ownership decided | pass |  |
+-| Reuse threshold met | pass |  |
+-| Pilot requirement declared | pass |  |
+-| Fallback / replaced_by declared | pass |  |
+-| Output contract declared | pass |  |
+-| Deterministic guard declared | pass |  |
+-| Evolution evidence declared | pass |  |
+-| Distribution channel reviewed | pass |  |
++| Duplicate skill checked | pending |  |
++| Trigger overlap checked | pending |  |
++| Profile ownership decided | pending |  |
++| Reuse threshold met | pending |  |
++| Pilot requirement declared | pending |  |
++| Fallback / replaced_by declared | pending |  |
++| Output contract declared | pending |  |
++| Deterministic guard declared | pending |  |
++| Evolution evidence declared | pending |  |
++| Distribution channel reviewed | pending |  |
+ 
+ ## Pattern Classification
+ 
+diff --git a/pyproject.toml b/pyproject.toml
+index 3dd961aa843bf0aeac689221a315bc3d9c961e66..4c29f556b59f64d7c4260e3070b5b6031105ccd6 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.3.8"
++version = "11.3.9"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/skills/adk-rtos-task-design/SKILL.md b/skills/adk-rtos-task-design/SKILL.md
+index c018062338f5bd478f6fbcd71ef4e39582c6a800..c447d6407ed33045e98770d24c9779ba6c44992c 100644
+--- a/skills/adk-rtos-task-design/SKILL.md
++++ b/skills/adk-rtos-task-design/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-rtos-task-design
+-description: "用于 RTOS 任务优先级、时序约束、同步资源与调度风险设计；不用于纯裸机单循环程序或未经测量声称实时性达标。"
+-version: 2.0.2
+-last_updated: 2026-11-15
++description: "用于 RTOS 任务优先级、周期唤醒、同步资源与调度风险设计；不用于裸机单循环或未经测量声称实时性达标。"
++version: 2.0.3
++last_updated: 2026-11-16
+ triggers:
+   - "RTOS任务"
+   - "任务设计"
+@@ -10,54 +10,57 @@ triggers:
+   - "调度分析"
+ non_triggers:
+   - 无 RTOS 的裸机项目
+-  - 只需要普通线程划分且无实时约束
++  - 普通线程划分且无实时约束
+ inputs:
+-  - 任务周期、deadline、WCET/测量样本、中断负载、共享资源、栈与队列约束
++  - 任务周期、deadline、WCET/样本、中断负载、共享资源、栈与队列约束
+ outputs:
+-  - 任务模型、优先级依据、response-time/trace 证据、共享资源策略、残留风险
++  - 任务模型、优先级与周期策略、response-time/trace 证据、残留风险
+ constraints:
+-  - 不使用固定经验阈值替代目标系统 deadline/latency budget
+-  - 必须区分测量值、估算值和未知值
+-  - 必须说明优先级、栈大小和共享资源策略依据
++  - 不用固定经验阈值替代目标 deadline/latency budget
++  - 区分测量、估算和未知值；优先级、栈与共享资源策略须有依据
+ ---
+ 
+ # adk-rtos-task-design
+ 
+-## Goal
+-- 建立可解释、可计算、可测量的 RTOS 调度模型。
+-- 用目标系统的 deadline、WCET、blocking 和 ISR interference 判断可调度性，而不是套用通用固定阈值。
+-
+-## Prerequisites
+-- 锁定 RTOS/MCU/clock/tick 或 tickless 配置与调度策略。
+-- 列出任务周期或最小到达间隔、deadline、优先级候选、共享资源和 ISR 来源。
+-- WCET 不可获得时必须标记 `estimated` 或 `unknown`，不得伪装成已验证值。
+-
+ ## Workflow
+-1. **任务模型**：为每个 task/ISR 记录 period 或 sporadic arrival、deadline、WCET、priority、stack、blocking resource。
+-2. **优先级策略**：选择 Rate Monotonic、Deadline Monotonic、固定业务关键级或平台既有策略，并写出适用前提。
+-3. **响应时间分析**：先确认模型适用性，再按下节计算 `R = C + B + interference` 或使用目标已有分析器；列出迭代与输入依据，不能仅填写总公式。
+-4. **ISR interference**：把高优先级 ISR、critical section、scheduler lock、关中断区间纳入预算，不能只分析 task-to-task 抢占。
+-5. **共享资源**：明确 PIP/PCP/lock-order/message-passing/lock-free 方案以及最坏 blocking time。
+-6. **栈与队列**：结合静态估算、stack high-water mark、burst/backpressure 样本给出容量依据。
+-7. **运行验证**：用 trace/周期统计核对 response time、jitter、deadline miss、queue high-water、stack high-water 和 CPU load。
+-8. **降级与恢复**：出现 deadline miss 时先识别 `C/B/interference` 主因，再调整优先级、临界区、任务划分或负载；禁止只“提高优先级”。
++1. 冻结 RTOS/MCU/clock、tick/tickless、调度策略与真实 API/port；每个 task/ISR 列 period 或最小到达间隔、deadline、WCET 状态、priority、stack、blocking resource。
++2. 核 RM/DM/既有优先级策略的适用条件；按下式或目标分析器迭代 response-time。WCET 缺上界记 estimated/unknown，不以观测最大值冒充。
++3. 纳入 ISR interference、critical section、scheduler lock、关中断与调度开销；明确 PIP/PCP/lock-order/message-passing/lock-free 的 owner 和最坏 blocking。
++4. 按下节核周期执行；栈用静态估算与 high-water，队列用 burst/backpressure 定容量，不能只提高优先级或扩容。
++5. 用目标 trace 记录 release/start/finish、response-time、jitter、deadline miss、队列/栈 high-water、CPU load。trace 超模型上界先查漏项；低于上界不证明可降低 WCET。缺板端证据 `needs-runtime-evidence`。
+ 
+-## Analysis Notes
+-- `RMA` 在本 Skill 中指 Rate Monotonic Analysis，不与 Direct Memory Access (`DMA`) 混用。
+-- Deadline Monotonic 只在适用固定优先级模型下使用；混合关键级、SMP 或动态优先级需记录模型限制。
+-- 对无法静态证明的路径，保留 `needs-runtime-evidence`，以目标板 trace/HIL 证据闭环。
+-
+-### 固定优先级计算（仅适用时）
++## 固定优先级计算（仅适用时）
+ 单核、抢占式、固定优先级、独立周期/有界 sporadic 任务、deadline 不大于 period、无未建模 release jitter 或自挂起时，使用同一时间单位：
+ ```text
+ R0 = Ci + Bi
+ Rnext = Ci + Bi + sum(ceil(R / Tj) * Cj, j in higher-priority tasks) + Ii(R)
+ ```
+-`C` 是有依据的 WCET 上界，`B` 是一次作业的最坏阻塞，`T` 是周期/最小到达间隔；`Ii(R)` 汇总窗口 R 内 IRQ 干扰。调度开销纳入对应项，中断不得又计为 task 又重复相加。收敛且 `R <= deadline` 仅证明所声明模型及上界条件下可调度；超过 deadline 停止，缺上界/不收敛记未知。SMP、jitter、自挂起或任意 deadline 需适配模型，不能硬套本式。
++`C` 为有依据的 WCET 上界，`B` 为一次作业最坏阻塞，`T` 为周期/最小到达间隔，`Ii(R)` 为窗口内 IRQ 干扰。中断与调度开销不重复计数。收敛且 `R <= deadline` 只证明该模型/上界下可调度；超过 deadline 停止，缺上界/不收敛记未知。SMP、jitter、自挂起、任意 deadline 或动态优先级另选模型；RMA 指 Rate Monotonic Analysis。
++
++例：`Ci=2, Bi=1, Di=5`、高优先级 `Cj=1,Tj=4`：`3→4→4`；加 `Cirq=0.5,Tirq=3` 得 `3→4.5→6`，超 deadline。这是计算示例，非板测。背景：https://www.cs.york.ac.uk/rts/publications/Davis2008a.html 。
+ 
+-例如 `Ci=2, Bi=1, Di=5`、高优先级任务 `Cj=1,Tj=4`：`3→4→4`；再加 `Cirq=0.5,Tirq=3`，得到 `3→4.5→6`，超过 deadline。此为计算示例，不是板端实测。方法背景：https://www.cs.york.ac.uk/rts/publications/Davis2008a.html 。
++## 周期与回调执行
++- 核 API 的 tick 单位、频率、位宽/回绕及转换宏；`pdMS_TO_TICKS` 可被项目覆盖。默认整数除法会量化，转换为零或超范围不得当合法周期；核有效周期能否满足需求，不擅改 tick 频率。
++- 固定相位任务用项目绝对周期入口：FreeRTOS `xTaskDelayUntil(&last, period_ticks)` 更新 last；CMSIS-RTOS2 `osDelayUntil(next_tick)` 只有一个绝对 tick 参数，调用者推进 next。相对 `vTaskDelay`/`osDelay` 从调用时计时，含 work 耗时后会漂移；按业务需要选择，非一律替换。
++- FreeRTOS `pdFALSE` 只表示未阻塞，到点也可能返回，不能直接记 deadline miss。以实际 release/finish 与 deadline 核超期；明确有界 catch-up、跳过过期周期或降级及计数；无界追赶会饿死其他任务。回绕/长时间停顿须依 port 的比较范围，不能用裸 `now > deadline`。
++- FreeRTOS software timer callbacks 共用 daemon task：不得阻塞它；只做有界处理并检查非阻塞投递的失败。`xTimerStop`/`xTimerDelete` 的 `pdPASS` 仅表示命令入队，非回调已静止；核目标取消/完成协议，确认无在途使用后才释放 callback context。其他 RTOS 核其实际语义。
+ 
+-## Commands
++### 量化反例（host 算术，不是 RTOS 实现）
++存为 `period.c`，以 host C99 核默认向下取整及 16/32-bit 范围；有效周期另核需求，实际工程仍核其宏/port。
++<!-- adk-example: period-ticks -->
++```c
++#include <stdint.h>
++int period_ticks(uint64_t ms, uint32_t hz, uint32_t tick_max, uint32_t *out) {
++    if (!ms || !hz || !out || ms > UINT64_MAX / hz) return 0;
++    uint64_t n = ms * hz / 1000u;
++    if (!n || n > tick_max) return 0;
++    *out = (uint32_t)n;
++    return 1;
++}
++```
++100 Hz：1 ms 拒绝、10 ms 得 1；16-bit/1000 Hz：65535 ms 合法、65536 ms 拒绝。溢出/拒绝不改写输出；host 证据不证明调度或 HIL。
++
++## 验证与交付
+ ```bash
+ <rtos-trace-cmd> --duration <representative-window>
+ rg -n "xTaskCreate|thread_create|osThread|mutex|semaphore|critical|irq" <src_path>
+@@ -65,31 +68,8 @@ rg -n "priority|PRIO|stack|queue|tickless|watchdog" <src_path>
+ <stack-high-water-command>
+ <deadline-or-latency-report-command>
+ ```
++交付 Runtime Identity、任务/ISR 表、优先级/栈/队列依据、`C/B/interference/R/deadline` 迭代、周期 API/量化/超期策略、callback owner/取消后置状态、命令/trace/未测边界。确无共享资源或干扰才给有依据的 `B=0/I=0`。
+ 
+-## Evidence Template
+-```md
+-- Runtime Identity: RTOS / MCU / clock / tick-mode / scheduler
+-- Task Model:
+-  | Task/ISR | Period/Arrival | Deadline | WCET(status) | Priority | Stack | Blocking Resource |
+-- Priority Policy + Preconditions:
+-- Response-Time Analysis: C / B / interference / R / deadline
+-- ISR Interference Budget:
+-- Shared Resource Policy:
+-- Stack High-Water / Queue High-Water:
+-- Runtime Trace: response-time / jitter / misses / CPU load
+-- Unknowns / Model Limits:
+-- Verification Result: pass | needs-runtime-evidence | needs-fix
+-```
+-
+-## Failure Handling
+-- response time 超 deadline：定位 WCET、blocking、ISR interference 或 overload 主因后 replan。
+-- stack/queue high-water 接近配置上限：补 burst 场景与安全余量依据，不直接拍脑袋扩容。
+-- trace 超出模型上界时查漏项并修正模型；短期观测低于保守上界不能证明可降低 WCET。实测最大值与已证明上界分开，保留差异原因。
+-- 无目标板或 trace 能力时：最多输出 `needs-runtime-evidence`，不得声称硬实时目标已满足。
++验证正常周期、到点未阻塞、超期/有界恢复、零/越界转换、回绕及 timer 投递失败/取消。超 deadline 先定位 `C/B/interference`；未知仍保留，不把 host 算术、短期 trace 或缺目标板当硬实时达标。分析不授予设备写权限。
+ 
+-## Quality Gate
+-- 每条关键实时路径必须有 deadline/latency budget 和 WCET 状态。
+-- 硬/准实时任务必须给 response-time 或等价可调度性证据。
+-- 必须核对 ISR interference 与共享资源 blocking；确无相关干扰/资源时给出 `I=0/B=0` 的依据，不虚构场景。
+-- 每个任务必须有优先级与 stack sizing 依据；关键队列必须有 burst/backpressure 依据。
+-- 结论中的数值必须来自目标约束、测量或显式估算，不得使用无来源固定经验阈值。
++依据：[FreeRTOS task.h/timers.h/projdefs.h](https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include)、[CMSIS-RTOS2](https://arm-software.github.io/CMSIS_6/main/RTOS2/group__CMSIS__RTOS__Wait.html)。
+diff --git a/skills/adk-systematic-debugging/SKILL.md b/skills/adk-systematic-debugging/SKILL.md
+index eec456f4571df35a1eb01d6db6781e77bd56e055..a4de92609ea416c21af29f2f1e64f3e850f42ba7 100644
+--- a/skills/adk-systematic-debugging/SKILL.md
++++ b/skills/adk-systematic-debugging/SKILL.md
+@@ -1,7 +1,7 @@
+ ---
+ name: adk-systematic-debugging
+ description: "用于根因不明问题的复现、单变量实验、sanitizer 取证与回归；不用于跳过取证猜修复或替代性能基准。"
+-version: 1.2.4
++version: 1.2.5
+ last_updated: 2026-11-16
+ triggers:
+   - "调试"
+@@ -25,38 +25,30 @@ inputs:
+ outputs:
+   - 假设矩阵、实验记录、repair note、根因结论与修复验证证据
+ constraints:
+-  - 先做只读诊断，未经确认不做破坏性操作
+-  - 单轮仅验证一个假设并记录正负结果
+-  - 没有证据链不得给出根因结论
+-  - 禁止在未缩小失败范围时盲目重试或扩大改动
++  - 先只读，破坏性操作须获准
++  - 每轮一假设，记正负结果
++  - 无证据链不下根因结论
++  - 未缩小失败范围不盲重试/扩改
+ ---
+ 
+ # adk-systematic-debugging
+ 
+-## Goal
+-定位根因并验证修复。
+-
+-## Prerequisites
+-固定版本/环境/输入/时间窗、指标与日志；先只读，破坏性操作保持原授权边界。
+-
+-## 方法选择
+-- 直接因果链明确时记录复现/原因/修复，不虚构假设或负结果。
+-- 多根因按概率/影响/证伪成本排序；强现象链用 5-Why，每层有证据，到可验证根因即停。
+-- 范围大、回归引入点未知或假设穷尽时，二分代码/配置/模块/输入，逐步记 good/bad；矛盾先查测试信号。
++固定版本/环境/输入/时间窗、指标/日志/命令/输出/期望红。
+ 
+ ## Workflow
+-1. 固定现象/影响/触发，建立会因缺陷转红的最小信号。困难/偶现读 `references/tight-feedback-loop.md` 核复现率与误报；替代信号标 `proxy evidence`，无安全复现方式记 blocker。
+-2. 单变量实验留时间线、命令/输入、观察/反例/不可重复路径，收缩失败范围。E2/E3 正确性/安全关键前提做适用证伪，可复用同身份证据，不强制加 Agent。
+-3. **Repair Note**：failed scope、preserved passing scope、minimal rerun、rollback anchor、风险、root cause status。格式失败修 schema/模板；语义失败固定断言；并行只 reopen 失败项；设备不稳先固化环境，保留通过产物。
+-4. 映射观察与根因，执行同条件“复现 -> 修复 -> 回归”并核原通过路径。连续两轮无信息增量则停，重审信号/假设；5-Why 断链先补证。未收敛保持 `needs-fix`。
++1. 固定现象/影响/触发，建最小红信号；困难/偶现、二分或重跑先读 `references/tight-feedback-loop.md`。无安全复现记 blocker；替代信号标 `proxy evidence`。
++2. 因果明确记复现/原因/修复，不虚构假设/负结果；多根因按概率/影响/证伪成本排序。强现象链用 5-Why，逐层有证据，到可验证根因即停；范围大、回归点未知或假设穷尽时二分代码/配置/模块/输入，记 good/bad，矛盾先核信号。
++3. 单变量实验缩范围，留时间线、命令/输入、观察/反例/不可重复路径。E2/E3 正确性/安全关键前提证伪，同身份证据可复用，无需增 Agent。
++4. **Repair Note**：failed scope、preserved passing scope、minimal rerun、rollback anchor、风险、root cause status。格式失败修 schema/模板；语义失败固定断言；并行只 reopen 失败项；设备不稳固化环境，保留通过产物。
++5. 映射观察与根因，同条件旧版红→新版绿并补回归，核受影响通过路径。两轮无新信息则停，核信号覆盖/测量失真与假设；5-Why 断链补证，未收敛记 `needs-fix`。
+ 
+-## 按需取证
+-- 内存/UB/数据竞争：读 `references/sanitizer-validation.md` 核目标/runtime 与已知缺陷对照；UBSan 报警即使 exit 0 也不能通过。
+-- UBIFS/SquashFS、Buildroot/Autotools、Wi-Fi/DNS/MQTT、SPI/QSPI、FOC：读 `references/embedded-diagnosis-branches.md` 选择下一证据，不替代 BSP/TRM 或现场记录。
+-- AI 工具/CLI 异常：对照文档版本，追源码/配置决策点，用 git log/blame 建时间线后归因。
++## 取证
++- 内存/UB/竞争：`references/sanitizer-validation.md` 核目标/runtime、已知缺陷对照；UBSan 报警即使 exit 0 也失败。
++- UBIFS/SquashFS、Buildroot/Autotools、Wi-Fi/DNS/MQTT、SPI/QSPI、FOC：`references/embedded-diagnosis-branches.md` 选证据，不替代 BSP/TRM/现场。
++- AI 工具/CLI：核文档版本，追源码/配置决策点，以 git log/blame 建时间线归因。
+ 
+ ## Commands
+ ```bash
+ rg -n "error|fatal|panic|timeout|reset" <log-or-src>
+ ```
+-transport/debugger 仅用已核实的只读入口；交付所选方法适用性、上述原始证据和结果，未跑记 `not-run`。
++transport/debugger 只用已核实只读入口；交付适用性、原始证据/结果，未跑记 `not-run`。
+diff --git a/skills/adk-systematic-debugging/references/tight-feedback-loop.md b/skills/adk-systematic-debugging/references/tight-feedback-loop.md
+index a4cd5e164cee269b2be25856c1e602623507f994..a8f806a520b6a45b6738bae52927ccf90fbe25ae 100644
+--- a/skills/adk-systematic-debugging/references/tight-feedback-loop.md
++++ b/skills/adk-systematic-debugging/references/tight-feedback-loop.md
+@@ -1,11 +1,27 @@
+ # 困难故障的最短反馈回路
+ 
+-只读排障或已授权的受控实验使用；生产设备、危险写入和认证仍需单独授权。
++只读/获准隔离实验；生产设备、危险写入与认证保持授权边界。
+ 
+-1. 选择**能因这个问题变红**的最小信号：准确错误码、断言、响应差异、日志事件或计数器。记录输入、版本、命令、输出、环境快照和“期望红”。
+-2. 优先使用单次本地复现；不稳定时记录 N 次样本的失败比例与置信边界，固定随机种子、时间、网络、并发或文件状态。**一轮绿色不等于修复成功**。
+-3. 采用缩减输入、`git bisect`、状态捕获、只读插桩或对照配置，逐次只改变一项因子。对双麦/MCU/异步问题记录时间线、任务调度、IRQ/状态顺序、资源所有权和晚到完成。
+-4. 无法原机复现时：将现象抽象为受控模拟或静态断言，标为 `proxy evidence`，不能冒称现场验证。
+-5. 修复前后运行完全相同的反馈回路，并补一个能在旧版重现且在新版通过的回归用例。回归时额外核受影响的通过路径，避免局部修复导致全局退化。
++1. 重跑/clean/rebuild **前**保全易失的输入、日志、dump/截图，记来源/hash/受控路径；缺原件的归因仍是假设。
++2. 选会因缺陷变红的最小错误码、断言、响应、日志事件或计数器。优先单次本地复现；偶现记失败数/N、置信边界，固定种子/时间/网络/并发/文件条件；一次绿不证明修复。
++3. 缩减输入、二分、状态捕获、只读插桩或对照配置，一次一因子。双麦/MCU/异步核时间线、调度、IRQ/状态顺序、资源 owner 与晚到完成。无法原机复现，用受控模拟/静态断言标 `proxy evidence`。
+ 
+-连续两轮无新信息即停；核信号覆盖和测量失真，再选假设。
++## Git 二分
++隔离仓校准同一性质的 known-good/bad；包装器/测试器置于切换树外。受信 probe 只输出 good、bad 或 untestable，exit 0，故障非零。编译回归的编译失败是 bad；妨碍其他性质测试的修订才 untestable，未知/环境故障中止。
++
++<!-- adk-example: bisect-probe -->
++```bash
++bisect_probe() {
++  local verdict
++  verdict=$("$@") || return 128
++  case "$verdict" in
++    good) return 0 ;;
++    bad) return 1 ;;
++    untestable) return 125 ;;
++    *) return 128 ;;
++  esac
++}
++bisect_probe "$@"
++```
++
++用 `git bisect run bash <包装器> <probe>`。留 `git bisect log`/候选，停留 HEAD 不是结论；skip 多候选保持未定位。无稳定信号不二分。[Git 2.52](https://git-scm.com/docs/git-bisect/2.52.0)。
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index 994ab724cbe19e6c9f8687298e4774b0159dd433..08df3c4982ab63f51f7739a93265e272d9353c27 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.3.8"
++__version__ = "11.3.9"
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 108c41f4dd3147bf97019a56ee29d9162dd87331..9b8dbea72c585df87c6772e5599a5b1ce012689c 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.3.8",
++    "planned_release": "v11.3.9",
+     "source_sha": null
+   },
+   "case_groups": {
+@@ -67,6 +67,12 @@
+   },
+   "holdout_qualification": "development-fixture-only-after-author-exposure",
+   "unexecuted_candidate_history": [
++    {
++      "planned_release": "v11.3.8",
++      "merged_main_sha": "913b6b3a0838ccddae252a3a8536ac7d41598810",
++      "model_runs": 0,
++      "reason": "The source release and consumer-source promotion did not execute this author-exposed model campaign. The successor's isolated Git, timer arithmetic, timestamp and template observations remain separate from native A/B, provider-token and cost results."
++    },
+     {
+       "planned_release": "v11.3.7",
+       "merged_main_sha": "5f442723e95fa7ca846b7c3ddc9f9995c7a27065",
+diff --git a/tests/test_optional_incident_lifecycle.py b/tests/test_optional_incident_lifecycle.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..8b9aced00453fc8c2b971f3111beb9a1dfeb9c9f
+--- /dev/null
++++ b/tests/test_optional_incident_lifecycle.py
+@@ -0,0 +1,89 @@
++"""Source-template invariants and timestamp design cases, not model evaluation."""
++from __future__ import annotations
++
++from datetime import datetime, timedelta, timezone
++from pathlib import Path
++import re
++import unittest
++
++
++ROOT = Path(__file__).resolve().parents[1]
++LIFECYCLE = ROOT / (
++    "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md"
++)
++INCIDENT = ROOT / "optional-skills/adk-incident-rca-report/SKILL.md"
++
++
++class OptionalTemplateInvariantTests(unittest.TestCase):
++    def test_blank_creation_gate_cannot_predeclare_success(self) -> None:
++        section = LIFECYCLE.read_text(encoding="utf-8").split(
++            "## Creation Gate\n", 1
++        )[1].split("\n## ", 1)[0]
++        rows = [
++            [cell.strip() for cell in line.strip().strip("|").split("|")]
++            for line in section.splitlines()
++            if line.startswith("| ")
++        ]
++        self.assertEqual(rows[0], ["Gate", "Decision", "Evidence"])
++        data = [row for row in rows[1:] if row[0] != "---"]
++        self.assertTrue(data, "the creation checklist must not disappear")
++        self.assertEqual(len({row[0] for row in data}), len(data))
++        for gate, decision, evidence in data:
++            with self.subTest(gate=gate):
++                self.assertTrue(decision, "unknown work needs an explicit state")
++                if not evidence:
++                    self.assertNotIn(
++                        decision.casefold(), {"pass", "passed", "accepted", "ready"},
++                        "a blank template is not an observed successful review",
++                    )
++
++    def test_incident_output_preserves_distinct_clock_fields(self) -> None:
++        section = INCIDENT.read_text(encoding="utf-8").split(
++            "## Report\n", 1
++        )[1].split("\n## ", 1)[0]
++        template = re.search(r"```md\n(.*?)\n```", section, re.DOTALL)
++        self.assertIsNotNone(template)
++        fields = set(re.findall(r"[a-z]+(?:_[a-z]+)+", template.group(1)))
++        self.assertTrue(
++            {"event_time", "observed_time", "clock_uncertainty"} <= fields,
++            "the output template must not collapse event and collection clocks",
++        )
++        self.assertIn("timezone", template.group(1))
++        self.assertIn("evidence", template.group(1).lower())
++
++
++class IncidentTimelineDesignCaseTests(unittest.TestCase):
++    """Executable arithmetic for authored cases; no Skill/host success claim."""
++
++    def test_late_observation_reverses_event_order_across_timezones(self) -> None:
++        records = [
++            {
++                "id": "fault", "event_time": "2026-11-16T12:00:10+08:00",
++                "observed_time": "2026-11-16T04:01:30+00:00",
++            },
++            {
++                "id": "deployment", "event_time": "2026-11-16T04:00:40+00:00",
++                "observed_time": "2026-11-16T04:00:41+00:00",
++            },
++        ]
++        event_order = sorted(records, key=lambda row: datetime.fromisoformat(row["event_time"]))
++        observed_order = sorted(
++            records, key=lambda row: datetime.fromisoformat(row["observed_time"])
++        )
++        self.assertEqual([row["id"] for row in event_order], ["fault", "deployment"])
++        self.assertEqual([row["id"] for row in observed_order], ["deployment", "fault"])
++        fault = datetime.fromisoformat(records[0]["event_time"]).astimezone(timezone.utc)
++        deployed = datetime.fromisoformat(records[1]["event_time"])
++        self.assertEqual((deployed - fault).total_seconds(), 30)
++
++    def test_clock_uncertainty_cannot_be_erased_by_timezone_conversion(self) -> None:
++        fault = datetime.fromisoformat("2026-11-16T12:00:10+08:00")
++        deployed = datetime.fromisoformat("2026-11-16T04:00:40+00:00")
++        uncertainty = timedelta(seconds=45)
++        self.assertLess(fault - uncertainty, deployed)
++        self.assertGreater(fault + uncertainty, deployed)
++        # The authored case admits both orders; UTC conversion alone cannot select one.
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_skill_bisect_methods.py b/tests/test_skill_bisect_methods.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ad7ae7f45e5de13a3e0515150a7e4c0e0fc2b72
+--- /dev/null
++++ b/tests/test_skill_bisect_methods.py
+@@ -0,0 +1,179 @@
++"""Exercise the published diagnostic oracle against real isolated Git histories."""
++from __future__ import annotations
++
++import hashlib
++import json
++import os
++from pathlib import Path
++import re
++import shutil
++import subprocess
++import sys
++import tempfile
++import unittest
++
++from agent_dev_kit.model import Manifest
++from agent_dev_kit.targets import load_target_contract, render_asset
++
++
++ROOT = Path(__file__).resolve().parents[1]
++RECEIPTS: list[dict[str, object]] = []
++
++
++class DiagnosticBisectTests(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls) -> None:
++        cls.git_binary = shutil.which("git")
++        cls.bash_binary = shutil.which("bash")
++        if cls.git_binary is None or cls.bash_binary is None:
++            raise AssertionError("Git and Bash are required for diagnostic method tests")
++        manifest = Manifest.load(ROOT)
++        asset = next(item for item in manifest.all_assets("skill")
++                     if item.name == "adk-systematic-debugging")
++        rendered = render_asset(manifest, load_target_contract(manifest, "claude-code"), asset)
++        reference = next(item for item in rendered if item.destination.endswith(
++            "/references/tight-feedback-loop.md"))
++        cls.reference_sha256 = hashlib.sha256(reference.content).hexdigest()
++        text = reference.content.decode("utf-8")
++        block = re.search(r"<!-- adk-example: bisect-probe -->\s*```bash\n(.*?)\n```",
++                          text, re.DOTALL)
++        if block is None:
++            raise AssertionError("Published diagnostic oracle is missing")
++        cls.recipe = block.group(1)
++
++    def setUp(self) -> None:
++        temporary = tempfile.TemporaryDirectory(prefix="adk-bisect-method-")
++        self.addCleanup(temporary.cleanup)
++        self.area = Path(temporary.name)
++        self.repo = self.area / "consumer"
++        self.repo.mkdir()
++        self.env = {key: value for key, value in os.environ.items()
++                    if not key.startswith("GIT_")}
++        self.env.update({"LC_ALL": "C", "GIT_CONFIG_NOSYSTEM": "1",
++                         "GIT_CONFIG_GLOBAL": os.devnull,
++                         "PYTHONDONTWRITEBYTECODE": "1"})
++        self.wrapper = self.area / "published-oracle.sh"
++        self.wrapper.write_text(self.recipe + "\n", encoding="utf-8")
++        self.probe = self.area / "project-probe.py"
++        self.probe.write_text(
++            'import json, sys\nfrom pathlib import Path\n'
++            's = json.loads(Path("state.json").read_text())\n'
++            'if s.get("infrastructure_error"):\n'
++            '    print("runner cannot inspect the target", file=sys.stderr)\n'
++            '    raise SystemExit(2)\n'
++            'if not s["buildable"]:\n'
++            '    print("bad" if sys.argv[1] == "build" else "untestable")\n'
++            'else:\n'
++            '    print("bad" if sys.argv[1] == "semantic" and s["bug"] else "good")\n',
++            encoding="utf-8",
++        )
++        self.git("init", "-q", "-b", "main")
++        self.git("config", "user.name", "ADK diagnostic fixture")
++        self.git("config", "user.email", "fixture@example.invalid")
++        self.git("config", "commit.gpgsign", "false")
++        self.git("config", "core.hooksPath", os.devnull)
++
++    def run_command(self, argv: list[str]) -> subprocess.CompletedProcess[str]:
++        result = subprocess.run(argv, cwd=self.repo, env=self.env,
++                                capture_output=True, text=True, timeout=10)
++        RECEIPTS.append({"test": self.id(), "argv": argv, "exit": result.returncode,
++                         "stdout": result.stdout, "stderr": result.stderr,
++                         "reference_sha256": self.reference_sha256})
++        return result
++
++    def git(self, *args: str) -> str:
++        result = self.run_command([self.git_binary, "-c", "core.fsmonitor=false", *args])
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        return result.stdout
++
++    def history(self, states: list[dict[str, object]]) -> list[str]:
++        commits = []
++        for index, state in enumerate(states):
++            (self.repo / "state.json").write_text(json.dumps({**state, "step": index}) + "\n",
++                                                   encoding="utf-8")
++            self.git("add", "state.json")
++            self.git("commit", "-qm", f"controlled state {index}")
++            commits.append(self.git("rev-parse", "HEAD").strip())
++        return commits
++
++    def oracle(self, target: str = "semantic") -> list[str]:
++        return [self.bash_binary, "--noprofile", "--norc", str(self.wrapper),
++                sys.executable, "-B", str(self.probe), target]
++
++    def bisect(self, commits: list[str], target: str = "semantic") -> tuple[subprocess.CompletedProcess[str], str]:
++        # Calibrate the actual oracle on both known endpoints before searching.
++        for commit, expected in ((commits[0], 0), (commits[-1], 1)):
++            self.git("checkout", "--detach", "-q", commit)
++            result = self.run_command(self.oracle(target))
++            self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
++        self.git("bisect", "start", commits[-1], commits[0])
++        result = self.run_command([self.git_binary, "bisect", "run", *self.oracle(target)])
++        log = self.git("bisect", "log")
++        self.git("bisect", "reset")
++        return result, log
++
++    def unique_first_bad(self, result: subprocess.CompletedProcess[str], log: str) -> str:
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        candidates = re.findall(r"^# first bad commit: \[([0-9a-f]{40})\]", log, re.MULTILINE)
++        self.assertEqual(1, len(candidates), log)
++        return candidates[0]
++
++    def test_published_oracle_preserves_outcomes_and_aborts_unknown_results(self) -> None:
++        prefix = [self.bash_binary, "--noprofile", "--norc", str(self.wrapper)]
++        for output, process_exit, expected in (
++            ("good", 0, 0), ("bad", 0, 1), ("untestable", 0, 125),
++            ("unknown", 0, 128), ("", 0, 128), ("good\nbad", 0, 128),
++            ("good", 2, 128), ("bad", 126, 128), ("bad", 127, 128),
++        ):
++            with self.subTest(output=output, process_exit=process_exit):
++                command = [*prefix, sys.executable, "-c",
++                           f"import sys; print({output!r}); raise SystemExit({process_exit})"]
++                result = self.run_command(command)
++                self.assertEqual(expected, result.returncode, result.stdout + result.stderr)
++        missing = self.run_command([*prefix, str(self.area / "missing-probe")])
++        self.assertEqual(128, missing.returncode, missing.stderr)
++
++    def test_real_bisect_skips_unrelated_unbuildable_revision(self) -> None:
++        good = {"buildable": True, "bug": False}
++        bad = {"buildable": True, "bug": True}
++        commits = self.history([good, good, {"buildable": False, "bug": False},
++                                good, bad, bad])
++        result, log = self.bisect(commits)
++        self.assertEqual(commits[4], self.unique_first_bad(result, log))
++        self.assertIn("git bisect skip " + commits[2], log)
++
++    def test_real_bisect_treats_build_failure_as_bad_for_build_regression(self) -> None:
++        good = {"buildable": True, "bug": False}
++        bad = {"buildable": False, "bug": False}
++        commits = self.history([good, good, bad, bad, bad, bad])
++        result, log = self.bisect(commits, "build")
++        self.assertEqual(commits[2], self.unique_first_bad(result, log))
++        self.assertNotIn("git bisect skip ", log)
++
++    def test_real_bisect_aborts_instead_of_blames_infrastructure_error(self) -> None:
++        good = {"buildable": True, "bug": False}
++        bad = {"buildable": True, "bug": True}
++        commits = self.history([good, good, {**good, "infrastructure_error": True},
++                                good, bad, bad])
++        result, log = self.bisect(commits)
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn("exit code 128", result.stdout + result.stderr)
++        self.assertNotIn("# first bad commit:", log)
++        self.assertNotIn("git bisect bad " + commits[2], log)
++        self.assertNotIn("git bisect skip " + commits[2], log)
++
++    def test_real_bisect_preserves_ambiguity_next_to_skipped_boundary(self) -> None:
++        good = {"buildable": True, "bug": False}
++        bad = {"buildable": True, "bug": True}
++        commits = self.history([good, good, {"buildable": False, "bug": False},
++                                bad, bad, bad])
++        result, log = self.bisect(commits)
++        self.assertNotEqual(0, result.returncode)
++        self.assertIn("first bad commit could be any of", result.stdout)
++        self.assertIn(commits[2], result.stdout)
++        self.assertIn(commits[3], result.stdout)
++        self.assertNotIn("# first bad commit:", log)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/tests/test_skill_content.sh b/tests/test_skill_content.sh
+index 8bc519f2c85c64a92557ad5ccb589f419050aa5e..6280e9a918be1a95d5b4649a01d5e1e6107d39ac 100644
+--- a/tests/test_skill_content.sh
++++ b/tests/test_skill_content.sh
+@@ -4,5 +4,5 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ export PYTHONPATH="$ROOT_DIR/src"
+ cd "$ROOT_DIR"
+ # Content v2 has no universal SOP headings or minimum line count.
+-python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_openai_metadata tests.test_commit_message_policy -v
++python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_bisect_methods tests.test_skill_rtos_methods tests.test_optional_incident_lifecycle tests.test_skill_openai_metadata tests.test_commit_message_policy -v
+ echo "[PASS] Skills content v2, OpenAI metadata and Commit Policy"
+diff --git a/tests/test_skill_rtos_methods.py b/tests/test_skill_rtos_methods.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..fbd372f0b0a9dc4828093c58d4f6bef4afb2d676
+--- /dev/null
++++ b/tests/test_skill_rtos_methods.py
+@@ -0,0 +1,108 @@
++"""Execute the published host tick-range example; no RTOS/HIL qualification."""
++from __future__ import annotations
++
++import os
++from pathlib import Path
++import re
++import shutil
++import subprocess
++import tempfile
++import unittest
++
++
++ROOT = Path(__file__).resolve().parents[1]
++
++VECTORS = r"""
++#include <stdio.h>
++int main(void) {
++    const struct {
++        uint64_t ms;
++        uint32_t hz, maximum;
++        int ok;
++        uint32_t ticks;
++    } cases[] = {
++        {0, 1000, UINT32_MAX, 0, 0},
++        {1, 0, UINT32_MAX, 0, 0},
++        {1, 100, UINT32_MAX, 0, 0},
++        {9, 100, UINT32_MAX, 0, 0},
++        {10, 100, UINT32_MAX, 1, 1},
++        {11, 100, UINT32_MAX, 1, 1},
++        {1000, 100, UINT32_MAX, 1, 100},
++        {1, 1000, UINT32_MAX, 1, 1},
++        {10, 128, UINT32_MAX, 1, 1},
++        {65535, 1000, UINT16_MAX, 1, 65535},
++        {65536, 1000, UINT16_MAX, 0, 0},
++        {UINT32_MAX, 1000, UINT32_MAX, 1, UINT32_MAX},
++        {UINT64_C(4294967296), 1000, UINT32_MAX, 0, 0},
++        {UINT64_C(4294967297), 1000, UINT32_MAX, 0, 0},
++        {UINT64_MAX, 2, UINT32_MAX, 0, 0},
++        {UINT64_MAX, 1, UINT32_MAX, 0, 0},
++        {1, 1000, 0, 0, 0},
++        {1, UINT32_MAX, UINT32_MAX, 1, 4294967},
++        {UINT32_MAX, 1, UINT32_MAX, 1, 4294967},
++    };
++    const uint32_t untouched = UINT32_C(0xa5a5a5a5);
++    unsigned int i;
++    for (i = 0; i < sizeof cases / sizeof cases[0]; ++i) {
++        uint32_t out = untouched;
++        int ok = period_ticks(cases[i].ms, cases[i].hz, cases[i].maximum, &out);
++        uint32_t expected = cases[i].ok ? cases[i].ticks : untouched;
++        if (ok != cases[i].ok || out != expected) {
++            fprintf(stderr, "case %u: ok=%d out=%llu expected_ok=%d expected_out=%llu\n",
++                    i, ok, (unsigned long long)out, cases[i].ok, (unsigned long long)expected);
++            return 1;
++        }
++    }
++    if (period_ticks(1, 1000, UINT32_MAX, NULL) != 0) return 1;
++    puts("19 literal conversion/range cases and null-output rejection passed; host arithmetic only");
++    return 0;
++}
++"""
++
++
++class RtosPeriodMethodTests(unittest.TestCase):
++    def setUp(self):
++        self.compiler = shutil.which("cc")
++        if self.compiler is None:
++            if os.environ.get("GITHUB_ACTIONS") == "true":
++                self.fail("native C compiler required for period-method validation")
++            self.skipTest("native C compiler unavailable")
++        text = (ROOT / "skills/adk-rtos-task-design/SKILL.md").read_text(encoding="utf-8")
++        matches = re.findall(r"<!-- adk-example: period-ticks -->\s*```c\n(.*?)\n```", text, re.S)
++        self.assertEqual(1, len(matches), "missing or ambiguous published period example")
++        self.published = matches[0]
++
++    def execute(self, implementation):
++        with tempfile.TemporaryDirectory(prefix="adk-period-test-") as directory:
++            source, binary = Path(directory) / "period.c", Path(directory) / "period"
++            source.write_text(implementation + "\n" + VECTORS, encoding="utf-8")
++            built = subprocess.run([self.compiler, "-std=c99", "-Wall", "-Wextra", "-Werror", "-pedantic",
++                                    str(source), "-o", str(binary)],
++                                   capture_output=True, text=True, timeout=10)
++            self.assertEqual(0, built.returncode, built.stdout + built.stderr)
++            return subprocess.run([str(binary)], capture_output=True, text=True, timeout=5)
++
++    def test_published_example_rejects_zero_overflow_and_preserves_output(self):
++        result = self.execute(self.published)
++        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
++        self.assertIn("19 literal conversion/range cases", result.stdout)
++
++    def test_oracle_rejects_accepting_a_quantized_zero_period(self):
++        needle = "if (!n || n > tick_max)"
++        self.assertEqual(1, self.published.count(needle))
++        mutant = self.published.replace(needle, "if (n > tick_max)")
++        result = self.execute(mutant)
++        self.assertEqual(1, result.returncode, result.stdout + result.stderr)
++        self.assertIn("case 2:", result.stderr)
++
++    def test_oracle_rejects_narrowing_before_range_validation(self):
++        needle = "uint64_t n = ms * hz / 1000u;"
++        self.assertEqual(1, self.published.count(needle))
++        mutant = self.published.replace(needle, "uint32_t n = (uint32_t)(ms * hz / 1000u);")
++        result = self.execute(mutant)
++        self.assertEqual(1, result.returncode, result.stdout + result.stderr)
++        self.assertIn("case 13:", result.stderr)
++
++
++if __name__ == "__main__":
++    unittest.main()

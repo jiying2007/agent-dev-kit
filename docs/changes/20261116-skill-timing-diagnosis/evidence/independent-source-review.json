@@ -1,0 +1,684 @@
+{
+  "schema": "adk-independent-review/v2",
+  "reviewer": "ai/root/independent_round2_review",
+  "role": "read-only independent reviewer; no candidate implementation, repo/index/ref or remote writes",
+  "status": "final-source-review-complete",
+  "reviewed_at": "2026-11-16T05:40:52.670629+00:00",
+  "base_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+  "source_tree": "475d2fa8ff69320bf5268677eb4072e7359e5ab1",
+  "patch_sha256": "02f31f5fd6f932c5c52892fda46633d0510eb0ec1f66db461f78041a27f2917a",
+  "changed_file_count": 29,
+  "source_files": [
+    {
+      "path": ".version-lock",
+      "blob": "c9713f8a9c7835da436f7dbbbc5074e3a8b0652d",
+      "bytes": 87,
+      "sha256": "9c2c8625dec775dbe29f61c8ac867e0094b1399ff8f767b2476b860c06c859a5"
+    },
+    {
+      "path": "CONTEXT.md",
+      "blob": "b4f52c8ef3c2c369d6714366922dd69fbe61d505",
+      "bytes": 8643,
+      "sha256": "fbb3fb2f5b8de18dcec4c12eddde70630e80b05b95d51c6b58fe49aa902c60b5"
+    },
+    {
+      "path": "README.md",
+      "blob": "bffe23b1a7bf49bccb71025027f59dd5e0b73921",
+      "bytes": 13086,
+      "sha256": "b1dfee0b243bded458d0ba3376c7dbcc3f7a349c76ebe9fdd090919fb1b76997"
+    },
+    {
+      "path": "docs/agent-skill-catalog.md",
+      "blob": "7981a87d1005041e6ab6cc75fee0f0b573d65964",
+      "bytes": 38498,
+      "sha256": "23b1d2be15d1cba63d8eadd9505a9b6cf57f8a3531b48129933cb47dcb9cda25"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/audit.md",
+      "blob": "8da03e38bc8e156e05f7b626b0c73d03e2ec97d1",
+      "bytes": 10734,
+      "sha256": "2e0a9519087606f7fdb71c70d686053f6359269f73f0acbdd4197446d91d4f04"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/design.md",
+      "blob": "6ba32ab9e71a28a47a8e62d526d982dfa4674a44",
+      "bytes": 2136,
+      "sha256": "2145e7d0c827110f3a2b4fba1ab790333322cb2adc88053f49e46b020b08d6d7"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/core-audit.json",
+      "blob": "de54d4c8de69229268d04424c41360fc87c25ebb",
+      "bytes": 44073,
+      "sha256": "273cf660b7ab6cb1f67bb0319c8ea911f370b38b075441e7ee757ab195fbb4f6"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/embedded-audit.json",
+      "blob": "b40e79c024f294c91b23545364f61a95e27a582e",
+      "bytes": 26856,
+      "sha256": "52330f35937ff3915296c6065e9945b4a08ba900dfa1a3d65776436547bd2fb9"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/optional-audit.json",
+      "blob": "c9e63aff89c1ee1817b240ff243e60714df2826f",
+      "bytes": 20703,
+      "sha256": "483124b8f8e08474da9db0670b70f25d7958ba6b60501063e1cdcb9e4579b32c"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/portfolio-audit.json",
+      "blob": "f5462ddc91fa331928cafeb2ca87b96493750c3e",
+      "bytes": 16489,
+      "sha256": "384533d1186a294890970c4277e800c66b7a878e7eedbc0fa3b3b628346aa748"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/negative-results.md",
+      "blob": "02f97bce4c7a9cae79d9e85c90ed5cfd355b132c",
+      "bytes": 2266,
+      "sha256": "c246a0efcb024a47a9b29bcdc8d992385aba0563289ba4e9c233a5d66734efba"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/requirements.md",
+      "blob": "b1afd73beaf2c85be84707e6806cd2984437daf7",
+      "bytes": 1600,
+      "sha256": "04c41702d0c5849c844e6427bf26df82bb55cca1b5e3330ce30b205213a4f469"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/source-review.md",
+      "blob": "f9eb0bdabc3c90c2a293b2e924ecbb063c81487a",
+      "bytes": 8369,
+      "sha256": "0cf7c8c2b2d5167464693179b70704b35895657bb4820b3bd25bf35493f60ad3"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/tasks.md",
+      "blob": "6890f983012b0d405ccf30f8bd203b1c9647aa3b",
+      "bytes": 1476,
+      "sha256": "38c7612f2af740d657f69467ca3a510a26be37db80c35b57e9e9bde6addc3892"
+    },
+    {
+      "path": "manifest.json",
+      "blob": "c4316d8123a6487f86155d90ff6bcf202adc5fb7",
+      "bytes": 90987,
+      "sha256": "8ba8f74d5db6f297260b2ada4b2f779541be320152a9b915fedc50c2be933c32"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "blob": "025c788be69f9eccc099284708b41aa15b1b67a1",
+      "bytes": 705,
+      "sha256": "94abc0f2f09786ba8c372ed7ff6965b187f148716473c86cf7d135186f401c2f"
+    },
+    {
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "blob": "a123dabd42d37fb08b803abf2a732bc7cd855512",
+      "bytes": 2416,
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "blob": "52da1f2961c8235de2ded7578337caa3ea64d180",
+      "bytes": 6646,
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "blob": "d402bbbd3dee0cd795f7d9fb41756058578addc8",
+      "bytes": 7050,
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0"
+    },
+    {
+      "path": "pyproject.toml",
+      "blob": "4c29f556b59f64d7c4260e3070b5b6031105ccd6",
+      "bytes": 1309,
+      "sha256": "8bb804a71fcb16cb61cdfa3b135306d0f24523a89ddad4006f79b0e53d2a8f93"
+    },
+    {
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "blob": "c447d6407ed33045e98770d24c9779ba6c44992c",
+      "bytes": 5718,
+      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "blob": "a4de92609ea416c21af29f2f1e64f3e850f42ba7",
+      "bytes": 2801,
+      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "blob": "a8f806a520b6a45b6738bae52927ccf90fbe25ae",
+      "bytes": 1524,
+      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "blob": "08df3c4982ab63f51f7739a93265e272d9353c27",
+      "bytes": 70,
+      "sha256": "dce1daed7479bc1686d5596aa6d4c9cdc92631615bdfb92f181a310924bcb9e9"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "blob": "9b8dbea72c585df87c6772e5599a5b1ce012689c",
+      "bytes": 5821,
+      "sha256": "bfb37e4ca4f3e58c586d9a6c8047183916ef27f7ea85d53c125faf6a822d5edc"
+    },
+    {
+      "path": "tests/test_optional_incident_lifecycle.py",
+      "blob": "8b9aced00453fc8c2b971f3111beb9a1dfeb9c9f",
+      "bytes": 4019,
+      "sha256": "00f45ea1b0890a4413a290f556fc8e295d82d4d5c606af8ee7586430e1c94d65"
+    },
+    {
+      "path": "tests/test_skill_bisect_methods.py",
+      "blob": "4ad7ae7f45e5de13a3e0515150a7e4c0e0fc2b72",
+      "bytes": 8897,
+      "sha256": "a413b9fccf6dce8abc236a44554c100c69a0db2d5a304009a592040409daca74"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "blob": "6280e9a918be1a95d5b4649a01d5e1e6107d39ac",
+      "bytes": 972,
+      "sha256": "fe308b160bac02228bd26261fbfaf4c5c4871f0cf0c9f85e6f10d630ef380450"
+    },
+    {
+      "path": "tests/test_skill_rtos_methods.py",
+      "blob": "fbd372f0b0a9dc4828093c58d4f6bef4afb2d676",
+      "bytes": 4584,
+      "sha256": "79f5d6fa731e7f905b33f906e4f26e16de8cb73d876ab6ea07cea1fa9c1a5122"
+    }
+  ],
+  "spec_verdict": "pass",
+  "quality_verdict": "pass",
+  "verdict_scope": "Frozen29-file source/method change at b4c2a and its bound execution/consumer evidence; no runtime, model, field, product or future release certification.",
+  "findings": [
+    {
+      "id": "IR-C1",
+      "severity": "major",
+      "status": "closed",
+      "scope": "consumer-output-usability; observed on original source",
+      "location": "/workspace/scratch/fe5385ca063a/round2-consumer-response.json#/cases/2/answer",
+      "evidence": {
+        "task": "/workspace/scratch/fe5385ca063a/round2-consumer-task.md#请求 C",
+        "requirement": "初始化一份最小记录；只填写已知输入；全部 Creation Gate 状态和证据；保留后续审核入口",
+        "observed_characters": 3894,
+        "observed_lines": 96,
+        "observed_headings": 12,
+        "unnecessary_sections": [
+          "Pattern Classification",
+          "Reuse Threshold / Evolution Evidence",
+          "Skill Behavior RED → GREEN → REFACTOR",
+          "Failure Feedback → Deterministic Regression",
+          "Atomicity Rule",
+          "all-pending Output Contract / Metadata"
+        ]
+      },
+      "finding": "十项Creation Gate均正确pending，未虚构证据；但完整展开大量本次尚无输入且并不必填的生命周期阶段，超出最小初始化交付，增加阅读和后续维护负担。不能把本案例算为完整通过。",
+      "required_action": "由实现者收窄仅初始化记录的适用指导，保留已知Scope、全部10项pending Gate及后续审核指针；保留原始回答并使用新会话复验；审核者不修源。",
+      "causality_limit": "Initial thread answered A/B/C together; fresh follow-up answered only the same C engineering request. Both are constrained synthetic tasks, with no fixed sampling conditions, native loading trace, baseline/candidate A/B or token measurement.96 versus41lines are two observed answers and cannot isolate the causal effect of one sentence or establish efficiency.",
+      "title": "Original consumer C expanded a requested minimal initialization into the full lifecycle template",
+      "original_severity": "medium",
+      "severity_mapping": "The original free-form medium finding maps to canonical major because it blocked this task’s explicit delivery requirement before repair. This is a taxonomy mapping, not a new safety finding or a claim of general model regression.",
+      "original_source_status": "needs-fix",
+      "correction": {
+        "source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+        "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+        "old_sha256": "d90e4f7a2bde8ca2a094edd7538a569def647933cb42d65584e50bbbe4e4c001",
+        "new_sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
+        "change": "Initialize known Scope, complete Creation Gate and next-review entry; expand remaining sections only when current stage and evidence require. All ten existing Gate rows remain pending; no new Gate.",
+        "corrective_patch": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/corrective-diff.patch",
+          "bytes": 2854,
+          "sha256": "2c00092361f6d68463a1438db715a26b50cb03fbad11e1593372eeb9882402d7"
+        },
+        "implementer_receipt": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-optional-minimal-record-fix.json",
+          "bytes": 6341,
+          "sha256": "aeea2b279d82615d1bb6a031a51c7d7dfc3071d349b683e047507b4b7fe964f3"
+        }
+      },
+      "closure_verification": {
+        "reviewer_decision": "closed after independent full-answer inspection; not accepted from implementer self-score",
+        "checked_at": "2026-11-16T05:35:50.680618+00:00",
+        "raw_task": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-consumer-c-followup-task.md",
+          "bytes": 1298,
+          "sha256": "68a5f4020e0ec4af9de4976804f789a3311d8ef99804b50d8a906c4bf174a6c3"
+        },
+        "raw_response": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-consumer-c-followup-response.json",
+          "bytes": 4932,
+          "sha256": "42d1349c06feffa2575c78bb6a99c7566add8d62c12d6a64f0fdae06da8d0655"
+        },
+        "answer_sha256": "909c37c49dfc2e33d648a3c84f14e7c21e9d31bbedcfcaf9961204e5f4c95f06",
+        "input_hashes_match_final_source": true,
+        "observed_characters": 2096,
+        "observed_lines": 41,
+        "observed_headings": 5,
+        "gate_count": 10,
+        "all_gate_decisions": "pending",
+        "semantic_result": "pass",
+        "usability_result": "pass",
+        "reason": "Answer contains Scope, all ten Gate rows with absent evidence explicit, and next-review entry plus source citations. It does not expand the unrelated full lifecycle. The unspecified layer is honestly left unknown; optional remains intended ownership rather than an invented approved result.",
+        "followup_review": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/followup-consumer-review.json",
+          "bytes": 3486,
+          "sha256": "f42a5fbc69c8db56e18c1cea2b289dc8b8a7fb7c8b355263e7ce6fcc04f8042c"
+        },
+        "final_regression": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-regression-verification.json",
+          "bytes": 13478,
+          "sha256": "9d103f6fa3b845cc86ac13343926a2b873c7c9f8e82fefdc0ac1c87440abdc20"
+        }
+      }
+    }
+  ],
+  "source_assessment": {
+    "rtos": "Constrained RTA model/inputs/IRQ/shared-resource/stack/queue/WCET and permission bounds retained. Tick quantization/range, exact-boundary pdFALSE, caller-owned absolute CMSIS tick, bounded overload and timer daemon/quiescence guidance align with inspected pinned upstream code. Host examples are explicitly not scheduling/HIL evidence.",
+    "debugging": "Published wrapper verbatim execution correctly separates good/bad/untestable and aborts unknown/process errors; build-as-target stays bad; saved Git logs resolve first bad and skipped ambiguity. Volatile artifact preservation is method guidance, not a new automatic copier.",
+    "optional": "RCA preserves fact/hypothesis/unresolved, default short report, timezone and clock-uncertainty boundaries. Creation Gate retains 10 original rows and changes unsupported pass defaults to pending. C usability shortfall remains distinct from this invariant fix. The corrective initialization paragraph now explicitly limits initial records to known Scope, complete Gate and next review; the full lifecycle remains available when stage/evidence needs it.",
+    "compression": "Removed repeated headings/template prose retain core constraints in workflow/delivery paragraphs; no identified material lost safety or analytic condition.",
+    "tests": "New tests execute the published shell/C snippets and assert forbidden outcomes. RTOS C tests use literal vectors plus rejecting mutants. RCA arithmetic tests are authored datetime design cases, and the template parser is a source invariant; neither establishes real model behavior.",
+    "result": "pass at frozen final source: no remaining blocking source/method finding after IR-C1 correction and actual final regression",
+    "portfolio": "The baseline inventory is exactly65Skills/153tracked files/421746bytes. Four existing Skills changed;61retained with recorded rationale. This is a broad source audit with bounded executable probes, not proof that every Skill improved or that all workloads are qualified.",
+    "version_projection": "11.3.9 projections are consistent; no admission/permission/product-evidence gate was removed. Prospective A/B fixture remains not-run without invented provider samples."
+  },
+  "consumer_review": {
+    "raw_task": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-consumer-task.md",
+      "bytes": 3251,
+      "sha256": "73947ee6a42c92ca276e399d79c2d74bbd92a319f89212fc5e32b16bfa8db9a7"
+    },
+    "raw_response": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-consumer-response.json",
+      "bytes": 20302,
+      "sha256": "8fc03f3cf37379bfa3fc0ff9f1c16393b1aec2a34b902f1dde3b0d2dfb50f69e"
+    },
+    "input_hashes_match_reviewed_files": true,
+    "author_self_score_used": false,
+    "cases": [
+      {
+        "id": "A",
+        "semantic_verdict": "pass",
+        "usability_verdict": "pass-with-verbosity-observation",
+        "full_contract_verdict": "pass",
+        "basis": "Correctly rejects 7ms -> zero at100Hz, refuses 10ms substitution, distinguishes at-boundary non-blocking from completion miss, avoids promoting observed maxima to WCET, requires nonblocking callback plus in-flight owner/quiescence protocol. Validation statuses remain not-run/needs-runtime-evidence. Length is greater than necessary but recommendations remain scoped to the three actual engineering faults.",
+        "observation_source_commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9"
+      },
+      {
+        "id": "B",
+        "semantic_verdict": "pass",
+        "usability_verdict": "pass",
+        "full_contract_verdict": "pass",
+        "basis": "Distinguishes event/observation clocks, retains unsynchronized RTC uncertainty, does not infer configuration cause or rollback success, separates local probe success from total restoration, assigns only log collection to known Yang engineer and gives exactly three next actions without invented deadlines. Four short sections and two tables remain usable as a compact handoff.",
+        "observation_source_commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9"
+      },
+      {
+        "id": "C",
+        "semantic_verdict": "pass",
+        "usability_verdict": "needs-fix",
+        "full_contract_verdict": "needs-fix",
+        "basis": "All10pending statuses and unknown evidence are correct, no extra authorization or fabricated pilot. Nevertheless96lines/12headings expand full lifecycle scaffolding and fail explicit minimal initialization request. See IR-C1.",
+        "observation_source_commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9"
+      }
+    ],
+    "overall": "Original A/B pass and original C needs-fix remain unchanged; a separate later C-only observation on corrected source passes. This is not three original cases all passing and not a controlled A/B campaign.",
+    "original_source_commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9",
+    "followups": [
+      {
+        "id": "C-followup",
+        "source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+        "input_binding": "Exact Skill/reference SHA256s match final frozen source; answer was observed before commit freeze but uses those exact bytes.",
+        "observed_at": "2026-11-16T05:32:35Z",
+        "task": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-consumer-c-followup-task.md",
+          "bytes": 1298,
+          "sha256": "68a5f4020e0ec4af9de4976804f789a3311d8ef99804b50d8a906c4bf174a6c3"
+        },
+        "response": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-consumer-c-followup-response.json",
+          "bytes": 4932,
+          "sha256": "42d1349c06feffa2575c78bb6a99c7566add8d62c12d6a64f0fdae06da8d0655"
+        },
+        "answer_sha256": "909c37c49dfc2e33d648a3c84f14e7c21e9d31bbedcfcaf9961204e5f4c95f06",
+        "semantic_verdict": "pass",
+        "usability_verdict": "pass",
+        "full_contract_verdict": "pass",
+        "review": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/followup-consumer-review.json",
+          "bytes": 3486,
+          "sha256": "f42a5fbc69c8db56e18c1cea2b289dc8b8a7fb7c8b355263e7ce6fcc04f8042c"
+        }
+      }
+    ],
+    "sampling_and_host_limit": "Initial consumer thread processed A/B/C; reported fresh follow-up context processed C only. Reviewer independently checked exact task/answer and source hashes, not the entire private model execution trace. Fixed sampling parameters, native discovery/loading trace, baseline condition, token/cost measures and holdout statistics were not provided."
+  },
+  "evidence_review": {
+    "identity": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-source-identity-check.json",
+      "bytes": 7710,
+      "sha256": "d23a02328ab328315c72dc41753f54b5e80f8fb029c003fa72cd95e73c4cb5f0"
+    },
+    "raw_complete_diff": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-source-raw-diff.patch",
+      "bytes": 194148,
+      "sha256": "02f31f5fd6f932c5c52892fda46633d0510eb0ec1f66db461f78041a27f2917a"
+    },
+    "coverage": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/audit-coverage-check.json",
+      "bytes": 319,
+      "sha256": "a21f7e1bb56d20b400116120af9ec92de8fe03f701eec487ec7ab0bb6cdfaf89"
+    },
+    "audit_coverage_result": "65 skills/153 unique tracked files/421746 bytes exactly equal baseline Git tree; every blob/SHA256/byte count checked.23 declared external files across16 repositories counted, including licenses. Does not independently prove each original auditor read every line.",
+    "upstream_copy_integrity": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/embedded-upstream-integrity.json",
+      "bytes": 2684,
+      "sha256": "a5cebe67035553a0d71e5222d0cb5b9b006c30656b77e590a7f7d02c7d4b9037"
+    },
+    "independently_fetched_primary_sources": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-independent-integrity.json",
+      "bytes": 1322,
+      "sha256": "73e50b9bbdee64dc361e01e1677afb6b6e64d56a1648105ea587215148d29f64"
+    },
+    "upstream_scope": "All23declared external files have local source bodies with independently checked identities against audit metadata:8restored core,10embedded copies,5new optional retrievals. The23include3licenses and span16repositories. Git bisect documentation and OTel were also independently fetched by this reviewer. Identity checking does not establish historical line-by-line reading; selected semantic read scopes are listed below.",
+    "implementation_receipts": [
+      {
+        "path": "/workspace/scratch/fe5385ca063a/round2-core-implementation.json",
+        "bytes": 25026,
+        "sha256": "6a24285c3f4528dd46cba319fb1c84ecbc5daf0776d9cd25c68544df86f68d93"
+      },
+      {
+        "path": "/workspace/scratch/fe5385ca063a/round2-embedded-implementation.json",
+        "bytes": 13508,
+        "sha256": "56361af175a398c74049767bdea024598657dab75c59ed61fcde4de7fe7b0ff2"
+      },
+      {
+        "path": "/workspace/scratch/fe5385ca063a/round2-optional-implementation.json",
+        "bytes": 19363,
+        "sha256": "53482b8c7abbd67a2562622a9185e36040062027f93a84a41baa1ded6bcc11b8"
+      }
+    ],
+    "negative_results_handling": "Core contract RED ran0methods due absent published marker; does not prove model RED. Optional actual empty-evidence template RED had10 failing subtests. Embedded missing PYTHONPATH error is recorded and corrected. No final GREEN supplied here is inferred from failed or unexecuted commands.",
+    "core_restored_source_integrity": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/core-restored-upstream-integrity.json",
+      "bytes": 8735,
+      "sha256": "cb51fe710a7e460e7519ef5c56d5240379cdb7133d55b47b2a4eb2654ab6d426"
+    },
+    "optional_refetched_source_integrity": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/optional-refetched-upstream-integrity.json",
+      "bytes": 3995,
+      "sha256": "6007edf42ca0593cc18b03697e51d744662ffc1e83c85a09a22a3aef78fe870b"
+    },
+    "patch_format_agreement": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-patch-format-check.json",
+      "bytes": 575,
+      "sha256": "8702fc734309c59a3f81a7faced68c0734e815c3c4e48ff94ebc78e3efd783f1"
+    },
+    "upstream_read_scopes": [
+      {
+        "group": "core",
+        "independent_semantic_scope": "Matt Pocock grilling and obra systematic-debugging main bodies; Anthropic skill-writing/evaluation/baseline/iteration/description sections; Git bisect_run/verify_good and documented run/skip semantics; issue2232 original body. License bytes/identity checked, no new legal redistribution opinion. Helper/reference libraries were not exhaustively read.",
+        "retrieval_boundary": "Core8are exact normalized original retrieval records restored later, not original transport envelopes. Issue2232original tool response is separately preserved. Sentry was commit-only and no unread body/method is claimed.",
+        "integrity": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/core-restored-upstream-integrity.json",
+          "bytes": 8735,
+          "sha256": "cb51fe710a7e460e7519ef5c56d5240379cdb7133d55b47b2a4eb2654ab6d426"
+        }
+      },
+      {
+        "group": "embedded",
+        "independent_semantic_scope": "All3community Skill bodies; FreeRTOS macro, delay API/function, timer stop/delete return semantics, daemon callback restriction; CMSIS delay declaration; Linux coherent DMA ordering paragraph. Does not claim full reading of all large upstream C/header/manual files.",
+        "retrieval_boundary": "Raw copies provided by embedded auditor; all10file byte/SHA256 identities match their recorded metadata. No independent network transport history inferred from local copies.",
+        "integrity": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/embedded-upstream-integrity.json",
+          "bytes": 2684,
+          "sha256": "a5cebe67035553a0d71e5222d0cb5b9b006c30656b77e590a7f7d02c7d4b9037"
+        }
+      },
+      {
+        "group": "optional",
+        "independent_semantic_scope": "Cloudflare, Supabase, Awesome Copilot and wshobson main Skill bodies; OTel event/observation clock model. Reported adoption/retention/rejection decisions are consistent with inspected sections.",
+        "retrieval_boundary": "Original transient optional stores unavailable; five fixed sources newly retrieved05:31:08Z and independently hash/blob checked. Not presented as recovered original receipts. Google SRE search corroboration is original-auditor evidence, not separately re-fetched by this reviewer.",
+        "integrity": {
+          "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/optional-refetched-upstream-integrity.json",
+          "bytes": 3995,
+          "sha256": "6007edf42ca0593cc18b03697e51d744662ffc1e83c85a09a22a3aef78fe870b"
+        }
+      }
+    ],
+    "profile_results": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-final-profile-results.json",
+      "bytes": 4917,
+      "sha256": "91d679e46ed340f1800614df49aef8df22c4ff8b55bc6bda5bd3a0d0fe943f17"
+    },
+    "independent_profile_verification": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-profile-independent-check.json",
+      "bytes": 18463,
+      "sha256": "586a0fe7f9786e4a38d67bdc4122056c1138219e812d1ee39007c627cf69a69b"
+    },
+    "profile_result_summary": {
+      "profiles": 8,
+      "passed": 8,
+      "ratchet_unchanged_from_baseline": true,
+      "smallest_full_source_margin": {
+        "profile": "large-refactor",
+        "actual_bytes": 323191,
+        "limit_bytes": 323328,
+        "remaining_bytes": 137
+      },
+      "semantics": "UTF-8 source-byte ratchet only; not tokenizer or runtime initial context."
+    }
+  },
+  "execution_evidence": {
+    "independent_new_tests": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/new-tests-receipt.json",
+      "bytes": 78156,
+      "sha256": "1938c4dac5dfd134bbf7ee4b811dd5ee580c2878d6e47663a7cb8d140687c4a7"
+    },
+    "new_tests_result": {
+      "tests_run": 12,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "git_subprocess_receipts": 139
+    },
+    "independent_upstream_probes": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/independent-upstream-probes.json",
+      "bytes": 5538,
+      "sha256": "ed846d30e736a422bd98a79494dfec13cc7b7b28234f82f5e36980e9fa4dd3ec"
+    },
+    "upstream_probe_result": "7 equality/wrap cases on exact kernel function excerpt with instrumented scheduler helper stubs;5 literal16-bit/100Hz macro vectors;actual CMSIS two-argument compiler rejection and one-argument acceptance. Not native scheduler.",
+    "full_regression": {
+      "status": "pass",
+      "source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+      "tree": "475d2fa8ff69320bf5268677eb4072e7359e5ab1",
+      "command": [
+        "bash",
+        "tests/run_all.sh",
+        "--verbose",
+        "--timing-json",
+        "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/timing.json"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at": "2026-11-16T05:33:36.070832+00:00",
+      "finished_at": "2026-11-16T05:38:52.781242+00:00",
+      "elapsed_seconds": 316.6942289109975,
+      "exit_code": 0,
+      "timed_out": false,
+      "suite_counts": {
+        "total": 102,
+        "pass": 102,
+        "fail": 0
+      },
+      "before_and_after_clean": true,
+      "registered_run_pass_timing_names_identical": true,
+      "unittest_skip_lines": [],
+      "unittest_failure_summaries": [],
+      "receipt": {
+        "path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/receipt.json",
+        "bytes": 1639,
+        "sha256": "66d60a85d7cf375ce332cda4ec28fa5147b70b6e79dbc8a367a358984187bc51"
+      },
+      "timing": {
+        "path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/timing.json",
+        "bytes": 8223,
+        "sha256": "97a9e4c497f445a9538f9c7399003b0e511a78660e2ab72c9a5dda76c30c992e"
+      },
+      "stdout": {
+        "path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/stdout.log",
+        "bytes": 34272,
+        "sha256": "40dbe2627b1772643396d267621e4ffd497ac73765124158bd641c124fabfd82"
+      },
+      "stderr": {
+        "path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/stderr.log",
+        "bytes": 54618,
+        "sha256": "712a3ea0e4032e78360408230692a32affbabd1014a2e29238df8a0b480327bd"
+      },
+      "independent_verification": {
+        "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-regression-verification.json",
+        "bytes": 13478,
+        "sha256": "9d103f6fa3b845cc86ac13343926a2b873c7c9f8e82fefdc0ac1c87440abdc20"
+      }
+    },
+    "initial_inspection_commands_and_raw_output": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/initial-commands.json",
+      "bytes": 587390,
+      "sha256": "01a6bf7bfe645241ea1892669d09db0c5ddbfe63a482e73696260529bfafc02b"
+    },
+    "final_inspection_commands_and_raw_output": {
+      "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-source-inspection-commands.json",
+      "bytes": 580224,
+      "sha256": "cbf3d01f36f9ebff3d4738d595ee1b86850987eae9ba83e3414f6811c363c996"
+    },
+    "full_regression_original_source": {
+      "status": "pass",
+      "source_commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9",
+      "tree": "8df5f5652a02c2ae5c0d37f5600d1a5525731e53",
+      "command": [
+        "bash",
+        "tests/run_all.sh",
+        "--verbose",
+        "--timing-json",
+        "/workspace/scratch/fe5385ca063a/adk-11.3.9-full-regression/timing.json"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+      "started_at": "2026-11-16T05:25:38.038510+00:00",
+      "finished_at": "2026-11-16T05:30:56.240002+00:00",
+      "elapsed_seconds": 318.18312679299925,
+      "exit_code": 0,
+      "suite_counts": {
+        "total": 102,
+        "pass": 102,
+        "fail": 0
+      },
+      "before_and_after_clean": true,
+      "receipt": {
+        "path": "/workspace/scratch/fe5385ca063a/adk-11.3.9-full-regression/receipt.json",
+        "bytes": 1635,
+        "sha256": "1512f6f48d46ce2184540e9705b8742f4b894ae203c756ef79486d4f46cadcf1"
+      },
+      "log_integrity": {
+        "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-regression-verification.json",
+        "bytes": 19494,
+        "sha256": "0eb6c9d000583657c6e725b06d80b24bd741f5e7ef41b8082c939de1abde5147"
+      },
+      "suite_integrity": {
+        "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-regression-suite-check.json",
+        "bytes": 325,
+        "sha256": "4b78b5e71c9aa1ecc0ec1b554abef4783b184b06e72cb750d159f414dc20d4b0"
+      },
+      "checked_names": true,
+      "reuse_limit": "Only valid for original7e471/tree8df; must not substitute for final b4c2a regression."
+    },
+    "new_tests_source_binding": "The separate12-test reviewer run was on original7e471. Those three test modules are unchanged in b4c2a and are also executed inside the actual final102-suite regression. Original execution is not relabeled as a final-source run.",
+    "raw_command_boundary": "Exact Git subprocess and compiled-probe argv/stdout/stderr are preserved in linked receipts; the separate12-test outer Python runner is described by its environment/module set, with actual unittest stdout/stderr and139Git subprocess records. Final full-regression command, all suite names and raw logs are complete."
+  },
+  "limitations": [
+    "No board, real FreeRTOS scheduler/timer-daemon cancellation runtime, device writes, hard-real-time qualification or field acceptance was executed. The upstream function probe used explicit host scheduler-helper stubs and is not a native RTOS measurement.",
+    "No paid model invocation, controlled baseline/candidate A/B, fixed sampling campaign, held-out statistics, provider-token/cost measurement, native skill-loading trace or product qualification.",
+    "Initial consumer thread contained A/B/C; corrected fresh thread contained onlyC.41and96line counts describe two actual answers under different request batching, not an isolated causal or efficiency estimate.",
+    "All65Skills are represented in the baseline audit inventory and retention decisions, but the independent semantic review focuses on the complete29-file change, supporting tests and relevant upstream passages. It does not certify all65Skills for every workload or claim all61retainedSkills improved.",
+    "Original upstream read-history remains auditor-declared. Restored normalized core records, new optional retrievals, provided embedded copies and independent primary retrievals are distinguished. Full-body hashes do not imply every upstream line was independently read.",
+    "Source profile ratchets measure UTF-8 source bytes only; no runtime initial-context or token claim follows from8/8pass.",
+    "The reviewer did not implement fixes, alter repository files/index/refs, perform remote writes or send external messages. Scratch-only reports and isolated probes were produced.",
+    "This verdict is tied to final frozen sourceb4c2a/tree475d and29source paths. Later evidence packaging,CI,protected merge,release publication and postmerge checks are separate observations, not implicitly approved or certified by this source review."
+  ],
+  "source": {
+    "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+    "reviewed_source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+    "tree": "475d2fa8ff69320bf5268677eb4072e7359e5ab1",
+    "original_patch_sha256": "02f31f5fd6f932c5c52892fda46633d0510eb0ec1f66db461f78041a27f2917a",
+    "patch_command": [
+      "git",
+      "diff",
+      "--binary",
+      "--full-index",
+      "--no-ext-diff",
+      "--no-textconv",
+      "913b6b3a0838ccddae252a3a8536ac7d41598810",
+      "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9"
+    ],
+    "original_candidate_commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9",
+    "original_candidate_tree": "8df5f5652a02c2ae5c0d37f5600d1a5525731e53",
+    "original_candidate_patch_sha256": "4d91d33f3de27bc06e3c9dd0e155b63f60f39a2be99a03811c6be1712e64ce9b"
+  },
+  "verdicts": {
+    "spec": {
+      "result": "pass",
+      "basis": [
+        "The complete base-to-source diff and29 immutable source-file identities were reviewed; the two-file corrective delta was separately read.",
+        "The four changed Skills preserve existing scope/authorization/analytical constraints and implement the documented timing, diagnostic, dual-clock and pending-Gate requirements.",
+        "Final-source full regression independently verified102/102;8 profile ratchets remain unchanged and all pass."
+      ],
+      "scope": "Candidate source and its actual local verification. Future CI/merge/release observations are separate."
+    },
+    "quality": {
+      "result": "pass",
+      "basis": [
+        "No remaining blocking API, method, compression, fixture-oracle or evidence-integrity defect identified in this source.",
+        "IR-C1 originally prevented complete consumer acceptance. The implementer changed only the lifecycle initialization guidance; an independently judged follow-up C answer satisfies the requested minimal stage while keeping all10Gate decisions pending.",
+        "Original C remains a recorded failed output-scope observation; no author self-rating or test pass is substituted for this reviewer’s judgment."
+      ],
+      "scope": "The bounded submitted cases and reviewed source; not a measured portfolio-wide model-effect claim."
+    }
+  },
+  "original_source_review": {
+    "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-source-review.json",
+    "bytes": 21255,
+    "sha256": "7f25ac7676e94478aceeefbbea594df5fbe568ddff05afce562701db9b819192"
+  },
+  "original_interim_review": {
+    "path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-source-interim-review.json",
+    "bytes": 18729,
+    "sha256": "fbdb3f85d4b879854e00eb28231a379950e9dc670451bbcc6379199de69a2814"
+  },
+  "requirements_review": [
+    {
+      "area": "tick units/absolute deadlines/overload/timer ownership",
+      "result": "pass",
+      "basis": "RTOS source keeps model assumptions and evidence limits; published C rejects zero/overflow/range; independent fixed-upstream probes corroborate equality/wrap and timer/API interpretation."
+    },
+    {
+      "area": "diagnostic classification and volatile originals",
+      "result": "pass",
+      "basis": "Published wrapper is tested verbatim against real isolated Git histories; untestable125 is distinct from target bad1 and infrastructure128 abort; skip ambiguity and original-artifact preservation are explicit."
+    },
+    {
+      "area": "incident clocks and action ownership",
+      "result": "pass",
+      "basis": "Event versus observed time and clock uncertainty remain separate; Causal/rollback/recovery claims are withheld in actual B response, and only known responsibility is assigned."
+    },
+    {
+      "area": "empty lifecycle Gate and minimal initialization",
+      "result": "pass-after-correction",
+      "basis": "Ten empty decisions remain pending. Original C output-scope failure preserved, one-paragraph corrective guidance and actual follow-up C independently accepted."
+    },
+    {
+      "area": "retained constraints/API provenance/profile growth",
+      "result": "pass",
+      "basis": "No identified material lost constraint; upstream identities and selected semantics checked; all8original source-byte ratchets unchanged and passing."
+    },
+    {
+      "area": "verification evidence and release boundary",
+      "result": "pass-for-source",
+      "basis": "Final102suite receipt bound to final head/tree with clean before/after and matching hashes. CI,protected merge,postmerge qualification and publication remain separately observable actions."
+    }
+  ]
+}

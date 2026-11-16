@@ -1,0 +1,114 @@
+{
+  "started_at": "2026-11-16T05:29:16.264580+00:00",
+  "completed_at": "2026-11-16T05:29:16.401709+00:00",
+  "reviewer": "ai/root/independent_round2_review",
+  "scope": "Independent literal equality/wrap and conversion checks on provided pinned upstream code; FreeRTOS scheduler helpers are instrumented host stubs, not an executed scheduler, HIL or latency measurement. CMSIS checks are actual header syntax checks.",
+  "delay_excerpt_matches_full_tasks_c": true,
+  "source_hashes": {
+    "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/tasks.c": "6de295f333f31818de546d6eb72b877c5a6964980f14f80bc1e17b19b7ff9fc4",
+    "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/freertos-delay-until.inc": "fbff5b0d2e67edeb367e4c257651490b1bd6884cc84e01ff0b37b3d982fd85dd",
+    "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/projdefs.h": "87e8328c5d844abde3593291b36a2c235b2ae6e41402c0314fb54f933d32c4b9",
+    "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/cmsis_os2.h": "0de5e6ff219ee13bcd1b1ca2b6446d68cb56b6a11e16494e9577bb2ffdd52a70",
+    "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-delay-excerpt-probe.c": "828ec01235c8e7e2fff98e7b1246278c062abab8aef1fe15a060e8e33e03dcd3",
+    "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-macro-probe.c": "2af0313010e1298cfeeba53bda47744ab88772caf7b1b715fb7ac8d0229d5690"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "cc",
+        "-std=c99",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-delay-excerpt-probe.c",
+        "-o",
+        "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/delay-probe"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/delay-probe"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts",
+      "exit_code": 0,
+      "stdout": "case=0 last=240 now=249 result=1 next=250 blocked=1 delay=1\ncase=1 last=240 now=250 result=0 next=250 blocked=0 delay=0\ncase=2 last=240 now=251 result=0 next=250 blocked=0 delay=0\ncase=3 last=65530 now=65534 result=1 next=4 blocked=1 delay=6\ncase=4 last=65530 now=2 result=1 next=4 blocked=1 delay=2\ncase=5 last=65530 now=4 result=0 next=4 blocked=0 delay=0\ncase=6 last=65530 now=5 result=0 next=4 blocked=0 delay=0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "cc",
+        "-std=c99",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-I",
+        "/workspace/scratch/fe5385ca063a/round2-embedded-evidence",
+        "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-macro-probe.c",
+        "-o",
+        "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/macro-probe"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/macro-probe"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts",
+      "exit_code": 0,
+      "stdout": "ms=7 ticks=0\nms=10 ticks=1\nms=655350 ticks=65535\nms=655359 ticks=65535\nms=655360 ticks=0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsyntax-only",
+        "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/probe_cmsis_bad.c"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts",
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/probe_cmsis_bad.c: In function ‘probe’:\n/workspace/scratch/fe5385ca063a/round2-embedded-evidence/probe_cmsis_bad.c:2:42: error: too many arguments to function ‘osDelayUntil’\n    2 | osStatus_t probe(uint32_t tick) { return osDelayUntil(tick, 1); }\n      |                                          ^~~~~~~~~~~~\nIn file included from /workspace/scratch/fe5385ca063a/round2-embedded-evidence/probe_cmsis_bad.c:1:\n/workspace/scratch/fe5385ca063a/round2-embedded-evidence/cmsis_os2.h:591:12: note: declared here\n  591 | osStatus_t osDelayUntil (uint32_t ticks);\n      |            ^~~~~~~~~~~~\n"
+    },
+    {
+      "argv": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "cc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsyntax-only",
+        "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/probe_cmsis_good.c"
+      ],
+      "cwd": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "status": "pass"
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "local-command-observation/v1",
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "command": [
+    "bash",
+    "tests/run_all.sh",
+    "--verbose",
+    "--timing-json",
+    "/workspace/scratch/fe5385ca063a/adk-11.3.9-corrected-regression/timing.json"
+  ],
+  "started_at": "2026-11-16T05:33:36.070832+00:00",
+  "before": {
+    "head": {
+      "exit_code": 0,
+      "stdout": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9\n",
+      "stderr": ""
+    },
+    "indexed_tree": {
+      "exit_code": 0,
+      "stdout": "475d2fa8ff69320bf5268677eb4072e7359e5ab1\n",
+      "stderr": ""
+    },
+    "status": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "staged_diff": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "finished_at": "2026-11-16T05:38:52.781242+00:00",
+  "elapsed_seconds": 316.6942289109975,
+  "exit_code": 0,
+  "timed_out": false,
+  "after": {
+    "head": {
+      "exit_code": 0,
+      "stdout": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9\n",
+      "stderr": ""
+    },
+    "indexed_tree": {
+      "exit_code": 0,
+      "stdout": "475d2fa8ff69320bf5268677eb4072e7359e5ab1\n",
+      "stderr": ""
+    },
+    "status": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "staged_diff": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "logs": {
+    "stdout.log": {
+      "bytes": 34272,
+      "sha256": "40dbe2627b1772643396d267621e4ffd497ac73765124158bd641c124fabfd82"
+    },
+    "stderr.log": {
+      "bytes": 54618,
+      "sha256": "712a3ea0e4032e78360408230692a32affbabd1014a2e29238df8a0b480327bd"
+    }
+  }
+}

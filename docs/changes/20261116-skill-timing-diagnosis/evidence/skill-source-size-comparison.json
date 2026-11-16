@@ -1,0 +1,15 @@
+{
+  "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "candidate_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+  "tracked_file_count": 153,
+  "baseline_bytes": 421746,
+  "candidate_bytes": 422088,
+  "net_bytes": 342,
+  "changed_skill_net_bytes": {
+    "optional-skills/adk-incident-rca-report": 115,
+    "optional-skills/adk-skill-composition-governance": 324,
+    "skills/adk-rtos-task-design": -97,
+    "skills/adk-systematic-debugging": 0
+  },
+  "boundary": "UTF-8 repository bytes only; not a tokenizer, runtime-context, latency or cost measurement."
+}

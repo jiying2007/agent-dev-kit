@@ -1,0 +1,176 @@
+{
+  "checked_at": "2026-11-16T05:35:50.441740+00:00",
+  "checks": [
+    {
+      "repository": "anthropics/skills",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "path": "skills/skill-creator/SKILL.md",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/anthropics--skills/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/SKILL.md",
+      "actual": {
+        "bytes": 33168,
+        "sha256": "dcd4803e61e913e6fc27294184cd3a71f09f5e924ff20c8a9a20173e7b3c2bcf",
+        "git_blob": "65b3a402dbd09b8e83f9d637c6b553875189085c"
+      },
+      "audit_declared": {
+        "bytes": 33168,
+        "sha256": "dcd4803e61e913e6fc27294184cd3a71f09f5e924ff20c8a9a20173e7b3c2bcf",
+        "git_blob": "65b3a402dbd09b8e83f9d637c6b553875189085c"
+      },
+      "match": true,
+      "record_sha256": "37c95c4300ac97acf6513db20237e4b914371bb74a77f3eed112afed5f9eeb7c",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "full file"
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "path": "skills/productivity/grilling/SKILL.md",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/mattpocock--skills/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/grilling/SKILL.md",
+      "actual": {
+        "bytes": 2077,
+        "sha256": "a146842ed93ca43d833550fa9adf02e58cb63c83fea9d4b4522995b82242d4e2",
+        "git_blob": "d2f09a18e6a6c65c55f1271ba08dfeaf06f0bed3"
+      },
+      "audit_declared": {
+        "bytes": 2077,
+        "sha256": "a146842ed93ca43d833550fa9adf02e58cb63c83fea9d4b4522995b82242d4e2",
+        "git_blob": "d2f09a18e6a6c65c55f1271ba08dfeaf06f0bed3"
+      },
+      "match": true,
+      "record_sha256": "a1f9a637deed40a1371e7f1da72618efdfd5dcae181dcce3923a0ca0bbf8d136",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "full file"
+    },
+    {
+      "repository": "obra/superpowers",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "path": "skills/systematic-debugging/SKILL.md",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/obra--superpowers/22f0b463e7a5e579904dd6211a520321035526f7/skills/systematic-debugging/SKILL.md",
+      "actual": {
+        "bytes": 9530,
+        "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
+        "git_blob": "62fc752aaef59a8bbed5d305f4cadc60f8ae07ed"
+      },
+      "audit_declared": {
+        "bytes": 9530,
+        "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
+        "git_blob": "62fc752aaef59a8bbed5d305f4cadc60f8ae07ed"
+      },
+      "match": true,
+      "record_sha256": "364258da7e7db8306a44b366f6d2dbd1ee271ed6ba32a151096c010887a53618",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "full file"
+    },
+    {
+      "repository": "git/git",
+      "commit": "9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed",
+      "path": "builtin/bisect.c",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/git--git/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/builtin/bisect.c",
+      "actual": {
+        "bytes": 38485,
+        "sha256": "efd4b7d0951ca9049c7e7aba2560605c74792408c609647ab2e88dd84636e9e0",
+        "git_blob": "ccff4e1a1b2483860f9ab9916365d921ff2d20f5"
+      },
+      "audit_declared": {
+        "bytes": 38485,
+        "sha256": "efd4b7d0951ca9049c7e7aba2560605c74792408c609647ab2e88dd84636e9e0",
+        "git_blob": "ccff4e1a1b2483860f9ab9916365d921ff2d20f5"
+      },
+      "match": true,
+      "record_sha256": "450cabc23942ecc998d05d7cc37c2d813297aabc6ee3bd022634a90a31d856ce",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "bisect_run and verify_good control flow"
+    },
+    {
+      "repository": "git/git",
+      "commit": "9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed",
+      "path": "Documentation/git-bisect.adoc",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/git--git/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/Documentation/git-bisect.adoc",
+      "actual": {
+        "bytes": 18199,
+        "sha256": "9117f814e40ddc291c24a601899e458810427dea6e4be121f84c6d6a264d9820",
+        "git_blob": "b0078dda0eb05093aa86a56c6c69363ef3ab97d2"
+      },
+      "audit_declared": {
+        "bytes": 18199,
+        "sha256": "9117f814e40ddc291c24a601899e458810427dea6e4be121f84c6d6a264d9820",
+        "git_blob": "b0078dda0eb05093aa86a56c6c69363ef3ab97d2"
+      },
+      "match": true,
+      "record_sha256": "bba99221dfa5015ec771bdf76813b975b7208311f0512fd3c2376b1ded89e0f1",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "Bisect run / Bisect skip"
+    },
+    {
+      "repository": "anthropics/skills",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "path": "skills/skill-creator/LICENSE.txt",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/anthropics--skills/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/LICENSE.txt",
+      "actual": {
+        "bytes": 11345,
+        "sha256": "bc6b3af2f331cbc7fb0da1344efb2cbe5877a31498b4d70dbc7000f3405a1362",
+        "git_blob": "4f881c52d1f72f4cfb720e339e2d35c3058d01a9"
+      },
+      "audit_declared": {
+        "bytes": 11345,
+        "sha256": "bc6b3af2f331cbc7fb0da1344efb2cbe5877a31498b4d70dbc7000f3405a1362",
+        "git_blob": "4f881c52d1f72f4cfb720e339e2d35c3058d01a9"
+      },
+      "match": true,
+      "record_sha256": "c49ca9dab4584c93a40433be332e19bf71cef1f1213a58f86899dcc8e00530bb",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "full file"
+    },
+    {
+      "repository": "mattpocock/skills",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "path": "LICENSE",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/mattpocock--skills/5863806dd4e15c63174bee4e7515a4256792ecfa/LICENSE",
+      "actual": {
+        "bytes": 1068,
+        "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+        "git_blob": "f1dd2c09108dde1a5f56097cee8461b3ea834499"
+      },
+      "audit_declared": {
+        "bytes": 1068,
+        "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+        "git_blob": "f1dd2c09108dde1a5f56097cee8461b3ea834499"
+      },
+      "match": true,
+      "record_sha256": "7a541ff9d2e0a2fdc25fccc9d878735ee6af5f4dea99c33385961f3979bc612a",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "full file"
+    },
+    {
+      "repository": "obra/superpowers",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "path": "LICENSE",
+      "local_body": "/workspace/scratch/fe5385ca063a/round2-core-upstream-raw/obra--superpowers/22f0b463e7a5e579904dd6211a520321035526f7/LICENSE",
+      "actual": {
+        "bytes": 1070,
+        "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "git_blob": "abf0390320aa14406af7a520b9b0739fdda9bf08"
+      },
+      "audit_declared": {
+        "bytes": 1070,
+        "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "git_blob": "abf0390320aa14406af7a520b9b0739fdda9bf08"
+      },
+      "match": true,
+      "record_sha256": "7a5fe329ed88278b08932eeddc663480632ebb1f6f0eddbcf65ddc332ce64842",
+      "record_hash_match": true,
+      "original_auditor_read_scope": "full file"
+    }
+  ],
+  "all_match": true,
+  "provenance": {
+    "persisted_at_original_audit": "The audit JSON contained pinned identity, hash, decisions and read scope, not separate full-text files.",
+    "recovered_from": "Complete source strings and normalized retrieval records retained in this agent's functions store from the original tools; exact UTF-8 bytes restored.",
+    "original_transport_envelopes": "Not retained for the eight files. Their adjacent retrieval-record.json files preserve session-normalized record objects and the exact original body, not a reconstruction presented as an original MCP envelope.",
+    "issue_transport": "The issue #2232 original tool response object was retained and is now serialized separately.",
+    "integrity": "All eight restored bodies match original audit byte count, SHA256 and computed Git blob.",
+    "read_scope": "All three SKILL.md files and three licenses read fully. Git C/documentation full bodies fetched and hashed; only named bisection implementation/documentation sections read. Restoring full bodies does not expand the claimed earlier reading scope.",
+    "unverified": "Sentry only had a commit identity; no source body or method is claimed."
+  },
+  "issue_sha256": "67f9b79c948ccf99f6935dba320af0e0c1240b65bb5cdc2ee4d9ecd57a1d4c50"
+}

@@ -1,0 +1,118 @@
+{
+  "schema": "adk-optional-implementation/v1",
+  "implementer": "ai/root/research_optional_effectiveness",
+  "observed_completed_at": "2026-11-16T05:13:04Z",
+  "source_baseline": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "role": "implementation; not independent reviewer of these changes",
+  "contract": "docs/changes/20261116-skill-timing-diagnosis/{requirements,design,tasks}.md",
+  "lessons_lookup": {
+    "path": "knowledge/L2-domain/lessons.md",
+    "result": "missing",
+    "inferred_history": false
+  },
+  "changes": [
+    {
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "old_bytes": 2301,
+      "new_bytes": 2416,
+      "delta": 115,
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "old_bytes": 6646,
+      "new_bytes": 6646,
+      "delta": 0,
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "old_bytes": 6726,
+      "new_bytes": 6866,
+      "delta": 140,
+      "sha256": "d90e4f7a2bde8ca2a094edd7538a569def647933cb42d65584e50bbbe4e4c001"
+    },
+    {
+      "path": "tests/test_optional_incident_lifecycle.py",
+      "old_bytes": 0,
+      "new_bytes": 4019,
+      "delta": 4019,
+      "sha256": "00f45ea1b0890a4413a290f556fc8e295d82d4d5c606af8ee7586430e1c94d65"
+    }
+  ],
+  "skill_versions": {
+    "adk-incident-rca-report": "1.1.1",
+    "adk-skill-composition-governance": "1.1.7"
+  },
+  "skill_bytes_delta": 255,
+  "no_shared_files_changed": true,
+  "no_git_add_commit_push": true,
+  "test_evidence": [
+    {
+      "label": "Actual RED before Skill edits",
+      "command": "rtk python3 -m unittest tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success -v",
+      "chunk_id": "8d823a",
+      "wall_time_seconds": 0.114072641,
+      "exit_code": 1,
+      "original_token_count": 2419,
+      "output": "test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... \n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Duplicate skill checked') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Trigger overlap checked') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Profile ownership decided') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Reuse threshold met') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Pilot requirement declared') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Fallback / replaced_by declared') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Output contract declared') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Deterministic guard declared') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Evolution evidence declared') ... FAIL\n  test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Distribution channel reviewed') ... FAIL\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Duplicate skill checked')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Trigger overlap checked')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Profile ownership decided')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Reuse threshold met')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Pilot requirement declared')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Fallback / replaced_by declared')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Output contract declared')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Deterministic guard declared')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Evolution evidence declared')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n======================================================================\nFAIL: test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) (gate='Distribution channel reviewed')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_optional_incident_lifecycle.py\", line 35, in test_blank_creation_gate_cannot_predeclare_success\n    self.assertNotIn(\nAssertionError: 'pass' unexpectedly found in {'ready', 'pass', 'passed', 'accepted'} : a blank template is not an observed successful review\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=10)\n",
+      "interpretation": "1 test method, 10 actual failing subtests: each blank-evidence row predeclared pass."
+    },
+    {
+      "label": "GREEN plus existing authoring/quality checks",
+      "command": "rtk python3 -m unittest tests.test_optional_incident_lifecycle tests.test_document_authoring_skills tests.test_skill_quality_methods -v",
+      "chunk_id": "5169e2",
+      "wall_time_seconds": 0.216245909,
+      "exit_code": 0,
+      "original_token_count": 995,
+      "output": "test_clock_uncertainty_cannot_be_erased_by_timezone_conversion (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_clock_uncertainty_cannot_be_erased_by_timezone_conversion) ... ok\ntest_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok\ntest_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok\ntest_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok\ntest_known_overconstraint_regressions (tests.test_document_authoring_skills.DocumentAuthoringSkillTests.test_known_overconstraint_regressions) ... ok\ntest_preserve_evidence_and_optional_prose_boundary (tests.test_document_authoring_skills.DocumentAuthoringSkillTests.test_preserve_evidence_and_optional_prose_boundary) ... ok\ntest_source_case_coverage_not_model_evidence (tests.test_document_authoring_skills.DocumentAuthoringSkillTests.test_source_case_coverage_not_model_evidence) ... ok\ntest_cases_are_source_only_not_runtime_success (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_cases_are_source_only_not_runtime_success) ... ok\ntest_cost_priority_requires_real_task_quality_evidence (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_cost_priority_requires_real_task_quality_evidence) ... ok\ntest_embedded_tools_bind_target_and_missing_evidence (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_embedded_tools_bind_target_and_missing_evidence) ... ok\ntest_external_skill_references_are_source_pinned_and_not_installed (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_external_skill_references_are_source_pinned_and_not_installed) ... ok\ntest_fast_checks_move_before_expensive_matrix_without_duplication (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_fast_checks_move_before_expensive_matrix_without_duplication) ... ok\ntest_outcome_first_evaluation_and_minimal_verification_without_overclaim (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_outcome_first_evaluation_and_minimal_verification_without_overclaim) ... ok\ntest_patch_validation_requires_variants_and_non_regression (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_patch_validation_requires_variants_and_non_regression) ... ok\ntest_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs) ... ok\ntest_reader_first_acceptance_and_feedback_are_source_only (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_reader_first_acceptance_and_feedback_are_source_only) ... ok\ntest_real_eval_is_pre_registered_but_unmeasured (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_real_eval_is_pre_registered_but_unmeasured) ... ok\ntest_review_coverage_is_conditional_and_fail_closed (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_review_coverage_is_conditional_and_fail_closed) ... ok\ntest_security_scanner_separates_coverage_from_verified_vulnerabilities (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_security_scanner_separates_coverage_from_verified_vulnerabilities) ... ok\ntest_skill_fit_and_measured_value_are_not_trigger_success (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_skill_fit_and_measured_value_are_not_trigger_success) ... ok\ntest_spec_to_code_is_bidirectional_and_unchecked_is_not_success (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_spec_to_code_is_bidirectional_and_unchecked_is_not_success) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.009s\n\nOK\n",
+      "interpretation": "21 tests passed. Afterwards removed three self-evident fixture assertions from the new test; all Skill sources unchanged."
+    },
+    {
+      "label": "Canonical optional installation",
+      "command": "rtk bash tests/test_optional_skills.sh",
+      "exit_code": 0,
+      "chunk_id": "f14047",
+      "wall_time_seconds": 0.921911404,
+      "output": "[PASS] optional skills install through canonical CLI\n"
+    },
+    {
+      "label": "Final new-test file check",
+      "command": "rtk python3 -m unittest tests.test_optional_incident_lifecycle -v",
+      "chunk_id": "162b99",
+      "wall_time_seconds": 0.000029318,
+      "exit_code": 0,
+      "original_token_count": 218,
+      "output": "test_clock_uncertainty_cannot_be_erased_by_timezone_conversion (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_clock_uncertainty_cannot_be_erased_by_timezone_conversion) ... ok\ntest_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok\ntest_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok\ntest_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.001s\n\nOK\n",
+      "interpretation": "4 tests passed on final test-file hash; 2 source-template invariants and 2 timestamp arithmetic design cases."
+    },
+    {
+      "label": "Whitespace check",
+      "command": "rtk git diff --check -- optional-skills/adk-incident-rca-report optional-skills/adk-skill-composition-governance",
+      "exit_code": 0,
+      "output": "",
+      "note": "Actually invoked within rtk bash -lc together with a pyproject lint-settings read; both exited 0."
+    }
+  ],
+  "preserved": [
+    "short report default",
+    "optional 5-Why",
+    "confirmed/hypothesis/unresolved separation",
+    "document fidelity",
+    "source-only lifecycle semantics",
+    "original manifest role/effect/trigger boundaries",
+    "explicit optional install"
+  ],
+  "verification_boundary": {
+    "source_template_invariants": "verified",
+    "authored_timestamp_arithmetic": "verified design-case",
+    "model_behavior_improvement": "not-measured",
+    "native_host_or_device_qualification": "not-run",
+    "full_regression_and_profile_budgets": "parent integration responsibility"
+  },
+  "parent_next_steps": [
+    "Wire tests.test_optional_incident_lifecycle into existing tests/test_skill_content.sh.",
+    "Integrate global version/catalog, run shared validation, then independent read-only review.",
+    "Do not count timestamp arithmetic cases as Skill/model A/B improvement."
+  ]
+}

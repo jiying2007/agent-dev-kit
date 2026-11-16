@@ -1,0 +1,33 @@
+{
+  "status": "pass",
+  "record_sha256": "9d87d48e53ba24efd7ee3a3f985e93183794c4551245d3926b804d3c56ec80b3",
+  "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "checked_at": "2026-11-16T05:42:24.019682+00:00",
+  "source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+  "sources": 30,
+  "evidence": 33,
+  "validation_call": "agent_dev_kit.review_evidence.validate_review",
+  "preparation_failures": [
+    {
+      "stage": "mapping actual independent report into typed record before validation",
+      "error": "TypeError: can only concatenate str (not dict) to str",
+      "validator_invoked": false,
+      "source_changed": false,
+      "resolution": "Read the actual nested correction and closure_verification fields and retain their reviewer-authored change/reason; no source, verdict or validator modification."
+    },
+    {
+      "stage": "typed timestamp representation validation",
+      "error": "ReviewEvidenceError: review timestamp must be canonical UTC",
+      "validator_invoked": true,
+      "source_changed": false,
+      "resolution": "Normalize actual +00:00 timestamps to equivalent Z representation, retaining microseconds and the same instant; no date substitution or validator modification."
+    }
+  ],
+  "reference_scope": "All 29 source files plus original patch and 33 primary evidence files are directly bound (63 refs, within unchanged 64 limit). Retained path maps bind hashes of subordinate copies; packaging review checks those maps separately.",
+  "boundary": "Mechanical digest binding validation; semantic verdict is supplied by the independent reviewer. No human/runtime/field/product qualification is inferred."
+}
