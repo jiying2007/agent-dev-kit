@@ -1,0 +1,278 @@
+{
+  "base_commit": "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+  "tested_source_commit": "384bdcdfac75881891bce795991b68fa46d9b9d6",
+  "tested_source_tree": "627aabff2317705de46b010126edf3b57a443d1f",
+  "canonical_patch_sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823",
+  "files": [
+    {
+      "path": ".version-lock",
+      "bytes": 79,
+      "sha256": "8a531739a8238f1627d3b5842a65b9e2fa423d670ffff3c420a006ef94460649",
+      "blob": "2d0765a004c5a1ff704fd296b5a3ec0687a39e96"
+    },
+    {
+      "path": "CONTEXT.md",
+      "bytes": 8644,
+      "sha256": "b5bcf760f63741ca7bd9d96462993231d7568743d6357e1f738775d6e2d2a768",
+      "blob": "b85743a532da3fd2d81cce253cab052afad2acab"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13087,
+      "sha256": "8525a120c921b8a8e5ae9ba6f61f75cf36c0a17a8a20f5925b1e87b9c8970514",
+      "blob": "2fd6a67c04684032ad5fc2e56323a4e0284085c8"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/audit.md",
+      "bytes": 3645,
+      "sha256": "942a53afa546dd8a2380acf066f7111f14bf1caf30103eb98dfd6014757423bb",
+      "blob": "d35e349e68d63e15a91186f9901dc438e51c59f7"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/design-review.md",
+      "bytes": 1713,
+      "sha256": "d4d8b76c8105a6abf01bf7c2d2f96472c81afe3a3d60641ab89da8f49a6f773b",
+      "blob": "c684ae134ed1ef23fa8d4bbedad961ad1d91109a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/design.md",
+      "bytes": 2966,
+      "sha256": "f787c46a52c6787a5d5c4b7ddb450fd74eaaa8569410513df23ceda449886b79",
+      "blob": "cf0c491049d1d3b91a5f601f8c61e10d9f6daf89"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/audit-bundle.json",
+      "bytes": 78317,
+      "sha256": "ebcbab45b5d17ec6927bac7cf410ff2ba189a479864bd57bbcc84fd15a285b7a",
+      "blob": "5155e2700550c7cdcd220b07bb25e14decd38b1c"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/adk-export-manifest.json",
+      "bytes": 32742,
+      "sha256": "3053de9c63018961d265f120f4c0b8850b10b1b32f3dc250529d282374145e57",
+      "blob": "f9a4ccf4681ccb145271653555663eddb739a4a5"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/aggregate-shell-syntax.json",
+      "bytes": 1682,
+      "sha256": "f5ae6da58dee34de9ab03ed65d50b8bbe09f28f55addbabeac1bb7dfb872da9f",
+      "blob": "1185ab920f31bd6b90790bb9db8d04119a6d9985"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/catalog-build.json",
+      "bytes": 1790,
+      "sha256": "fc6eef5cc28c7e738a24d5b60af536ddf1ec723ffcbde4bf49e2f6f21281a0ba",
+      "blob": "3ab65e21552ce022b7409f8d72d89b12619296e6"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/claude-export.json",
+      "bytes": 34809,
+      "sha256": "3f8a72986bc6e65727f3dcd47bc4ad9fa7e83a9f5821855ae994ce7fced478a0",
+      "blob": "096a418c43f0db5675113685212e37f680204390"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/combined-methods.json",
+      "bytes": 8321,
+      "sha256": "3cabf4ab2008b9b9ac590060d4b47bf7e8f544fa4af946ef0cddf9e5ed831c9d",
+      "blob": "515a8ae62d7e30e4d7c8fe5514e460bae35af4c5"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/delivery-inspection-command.json",
+      "bytes": 3018,
+      "sha256": "8e61c76918e5f9f263e1d5b70187bab80d3dd7d80070fb479ecaf3343a15ac9b",
+      "blob": "00b234b3c67a27096fb5d20cabaa694ebcb4c01e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/delivery-inspection.json",
+      "bytes": 124046,
+      "sha256": "04948161ebc0a599beb37a073358e287605b2fee01712f2a6da25910166412fa",
+      "blob": "6c67c63dd1f599833958c39a31219dbdcb97bdf2"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/diff-check.json",
+      "bytes": 1662,
+      "sha256": "b553c6edfa0f988a218d14511e5ec5565d12a0713a47d6f6d6c1b9b3058be556",
+      "blob": "020185b1fe10ee91a23bf631a98619540a8fb8d0"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/exported-consumer/adk-email-imap-fetch/SKILL.md",
+      "bytes": 3614,
+      "sha256": "09c31d595ff2aa073af02bcb3951ebf22a576b645e5f6b5164bed5326c8bb4d7",
+      "blob": "d0bfb2a10426485feba67038aed5ae6e5b38b86a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/exported-consumer/adk-fault-injection-recovery/SKILL.md",
+      "bytes": 3374,
+      "sha256": "e2ca83b2a2f6f67d379214f00584358c78f579c8883832c08be483b79e651bba",
+      "blob": "2b0dfeaedcc8dfa2c7c24244db9dbcd34046b43b"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/fault-method-green.json",
+      "bytes": 6919,
+      "sha256": "9cc80eed4bfbb08d23118a378ba5d953e3791c866d75d7a1974b87df155ec3c8",
+      "blob": "be0d865e033bf5614fd9714e24c9403c5c6a8a54"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/fault-method-red.json",
+      "bytes": 2901,
+      "sha256": "1ad1d46c34c7ed867138b5e1eedcc583d47b9bf6e1859e8e3d0ccbdfa8e79d8e",
+      "blob": "9dff69b53d71497e8c59c8ffe2875ed9d864a94e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/handoff.md",
+      "bytes": 6441,
+      "sha256": "c240ce0a531ccf667c4642b74e9ca32fdaf6e2a0742981f6d05a0d3a847a8f53",
+      "blob": "39f4f50418ff3abb62b1e625ca91708dab1739e1"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/inspect-delivery.py",
+      "bytes": 8123,
+      "sha256": "845141f6ff88a838452894bd50fb7bae9904fbb900969e923c09f7ba90eba80c",
+      "blob": "ee71b3963ffdca7024b97f3b0875ffade7f399f6"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/prereg-identity.json",
+      "bytes": 2183,
+      "sha256": "09b8df4be6645d34e972ca9a72c56fe964e3537f1c6b215b3b76bbcd392e940b",
+      "blob": "543cc94f6d8d69747b7b902eb03b8b097bfbc9fb"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/profile-ratchets.json",
+      "bytes": 2124,
+      "sha256": "6ed055c6b85caef6ebeb282b8d5b547404ffc7b4a3dfef7d93b5f72fb79949e1",
+      "blob": "f199db3bfdf6914298bebe1a2d59d3fdbab20f04"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/record-check.py",
+      "bytes": 2140,
+      "sha256": "f56f08ef703a7cdf1c2d01048f6a20369c70ccf509e3f79896b99b88abac9553",
+      "blob": "cbe43f3a51ce1fc20f1727987c03af54bbb9d377"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/strict-final.json",
+      "bytes": 1728,
+      "sha256": "2fd109836c03f9116715d2021230477e44baf1940d23256d6a8f02b0232084ba",
+      "blob": "086109d4a9858984291d9608ddf9b15eeed26814"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/strict-validation.json",
+      "bytes": 1728,
+      "sha256": "2f431ee9949ff49e221f3179ab85fd20ddcc921b384cccf8a27a52cfd68037f8",
+      "blob": "bdc8c7427aa1dd89ed8e31072722f229d76d69d2"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/version-identity.json",
+      "bytes": 1720,
+      "sha256": "5b083c9fb648a0576226f10c4608a35012aebbc41224b024e7f4e1017221c29c",
+      "blob": "e22caff80aec0915ee761a5516e1889bb6fb49ec"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/version-upgrade.json",
+      "bytes": 2001,
+      "sha256": "9f9a61bcacb3632c3cd17c76e4a08c6b9c0e76da5d758d018c855b09a625d55f",
+      "blob": "f2bca8a9ae772427f43daf5ec2a17ef69f8940ae"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-imap-bundle.json",
+      "bytes": 42451,
+      "sha256": "d31450491dff28169b767e6b8fa7561ff63a6d5355ce0767c276fc48de561a21",
+      "blob": "8134063dc465c8132d5c768589b03a3292bab25c"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/negative-results.md",
+      "bytes": 1584,
+      "sha256": "d268606ba5c251226be05ea1c966dd2b9e8ca89858f99f2b046b2566c81e995a",
+      "blob": "a8a57dbc5e44c84237f94c044dc3b278bfbe7341"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/requirements.md",
+      "bytes": 2205,
+      "sha256": "895f1b927b247dcbd268257b9b7f7c335d249b2a64b0d0c36e5056bf3b4a9e44",
+      "blob": "73e21c70257ecde3b5aaa12eed4c1794fcbffc36"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/source-review.md",
+      "bytes": 1894,
+      "sha256": "cba4de24d58731ba64a4fa441675a7e7144ef27440be1317456f5cd2036ad96b",
+      "blob": "c8edcfdfd481b5e259c22538e835bc8e40e79447"
+    },
+    {
+      "path": "docs/changes/20261116-skill-observation-precision/tasks.md",
+      "bytes": 1639,
+      "sha256": "1279d2efc2ef4105105d19b038b99d131a1eb2ef8198905c22904e3bf71424da",
+      "blob": "510c033d0d389b0744aedfffca6c3e326edf52b1"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 90988,
+      "sha256": "266e98e149084fcbdd33c34ef46a31dadd500e17ef70e16269288ba6feeefaaf",
+      "blob": "98f780e8ee957405961d3d20b9f53dbac7087d14"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "bytes": 706,
+      "sha256": "363434473990c77da2bbea6f187f234e771fb560b2b5928f8f5a4bf7e9731409",
+      "blob": "c62409ac2d99435c8473d2f333c30b0356a0bf68"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "bytes": 3782,
+      "sha256": "b109548aceb24d3f978e92eb4706cc0845847c82a741d05810ded49f44f351b7",
+      "blob": "463c15106cfd15072eace59ee5732078ced4b250"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1310,
+      "sha256": "0546694fbd8039e9f3be3dccc35690238e0ccc27abf3bf3f646b656c5bafb6f1",
+      "blob": "307589e4608439ad77bf3dffaa7f3edab5b4dccd"
+    },
+    {
+      "path": "skills/adk-fault-injection-recovery/SKILL.md",
+      "bytes": 3558,
+      "sha256": "cfffdf6b98594802f65acee8f0258ed44eff8d5bb5c2a02eca6f5df60567f209",
+      "blob": "97b1aa41f2fb482a19f783aa9cdc17ac5a99bdda"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "bytes": 71,
+      "sha256": "a8c6f660c005afc21c6033ba9240f03126db78d94f99cef7e61fd8bd3f1c32e5",
+      "blob": "4f40e6f3ee91a361b5239d04e09b7e64993932e0"
+    },
+    {
+      "path": "tests/fixtures/fault-activation.c",
+      "bytes": 2298,
+      "sha256": "0b4327f02d2a791e971aad9989e3e86b49a21dadef861908d0f6361005f015d2",
+      "blob": "0ef9a614353142ff60ba5636e3ce111e3889d4bb"
+    },
+    {
+      "path": "tests/fixtures/imap-time-fixture.py",
+      "bytes": 11579,
+      "sha256": "c41e440db905d91789a18137284acd8408cd7b224f512047121bac3127d12d4d",
+      "blob": "ecae3c87a35a8d760a7365db3f667a4b1bd2eef0"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "bytes": 7023,
+      "sha256": "49024c10ab9bbe3ad0869107c434620bbd9ee7f077f7e839ad2a494e3a997aae",
+      "blob": "a4834664d2a5a18f6974cba781709e28a3b68f93"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "bytes": 1145,
+      "sha256": "6857bda2e84fa376012e974f612cd47609e3303ae9a9f364e7743b6b431afc2d",
+      "blob": "17368a8eacd0ca26f10ad81e9798f75b8c297ab2"
+    },
+    {
+      "path": "tests/test_skill_fault_activation.py",
+      "bytes": 7217,
+      "sha256": "099d9a8c0b61c85292ba30da70ff512a0319971a46665391f32a98efe290f048",
+      "blob": "6d0e8cce9801efd05b00736cf37392d89ee594db"
+    },
+    {
+      "path": "tests/test_skill_imap_time_methods.py",
+      "bytes": 6935,
+      "sha256": "4a169bc6113cb55a86c8ea6f0146d47f93acdb4a4c0f521ee82cec5e35f385e0",
+      "blob": "b9b0e35fb721ed7d40a23bc787c9070bc5af78b0"
+    }
+  ]
+}

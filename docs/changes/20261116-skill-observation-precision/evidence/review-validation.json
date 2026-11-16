@@ -1,0 +1,308 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261116-skill-observation-precision",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-skill-observation-precision",
+  "reviewer": {
+    "id": "ai/root/embedded_methods",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-16T14:55:14.993112Z",
+  "evidence_completed_at": "2026-11-16T14:51:02.383334Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [],
+  "limitations": [
+    "Source-level Spec/Quality pass for this frozen commit; protected PR/main CI, release publication and Root source-only delivery remain parent-owned subsequent steps.",
+    "No native runtime discovery/load/trigger qualification, model A/B, token/cost improvement or general completion-rate result is established.",
+    "Host malloc instrumentation does not establish target-device fault behavior, detection/recovery timing, recovery SLA, DMA/RTOS/HIL or product qualification.",
+    "Local stdio IMAP peer is a fixed test fixture. It does not establish live server compatibility, TLS/authentication or live mailbox side-effect freedom.",
+    "IMAP byte-budget tests cover the selected content acquisition within this bounded fixture, not a generic total wire-byte limiter for every server response.",
+    "The prepared consumer SEARCH list is derived from fixture dates without a sender predicate, not a newly executed live mailbox query.",
+    "The two Skill changes are method enhancements; the test-owned wrong variants are not evidence of an existing ADK runtime implementation defect.",
+    "Any later evidence-only packaging commit requires the planned incremental packaging review. This report does not authorize changing the reviewed production source or relabeling executions.",
+    "The large-refactor source-byte ratchet has eight bytes of remaining headroom; thresholds were not raised."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "fad9d4d170a97c5dbb2c5261432fa2120bfcc3c9",
+    "head_commit": "384bdcdfac75881891bce795991b68fa46d9b9d6",
+    "original_patch_sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "8a531739a8238f1627d3b5842a65b9e2fa423d670ffff3c420a006ef94460649"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "b5bcf760f63741ca7bd9d96462993231d7568743d6357e1f738775d6e2d2a768"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "8525a120c921b8a8e5ae9ba6f61f75cf36c0a17a8a20f5925b1e87b9c8970514"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/audit.md",
+      "sha256": "942a53afa546dd8a2380acf066f7111f14bf1caf30103eb98dfd6014757423bb"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/design-review.md",
+      "sha256": "d4d8b76c8105a6abf01bf7c2d2f96472c81afe3a3d60641ab89da8f49a6f773b"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/design.md",
+      "sha256": "f787c46a52c6787a5d5c4b7ddb450fd74eaaa8569410513df23ceda449886b79"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/audit-bundle.json",
+      "sha256": "ebcbab45b5d17ec6927bac7cf410ff2ba189a479864bd57bbcc84fd15a285b7a"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/adk-export-manifest.json",
+      "sha256": "3053de9c63018961d265f120f4c0b8850b10b1b32f3dc250529d282374145e57"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/aggregate-shell-syntax.json",
+      "sha256": "f5ae6da58dee34de9ab03ed65d50b8bbe09f28f55addbabeac1bb7dfb872da9f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/catalog-build.json",
+      "sha256": "fc6eef5cc28c7e738a24d5b60af536ddf1ec723ffcbde4bf49e2f6f21281a0ba"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/claude-export.json",
+      "sha256": "3f8a72986bc6e65727f3dcd47bc4ad9fa7e83a9f5821855ae994ce7fced478a0"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/combined-methods.json",
+      "sha256": "3cabf4ab2008b9b9ac590060d4b47bf7e8f544fa4af946ef0cddf9e5ed831c9d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/delivery-inspection-command.json",
+      "sha256": "8e61c76918e5f9f263e1d5b70187bab80d3dd7d80070fb479ecaf3343a15ac9b"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/delivery-inspection.json",
+      "sha256": "04948161ebc0a599beb37a073358e287605b2fee01712f2a6da25910166412fa"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/diff-check.json",
+      "sha256": "b553c6edfa0f988a218d14511e5ec5565d12a0713a47d6f6d6c1b9b3058be556"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/exported-consumer/adk-email-imap-fetch/SKILL.md",
+      "sha256": "09c31d595ff2aa073af02bcb3951ebf22a576b645e5f6b5164bed5326c8bb4d7"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/exported-consumer/adk-fault-injection-recovery/SKILL.md",
+      "sha256": "e2ca83b2a2f6f67d379214f00584358c78f579c8883832c08be483b79e651bba"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/fault-method-green.json",
+      "sha256": "9cc80eed4bfbb08d23118a378ba5d953e3791c866d75d7a1974b87df155ec3c8"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/fault-method-red.json",
+      "sha256": "1ad1d46c34c7ed867138b5e1eedcc583d47b9bf6e1859e8e3d0ccbdfa8e79d8e"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/handoff.md",
+      "sha256": "c240ce0a531ccf667c4642b74e9ca32fdaf6e2a0742981f6d05a0d3a847a8f53"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/inspect-delivery.py",
+      "sha256": "845141f6ff88a838452894bd50fb7bae9904fbb900969e923c09f7ba90eba80c"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/prereg-identity.json",
+      "sha256": "09b8df4be6645d34e972ca9a72c56fe964e3537f1c6b215b3b76bbcd392e940b"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/profile-ratchets.json",
+      "sha256": "6ed055c6b85caef6ebeb282b8d5b547404ffc7b4a3dfef7d93b5f72fb79949e1"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/record-check.py",
+      "sha256": "f56f08ef703a7cdf1c2d01048f6a20369c70ccf509e3f79896b99b88abac9553"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/strict-final.json",
+      "sha256": "2fd109836c03f9116715d2021230477e44baf1940d23256d6a8f02b0232084ba"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/strict-validation.json",
+      "sha256": "2f431ee9949ff49e221f3179ab85fd20ddcc921b384cccf8a27a52cfd68037f8"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/version-identity.json",
+      "sha256": "5b083c9fb648a0576226f10c4608a35012aebbc41224b024e7f4e1017221c29c"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-diagnostic/version-upgrade.json",
+      "sha256": "9f9a61bcacb3632c3cd17c76e4a08c6b9c0e76da5d758d018c855b09a625d55f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/evidence/implementation-imap-bundle.json",
+      "sha256": "d31450491dff28169b767e6b8fa7561ff63a6d5355ce0767c276fc48de561a21"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/negative-results.md",
+      "sha256": "d268606ba5c251226be05ea1c966dd2b9e8ca89858f99f2b046b2566c81e995a"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/requirements.md",
+      "sha256": "895f1b927b247dcbd268257b9b7f7c335d249b2a64b0d0c36e5056bf3b4a9e44"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/source-review.md",
+      "sha256": "cba4de24d58731ba64a4fa441675a7e7144ef27440be1317456f5cd2036ad96b"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-observation-precision/tasks.md",
+      "sha256": "1279d2efc2ef4105105d19b038b99d131a1eb2ef8198905c22904e3bf71424da"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "266e98e149084fcbdd33c34ef46a31dadd500e17ef70e16269288ba6feeefaaf"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "363434473990c77da2bbea6f187f234e771fb560b2b5928f8f5a4bf7e9731409"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "sha256": "b109548aceb24d3f978e92eb4706cc0845847c82a741d05810ded49f44f351b7"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "0546694fbd8039e9f3be3dccc35690238e0ccc27abf3bf3f646b656c5bafb6f1"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-fault-injection-recovery/SKILL.md",
+      "sha256": "cfffdf6b98594802f65acee8f0258ed44eff8d5bb5c2a02eca6f5df60567f209"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "a8c6f660c005afc21c6033ba9240f03126db78d94f99cef7e61fd8bd3f1c32e5"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/fault-activation.c",
+      "sha256": "0b4327f02d2a791e971aad9989e3e86b49a21dadef861908d0f6361005f015d2"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/imap-time-fixture.py",
+      "sha256": "c41e440db905d91789a18137284acd8408cd7b224f512047121bac3127d12d4d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "49024c10ab9bbe3ad0869107c434620bbd9ee7f077f7e839ad2a494e3a997aae"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content.sh",
+      "sha256": "6857bda2e84fa376012e974f612cd47609e3303ae9a9f364e7743b6b431afc2d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_fault_activation.py",
+      "sha256": "099d9a8c0b61c85292ba30da70ff512a0319971a46665391f32a98efe290f048"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_imap_time_methods.py",
+      "sha256": "4a169bc6113cb55a86c8ea6f0146d47f93acdb4a4c0f521ee82cec5e35f385e0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "ae27a8e2e298f8f4e98290adba4f2e2d4609d5a3d29a1eea11edbac8172e4823"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/independent-source-review.json",
+      "sha256": "84df99e85c253f875a483cdb8e3364c944a7e79cae77a9b58d48a1cc231604e0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-source-review.md",
+      "sha256": "78a5ad3069f84e68b412e79b21cf482ec0a38475e352f0e574702c6678446b2a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "1bcac7d4f3d2e04ae0e08df6f2e8db71725d310fba32abeff434b0f088b9964a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/execution-bundle.json",
+      "sha256": "a4f203b13e018c56bc3ee2eb760ffa58087d91ef47bee71949a8658a136388c0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/execution-summary.json",
+      "sha256": "01f0cb96982d2c786d6e49c4ae9a76eac1f356c2f31acafd4824b04668f42a05"
+    }
+  ],
+  "status": "pass",
+  "record_sha256": "f6fe33f7fe5235d5d6d1e04905c0b4497dbbc7c6e167f35ab746ec04f580fa2d",
+  "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false
+}

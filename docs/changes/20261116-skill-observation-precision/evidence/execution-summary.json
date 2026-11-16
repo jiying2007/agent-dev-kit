@@ -1,0 +1,21 @@
+{
+  "source_commit": "384bdcdfac75881891bce795991b68fa46d9b9d6",
+  "source_tree": "627aabff2317705de46b010126edf3b57a443d1f",
+  "full": {
+    "started_at": "2026-11-16T14:44:42.910664+00:00",
+    "finished_at": "2026-11-16T14:51:02.383334+00:00",
+    "elapsed_seconds": 379.4513539610052,
+    "exit_code": 0,
+    "timed_out": false
+  },
+  "full_total": 102,
+  "full_pass": 102,
+  "source_unchanged_during_full": true,
+  "independent_verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "consumer_observations": 1,
+  "consumer_pairing_or_effect_claim": false,
+  "boundary": "Published PR/main/release and Root consumption are subsequent delivery checks, not certified by this source review."
+}
