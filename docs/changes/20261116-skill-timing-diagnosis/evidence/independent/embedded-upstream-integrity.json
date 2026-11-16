@@ -1,0 +1,72 @@
+[
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/jeffallan-embedded.md",
+    "sha256": "26695ca78cdbbfd3657dc143b28308a293e798399df430cee6116e758cc3f4a8",
+    "bytes": 6295,
+    "matches_claim": true,
+    "read_scope": "whole file"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/mindrally-embedded-stm32.md",
+    "sha256": "dcc30759b8225eb0b0b091c057e305f6dd7c32bc76fdcaea4b63be48a6e8dac7",
+    "bytes": 9302,
+    "matches_claim": true,
+    "read_scope": "whole file"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/rovinax-embedded-rtos.md",
+    "sha256": "894e75a646c44e54447933cd67c494e9a6712529b82837da962893f19afdb0d6",
+    "bytes": 9790,
+    "matches_claim": true,
+    "read_scope": "whole file"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/projdefs.h",
+    "sha256": "87e8328c5d844abde3593291b36a2c235b2ae6e41402c0314fb54f933d32c4b9",
+    "bytes": 7364,
+    "matches_claim": true,
+    "read_scope": "whole file"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/task.h",
+    "sha256": "463d29016b1c11dd7c5f9e67b41bf8c1897d9c2dcc510cdc37e3158f32584222",
+    "bytes": 170813,
+    "matches_claim": true,
+    "read_scope": "vTaskDelay and xTaskDelayUntil"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/tasks.c",
+    "sha256": "6de295f333f31818de546d6eb72b877c5a6964980f14f80bc1e17b19b7ff9fc4",
+    "bytes": 365244,
+    "matches_claim": true,
+    "read_scope": "xTaskDelayUntil"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/timers.h",
+    "sha256": "aff317a330935160abbd00a3a60a973653921e3a022216dcb04d804678c375b8",
+    "bytes": 66027,
+    "matches_claim": true,
+    "read_scope": "xTimerStop and xTimerDelete"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/freertos-book-ch06.md",
+    "sha256": "319e7a420fc9e788e3740ac4c2c2addd351fa9cb08560cb6c693dfe6e46f8403",
+    "bytes": 50991,
+    "matches_claim": true,
+    "read_scope": "sections 6.2, 6.4 and command queue semantics"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/cmsis_os2.h",
+    "sha256": "0de5e6ff219ee13bcd1b1ca2b6446d68cb56b6a11e16494e9577bb2ffdd52a70",
+    "bytes": 42623,
+    "matches_claim": true,
+    "read_scope": "whole file"
+  },
+  {
+    "path": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/dma-api-howto.rst",
+    "sha256": "92070ca3b5e150580c26d39be990b109053951a767fb3fd1d695aece478bbff2",
+    "bytes": 35316,
+    "matches_claim": true,
+    "read_scope": "coherent DMA ordering and cache line sharing"
+  }
+]

@@ -1,0 +1,584 @@
+{
+  "schema": "adk-round2-domain-audit/v1",
+  "baseline": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "role": "read-only domain auditor; implementation authorized separately after this audit",
+  "skills": [
+    {
+      "skill": "adk-embedded-debug-transport",
+      "files": [
+        {
+          "path": "skills/adk-embedded-debug-transport/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-embedded-debug-transport/README.md",
+          "bytes": 391,
+          "sha256": "453bf2b168e3ba1a2c7176e59803709ac714749701f07809163c39614fc3220d",
+          "git_blob": "c975880282efd85f55780b4c423efcedcdf58edf"
+        },
+        {
+          "path": "skills/adk-embedded-debug-transport/SKILL.md",
+          "bytes": 5745,
+          "sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
+          "git_blob": "d4100591b2faa1f536bafce5b8a12837fcd31d09"
+        },
+        {
+          "path": "skills/adk-embedded-debug-transport/agents/openai.yaml",
+          "bytes": 173,
+          "sha256": "5482eefa68e99a12a9c0a9ec90c1d958cfac588f30c516c419c216b7dfa7ae69",
+          "git_blob": "a30652980d243b2de8379d1e02946e6ebfa18090"
+        }
+      ],
+      "decision": "保留：已区分被动/主动/状态改变/破坏性通道，含GDB暂停与MMIO读取副作用。"
+    },
+    {
+      "skill": "adk-bsp-porting-playbook",
+      "files": [
+        {
+          "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+          "bytes": 5335,
+          "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
+          "git_blob": "2413d7cea3f01a73fc55a5d04067a5f2c79e51ca"
+        }
+      ],
+      "decision": "保留：目标ABI、独立输出目录、Kbuild实际参数、资源预算及设备handoff完整。"
+    },
+    {
+      "skill": "adk-register-map-design",
+      "files": [
+        {
+          "path": "skills/adk-register-map-design/SKILL.md",
+          "bytes": 3856,
+          "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919",
+          "git_blob": "06a3fa96385ee6b994fc55c4b796f6e7c03517c3"
+        }
+      ],
+      "decision": "保留：v11.3.8已补复位条件/有效位/undefined和安全读取；未发现新执行缺口。"
+    },
+    {
+      "skill": "adk-embedded-remote-debug-log-triage",
+      "files": [
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/README.md",
+          "bytes": 560,
+          "sha256": "9aa267e1e3eda44db5c9fadba10ce9d422da36dca50183a6236a4266f1cb8487",
+          "git_blob": "b8ad51e75a696100dfc4381cba5db3c50b1fd7a4"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+          "bytes": 6746,
+          "sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
+          "git_blob": "9936e058634b407592f10e286ce3e3afa4e3ddb5"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/agents/openai.yaml",
+          "bytes": 189,
+          "sha256": "e627b547abc25a924ac9899add7d9158fa9f194a5f2a3cbf8cc4e4e30b1d380e",
+          "git_blob": "d50dba172a3732c982867bb1205024b2c193c2f2"
+        },
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+          "bytes": 3301,
+          "sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
+          "git_blob": "6b573675b3a48548fdbda7649397c0304af69d43"
+        }
+      ],
+      "decision": "保留：分层健康、输出语义、熔断、恢复后身份与HIL阶段覆盖；按问题加载详细参考。"
+    },
+    {
+      "skill": "adk-embedded-release-orchestration",
+      "files": [
+        {
+          "path": "skills/adk-embedded-release-orchestration/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/README.md",
+          "bytes": 342,
+          "sha256": "e917b29015b779f128478eb2e450f27c0e1cd19d1be639321e7000677b08d5d0",
+          "git_blob": "f093c89f695ebc73ecb8895680aab8bfd6ea0804"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+          "bytes": 5245,
+          "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5",
+          "git_blob": "2e3275c050211de5e0f9f65b040327d92516165b"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/agents/openai.yaml",
+          "bytes": 177,
+          "sha256": "42f5870f805301ab55c6d1a8fbcb378ecb1a9620cfc50c03dd297eddf82b1057",
+          "git_blob": "3baaad6a3aeaf5a9b7728492c7681dcfec82a096"
+        },
+        {
+          "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+          "bytes": 1698,
+          "sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
+          "git_blob": "ba9fd82c7e172aec3c58a666e7f4aad614f65367"
+        }
+      ],
+      "decision": "保留：prepare/publish/device分权与多MCU部分成功恢复已有明确方法。"
+    },
+    {
+      "skill": "adk-interrupt-dma-patterns",
+      "files": [
+        {
+          "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+          "bytes": 5406,
+          "sha256": "49bfd3961ad45dc00afe801086c4b3974518180123bb003941d51c436e81eaea",
+          "git_blob": "eb6d6b7ad74a355b2c049cef81477962244352b4"
+        },
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+          "bytes": 1709,
+          "sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
+          "git_blob": "59b883b26bdd3a3dd27c4845ffa344e938aab24d"
+        },
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+          "bytes": 1645,
+          "sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
+          "git_blob": "671a11e2df2fe49f98d2bdcd5401c123982d950d"
+        }
+      ],
+      "decision": "保留：ownership、barrier、memory ordering与coherency分别要求；Linux官方coherent不保证顺序可作现有方法解释，未强行增改。"
+    },
+    {
+      "skill": "adk-fault-injection-recovery",
+      "files": [
+        {
+          "path": "skills/adk-fault-injection-recovery/SKILL.md",
+          "bytes": 3559,
+          "sha256": "8765aad5a698ff110e7765e72aa2c7286cfb9801557ec8b33ee0bb4e18c1e812",
+          "git_blob": "01ef6c409bdfa9d4c00cef778dea3177bf2d7e09"
+        }
+      ],
+      "decision": "保留：按实际风险选择故障、隔离授权、恢复SLA、功能/数据一致性及有条件watchdog验证。"
+    },
+    {
+      "skill": "adk-performance-profiling-embedded",
+      "files": [
+        {
+          "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+          "bytes": 2983,
+          "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
+          "git_blob": "1bd0416c8e0ab72f7099c09188cf3dd5c1a2bd78"
+        },
+        {
+          "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+          "bytes": 4590,
+          "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02",
+          "git_blob": "2c9c7b05532d2b28dc9d9585ee8e7a8788610700"
+        }
+      ],
+      "decision": "保留：v11.3.8实际运行对象身份、栈边界、有效负载/工作点与不确定性已有执行证据。"
+    },
+    {
+      "skill": "adk-embedded-storage-layout-migration",
+      "files": [
+        {
+          "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+          "bytes": 5590,
+          "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76",
+          "git_blob": "a8e5e5a4533ecff63b5753f67515d7a702d32299"
+        }
+      ],
+      "decision": "保留：文件系统问题分流、数据保护、host演练和独立operator写操作边界明确。"
+    },
+    {
+      "skill": "adk-unit-test-embedded",
+      "files": [
+        {
+          "path": "skills/adk-unit-test-embedded/SKILL.md",
+          "bytes": 3068,
+          "sha256": "dd6bb63fe1b749a5d24767ddc8819d3f66c7dfd8cba94bbc1fb8fc1a88563db3",
+          "git_blob": "b97d09d30973b1c54d0ad3067a1a405dd4c034e7"
+        },
+        {
+          "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+          "bytes": 783,
+          "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
+          "git_blob": "c1fa37aa190a10f549117442b93abe053f2464d4"
+        },
+        {
+          "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+          "bytes": 3315,
+          "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+          "git_blob": "83c5ad4c600bf8a6e46dcdfd7f693e399ddfbc10"
+        }
+      ],
+      "decision": "保留：独立oracle、有界状态序列、复位/回放、覆盖局限与host/target边界已具体化。"
+    },
+    {
+      "skill": "adk-driver-bringup-checklist",
+      "files": [
+        {
+          "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+          "bytes": 5457,
+          "sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
+          "git_blob": "7f5154f2926ef55538983d455767208b96fb740b"
+        }
+      ],
+      "decision": "保留：分阶段验收、主动探测/读副作用、异常恢复、not-run与未授权设备写边界。"
+    },
+    {
+      "skill": "adk-cmake-cross-build",
+      "files": [
+        {
+          "path": "skills/adk-cmake-cross-build/SKILL.md",
+          "bytes": 4709,
+          "sha256": "e884e89f047dfd47248413a0d0a7d32c3f8a4e7724a9fe1b6a368f77e28a710a",
+          "git_blob": "5f9fa8ac96f75a659245007135eb99f8c38f6268"
+        }
+      ],
+      "decision": "保留：真实preset/binaryDir/config、JUnit执行状态、零/全skip、资源预算和工具链匹配已有真实测试。"
+    },
+    {
+      "skill": "adk-offline-core-dump-triage",
+      "files": [
+        {
+          "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+          "bytes": 3562,
+          "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+          "git_blob": "bff5d56495dfacc6a986e9a211074b1a559d0958"
+        }
+      ],
+      "decision": "保留：身份/库匹配与GDB提前关闭auto-load、有限可信帧及partial结论完整。"
+    },
+    {
+      "skill": "adk-static-analysis-c-cpp",
+      "files": [
+        {
+          "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+          "bytes": 3405,
+          "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
+          "git_blob": "4bbb10a5553d0aa849c5133dba2d6bffca96476a"
+        }
+      ],
+      "decision": "保留：TU/头依赖、实际数据库、非空扫描、解析失败、警告升级与动态证据分层明确。"
+    },
+    {
+      "skill": "adk-protocol-stack-integration",
+      "files": [
+        {
+          "path": "skills/adk-protocol-stack-integration/SKILL.md",
+          "bytes": 3084,
+          "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
+          "git_blob": "9963c190e57d1929448011b823bfe2d5cfb5b824"
+        },
+        {
+          "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+          "bytes": 1135,
+          "sha256": "6006f23c5e1d8ae8b1ea185fb4f2613c13af55b92a33cdc881fd909c6a199b9c",
+          "git_blob": "d2208cf38c5a57788237be1872ecdb95080a76d6"
+        }
+      ],
+      "decision": "保留：v11.3.8帧边界/部分IO/截断/缓冲限制/全程deadline与分层状态机已落实。"
+    },
+    {
+      "skill": "adk-driver-implementation",
+      "files": [
+        {
+          "path": "skills/adk-driver-implementation/SKILL.md",
+          "bytes": 5130,
+          "sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
+          "git_blob": "e2a26df790d5f8f668caddf131e82838e7e0e564"
+        }
+      ],
+      "decision": "保留：runtime-specific生命周期、IRQ/DMA引用、partial init/cancel/late completion与资源所有权足够明确。"
+    },
+    {
+      "skill": "adk-rtos-task-design",
+      "files": [
+        {
+          "path": "skills/adk-rtos-task-design/SKILL.md",
+          "bytes": 5815,
+          "sha256": "0c2a9cd2148878cfd8fd06c65789d3f015dc5139ed243ea46302089e2c99cea3",
+          "git_blob": "c018062338f5bd478f6fbcd71ef4e39582c6a800"
+        }
+      ],
+      "decision": "改进：保留现有RTA模型，补实际周期API/单位量化与范围、到点与超期区别、有界超期策略，以及共享timer服务与异步stop/delete生命周期。"
+    },
+    {
+      "skill": "adk-test-strategy",
+      "files": [
+        {
+          "path": "skills/adk-test-strategy/SKILL.md",
+          "bytes": 3612,
+          "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
+          "git_blob": "786a30565cd7739340e497e0adb0e1c89100ab39"
+        },
+        {
+          "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+          "bytes": 3247,
+          "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
+          "git_blob": "05c40e1f1d6b19a3b98519dd3c542b4f2d3cde63"
+        }
+      ],
+      "decision": "保留：风险分级、独立expected/变体、checker校准、资源隔离及真实回执覆盖充分。"
+    },
+    {
+      "skill": "adk-embedded-diagnostic-harness",
+      "files": [
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "git_blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/README.md",
+          "bytes": 343,
+          "sha256": "37fc552aff1dd57ab25ce50cb3d2b669a6a59cd8e59cc70030139c63b9505751",
+          "git_blob": "6005feb11ddfc27c5db48f421e1e3e6986c0d04d"
+        },
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+          "bytes": 3079,
+          "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526",
+          "git_blob": "844be83933a5cfc9014468bb77d9506cf9757eaf"
+        },
+        {
+          "path": "skills/adk-embedded-diagnostic-harness/agents/openai.yaml",
+          "bytes": 168,
+          "sha256": "e994baf88b865d08f5808d321936ea25fdbf5b7ef42abf8d196ce433f211122a",
+          "git_blob": "ddb21a32a52583d51156e186585bdb0801b196c5"
+        }
+      ],
+      "decision": "保留：expected/harness/product/environment区分，strict/env套件与实际CLI返回语义明确。"
+    },
+    {
+      "skill": "adk-hardware-debugging",
+      "files": [
+        {
+          "path": "skills/adk-hardware-debugging/SKILL.md",
+          "bytes": 2701,
+          "sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+          "git_blob": "4207ed8d0f287c908963e0859728bd977380a040"
+        },
+        {
+          "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+          "bytes": 1919,
+          "sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
+          "git_blob": "722fdb6ebfd3d5c68b48662a5750de5069c181f4"
+        }
+      ],
+      "decision": "保留：目标ELF/地址归一化与MCU fault差异，保留实际板端边界。"
+    },
+    {
+      "skill": "adk-integration-hil-sil",
+      "files": [
+        {
+          "path": "skills/adk-integration-hil-sil/SKILL.md",
+          "bytes": 3866,
+          "sha256": "8ae810e665542db4ca20c46a911bd98d859d70fa97caf5bd5615595ee75fb8f2",
+          "git_blob": "edfed5940559e83040789791776716bd3f30dbda"
+        }
+      ],
+      "decision": "保留：实际runner身份、资源隔离、新鲜JUnit/必跑项、实际执行状态与设备后置健康要求。"
+    },
+    {
+      "skill": "adk-bsp-analysis",
+      "files": [
+        {
+          "path": "skills/adk-bsp-analysis/SKILL.md",
+          "bytes": 3928,
+          "sha256": "afb1112e6e10d1b605f9bccb6837afdca9506ccac2881f98dd044d344fe78835",
+          "git_blob": "929e9ba760ad73979ba41e028385d7efaef2d5a4"
+        },
+        {
+          "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+          "bytes": 1666,
+          "sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
+          "git_blob": "b9016cd4f521354f72a6ec2abbf6a7b8fd425c67"
+        }
+      ],
+      "decision": "保留：按问题展开的初始化/资源链、权威章节、历史workaround与confirmed/inferred/unknown分离。"
+    }
+  ],
+  "external_sources": [
+    {
+      "repo": "Jeffallan/claude-skills",
+      "path": "skills/embedded-systems/SKILL.md",
+      "copy": "jeffallan-embedded.md",
+      "decision": "借鉴按问题加载参考的组织方式（ADK已有）；拒绝直接移植ISR/IRQ模板、固定优先级/栈水位门槛及不检查所有返回值的示例。",
+      "commit": "078a25cc5bfd8011459be7b91d004e900c1d02d3",
+      "url": "https://github.com/Jeffallan/claude-skills/blob/078a25cc5bfd8011459be7b91d004e900c1d02d3/skills/embedded-systems/SKILL.md",
+      "sha256": "26695ca78cdbbfd3657dc143b28308a293e798399df430cee6116e758cc3f4a8",
+      "bytes": 6295,
+      "read": true,
+      "read_scope": "whole file",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/jeffallan-embedded.md"
+    },
+    {
+      "repo": "Mindrally/skills",
+      "path": "embedded-stm32/SKILL.md",
+      "copy": "mindrally-embedded-stm32.md",
+      "decision": "借鉴generated/user边界、资源所有权与分层测试（ADK已有）；拒绝同一RX buffer在消费者读取前重新交给DMA的示例，也不跨MCU套用CFSR/HFSR。",
+      "commit": "7682ca77710e0971eab4e0ae5dddfa281aea0ba5",
+      "url": "https://github.com/Mindrally/skills/blob/7682ca77710e0971eab4e0ae5dddfa281aea0ba5/embedded-stm32/SKILL.md",
+      "sha256": "dcc30759b8225eb0b0b091c057e305f6dd7c32bc76fdcaea4b63be48a6e8dac7",
+      "bytes": 9302,
+      "read": true,
+      "read_scope": "whole file",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/mindrally-embedded-stm32.md"
+    },
+    {
+      "repo": "rovinax/embedded-skills",
+      "path": "skills/embedded-rtos-design/SKILL.md",
+      "copy": "rovinax-embedded-rtos.md",
+      "decision": "采用固定周期意图，经官方API纠正；拒绝双参osDelayUntil、ticks=ms、固定任务优先级/禁止所有ISR控制计算和无条件拆任务。",
+      "commit": "022ce31b469b1a1d0c1261c2c8d0f3e07b2c0bbc",
+      "url": "https://github.com/rovinax/embedded-skills/blob/022ce31b469b1a1d0c1261c2c8d0f3e07b2c0bbc/skills/embedded-rtos-design/SKILL.md",
+      "sha256": "894e75a646c44e54447933cd67c494e9a6712529b82837da962893f19afdb0d6",
+      "bytes": 9790,
+      "read": true,
+      "read_scope": "whole file",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/rovinax-embedded-rtos.md"
+    },
+    {
+      "repo": "FreeRTOS/FreeRTOS-Kernel",
+      "path": "include/projdefs.h",
+      "copy": "projdefs.h",
+      "decision": "核默认pdMS_TO_TICKS整数除法、宏可覆盖及最终TickType_t收窄；真实头文件编译运行30向量。",
+      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
+      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/projdefs.h",
+      "sha256": "87e8328c5d844abde3593291b36a2c235b2ae6e41402c0314fb54f933d32c4b9",
+      "bytes": 7364,
+      "read": true,
+      "read_scope": "whole file",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/projdefs.h"
+    },
+    {
+      "repo": "FreeRTOS/FreeRTOS-Kernel",
+      "path": "include/task.h",
+      "copy": "task.h",
+      "decision": "核相对vTaskDelay与绝对xTaskDelayUntil、previous wake更新和return值只表示是否阻塞。",
+      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
+      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/task.h",
+      "sha256": "463d29016b1c11dd7c5f9e67b41bf8c1897d9c2dcc510cdc37e3158f32584222",
+      "bytes": 170813,
+      "read": true,
+      "read_scope": "vTaskDelay and xTaskDelayUntil",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/task.h"
+    },
+    {
+      "repo": "FreeRTOS/FreeRTOS-Kernel",
+      "path": "tasks.c",
+      "copy": "tasks.c",
+      "decision": "只审读xTaskDelayUntil实现，确认到点now==wake时pdFALSE、每次均推进previous wake；本地保存对应原始函数摘录。",
+      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
+      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/tasks.c",
+      "sha256": "6de295f333f31818de546d6eb72b877c5a6964980f14f80bc1e17b19b7ff9fc4",
+      "bytes": 365244,
+      "read": true,
+      "read_scope": "xTaskDelayUntil",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/tasks.c"
+    },
+    {
+      "repo": "FreeRTOS/FreeRTOS-Kernel",
+      "path": "include/timers.h",
+      "copy": "timers.h",
+      "decision": "核xTimerStop/Delete pdPASS仅成功投递timer command queue，不证明共享回调context已无使用者。",
+      "commit": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520",
+      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/ca759444e9ca59cfa3a9faa6cb8b49e0772ca520/include/timers.h",
+      "sha256": "aff317a330935160abbd00a3a60a973653921e3a022216dcb04d804678c375b8",
+      "bytes": 66027,
+      "read": true,
+      "read_scope": "xTimerStop and xTimerDelete",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/timers.h"
+    },
+    {
+      "repo": "FreeRTOS/FreeRTOS-Kernel-Book",
+      "path": "ch06.md",
+      "copy": "freertos-book-ch06.md",
+      "decision": "审读6.2、6.4及命令入队语义；FreeRTOS timer callback共享daemon task且不能进入Blocked。",
+      "commit": "ba20b2f820926587d5ee20ce312b3789d63f795c",
+      "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel-Book/blob/ba20b2f820926587d5ee20ce312b3789d63f795c/ch06.md",
+      "sha256": "319e7a420fc9e788e3740ac4c2c2addd351fa9cb08560cb6c693dfe6e46f8403",
+      "bytes": 50991,
+      "read": true,
+      "read_scope": "sections 6.2, 6.4 and command queue semantics",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/freertos-book-ch06.md"
+    },
+    {
+      "repo": "ARM-software/CMSIS_6",
+      "path": "CMSIS/RTOS2/Include/cmsis_os2.h",
+      "copy": "cmsis_os2.h",
+      "decision": "核osDelayUntil单absolute-tick参数；用实际头文件编译确认双参错误和单参合法。",
+      "commit": "69b5aa343e618b74ffb40ca2b13f73a0cda7ab76",
+      "url": "https://github.com/ARM-software/CMSIS_6/blob/69b5aa343e618b74ffb40ca2b13f73a0cda7ab76/CMSIS/RTOS2/Include/cmsis_os2.h",
+      "sha256": "0de5e6ff219ee13bcd1b1ca2b6446d68cb56b6a11e16494e9577bb2ffdd52a70",
+      "bytes": 42623,
+      "read": true,
+      "read_scope": "whole file",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/cmsis_os2.h"
+    },
+    {
+      "repo": "torvalds/linux",
+      "path": "Documentation/core-api/dma-api-howto.rst",
+      "copy": "dma-api-howto.rst",
+      "decision": "审读coherent DMA与ordering段；现ADK明确memory ordering，作为保留依据，不额外扩写。",
+      "commit": "aebb7274476403040d582c61478df8f4a7bf9cd3",
+      "url": "https://github.com/torvalds/linux/blob/aebb7274476403040d582c61478df8f4a7bf9cd3/Documentation/core-api/dma-api-howto.rst",
+      "sha256": "92070ca3b5e150580c26d39be990b109053951a767fb3fd1d695aece478bbff2",
+      "bytes": 35316,
+      "read": true,
+      "read_scope": "coherent DMA ordering and cache line sharing",
+      "raw_copy_bytes_equal_retrieval": true,
+      "git_blob": null,
+      "git_blob_verification": "not-performed",
+      "local_copy": "/workspace/scratch/fe5385ca063a/round2-embedded-evidence/dma-api-howto.rst"
+    }
+  ],
+  "observations": {
+    "host_probe": "round2-embedded-evidence/probe-observed.json",
+    "source_evidence": "round2-embedded-evidence/",
+    "native_scheduler_executed": false,
+    "device_executed": false,
+    "scope": "22 core Skills, all tracked files under those skill directories; upstream whole files fetched, relevant sections reviewed; no external code installed or imported to ADK"
+  },
+  "negative_results": [
+    "knowledge/L2-domain/lessons.md absent; no historical lesson invented.",
+    "External rovinax osDelayUntil double-argument example failed actual CMSIS header syntax validation; the failure is external example evidence, not an ADK regression.",
+    "First probe executed successfully before raw receipt persistence; second identical bounded execution was retained in probe-observed.json. No performance/reliability claim from repeats."
+  ],
+  "recommendation": "Modify only adk-rtos-task-design, keep 21 other assigned Skills. Net directory bytes should not increase; keep RTA formula/preconditions and independent priorities/IRQ/stack/queue budgets. Tests and evidence must label host arithmetic/compile/model vs actual RTOS scheduling/HIL."
+}

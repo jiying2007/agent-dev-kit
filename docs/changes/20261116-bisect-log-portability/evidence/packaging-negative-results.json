@@ -1,0 +1,5 @@
+{
+  "observed_failure": "git diff --cached --check rejected trailing whitespace in two authentic raw logs and a raw log ending blank line.",
+  "resolution": "Encode the complete original UTF-8 text as a JSON string; round-trip bytes and original SHA256 verified. Do not trim logs, change source evidence, or weaken repository whitespace policy.",
+  "scope": "Evidence representation only; reviewed five source files and semantic evidence remain unchanged."
+}

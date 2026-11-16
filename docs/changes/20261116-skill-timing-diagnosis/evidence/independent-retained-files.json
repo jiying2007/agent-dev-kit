@@ -1,0 +1,111 @@
+{
+  "files": [
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/audit-coverage-check.json",
+      "retained_path": "evidence/independent/audit-coverage-check.json",
+      "sha256": "a21f7e1bb56d20b400116120af9ec92de8fe03f701eec487ec7ab0bb6cdfaf89",
+      "bytes": 319
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/core-restored-upstream-integrity.json",
+      "retained_path": "evidence/independent/core-restored-upstream-integrity.json",
+      "sha256": "cb51fe710a7e460e7519ef5c56d5240379cdb7133d55b47b2a4eb2654ab6d426",
+      "bytes": 8735
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/embedded-upstream-integrity.json",
+      "retained_path": "evidence/independent/embedded-upstream-integrity.json",
+      "sha256": "a5cebe67035553a0d71e5222d0cb5b9b006c30656b77e590a7f7d02c7d4b9037",
+      "bytes": 2684
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-patch-format-check.json",
+      "retained_path": "evidence/independent/final-patch-format-check.json",
+      "sha256": "8702fc734309c59a3f81a7faced68c0734e815c3c4e48ff94ebc78e3efd783f1",
+      "bytes": 575
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-profile-independent-check.json",
+      "retained_path": "evidence/independent/final-profile-independent-check.json",
+      "sha256": "586a0fe7f9786e4a38d67bdc4122056c1138219e812d1ee39007c627cf69a69b",
+      "bytes": 18463
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-regression-verification.json",
+      "retained_path": "evidence/independent/final-regression-verification.json",
+      "sha256": "9d103f6fa3b845cc86ac13343926a2b873c7c9f8e82fefdc0ac1c87440abdc20",
+      "bytes": 13478
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/final-source-identity-check.json",
+      "retained_path": "evidence/independent/final-source-identity-check.json",
+      "sha256": "d23a02328ab328315c72dc41753f54b5e80f8fb029c003fa72cd95e73c4cb5f0",
+      "bytes": 7710
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/followup-consumer-review.json",
+      "retained_path": "evidence/independent/followup-consumer-review.json",
+      "sha256": "f42a5fbc69c8db56e18c1cea2b289dc8b8a7fb7c8b355263e7ce6fcc04f8042c",
+      "bytes": 3486
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/identity-check.json",
+      "retained_path": "evidence/independent/identity-check.json",
+      "sha256": "bcd87fd9afea08a3294dcc398b37500c09d032ea25bc013372225688842ec452",
+      "bytes": 7362
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/independent-upstream-probes.json",
+      "retained_path": "evidence/independent/independent-upstream-probes.json",
+      "sha256": "ed846d30e736a422bd98a79494dfec13cc7b7b28234f82f5e36980e9fa4dd3ec",
+      "bytes": 5538
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/new-tests-receipt.json",
+      "retained_path": "evidence/independent/new-tests-receipt.json",
+      "sha256": "1938c4dac5dfd134bbf7ee4b811dd5ee580c2878d6e47663a7cb8d140687c4a7",
+      "bytes": 78156
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/optional-refetched-upstream-integrity.json",
+      "retained_path": "evidence/independent/optional-refetched-upstream-integrity.json",
+      "sha256": "6007edf42ca0593cc18b03697e51d744662ffc1e83c85a09a22a3aef78fe870b",
+      "bytes": 3995
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-regression-suite-check.json",
+      "retained_path": "evidence/independent/original-regression-suite-check.json",
+      "sha256": "4b78b5e71c9aa1ecc0ec1b554abef4783b184b06e72cb750d159f414dc20d4b0",
+      "bytes": 325
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-regression-verification.json",
+      "retained_path": "evidence/independent/original-regression-verification.json",
+      "sha256": "0eb6c9d000583657c6e725b06d80b24bd741f5e7ef41b8082c939de1abde5147",
+      "bytes": 19494
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-source-interim-review.json",
+      "retained_path": "evidence/independent/original-source-interim-review.json",
+      "sha256": "fbdb3f85d4b879854e00eb28231a379950e9dc670451bbcc6379199de69a2814",
+      "bytes": 18729
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/original-source-review.json",
+      "retained_path": "evidence/independent/original-source-review.json",
+      "sha256": "7f25ac7676e94478aceeefbbea594df5fbe568ddff05afce562701db9b819192",
+      "bytes": 21255
+    },
+    {
+      "original_path": "/workspace/scratch/fe5385ca063a/round2-independent-review-artifacts/upstream-independent-integrity.json",
+      "retained_path": "evidence/independent/upstream-independent-integrity.json",
+      "sha256": "73e50b9bbdee64dc361e01e1677afb6b6e64d56a1648105ea587215148d29f64",
+      "bytes": 1322
+    }
+  ],
+  "not_copied": [
+    "Redundant full inspection command transcripts",
+    "Full third-party upstream documents and transport responses"
+  ],
+  "boundary": "The independent report and focused verification receipts are retained; pinned upstream URLs/blob/SHA256 allow retrieval without vendoring external Skill implementations."
+}

@@ -1,0 +1,132 @@
+{
+  "schema": "adk-rtos-audit-probe/v1",
+  "status": "pass",
+  "started": "2026-11-16T05:10:40.062943+00:00",
+  "completed": "2026-11-16T05:10:40.186881+00:00",
+  "boundary": "Actual GCC header checking and macro execution; no RTOS task scheduling or hardware execution",
+  "assertions": {
+    "cmsis_bad_rejected": true,
+    "cmsis_valid_compiles": true,
+    "macro_vectors": 30
+  },
+  "file_sha256": {
+    "cmsis_os2.h": "0de5e6ff219ee13bcd1b1ca2b6446d68cb56b6a11e16494e9577bb2ffdd52a70",
+    "dma-api-howto.rst": "92070ca3b5e150580c26d39be990b109053951a767fb3fd1d695aece478bbff2",
+    "freertos-book-ch06.md": "319e7a420fc9e788e3740ac4c2c2addd351fa9cb08560cb6c693dfe6e46f8403",
+    "jeffallan-embedded.md": "26695ca78cdbbfd3657dc143b28308a293e798399df430cee6116e758cc3f4a8",
+    "mindrally-embedded-stm32.md": "dcc30759b8225eb0b0b091c057e305f6dd7c32bc76fdcaea4b63be48a6e8dac7",
+    "probe.py": "4524df28cdfa5e295c913fddc92d2e2d5b15426b55e5caccf3985f1eefa93ca5",
+    "probe_cmsis_bad.c": "546ef0c3166cf8ebd7428465969fa4f8530090ca8931bc7f8db22d14608f6726",
+    "probe_cmsis_good.c": "78ca1860488beb22d0422af88cedefbaff433ef6991b009c40a9b27d1339d2be",
+    "probe_ticks.c": "311863712cda57b65bd5349338bab9606b74776c9fcdd12c6a6afcc5989afd71",
+    "projdefs.h": "87e8328c5d844abde3593291b36a2c235b2ae6e41402c0314fb54f933d32c4b9",
+    "rovinax-embedded-rtos.md": "894e75a646c44e54447933cd67c494e9a6712529b82837da962893f19afdb0d6",
+    "task.h": "463d29016b1c11dd7c5f9e67b41bf8c1897d9c2dcc510cdc37e3158f32584222",
+    "timers.h": "aff317a330935160abbd00a3a60a973653921e3a022216dcb04d804678c375b8"
+  },
+  "executions": [
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsyntax-only",
+        "probe_cmsis_bad.c"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "probe_cmsis_bad.c: In function ‘probe’:\nprobe_cmsis_bad.c:2:42: error: too many arguments to function ‘osDelayUntil’\n    2 | osStatus_t probe(uint32_t tick) { return osDelayUntil(tick, 1); }\n      |                                          ^~~~~~~~~~~~\nIn file included from probe_cmsis_bad.c:1:\ncmsis_os2.h:591:12: note: declared here\n  591 | osStatus_t osDelayUntil (uint32_t ticks);\n      |            ^~~~~~~~~~~~\n"
+    },
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-fsyntax-only",
+        "probe_cmsis_good.c"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DPROBE_WIDTH=32",
+        "-DconfigTICK_RATE_HZ=100",
+        "probe_ticks.c",
+        "-o",
+        "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-100"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-100"
+      ],
+      "returncode": 0,
+      "stdout": "0:0\n1:0\n9:0\n10:1\n11:1\n1000:100\n65535:6553\n65536:6553\n4294967295:429496729\n4294967296:429496729\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DPROBE_WIDTH=16",
+        "-DconfigTICK_RATE_HZ=1000",
+        "probe_ticks.c",
+        "-o",
+        "/tmp/adk-rtos-audit-nw19kx2p/ticks-16-1000"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/adk-rtos-audit-nw19kx2p/ticks-16-1000"
+      ],
+      "returncode": 0,
+      "stdout": "0:0\n1:1\n9:9\n10:10\n11:11\n1000:1000\n65535:65535\n65536:0\n4294967295:65535\n4294967296:0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "gcc",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DPROBE_WIDTH=32",
+        "-DconfigTICK_RATE_HZ=1000",
+        "probe_ticks.c",
+        "-o",
+        "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-1000"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-1000"
+      ],
+      "returncode": 0,
+      "stdout": "0:0\n1:1\n9:9\n10:10\n11:11\n1000:1000\n65535:65535\n65536:65536\n4294967295:4294967295\n4294967296:0\n",
+      "stderr": ""
+    }
+  ]
+}

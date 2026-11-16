@@ -1,0 +1,228 @@
+{
+  "observed_at": "2026-11-16T05:38:41.765815+00:00",
+  "source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+  "head_before": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+  "head_after": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+  "worktree_status": "",
+  "source_matches": true,
+  "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 - [Manifest.load; enforce_profile_ratchet for each actual profile]",
+  "results": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 98424,
+        "potential_full_source_bytes": 173292
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 210261,
+        "potential_full_source_bytes": 316309
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30352,
+        "potential_full_source_bytes": 46452
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 213286,
+        "potential_full_source_bytes": 323191
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 113506,
+        "potential_full_source_bytes": 192111
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 82900,
+        "potential_full_source_bytes": 156683
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 65951,
+        "potential_full_source_bytes": 117524
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 124040,
+        "potential_full_source_bytes": 211277
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "matches_submitted_final_results": true,
+  "ratchet_unchanged_from_baseline": true,
+  "ratchet_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+  "raw_git_commands": [
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "show",
+        "913b6b3a0838ccddae252a3a8536ac7d41598810:manifests/profile_context_ratchets.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"schema\": \"adk-profile-context-ratchets/v1\",\n  \"status\": \"active\",\n  \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\",\n  \"measured_from\": \"source-file-bytes\",\n  \"measured_at\": \"2026-11-10\",\n  \"policy\": {\n    \"fail_on_entry_file_growth\": true,\n    \"fail_on_potential_full_source_growth\": true,\n    \"asset_count_is_observability_only\": true,\n    \"runtime_initial_context_claim\": false,\n    \"provider_tokenizer_claim\": false,\n    \"update_requires_reviewed_rationale\": true\n  },\n  \"profiles\": {\n    \"core\": {\n      \"assets\": 27,\n      \"entry_file_bytes\": 133940,\n      \"potential_full_source_bytes\": 184133\n    },\n    \"release-hardening\": {\n      \"assets\": 23,\n      \"entry_file_bytes\": 112256,\n      \"potential_full_source_bytes\": 159576\n    },\n    \"personal-core\": {\n      \"assets\": 32,\n      \"entry_file_bytes\": 152918,\n      \"potential_full_source_bytes\": 204293\n    },\n    \"embedded-fullstack\": {\n      \"assets\": 55,\n      \"entry_file_bytes\": 245296,\n      \"potential_full_source_bytes\": 316854\n    },\n    \"team-core\": {\n      \"assets\": 35,\n      \"entry_file_bytes\": 166442,\n      \"potential_full_source_bytes\": 223333\n    },\n    \"large-refactor\": {\n      \"assets\": 56,\n      \"entry_file_bytes\": 248328,\n      \"potential_full_source_bytes\": 323328\n    },\n    \"incident-response\": {\n      \"assets\": 9,\n      \"entry_file_bytes\": 37797,\n      \"potential_full_source_bytes\": 46612\n    },\n    \"research-intake\": {\n      \"assets\": 20,\n      \"entry_file_bytes\": 86571,\n      \"potential_full_source_bytes\": 124543\n    }\n  },\n  \"baseline_source\": {\n    \"version\": \"7.1.0\",\n    \"commit\": \"70fac05125907e4930ee73f3928799e11bac55de\",\n    \"note\": \"Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes. 2026-11-04 v10.0.0 source-only measurement from feature-branch Git tree 1819607e3fccc61de9041bde3c28af62a2c74819, not a runtime token claim: capability-based language consolidation removed two team Skills and seven redundant references; 9 OpenAI metadata corrections and risk-aware gate instructions add exactly 2590 entry bytes to shared profiles, while most deferred support footprints decrease. All eight Profile limits reset to exact measured source values with ZERO growth slack and original fail-on-growth policy retained. Detailed deltas and self-review boundary: docs/changes/skill-v10-convergence/measurement.md. Formal independent release review remains a separate gate. 2026-11-09 ADK 11.2.0 candidate exact source-byte recalibration from Git trees base=f55293dec57c0dd7cfc65372f29044ffe0b73ab9 and method-change=2af49544f53e501d7782d89aefec4a1a219a1a2a. 64 Skill identities unchanged. Seven skill-local on-demand references and revised entry instructions increase checked source bytes while avoiding unconditional loading: core entry +1831/full +8703, large-refactor entry +2438/full +10585. Each profile threshold is set to the exact candidate source byte measurement, not padded, in docs/changes/20261109-skill-method-quality/measurement.md. This is a reviewed source-growth ratchet only; runtime initial context, token savings, behavior success, native host certification and release authority are not measured or granted. 2026-11-09 skills-audit-closure: all eight profiles recalculated from exact baseline and candidate Git trees, including three self-contained AAR references and updated safety guidance; see docs/changes/20261109-skills-audit-closure/measurement.md. These are source bytes only, never native token/model/field measurements. 2026-11-09 CI follow-up: trimmed 8 trailing spaces in canonical AAR template and exact mirrored skill-local reference; each including profile deferred support ratchet tightened by 8 bytes. Candidate tree 0c4fd0ca09b9a0a85293185901d449f840831961; source-only check. 2026-11-10 11.2.2 embedded-Skill-audit: exact Git-tree byte recomputation at branch head cfe82bf7086b11aa8c7e41822bca624951a535d9; source-only changes (routing, embedded field references, tests), no real device/runtime/token claim; measurement docs/changes/20261110-embedded-skill-audit-closure/measurement.md. Ratchets remain exact with zero padding. 2026-11-10 format follow-up: HIL/Protocol trailing blank line removal; affected Profile source byte ratchets tightened.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "show",
+        "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9:manifests/profile_context_ratchets.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"schema\": \"adk-profile-context-ratchets/v1\",\n  \"status\": \"active\",\n  \"semantics\": \"source-growth-review-ratchet-not-runtime-context-budget\",\n  \"measured_from\": \"source-file-bytes\",\n  \"measured_at\": \"2026-11-10\",\n  \"policy\": {\n    \"fail_on_entry_file_growth\": true,\n    \"fail_on_potential_full_source_growth\": true,\n    \"asset_count_is_observability_only\": true,\n    \"runtime_initial_context_claim\": false,\n    \"provider_tokenizer_claim\": false,\n    \"update_requires_reviewed_rationale\": true\n  },\n  \"profiles\": {\n    \"core\": {\n      \"assets\": 27,\n      \"entry_file_bytes\": 133940,\n      \"potential_full_source_bytes\": 184133\n    },\n    \"release-hardening\": {\n      \"assets\": 23,\n      \"entry_file_bytes\": 112256,\n      \"potential_full_source_bytes\": 159576\n    },\n    \"personal-core\": {\n      \"assets\": 32,\n      \"entry_file_bytes\": 152918,\n      \"potential_full_source_bytes\": 204293\n    },\n    \"embedded-fullstack\": {\n      \"assets\": 55,\n      \"entry_file_bytes\": 245296,\n      \"potential_full_source_bytes\": 316854\n    },\n    \"team-core\": {\n      \"assets\": 35,\n      \"entry_file_bytes\": 166442,\n      \"potential_full_source_bytes\": 223333\n    },\n    \"large-refactor\": {\n      \"assets\": 56,\n      \"entry_file_bytes\": 248328,\n      \"potential_full_source_bytes\": 323328\n    },\n    \"incident-response\": {\n      \"assets\": 9,\n      \"entry_file_bytes\": 37797,\n      \"potential_full_source_bytes\": 46612\n    },\n    \"research-intake\": {\n      \"assets\": 20,\n      \"entry_file_bytes\": 86571,\n      \"potential_full_source_bytes\": 124543\n    }\n  },\n  \"baseline_source\": {\n    \"version\": \"7.1.0\",\n    \"commit\": \"70fac05125907e4930ee73f3928799e11bac55de\",\n    \"note\": \"Original baseline: independently measured Git blob sizes before 7.2.0. 2026-11-03 user-authorized adk-goal-authoring addition: author-self-review, add exactly 4457 entry bytes and 1864 deferred-support bytes plus one asset only to core and its inheriting profiles. Rationale and verification: docs/changes/20261103-adk-goal-authoring/design.md. No runtime token-budget or release-authority change. 2026-11-03 v8.2.2: three existing registered-but-unreachable core Skills are attached to existing specialist Profiles only (team-core, incident-response, embedded-fullstack). Platform-neutral core remains unchanged. Checked source bytes: team-core 160166/212956; incident-response 34102/37403; embedded-fullstack 230096/289584; inherited large-refactor 232417/296914. These are source bytes, not native runtime token measurements. 2026-11-03 v8.2.3: reviewed source-only description boundary improvements and explicit team-core reachability for existing artifact/pilot Skills; per-profile source byte ratchets refreshed from exact Git tree with support references counted. This is not a native tokenizer or runtime-context measurement. Duplicate private support references are retained for independently exportable Skills, not compatibility aliases. 8.2.3 CI repair: sorted team-core Skill lifecycle order and shortened review entry below its unchanged 7200-byte ceiling; first-party catalog find retains bring-up keyword. Source-byte values adjusted for both exact description changes. 2026-11-04 v10.0.0 source-only measurement from feature-branch Git tree 1819607e3fccc61de9041bde3c28af62a2c74819, not a runtime token claim: capability-based language consolidation removed two team Skills and seven redundant references; 9 OpenAI metadata corrections and risk-aware gate instructions add exactly 2590 entry bytes to shared profiles, while most deferred support footprints decrease. All eight Profile limits reset to exact measured source values with ZERO growth slack and original fail-on-growth policy retained. Detailed deltas and self-review boundary: docs/changes/skill-v10-convergence/measurement.md. Formal independent release review remains a separate gate. 2026-11-09 ADK 11.2.0 candidate exact source-byte recalibration from Git trees base=f55293dec57c0dd7cfc65372f29044ffe0b73ab9 and method-change=2af49544f53e501d7782d89aefec4a1a219a1a2a. 64 Skill identities unchanged. Seven skill-local on-demand references and revised entry instructions increase checked source bytes while avoiding unconditional loading: core entry +1831/full +8703, large-refactor entry +2438/full +10585. Each profile threshold is set to the exact candidate source byte measurement, not padded, in docs/changes/20261109-skill-method-quality/measurement.md. This is a reviewed source-growth ratchet only; runtime initial context, token savings, behavior success, native host certification and release authority are not measured or granted. 2026-11-09 skills-audit-closure: all eight profiles recalculated from exact baseline and candidate Git trees, including three self-contained AAR references and updated safety guidance; see docs/changes/20261109-skills-audit-closure/measurement.md. These are source bytes only, never native token/model/field measurements. 2026-11-09 CI follow-up: trimmed 8 trailing spaces in canonical AAR template and exact mirrored skill-local reference; each including profile deferred support ratchet tightened by 8 bytes. Candidate tree 0c4fd0ca09b9a0a85293185901d449f840831961; source-only check. 2026-11-10 11.2.2 embedded-Skill-audit: exact Git-tree byte recomputation at branch head cfe82bf7086b11aa8c7e41822bca624951a535d9; source-only changes (routing, embedded field references, tests), no real device/runtime/token claim; measurement docs/changes/20261110-embedded-skill-audit-closure/measurement.md. Ratchets remain exact with zero padding. 2026-11-10 format follow-up: HIL/Protocol trailing blank line removal; affected Profile source byte ratchets tightened.\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "git",
+        "status",
+        "--porcelain=v1"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

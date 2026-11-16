@@ -1,8 +1,8 @@
 ---
 name: adk-incident-rca-report
 description: "用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。"
-version: 1.1.0
-last_updated: 2026-11-13
+version: 1.1.1
+last_updated: 2026-11-16
 triggers:
   - "线上事故"
   - "故障复盘"
@@ -22,23 +22,23 @@ constraints:
 # adk-incident-rca-report
 
 ## Goal
-在事故止损后基于证据解释事件、原因与防复发。报告质量取决于因果证据，而不是 5-Why 的层数。
+事故止损后凭证据解释因果与防复发；不以 5-Why 层数评判质量。
 
 ## Workflow
-1. 固定事件范围、已确认版本、证据指针和影响；时间不明则写 `unknown`，不编造分钟级时间线。
+1. 固定事件范围、版本、影响与证据；保留原时区，区分事件发生与采集时间，仅可比时统一时基。未知时间/时钟偏差记 `unknown`，不凭采集顺序断因果。
 2. 单一原因已复现时使用“触发 → 失效机制 → 影响 → 修复/验证”短链。
 3. 多因素场景才按需用 5-Why、故障树或事件序列分析；**5-Why 为可选分析工具**，不强制凑三层/五层，不能因为模板把责任推给组织。
 4. 根因没有确认时标 `unresolved`；分别记录事实、假设、被证伪方向、下一步取证，不编造概率或确定性判断。
-5. 产出具体改进与复验信号、实际 owner（未知则待确认）。涉及生产变更、安全、数据写入或回滚时维持真实的权限审批与恢复边界，不擅自操作。
-6. 短报告为默认；确有正式事故档案/多方协调需求时才补 RACI、完整影响核算和长期复查。
+5. 按实际缺口选择检测/缓解/预防行动，给改进、复验信号及实际 owner（未知则待确认），不强制三类齐全。生产、安全、数据写入或回滚仍维持原权限与恢复边界。
+6. 默认短报告；需正式档案/多方协调时才补 RACI、影响核算与长期复查。
 
 ## Report
 ```md
-- Incident / status / time range:
+- Incident / status / time range (event_time / observed_time / timezone / clock_uncertainty):
 - Verified impact / unknown:
 - Facts and evidence pointers:
 - Causal chain: confirmed | hypothesis | unresolved
-- Remediation / owner / verification:
+- Action (detect | mitigate | prevent) / owner / verification:
 - Open questions / residual risks:
 ```
 

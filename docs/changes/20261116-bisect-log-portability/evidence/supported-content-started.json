@@ -1,0 +1,31 @@
+{
+  "schema": "local-command-observation/v1",
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "command": [
+    "bash",
+    "tests/test_skill_content.sh"
+  ],
+  "started_at": "2026-11-16T06:01:02.068710+00:00",
+  "before": {
+    "head": {
+      "exit_code": 0,
+      "stdout": "bc2f4b2ca3bbef2cb5515322048a144639e79004\n",
+      "stderr": ""
+    },
+    "indexed_tree": {
+      "exit_code": 0,
+      "stdout": "17acaeff0a4d88b54290f714d80a099f646b7462\n",
+      "stderr": ""
+    },
+    "status": {
+      "exit_code": 0,
+      "stdout": " M tests/test_skill_bisect_methods.py\n?? docs/changes/20261116-bisect-log-portability/\n?? docs/changes/20261116-skill-timing-diagnosis/ci-followup.md\n",
+      "stderr": ""
+    },
+    "staged_diff": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "schema": "adk-reviewed-source-bindings/v1",
+  "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "reviewed_source_commit": "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9",
+  "source_tree": "475d2fa8ff69320bf5268677eb4072e7359e5ab1",
+  "original_patch_sha256": "02f31f5fd6f932c5c52892fda46633d0510eb0ec1f66db461f78041a27f2917a",
+  "file_count": 29,
+  "files": [
+    {
+      "path": ".version-lock",
+      "sha256": "9c2c8625dec775dbe29f61c8ac867e0094b1399ff8f767b2476b860c06c859a5",
+      "bytes": 87,
+      "git_blob": "c9713f8a9c7835da436f7dbbbc5074e3a8b0652d"
+    },
+    {
+      "path": "CONTEXT.md",
+      "sha256": "fbb3fb2f5b8de18dcec4c12eddde70630e80b05b95d51c6b58fe49aa902c60b5",
+      "bytes": 8643,
+      "git_blob": "b4f52c8ef3c2c369d6714366922dd69fbe61d505"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b1dfee0b243bded458d0ba3376c7dbcc3f7a349c76ebe9fdd090919fb1b76997",
+      "bytes": 13086,
+      "git_blob": "bffe23b1a7bf49bccb71025027f59dd5e0b73921"
+    },
+    {
+      "path": "docs/agent-skill-catalog.md",
+      "sha256": "23b1d2be15d1cba63d8eadd9505a9b6cf57f8a3531b48129933cb47dcb9cda25",
+      "bytes": 38498,
+      "git_blob": "7981a87d1005041e6ab6cc75fee0f0b573d65964"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/audit.md",
+      "sha256": "2e0a9519087606f7fdb71c70d686053f6359269f73f0acbdd4197446d91d4f04",
+      "bytes": 10734,
+      "git_blob": "8da03e38bc8e156e05f7b626b0c73d03e2ec97d1"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/design.md",
+      "sha256": "2145e7d0c827110f3a2b4fba1ab790333322cb2adc88053f49e46b020b08d6d7",
+      "bytes": 2136,
+      "git_blob": "6ba32ab9e71a28a47a8e62d526d982dfa4674a44"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/core-audit.json",
+      "sha256": "273cf660b7ab6cb1f67bb0319c8ea911f370b38b075441e7ee757ab195fbb4f6",
+      "bytes": 44073,
+      "git_blob": "de54d4c8de69229268d04424c41360fc87c25ebb"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/embedded-audit.json",
+      "sha256": "52330f35937ff3915296c6065e9945b4a08ba900dfa1a3d65776436547bd2fb9",
+      "bytes": 26856,
+      "git_blob": "b40e79c024f294c91b23545364f61a95e27a582e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/optional-audit.json",
+      "sha256": "483124b8f8e08474da9db0670b70f25d7958ba6b60501063e1cdcb9e4579b32c",
+      "bytes": 20703,
+      "git_blob": "c9e63aff89c1ee1817b240ff243e60714df2826f"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/evidence/portfolio-audit.json",
+      "sha256": "384533d1186a294890970c4277e800c66b7a878e7eedbc0fa3b3b628346aa748",
+      "bytes": 16489,
+      "git_blob": "f5462ddc91fa331928cafeb2ca87b96493750c3e"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/negative-results.md",
+      "sha256": "c246a0efcb024a47a9b29bcdc8d992385aba0563289ba4e9c233a5d66734efba",
+      "bytes": 2266,
+      "git_blob": "02f97bce4c7a9cae79d9e85c90ed5cfd355b132c"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/requirements.md",
+      "sha256": "04c41702d0c5849c844e6427bf26df82bb55cca1b5e3330ce30b205213a4f469",
+      "bytes": 1600,
+      "git_blob": "b1afd73beaf2c85be84707e6806cd2984437daf7"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/source-review.md",
+      "sha256": "0cf7c8c2b2d5167464693179b70704b35895657bb4820b3bd25bf35493f60ad3",
+      "bytes": 8369,
+      "git_blob": "f9eb0bdabc3c90c2a293b2e924ecbb063c81487a"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/tasks.md",
+      "sha256": "38c7612f2af740d657f69467ca3a510a26be37db80c35b57e9e9bde6addc3892",
+      "bytes": 1476,
+      "git_blob": "6890f983012b0d405ccf30f8bd203b1c9647aa3b"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "8ba8f74d5db6f297260b2ada4b2f779541be320152a9b915fedc50c2be933c32",
+      "bytes": 90987,
+      "git_blob": "c4316d8123a6487f86155d90ff6bcf202adc5fb7"
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "94abc0f2f09786ba8c372ed7ff6965b187f148716473c86cf7d135186f401c2f",
+      "bytes": 705,
+      "git_blob": "025c788be69f9eccc099284708b41aa15b1b67a1"
+    },
+    {
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405",
+      "bytes": 2416,
+      "git_blob": "a123dabd42d37fb08b803abf2a732bc7cd855512"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f",
+      "bytes": 6646,
+      "git_blob": "52da1f2961c8235de2ded7578337caa3ea64d180"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
+      "bytes": 7050,
+      "git_blob": "d402bbbd3dee0cd795f7d9fb41756058578addc8"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "8bb804a71fcb16cb61cdfa3b135306d0f24523a89ddad4006f79b0e53d2a8f93",
+      "bytes": 1309,
+      "git_blob": "4c29f556b59f64d7c4260e3070b5b6031105ccd6"
+    },
+    {
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482",
+      "bytes": 5718,
+      "git_blob": "c447d6407ed33045e98770d24c9779ba6c44992c"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc",
+      "bytes": 2801,
+      "git_blob": "a4de92609ea416c21af29f2f1e64f3e850f42ba7"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85",
+      "bytes": 1524,
+      "git_blob": "a8f806a520b6a45b6738bae52927ccf90fbe25ae"
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "dce1daed7479bc1686d5596aa6d4c9cdc92631615bdfb92f181a310924bcb9e9",
+      "bytes": 70,
+      "git_blob": "08df3c4982ab63f51f7739a93265e272d9353c27"
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "bfb37e4ca4f3e58c586d9a6c8047183916ef27f7ea85d53c125faf6a822d5edc",
+      "bytes": 5821,
+      "git_blob": "9b8dbea72c585df87c6772e5599a5b1ce012689c"
+    },
+    {
+      "path": "tests/test_optional_incident_lifecycle.py",
+      "sha256": "00f45ea1b0890a4413a290f556fc8e295d82d4d5c606af8ee7586430e1c94d65",
+      "bytes": 4019,
+      "git_blob": "8b9aced00453fc8c2b971f3111beb9a1dfeb9c9f"
+    },
+    {
+      "path": "tests/test_skill_bisect_methods.py",
+      "sha256": "a413b9fccf6dce8abc236a44554c100c69a0db2d5a304009a592040409daca74",
+      "bytes": 8897,
+      "git_blob": "4ad7ae7f45e5de13a3e0515150a7e4c0e0fc2b72"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "sha256": "fe308b160bac02228bd26261fbfaf4c5c4871f0cf0c9f85e6f10d630ef380450",
+      "bytes": 972,
+      "git_blob": "6280e9a918be1a95d5b4649a01d5e1e6107d39ac"
+    },
+    {
+      "path": "tests/test_skill_rtos_methods.py",
+      "sha256": "79f5d6fa731e7f905b33f906e4f26e16de8cb73d876ab6ea07cea1fa9c1a5122",
+      "bytes": 4584,
+      "git_blob": "fbd372f0b0a9dc4828093c58d4f6bef4afb2d676"
+    }
+  ],
+  "observed_at": "2026-11-16T05:39:02.877184+00:00",
+  "boundary": "Hashes bind actual reviewed source; generated evidence is appended separately."
+}

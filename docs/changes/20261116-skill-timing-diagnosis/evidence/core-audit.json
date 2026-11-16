@@ -1,0 +1,1051 @@
+{
+  "schema": "adk-core-skill-audit/v1",
+  "reviewer": "ai/root/audit_core_effectiveness",
+  "role": "read-only-auditor",
+  "source_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "completed_at": "2026-11-16 05:13:36 UTC",
+  "coverage": {
+    "skills": 34,
+    "files": 93,
+    "bytes": 231726,
+    "body_and_reference_read": "all assigned files fully read; truncated middle blocks explicitly reread",
+    "git_blob_sha256_length_check": {
+      "status": "pass",
+      "skills": 34,
+      "files": 93
+    }
+  },
+  "skills": [
+    {
+      "skill": "adk-runtime-router",
+      "files": [
+        {
+          "path": "skills/adk-runtime-router/SKILL.md",
+          "bytes": 5443,
+          "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
+          "blob": "e4221a63cb951dfc206f9138c26141f5d8fd431f"
+        },
+        {
+          "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+          "bytes": 7296,
+          "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
+          "blob": "f30031e24580c72f1247119cab40dc52d366ca88"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "唯一primary、版本适配与optional真实加载边界完整。"
+    },
+    {
+      "skill": "adk-context-engineering",
+      "files": [
+        {
+          "path": "skills/adk-context-engineering/SKILL.md",
+          "bytes": 3927,
+          "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+          "blob": "1b53fcbe94688c5970e130017f6f1ab433be6522"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "stable/dynamic/evidence隔离、自包含交接与按需读取已覆盖。"
+    },
+    {
+      "skill": "adk-token-context-governance",
+      "files": [
+        {
+          "path": "skills/adk-token-context-governance/SKILL.md",
+          "bytes": 7699,
+          "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
+          "blob": "03a735d7faae07fa35db8491e9944ebe11c0f367"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "真实trace优先、raw回退，源码字节不冒充Token收益。"
+    },
+    {
+      "skill": "adk-requirements-triage",
+      "files": [
+        {
+          "path": "skills/adk-requirements-triage/SKILL.md",
+          "bytes": 3400,
+          "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
+          "blob": "43e6e6e463d026ecbc44e3404c716bc838913587"
+        },
+        {
+          "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+          "bytes": 1558,
+          "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
+          "blob": "b3983557b95917a1093ffa0d64ffebc2e5fd332b"
+        },
+        {
+          "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+          "bytes": 579,
+          "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
+          "blob": "c2358903d236fba94ecc1dba697386638280c37d"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "brief/execution/high-risk分流，既有批准直接进入执行。"
+    },
+    {
+      "skill": "adk-structured-requirements-questioning",
+      "files": [
+        {
+          "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+          "bytes": 3458,
+          "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
+          "blob": "95be4669b9b91f8a6bd87f0bb97539656efea8d4"
+        },
+        {
+          "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+          "bytes": 967,
+          "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
+          "blob": "654a449ba2d86c2ff16fd14a88a309ccc337faa1"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "Explore/Challenge、frontier、部分回答和依赖修订完整。"
+    },
+    {
+      "skill": "adk-repo-prompt-analysis",
+      "files": [
+        {
+          "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+          "bytes": 3300,
+          "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
+          "blob": "8ae146546cb2806bc4d9e2f0b257572107f7b57a"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "实际callsite、role和动态输入信任边界完整，最小报告。"
+    },
+    {
+      "skill": "adk-skill-deep-analysis",
+      "files": [
+        {
+          "path": "skills/adk-skill-deep-analysis/SKILL.md",
+          "bytes": 5613,
+          "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
+          "blob": "0a66b30462bb56e3de2b57070c208316d8fa5f3a"
+        },
+        {
+          "path": "skills/adk-skill-deep-analysis/references/details.md",
+          "bytes": 2096,
+          "sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
+          "blob": "744430c8df357ad4cc16cf192cf37fa9554c5d9d"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "有界source-discovery、固定来源、净增益与可实施handoff已有。"
+    },
+    {
+      "skill": "adk-lightweight-planning",
+      "files": [
+        {
+          "path": "skills/adk-lightweight-planning/LICENSE",
+          "bytes": 1063,
+          "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
+          "blob": "3c2826303420c300cf2a933bd8c440bc511eeb77"
+        },
+        {
+          "path": "skills/adk-lightweight-planning/README.md",
+          "bytes": 554,
+          "sha256": "8df5c88632885b07dc4a341b6904b57d687de144db79f2bf06d39e31dd0e2985",
+          "blob": "411c8973c5fb8f81a24cdf9b11604b40a399eec7"
+        },
+        {
+          "path": "skills/adk-lightweight-planning/SKILL.md",
+          "bytes": 2158,
+          "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
+          "blob": "fb572637a11ce11e7ae5d3c89ff56a8c194d3726"
+        },
+        {
+          "path": "skills/adk-lightweight-planning/agents/openai.yaml",
+          "bytes": 127,
+          "sha256": "29a33d35e237437b617366384e22e09a6b7c489fae8054f88c44dd51e25f20b5",
+          "blob": "dfe6682034190c40960bfe36e2c1a89a3849a8fd"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "只读计划按真实规模最小化，执行意图退出此skill。"
+    },
+    {
+      "skill": "adk-task-breakdown",
+      "files": [
+        {
+          "path": "skills/adk-task-breakdown/SKILL.md",
+          "bytes": 3659,
+          "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
+          "blob": "67edcf4f519e6cebca1ef8847a64644920076eed"
+        },
+        {
+          "path": "skills/adk-task-breakdown/references/task-packaging.md",
+          "bytes": 1534,
+          "sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
+          "blob": "c8dd41e0caa444c5af571c2d66a62a96ed2556b2"
+        },
+        {
+          "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+          "bytes": 3796,
+          "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
+          "blob": "1b0977d635e23911bd42a55e0b8354f78c11a0af"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "纵向切片、expand/migrate/contract及Ready Frontier已有。"
+    },
+    {
+      "skill": "adk-parallel-agent-governance",
+      "files": [
+        {
+          "path": "skills/adk-parallel-agent-governance/SKILL.md",
+          "bytes": 4292,
+          "sha256": "1336d4e8a3de6e7bf2f3aab4d09675f3ee794f7cb0476826076ffbebcf523b7c",
+          "blob": "332193235d528097389ee380b118c697ea0435ee"
+        },
+        {
+          "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+          "bytes": 1716,
+          "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+          "blob": "3431327dbbf22adc7db2f5ec3f6d1dd142b29f30"
+        },
+        {
+          "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+          "bytes": 643,
+          "sha256": "b771c82410f6c982e9482c27cf79ad0a28a8bd5ffdf3ea15c63ed2ae592e843c",
+          "blob": "e55eaf650d6f4690d92c8e6089d59d32f7a799f3"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "独立写集、data-only交接、summary-first与真实并行收益要求已有。"
+    },
+    {
+      "skill": "adk-worktree-governance",
+      "files": [
+        {
+          "path": "skills/adk-worktree-governance/SKILL.md",
+          "bytes": 3746,
+          "sha256": "68ce46730100ce4cedbb3438747bd134666561dca1c00790bb3e2329a3461242",
+          "blob": "f3c91613e6e5922bd452f9960e9f6f7976febf31"
+        },
+        {
+          "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+          "bytes": 654,
+          "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
+          "blob": "bde4c96c974fdac56a09b50dd945e153081b6b4d"
+        },
+        {
+          "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+          "bytes": 1789,
+          "sha256": "2ab200477eab8f816df4c958623030337693f05b3c5ea0dd2d23e1a36fe1eaa2",
+          "blob": "38d304e35e38587df7ee2e5e6313e3434cc1809c"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "上一轮Git只读取证已修，保留dirty保护与独立清理授权。"
+    },
+    {
+      "skill": "adk-context-compress-handoff",
+      "files": [
+        {
+          "path": "skills/adk-context-compress-handoff/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-context-compress-handoff/README.md",
+          "bytes": 324,
+          "sha256": "4c76f8c71b05435bc10d614b20011d643f798be03ecb57d0c192a6852886ee14",
+          "blob": "d1bf34ae8e15fa825bf64a85853bb639b61df22d"
+        },
+        {
+          "path": "skills/adk-context-compress-handoff/SKILL.md",
+          "bytes": 2578,
+          "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+          "blob": "7596082ede5c535c724324fc2099c17968fc4c78"
+        },
+        {
+          "path": "skills/adk-context-compress-handoff/agents/openai.yaml",
+          "bytes": 174,
+          "sha256": "60e59ca0c78d7202172eea257a23803188f8017776d18d58851ef4934090e00c",
+          "blob": "44f79d2174ec6c1b0e4e1f8e16fa512210d27778"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "自包含恢复摘要、raw指针、excluded及最多3动作保持。"
+    },
+    {
+      "skill": "adk-interface-contract-design",
+      "files": [
+        {
+          "path": "skills/adk-interface-contract-design/SKILL.md",
+          "bytes": 4924,
+          "sha256": "4bcf9f6d00ff3fdfeffef01a4c1e82383f02c0530f8dc632305780aedfc8592d",
+          "blob": "166bd9fdf3eb061cc5bfb90110fb0de921e32f04"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+          "bytes": 2184,
+          "sha256": "0d2a5ae8f32b3950d2b1a21ac913029905aded6f02bd1b0b2e591f61a29bcaf6",
+          "blob": "e28a344dd8989179e39f83c8afa405dee4055f75"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/details.md",
+          "bytes": 1938,
+          "sha256": "404798e52a85fde251c17986c95727b7b575c7425d7f73c5318a659e8bb57f23",
+          "blob": "a30be6f0edee84c8f76cbcd3d8243ec650ef2880"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+          "bytes": 2393,
+          "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+          "blob": "dac285c357b87bda2cc468d64fc38d931330aa51"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+          "bytes": 2238,
+          "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+          "blob": "12b0ea0bec197ae0e9db6d4c59d93772efdf29e9"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+          "bytes": 2845,
+          "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+          "blob": "64865b9122ebf281971818bdea4f6446a1758ff0"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "方向性版本/能力协商、生命周期/副作用与双向规格核对完整。"
+    },
+    {
+      "skill": "adk-adr-writer",
+      "files": [
+        {
+          "path": "skills/adk-adr-writer/SKILL.md",
+          "bytes": 3680,
+          "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
+          "blob": "ae3a98b5a0e1999d43ee9a36a2cce07fc427d382"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "按风险写ADR，真实备选、保真和冷读边界完整。"
+    },
+    {
+      "skill": "adk-component-api-stability",
+      "files": [
+        {
+          "path": "skills/adk-component-api-stability/SKILL.md",
+          "bytes": 5451,
+          "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
+          "blob": "538407bb30b6e0579672f6234d793a0704e499a5"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "源码API/二进制ABI/旧消费者/行为验证分离，保留真实退出码。"
+    },
+    {
+      "skill": "adk-goal-authoring",
+      "files": [
+        {
+          "path": "skills/adk-goal-authoring/SKILL.md",
+          "bytes": 3704,
+          "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a",
+          "blob": "08ec29da584e10cab9510b897ae75428d55dd643"
+        },
+        {
+          "path": "skills/adk-goal-authoring/references/goal-plan.json",
+          "bytes": 1844,
+          "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
+          "blob": "7f35ee1caeb659b47cbc805f0107dd3284f123db"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "原验收分母、可关闭批次、预算null与bounded resume已有。"
+    },
+    {
+      "skill": "adk-planning-execution-loop",
+      "files": [
+        {
+          "path": "skills/adk-planning-execution-loop/SKILL.md",
+          "bytes": 4415,
+          "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca",
+          "blob": "0381bdee35c0801f87c15117f5ce578930b78d54"
+        },
+        {
+          "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+          "bytes": 5155,
+          "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
+          "blob": "5d2b37d5b1fc692a86d3dbaa5a04304ff6d2c968"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "inline fast path、同快照复用、未知副作用对账和真实进展已有。"
+    },
+    {
+      "skill": "adk-code-simplification",
+      "files": [
+        {
+          "path": "skills/adk-code-simplification/SKILL.md",
+          "bytes": 3025,
+          "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
+          "blob": "42b1540590869156af4f462958687cd2aac8500b"
+        },
+        {
+          "path": "skills/adk-code-simplification/references/deep-module-design.md",
+          "bytes": 1275,
+          "sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
+          "blob": "7a294528019411649dfc84f5f5e79a7ab82e195f"
+        },
+        {
+          "path": "skills/adk-code-simplification/references/details.md",
+          "bytes": 2582,
+          "sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
+          "blob": "4f5ec1be3bb629581b05a7849c8e5234a23adaf8"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "以理解负担而非行数判断，保留cleanup与副作用顺序。"
+    },
+    {
+      "skill": "adk-systematic-debugging",
+      "files": [
+        {
+          "path": "skills/adk-systematic-debugging/SKILL.md",
+          "bytes": 3138,
+          "sha256": "1d95806ea88d14ad27f3c925ed7b1d1b0b5e57e7eb0f4f8580221bb00c77a8d0",
+          "blob": "eec456f4571df35a1eb01d6db6781e77bd56e055"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+          "bytes": 2793,
+          "sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+          "blob": "099940f7dad76c01971be181caab997a93897e50"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+          "bytes": 2463,
+          "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+          "blob": "fe9d0ac7e8bd9c53f7cedeca4a5d26ab64e8dbf5"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+          "bytes": 1187,
+          "sha256": "8f94f087b206d6bccb0a253231e9aa3bbe0a614b3be563e5d6c23d0da25672ab",
+          "blob": "a4cd5e164cee269b2be25856c1e602623507f994"
+        }
+      ],
+      "decision": "ENHANCE",
+      "reason": "二分oracle分类和重跑前证据保全需补，其余因果/单变量/领域方法保留。"
+    },
+    {
+      "skill": "adk-artifact-gating",
+      "files": [
+        {
+          "path": "skills/adk-artifact-gating/SKILL.md",
+          "bytes": 2061,
+          "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+          "blob": "da4328a303fe3b0ea9dd116350961a71882122f6"
+        },
+        {
+          "path": "skills/adk-artifact-gating/references/details.md",
+          "bytes": 2316,
+          "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+          "blob": "ab51413bf831af643c805e7120fb23bd8d13866f"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "READY/PASS与workflow阶段区分，真实通过才填PASS已澄清。"
+    },
+    {
+      "skill": "adk-pilot-framework",
+      "files": [
+        {
+          "path": "skills/adk-pilot-framework/SKILL.md",
+          "bytes": 3765,
+          "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
+          "blob": "904b084359c8a1fe284d0c57ee5c886dcf077771"
+        },
+        {
+          "path": "skills/adk-pilot-framework/references/details.md",
+          "bytes": 3632,
+          "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
+          "blob": "e0a681a96a5a86b32dc8dd7f591657b0d42e8560"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "smoke与收益比较、失败/blocked/inconclusive区分，保留重试。"
+    },
+    {
+      "skill": "adk-verification-before-completion",
+      "files": [
+        {
+          "path": "skills/adk-verification-before-completion/SKILL.md",
+          "bytes": 4508,
+          "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
+          "blob": "1f185c64ec8d2070a07aa4d96fd1c7ceadcb8af2"
+        },
+        {
+          "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+          "bytes": 8933,
+          "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa",
+          "blob": "611dc0ab9757c0b7faa45339b7000d9592db40a9"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "checkpoint/goal-final、checker校准、实际运行与资格边界已覆盖。"
+    },
+    {
+      "skill": "adk-code-review-loop",
+      "files": [
+        {
+          "path": "skills/adk-code-review-loop/SKILL.md",
+          "bytes": 6235,
+          "sha256": "c9f9a8149babf7f51786a8b1d86f38f10b629051efcb355a0965b1ad8b1aa9fd",
+          "blob": "68cdd62c005b0b69aedf9d9193dc83f18a16fac2"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+          "bytes": 1917,
+          "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
+          "blob": "d52dfdd9db9f2a465df26414e8bb0023a9f45379"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+          "bytes": 3907,
+          "sha256": "a82255232e618f5fd00f4532aa884c6df54f2dd97806da633d092286bc9d0af6",
+          "blob": "70206c8d3234ed46757e06b6a8e639d7c6b2a6d4"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+          "bytes": 2229,
+          "sha256": "731f4b0dd24c9c3baea0e7d76bbeef6eeeb746d23335cf96893c694b68e91fa4",
+          "blob": "7de3c48c1d1961bd692797470fc5cb61523f7c45"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-governance-details.md",
+          "bytes": 8750,
+          "sha256": "b82d16825e3a0ee15e4b6cd08f1f4e736e32d63c93fdf7381922ffab60c0a2ea",
+          "blob": "ed88058086d3797b9ab5dd0a274b7c65ded9528f"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "原始Git快照取证已落地，局部反馈/完整审查和双裁决保持。"
+    },
+    {
+      "skill": "adk-repo-drift-remediation",
+      "files": [
+        {
+          "path": "skills/adk-repo-drift-remediation/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-repo-drift-remediation/README.md",
+          "bytes": 303,
+          "sha256": "64a339900700aa3444f589aa9549d082124f2bf20e40ea58270d7ce8066bafa7",
+          "blob": "bbb9ffc101cd6ac54317dac5183bd3ee015d85ea"
+        },
+        {
+          "path": "skills/adk-repo-drift-remediation/SKILL.md",
+          "bytes": 3021,
+          "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
+          "blob": "33c87bdfa806af97b0a8f11d7185be3bba76374c"
+        },
+        {
+          "path": "skills/adk-repo-drift-remediation/agents/openai.yaml",
+          "bytes": 166,
+          "sha256": "daf474758479bf0bbfbd6350e6215c76dfbe7d23233e613c262f0a9f2e149470",
+          "blob": "697f5074deb1d789d265e0de0416e504fdf9fac9"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "源事实issue-map、共享配置串行、只读状态与残留理由已有。"
+    },
+    {
+      "skill": "adk-commit-pr-quality-gate",
+      "files": [
+        {
+          "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+          "bytes": 3821,
+          "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
+          "blob": "050cf95bc3c2f5b29f21e4658805ddb87c6058ee"
+        },
+        {
+          "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+          "bytes": 1429,
+          "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
+          "blob": "cbd8582597fdc5d53b5d34701e48ed536f8cfde4"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "message-only/PR-readiness/专项门禁按实际影响加载。"
+    },
+    {
+      "skill": "adk-release-versioning",
+      "files": [
+        {
+          "path": "skills/adk-release-versioning/SKILL.md",
+          "bytes": 2776,
+          "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+          "blob": "5b00d772ab95e0978d7c4039c304887d4173843d"
+        },
+        {
+          "path": "skills/adk-release-versioning/references/details.md",
+          "bytes": 2471,
+          "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
+          "blob": "b2c501842e5f22694538391f5d2ee617809290ee"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "正式baseline、完整历史、不可变tag与精确资产身份已有。"
+    },
+    {
+      "skill": "adk-production-field-readiness",
+      "files": [
+        {
+          "path": "skills/adk-production-field-readiness/SKILL.md",
+          "bytes": 5395,
+          "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
+          "blob": "d864336f23a9563fad78f27b08dfdbddeb2105f1"
+        },
+        {
+          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+          "bytes": 1793,
+          "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
+          "blob": "faf4083758a12cda2fe4a0e1a965468e9ef8f4bd"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "设备六类证据/OTA回滚/生产签署边界完整；多人human-active定义疑点无真实消费依据，OBSERVE。"
+    },
+    {
+      "skill": "adk-cross-team-handoff",
+      "files": [
+        {
+          "path": "skills/adk-cross-team-handoff/SKILL.md",
+          "bytes": 3069,
+          "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
+          "blob": "3a99ac808bf02120abe6a5b508bef0010f673a28"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "lite/formal、真实receiver签收及冷读验收完整。"
+    },
+    {
+      "skill": "adk-branch-closeout",
+      "files": [
+        {
+          "path": "skills/adk-branch-closeout/SKILL.md",
+          "bytes": 3095,
+          "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
+          "blob": "39a29b979bebb31093acf4e78330ae64469ce2eb"
+        },
+        {
+          "path": "skills/adk-branch-closeout/references/closeout-options.md",
+          "bytes": 908,
+          "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
+          "blob": "4357bb2f6bb30e76734fd5954ef17c47d804468d"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "同范围授权延续、精确head/check及fresh-main已有，删除单独授权。"
+    },
+    {
+      "skill": "adk-after-action-review",
+      "files": [
+        {
+          "path": "skills/adk-after-action-review/SKILL.md",
+          "bytes": 3785,
+          "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
+          "blob": "cec7d4b51daf500be270581c790aef7eeabaf104"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/after-action-review.md",
+          "bytes": 436,
+          "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
+          "blob": "33c0825776ab10105d8381f59ad3b6bc8c04d5e0"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/codify-decision.md",
+          "bytes": 651,
+          "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
+          "blob": "52b1b474f54bc76b3d6fba1e8304e53e8f6d63ea"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/memory-candidate.md",
+          "bytes": 1707,
+          "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
+          "blob": "702aced3a49cc5adddf33686afc081b7b1e8fb44"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "lite/standard/promotion分流，普通复盘无需长期晋级空字段。"
+    },
+    {
+      "skill": "adk-memory-curator",
+      "files": [
+        {
+          "path": "skills/adk-memory-curator/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-memory-curator/README.md",
+          "bytes": 310,
+          "sha256": "1c9f71a0511b8f6979e38c9825fd7aaaedcb62e62686316f9edeb1b55bf96933",
+          "blob": "a90db02f1be4fa9f456e24f4a931cdad259a6903"
+        },
+        {
+          "path": "skills/adk-memory-curator/SKILL.md",
+          "bytes": 3530,
+          "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5",
+          "blob": "b86d93a4421c4305b227053d7e6d63ae3fc2b820"
+        },
+        {
+          "path": "skills/adk-memory-curator/agents/openai.yaml",
+          "bytes": 165,
+          "sha256": "24ec7d756319b13019ccdb7b227d67f23066beae23e05e02e5339d4340231acc",
+          "blob": "db0b084970bff6d5eb5cdd0726a976262b4b8fb1"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "report-only、授权读取、仅文件名敏感扫描及冲突治理清晰。"
+    },
+    {
+      "skill": "adk-archive-governance",
+      "files": [
+        {
+          "path": "skills/adk-archive-governance/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-archive-governance/README.md",
+          "bytes": 301,
+          "sha256": "f0d5f306b1d8ddafa6065d4c07883ae6bcfd123857e0cdec22fcdec7ba0036c6",
+          "blob": "777dc00b02aa03d642041fb71a3e54a66ab94333"
+        },
+        {
+          "path": "skills/adk-archive-governance/SKILL.md",
+          "bytes": 2687,
+          "sha256": "a950a9e9916c4ec1377a4f56dbc55bb12e1c3198a89be677540d783544c62876",
+          "blob": "39c95599cd3084210e8eaa8be33072d2f9eb4c12"
+        },
+        {
+          "path": "skills/adk-archive-governance/agents/openai.yaml",
+          "bytes": 161,
+          "sha256": "1a49a5ab0c79fab66f27c547d8dd7ea85307a96e214062611c4f8e4da8f90b96",
+          "blob": "174e9523634c71615fc7ff3d7094548a3fc186d9"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "hash mismatch保留原值和可信原件，不盲重算；入口需核验。"
+    },
+    {
+      "skill": "adk-knowledge-archive",
+      "files": [
+        {
+          "path": "skills/adk-knowledge-archive/LICENSE",
+          "bytes": 61,
+          "sha256": "aaff9071bbd134038267b3fc9280958337fb13d5b95a12bf434adf186e8648cf",
+          "blob": "1c326f3a91d2e3889cb5259af82a3fdd96a4ba72"
+        },
+        {
+          "path": "skills/adk-knowledge-archive/README.md",
+          "bytes": 329,
+          "sha256": "07d5563a38ec220a6937c32a7339cd866942df34936c366ddfb1e4f2c4fde8ea",
+          "blob": "de534394e4358dc6812dd3ac3a3d40410648d6c6"
+        },
+        {
+          "path": "skills/adk-knowledge-archive/SKILL.md",
+          "bytes": 2236,
+          "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
+          "blob": "73d8519350051b9c02aadaadfa1293deebc3b269"
+        },
+        {
+          "path": "skills/adk-knowledge-archive/agents/openai.yaml",
+          "bytes": 156,
+          "sha256": "c915127f7ac46ebdce1bd6afd512c0039cfea00a6fa6dc5fc8d5f4a653b5a7ba",
+          "blob": "2d3a49cb10ab7b49174564111133699c068bab1e"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "新归档/治理分离，topic/路径/来源/隐私边界完整。"
+    },
+    {
+      "skill": "adk-engineering-growth-review",
+      "files": [
+        {
+          "path": "skills/adk-engineering-growth-review/LICENSE",
+          "bytes": 1063,
+          "sha256": "e69e969952b38b335005b8dd9d89ae0fd971ed7376ff66659bc5fae8099a6264",
+          "blob": "3c2826303420c300cf2a933bd8c440bc511eeb77"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/README.md",
+          "bytes": 745,
+          "sha256": "ba06dc6db2436cac1e51707248013dc732ee228c074d8730c7ee5d7703981f63",
+          "blob": "689f3c5d738954df8e27c1daa992dba2318f01b8"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/SKILL.md",
+          "bytes": 3853,
+          "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd",
+          "blob": "0aedd7670b6bfb5743e6d2b9da14a73f166e19df"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/agents/openai.yaml",
+          "bytes": 163,
+          "sha256": "17530036dc4d53ee862d6030d03cea86392d1e3ed1a4ce2e9178df4e8458bc05",
+          "blob": "b66751d4185a004dce444b9a1e24ec82131f02ab"
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+          "bytes": 1266,
+          "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
+          "blob": "e6540e1e825e08448da2f7721aec84baa5663837"
+        }
+      ],
+      "decision": "RETAIN",
+      "reason": "index-first、跨时点证据、不过度采集/外发，单次观察不代表长期能力。"
+    }
+  ],
+  "external_sources": [
+    {
+      "repo": "anthropics/skills",
+      "path": "skills/skill-creator/SKILL.md",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "reported_git_blob": "65b3a402dbd09b8e83f9d637c6b553875189085c",
+      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/SKILL.md",
+      "bytes": 33168,
+      "sha256": "dcd4803e61e913e6fc27294184cd3a71f09f5e924ff20c8a9a20173e7b3c2bcf",
+      "git_blob": "65b3a402dbd09b8e83f9d637c6b553875189085c",
+      "read_scope": "full file",
+      "external_code_executed": false
+    },
+    {
+      "repo": "mattpocock/skills",
+      "path": "skills/productivity/grilling/SKILL.md",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "reported_git_blob": "d2f09a18e6a6c65c55f1271ba08dfeaf06f0bed3",
+      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/grilling/SKILL.md",
+      "bytes": 2077,
+      "sha256": "a146842ed93ca43d833550fa9adf02e58cb63c83fea9d4b4522995b82242d4e2",
+      "git_blob": "d2f09a18e6a6c65c55f1271ba08dfeaf06f0bed3",
+      "read_scope": "full file",
+      "external_code_executed": false
+    },
+    {
+      "repo": "obra/superpowers",
+      "path": "skills/systematic-debugging/SKILL.md",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "reported_git_blob": "62fc752aaef59a8bbed5d305f4cadc60f8ae07ed",
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/systematic-debugging/SKILL.md",
+      "bytes": 9530,
+      "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
+      "git_blob": "62fc752aaef59a8bbed5d305f4cadc60f8ae07ed",
+      "read_scope": "full file",
+      "external_code_executed": false
+    },
+    {
+      "repo": "git/git",
+      "path": "builtin/bisect.c",
+      "commit": "9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed",
+      "reported_git_blob": null,
+      "url": "https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/builtin/bisect.c",
+      "bytes": 38485,
+      "sha256": "efd4b7d0951ca9049c7e7aba2560605c74792408c609647ab2e88dd84636e9e0",
+      "git_blob": "ccff4e1a1b2483860f9ab9916365d921ff2d20f5",
+      "read_scope": "bisect_run and verify_good control flow",
+      "external_code_executed": false
+    },
+    {
+      "repo": "git/git",
+      "path": "Documentation/git-bisect.adoc",
+      "commit": "9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed",
+      "reported_git_blob": null,
+      "url": "https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/Documentation/git-bisect.adoc",
+      "bytes": 18199,
+      "sha256": "9117f814e40ddc291c24a601899e458810427dea6e4be121f84c6d6a264d9820",
+      "git_blob": "b0078dda0eb05093aa86a56c6c69363ef3ab97d2",
+      "read_scope": "Bisect run / Bisect skip",
+      "external_code_executed": false
+    },
+    {
+      "repo": "anthropics/skills",
+      "path": "skills/skill-creator/LICENSE.txt",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "reported_git_blob": null,
+      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/LICENSE.txt",
+      "bytes": 11345,
+      "sha256": "bc6b3af2f331cbc7fb0da1344efb2cbe5877a31498b4d70dbc7000f3405a1362",
+      "git_blob": "4f881c52d1f72f4cfb720e339e2d35c3058d01a9",
+      "read_scope": "full file",
+      "external_code_executed": false
+    },
+    {
+      "repo": "mattpocock/skills",
+      "path": "LICENSE",
+      "commit": "5863806dd4e15c63174bee4e7515a4256792ecfa",
+      "reported_git_blob": null,
+      "url": "https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/LICENSE",
+      "bytes": 1068,
+      "sha256": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+      "git_blob": "f1dd2c09108dde1a5f56097cee8461b3ea834499",
+      "read_scope": "full file",
+      "external_code_executed": false
+    },
+    {
+      "repo": "obra/superpowers",
+      "path": "LICENSE",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "reported_git_blob": null,
+      "url": "https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/LICENSE",
+      "bytes": 1070,
+      "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+      "git_blob": "abf0390320aa14406af7a520b9b0739fdda9bf08",
+      "read_scope": "full file",
+      "external_code_executed": false
+    }
+  ],
+  "external_decisions": [
+    {
+      "source": "anthropics/skills",
+      "decision": "RETAIN",
+      "method": "Existing baseline/candidate/holdout, discriminating tasks, honest measured-vs-static evidence and lean references already match; do not adopt automatic paid CLI or indiscriminate model runs.",
+      "license": "Apache-2.0 in the skill-local LICENSE.txt"
+    },
+    {
+      "source": "mattpocock/skills",
+      "decision": "RETAIN",
+      "method": "Decision frontier and fact lookup already absorbed; ADK additionally handles partial answers and invalidation. Do not adopt unbounded interviews or implicit extra workers.",
+      "license": "MIT"
+    },
+    {
+      "source": "obra/superpowers",
+      "decision": "ENHANCE",
+      "method": "Retain single-hypothesis root-cause method, adopt preserve-before-rerun ordering corroborated by upstream issue and synthetic local probe.",
+      "license": "MIT"
+    },
+    {
+      "source": "git/git v2.52.0",
+      "decision": "ADOPT documented tool semantics",
+      "method": "0 good,1 target bad,125 revision untestable,128 explicit abort; current code additionally verifies known-good when initial raw status is126/127. No Git source copied.",
+      "license": "not assessed for redistribution; semantic reference only"
+    }
+  ],
+  "external_issue": {
+    "url": "https://github.com/obra/superpowers/issues/2232",
+    "created_at": "2026-08-31T06:57:02Z",
+    "updated_at": "2026-10-22T20:01:15Z",
+    "scope": "Author-reported single-project experience; independently corroborated only with our synthetic local artifact probe.",
+    "adopted_method": "Preserve volatile original failure artifacts before rerun.",
+    "not_adopted": "No unconditional soak, runner hook or claimed measured model effect."
+  },
+  "source_scope": {
+    "skill_candidate_repositories": [
+      "anthropics/skills",
+      "mattpocock/skills",
+      "obra/superpowers",
+      "getsentry/skills"
+    ],
+    "verified_skill_source_repositories": 3,
+    "unreviewed": [
+      {
+        "repo": "getsentry/skills",
+        "commit": "a582c51ee29d0f35e6ac321340796f77d43da733",
+        "reason": "Current commit only; no method claimed from unread source."
+      }
+    ],
+    "official_tool_reference": "git/git v2.52.0",
+    "web_refs": [
+      "turn24search0",
+      "turn24search1",
+      "turn24search4"
+    ],
+    "internet_exhaustive": false
+  },
+  "findings": [
+    {
+      "id": "CORE-D1",
+      "skill": "adk-systematic-debugging",
+      "classification": "confirmed method gap; no observed model failure",
+      "evidence": "Existing tight-feedback-loop reference recommends git bisect without oracle classification. Actual isolated Git2.52 fixture reports untestable step2 as first-bad with naive exit1; exit125 correctly locates semantic regression step4.",
+      "minimal_delta": "Calibrate good/bad on the intended property; map trusted pass/fail0/1, revision-only untestable125 and infrastructure/unknown abort128. Build failure is bad when buildability is the property. Retain skipped ambiguity and explicit bisect result, not checked-out HEAD.",
+      "verification": "Published mapping executed in real isolated histories including regression, skip, abort, ambiguity and build-as-target."
+    },
+    {
+      "id": "CORE-D2",
+      "skill": "adk-systematic-debugging",
+      "classification": "confirmed ordering gap; synthetic local file demonstration",
+      "evidence": "Current reference says reproduce/record but not preserve before destructive rerun. Synthetic runner deletes prior failure.json; pre-rerun copy keeps original SHA256.",
+      "minimal_delta": "Before rerun/clean/rebuild preserve volatile logs/dumps/inputs with identity and controlled destination. Missing original artifact leaves the root-cause hypothesis unproven.",
+      "verification": "Temporary-file actual runner fixture proves loss and byte-identical pre-rerun preservation; no production/model claim."
+    }
+  ],
+  "probe": {
+    "script": "/workspace/scratch/fe5385ca063a/core-diagnostic-probes.py",
+    "receipt": "/workspace/scratch/fe5385ca063a/round2-core-probes.json",
+    "execution": {
+      "chunk_id": "3ec5fc",
+      "wall_time_seconds": 0.219977485,
+      "exit_code": 0,
+      "original_token_count": 122,
+      "output": "{\"status\": \"pass\", \"output\": \"/workspace/scratch/fe5385ca063a/round2-core-probes.json\", \"naive_located_step\": 2, \"guarded_located_step\": 4, \"actual_semantic_regression_step\": 4, \"preservation\": {\"synthetic_runner\": true, \"raw_failure_after_rerun_exists\": false, \"copied_before_rerun\": true, \"original_sha256\": \"c998d87b76d649d176bba4070cb254815224e94c605127212affe61fc7e04535\", \"preserved_sha256\": \"c998d87b76d649d176bba4070cb254815224e94c605127212affe61fc7e04535\"}, \"command_count\": 32}\n"
+    },
+    "qualification": "Synthetic isolated Git/filesystem example; not deployed runtime/model A/B."
+  },
+  "negative_results": [
+    {
+      "kind": "invalid-fixture-assertion",
+      "observed_at": "2026-11-16T05:09:55Z",
+      "tool_chunk": "5b8545",
+      "exit": 1,
+      "detail": "First probe equated checked-out HEAD to identified first-bad. Git log already reported naive first-bad step2, while HEAD remained tested-good step1. Corrected reader to parse explicit '# first bad commit:'; no ADK defect.",
+      "raw_excerpt": "AssertionError: naive located_step 1; log # first bad commit: [353305fdacc2124d81bce90c0bacafd7fc79f3c9] synthetic step 2",
+      "retention": "Full original output remains in tool transcript chunk5b8545; only this excerpt is persisted."
+    },
+    {
+      "kind": "missing-local-lessons",
+      "path": "knowledge/L2-domain/lessons.md",
+      "observed": "unavailable",
+      "meaning": "No historical lesson inferred."
+    },
+    {
+      "kind": "tool-response-normalization",
+      "detail": "Initially JSON-parsed normalized plain-text GitHub content; corrected to reading content as text before drawing conclusions."
+    },
+    {
+      "kind": "evidence-hash-command-too-large",
+      "detail": "Initial combined hashing command exceeded OS argument length and never started; split independent per-file hashing succeeded. No source changed."
+    }
+  ],
+  "root_independent_review": {
+    "reviewed_at": "2026-11-16T05:06:55Z",
+    "base": "167b7cbce9ded6a8968518681c64e1da71235bd4",
+    "tree": "f20de0e0c5a6e7b96d44a82657be718b2f27ce62",
+    "scope": [
+      "agent-dev-kit",
+      "reports/current-status.md"
+    ],
+    "spec_verdict": "pass",
+    "quality_verdict": "pass",
+    "findings": [],
+    "release_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+    "preserved": [
+      "release_authorized=false",
+      "requires_fresh_cross_repo_verification=true",
+      "current_product_maturity=unverified",
+      "current_software_m5_certified=false"
+    ],
+    "cannot_verify_from_diff": [
+      "fresh protected Root CI and gh attestation verify pending at review time",
+      "~/codex Provider and Execution Policy not-run with user-authorized source-only exception"
+    ],
+    "changed_root_files": false
+  },
+  "next_role": "Implementation after parent-authored requirements/design/tasks; no final independent review of own changes."
+}

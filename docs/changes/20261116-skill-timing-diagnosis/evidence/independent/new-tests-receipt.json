@@ -1,0 +1,2106 @@
+{
+  "reviewer": "ai/root/independent_round2_review",
+  "started_at": "2026-11-16T05:28:41.456732+00:00",
+  "completed_at": "2026-11-16T05:28:42.644976+00:00",
+  "source_commit": "7e47130c77e0c2def86c5f8057a69c53b3423bf9",
+  "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bypass env PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 - [unittest runner]",
+  "tests_run": 12,
+  "successful": true,
+  "skipped": [],
+  "failures": [],
+  "errors": [],
+  "stdout": "",
+  "stderr": "test_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok\ntest_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok\ntest_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok\ntest_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok\ntest_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok\ntest_oracle_rejects_accepting_a_quantized_zero_period (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_accepting_a_quantized_zero_period) ... ok\ntest_oracle_rejects_narrowing_before_range_validation (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_narrowing_before_range_validation) ... ok\ntest_published_example_rejects_zero_overflow_and_preserves_output (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_published_example_rejects_zero_overflow_and_preserves_output) ... ok\ntest_clock_uncertainty_cannot_be_erased_by_timezone_conversion (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_clock_uncertainty_cannot_be_erased_by_timezone_conversion) ... ok\ntest_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok\ntest_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok\ntest_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 1.188s\n\nOK\n",
+  "git_subprocess_receipts": [
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "init",
+        "-q",
+        "-b",
+        "main"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.name",
+        "ADK diagnostic fixture"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.email",
+        "fixture@example.invalid"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "commit.gpgsign",
+        "false"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "core.hooksPath",
+        "/dev/null"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('good'); raise SystemExit(0)"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('bad'); raise SystemExit(0)"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('untestable'); raise SystemExit(0)"
+      ],
+      "exit": 125,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('unknown'); raise SystemExit(0)"
+      ],
+      "exit": 128,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print(''); raise SystemExit(0)"
+      ],
+      "exit": 128,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('good\\nbad'); raise SystemExit(0)"
+      ],
+      "exit": 128,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('good'); raise SystemExit(2)"
+      ],
+      "exit": 128,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('bad'); raise SystemExit(126)"
+      ],
+      "exit": 128,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-c",
+        "import sys; print('bad'); raise SystemExit(127)"
+      ],
+      "exit": 128,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-biballxa/published-oracle.sh",
+        "/tmp/adk-bisect-method-biballxa/missing-probe"
+      ],
+      "exit": 128,
+      "stdout": "",
+      "stderr": "/tmp/adk-bisect-method-biballxa/published-oracle.sh: line 3: /tmp/adk-bisect-method-biballxa/missing-probe: No such file or directory\n",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "init",
+        "-q",
+        "-b",
+        "main"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.name",
+        "ADK diagnostic fixture"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.email",
+        "fixture@example.invalid"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "commit.gpgsign",
+        "false"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "core.hooksPath",
+        "/dev/null"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 0"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "d8615b1c866313932442207b529368e92812149e\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 1"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "d38676ad7531c327e7a2956f442bb223357ccb0f\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 2"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "a86c98bf0045037091a5e4d8e783e30582eb1ce6\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 3"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "cc612b64184e7211f907af950afee971a7b07366\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 4"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "dacb300318db2ee8378c1ce0c886c9657aaab955\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 5"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "ae3d2eae5d2ac50c83e172cbe4c027a2fd3dc3b0\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "d8615b1c866313932442207b529368e92812149e"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-x7d5d0o6/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-x7d5d0o6/project-probe.py",
+        "semantic"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "ae3d2eae5d2ac50c83e172cbe4c027a2fd3dc3b0"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-x7d5d0o6/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-x7d5d0o6/project-probe.py",
+        "semantic"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "start",
+        "ae3d2eae5d2ac50c83e172cbe4c027a2fd3dc3b0",
+        "d8615b1c866313932442207b529368e92812149e"
+      ],
+      "exit": 0,
+      "stdout": "Bisecting: 2 revisions left to test after this (roughly 1 step)\n[a86c98bf0045037091a5e4d8e783e30582eb1ce6] controlled state 2\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "bisect",
+        "run",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-x7d5d0o6/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-x7d5d0o6/project-probe.py",
+        "semantic"
+      ],
+      "exit": 128,
+      "stdout": "running '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-x7d5d0o6/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-x7d5d0o6/project-probe.py' 'semantic'\n",
+      "stderr": "runner cannot inspect the target\nerror: bisect run failed: exit code 128 from '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-x7d5d0o6/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-x7d5d0o6/project-probe.py' 'semantic' is < 0 or >= 128\n",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "log"
+      ],
+      "exit": 0,
+      "stdout": "# bad: [ae3d2eae5d2ac50c83e172cbe4c027a2fd3dc3b0] controlled state 5\n# good: [d8615b1c866313932442207b529368e92812149e] controlled state 0\ngit bisect start 'ae3d2eae5d2ac50c83e172cbe4c027a2fd3dc3b0' 'd8615b1c866313932442207b529368e92812149e'\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "reset"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Previous HEAD position was a86c98b controlled state 2\nHEAD is now at ae3d2ea controlled state 5\n",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "init",
+        "-q",
+        "-b",
+        "main"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.name",
+        "ADK diagnostic fixture"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.email",
+        "fixture@example.invalid"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "commit.gpgsign",
+        "false"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "core.hooksPath",
+        "/dev/null"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 0"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "d8615b1c866313932442207b529368e92812149e\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 1"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "d38676ad7531c327e7a2956f442bb223357ccb0f\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 2"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "589bf24c20caf1ad2bd69e9c1f42540d1b70b5db\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 3"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "1672b640234fdd2e30673cd18ce0a88872475eb6\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 4"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "2ab369d2691b613b416bb22f82e8fceb8e8a257f\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 5"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "400d6b28ff416041c66ae8054232322453af7d6b\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "d8615b1c866313932442207b529368e92812149e"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-nx5_ckae/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-nx5_ckae/project-probe.py",
+        "semantic"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "400d6b28ff416041c66ae8054232322453af7d6b"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-nx5_ckae/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-nx5_ckae/project-probe.py",
+        "semantic"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "start",
+        "400d6b28ff416041c66ae8054232322453af7d6b",
+        "d8615b1c866313932442207b529368e92812149e"
+      ],
+      "exit": 0,
+      "stdout": "Bisecting: 2 revisions left to test after this (roughly 1 step)\n[589bf24c20caf1ad2bd69e9c1f42540d1b70b5db] controlled state 2\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "bisect",
+        "run",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-nx5_ckae/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-nx5_ckae/project-probe.py",
+        "semantic"
+      ],
+      "exit": 2,
+      "stdout": "running '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-nx5_ckae/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-nx5_ckae/project-probe.py' 'semantic'\nBisecting: 1 revision left to test after this (roughly 1 step)\n[1672b640234fdd2e30673cd18ce0a88872475eb6] controlled state 3\nrunning '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-nx5_ckae/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-nx5_ckae/project-probe.py' 'semantic'\nBisecting: 0 revisions left to test after this (roughly 1 step)\n[d38676ad7531c327e7a2956f442bb223357ccb0f] controlled state 1\nrunning '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-nx5_ckae/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-nx5_ckae/project-probe.py' 'semantic'\nThere are only 'skip'ped commits left to test.\nThe first bad commit could be any of:\n589bf24c20caf1ad2bd69e9c1f42540d1b70b5db\n1672b640234fdd2e30673cd18ce0a88872475eb6\nWe cannot bisect more!\n",
+      "stderr": "error: bisect run cannot continue any more\n",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "log"
+      ],
+      "exit": 0,
+      "stdout": "# bad: [400d6b28ff416041c66ae8054232322453af7d6b] controlled state 5\n# good: [d8615b1c866313932442207b529368e92812149e] controlled state 0\ngit bisect start '400d6b28ff416041c66ae8054232322453af7d6b' 'd8615b1c866313932442207b529368e92812149e'\n# skip: [589bf24c20caf1ad2bd69e9c1f42540d1b70b5db] controlled state 2\ngit bisect skip 589bf24c20caf1ad2bd69e9c1f42540d1b70b5db\n# bad: [1672b640234fdd2e30673cd18ce0a88872475eb6] controlled state 3\ngit bisect bad 1672b640234fdd2e30673cd18ce0a88872475eb6\n# good: [d38676ad7531c327e7a2956f442bb223357ccb0f] controlled state 1\ngit bisect good d38676ad7531c327e7a2956f442bb223357ccb0f\n# only skipped commits left to test\n# possible first bad commit: [1672b640234fdd2e30673cd18ce0a88872475eb6] controlled state 3\n# possible first bad commit: [589bf24c20caf1ad2bd69e9c1f42540d1b70b5db] controlled state 2\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "reset"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Previous HEAD position was d38676a controlled state 1\nHEAD is now at 400d6b2 controlled state 5\n",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "init",
+        "-q",
+        "-b",
+        "main"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.name",
+        "ADK diagnostic fixture"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.email",
+        "fixture@example.invalid"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "commit.gpgsign",
+        "false"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "core.hooksPath",
+        "/dev/null"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 0"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "07e11229f933b244852ffdd635eaa9c1bd13a406\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 1"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "45bdea0258d55d69b80f219c02ef6ce81904ed6c\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 2"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "75eb29db4bf99fbd27227b6b674d427367159d9a\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 3"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "26a033fefd63312817fd4e077eb1ad6fa095abc6\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 4"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "0e48781dc639d6ead739b8c941cb33d1541bfead\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 5"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "0a71625daebcde6253fd7b00f8ce28c6885f3d90\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "07e11229f933b244852ffdd635eaa9c1bd13a406"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-1etwvm8t/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-1etwvm8t/project-probe.py",
+        "semantic"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "0a71625daebcde6253fd7b00f8ce28c6885f3d90"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-1etwvm8t/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-1etwvm8t/project-probe.py",
+        "semantic"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "start",
+        "0a71625daebcde6253fd7b00f8ce28c6885f3d90",
+        "07e11229f933b244852ffdd635eaa9c1bd13a406"
+      ],
+      "exit": 0,
+      "stdout": "Bisecting: 2 revisions left to test after this (roughly 1 step)\n[75eb29db4bf99fbd27227b6b674d427367159d9a] controlled state 2\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "bisect",
+        "run",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-1etwvm8t/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-1etwvm8t/project-probe.py",
+        "semantic"
+      ],
+      "exit": 0,
+      "stdout": "running '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-1etwvm8t/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-1etwvm8t/project-probe.py' 'semantic'\nBisecting: 1 revision left to test after this (roughly 1 step)\n[26a033fefd63312817fd4e077eb1ad6fa095abc6] controlled state 3\nrunning '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-1etwvm8t/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-1etwvm8t/project-probe.py' 'semantic'\nBisecting: 0 revisions left to test after this (roughly 0 steps)\n[0e48781dc639d6ead739b8c941cb33d1541bfead] controlled state 4\nrunning '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-1etwvm8t/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-1etwvm8t/project-probe.py' 'semantic'\n0e48781dc639d6ead739b8c941cb33d1541bfead is the first bad commit\ncommit 0e48781dc639d6ead739b8c941cb33d1541bfead\nAuthor: ADK diagnostic fixture <fixture@example.invalid>\nDate:   Mon Nov 16 13:28:42 2026 +0800\n\n    controlled state 4\n\n state.json | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\nbisect found first bad commit\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "log"
+      ],
+      "exit": 0,
+      "stdout": "# bad: [0a71625daebcde6253fd7b00f8ce28c6885f3d90] controlled state 5\n# good: [07e11229f933b244852ffdd635eaa9c1bd13a406] controlled state 0\ngit bisect start '0a71625daebcde6253fd7b00f8ce28c6885f3d90' '07e11229f933b244852ffdd635eaa9c1bd13a406'\n# skip: [75eb29db4bf99fbd27227b6b674d427367159d9a] controlled state 2\ngit bisect skip 75eb29db4bf99fbd27227b6b674d427367159d9a\n# good: [26a033fefd63312817fd4e077eb1ad6fa095abc6] controlled state 3\ngit bisect good 26a033fefd63312817fd4e077eb1ad6fa095abc6\n# bad: [0e48781dc639d6ead739b8c941cb33d1541bfead] controlled state 4\ngit bisect bad 0e48781dc639d6ead739b8c941cb33d1541bfead\n# first bad commit: [0e48781dc639d6ead739b8c941cb33d1541bfead] controlled state 4\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "reset"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Previous HEAD position was 0e48781 controlled state 4\nHEAD is now at 0a71625 controlled state 5\n",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "init",
+        "-q",
+        "-b",
+        "main"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.name",
+        "ADK diagnostic fixture"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "user.email",
+        "fixture@example.invalid"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "commit.gpgsign",
+        "false"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "config",
+        "core.hooksPath",
+        "/dev/null"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 0"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "07e11229f933b244852ffdd635eaa9c1bd13a406\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 1"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "45bdea0258d55d69b80f219c02ef6ce81904ed6c\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 2"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "75eb29db4bf99fbd27227b6b674d427367159d9a\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 3"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "57313ffcb9af12017efcc2a4c645e471f3d99a23\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 4"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "08ad5391e808078d04ecdccfd59f93a5ae673ffd\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "add",
+        "state.json"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "commit",
+        "-qm",
+        "controlled state 5"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit": 0,
+      "stdout": "ee924fd791f39f98b4bb5abe013278d70c38f1e5\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "07e11229f933b244852ffdd635eaa9c1bd13a406"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-cwwacj81/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-cwwacj81/project-probe.py",
+        "build"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "checkout",
+        "--detach",
+        "-q",
+        "ee924fd791f39f98b4bb5abe013278d70c38f1e5"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-cwwacj81/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-cwwacj81/project-probe.py",
+        "build"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "start",
+        "ee924fd791f39f98b4bb5abe013278d70c38f1e5",
+        "07e11229f933b244852ffdd635eaa9c1bd13a406"
+      ],
+      "exit": 0,
+      "stdout": "Bisecting: 2 revisions left to test after this (roughly 1 step)\n[75eb29db4bf99fbd27227b6b674d427367159d9a] controlled state 2\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "bisect",
+        "run",
+        "/usr/bin/bash",
+        "--noprofile",
+        "--norc",
+        "/tmp/adk-bisect-method-cwwacj81/published-oracle.sh",
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-B",
+        "/tmp/adk-bisect-method-cwwacj81/project-probe.py",
+        "build"
+      ],
+      "exit": 0,
+      "stdout": "running '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-cwwacj81/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-cwwacj81/project-probe.py' 'build'\nBisecting: 0 revisions left to test after this (roughly 0 steps)\n[45bdea0258d55d69b80f219c02ef6ce81904ed6c] controlled state 1\nrunning '/usr/bin/bash' '--noprofile' '--norc' '/tmp/adk-bisect-method-cwwacj81/published-oracle.sh' '/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3' '-B' '/tmp/adk-bisect-method-cwwacj81/project-probe.py' 'build'\n75eb29db4bf99fbd27227b6b674d427367159d9a is the first bad commit\ncommit 75eb29db4bf99fbd27227b6b674d427367159d9a\nAuthor: ADK diagnostic fixture <fixture@example.invalid>\nDate:   Mon Nov 16 13:28:42 2026 +0800\n\n    controlled state 2\n\n state.json | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\nbisect found first bad commit\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "log"
+      ],
+      "exit": 0,
+      "stdout": "# bad: [ee924fd791f39f98b4bb5abe013278d70c38f1e5] controlled state 5\n# good: [07e11229f933b244852ffdd635eaa9c1bd13a406] controlled state 0\ngit bisect start 'ee924fd791f39f98b4bb5abe013278d70c38f1e5' '07e11229f933b244852ffdd635eaa9c1bd13a406'\n# bad: [75eb29db4bf99fbd27227b6b674d427367159d9a] controlled state 2\ngit bisect bad 75eb29db4bf99fbd27227b6b674d427367159d9a\n# good: [45bdea0258d55d69b80f219c02ef6ce81904ed6c] controlled state 1\ngit bisect good 45bdea0258d55d69b80f219c02ef6ce81904ed6c\n# first bad commit: [75eb29db4bf99fbd27227b6b674d427367159d9a] controlled state 2\n",
+      "stderr": "",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "test": "tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression",
+      "argv": [
+        "/usr/local/bin/git",
+        "-c",
+        "core.fsmonitor=false",
+        "bisect",
+        "reset"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Previous HEAD position was 45bdea0 controlled state 1\nHEAD is now at ee924fd controlled state 5\n",
+      "reference_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    }
+  ]
+}

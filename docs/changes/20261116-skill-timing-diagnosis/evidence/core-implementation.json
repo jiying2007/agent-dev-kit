@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-16T05:22:06Z",
+  "status": "implementation-frozen-awaiting-independent-review",
+  "role": "implementer; not an independent final reviewer",
+  "repository": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "scope": [
+    "skills/adk-systematic-debugging/SKILL.md",
+    "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+    "tests/test_skill_bisect_methods.py"
+  ],
+  "version": {
+    "before": "1.2.4",
+    "after": "1.2.5"
+  },
+  "implementation": {
+    "evidence_preservation": "Require preservation of ephemeral failure inputs/logs/dumps/screenshots before rerun/clean/rebuild, recording source, hash and controlled path. Missing originals do not support a firm causal claim.",
+    "calibrated_oracle": "Publish an executable Bash wrapper, including its invocation, around a trusted project-specific probe. Successful classifications good/bad/untestable map to Git statuses 0/1/125. Any process failure or unrecognized classification aborts with 128.",
+    "objective_boundary": "A build failure is bad when testing a build regression. Only a revision that prevents testing a different objective is untestable. Unknown and infrastructure errors abort.",
+    "bisection_qualification": "Calibrate known-good/bad for the same objective; keep wrapper and probe outside the checkout being switched; preserve git bisect log and reported candidates. A skipped boundary retains uncertainty. Current checkout HEAD is not the identified first-bad result.",
+    "context_cost": "Consolidated duplicate preconditions and regression requirements into the primary workflow; directory bytes unchanged. No additional Skill, runtime dependency, model invocation or new gate.",
+    "published_execution": "The final tests execute the rendered reference code verbatim, adding only its trailing newline. The first GREEN had an invocation appended by the fixture; self-review moved that invocation into the published block before the final GREEN."
+  },
+  "retained_methods": [
+    {
+      "method": "Read-only first; destructive action authorization; single hypothesis; no root-cause claim without evidence",
+      "location": "Frontmatter constraints; reference authorization paragraph"
+    },
+    {
+      "method": "Direct causal chain without fabricated hypotheses or negative results; ranked alternatives; evidence-backed 5-Why; code/config/module/input bisection",
+      "location": "Workflow step 2"
+    },
+    {
+      "method": "Version/environment/input/time window/metrics/logs/command/output/expected-red identity and failure impact",
+      "location": "Primary prerequisites paragraph; Workflow step 1"
+    },
+    {
+      "method": "Single-variable experiments, positive/negative observations, irreproducible branches, E2/E3 falsification and reuse of evidence with the same identity",
+      "location": "Workflow step 3"
+    },
+    {
+      "method": "Repair Note including passed-scope preservation, minimal rerun, rollback anchor and root-cause status; distinct schema/semantic/parallel/device repair paths",
+      "location": "Workflow step 4"
+    },
+    {
+      "method": "Same-condition old-red/new-green regression and affected passing paths; two uninformative iterations stop; signal coverage and measurement distortion; needs-fix if unresolved",
+      "location": "Workflow step 5"
+    },
+    {
+      "method": "Single local reproduction, intermittent failure count/N and confidence boundary; fixed seed/time/network/concurrency/files; one green insufficient",
+      "location": "Reference step 2"
+    },
+    {
+      "method": "Input shrinking, state capture, read-only instrumentation, controlled configurations; dual-mic/MCU/async timelines, scheduling, IRQ/state ordering, owner and late completion",
+      "location": "Reference step 3"
+    },
+    {
+      "method": "Controlled simulation/static assertions remain proxy evidence when original-device reproduction is unavailable",
+      "location": "Workflow step 1 and reference step 3"
+    },
+    {
+      "method": "Sanitizer known-defect controls including UBSan diagnostics despite exit 0; embedded diagnosis branches; AI tool version/source/config/git history attribution; verified read-only transport/debugger; not-run reporting",
+      "location": "Primary evidence/command sections; both unchanged references retain their baseline SHA256"
+    }
+  ],
+  "authoritative_git_semantics": {
+    "inspected_version": "Git 2.52.0",
+    "source_commit": "9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed",
+    "source_url": "https://github.com/git/git/blob/9a2fb147f2c61d0cab52c883e7e26f5b7948e3ed/builtin/bisect.c",
+    "source_sha256": "efd4b7d0951ca9049c7e7aba2560605c74792408c609647ab2e88dd84636e9e0",
+    "documentation_url": "https://git-scm.com/docs/git-bisect/2.52.0",
+    "result": "Generic run semantics are 0 good, 1..127 except 125 bad, 125 skip, >=128 abort. Git 2.52 additionally rechecks the known-good commit after first 126/127 and can abort if that status is reproduced. This implementation does not claim that every raw 126/127 is blindly classified as bad; the wrapper normalizes all project-process failures to 128.",
+    "source_use": "Behavioral semantics only; no upstream implementation copied."
+  },
+  "files": {
+    "baseline_commit": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+    "files": [
+      {
+        "path": "skills/adk-systematic-debugging/SKILL.md",
+        "baseline_bytes": 3138,
+        "new_bytes": 2801,
+        "delta": -337,
+        "baseline_sha256": "1d95806ea88d14ad27f3c925ed7b1d1b0b5e57e7eb0f4f8580221bb00c77a8d0",
+        "new_sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc"
+      },
+      {
+        "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+        "baseline_bytes": 2793,
+        "new_bytes": 2793,
+        "delta": 0,
+        "baseline_sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+        "new_sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89"
+      },
+      {
+        "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+        "baseline_bytes": 2463,
+        "new_bytes": 2463,
+        "delta": 0,
+        "baseline_sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+        "new_sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd"
+      },
+      {
+        "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+        "baseline_bytes": 1187,
+        "new_bytes": 1524,
+        "delta": 337,
+        "baseline_sha256": "8f94f087b206d6bccb0a253231e9aa3bbe0a614b3be563e5d6c23d0da25672ab",
+        "new_sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+      }
+    ],
+    "total_baseline_bytes": 9581,
+    "total_new_bytes": 9581,
+    "total_delta": 0,
+    "new_test": {
+      "path": "tests/test_skill_bisect_methods.py",
+      "bytes": 8897,
+      "sha256": "a413b9fccf6dce8abc236a44554c100c69a0db2d5a304009a592040409daca74"
+    }
+  },
+  "tests": {
+    "red": {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bash -lc 'PYTHONPATH=src python3 -m unittest tests.test_skill_bisect_methods -v'",
+      "result": {
+        "chunk_id": "dfa065",
+        "wall_time_seconds": 0.201185757,
+        "exit_code": 5,
+        "original_token_count": 170,
+        "output": "setUpClass (tests.test_skill_bisect_methods.DiagnosticBisectTests) ... ERROR\n\n======================================================================\nERROR: setUpClass (tests.test_skill_bisect_methods.DiagnosticBisectTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_bisect_methods.py\", line 41, in setUpClass\n    raise AssertionError(\"Published diagnostic oracle is missing\")\nAssertionError: Published diagnostic oracle is missing\n\n----------------------------------------------------------------------\nRan 0 tests in 0.093s\n\nFAILED (errors=1)\n"
+      },
+      "interpretation": "Contract RED: published oracle marker was absent at setUpClass, so zero test methods ran. This is not an observed model failure."
+    },
+    "first_green": {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bash -lc 'PYTHONPATH=src python3 -c '\\''import importlib,io,json,sys,unittest\nfrom datetime import datetime,timezone\nfrom pathlib import Path\nmodule=importlib.import_module('\\''\\'\\'''\\''tests.test_skill_bisect_methods'\\''\\'\\'''\\'')\nstream=io.StringIO()\nresult=unittest.TextTestRunner(stream=stream,verbosity=2).run(unittest.defaultTestLoader.loadTestsFromModule(module))\nrecord={'\\''\\'\\'''\\''recorded_at'\\''\\'\\'''\\'':datetime.now(timezone.utc).isoformat(),'\\''\\'\\'''\\''tests_run'\\''\\'\\'''\\'':result.testsRun,'\\''\\'\\'''\\''success'\\''\\'\\'''\\'':result.wasSuccessful(),'\\''\\'\\'''\\''failures'\\''\\'\\'''\\'':len(result.failures),'\\''\\'\\'''\\''errors'\\''\\'\\'''\\'':len(result.errors),'\\''\\'\\'''\\''test_output'\\''\\'\\'''\\'':stream.getvalue(),'\\''\\'\\'''\\''commands'\\''\\'\\'''\\'':module.RECEIPTS}\nPath('\\''\\'\\'''\\''/workspace/scratch/fe5385ca063a/round2-core-bisect-test-receipts.json'\\''\\'\\'''\\'').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\\''\\'\\'''\\''\\n'\\''\\'\\'''\\'')\nprint(stream.getvalue(),end='\\''\\'\\'''\\'''\\''\\'\\'''\\'')\nprint('\\''\\'\\'''\\''Recorded subprocess commands:'\\''\\'\\'''\\'',len(module.RECEIPTS))\nsys.exit(not result.wasSuccessful())'\\'''",
+      "result": {
+        "chunk_id": "0294bc",
+        "wall_time_seconds": 1.056662891,
+        "exit_code": 0,
+        "original_token_count": 269,
+        "output": "test_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok\ntest_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok\ntest_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok\ntest_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok\ntest_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.968s\n\nOK\nRecorded subprocess commands: 139\n"
+      },
+      "interpretation": "Five methods passed; fixture still appended the invocation. Preserved separately from final proof."
+    },
+    "final_green": {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bash -lc 'PYTHONPATH=src python3 -c '\\''import importlib,io,json,sys,unittest\nfrom datetime import datetime,timezone\nfrom pathlib import Path\nmodule=importlib.import_module('\\''\\'\\'''\\''tests.test_skill_bisect_methods'\\''\\'\\'''\\'')\nstream=io.StringIO()\nresult=unittest.TextTestRunner(stream=stream,verbosity=2).run(unittest.defaultTestLoader.loadTestsFromModule(module))\nrecord={'\\''\\'\\'''\\''recorded_at'\\''\\'\\'''\\'':datetime.now(timezone.utc).isoformat(),'\\''\\'\\'''\\''tests_run'\\''\\'\\'''\\'':result.testsRun,'\\''\\'\\'''\\''success'\\''\\'\\'''\\'':result.wasSuccessful(),'\\''\\'\\'''\\''failures'\\''\\'\\'''\\'':len(result.failures),'\\''\\'\\'''\\''errors'\\''\\'\\'''\\'':len(result.errors),'\\''\\'\\'''\\''test_output'\\''\\'\\'''\\'':stream.getvalue(),'\\''\\'\\'''\\''commands'\\''\\'\\'''\\'':module.RECEIPTS}\nPath('\\''\\'\\'''\\''/workspace/scratch/fe5385ca063a/round2-core-bisect-test-receipts.json'\\''\\'\\'''\\'').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\\''\\'\\'''\\''\\n'\\''\\'\\'''\\'')\nprint(stream.getvalue(),end='\\''\\'\\'''\\'''\\''\\'\\'''\\'')\nprint('\\''\\'\\'''\\''Recorded subprocess commands:'\\''\\'\\'''\\'',len(module.RECEIPTS))\nsys.exit(not result.wasSuccessful())'\\'''",
+      "result": {
+        "chunk_id": "873c06",
+        "wall_time_seconds": 1.17817168,
+        "exit_code": 0,
+        "original_token_count": 269,
+        "output": "test_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok\ntest_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok\ntest_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok\ntest_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok\ntest_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 1.061s\n\nOK\nRecorded subprocess commands: 139\n"
+      },
+      "tests_run": 5,
+      "subprocess_commands": 139,
+      "interpretation": "Final published code, including its invocation, executed unchanged in isolated real Git repositories."
+    },
+    "existing_regressions": {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk bash -lc 'PYTHONPATH=src python3 -m unittest tests.test_skill_governance tests.test_external_domain_methods -v'",
+      "result": {
+        "chunk_id": "924d37",
+        "wall_time_seconds": 0.891574934,
+        "exit_code": 0,
+        "original_token_count": 1195,
+        "output": "test_bsp_porting_exposes_flash_and_storage_escalation (tests.test_skill_governance.SkillGovernanceTests.test_bsp_porting_exposes_flash_and_storage_escalation) ... ok\ntest_displayed_skill_identity_refusal_preserves_all_selection_paths (tests.test_skill_governance.SkillGovernanceTests.test_displayed_skill_identity_refusal_preserves_all_selection_paths) ... ok\ntest_driver_bringup_exposes_live_device_escalation_without_granting_it (tests.test_skill_governance.SkillGovernanceTests.test_driver_bringup_exposes_live_device_escalation_without_granting_it) ... ok\ntest_driver_implementation_declares_runtime_model_and_live_device_handoff (tests.test_skill_governance.SkillGovernanceTests.test_driver_implementation_declares_runtime_model_and_live_device_handoff) ... ok\ntest_e1_requires_explicit_low_risk_and_workspace_boundary (tests.test_skill_governance.SkillGovernanceTests.test_e1_requires_explicit_low_risk_and_workspace_boundary) ... ok\ntest_effort_is_a_conservative_route_projection_not_a_permission (tests.test_skill_governance.SkillGovernanceTests.test_effort_is_a_conservative_route_projection_not_a_permission) ... ok\ntest_embedded_skills_do_not_embed_unauthorized_live_mutation_commands (tests.test_skill_governance.SkillGovernanceTests.test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands) ... ok\ntest_explicit_skill_identity_refusal_applies_without_promotion (tests.test_skill_governance.SkillGovernanceTests.test_explicit_skill_identity_refusal_applies_without_promotion) ... ok\ntest_field_readiness_stays_read_only (tests.test_skill_governance.SkillGovernanceTests.test_field_readiness_stays_read_only) ... ok\ntest_high_risk_falsification_and_legal_e1_change_contract (tests.test_skill_governance.SkillGovernanceTests.test_high_risk_falsification_and_legal_e1_change_contract) ... ok\ntest_manifest_has_no_legacy_dependency_metadata (tests.test_skill_governance.SkillGovernanceTests.test_manifest_has_no_legacy_dependency_metadata) ... ok\ntest_output_locale_is_not_skill_identity (tests.test_skill_governance.SkillGovernanceTests.test_output_locale_is_not_skill_identity) ... ok\ntest_plain_requirements_route_to_triage_without_interactive_discovery (tests.test_skill_governance.SkillGovernanceTests.test_plain_requirements_route_to_triage_without_interactive_discovery) ... ok\ntest_profiling_requires_valid_comparable_alternating_ab (tests.test_skill_governance.SkillGovernanceTests.test_profiling_requires_valid_comparable_alternating_ab) ... ok\ntest_realtime_skills_use_target_budgets_not_fixed_thresholds (tests.test_skill_governance.SkillGovernanceTests.test_realtime_skills_use_target_budgets_not_fixed_thresholds) ... ok\ntest_release_orchestration_requires_separate_publish_and_device_authority (tests.test_skill_governance.SkillGovernanceTests.test_release_orchestration_requires_separate_publish_and_device_authority) ... ok\ntest_review_routing_uses_review_loop_not_language_overlay (tests.test_skill_governance.SkillGovernanceTests.test_review_routing_uses_review_loop_not_language_overlay) ... ok\ntest_routing_primaries_resolve_to_primary_runtime_role (tests.test_skill_governance.SkillGovernanceTests.test_routing_primaries_resolve_to_primary_runtime_role) ... ok\ntest_same_group_promotion_allows_applicable_and_negated_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_allows_applicable_and_negated_exclusions) ... ok\ntest_same_group_promotion_preserves_target_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_preserves_target_exclusions) ... ok\ntest_skill_identity_boundaries_and_affirmative_displays (tests.test_skill_governance.SkillGovernanceTests.test_skill_identity_boundaries_and_affirmative_displays) ... ok\ntest_supporting_implicit_promotion_has_exactly_one_same_group_primary (tests.test_skill_governance.SkillGovernanceTests.test_supporting_implicit_promotion_has_exactly_one_same_group_primary) ... ok\ntest_production_catalog_routes_tasks_and_rejects_near_misses (tests.test_external_domain_methods.DomainDiscoveryTests.test_production_catalog_routes_tasks_and_rejects_near_misses) ... ok\ntest_public_gcc_stack_example_exposes_dynamic_part (tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_gcc_stack_example_exposes_dynamic_part) ... ok\ntest_public_state_sequence_replays_and_rejects_the_bug (tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_state_sequence_replays_and_rejects_the_bug) ... ok\ntest_public_ubsan_example_observes_diagnostics_despite_zero_exit (tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_ubsan_example_observes_diagnostics_despite_zero_exit) ... ok\n\n----------------------------------------------------------------------\nRan 26 tests in 0.812s\n\nOK\n"
+      },
+      "tests_run": 26,
+      "timing": "Passed before the final addition of the published invocation and small wording trims. Final oracle was rerun afterwards; parent owns the common frozen-tree regression suite."
+    },
+    "diff_check": {
+      "command": "/workspace/scratch/fe5385ca063a/verification-tools/rtk git diff --check -- skills/adk-systematic-debugging tests/test_skill_bisect_methods.py",
+      "result": {
+        "chunk_id": "33e2bf",
+        "wall_time_seconds": 0.077987073,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    "acceptance": [
+      "Known-good -> 0; known-bad -> 1; untestable -> 125; empty/unknown/multiline verdict, process errors including 126/127, and missing command -> 128.",
+      "Unrelated unbuildable revision is skipped; the actual later semantic regression is reported.",
+      "For the build property, the first build failure is bad and is not skipped.",
+      "Infrastructure failure aborts without marking the candidate bad or skipped or identifying a first bad commit.",
+      "Skipped boundary yields multiple reported candidates and no unique first-bad conclusion."
+    ]
+  },
+  "evidence_files": [
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round2-core-audit.json",
+      "bytes": 44073,
+      "sha256": "273cf660b7ab6cb1f67bb0319c8ea911f370b38b075441e7ee757ab195fbb4f6"
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round2-core-probes.json",
+      "bytes": 19751,
+      "sha256": "6f693938f68bb74579b866d170dddb4c3017f79f2093591e8d3a2a4358a2e30a",
+      "command_count": 32
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round2-core-bisect-first-green-receipts.json",
+      "bytes": 76480,
+      "sha256": "239a4fccb97daffad25c36fb6a3e593ed808625ba3c610c646ba4cf833669043",
+      "recorded_at": "2026-11-16T05:19:48.961331+00:00",
+      "tests_run": 5,
+      "success": true,
+      "failures": 0,
+      "errors": 0,
+      "test_output": "test_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok\ntest_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok\ntest_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok\ntest_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok\ntest_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.968s\n\nOK\n",
+      "command_count": 139
+    },
+    {
+      "path": "/workspace/scratch/fe5385ca063a/round2-core-bisect-test-receipts.json",
+      "bytes": 76480,
+      "sha256": "fc8a0711d9a5291174e39395c2ae79fd84fb968e26f28f4c8bcd9984779967b4",
+      "recorded_at": "2026-11-16T05:21:23.712536+00:00",
+      "tests_run": 5,
+      "success": true,
+      "failures": 0,
+      "errors": 0,
+      "test_output": "test_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok\ntest_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok\ntest_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok\ntest_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok\ntest_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 1.061s\n\nOK\n",
+      "command_count": 139
+    }
+  ],
+  "prior_audit": {
+    "artifact": "/workspace/scratch/fe5385ca063a/round2-core-audit.json",
+    "fully_read_skills": 34,
+    "fully_read_files": 93,
+    "bytes": 231726,
+    "outcomes": {
+      "retain": 33,
+      "enhance": 1
+    },
+    "root_independent_review": "Earlier two-path Root source-only staged tree f20de0e0c5a6e7b96d44a82657be718b2f27ce62 review is preserved in the audit. This is separate from the current implementation role."
+  },
+  "limits": [
+    "Constructed deterministic Git and filesystem fixtures prove the documented mechanics, not observed model failure rates or production diagnosis success.",
+    "No model baseline/skill A/B, blind model test, token usage benchmark or claimed speedup.",
+    "Failure-preservation ordering is a documented method and has a prior isolated filesystem diagnostic; no automatic copying system was added.",
+    "The trusted project-specific classification probe must implement and calibrate the intended property; the generic wrapper cannot establish domain correctness.",
+    "Git/Bash are required by the new real-history tests; neither provider setup nor remote services are invoked.",
+    "No shared manifest/version/test runner edits, git add, commit, push, Root write or remote write were performed by this agent.",
+    "Final independent review, integrated suite and release/promotion remain the parent workflow."
+  ]
+}

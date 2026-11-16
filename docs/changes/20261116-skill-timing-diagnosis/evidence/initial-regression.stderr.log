@@ -1,0 +1,550 @@
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.782s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 11.953s
+
+OK
+test_aar_templates_follow_standalone_skill_and_references_are_balanced (tests.test_skill_content_contract.SkillContentContractTests.test_aar_templates_follow_standalone_skill_and_references_are_balanced) ... ok
+test_all_registered_skill_frontmatter_and_body (tests.test_skill_content_contract.SkillContentContractTests.test_all_registered_skill_frontmatter_and_body) ... ok
+test_all_skill_shell_references_use_declared_adk_commands (tests.test_skill_content_contract.SkillContentContractTests.test_all_skill_shell_references_use_declared_adk_commands) ... ok
+test_archive_unknown_hash_mismatch_keeps_original_evidence (tests.test_skill_content_contract.SkillContentContractTests.test_archive_unknown_hash_mismatch_keeps_original_evidence)
+Static recovery guidance; this does not replay a production archive incident. ... ok
+test_details_are_supplemental_not_duplicate_skills (tests.test_skill_content_contract.SkillContentContractTests.test_details_are_supplemental_not_duplicate_skills) ... ok
+test_distributed_skill_commands_have_no_undeclared_rtk_requirement (tests.test_skill_content_contract.SkillContentContractTests.test_distributed_skill_commands_have_no_undeclared_rtk_requirement) ... ok
+test_exported_context_defaults_are_self_contained (tests.test_skill_content_contract.SkillContentContractTests.test_exported_context_defaults_are_self_contained)
+Inspect actual consumer packages, which intentionally omit ADK source aids. ... ok
+test_exported_parallel_worker_package_is_self_contained (tests.test_skill_content_contract.SkillContentContractTests.test_exported_parallel_worker_package_is_self_contained)
+Resolve the published default from actual packages without ADK source aids. ... ok
+test_exported_review_commands_run_without_optional_wrapper (tests.test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper)
+Exercise shipped instructions in a target repo without ADK or rtk. ... ok
+test_exported_review_snapshot_captures_selected_target_without_staging (tests.test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging)
+Exercise the shipped snapshot, including committed and mixed changes. ... ok
+test_fault_injection_defaults_never_write_live_device (tests.test_skill_content_contract.SkillContentContractTests.test_fault_injection_defaults_never_write_live_device) ... ok
+test_feedback_snapshot_uses_readonly_canonical_commands (tests.test_skill_content_contract.SkillContentContractTests.test_feedback_snapshot_uses_readonly_canonical_commands)
+A secondary shipped example must not refresh the real Git index. ... ok
+test_fetch_parent_preserves_child_result_states (tests.test_skill_content_contract.SkillContentContractTests.test_fetch_parent_preserves_child_result_states)
+Check the shipped result contract, not a real network/IMAP fetch. ... ok
+test_growth_scope_metadata_matches_bounded_body (tests.test_skill_content_contract.SkillContentContractTests.test_growth_scope_metadata_matches_bounded_body)
+Source consistency only; no model reading-cost claim. ... ok
+test_no_language_duplicate_skill_and_counts_match (tests.test_skill_content_contract.SkillContentContractTests.test_no_language_duplicate_skill_and_counts_match) ... ok
+test_registered_skill_markdown_fences_closed (tests.test_skill_content_contract.SkillContentContractTests.test_registered_skill_markdown_fences_closed)
+Regression for a real unclosed shell fence in interface-contract-design. ... ok
+test_review_skill_entries_have_real_goal_and_no_placeholder (tests.test_skill_content_contract.SkillContentContractTests.test_review_skill_entries_have_real_goal_and_no_placeholder) ... ok
+test_skill_method_cases_are_not_fabricated_model_results (tests.test_skill_content_contract.SkillContentContractTests.test_skill_method_cases_are_not_fabricated_model_results) ... ok
+test_known_overconstraint_regressions (tests.test_document_authoring_skills.DocumentAuthoringSkillTests.test_known_overconstraint_regressions) ... ok
+test_preserve_evidence_and_optional_prose_boundary (tests.test_document_authoring_skills.DocumentAuthoringSkillTests.test_preserve_evidence_and_optional_prose_boundary) ... ok
+test_source_case_coverage_not_model_evidence (tests.test_document_authoring_skills.DocumentAuthoringSkillTests.test_source_case_coverage_not_model_evidence) ... ok
+test_authority_coverage_survives_compaction (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_authority_coverage_survives_compaction) ... ok
+test_design_cases_not_model_success (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_design_cases_not_model_success) ... ok
+test_feedback_triage_remains_read_only_and_non_final (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_feedback_triage_remains_read_only_and_non_final) ... ok
+test_no_new_global_skill_or_injected_lifecycle (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_no_new_global_skill_or_injected_lifecycle) ... ok
+test_small_work_does_not_force_heavy_plan_or_parallel (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_small_work_does_not_force_heavy_plan_or_parallel) ... ok
+test_task_timeout_is_failure_not_discarded_as_incomplete (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_task_timeout_is_failure_not_discarded_as_incomplete) ... ok
+test_cases_are_source_only_not_runtime_success (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_cases_are_source_only_not_runtime_success) ... ok
+test_cost_priority_requires_real_task_quality_evidence (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_cost_priority_requires_real_task_quality_evidence) ... ok
+test_embedded_tools_bind_target_and_missing_evidence (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_embedded_tools_bind_target_and_missing_evidence) ... ok
+test_external_skill_references_are_source_pinned_and_not_installed (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_external_skill_references_are_source_pinned_and_not_installed) ... ok
+test_fast_checks_move_before_expensive_matrix_without_duplication (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_fast_checks_move_before_expensive_matrix_without_duplication) ... ok
+test_outcome_first_evaluation_and_minimal_verification_without_overclaim (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_outcome_first_evaluation_and_minimal_verification_without_overclaim) ... ok
+test_patch_validation_requires_variants_and_non_regression (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_patch_validation_requires_variants_and_non_regression) ... ok
+test_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs) ... ok
+test_reader_first_acceptance_and_feedback_are_source_only (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_reader_first_acceptance_and_feedback_are_source_only) ... ok
+test_real_eval_is_pre_registered_but_unmeasured (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_real_eval_is_pre_registered_but_unmeasured) ... ok
+test_review_coverage_is_conditional_and_fail_closed (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_review_coverage_is_conditional_and_fail_closed) ... ok
+test_security_scanner_separates_coverage_from_verified_vulnerabilities (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_security_scanner_separates_coverage_from_verified_vulnerabilities) ... ok
+test_skill_fit_and_measured_value_are_not_trigger_success (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_skill_fit_and_measured_value_are_not_trigger_success) ... ok
+test_spec_to_code_is_bidirectional_and_unchecked_is_not_success (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_spec_to_code_is_bidirectional_and_unchecked_is_not_success) ... ok
+test_checkpoint_does_not_require_full_codify_or_fake_success (tests.test_verification_stage_economy.VerificationStageEconomyTests.test_checkpoint_does_not_require_full_codify_or_fake_success) ... ok
+test_full_risk_template_is_deferred_not_removed (tests.test_verification_stage_economy.VerificationStageEconomyTests.test_full_risk_template_is_deferred_not_removed) ... ok
+test_scenario_ledger_declares_hypotheses_not_host_measurements (tests.test_verification_stage_economy.VerificationStageEconomyTests.test_scenario_ledger_declares_hypotheses_not_host_measurements) ... ok
+test_stage_and_risk_are_orthogonal_with_fail_closed_gates (tests.test_verification_stage_economy.VerificationStageEconomyTests.test_stage_and_risk_are_orthogonal_with_fail_closed_gates) ... ok
+test_65_manifest_skills_have_one_frozen_source_audit_row (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_65_manifest_skills_have_one_frozen_source_audit_row) ... ok
+test_composition_light_mode_does_not_downgrade_risk (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_composition_light_mode_does_not_downgrade_risk) ... ok
+test_embedded_tool_and_fake_register_example_gates (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_embedded_tool_and_fake_register_example_gates) ... ok
+test_external_fetch_untrusted_url_and_redirect_denials (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_external_fetch_untrusted_url_and_redirect_denials) ... ok
+test_imap_read_does_not_imply_mailbox_mutation (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_imap_read_does_not_imply_mailbox_mutation) ... ok
+test_scenarios_are_unmeasured_hypotheses (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_scenarios_are_unmeasured_hypotheses) ... ok
+test_supply_chain_has_readonly_and_install_boundaries (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_supply_chain_has_readonly_and_install_boundaries) ... ok
+test_bounded_public_discovery_cannot_claim_full_coverage (tests.test_external_method_intake.ExternalMethodIntakeTests.test_bounded_public_discovery_cannot_claim_full_coverage) ... ok
+test_deferred_reference_has_no_implicit_writes_or_diagrams (tests.test_external_method_intake.ExternalMethodIntakeTests.test_deferred_reference_has_no_implicit_writes_or_diagrams) ... ok
+test_prompt_trace_not_free_text_guess_or_durable_promotion (tests.test_external_method_intake.ExternalMethodIntakeTests.test_prompt_trace_not_free_text_guess_or_durable_promotion) ... ok
+test_skill_method_is_read_only_and_source_grounded (tests.test_external_method_intake.ExternalMethodIntakeTests.test_skill_method_is_read_only_and_source_grounded) ... ok
+test_source_only_cases_have_negative_and_authority_coverage (tests.test_external_method_intake.ExternalMethodIntakeTests.test_source_only_cases_have_negative_and_authority_coverage) ... ok
+test_source_to_implementation_handoff_is_bounded (tests.test_external_method_intake.ExternalMethodIntakeTests.test_source_to_implementation_handoff_is_bounded) ... ok
+test_checker_does_not_turn_invalid_or_incomplete_reports_into_pass (tests.test_external_core_methods.ExternalCoreMethodsTests.test_checker_does_not_turn_invalid_or_incomplete_reports_into_pass) ... ok
+test_checker_preserves_clean_and_threshold_permitted_results (tests.test_external_core_methods.ExternalCoreMethodsTests.test_checker_preserves_clean_and_threshold_permitted_results) ... ok
+test_checker_rejects_violation_even_when_scanner_exits_zero (tests.test_external_core_methods.ExternalCoreMethodsTests.test_checker_rejects_violation_even_when_scanner_exits_zero) ... ok
+test_direct_and_early_contract_fail_actual_old_consumers (tests.test_external_core_methods.ExternalCoreMethodsTests.test_direct_and_early_contract_fail_actual_old_consumers) ... ok
+test_independent_oracle_rejects_bug_mirrored_helper_misses (tests.test_external_core_methods.ExternalCoreMethodsTests.test_independent_oracle_rejects_bug_mirrored_helper_misses) ... ok
+test_methods_and_examples_survive_native_frontmatter_rebuild (tests.test_external_core_methods.ExternalCoreMethodsTests.test_methods_and_examples_survive_native_frontmatter_rebuild) ... ok
+test_migration_runs_both_real_consumers_at_each_safe_stage (tests.test_external_core_methods.ExternalCoreMethodsTests.test_migration_runs_both_real_consumers_at_each_safe_stage) ... ok
+test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) ... ok
+test_production_catalog_routes_tasks_and_rejects_near_misses (tests.test_external_domain_methods.DomainDiscoveryTests.test_production_catalog_routes_tasks_and_rejects_near_misses) ... ok
+test_public_gcc_stack_example_exposes_dynamic_part (tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_gcc_stack_example_exposes_dynamic_part) ... ok
+test_public_state_sequence_replays_and_rejects_the_bug (tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_state_sequence_replays_and_rejects_the_bug) ... ok
+test_public_ubsan_example_observes_diagnostics_despite_zero_exit (tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_ubsan_example_observes_diagnostics_despite_zero_exit) ... ok
+test_cases_are_bounded_and_not_behavior_claims (tests.test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_cases_are_bounded_and_not_behavior_claims) ... ok
+test_commit_mode_and_security_boundaries (tests.test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_commit_mode_and_security_boundaries) ... ok
+test_reference_paths_exist_only_on_demand (tests.test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_reference_paths_exist_only_on_demand) ... ok
+test_worktree_and_closeout_are_explicitly_authorized (tests.test_repository_workflow_efficiency.RepositoryWorkflowSkillEfficiencyTests.test_worktree_and_closeout_are_explicitly_authorized) ... ok
+test_all_eight_correct_outputs_produce_digest_bound_acceptance (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_all_eight_correct_outputs_produce_digest_bound_acceptance) ... ok
+test_case_cannot_add_commands_or_traversal_or_omit_input_coverage (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_case_cannot_add_commands_or_traversal_or_omit_input_coverage) ... ok
+test_claimed_success_cannot_replace_missing_artifact (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_claimed_success_cannot_replace_missing_artifact) ... ok
+test_each_wrong_semantic_output_fails_without_losing_other_checks (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_each_wrong_semantic_output_fails_without_losing_other_checks) ... ok
+test_executor_grader_identity_and_frozen_case_boundary (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_executor_grader_identity_and_frozen_case_boundary) ... ok
+test_json_does_not_coerce_boolean_number_or_accept_duplicate_keys (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_json_does_not_coerce_boolean_number_or_accept_duplicate_keys) ... ok
+test_original_bug_signal_really_fails_before_and_passes_after_fixed_patch (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_original_bug_signal_really_fails_before_and_passes_after_fixed_patch) ... ok
+test_reference_and_output_cannot_be_symlinked_or_escape (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_reference_and_output_cannot_be_symlinked_or_escape) ... ok
+test_special_file_does_not_block_or_pass (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_special_file_does_not_block_or_pass) ... ok
+test_suite_is_eight_development_tasks_with_real_inputs (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_suite_is_eight_development_tasks_with_real_inputs) ... ok
+test_unmodified_input_is_not_task_success (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_unmodified_input_is_not_task_success) ... ok
+test_unrequested_file_fails_boundary_even_when_all_outputs_match (tests.test_skill_execution_tasks.SkillExecutionTaskTests.test_unrequested_file_fails_boundary_even_when_all_outputs_match) ... ok
+test_build_failure_is_reported_and_keeps_config_for_diagnosis (tests.test_skill_command_examples.BspBuildExampleTests.test_build_failure_is_reported_and_keeps_config_for_diagnosis) ... ok
+test_config_failure_prevents_image_and_dt_commands (tests.test_skill_command_examples.BspBuildExampleTests.test_config_failure_prevents_image_and_dt_commands) ... ok
+test_existing_output_and_config_are_never_reused_or_reset (tests.test_skill_command_examples.BspBuildExampleTests.test_existing_output_and_config_are_never_reused_or_reset) ... ok
+test_invalid_job_budget_stops_before_configuration_or_output_creation (tests.test_skill_command_examples.BspBuildExampleTests.test_invalid_job_budget_stops_before_configuration_or_output_creation) ... ok
+test_make_preserves_selected_arch_toolchain_config_output_and_cpu_ram_budget (tests.test_skill_command_examples.BspBuildExampleTests.test_make_preserves_selected_arch_toolchain_config_output_and_cpu_ram_budget) ... ok
+test_missing_identity_input_and_relative_output_do_not_build (tests.test_skill_command_examples.BspBuildExampleTests.test_missing_identity_input_and_relative_output_do_not_build) ... ok
+test_no_dt_target_does_not_invent_a_dt_build (tests.test_skill_command_examples.BspBuildExampleTests.test_no_dt_target_does_not_invent_a_dt_build) ... ok
+test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... ok
+test_compile_only_preserves_not_run_without_invoking_ctest (tests.test_skill_command_examples.CmakeBuildExampleTests.test_compile_only_preserves_not_run_without_invoking_ctest) ... ok
+test_empty_ctest_selection_fails_after_a_real_successful_build (tests.test_skill_command_examples.CmakeBuildExampleTests.test_empty_ctest_selection_fails_after_a_real_successful_build) ... ok
+test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets (tests.test_skill_command_examples.CmakeBuildExampleTests.test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets) ... ok
+test_preset_names_bind_binary_directory_configuration_tests_and_elf (tests.test_skill_command_examples.CmakeBuildExampleTests.test_preset_names_bind_binary_directory_configuration_tests_and_elf) ... ok
+test_default_budget_and_normal_exit_keep_the_original_contract (tests.test_skill_command_examples.CommandExampleRunnerTests.test_default_budget_and_normal_exit_keep_the_original_contract) ... ok
+test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group (tests.test_skill_command_examples.CommandExampleRunnerTests.test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group) ... ok
+test_all_skipped_is_rejected_despite_successful_ctest_exit (tests.test_skill_command_examples.CtestQualificationExampleTests.test_all_skipped_is_rejected_despite_successful_ctest_exit) ... ok
+test_empty_and_all_disabled_selections_remain_failures (tests.test_skill_command_examples.CtestQualificationExampleTests.test_empty_and_all_disabled_selections_remain_failures) ... ok
+test_failed_build_does_not_read_or_replace_an_old_report (tests.test_skill_command_examples.CtestQualificationExampleTests.test_failed_build_does_not_read_or_replace_an_old_report) ... ok
+test_hil_collection_preserves_skip_evidence_without_claiming_qualification (tests.test_skill_command_examples.CtestQualificationExampleTests.test_hil_collection_preserves_skip_evidence_without_claiming_qualification) ... ok
+test_mixed_results_report_partial_and_test_runs_only_once (tests.test_skill_command_examples.CtestQualificationExampleTests.test_mixed_results_report_partial_and_test_runs_only_once) ... ok
+test_new_run_cannot_reuse_a_previous_passing_report (tests.test_skill_command_examples.CtestQualificationExampleTests.test_new_run_cannot_reuse_a_previous_passing_report) ... ok
+test_preset_compile_only_needs_no_test_preset_or_python (tests.test_skill_command_examples.CtestQualificationExampleTests.test_preset_compile_only_needs_no_test_preset_or_python) ... ok
+test_real_ctest_failure_keeps_its_nonzero_status (tests.test_skill_command_examples.CtestQualificationExampleTests.test_real_ctest_failure_keeps_its_nonzero_status) ... ok
+test_published_reader_rejects_missing_malformed_unknown_and_failure_results (tests.test_skill_command_examples.CtestReportReaderTests.test_published_reader_rejects_missing_malformed_unknown_and_failure_results) ... ok
+test_native_endpoints_clamping_and_invalid_inputs (tests.test_skill_command_examples.EmbeddedAdcExampleTests.test_native_endpoints_clamping_and_invalid_inputs) ... ok
+test_native_endpoints_with_supported_ubsan (tests.test_skill_command_examples.EmbeddedAdcExampleTests.test_native_endpoints_with_supported_ubsan) ... ok
+test_environment_example_only_prints_names_not_synthetic_secret_values (tests.test_skill_command_examples.FlakySampleExampleTests.test_environment_example_only_prints_names_not_synthetic_secret_values) ... ok
+test_existing_evidence_is_not_reused_or_overwritten (tests.test_skill_command_examples.FlakySampleExampleTests.test_existing_evidence_is_not_reused_or_overwritten) ... ok
+test_invalid_sample_budgets_do_not_execute_or_create_output (tests.test_skill_command_examples.FlakySampleExampleTests.test_invalid_sample_budgets_do_not_execute_or_create_output) ... ok
+test_sample_collection_failure_stops_without_fake_completed_attempt (tests.test_skill_command_examples.FlakySampleExampleTests.test_sample_collection_failure_stops_without_fake_completed_attempt) ... ok
+test_status_write_failure_is_not_a_successful_collection (tests.test_skill_command_examples.FlakySampleExampleTests.test_status_write_failure_is_not_a_successful_collection) ... ok
+test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports (tests.test_skill_command_examples.FlakySampleExampleTests.test_success_failure_and_mixed_runs_keep_exact_exit_codes_and_reports) ... ok
+test_compiled_consumer_requires_minor_21_and_async_cancel (tests.test_skill_command_examples.InterfaceVersionExampleTests.test_compiled_consumer_requires_minor_21_and_async_cancel) ... ok
+test_empty_verified_range_is_distinct_from_git_or_usage_failure (tests.test_skill_command_examples.ReleaseHistoryExampleTests.test_empty_verified_range_is_distinct_from_git_or_usage_failure) ... ok
+test_initial_release_preserves_all_commits_without_tags (tests.test_skill_command_examples.ReleaseHistoryExampleTests.test_initial_release_preserves_all_commits_without_tags) ... ok
+test_invalid_or_unrelated_baseline_fails_without_initial_fallback (tests.test_skill_command_examples.ReleaseHistoryExampleTests.test_invalid_or_unrelated_baseline_fails_without_initial_fallback) ... ok
+test_shallow_history_is_rejected_even_for_explicit_initial_mode (tests.test_skill_command_examples.ReleaseHistoryExampleTests.test_shallow_history_is_rejected_even_for_explicit_initial_mode) ... ok
+test_verified_release_range_keeps_breaking_revert_and_unknown_types (tests.test_skill_command_examples.ReleaseHistoryExampleTests.test_verified_release_range_keeps_breaking_revert_and_unknown_types) ... ok
+test_configured_submodule_omission_does_not_hide_gitlink_update (tests.test_review_raw_diff.ReviewRawDiffTests.test_configured_submodule_omission_does_not_hide_gitlink_update) ... ok
+test_fsmonitor_is_not_called_by_the_snapshot (tests.test_review_raw_diff.ReviewRawDiffTests.test_fsmonitor_is_not_called_by_the_snapshot) ... ok
+test_relative_and_color_configuration_do_not_reduce_raw_scope (tests.test_review_raw_diff.ReviewRawDiffTests.test_relative_and_color_configuration_do_not_reduce_raw_scope) ... ok
+test_shipped_status_preflights_preserve_index_and_do_not_run_fsmonitor (tests.test_review_raw_diff.ReviewRawDiffTests.test_shipped_status_preflights_preserve_index_and_do_not_run_fsmonitor) ... ok
+test_textconv_and_external_diff_do_not_hide_selected_changes (tests.test_review_raw_diff.ReviewRawDiffTests.test_textconv_and_external_diff_do_not_hide_selected_changes) ... ok
+test_published_reset_formula_distinguishes_defined_and_undefined_bits (tests.test_skill_domain_execution.RegisterResetExpressionTests.test_published_reset_formula_distinguishes_defined_and_undefined_bits) ... ok
+test_old_completion_and_spurious_notification_cannot_complete_new_request (tests.test_skill_runtime_methods.OperationReadinessTests.test_old_completion_and_spurious_notification_cannot_complete_new_request) ... ok
+test_pending_work_uses_notification_and_preserves_cancellation (tests.test_skill_runtime_methods.OperationReadinessTests.test_pending_work_uses_notification_and_preserves_cancellation) ... ok
+test_timeout_and_completed_zero_value_are_distinct (tests.test_skill_runtime_methods.OperationReadinessTests.test_timeout_and_completed_zero_value_are_distinct) ... ok
+test_deleted_and_absent_objects_do_not_become_verified_files (tests.test_skill_runtime_methods.RunningObjectEvidenceTests.test_deleted_and_absent_objects_do_not_become_verified_files) ... ok
+test_same_executable_can_run_a_different_library (tests.test_skill_runtime_methods.RunningObjectEvidenceTests.test_same_executable_can_run_a_different_library) ... ok
+test_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok
+test_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok
+test_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok
+test_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok
+test_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok
+test_oracle_rejects_accepting_a_quantized_zero_period (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_accepting_a_quantized_zero_period) ... ok
+test_oracle_rejects_narrowing_before_range_validation (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_narrowing_before_range_validation) ... ok
+test_published_example_rejects_zero_overflow_and_preserves_output (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_published_example_rejects_zero_overflow_and_preserves_output) ... ok
+test_clock_uncertainty_cannot_be_erased_by_timezone_conversion (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_clock_uncertainty_cannot_be_erased_by_timezone_conversion) ... ok
+test_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok
+test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok
+test_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok
+test_all_present_openai_metadata_use_interface (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_all_present_openai_metadata_use_interface) ... ok
+test_missing_interface_is_rejected (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_missing_interface_is_rejected) ... ok
+test_breaking_and_invalid (tests.test_commit_message_policy.CommitMessagePolicyTests.test_breaking_and_invalid) ... ok
+test_cli_is_read_only_and_returns_verdict (tests.test_commit_message_policy.CommitMessagePolicyTests.test_cli_is_read_only_and_returns_verdict) ... ok
+test_issue_policy_is_opt_in (tests.test_commit_message_policy.CommitMessagePolicyTests.test_issue_policy_is_opt_in) ... ok
+test_zh_and_en (tests.test_commit_message_policy.CommitMessagePolicyTests.test_zh_and_en) ... ok
+
+----------------------------------------------------------------------
+Ran 152 tests in 12.013s
+
+OK
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 1.191s
+
+OK
+test_bsp_porting_exposes_flash_and_storage_escalation (tests.test_skill_governance.SkillGovernanceTests.test_bsp_porting_exposes_flash_and_storage_escalation) ... ok
+test_displayed_skill_identity_refusal_preserves_all_selection_paths (tests.test_skill_governance.SkillGovernanceTests.test_displayed_skill_identity_refusal_preserves_all_selection_paths) ... ok
+test_driver_bringup_exposes_live_device_escalation_without_granting_it (tests.test_skill_governance.SkillGovernanceTests.test_driver_bringup_exposes_live_device_escalation_without_granting_it) ... ok
+test_driver_implementation_declares_runtime_model_and_live_device_handoff (tests.test_skill_governance.SkillGovernanceTests.test_driver_implementation_declares_runtime_model_and_live_device_handoff) ... ok
+test_e1_requires_explicit_low_risk_and_workspace_boundary (tests.test_skill_governance.SkillGovernanceTests.test_e1_requires_explicit_low_risk_and_workspace_boundary) ... ok
+test_effort_is_a_conservative_route_projection_not_a_permission (tests.test_skill_governance.SkillGovernanceTests.test_effort_is_a_conservative_route_projection_not_a_permission) ... ok
+test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands (tests.test_skill_governance.SkillGovernanceTests.test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands) ... ok
+test_explicit_skill_identity_refusal_applies_without_promotion (tests.test_skill_governance.SkillGovernanceTests.test_explicit_skill_identity_refusal_applies_without_promotion) ... ok
+test_field_readiness_stays_read_only (tests.test_skill_governance.SkillGovernanceTests.test_field_readiness_stays_read_only) ... ok
+test_high_risk_falsification_and_legal_e1_change_contract (tests.test_skill_governance.SkillGovernanceTests.test_high_risk_falsification_and_legal_e1_change_contract) ... ok
+test_manifest_has_no_legacy_dependency_metadata (tests.test_skill_governance.SkillGovernanceTests.test_manifest_has_no_legacy_dependency_metadata) ... ok
+test_output_locale_is_not_skill_identity (tests.test_skill_governance.SkillGovernanceTests.test_output_locale_is_not_skill_identity) ... ok
+test_plain_requirements_route_to_triage_without_interactive_discovery (tests.test_skill_governance.SkillGovernanceTests.test_plain_requirements_route_to_triage_without_interactive_discovery) ... ok
+test_profiling_requires_valid_comparable_alternating_ab (tests.test_skill_governance.SkillGovernanceTests.test_profiling_requires_valid_comparable_alternating_ab) ... ok
+test_realtime_skills_use_target_budgets_not_fixed_thresholds (tests.test_skill_governance.SkillGovernanceTests.test_realtime_skills_use_target_budgets_not_fixed_thresholds) ... ok
+test_release_orchestration_requires_separate_publish_and_device_authority (tests.test_skill_governance.SkillGovernanceTests.test_release_orchestration_requires_separate_publish_and_device_authority) ... ok
+test_review_routing_uses_review_loop_not_language_overlay (tests.test_skill_governance.SkillGovernanceTests.test_review_routing_uses_review_loop_not_language_overlay) ... ok
+test_routing_primaries_resolve_to_primary_runtime_role (tests.test_skill_governance.SkillGovernanceTests.test_routing_primaries_resolve_to_primary_runtime_role) ... ok
+test_same_group_promotion_allows_applicable_and_negated_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_allows_applicable_and_negated_exclusions) ... ok
+test_same_group_promotion_preserves_target_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_preserves_target_exclusions) ... ok
+test_skill_identity_boundaries_and_affirmative_displays (tests.test_skill_governance.SkillGovernanceTests.test_skill_identity_boundaries_and_affirmative_displays) ... ok
+test_supporting_implicit_promotion_has_exactly_one_same_group_primary (tests.test_skill_governance.SkillGovernanceTests.test_supporting_implicit_promotion_has_exactly_one_same_group_primary) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.278s
+
+OK
+........................
+----------------------------------------------------------------------
+Ran 24 tests in 0.280s
+
+OK
+.........................................
+----------------------------------------------------------------------
+Ran 41 tests in 8.936s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.947s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.111s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.152s
+
+OK
+test_contract_schema_rejects_unknown_top_level_field (tests.test_phase_context.PhaseContextContractTests.test_contract_schema_rejects_unknown_top_level_field) ... ok
+test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout (tests.test_phase_context.PhaseContextContractTests.test_delivery_lifecycle_is_review_then_completion_then_commit_then_closeout) ... ok
+test_driver_phase_contains_implementation_bringup_and_interrupt_dma (tests.test_phase_context.PhaseContextContractTests.test_driver_phase_contains_implementation_bringup_and_interrupt_dma) ... ok
+test_manifest_has_no_phase_to_skill_path_mirror (tests.test_phase_context.PhaseContextContractTests.test_manifest_has_no_phase_to_skill_path_mirror) ... ok
+test_non_unique_group_cannot_be_promoted_to_exactly_one_primary (tests.test_phase_context.PhaseContextContractTests.test_non_unique_group_cannot_be_promoted_to_exactly_one_primary) ... ok
+test_phase_resource_cannot_escape_repository_root (tests.test_phase_context.PhaseContextContractTests.test_phase_resource_cannot_escape_repository_root) ... ok
+test_review_phase_uses_one_primary_without_language_duplicate (tests.test_phase_context.PhaseContextContractTests.test_review_phase_uses_one_primary_without_language_duplicate) ... ok
+test_skill_selector_fails_closed_on_role_drift (tests.test_phase_context.PhaseContextContractTests.test_skill_selector_fails_closed_on_role_drift) ... ok
+test_unknown_skill_fails_closed (tests.test_phase_context.PhaseContextContractTests.test_unknown_skill_fails_closed) ... ok
+test_verify_phase_separates_test_execution_from_completion_gate (tests.test_phase_context.PhaseContextContractTests.test_verify_phase_separates_test_execution_from_completion_gate) ... ok
+test_context_prerequisite_graph_is_acyclic (tests.test_skill_relationships.SkillRelationshipContractTests.test_context_prerequisite_graph_is_acyclic) ... ok
+test_delivery_precedence_must_exactly_match_adjacent_lifecycle (tests.test_skill_relationships.SkillRelationshipContractTests.test_delivery_precedence_must_exactly_match_adjacent_lifecycle) ... ok
+test_inverted_terminal_stage_order_fails_closed (tests.test_skill_relationships.SkillRelationshipContractTests.test_inverted_terminal_stage_order_fails_closed) ... ok
+test_manifest_has_no_parallel_dependency_graph (tests.test_skill_relationships.SkillRelationshipContractTests.test_manifest_has_no_parallel_dependency_graph) ... ok
+test_only_delivery_precedence_can_claim_sequencing_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_only_delivery_precedence_can_claim_sequencing_authority) ... ok
+test_terminal_lifecycle_has_single_typed_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_terminal_lifecycle_has_single_typed_authority) ... ok
+test_typed_relationships_are_the_only_relationship_authority (tests.test_skill_relationships.SkillRelationshipContractTests.test_typed_relationships_are_the_only_relationship_authority) ... ok
+test_unknown_typed_endpoint_fails_closed (tests.test_skill_relationships.SkillRelationshipContractTests.test_unknown_typed_endpoint_fails_closed) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.151s
+
+OK
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+[WARN] script is not executable: tests/run_all.sh
+[WARN] script is not executable: tests/test_agent_platform.sh
+[WARN] script is not executable: tests/test_agent_value_trust.sh
+[WARN] script is not executable: tests/test_archive_restore.sh
+[WARN] script is not executable: tests/test_asset_taxonomy.sh
+[WARN] script is not executable: tests/test_branch_gc.sh
+[WARN] script is not executable: tests/test_catalog.sh
+[WARN] script is not executable: tests/test_change_governance.sh
+[WARN] script is not executable: tests/test_effect_campaign_materializer.sh
+[WARN] script is not executable: tests/test_evidence_bridge.sh
+[WARN] script is not executable: tests/test_evidence_envelope.sh
+[WARN] script is not executable: tests/test_execution_policy.sh
+[WARN] script is not executable: tests/test_external_reference_binding.sh
+[WARN] script is not executable: tests/test_manifest_composition_cli.sh
+[WARN] script is not executable: tests/test_mcp_freshness_ssot.sh
+[WARN] script is not executable: tests/test_native_campaign.sh
+[WARN] script is not executable: tests/test_native_campaign_boundaries.sh
+[WARN] script is not executable: tests/test_native_campaign_diagnostics.sh
+[WARN] script is not executable: tests/test_native_trust.sh
+[WARN] script is not executable: tests/test_official_upstream_drift.sh
+[WARN] script is not executable: tests/test_optional_skills.sh
+[WARN] script is not executable: tests/test_performance_budgets.sh
+[WARN] script is not executable: tests/test_profile_coherence.sh
+[WARN] script is not executable: tests/test_profile_context_footprint.sh
+[WARN] script is not executable: tests/test_review_evidence.sh
+[WARN] script is not executable: tests/test_runtime_comparison_contract.sh
+[WARN] script is not executable: tests/test_schema_resource_sync.sh
+[WARN] script is not executable: tests/test_sigstore_blob.sh
+[WARN] script is not executable: tests/test_skill_content.sh
+[WARN] script is not executable: tests/test_skill_governance.sh
+[WARN] script is not executable: tests/test_target_adapter_spi.sh
+[WARN] script is not executable: tests/test_target_contracts.sh
+[WARN] script is not executable: tests/test_target_source_probe.sh
+[WARN] script is not executable: tests/test_token_context_governance.sh
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 8.446s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.483s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.913s
+
+OK
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 9.425s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.114s
+
+OK
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.066s
+
+OK
+..................................
+----------------------------------------------------------------------
+Ran 34 tests in 7.997s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.013s
+
+OK
+.........................
+----------------------------------------------------------------------
+Ran 25 tests in 0.196s
+
+OK
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.587s
+
+OK
+test_complete_structural_coverage_never_grants_completion (tests.test_completion_coverage.CompletionCoverageTests.test_complete_structural_coverage_never_grants_completion) ... ok
+test_duplicate_ids_and_invalid_skip_reason_are_rejected (tests.test_completion_coverage.CompletionCoverageTests.test_duplicate_ids_and_invalid_skip_reason_are_rejected) ... ok
+test_duplicate_json_field_is_rejected_by_cli (tests.test_completion_coverage.CompletionCoverageTests.test_duplicate_json_field_is_rejected_by_cli) ... ok
+test_failed_additional_check_still_blocks_coverage (tests.test_completion_coverage.CompletionCoverageTests.test_failed_additional_check_still_blocks_coverage) ... ok
+test_missing_required_and_skipped_required_are_visible (tests.test_completion_coverage.CompletionCoverageTests.test_missing_required_and_skipped_required_are_visible) ... ok
+test_snapshot_mismatch_and_future_time_are_invalid (tests.test_completion_coverage.CompletionCoverageTests.test_snapshot_mismatch_and_future_time_are_invalid) ... ok
+test_stale_required_evidence_does_not_cover_check (tests.test_completion_coverage.CompletionCoverageTests.test_stale_required_evidence_does_not_cover_check) ... ok
+test_status_exit_code_ref_and_unknown_fields_are_invalid (tests.test_completion_coverage.CompletionCoverageTests.test_status_exit_code_ref_and_unknown_fields_are_invalid) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.031s
+
+OK
+test_duplicate_manifest_fixture_cannot_report_alignment_pass (tests.test_eval_catalog.EvalCatalogAuditTests.test_duplicate_manifest_fixture_cannot_report_alignment_pass) ... ok
+test_duplicate_suite_and_case_ids_fail (tests.test_eval_catalog.EvalCatalogAuditTests.test_duplicate_suite_and_case_ids_fail) ... ok
+test_hidden_execution_fields_and_duplicate_json_keys_fail_closed (tests.test_eval_catalog.EvalCatalogAuditTests.test_hidden_execution_fields_and_duplicate_json_keys_fail_closed) ... ok
+test_manifest_fixture_drift_and_wrong_outcome_fail (tests.test_eval_catalog.EvalCatalogAuditTests.test_manifest_fixture_drift_and_wrong_outcome_fail) ... ok
+test_missing_dataset_and_path_traversal_fail_closed (tests.test_eval_catalog.EvalCatalogAuditTests.test_missing_dataset_and_path_traversal_fail_closed) ... ok
+test_oversized_guardrail_dataset_is_rejected (tests.test_eval_catalog.EvalCatalogAuditTests.test_oversized_guardrail_dataset_is_rejected) ... ok
+test_repository_catalog_is_valid_without_claiming_runtime_eval (tests.test_eval_catalog.EvalCatalogAuditTests.test_repository_catalog_is_valid_without_claiming_runtime_eval) ... ok
+test_symlink_dataset_is_rejected (tests.test_eval_catalog.EvalCatalogAuditTests.test_symlink_dataset_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.007s
+
+OK
+test_current_method_only_reference_bindings_pass (tests.test_external_reference_binding.ExternalReferenceBindingTests.test_current_method_only_reference_bindings_pass) ... ok
+test_manifest_reader_rejects_duplicate_fields_links_and_oversize (tests.test_external_reference_binding.ExternalReferenceBindingTests.test_manifest_reader_rejects_duplicate_fields_links_and_oversize) ... ok
+test_missing_or_inconsistent_exact_identity_is_rejected (tests.test_external_reference_binding.ExternalReferenceBindingTests.test_missing_or_inconsistent_exact_identity_is_rejected) ... ok
+test_observation_freshness_is_explicit_and_bounded (tests.test_external_reference_binding.ExternalReferenceBindingTests.test_observation_freshness_is_explicit_and_bounded) ... ok
+test_optional_parent_lock_matches_exact_repository_and_pin (tests.test_external_reference_binding.ExternalReferenceBindingTests.test_optional_parent_lock_matches_exact_repository_and_pin) ... ok
+test_unapproved_host_and_inconsistent_duplicate_source_are_rejected (tests.test_external_reference_binding.ExternalReferenceBindingTests.test_unapproved_host_and_inconsistent_duplicate_source_are_rejected) ... ok
+test_unreviewed_date_is_rejected (tests.test_external_reference_binding.ExternalReferenceBindingTests.test_unreviewed_date_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.563s
+
+OK
+test_aggregate_gain_cannot_hide_case_regression (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_aggregate_gain_cannot_hide_case_regression) ... ok
+test_dataset_prompt_and_labels_must_match (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_dataset_prompt_and_labels_must_match) ... ok
+test_deterministic_report_uses_pre_execution_task_snapshot (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_deterministic_report_uses_pre_execution_task_snapshot) ... ok
+test_direct_runtime_cli_requires_count_and_cost_acknowledgment (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_direct_runtime_cli_requires_count_and_cost_acknowledgment) ... ok
+test_direct_runtime_rejects_duplicate_ids_before_model_call (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_direct_runtime_rejects_duplicate_ids_before_model_call) ... ok
+test_invalid_runtime_json_error_omits_model_content (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_invalid_runtime_json_error_omits_model_content) ... ok
+test_legacy_and_forged_reports_fail_closed (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_legacy_and_forged_reports_fail_closed) ... ok
+test_malformed_provider_result_fails_without_leaking_error (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_malformed_provider_result_fails_without_leaking_error) ... ok
+test_missing_case_model_cannot_pass_comparison (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_missing_case_model_cannot_pass_comparison) ... ok
+test_per_case_model_swap_with_same_union_is_rejected (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_per_case_model_swap_with_same_union_is_rejected) ... ok
+test_provider_failure_does_not_echo_cli_output (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_provider_failure_does_not_echo_cli_output) ... ok
+test_provider_prompts_stay_out_of_command_arguments (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_provider_prompts_stay_out_of_command_arguments) ... ok
+test_runtime_report_emits_bound_identity_without_provider (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_runtime_report_emits_bound_identity_without_provider) ... ok
+test_same_inputs_and_no_case_regression_can_pass (tests.test_runtime_comparison_contract.RuntimeComparisonContractTests.test_same_inputs_and_no_case_regression_can_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.196s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 1.418s
+
+OK
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.725s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.028s
+
+OK
+...............................
+----------------------------------------------------------------------
+Ran 31 tests in 47.838s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 10.715s
+
+OK
+...................
+----------------------------------------------------------------------
+Ran 19 tests in 0.057s
+
+OK
+........................................
+----------------------------------------------------------------------
+Ran 40 tests in 4.047s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
+test_existing_assets_require_context_only_and_low_attention (test_superagent_method_contract.SuperagentMethodContractTests.test_existing_assets_require_context_only_and_low_attention) ... ok
+test_explicit_implementation_and_valid_prototype_baselines (test_superagent_method_contract.SuperagentMethodContractTests.test_explicit_implementation_and_valid_prototype_baselines) ... ok
+test_external_research_does_not_gain_implementation_authority (test_superagent_method_contract.SuperagentMethodContractTests.test_external_research_does_not_gain_implementation_authority) ... ok
+test_prototype_and_decision_reject_only_the_wrong_boundary (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_and_decision_reject_only_the_wrong_boundary) ... ok
+test_prototype_artifact_does_not_hide_permission_failures (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_artifact_does_not_hide_permission_failures) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+...................
+----------------------------------------------------------------------
+Ran 19 tests in 1.090s
+
+OK
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.411s
+
+OK
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 0.067s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.407s
+
+OK
+...........................
+----------------------------------------------------------------------
+Ran 27 tests in 7.424s
+
+OK
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 9.636s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.086s
+
+OK
+...................................
+----------------------------------------------------------------------
+Ran 35 tests in 3.681s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 1.369s
+
+OK
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.340s
+
+OK
+[DIAG] canonical Harness source review rejected: review source or evidence digest does not match
+.............................................
+----------------------------------------------------------------------
+Ran 45 tests in 0.900s
+
+OK
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.334s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.130s
+
+OK
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.437s
+
+OK
+test_bsp_porting_exposes_flash_and_storage_escalation (tests.test_skill_governance.SkillGovernanceTests.test_bsp_porting_exposes_flash_and_storage_escalation) ... ok
+test_displayed_skill_identity_refusal_preserves_all_selection_paths (tests.test_skill_governance.SkillGovernanceTests.test_displayed_skill_identity_refusal_preserves_all_selection_paths) ... ok
+test_driver_bringup_exposes_live_device_escalation_without_granting_it (tests.test_skill_governance.SkillGovernanceTests.test_driver_bringup_exposes_live_device_escalation_without_granting_it) ... ok
+test_driver_implementation_declares_runtime_model_and_live_device_handoff (tests.test_skill_governance.SkillGovernanceTests.test_driver_implementation_declares_runtime_model_and_live_device_handoff) ... ok
+test_e1_requires_explicit_low_risk_and_workspace_boundary (tests.test_skill_governance.SkillGovernanceTests.test_e1_requires_explicit_low_risk_and_workspace_boundary) ... ok
+test_effort_is_a_conservative_route_projection_not_a_permission (tests.test_skill_governance.SkillGovernanceTests.test_effort_is_a_conservative_route_projection_not_a_permission) ... ok
+test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands (tests.test_skill_governance.SkillGovernanceTests.test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands) ... ok
+test_explicit_skill_identity_refusal_applies_without_promotion (tests.test_skill_governance.SkillGovernanceTests.test_explicit_skill_identity_refusal_applies_without_promotion) ... ok
+test_field_readiness_stays_read_only (tests.test_skill_governance.SkillGovernanceTests.test_field_readiness_stays_read_only) ... ok
+test_high_risk_falsification_and_legal_e1_change_contract (tests.test_skill_governance.SkillGovernanceTests.test_high_risk_falsification_and_legal_e1_change_contract) ... ok
+test_manifest_has_no_legacy_dependency_metadata (tests.test_skill_governance.SkillGovernanceTests.test_manifest_has_no_legacy_dependency_metadata) ... ok
+test_output_locale_is_not_skill_identity (tests.test_skill_governance.SkillGovernanceTests.test_output_locale_is_not_skill_identity) ... ok
+test_plain_requirements_route_to_triage_without_interactive_discovery (tests.test_skill_governance.SkillGovernanceTests.test_plain_requirements_route_to_triage_without_interactive_discovery) ... ok
+test_profiling_requires_valid_comparable_alternating_ab (tests.test_skill_governance.SkillGovernanceTests.test_profiling_requires_valid_comparable_alternating_ab) ... ok
+test_realtime_skills_use_target_budgets_not_fixed_thresholds (tests.test_skill_governance.SkillGovernanceTests.test_realtime_skills_use_target_budgets_not_fixed_thresholds) ... ok
+test_release_orchestration_requires_separate_publish_and_device_authority (tests.test_skill_governance.SkillGovernanceTests.test_release_orchestration_requires_separate_publish_and_device_authority) ... ok
+test_review_routing_uses_review_loop_not_language_overlay (tests.test_skill_governance.SkillGovernanceTests.test_review_routing_uses_review_loop_not_language_overlay) ... ok
+test_routing_primaries_resolve_to_primary_runtime_role (tests.test_skill_governance.SkillGovernanceTests.test_routing_primaries_resolve_to_primary_runtime_role) ... ok
+test_same_group_promotion_allows_applicable_and_negated_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_allows_applicable_and_negated_exclusions) ... ok
+test_same_group_promotion_preserves_target_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_preserves_target_exclusions) ... ok
+test_skill_identity_boundaries_and_affirmative_displays (tests.test_skill_governance.SkillGovernanceTests.test_skill_identity_boundaries_and_affirmative_displays) ... ok
+test_supporting_implicit_promotion_has_exactly_one_same_group_primary (tests.test_skill_governance.SkillGovernanceTests.test_supporting_implicit_promotion_has_exactly_one_same_group_primary) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.325s
+
+OK

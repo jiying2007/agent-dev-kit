@@ -1,0 +1,218 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261116-bisect-log-portability",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-ci-log-portability",
+  "reviewer": {
+    "id": "ai/root/independent_round2_review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-16T06:04:30.645653Z",
+  "evidence_completed_at": "2026-11-16T06:04:30.644859Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "ir-ci1",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Git 2.56.1 terminal wording was not recognized by the newly added diagnostic tests. Centralize exactly the observed bad and quoted-bad terminal forms. Count all recognized terminal records before validating a single 40-hex SHA; use the same matcher for absence assertions, including missing-SHA prefixes. Require an anchored complete ambiguity heading in either observed form. Keep original target SHA, skip, abort, exit-code and candidate-set assertions. Add five deterministic format regression methods. 10/10 local methods passed with no skips. Independent replay accepted both actual remote terminal records and the real ambiguity output, and rejected exit127 with a terminal, a valid plus malformed duplicate terminal, and an actual quoted terminal in the absence path. Existing real Git histories still execute the published wrapper and compare exact targets. not-yet-completed for the updated PR head; required before merge, independently of this source finding closure."
+    }
+  ],
+  "limitations": [
+    "No local Git2.56.1 binary was executed; local test environment is Git2.52.0. The quoted variant was verified by actual CI-text replay and deterministic regressions, pending fresh hosted execution.",
+    "This review covers the five-file test-compatibility follow-up. It does not re-certify original Skill effectiveness,65-Skill model behavior,native loading,RTOS/HIL,token/cost or product/field qualification.",
+    "Source review pass does not mean platform delivery is complete. Mandatory new-head full PRCI is pending at review time; merge/release remain gated by it.",
+    "Targeted and content runs precede source commit creation; tested file identities, actual HEAD/index chronology and skipped first content attempt are retained rather than relabeled.",
+    "No target repository edits,index/ref writes,remote writes,paid model calls or device actions were performed by this reviewer. Scratch reports and isolated local probes only."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+    "head_commit": "f23d41e2a4d7e4ea5b5cb392f514827d01178ed8",
+    "original_patch_sha256": "78f40cc8970c097e427e20e8c59a06dfc3e595a9186719fac162e1e468a068e4"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-bisect-log-portability/design.md",
+      "sha256": "6603003904b80d86a8a66a81a98021fc3a8e524fce83e2ef5edf6d5080b5b185"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-bisect-log-portability/requirements.md",
+      "sha256": "555dcf02b2fc9992675147669ee91ea8d14a6c74acfd67eabb26d1cf9b8a435d"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-bisect-log-portability/tasks.md",
+      "sha256": "8c5129bf336880afc7fcdd6abc12a8dd9bd6d300aeacd60f3d9b9e3424aa8e77"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261116-skill-timing-diagnosis/ci-followup.md",
+      "sha256": "93a9fd0ab336580c348f3f424f713b0bfef472f5fc50bc36810be412216eb3be"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_bisect_methods.py",
+      "sha256": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "78f40cc8970c097e427e20e8c59a06dfc3e595a9186719fac162e1e468a068e4"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/independent/content-gate-verification.json",
+      "sha256": "abb3ffd152498aff2012e72101723c46dcb9a1a47a08d5977d6531845f8f8b91"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/independent-targeted-receipt.json",
+      "sha256": "2e9560b1c9d9fe9df2daf9682453bbeaa6de134845b85a649c56170133862241"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/initial-ci-failure-review.json",
+      "sha256": "1a8a95d393c58e7fb6ef14bd805c0ea718475d3a2d25bfdf66db7c570540958d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-identity-check.json",
+      "sha256": "5e57a7e4b8fd064314f7c3700ed601cdefc880abb74a8c0fe8178a523e51ae27"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-inspection-commands.json",
+      "sha256": "cb8253a55a027867c8c8858c27df4eb14d17813ff47d009a11ed134f74a4b1e3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-retained-files.json",
+      "sha256": "2910ad8c6a8c82f3d7b8feccdf4b79e67c100c299a53109da585d34976bce5b3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-source-review.json",
+      "sha256": "7b30f9b5184d75b64fb7e028c9e4c3e022e3c33f4ba8a6b6e7071977c06bb91f"
+    },
+    {
+      "base": "record",
+      "path": "evidence/initial-ci-regression.json",
+      "sha256": "716b2a2096deb0085d76da883a0427bd424ea413dc9c0bbd75084a4929e1f892"
+    },
+    {
+      "base": "record",
+      "path": "evidence/initial-content-started.json",
+      "sha256": "f5e64ac3323d4722ea1be20fcaaa3b51316a8a78e089a4a70ab930c2309d9297"
+    },
+    {
+      "base": "record",
+      "path": "evidence/initial-content.json",
+      "sha256": "85d8c72e6c216e228993555067fec9af5bf249bfbf708ba72c1333b094298d91"
+    },
+    {
+      "base": "record",
+      "path": "evidence/initial-content.stderr.json",
+      "sha256": "50a2d0bda04b2c4e87d7bfad846346b42b25465542a9dfc1c02dfaa01b4b6dfc"
+    },
+    {
+      "base": "record",
+      "path": "evidence/initial-content.stdout.log",
+      "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/packaging-negative-results.json",
+      "sha256": "a52bd4116d29d5e22baaaea7970cd0520179b78354e6301845fdad91307029b2"
+    },
+    {
+      "base": "record",
+      "path": "evidence/parser-evidence-runner.py",
+      "sha256": "8b6b4f34d98878112edef8c92071c454b9c424a044375b0b11bde4e0d85529cd"
+    },
+    {
+      "base": "record",
+      "path": "evidence/parser-red-green.json",
+      "sha256": "b4a6a6495e94dfff62ba0c15c3e7e22fbcc8dc68a8789660d01308ab82a007d7"
+    },
+    {
+      "base": "record",
+      "path": "evidence/retained-files.json",
+      "sha256": "bf0180a9a4d728a80a3f335d2fe4d456a9eab95b3e1d42a3c5dd58fe20a9057e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "8fe02ac70806ca37f5685a16de2d8aafa029e0ac4921346da3b06233f799ac8a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/supported-content-started.json",
+      "sha256": "d421fa5122dbf96f537a115868b1220f8108ed873b6cd86d3cbf396f9a9875a5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/supported-content.json",
+      "sha256": "1ca855501358346a90a2822fd8bf41adc0429f68bd82591349b8d79c0c446897"
+    },
+    {
+      "base": "record",
+      "path": "evidence/supported-content.stderr.log",
+      "sha256": "ff4a0adbeb070a5d272658cb8d7d8bb13a449f64fdab8ec7ad8767aa357b5b95"
+    },
+    {
+      "base": "record",
+      "path": "evidence/supported-content.stdout.log",
+      "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/verification-boundaries.json",
+      "sha256": "4d4b34f7a29db5ac848f2194e37652fcbfee6d59ccdf168616e9d64c2923304d"
+    }
+  ]
+}

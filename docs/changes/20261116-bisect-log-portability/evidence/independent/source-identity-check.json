@@ -1,0 +1,81 @@
+{
+  "checked_at": "2026-11-16T06:02:45.540103+00:00",
+  "baseline_commit": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+  "reviewed_source_commit": "f23d41e2a4d7e4ea5b5cb392f514827d01178ed8",
+  "tree": "1197f5560a7a8fc03f5454dfa16460da8c2a108c",
+  "parent_commit": "bc2f4b2ca3bbef2cb5515322048a144639e79004",
+  "original_patch_sha256": "78f40cc8970c097e427e20e8c59a06dfc3e595a9186719fac162e1e468a068e4",
+  "patch_bytes": 15919,
+  "source_files": [
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/design.md",
+      "bytes": 1490,
+      "sha256": "6603003904b80d86a8a66a81a98021fc3a8e524fce83e2ef5edf6d5080b5b185",
+      "blob": "4a7f1426c45a2067209f8769e325239864c5d85f"
+    },
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/requirements.md",
+      "bytes": 1351,
+      "sha256": "555dcf02b2fc9992675147669ee91ea8d14a6c74acfd67eabb26d1cf9b8a435d",
+      "blob": "51c5e42870a1f7b89b5189d9148c22206c86d623"
+    },
+    {
+      "path": "docs/changes/20261116-bisect-log-portability/tasks.md",
+      "bytes": 939,
+      "sha256": "8c5129bf336880afc7fcdd6abc12a8dd9bd6d300aeacd60f3d9b9e3424aa8e77",
+      "blob": "2fdc289c78cd2f0bec17751a03be8fc2b427c297"
+    },
+    {
+      "path": "docs/changes/20261116-skill-timing-diagnosis/ci-followup.md",
+      "bytes": 4143,
+      "sha256": "93a9fd0ab336580c348f3f424f713b0bfef472f5fc50bc36810be412216eb3be",
+      "blob": "192674e860457cf0bf3d78c36759a88145aed295"
+    },
+    {
+      "path": "tests/test_skill_bisect_methods.py",
+      "bytes": 13121,
+      "sha256": "f8cb68ec55b1898842fb482958f640bcf1d17bf02da974e876fe491e8b895eee",
+      "blob": "05e1fcafcbc4f82c0ad6125bf07419b10e87ecd5"
+    }
+  ],
+  "matches_supplied_identity": true,
+  "production_and_ci_identities": {
+    "skills": {
+      "baseline_object": "ba1b9dd6710de55d3b13fed986cffd8237e1160b",
+      "source_object": "ba1b9dd6710de55d3b13fed986cffd8237e1160b",
+      "unchanged": true
+    },
+    "optional-skills": {
+      "baseline_object": "fb5a5b0bcc536cd06776cec8eaffd57f26fb3036",
+      "source_object": "fb5a5b0bcc536cd06776cec8eaffd57f26fb3036",
+      "unchanged": true
+    },
+    "src": {
+      "baseline_object": "12247d2df3629d76284c958d63ebba973358b623",
+      "source_object": "12247d2df3629d76284c958d63ebba973358b623",
+      "unchanged": true
+    },
+    "scripts": {
+      "baseline_object": "a864daaca9ed6bd1b8cb2a5c2493d1eb13ed6b95",
+      "source_object": "a864daaca9ed6bd1b8cb2a5c2493d1eb13ed6b95",
+      "unchanged": true
+    },
+    ".github": {
+      "baseline_object": "6013b1cf1d1417c3f8b50747f1a5ada6474390cc",
+      "source_object": "6013b1cf1d1417c3f8b50747f1a5ada6474390cc",
+      "unchanged": true
+    },
+    "manifests": {
+      "baseline_object": "22dfeaf58f37af82891056aea126eb3e714b7701",
+      "source_object": "22dfeaf58f37af82891056aea126eb3e714b7701",
+      "unchanged": true
+    },
+    "manifest.json": {
+      "baseline_object": "c4316d8123a6487f86155d90ff6bcf202adc5fb7",
+      "source_object": "c4316d8123a6487f86155d90ff6bcf202adc5fb7",
+      "unchanged": true
+    }
+  },
+  "old_report_sha256": "1c2ab7375a637881e25b403cd4e76c2227158a053fc1196ba3ba625ea66ae28a",
+  "old_packaging_report_sha256": "af1193bb679cd013e838aa00c120f290ad4f19b44ab5f6067f7aa48e8d8ae94d"
+}

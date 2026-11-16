@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-11-16T05:35:57.943840+00:00",
+  "command": [
+    "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+    "bypass",
+    "git",
+    "diff",
+    "--binary",
+    "--full-index",
+    "--no-ext-diff",
+    "--no-textconv",
+    "913b6b3a0838ccddae252a3a8536ac7d41598810",
+    "b4c2a30384542abdd2db1b6ba524f7f3a3b002b9"
+  ],
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "exit_code": 0,
+  "stderr": "",
+  "bytes": 194148,
+  "sha256": "02f31f5fd6f932c5c52892fda46633d0510eb0ec1f66db461f78041a27f2917a",
+  "matches_reviewed_raw_diff": true
+}

@@ -1,0 +1,67 @@
+{
+  "schema": "local-command-observation/v1",
+  "cwd": "/workspace/scratch/fe5385ca063a/agent-dev-kit",
+  "command": [
+    "bash",
+    "tests/test_skill_content.sh"
+  ],
+  "started_at": "2026-11-16T06:00:12.866880+00:00",
+  "before": {
+    "head": {
+      "exit_code": 0,
+      "stdout": "bc2f4b2ca3bbef2cb5515322048a144639e79004\n",
+      "stderr": ""
+    },
+    "indexed_tree": {
+      "exit_code": 0,
+      "stdout": "17acaeff0a4d88b54290f714d80a099f646b7462\n",
+      "stderr": ""
+    },
+    "status": {
+      "exit_code": 0,
+      "stdout": " M tests/test_skill_bisect_methods.py\n?? docs/changes/20261116-bisect-log-portability/\n?? docs/changes/20261116-skill-timing-diagnosis/ci-followup.md\n",
+      "stderr": ""
+    },
+    "staged_diff": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "finished_at": "2026-11-16T06:00:20.704319+00:00",
+  "elapsed_seconds": 7.799725614000636,
+  "exit_code": 0,
+  "timed_out": false,
+  "after": {
+    "head": {
+      "exit_code": 0,
+      "stdout": "bc2f4b2ca3bbef2cb5515322048a144639e79004\n",
+      "stderr": ""
+    },
+    "indexed_tree": {
+      "exit_code": 0,
+      "stdout": "17acaeff0a4d88b54290f714d80a099f646b7462\n",
+      "stderr": ""
+    },
+    "status": {
+      "exit_code": 0,
+      "stdout": " M tests/test_skill_bisect_methods.py\n?? docs/changes/20261116-bisect-log-portability/\n?? docs/changes/20261116-skill-timing-diagnosis/ci-followup.md\n",
+      "stderr": ""
+    },
+    "staged_diff": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "logs": {
+    "stdout.log": {
+      "bytes": 60,
+      "sha256": "a1d41f1ff1943113e4f98d3e1a6622a2e4ee9a8ae5d0061625cf5849121531b0"
+    },
+    "stderr.log": {
+      "bytes": 30766,
+      "sha256": "d1aa237db48bf148be00fff7f9b0bf13a6068793970ea1a2c0b35e8c8ea6c6e5"
+    }
+  }
+}

@@ -1,0 +1,573 @@
+{
+  "schema": "adk-core-diagnostic-probes/v1",
+  "status": "pass",
+  "started_at": "2026-11-16T05:10:23.593707+00:00",
+  "completed_at": "2026-11-16T05:10:23.843013+00:00",
+  "scope": "Synthetic isolated examples; not an observed agent/model failure or an ADK runner defect",
+  "git_version": "git version 2.52.0",
+  "bisect": {
+    "states": [
+      {
+        "step": 0,
+        "runnable": true,
+        "semantic_regression": false
+      },
+      {
+        "step": 1,
+        "runnable": true,
+        "semantic_regression": false
+      },
+      {
+        "step": 2,
+        "runnable": false,
+        "semantic_regression": false
+      },
+      {
+        "step": 3,
+        "runnable": true,
+        "semantic_regression": false
+      },
+      {
+        "step": 4,
+        "runnable": true,
+        "semantic_regression": true
+      },
+      {
+        "step": 5,
+        "runnable": true,
+        "semantic_regression": true
+      }
+    ],
+    "commits": [
+      "1486b253b3308b1891d93b1ffbac09ee89ed9422",
+      "d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f",
+      "fc1b94a2ae2a569734cdd823ea4710e6f32e41cb",
+      "6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2",
+      "9d4f3de4d12794b9d156b73c5c4af7c83260096c",
+      "e97314c19433da4e2bb128d8e78f30bdbf14600b"
+    ],
+    "results": {
+      "naive": {
+        "exit": 0,
+        "located_commit": "fc1b94a2ae2a569734cdd823ea4710e6f32e41cb",
+        "located_step": 2,
+        "checked_out_head": "d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f",
+        "log": "# bad: [e97314c19433da4e2bb128d8e78f30bdbf14600b] synthetic step 5\n# good: [1486b253b3308b1891d93b1ffbac09ee89ed9422] synthetic step 0\ngit bisect start 'e97314c19433da4e2bb128d8e78f30bdbf14600b' '1486b253b3308b1891d93b1ffbac09ee89ed9422'\n# bad: [fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\ngit bisect bad fc1b94a2ae2a569734cdd823ea4710e6f32e41cb\n# good: [d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f] synthetic step 1\ngit bisect good d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f\n# first bad commit: [fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\n",
+        "stdout": "running 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'naive'\n{\"mode\": \"naive\", \"state\": {\"step\": 2, \"runnable\": false, \"semantic_regression\": false}}\nBisecting: 0 revisions left to test after this (roughly 0 steps)\n[d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f] synthetic step 1\nrunning 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'naive'\n{\"mode\": \"naive\", \"state\": {\"step\": 1, \"runnable\": true, \"semantic_regression\": false}}\nfc1b94a2ae2a569734cdd823ea4710e6f32e41cb is the first bad commit\ncommit fc1b94a2ae2a569734cdd823ea4710e6f32e41cb\nAuthor: Synthetic Diagnostic <diagnostic@example.invalid>\nDate:   Mon Nov 16 13:10:23 2026 +0800\n\n    synthetic step 2\n\n state.json | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\nbisect found first bad commit\n",
+        "stderr": ""
+      },
+      "guarded": {
+        "exit": 0,
+        "located_commit": "9d4f3de4d12794b9d156b73c5c4af7c83260096c",
+        "located_step": 4,
+        "checked_out_head": "9d4f3de4d12794b9d156b73c5c4af7c83260096c",
+        "log": "# bad: [e97314c19433da4e2bb128d8e78f30bdbf14600b] synthetic step 5\n# good: [1486b253b3308b1891d93b1ffbac09ee89ed9422] synthetic step 0\ngit bisect start 'e97314c19433da4e2bb128d8e78f30bdbf14600b' '1486b253b3308b1891d93b1ffbac09ee89ed9422'\n# skip: [fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\ngit bisect skip fc1b94a2ae2a569734cdd823ea4710e6f32e41cb\n# good: [6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2] synthetic step 3\ngit bisect good 6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2\n# bad: [9d4f3de4d12794b9d156b73c5c4af7c83260096c] synthetic step 4\ngit bisect bad 9d4f3de4d12794b9d156b73c5c4af7c83260096c\n# first bad commit: [9d4f3de4d12794b9d156b73c5c4af7c83260096c] synthetic step 4\n",
+        "stdout": "running 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'guarded'\n{\"mode\": \"guarded\", \"state\": {\"step\": 2, \"runnable\": false, \"semantic_regression\": false}}\nBisecting: 1 revision left to test after this (roughly 1 step)\n[6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2] synthetic step 3\nrunning 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'guarded'\n{\"mode\": \"guarded\", \"state\": {\"step\": 3, \"runnable\": true, \"semantic_regression\": false}}\nBisecting: 0 revisions left to test after this (roughly 0 steps)\n[9d4f3de4d12794b9d156b73c5c4af7c83260096c] synthetic step 4\nrunning 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'guarded'\n{\"mode\": \"guarded\", \"state\": {\"step\": 4, \"runnable\": true, \"semantic_regression\": true}}\n9d4f3de4d12794b9d156b73c5c4af7c83260096c is the first bad commit\ncommit 9d4f3de4d12794b9d156b73c5c4af7c83260096c\nAuthor: Synthetic Diagnostic <diagnostic@example.invalid>\nDate:   Mon Nov 16 13:10:23 2026 +0800\n\n    synthetic step 4\n\n state.json | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\nbisect found first bad commit\n",
+        "stderr": ""
+      }
+    }
+  },
+  "preservation": {
+    "synthetic_runner": true,
+    "raw_failure_after_rerun_exists": false,
+    "copied_before_rerun": true,
+    "original_sha256": "c998d87b76d649d176bba4070cb254815224e94c605127212affe61fc7e04535",
+    "preserved_sha256": "c998d87b76d649d176bba4070cb254815224e94c605127212affe61fc7e04535"
+  },
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "init",
+        "-b",
+        "main"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "Initialized empty Git repository in /tmp/adk-core-probes-shrjm_nm/repo/.git/\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "config",
+        "user.name",
+        "Synthetic Diagnostic"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "config",
+        "user.email",
+        "diagnostic@example.invalid"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "add",
+        "state.json"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "-m",
+        "synthetic step 0"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "[main (root-commit) 1486b25] synthetic step 0\n 1 file changed, 1 insertion(+)\n create mode 100644 state.json\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "1486b253b3308b1891d93b1ffbac09ee89ed9422\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "add",
+        "state.json"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "-m",
+        "synthetic step 1"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "[main d6b5b58] synthetic step 1\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "add",
+        "state.json"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "-m",
+        "synthetic step 2"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "[main fc1b94a] synthetic step 2\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "fc1b94a2ae2a569734cdd823ea4710e6f32e41cb\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "add",
+        "state.json"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "-m",
+        "synthetic step 3"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "[main 6c1e0a6] synthetic step 3\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "add",
+        "state.json"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "-m",
+        "synthetic step 4"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "[main 9d4f3de] synthetic step 4\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "9d4f3de4d12794b9d156b73c5c4af7c83260096c\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "add",
+        "state.json"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "commit",
+        "-m",
+        "synthetic step 5"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "[main e97314c] synthetic step 5\n 1 file changed, 1 insertion(+), 1 deletion(-)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "e97314c19433da4e2bb128d8e78f30bdbf14600b\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "start",
+        "e97314c19433da4e2bb128d8e78f30bdbf14600b",
+        "1486b253b3308b1891d93b1ffbac09ee89ed9422"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "Bisecting: 2 revisions left to test after this (roughly 1 step)\n[fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "run",
+        "python3",
+        "/tmp/adk-core-probes-shrjm_nm/oracle.py",
+        "naive"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "running 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'naive'\n{\"mode\": \"naive\", \"state\": {\"step\": 2, \"runnable\": false, \"semantic_regression\": false}}\nBisecting: 0 revisions left to test after this (roughly 0 steps)\n[d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f] synthetic step 1\nrunning 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'naive'\n{\"mode\": \"naive\", \"state\": {\"step\": 1, \"runnable\": true, \"semantic_regression\": false}}\nfc1b94a2ae2a569734cdd823ea4710e6f32e41cb is the first bad commit\ncommit fc1b94a2ae2a569734cdd823ea4710e6f32e41cb\nAuthor: Synthetic Diagnostic <diagnostic@example.invalid>\nDate:   Mon Nov 16 13:10:23 2026 +0800\n\n    synthetic step 2\n\n state.json | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\nbisect found first bad commit\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "log"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "# bad: [e97314c19433da4e2bb128d8e78f30bdbf14600b] synthetic step 5\n# good: [1486b253b3308b1891d93b1ffbac09ee89ed9422] synthetic step 0\ngit bisect start 'e97314c19433da4e2bb128d8e78f30bdbf14600b' '1486b253b3308b1891d93b1ffbac09ee89ed9422'\n# bad: [fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\ngit bisect bad fc1b94a2ae2a569734cdd823ea4710e6f32e41cb\n# good: [d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f] synthetic step 1\ngit bisect good d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f\n# first bad commit: [fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "d6b5b58518398e5f49b7e1cbcb3e416b068c0b9f\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "reset"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Previous HEAD position was d6b5b58 synthetic step 1\nSwitched to branch 'main'\n"
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "start",
+        "e97314c19433da4e2bb128d8e78f30bdbf14600b",
+        "1486b253b3308b1891d93b1ffbac09ee89ed9422"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "Bisecting: 2 revisions left to test after this (roughly 1 step)\n[fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "run",
+        "python3",
+        "/tmp/adk-core-probes-shrjm_nm/oracle.py",
+        "guarded"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "running 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'guarded'\n{\"mode\": \"guarded\", \"state\": {\"step\": 2, \"runnable\": false, \"semantic_regression\": false}}\nBisecting: 1 revision left to test after this (roughly 1 step)\n[6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2] synthetic step 3\nrunning 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'guarded'\n{\"mode\": \"guarded\", \"state\": {\"step\": 3, \"runnable\": true, \"semantic_regression\": false}}\nBisecting: 0 revisions left to test after this (roughly 0 steps)\n[9d4f3de4d12794b9d156b73c5c4af7c83260096c] synthetic step 4\nrunning 'python3' '/tmp/adk-core-probes-shrjm_nm/oracle.py' 'guarded'\n{\"mode\": \"guarded\", \"state\": {\"step\": 4, \"runnable\": true, \"semantic_regression\": true}}\n9d4f3de4d12794b9d156b73c5c4af7c83260096c is the first bad commit\ncommit 9d4f3de4d12794b9d156b73c5c4af7c83260096c\nAuthor: Synthetic Diagnostic <diagnostic@example.invalid>\nDate:   Mon Nov 16 13:10:23 2026 +0800\n\n    synthetic step 4\n\n state.json | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\nbisect found first bad commit\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "log"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "# bad: [e97314c19433da4e2bb128d8e78f30bdbf14600b] synthetic step 5\n# good: [1486b253b3308b1891d93b1ffbac09ee89ed9422] synthetic step 0\ngit bisect start 'e97314c19433da4e2bb128d8e78f30bdbf14600b' '1486b253b3308b1891d93b1ffbac09ee89ed9422'\n# skip: [fc1b94a2ae2a569734cdd823ea4710e6f32e41cb] synthetic step 2\ngit bisect skip fc1b94a2ae2a569734cdd823ea4710e6f32e41cb\n# good: [6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2] synthetic step 3\ngit bisect good 6c1e0a65d01cde563c14e4526cb5b8b2329fc7f2\n# bad: [9d4f3de4d12794b9d156b73c5c4af7c83260096c] synthetic step 4\ngit bisect bad 9d4f3de4d12794b9d156b73c5c4af7c83260096c\n# first bad commit: [9d4f3de4d12794b9d156b73c5c4af7c83260096c] synthetic step 4\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "9d4f3de4d12794b9d156b73c5c4af7c83260096c\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.fsmonitor=false",
+        "-c",
+        "core.hooksPath=/dev/null",
+        "bisect",
+        "reset"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "Previous HEAD position was 9d4f3de synthetic step 4\nSwitched to branch 'main'\n"
+    },
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "cwd": "/tmp/adk-core-probes-shrjm_nm/repo",
+      "exit": 0,
+      "stdout": "git version 2.52.0\n",
+      "stderr": ""
+    }
+  ]
+}

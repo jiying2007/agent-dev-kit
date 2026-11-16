@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-11-16T05:28:16.372859+00:00",
+  "baseline": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "row_count": 153,
+  "path_count": 153,
+  "expected_path_count": 153,
+  "exact_path_set": true,
+  "bytes": 421746,
+  "errors": [],
+  "skill_files": 65,
+  "external_file_count": 23,
+  "external_repos": 16
+}

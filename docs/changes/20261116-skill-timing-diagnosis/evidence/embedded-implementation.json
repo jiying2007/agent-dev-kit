@@ -1,0 +1,187 @@
+{
+  "schema": "adk-round2-rtos-implementation/v1",
+  "observed_at": "2026-11-16 05:16:13 UTC",
+  "baseline": "913b6b3a0838ccddae252a3a8536ac7d41598810",
+  "skill_version": "2.0.3",
+  "role": "implementation following frozen docs/changes/20261116-skill-timing-diagnosis contracts; not independent reviewer",
+  "changed_files": {
+    "skills/adk-rtos-task-design/SKILL.md": {
+      "bytes": 5718,
+      "sha256": "766bdf3679c4929bd950f3efd92a994579ad46084b55cae41e0716cfdf118482"
+    },
+    "tests/test_skill_rtos_methods.py": {
+      "bytes": 4584,
+      "sha256": "79f5d6fa731e7f905b33f906e4f26e16de8cb73d876ab6ea07cea1fa9c1a5122"
+    }
+  },
+  "skill_directory_delta_bytes": -97,
+  "changes": [
+    "周期API tick量化/范围、相对和绝对语义、到点未阻塞不等于miss",
+    "有界catch-up/skip/degrade及回绕/停顿适用范围",
+    "FreeRTOS共享daemon callback不阻塞及stop/delete入队成功不等于quiescence",
+    "保留原RTA公式/前提、IRQ/blocking/stack/queue与板端验证边界",
+    "新增可编译host C转换例、19独立字面向量、null-output保护及2个错误变体拒绝"
+  ],
+  "external_probe": {
+    "schema": "adk-rtos-audit-probe/v1",
+    "status": "pass",
+    "started": "2026-11-16T05:10:40.062943+00:00",
+    "completed": "2026-11-16T05:10:40.186881+00:00",
+    "boundary": "Actual GCC header checking and macro execution; no RTOS task scheduling or hardware execution",
+    "assertions": {
+      "cmsis_bad_rejected": true,
+      "cmsis_valid_compiles": true,
+      "macro_vectors": 30
+    },
+    "file_sha256": {
+      "cmsis_os2.h": "0de5e6ff219ee13bcd1b1ca2b6446d68cb56b6a11e16494e9577bb2ffdd52a70",
+      "dma-api-howto.rst": "92070ca3b5e150580c26d39be990b109053951a767fb3fd1d695aece478bbff2",
+      "freertos-book-ch06.md": "319e7a420fc9e788e3740ac4c2c2addd351fa9cb08560cb6c693dfe6e46f8403",
+      "jeffallan-embedded.md": "26695ca78cdbbfd3657dc143b28308a293e798399df430cee6116e758cc3f4a8",
+      "mindrally-embedded-stm32.md": "dcc30759b8225eb0b0b091c057e305f6dd7c32bc76fdcaea4b63be48a6e8dac7",
+      "probe.py": "4524df28cdfa5e295c913fddc92d2e2d5b15426b55e5caccf3985f1eefa93ca5",
+      "probe_cmsis_bad.c": "546ef0c3166cf8ebd7428465969fa4f8530090ca8931bc7f8db22d14608f6726",
+      "probe_cmsis_good.c": "78ca1860488beb22d0422af88cedefbaff433ef6991b009c40a9b27d1339d2be",
+      "probe_ticks.c": "311863712cda57b65bd5349338bab9606b74776c9fcdd12c6a6afcc5989afd71",
+      "projdefs.h": "87e8328c5d844abde3593291b36a2c235b2ae6e41402c0314fb54f933d32c4b9",
+      "rovinax-embedded-rtos.md": "894e75a646c44e54447933cd67c494e9a6712529b82837da962893f19afdb0d6",
+      "task.h": "463d29016b1c11dd7c5f9e67b41bf8c1897d9c2dcc510cdc37e3158f32584222",
+      "timers.h": "aff317a330935160abbd00a3a60a973653921e3a022216dcb04d804678c375b8"
+    },
+    "executions": [
+      {
+        "argv": [
+          "gcc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsyntax-only",
+          "probe_cmsis_bad.c"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "probe_cmsis_bad.c: In function ‘probe’:\nprobe_cmsis_bad.c:2:42: error: too many arguments to function ‘osDelayUntil’\n    2 | osStatus_t probe(uint32_t tick) { return osDelayUntil(tick, 1); }\n      |                                          ^~~~~~~~~~~~\nIn file included from probe_cmsis_bad.c:1:\ncmsis_os2.h:591:12: note: declared here\n  591 | osStatus_t osDelayUntil (uint32_t ticks);\n      |            ^~~~~~~~~~~~\n"
+      },
+      {
+        "argv": [
+          "gcc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-fsyntax-only",
+          "probe_cmsis_good.c"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "gcc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DPROBE_WIDTH=32",
+          "-DconfigTICK_RATE_HZ=100",
+          "probe_ticks.c",
+          "-o",
+          "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-100"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-100"
+        ],
+        "returncode": 0,
+        "stdout": "0:0\n1:0\n9:0\n10:1\n11:1\n1000:100\n65535:6553\n65536:6553\n4294967295:429496729\n4294967296:429496729\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "gcc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DPROBE_WIDTH=16",
+          "-DconfigTICK_RATE_HZ=1000",
+          "probe_ticks.c",
+          "-o",
+          "/tmp/adk-rtos-audit-nw19kx2p/ticks-16-1000"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/tmp/adk-rtos-audit-nw19kx2p/ticks-16-1000"
+        ],
+        "returncode": 0,
+        "stdout": "0:0\n1:1\n9:9\n10:10\n11:11\n1000:1000\n65535:65535\n65536:0\n4294967295:65535\n4294967296:0\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "gcc",
+          "-std=c11",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-DPROBE_WIDTH=32",
+          "-DconfigTICK_RATE_HZ=1000",
+          "probe_ticks.c",
+          "-o",
+          "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-1000"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/tmp/adk-rtos-audit-nw19kx2p/ticks-32-1000"
+        ],
+        "returncode": 0,
+        "stdout": "0:0\n1:1\n9:9\n10:10\n11:11\n1000:1000\n65535:65535\n65536:65536\n4294967295:4294967295\n4294967296:0\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "execution_attempts": [
+    {
+      "command": "rtk python3 -m unittest tests.test_skill_rtos_methods tests.test_skill_governance -v",
+      "result": {
+        "chunk_id": "2026a8",
+        "wall_time_seconds": 0.144323875,
+        "exit_code": 1,
+        "original_token_count": 378,
+        "output": "test_oracle_rejects_accepting_a_quantized_zero_period (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_accepting_a_quantized_zero_period) ... ok\ntest_oracle_rejects_narrowing_before_range_validation (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_narrowing_before_range_validation) ... ok\ntest_published_example_rejects_zero_overflow_and_preserves_output (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_published_example_rejects_zero_overflow_and_preserves_output) ... ok\ntest_skill_governance (unittest.loader._FailedTest.test_skill_governance) ... ERROR\n\n======================================================================\nERROR: test_skill_governance (unittest.loader._FailedTest.test_skill_governance)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_skill_governance\nTraceback (most recent call last):\n  File \"/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/fe5385ca063a/agent-dev-kit/tests/test_skill_governance.py\", line 7, in <module>\n    from agent_dev_kit.matcher import _derive_effort, match_text, resolve_skill_content\nModuleNotFoundError: No module named 'agent_dev_kit'\n\n\n----------------------------------------------------------------------\nRan 4 tests in 0.119s\n\nFAILED (errors=1)\n"
+      },
+      "interpretation": "3新增测试通过；governance模块因遗漏PYTHONPATH=src导入失败，此为执行配置错误，不归为产品失败或TDD红灯。"
+    },
+    {
+      "command": "rtk bash -lc 'PYTHONPATH=src python3 -m unittest tests.test_skill_rtos_methods tests.test_skill_governance -v; git diff --check; git diff --stat -- skills/adk-rtos-task-design tests/test_skill_rtos_methods.py'",
+      "result": {
+        "chunk_id": "dcecf1",
+        "wall_time_seconds": 0.548392721,
+        "exit_code": 0,
+        "original_token_count": 1173,
+        "output": "test_oracle_rejects_accepting_a_quantized_zero_period (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_accepting_a_quantized_zero_period) ... ok\ntest_oracle_rejects_narrowing_before_range_validation (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_narrowing_before_range_validation) ... ok\ntest_published_example_rejects_zero_overflow_and_preserves_output (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_published_example_rejects_zero_overflow_and_preserves_output) ... ok\ntest_bsp_porting_exposes_flash_and_storage_escalation (tests.test_skill_governance.SkillGovernanceTests.test_bsp_porting_exposes_flash_and_storage_escalation) ... ok\ntest_displayed_skill_identity_refusal_preserves_all_selection_paths (tests.test_skill_governance.SkillGovernanceTests.test_displayed_skill_identity_refusal_preserves_all_selection_paths) ... ok\ntest_driver_bringup_exposes_live_device_escalation_without_granting_it (tests.test_skill_governance.SkillGovernanceTests.test_driver_bringup_exposes_live_device_escalation_without_granting_it) ... ok\ntest_driver_implementation_declares_runtime_model_and_live_device_handoff (tests.test_skill_governance.SkillGovernanceTests.test_driver_implementation_declares_runtime_model_and_live_device_handoff) ... ok\ntest_e1_requires_explicit_low_risk_and_workspace_boundary (tests.test_skill_governance.SkillGovernanceTests.test_e1_requires_explicit_low_risk_and_workspace_boundary) ... ok\ntest_effort_is_a_conservative_route_projection_not_a_permission (tests.test_skill_governance.SkillGovernanceTests.test_effort_is_a_conservative_route_projection_not_a_permission) ... ok\ntest_embedded_skills_do_not_embed_unauthorized_live_mutation_commands (tests.test_skill_governance.SkillGovernanceTests.test_embedded_skills_do_not_embed_unauthorized_live_mutation_commands) ... ok\ntest_explicit_skill_identity_refusal_applies_without_promotion (tests.test_skill_governance.SkillGovernanceTests.test_explicit_skill_identity_refusal_applies_without_promotion) ... ok\ntest_field_readiness_stays_read_only (tests.test_skill_governance.SkillGovernanceTests.test_field_readiness_stays_read_only) ... ok\ntest_high_risk_falsification_and_legal_e1_change_contract (tests.test_skill_governance.SkillGovernanceTests.test_high_risk_falsification_and_legal_e1_change_contract) ... ok\ntest_manifest_has_no_legacy_dependency_metadata (tests.test_skill_governance.SkillGovernanceTests.test_manifest_has_no_legacy_dependency_metadata) ... ok\ntest_output_locale_is_not_skill_identity (tests.test_skill_governance.SkillGovernanceTests.test_output_locale_is_not_skill_identity) ... ok\ntest_plain_requirements_route_to_triage_without_interactive_discovery (tests.test_skill_governance.SkillGovernanceTests.test_plain_requirements_route_to_triage_without_interactive_discovery) ... ok\ntest_profiling_requires_valid_comparable_alternating_ab (tests.test_skill_governance.SkillGovernanceTests.test_profiling_requires_valid_comparable_alternating_ab) ... ok\ntest_realtime_skills_use_target_budgets_not_fixed_thresholds (tests.test_skill_governance.SkillGovernanceTests.test_realtime_skills_use_target_budgets_not_fixed_thresholds) ... ok\ntest_release_orchestration_requires_separate_publish_and_device_authority (tests.test_skill_governance.SkillGovernanceTests.test_release_orchestration_requires_separate_publish_and_device_authority) ... ok\ntest_review_routing_uses_review_loop_not_language_overlay (tests.test_skill_governance.SkillGovernanceTests.test_review_routing_uses_review_loop_not_language_overlay) ... ok\ntest_routing_primaries_resolve_to_primary_runtime_role (tests.test_skill_governance.SkillGovernanceTests.test_routing_primaries_resolve_to_primary_runtime_role) ... ok\ntest_same_group_promotion_allows_applicable_and_negated_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_allows_applicable_and_negated_exclusions) ... ok\ntest_same_group_promotion_preserves_target_exclusions (tests.test_skill_governance.SkillGovernanceTests.test_same_group_promotion_preserves_target_exclusions) ... ok\ntest_skill_identity_boundaries_and_affirmative_displays (tests.test_skill_governance.SkillGovernanceTests.test_skill_identity_boundaries_and_affirmative_displays) ... ok\ntest_supporting_implicit_promotion_has_exactly_one_same_group_primary (tests.test_skill_governance.SkillGovernanceTests.test_supporting_implicit_promotion_has_exactly_one_same_group_primary) ... ok\n\n----------------------------------------------------------------------\nRan 25 tests in 0.411s\n\nOK\n skills/adk-rtos-task-design/SKILL.md | 102 ++++++++++++++---------------------\n 1 file changed, 41 insertions(+), 61 deletions(-)\n"
+      },
+      "interpretation": "25 tests通过；包含3新增RTOS方法测试，源码diff whitespace检查通过。"
+    }
+  ],
+  "limits": [
+    "Actual host C99 compilation/execution and upstream header/macro probes only; no FreeRTOS scheduler or hardware runtime was executed.",
+    "No source shared manifest/global version/test runner edits; parent integrates these.",
+    "Source safety/published method proof is distinct from real-time or product qualification.",
+    "Full regression/profile ratchets and independent review remain parent integration steps, not claimed here."
+  ]
+}
