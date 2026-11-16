@@ -18,6 +18,9 @@ from agent_dev_kit.targets import load_target_contract, render_asset
 
 ROOT = Path(__file__).resolve().parents[1]
 RECEIPTS: list[dict[str, object]] = []
+FIRST_BAD_COMMIT = re.compile(r"^# first (?:bad|'bad') commit:(.*)$", re.MULTILINE)
+AMBIGUOUS_FIRST_BAD = re.compile(
+    r"^The first (?:bad|'bad') commit could be any of:$", re.MULTILINE)
 
 
 class DiagnosticBisectTests(unittest.TestCase):
@@ -114,9 +117,86 @@ class DiagnosticBisectTests(unittest.TestCase):
 
     def unique_first_bad(self, result: subprocess.CompletedProcess[str], log: str) -> str:
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-        candidates = re.findall(r"^# first bad commit: \[([0-9a-f]{40})\]", log, re.MULTILINE)
+        candidates = FIRST_BAD_COMMIT.findall(log)
         self.assertEqual(1, len(candidates), log)
-        return candidates[0]
+        commit = re.match(r" \[([0-9a-f]{40})\]", candidates[0])
+        if commit is None:
+            self.fail(log)
+        return commit.group(1)
+
+    def assert_no_first_bad(self, log: str) -> None:
+        self.assertNotRegex(log, FIRST_BAD_COMMIT)
+
+    def assert_ambiguous_first_bad(self, output: str) -> None:
+        self.assertRegex(output, AMBIGUOUS_FIRST_BAD)
+
+    def test_unique_first_bad_accepts_observed_git_log_formats(self) -> None:
+        # These spellings were observed with Git 2.52.0 locally and 2.56.1 in CI.
+        commit = "5f3ac9869c103734217df1fbb66f78b4bd7dbac0"
+        result = subprocess.CompletedProcess(["git", "bisect", "run"], 0, "", "")
+        for term in ("bad", "'bad'"):
+            with self.subTest(term=term):
+                log = (f"# bad: [{commit}] controlled state 4\n"
+                       f"git bisect bad {commit}\n"
+                       f"# first {term} commit: [{commit}] controlled state 4\n")
+                self.assertEqual(commit, self.unique_first_bad(result, log))
+
+    def test_unique_first_bad_rejects_missing_duplicate_or_failed_evidence(self) -> None:
+        commit = "5f3ac9869c103734217df1fbb66f78b4bd7dbac0"
+        other = "5f3c14db7890439ff92dc559f73edd227a4b44cd"
+        plain = f"# first bad commit: [{commit}] controlled state 4\n"
+        quoted = f"# first 'bad' commit: [{commit}] controlled state 4\n"
+        result = subprocess.CompletedProcess(["git", "bisect", "run"], 0, "", "")
+        for log in (
+            "", f"# bad: [{commit}] controlled state 4\n",
+            f"# possible first bad commit: [{commit}] controlled state 4\n",
+            plain + plain, quoted + quoted, plain + quoted,
+            plain + quoted.replace(commit, other),
+            plain.replace(commit, commit[:-1]),
+            quoted.replace("'bad'", "'bad"),
+        ):
+            with self.subTest(log=log):
+                with self.assertRaises(AssertionError):
+                    self.unique_first_bad(result, log)
+        for process_exit in (1, 125, 128, 255):
+            for log in (plain, quoted):
+                with self.subTest(process_exit=process_exit, log=log):
+                    failed = subprocess.CompletedProcess(
+                        ["git", "bisect", "run"], process_exit, "", "")
+                    with self.assertRaises(AssertionError):
+                        self.unique_first_bad(failed, log)
+
+    def test_no_first_bad_rejects_both_observed_verdict_formats(self) -> None:
+        commit = "5f3ac9869c103734217df1fbb66f78b4bd7dbac0"
+        self.assert_no_first_bad(f"# bad: [{commit}] controlled state 4\n")
+        self.assert_no_first_bad(f"# possible first bad commit: [{commit}] controlled state 4\n")
+        for term in ("bad", "'bad'"):
+            for suffix in (f" [{commit}] controlled state 4", ""):
+                with self.subTest(term=term, suffix=suffix):
+                    with self.assertRaises(AssertionError):
+                        self.assert_no_first_bad(f"# first {term} commit:{suffix}\n")
+
+    def test_ambiguity_evidence_accepts_observed_git_output_formats(self) -> None:
+        for term in ("bad", "'bad'"):
+            with self.subTest(term=term):
+                output = ("There are only 'skip'ped commits left to test.\n"
+                          f"The first {term} commit could be any of:\n"
+                          "5f3c14db7890439ff92dc559f73edd227a4b44cd\n"
+                          "4810cfb9384edf7b46738dc708fc3800b13ac2cd\n"
+                          "We cannot bisect more!\n")
+                self.assert_ambiguous_first_bad(output)
+
+    def test_ambiguity_evidence_rejects_missing_or_partial_headings(self) -> None:
+        for output in (
+            "", "bisect found first bad commit\n",
+            "The first bad commit could be any of\n",
+            "prefix The first bad commit could be any of:\n",
+            "The first 'bad commit could be any of:\n",
+            "The first 'broken' commit could be any of:\n",
+        ):
+            with self.subTest(output=output):
+                with self.assertRaises(AssertionError):
+                    self.assert_ambiguous_first_bad(output)
 
     def test_published_oracle_preserves_outcomes_and_aborts_unknown_results(self) -> None:
         prefix = [self.bash_binary, "--noprofile", "--norc", str(self.wrapper)]
@@ -158,7 +238,7 @@ class DiagnosticBisectTests(unittest.TestCase):
         result, log = self.bisect(commits)
         self.assertNotEqual(0, result.returncode)
         self.assertIn("exit code 128", result.stdout + result.stderr)
-        self.assertNotIn("# first bad commit:", log)
+        self.assert_no_first_bad(log)
         self.assertNotIn("git bisect bad " + commits[2], log)
         self.assertNotIn("git bisect skip " + commits[2], log)
 
@@ -169,10 +249,10 @@ class DiagnosticBisectTests(unittest.TestCase):
                                 bad, bad, bad])
         result, log = self.bisect(commits)
         self.assertNotEqual(0, result.returncode)
-        self.assertIn("first bad commit could be any of", result.stdout)
+        self.assert_ambiguous_first_bad(result.stdout)
         self.assertIn(commits[2], result.stdout)
         self.assertIn(commits[3], result.stdout)
-        self.assertNotIn("# first bad commit:", log)
+        self.assert_no_first_bad(log)
 
 
 if __name__ == "__main__":
