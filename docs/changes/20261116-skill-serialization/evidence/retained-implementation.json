@@ -1,0 +1,58 @@
+{
+  "artifacts": [
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/portfolio-audit.json",
+      "retained_path": "portfolio-audit.json",
+      "bytes": 88073,
+      "sha256": "cbf7851b8938ab8fdd360e844063d2aad13035bb272cbd20b118f0a0b291fcda"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/baseline-probe.json",
+      "retained_path": "implementation/baseline-probe.json",
+      "bytes": 745,
+      "sha256": "4c694a2c1cf07d0a76d16e8abb31ef86804b1146293269fd5e2bd7d37dbc7409"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/baseline_probe.py",
+      "retained_path": "implementation/baseline_probe.py",
+      "bytes": 1310,
+      "sha256": "4b20d4c24b3e73530882e464454be8397544537adc146a28cda314f26906da1d"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/green-original-token-budget.json",
+      "retained_path": "implementation/green-original-token-budget.json",
+      "bytes": 956,
+      "sha256": "b1584eced4a835823c1482ef2b42c2958fa711da45d34eb50e57e095c8c6cf5f"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/green-published-method.json",
+      "retained_path": "implementation/green-published-method.json",
+      "bytes": 1161,
+      "sha256": "2c154f2f84a604fafebadcf49b1b9b90df4c5fa2f15bb35508e38bc80f21c488"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/implementation-diff-check.json",
+      "retained_path": "implementation/implementation-diff-check.json",
+      "bytes": 376,
+      "sha256": "4616526cce1f01f7fcd1df596fea322f2a2a0542aba7e73638e135b70f5410c7"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/record_command.py",
+      "retained_path": "implementation/record_command.py",
+      "bytes": 973,
+      "sha256": "2237a037d4dccbab0eed3fe182c55541de5dea14e37926478e6a689aa6606b84"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/red-published-method.json",
+      "retained_path": "implementation/red-published-method.json",
+      "bytes": 4960,
+      "sha256": "513693af2dab32e1dd3e13818c26e7b8e8fe756cc04578c02f9fb875b2425698"
+    },
+    {
+      "original_path": "/workspace/scratch/2d4d08f07657/serialization-implementation/unchanged-context-budget.json",
+      "retained_path": "implementation/unchanged-context-budget.json",
+      "bytes": 1138,
+      "sha256": "da5531485cb44296b1f9e42bc42bfdf7e17a142dc29869c86e7d9122d02ae493"
+    }
+  ]
+}

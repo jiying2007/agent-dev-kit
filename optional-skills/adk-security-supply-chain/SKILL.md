@@ -1,7 +1,7 @@
 ---
 name: adk-security-supply-chain
 description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
-version: 1.1.5
+version: 1.1.6
 last_updated: 2026-11-16
 triggers:
   - "供应链审查"
@@ -43,7 +43,7 @@ constraints:
 4. SBOM 生成：生成软件物料清单，记录所有直接与间接依赖。
 5. CVE 扫描：检查已知漏洞，评估影响范围与修复状态。
 6. 脚本审查：列出可执行脚本、危险命令、网络访问和写入路径。
-7. 敏感信息审查：检查密钥、token、个人路径和内部域名。
+7. 敏感信息审查：检查密钥、token、个人路径和内部域名；涉及凭证对象或整对象输出时，按 `references/skill-scan-coverage.md` 的 Generated serialization 检查。
 8. 签名验证：验证资产完整性与发布者身份。
 9. 运行态信任边界审查：确认 base URL、relay、MCP server、hooks、sandbox 和 approval policy。
 10. 工具调用策略审查：为读文件、写文件、命令执行、网络访问、凭证读取列出 allow/deny 条件。
