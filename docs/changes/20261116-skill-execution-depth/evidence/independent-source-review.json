@@ -1,0 +1,394 @@
+{
+  "report_format": "independent-spec-quality-source-review",
+  "format_version": 1,
+  "reviewed_at": "2026-11-16T04:14:45Z",
+  "reviewer": {
+    "id": "/root/independent_review",
+    "role": "Independent read-only Spec/Quality reviewer",
+    "implementation_participation": false,
+    "repository_files_modified_by_reviewer": false,
+    "report_only_write": "/workspace/scratch/fe5385ca063a/independent-review-final.json",
+    "delegated_domain_reviewer": "/root/independent_review/domain_review",
+    "delegated_domain_implementation_participation": false,
+    "independence_boundary": "Reviewers did not implement this change. Findings were sent to the implementer; only the implementer changed repository files. The consumer exercise was visible during review and is not blind."
+  },
+  "source": {
+    "baseline_commit": "5f442723e95fa7ca846b7c3ddc9f9995c7a27065",
+    "reviewed_source_commit": "49a20cc96078d6e1206d1d1dcd46761b9dc48d31",
+    "reviewed_source_tree": "df6a691dfcd869ea4fbbfc7674b24538860d9ae4",
+    "source_snapshot_verified_at": "2026-11-16T04:14:19.322241+00:00",
+    "changed_files": 41,
+    "modified_skills": 8,
+    "tracked_status_at_review": "",
+    "review_target": "whole-branch source diff 5f442723..49a20cc, plus identified verification evidence",
+    "verified_changed_file_inventory": {
+      "receipt_path": "/workspace/scratch/fe5385ca063a/frozen-regression/receipt.json",
+      "receipt_sha256": "2fa71974a2217c18857c4337891b4be889a4704fc6227d3190260d633e03dd92",
+      "fields": [
+        "source_sha256_before",
+        "source_sha256_after"
+      ],
+      "started_path": "/workspace/scratch/fe5385ca063a/frozen-regression/started.json",
+      "started_sha256": "8f7d453cffe52fca906d39a6d33f94cd5266591b39db701dd825034f3adac81d",
+      "count": 41,
+      "all_entries_independently_verified": true,
+      "verification": "Every path exactly matches baseline..candidate diff; all 41 current bytes equal their canonical Git blobs and both receipt hash maps."
+    },
+    "supporting_repository_files_read": [
+      "AGENTS.md",
+      "docs/agent-operating-rules.md",
+      "src/agent_dev_kit/release.py",
+      "src/agent_dev_kit/distribution/release_artifacts.py",
+      "manifests/skill_reproducibility_contracts.json",
+      "docs/changes/remove-external-runtime-compat/negative-results.md",
+      "tests/test_runtime_bundle.py",
+      "tests/test_skill_quality_methods.py"
+    ],
+    "post_regression_evidence_overlay": [
+      {
+        "path": "docs/changes/20261116-skill-execution-depth/evidence/full-regression-timing.json",
+        "sha256": "1f9e5168ecae217a9c634bbb110b1ecefffb59f65834372e5ea705ea96078ece",
+        "bytes": 8222,
+        "byte_identical_to_original": true,
+        "ignored_by_default": false
+      },
+      {
+        "path": "docs/changes/20261116-skill-execution-depth/evidence/full-regression.json",
+        "sha256": "2fa71974a2217c18857c4337891b4be889a4704fc6227d3190260d633e03dd92",
+        "bytes": 23334,
+        "byte_identical_to_original": true,
+        "ignored_by_default": false
+      },
+      {
+        "path": "docs/changes/20261116-skill-execution-depth/evidence/original.patch",
+        "sha256": "7e2b67d92cfe9f1a2b175710e2a526a306b06ec5282bc69cdafcd01494423175",
+        "bytes": 485382,
+        "byte_identical_to_original": true,
+        "ignored_by_default": false
+      },
+      {
+        "path": "docs/changes/20261116-skill-execution-depth/evidence/full-regression.stdout.log",
+        "sha256": "6388eb8490c81cc0073ff5ab991c1b1778e9fdf7281d7e939ca3c32e479caeba",
+        "bytes": 34272,
+        "byte_identical_to_original": true,
+        "ignored_by_default": true
+      },
+      {
+        "path": "docs/changes/20261116-skill-execution-depth/evidence/full-regression.stderr.log",
+        "sha256": "78091e542625f85b29d4cd9cfb81ac9261b0babfbddb639b8615d136811a768f",
+        "bytes": 52373,
+        "byte_identical_to_original": true,
+        "ignored_by_default": true
+      }
+    ],
+    "overlay_boundary": "These five evidence copies were appended after 49a20cc and checked byte-identical to their originals. They do not modify the 41 reviewed source files. Later verification/review documents are additional delivery evidence.",
+    "review_coverage_boundary": "All 41 changed files received diff/context or structured-evidence review. Ledger integrity for the unchanged 57 Skills was verified; this reviewer does not claim to have independently reread all their full bodies."
+  },
+  "verdicts": {
+    "spec": {
+      "result": "pass",
+      "scope": "Frozen source-method change and its documented evidence boundaries",
+      "rationale": "The candidate satisfies the source-scoped requirements: complete 65-Skill audit coverage, bounded primary-source intake, independently observable method fixes, unchanged original thresholds/gates, a complete exact-source regression, and preservation of the unresolved historical CTest cause. The two review findings were fixed before the canonical source freeze."
+    },
+    "quality": {
+      "result": "pass",
+      "scope": "The 41-file frozen source diff and reviewed local verification",
+      "rationale": "No open blocker or major issue was found after the version identity and independent per-layer state-machine requirements were repaired. Published Git, condition-wait, loaded-object and C examples have meaningful host execution checks; the transport guidance and actual consumer conclusions preserve the required boundaries."
+    },
+    "open_blockers": 0,
+    "open_major_findings": 0,
+    "open_minor_findings": 0,
+    "source_review_readiness": true,
+    "overall_user_task_completed": false,
+    "protected_pr_checks": "not-verified-by-this-review",
+    "merged_main_verification": "not-verified-by-this-review",
+    "immutable_tag_and_release_artifacts": "not-verified-by-this-review",
+    "delivery_boundary": "This is an independent source review pass, not proof of completed PR checks, protected merge, fresh-main verification, Release publication, runtime qualification, or field qualification."
+  },
+  "findings": [
+    {
+      "id": "IR-01",
+      "severity": "major",
+      "status": "closed",
+      "title": "Changed Skill contents retained previously published version identities",
+      "affected_paths": [
+        "skills/adk-branch-closeout/SKILL.md",
+        "skills/adk-code-review-loop/SKILL.md",
+        "skills/adk-repo-drift-remediation/SKILL.md",
+        "skills/adk-worktree-governance/SKILL.md",
+        "skills/adk-performance-profiling-embedded/SKILL.md",
+        "optional-skills/adk-test-flakiness-triage/SKILL.md"
+      ],
+      "impact": "Different content would share a published per-Skill version identity and bundle path, weakening reliable pinning and upgrade interpretation.",
+      "correction": "The implementer incremented all six patch versions and updated the worktree Skill date; together with register/protocol, all eight changed Skill directories now have new versions.",
+      "closure_verification": "Inspected all eight baseline/candidate versions and built an actual temporary embedded-fullstack bundle with the optional flaky Skill. All eight new paths and entrypoint bytes matched the candidate, and the transport reference was packaged.",
+      "closed_on_commit": "49a20cc96078d6e1206d1d1dcd46761b9dc48d31"
+    },
+    {
+      "id": "IR-02",
+      "severity": "minor",
+      "status": "closed",
+      "title": "Protocol compression omitted the explicit independent per-layer state-machine requirement",
+      "affected_paths": [
+        "skills/adk-protocol-stack-integration/SKILL.md"
+      ],
+      "impact": "This weakened an existing constraint that this change was required to retain.",
+      "correction": "The implementer restored '各层独立 timeout/状态机，参数依据协议/链路/产品预算' while retaining the overall monotonic deadline and remaining-budget rules.",
+      "closure_verification": "Read the restored sentence in canonical source; verified the final consumer reread and answer explicitly preserve the same requirement.",
+      "closed_on_commit": "49a20cc96078d6e1206d1d1dcd46761b9dc48d31"
+    }
+  ],
+  "spec_checks": [
+    {
+      "requirement": 1,
+      "result": "pass",
+      "evidence": "portfolio-audit.json, audit.md, source-review.md, research-sources.json",
+      "detail": "65 unique manifest decisions (56 core/9 optional), entrypoints/reasons and all 152 baseline SHA256/size/Git-blob identities match. Every Skill directory's baseline/current bytes was recomputed. Research records 15 fixed files in 10 repositories and distinguishes license files from metadata."
+    },
+    {
+      "requirement": 2,
+      "result": "pass-with-limits",
+      "evidence": "Three new test modules, raw-observations.json and consumer-response.json",
+      "detail": "Real Git, ELF/shared-library, Condition, C and local socket observations support bounded method claims. Intermediate failures remain archived; no host result is relabelled as device or model qualification."
+    },
+    {
+      "requirement": 3,
+      "result": "pass",
+      "evidence": "profile-final.json and full-regression receipt",
+      "detail": "8/8 original profile thresholds pass unchanged; source bytes -92 B. Full exact-source regression passes 102/102 groups, including 140 Skill-content unit tests."
+    },
+    {
+      "requirement": 4,
+      "result": "source-review-pass; delivery-pending",
+      "detail": "Frozen-source independent Spec/Quality review is complete. Protected PR checks, merge, fresh main and Release remain separate unobserved delivery gates."
+    },
+    {
+      "requirement": 5,
+      "result": "pass",
+      "detail": "Historical v11.3.7 CTest cause remains unknown. Failure is retained; no budget/test/failure semantics was relaxed or later green execution misrepresented as a root-cause repair."
+    }
+  ],
+  "method_review": [
+    {
+      "area": "Raw Git review and read-only preflights",
+      "judgment": "The recipe preserves staged/working-tree/whole-branch selection, validated base/merge-base, dirty/untracked overlays and immutable review identity requirements. It disables external diff/textconv, FSMonitor, pager, color/relative narrowing and submodule omission for the relevant snapshot/preflight commands. Tests observe real content, no targeted helper invocation and unchanged index/worktree bytes."
+    },
+    {
+      "area": "Register reset semantics",
+      "judgment": "The parenthesized C expression is correct; known reset bits, undefined bits, unverified documentation and conditional reset types are distinct. Whole-access read safety precedes masking; zero checkable bits are not-testable; undefined does not become fake zero or missing documentation."
+    },
+    {
+      "area": "Transport framing and partial I/O",
+      "judgment": "Stream residuals/coalesced frames, nonzero-read EOF, legitimate empty datagrams, unrecoverable truncated datagram tails, partial-write offsets, length/overflow checks, bounded queues/backpressure and unchanged total deadlines are distinguished. Per-layer independent state/timeout semantics are restored."
+    },
+    {
+      "area": "Actual loaded object and dispatch",
+      "judgment": "Expected build identity, actual mapping and actual executed branch are not conflated. Complete path, process identity/starttime, deleted/changed/JIT/container cases and absent/permission-limited observations narrow the claim. The same executable selecting different real shared libraries demonstrates the gap."
+    },
+    {
+      "area": "Condition-based readiness waiting",
+      "judgment": "The example checks the current operation identity and explicit readiness/cancellation under the same Condition lock, accepts legitimate result=0 and gives cancellation priority. Finite nonnegative waits use Condition.wait_for's monotonic remaining time. It preserves exact timing/debounce/throttle/backoff tests and does not raise timeouts to hide failures."
+    },
+    {
+      "area": "Version and preregistration continuity",
+      "judgment": "Global 11.3.8 identity is coherent and all eight changed Skill versions advance. The preregistration changes only candidate release to v11.3.8 and prepends v11.3.7 at the exact baseline SHA with model_runs=0; after reversing those two changes, parsed JSON equals the baseline."
+    }
+  ],
+  "verification": {
+    "full_regression": {
+      "source_commit": "49a20cc96078d6e1206d1d1dcd46761b9dc48d31",
+      "source_tree": "df6a691dfcd869ea4fbbfc7674b24538860d9ae4",
+      "command": [
+        "bash",
+        "tests/run_all.sh",
+        "--verbose",
+        "--timing-json",
+        "/workspace/scratch/fe5385ca063a/frozen-regression/timing.json"
+      ],
+      "started_at": "2026-11-16T04:07:02.454699Z",
+      "finished_at": "2026-11-16T04:12:12.007854Z",
+      "elapsed_seconds": 309.5284584149995,
+      "exit_code": 0,
+      "groups": {
+        "total": 102,
+        "pass": 102,
+        "fail": 0
+      },
+      "skill_content_unit_tests": 140,
+      "source_files_unchanged": 41,
+      "original_logs_reviewed": true,
+      "actual_skip_or_fail_records_detected": false,
+      "count_boundary": "102 registered groups, not individual unit tests. Skip checks distinguish fixture mentions from actual unittest skipped records.",
+      "artifacts": [
+        {
+          "path": "/workspace/scratch/fe5385ca063a/frozen-regression/started.json",
+          "bytes": 6000,
+          "sha256": "8f7d453cffe52fca906d39a6d33f94cd5266591b39db701dd825034f3adac81d"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/frozen-regression/receipt.json",
+          "bytes": 23334,
+          "sha256": "2fa71974a2217c18857c4337891b4be889a4704fc6227d3190260d633e03dd92"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/frozen-regression/timing.json",
+          "bytes": 8222,
+          "sha256": "1f9e5168ecae217a9c634bbb110b1ecefffb59f65834372e5ea705ea96078ece"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/frozen-regression/stdout.log",
+          "bytes": 34272,
+          "sha256": "6388eb8490c81cc0073ff5ab991c1b1778e9fdf7281d7e939ca3c32e479caeba"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/frozen-regression/stderr.log",
+          "bytes": 52373,
+          "sha256": "78091e542625f85b29d4cd9cfb81ac9261b0babfbddb639b8615d136811a768f"
+        },
+        {
+          "path": "/workspace/scratch/fe5385ca063a/original-source.patch",
+          "bytes": 485382,
+          "sha256": "7e2b67d92cfe9f1a2b175710e2a526a306b06ec5282bc69cdafcd01494423175"
+        }
+      ]
+    },
+    "independent_checks": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 -m unittest tests.test_review_raw_diff tests.test_skill_runtime_methods -v",
+        "result": "10/10 pass in 0.643s",
+        "scope": "5 Git, 3 Condition and 2 actual shared-library methods; pre-freeze example/test bytes subsequently matched to canonical source; final full regression reran final source."
+      },
+      {
+        "owner": "delegated independent domain reviewer",
+        "command": "PYTHONDONTWRITEBYTECODE=1 python -m unittest tests.test_skill_domain_execution -v",
+        "result": "1/1 pass in 0.039s",
+        "scope": "Six actual compiled-C reset-expression vectors; no hardware."
+      },
+      {
+        "owner": "delegated independent domain reviewer",
+        "result": "Local socketpair observation passed",
+        "observed": {
+          "stream_receive_lengths": [
+            2,
+            2,
+            2,
+            2,
+            1,
+            0
+          ],
+          "decoded_payloads": [
+            "abc",
+            "de"
+          ],
+          "empty_datagram_length": 0,
+          "truncated_datagram_prefix": "ABCD",
+          "msg_trunc": true,
+          "next_nonblocking_receive": "not-readable"
+        }
+      },
+      {
+        "command": "build_runtime_bundle(Manifest.load(root), TemporaryDirectory, 'embedded-fullstack', optional_skills=['adk-test-flakiness-triage'])",
+        "result": "pass",
+        "skill_count": 47,
+        "archive_sha256": "941e174bcc935e818223dec268c122cdf0f53d7ee3d6e27cdcc23ef3834d2447",
+        "scope": "All eight new version paths and entrypoint bytes verified; transport reference packaged. Temporary artifact removed after inspection; external importer not run."
+      },
+      {
+        "command": "git diff --no-ext-diff --no-textconv --check 5f442723..49a20cc",
+        "result": "pass, exit 0"
+      },
+      {
+        "result": "Evidence consistency checks pass",
+        "counts": {
+          "changed_files": 41,
+          "baseline_read_identities": 152,
+          "unique_manifest_decisions": 65,
+          "raw_utf8_archive_members": 25,
+          "consumer_final_input_hashes": 6,
+          "research_files": 15,
+          "research_repositories": 10,
+          "original_patch_diff_headers": 41
+        }
+      }
+    ],
+    "profile_limits": {
+      "unchanged": true,
+      "pass": 8,
+      "source_delta_bytes": -92,
+      "large_refactor_bytes": 323288,
+      "large_refactor_limit": 323328,
+      "remaining_bytes": 40
+    },
+    "reviewer_preparation_errors": [
+      "Initial parser assumed only baseline_git_blob; existing records also use git_blob. Corrected the read-only parser and verified every record. No ADK change.",
+      "An unnecessary extra AF_UNIX socket creation returned EPERM; the intended socketpair observation subsequently succeeded. Not an ADK failure.",
+      "A final entirely-clean assertion noticed the integrator's new evidence files; reviewer separated unchanged tracked source from the byte-verified evidence overlay."
+    ]
+  },
+  "consumer_review": {
+    "task_path": "docs/changes/20261116-skill-execution-depth/evidence/consumer-task.md",
+    "task_sha256": "2c01ee2ae5bf3053066201ab492ab6008d22af98239176e109a230defd91f4cc",
+    "response_path": "docs/changes/20261116-skill-execution-depth/evidence/consumer-response.json",
+    "response_sha256": "0475a51b3443c07202dc2fa4ff03259bbdc9e7f9cf07d114e8a2d5d67e57d4c5",
+    "sessions": 1,
+    "supplied_scenarios": 3,
+    "scenarios_meeting_review_checks": 3,
+    "evaluation_kind": "Post-hoc independent semantic review of one actual new-session response and its same-session reread",
+    "final_inputs_verified": 6,
+    "earlier_output_sha256": "7fecba4c685d62775c36c1c03c3eb4f48c2205db1b32b5b0f716aaeb97900354",
+    "reread": "Final protocol/performance hashes match canonical source; previous input/output hashes remain preserved. The reread is not another independent trial.",
+    "cases": [
+      {
+        "id": "A",
+        "result": "pass",
+        "checks": [
+          "0xA3 satisfies POR expected=3 under known_mask=0x0F; undefined high bits are not assigned a fabricated guarantee.",
+          "Software-reset 0xB0 is not judged with the POR-only contract.",
+          "Undefined FIFO reset with destructive reads remains not-testable for ordinary numeric readback; masking does not remove the side effect.",
+          "0x108 is genuinely unverified documentation and remains needs-fix, without fabricated zero or a publishable unknown definition.",
+          "Next steps preserve manual revision/errata, access width/endian provenance and authorization boundaries."
+        ]
+      },
+      {
+        "id": "B",
+        "result": "pass",
+        "checks": [
+          "The supplied stream bytes yield abc then de, preserving the one-byte partial header and multiple frames.",
+          "Zero return is receive EOF only for a nonzero stream read request; residual EOF would be truncation.",
+          "The legitimate empty datagram and next are separate messages, not stream EOF.",
+          "ABCD with MSG_TRUNC is not a complete payload; absent subsequent data does not reverse truncation or enable tail reconstruction.",
+          "A partial stream write advances by the actual three bytes and never resends the prefix; datagrams are not split into fake continuation packets.",
+          "The two-byte header, 4096 payload maximum, length arithmetic and total buffering/backpressure limits are distinguished.",
+          "The total 30-second deadline is not refreshed by partial I/O; independent layer timeout/state machines and their parameter basis are explicit."
+        ]
+      },
+      {
+        "id": "C",
+        "result": "pass",
+        "checks": [
+          "The outcome is inconclusive and no performance figures are fabricated.",
+          "Unchanged ELF and a new candidate disk hash do not prove which shared-library content was loaded.",
+          "The observed baseline mapping does not itself prove actual kernel/dispatch execution or exact mapped-content identity.",
+          "pass=12 does not establish target-kernel coverage, valid performance work or causal attribution.",
+          "The minimum next step is to request existing same-run identity/dispatch/KPI evidence; no unauthorized benchmark, process start or library replacement is proposed as already performed."
+        ]
+      }
+    ],
+    "boundary": "Not a blind A/B, independent repeated trial, holdout qualification, population success-rate estimate or native model certification; it does not populate the preregistered campaign."
+  },
+  "limitations": [
+    "PR checks, protected merge, fresh-main verification, immutable tag and final Release artifacts remain outside this review's observed evidence.",
+    "Host regression does not certify external agent hosts, native model/runtime behavior, ARM/MCU, real links, HIL or field behavior.",
+    "Git flags do not sandbox other content filters or untrusted repositories; binary/gitlink contents and untracked bodies still need scoped review.",
+    "Transport execution did not cover the complete matrix: partial/no-progress writes, length overflow, backpressure, residual-frame EOF, cancellation or reconnect isolation in a real project implementation remain unmeasured.",
+    "C arithmetic tests do not execute SVD inheritance, real reset selection or safe MMIO. Mask-zero/undefined/unknown semantics were also checked through source and consumer reasoning.",
+    "Condition.wait_for does not establish hard bounds on lock acquisition or scheduling, or a complete application cancellation/cleanup protocol; producer same-lock discipline and real timing tests remain required.",
+    "Mapped path is not executed dispatch. Production kernel/ISA/precision/thread/model-path identity, performance gain and thermal causality remain unproven.",
+    "The one consumer session with three scenarios and a same-session reread has no blinded control, randomization or independent repeats. Model, token, latency and cost effects remain not-measured.",
+    "Only the current preregistration transition is verified. Older inherited unexecuted-candidate history is not claimed exhaustive; results remain empty and the author-exposed holdout remains unqualified.",
+    "The historical CTest timeout cause remains unknown; later green runs do not prove repair.",
+    "The reviewer checked recorded external identities, decisions, scope and license evidence levels without independently refetching every external file or performing a legal-license audit. No external pack/script was imported/executed.",
+    "Source-byte/profile results are not measured runtime-context, token, cost or general task-success improvements."
+  ],
+  "closing_statement": "Within the explicit source-review scope, Spec and Quality pass with no open findings. The delivery owner must retain these source identities and complete the already-authorized protected delivery checks; this report does not substitute for those observations."
+}

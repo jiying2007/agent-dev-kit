@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "record_sha256": "a5c178ef9a7c2029d02646aa36be32e3c61ddda64457949252301962289189b5",
+  "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "checked_at": "2026-11-16T04:18:27.645069Z",
+  "source_commit": "49a20cc96078d6e1206d1d1dcd46761b9dc48d31",
+  "validation_call": "agent_dev_kit.review_evidence.validate_review(root, record, expected_subject=\"20261116-skill-execution-depth\", expected_scope=\"source-change\")",
+  "sources": 42,
+  "evidence": 6,
+  "preparation_failures": [
+    {
+      "stage": "local report-mapping preparation",
+      "error": "KeyError: 'scope'",
+      "validator_invoked": false,
+      "resolution": "Read the frozen independent report schema (source key after its condensation) and map its actual fields; no source or validator change."
+    }
+  ],
+  "boundary": "Mechanical binding validation; the independent report supplies the semantic verdict. Source pass does not authorize a product release or prove provider/field execution."
+}
