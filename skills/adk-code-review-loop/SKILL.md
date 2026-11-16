@@ -1,7 +1,7 @@
 ---
 name: adk-code-review-loop
 description: "用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。"
-version: 1.7.8
+version: 1.7.9
 last_updated: 2026-11-16
 triggers:
   - "独立代码审查"

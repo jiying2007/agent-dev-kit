@@ -1,8 +1,8 @@
 ---
 name: adk-engineering-growth-review
 description: "用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。"
-version: 1.1.0
-last_updated: 2026-11-13
+version: 1.1.1
+last_updated: 2026-11-16
 triggers:
   - "开发者成长复盘"
   - "成长分析"
@@ -22,7 +22,7 @@ inputs:
 outputs:
   - 本地成长复盘报告、证据索引、长期趋势、短期观察、学习建议、训练计划、可选 memory/archive 候选
 constraints:
-  - 允许本地宽读；默认不固定 24-48 小时时间窗，不限制单一项目
+  - 默认 index-first，只读已授权范围；跨项目/全历史仅按明确请求扩展
   - 默认本地 report-only，不自动外发 Slack、邮件或外部服务
   - 不静默写入 ~/.codex/memories；长期记忆只输出候选和人工确认项
   - 改进建议进入执行层前必须先形成 trace-feedback-eval-handoff 候选

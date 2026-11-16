@@ -6,10 +6,13 @@ import os
 from pathlib import Path
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
+import xml.etree.ElementTree as ET
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +22,7 @@ BSP = "skills/adk-bsp-porting-playbook/SKILL.md"
 INTERFACE = "skills/adk-interface-contract-design/references/details.md"
 ADC = ROOT / "examples/embedded-test-matrix"
 CMAKE = "skills/adk-cmake-cross-build/SKILL.md"
+HIL = "skills/adk-integration-hil-sil/SKILL.md"
 
 
 def bash_example(path: str, marker: str) -> str:
@@ -29,9 +33,91 @@ def bash_example(path: str, marker: str) -> str:
     return matches[0]
 
 
-def run_example(code: str, root: Path, *arguments: str, environment=None):
-    return subprocess.run(["bash", "-c", code, "skill-example", *arguments], cwd=root,
-                          env=environment, capture_output=True, text=True, timeout=15)
+def run_example(code: str, root: Path, *arguments: str, environment=None,
+                timeout=15, label="skill-example"):
+    """Bound the whole example; keep diagnostics and terminate its own process group."""
+    command = ["bash", "-c", code, "skill-example", *arguments]
+    started = time.monotonic()
+    process = subprocess.Popen(command, cwd=root, env=environment, stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, text=True, start_new_session=True)
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired as expired:
+        work_elapsed = time.monotonic() - started
+        cleanup_started = time.monotonic()
+        cleanup_deadline = cleanup_started + 1
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        cleanup_status = "complete"
+        try:
+            stdout, stderr = process.communicate(timeout=max(0, cleanup_deadline - time.monotonic()))
+        except subprocess.TimeoutExpired as draining:
+            # A descendant outside this owned group could retain a pipe. Do not
+            # let cleanup extend the work budget or wait without a limit.
+            stdout, stderr = draining.stdout or expired.stdout, draining.stderr or expired.stderr
+            process.stdout.close()
+            process.stderr.close()
+            try:
+                process.wait(timeout=max(0, cleanup_deadline - time.monotonic()))
+            except subprocess.TimeoutExpired:
+                cleanup_status = "leader-not-reaped"
+            else:
+                cleanup_status = "pipe-drain-incomplete"
+        def decoded(value):
+            return value.decode(errors="replace") if isinstance(value, bytes) else value or ""
+        raise AssertionError(
+            f"{label}: timeout; budget={timeout}s; work_elapsed={work_elapsed:.3f}s; "
+            f"cleanup_elapsed={time.monotonic() - cleanup_started:.3f}s; cleanup={cleanup_status}\n"
+            f"stdout:\n{decoded(stdout)}\nstderr:\n{decoded(stderr)}"
+        ) from None
+    return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+
+
+class CommandExampleRunnerTests(unittest.TestCase):
+    def test_default_budget_and_normal_exit_keep_the_original_contract(self):
+        self.assertEqual(15, run_example.__kwdefaults__["timeout"])
+        with tempfile.TemporaryDirectory() as directory:
+            for status in (0, 7):
+                result = run_example('printf "visible stdout\\n"; printf "visible stderr\\n" >&2; exit "$1"',
+                                     Path(directory), str(status))
+                self.assertEqual(status, result.returncode)
+                self.assertEqual("visible stdout\n", result.stdout)
+                self.assertEqual("visible stderr\n", result.stderr)
+
+    def test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            unrelated = subprocess.Popen(["sleep", "60"], start_new_session=True)
+            try:
+                code = ('sleep 60 & child=$!; printf "%s\\n" "$child" > child.pid; '
+                        'printf "configure complete\\n"; printf "build waiting\\n" >&2; wait')
+                with self.assertRaises(AssertionError) as failure:
+                    run_example(code, root, timeout=0.5, label="timeout-fixture")
+                message = str(failure.exception)
+                for expected in ("timeout-fixture", "budget=0.5s", "work_elapsed=", "cleanup_elapsed=",
+                                 "stdout:\nconfigure complete", "stderr:\nbuild waiting"):
+                    self.assertIn(expected, message)
+                child = int((root / "child.pid").read_text())
+                # Linux may briefly retain an already killed orphan as a zombie;
+                # that is not a running child, and is reaped by its new parent.
+                state = Path(f"/proc/{child}/stat")
+                try:
+                    child_state = state.read_text().rsplit(") ", 1)[1].split()[0]
+                except FileNotFoundError:
+                    pass
+                else:
+                    self.assertEqual("Z", child_state)
+                self.assertIsNone(unrelated.poll(), "cleanup must not signal another process group")
+            finally:
+                unrelated.kill()
+                unrelated.wait(timeout=2)
+                if (root / "child.pid").exists():
+                    try:
+                        os.kill(int((root / "child.pid").read_text()), signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
 
 
 class ReleaseHistoryExampleTests(unittest.TestCase):
@@ -376,11 +462,10 @@ class EmbeddedAdcExampleTests(unittest.TestCase):
         self.compile_and_run(*flags)
 
 
-class CmakeBuildExampleTests(unittest.TestCase):
-    """Execute the current published blocks with real CMake/CTest and native ELF files."""
-
-    def prepare(self, *, register_tests=True):
-        required = ("cmake", "ctest", "ninja", "cc", "file", "size", "objdump")
+class _CmakeExampleFixture:
+    def prepare(self, *, register_tests=True, generator="Ninja"):
+        backend = "make" if generator == "Unix Makefiles" else "ninja"
+        required = ("cmake", "ctest", backend, "cc", "file", "size", "objdump", "python3", "mktemp")
         missing = [tool for tool in required if shutil.which(tool) is None]
         if missing:
             reason = "real CMake example not executed; missing tools: " + ", ".join(missing)
@@ -390,6 +475,8 @@ class CmakeBuildExampleTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+        self.evidence = self.root / "test evidence"
+        self.evidence.mkdir()
         self.source = self.root / "source project"
         self.source.mkdir()
         (self.source / "CMakeLists.txt").write_text(
@@ -420,16 +507,20 @@ class CmakeBuildExampleTests(unittest.TestCase):
         self.output = self.source / "out" / "manual build"
         self.environment = dict(
             os.environ, CC=shutil.which("cc"), ADK_SOURCE_DIR=str(self.source),
-            ADK_BINARY_DIR=str(self.output), ADK_GENERATOR="Ninja",
+            ADK_BINARY_DIR=str(self.output), ADK_GENERATOR=generator, ADK_BUILD_MODE="manual",
             ADK_TOOLCHAIN_FILE=str(self.toolchain), ADK_CONFIG="Release", ADK_BUILD_JOBS="1",
             ADK_TEST_BACKEND="host-unit", ADK_ELF=str(self.output / "firmware.elf"),
             ADK_SIZE=shutil.which("size"), ADK_OBJDUMP=shutil.which("objdump"),
+            ADK_EVIDENCE_DIR=str(self.evidence),
             ADK_CONFIGURE_PRESET="unselected-configure", ADK_BUILD_PRESET="unselected-build",
             ADK_TEST_PRESET="unselected-test")
 
     def published(self, marker, **overrides):
-        return run_example(bash_example(CMAKE, marker), self.source,
-                           environment=dict(self.environment, **overrides))
+        environment = dict(self.environment, **overrides)
+        # Fixture-only trace identifies the last configure/build/CTest command
+        # if the aggregate example budget expires; the published block is intact.
+        return run_example("set -x\n" + bash_example(CMAKE, marker), self.source,
+                           environment=environment, label=f"CMake/{environment['ADK_BUILD_MODE']}/{marker}")
 
     def assert_identity(self, identity, output, artifact):
         self.assertEqual(identity + "\n", (output / "ctest-identity.txt").read_text())
@@ -441,6 +532,10 @@ class CmakeBuildExampleTests(unittest.TestCase):
         self.assertEqual(0, inspected.returncode, inspected.stdout + inspected.stderr)
         self.assertIn(str(artifact), inspected.stdout)
         self.assertIn(".text", inspected.stdout)
+
+
+class CmakeBuildExampleTests(_CmakeExampleFixture, unittest.TestCase):
+    """Keep the original Ninja/multiconfig cases and their CI tool requirement."""
 
     def test_preset_names_bind_binary_directory_configuration_tests_and_elf(self):
         self.prepare()
@@ -461,7 +556,7 @@ class CmakeBuildExampleTests(unittest.TestCase):
             "buildPresets": [{"name": "compile-release", "configurePreset": "configure-board", "configuration": "Release"}],
             "testPresets": [{"name": "run-release", "configurePreset": "configure-board", "configuration": "Release"}],
         }))
-        result = self.published("# preset-build:", ADK_CONFIGURE_PRESET="configure-board",
+        result = self.published("# cmake-build:", ADK_BUILD_MODE="preset", ADK_CONFIGURE_PRESET="configure-board",
                                 ADK_BUILD_PRESET="compile-release", ADK_TEST_PRESET="run-release",
                                 ADK_BINARY_DIR=str(self.source / "must-not-be-created"),
                                 ADK_TOOLCHAIN_FILE="missing-unselected-toolchain", ADK_GENERATOR="unselected")
@@ -472,14 +567,14 @@ class CmakeBuildExampleTests(unittest.TestCase):
 
     def test_manual_directory_configuration_tests_and_elf_do_not_invoke_presets(self):
         self.prepare()
-        result = self.published("# manual-build:", ADK_CONFIG="RelWithDebInfo")
+        result = self.published("# cmake-build:", ADK_CONFIG="RelWithDebInfo")
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assert_identity("manual:RelWithDebInfo", self.output, self.output / "firmware.elf")
         self.assertFalse((self.source / "build").exists())
 
     def test_empty_ctest_selection_fails_after_a_real_successful_build(self):
         self.prepare(register_tests=False)
-        result = self.published("# manual-build:")
+        result = self.published("# cmake-build:")
         self.assertNotEqual(0, result.returncode)
         self.assertTrue((self.output / "firmware.elf").is_file())
         self.assertIn("No tests", result.stdout + result.stderr)
@@ -487,7 +582,7 @@ class CmakeBuildExampleTests(unittest.TestCase):
 
     def test_compile_only_preserves_not_run_without_invoking_ctest(self):
         self.prepare(register_tests=False)
-        result = self.published("# manual-build:", ADK_TEST_BACKEND="compile-only")
+        result = self.published("# cmake-build:", ADK_TEST_BACKEND="compile-only")
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assertIn("target tests: not-run", result.stdout)
         self.assertTrue((self.output / "firmware.elf").is_file())
@@ -500,7 +595,7 @@ class CmakeBuildExampleTests(unittest.TestCase):
                                   + 'set(CMAKE_C_STANDARD 90)\n'
                                   + 'set(CMAKE_C_STANDARD_REQUIRED ON)\n'
                                   + 'set(CMAKE_C_EXTENSIONS OFF)\n')
-        result = self.published("# manual-build:", ADK_SOURCE_DIR=str(ADC), CFLAGS="-pedantic-errors")
+        result = self.published("# cmake-build:", ADK_SOURCE_DIR=str(ADC), CFLAGS="-pedantic-errors")
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assertIn("adc_scale_host_unit", result.stdout)
         executable = self.output / "test_adc_scale"
@@ -511,6 +606,180 @@ class CmakeBuildExampleTests(unittest.TestCase):
         inspected = self.published("# built-artifact:", ADK_ELF=str(executable))
         self.assertEqual(0, inspected.returncode, inspected.stdout + inspected.stderr)
         self.assertIn(str(executable), inspected.stdout)
+
+
+class CtestQualificationExampleTests(_CmakeExampleFixture, unittest.TestCase):
+    """Real native CMake/CTest semantics, using an available single-config backend."""
+
+    def prepare_native(self, *, register_tests=True, extra=""):
+        self.prepare(register_tests=register_tests, generator="Unix Makefiles")
+        cmake = self.source / "CMakeLists.txt"
+        cmake.write_text(cmake.read_text() + extra)
+
+    def reports(self):
+        return sorted(self.evidence.glob("ctest.*/ctest.xml"))
+
+    def test_all_skipped_is_rejected_despite_successful_ctest_exit(self):
+        self.prepare_native(register_tests=False, extra=(
+            'add_test(NAME skipped COMMAND "${CMAKE_COMMAND}" -E false)\n'
+            'set_tests_properties(skipped PROPERTIES SKIP_RETURN_CODE 1)\n'))
+        result = self.published("# cmake-build:")
+        self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+        self.assertIn("passed=0 selected=1 skipped=1", result.stdout)
+        self.assertIn("no executed passing tests", result.stderr)
+        report, = self.reports()
+        self.assertEqual("notrun", ET.parse(report).getroot().find("testcase").get("status"))
+
+    def test_empty_and_all_disabled_selections_remain_failures(self):
+        for extra in ("", 'add_test(NAME disabled COMMAND "${CMAKE_COMMAND}" -E true)\n'
+                          'set_tests_properties(disabled PROPERTIES DISABLED TRUE)\n'):
+            with self.subTest(disabled=bool(extra)):
+                self.prepare_native(register_tests=False, extra=extra)
+                result = self.published("# cmake-build:")
+                self.assertNotEqual(0, result.returncode)
+                self.assertTrue((self.output / "firmware.elf").is_file())
+                self.assertIn("CTest report:", result.stdout)
+
+    def test_mixed_results_report_partial_and_test_runs_only_once(self):
+        self.prepare_native(extra=(
+            'add_test(NAME skipped COMMAND "${CMAKE_COMMAND}" -E false)\n'
+            'set_tests_properties(skipped PROPERTIES SKIP_RETURN_CODE 1)\n'
+            'add_test(NAME disabled COMMAND "${CMAKE_COMMAND}" -E true)\n'
+            'set_tests_properties(disabled PROPERTIES DISABLED TRUE)\n'))
+        main = self.source / "main.c"
+        main.write_text(main.read_text().replace('fopen(argv[1], "w")', 'fopen(argv[1], "a")'))
+        result = self.published("# cmake-build:")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn("status=partial passed=1 selected=3 skipped=1 disabled=1", result.stdout)
+        self.assertEqual("manual:Release\n", (self.output / "ctest-identity.txt").read_text())
+        self.assertEqual(1, len(self.reports()))
+
+    def test_new_run_cannot_reuse_a_previous_passing_report(self):
+        self.prepare_native()
+        first = self.published("# cmake-build:")
+        self.assertEqual(0, first.returncode, first.stdout + first.stderr)
+        self.assertIn("status=pass passed=1 selected=1 skipped=0 disabled=0", first.stdout)
+        original, = self.reports()
+        original_bytes = original.read_bytes()
+        cmake = self.source / "CMakeLists.txt"
+        cmake.write_text(cmake.read_text() + 'set_tests_properties(identity PROPERTIES SKIP_RETURN_CODE 0)\n')
+        second = self.published("# cmake-build:")
+        self.assertNotEqual(0, second.returncode)
+        self.assertIn("passed=0 selected=1 skipped=1", second.stdout)
+        self.assertEqual(2, len(self.reports()))
+        self.assertEqual(original_bytes, original.read_bytes())
+        new_report, = [p for p in self.reports() if p != original]
+        self.assertIn(str(new_report), second.stdout)
+
+    def test_real_ctest_failure_keeps_its_nonzero_status(self):
+        self.prepare_native(extra='add_test(NAME failing COMMAND "${CMAKE_COMMAND}" -E false)\n')
+        result = self.published("# cmake-build:")
+        self.assertEqual(8, result.returncode, result.stdout + result.stderr)
+        self.assertNotIn("status=pass", result.stdout)
+        report, = self.reports()
+        cases = ET.parse(report).getroot().findall("testcase")
+        self.assertEqual({"run", "fail"}, {c.get("status") for c in cases})
+
+    def test_failed_build_does_not_read_or_replace_an_old_report(self):
+        self.prepare_native()
+        old = self.evidence / "ctest.old"
+        old.mkdir()
+        report = old / "ctest.xml"
+        original = b'<testsuite tests="1"><testcase status="run"/></testsuite>'
+        report.write_bytes(original)
+        (self.source / "main.c").write_text("this is an intentional compiler error\n")
+        result = self.published("# cmake-build:")
+        self.assertNotEqual(0, result.returncode)
+        self.assertNotIn("CTest report:", result.stdout)
+        self.assertEqual([report], self.reports())
+        self.assertEqual(original, report.read_bytes())
+
+    def test_preset_compile_only_needs_no_test_preset_or_python(self):
+        self.prepare_native(register_tests=False)
+        output = self.source / "out" / "compile-only preset"
+        (self.source / "CMakePresets.json").write_text(json.dumps({
+            "version": 3,
+            "configurePresets": [{"name": "native", "generator": "Unix Makefiles",
+                                  "binaryDir": str(output),
+                                  "cacheVariables": {"CMAKE_BUILD_TYPE": "Release",
+                                                     "CMAKE_C_COMPILER": shutil.which("cc")}}],
+            "buildPresets": [{"name": "compile", "configurePreset": "native"}],
+        }))
+        tool_path = self.root / "build-tools-without-python"
+        tool_path.mkdir()
+        for name in ("bash", "cmake", "make", "gmake", "cc", "as", "ld", "ar", "ranlib"):
+            actual = shutil.which(name)
+            if actual:
+                (tool_path / name).symlink_to(actual)
+        self.assertIsNone(shutil.which("python3", path=str(tool_path)))
+        environment = dict(self.environment, PATH=str(tool_path), ADK_BUILD_MODE="preset",
+                           ADK_CONFIGURE_PRESET="native", ADK_BUILD_PRESET="compile",
+                           ADK_TEST_BACKEND="compile-only")
+        for name in ("ADK_TEST_PRESET", "ADK_EVIDENCE_DIR"):
+            environment.pop(name)
+        result = run_example("set -x\n" + bash_example(CMAKE, "# cmake-build:"), self.source,
+                             environment=environment, label="CMake/preset/compile-only/no-python")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertIn("target tests: not-run", result.stdout)
+        self.assertTrue((output / "firmware.elf").is_file())
+        self.assertEqual([], self.reports())
+
+    def test_hil_collection_preserves_skip_evidence_without_claiming_qualification(self):
+        self.prepare_native(register_tests=False, extra=(
+            'add_test(NAME skipped COMMAND "${CMAKE_COMMAND}" -E false)\n'
+            'set_tests_properties(skipped PROPERTIES SKIP_RETURN_CODE 1)\n'))
+        built = self.published("# cmake-build:", ADK_TEST_BACKEND="compile-only")
+        self.assertEqual(0, built.returncode, built.stdout + built.stderr)
+        result = run_example(bash_example(HIL, "# hil-sil-ctest:"), self.source,
+                             environment=self.environment, label="SIL/report-collection")
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        report, = self.reports()
+        self.assertIn(str(report), result.stdout)
+        self.assertEqual("notrun", ET.parse(report).getroot().find("testcase").get("status"))
+        qualification = (ROOT / HIL).read_text()
+        for marker in ("不自动判整项通过", "零实际 pass", "混合 pass/skip 为 partial", "缺必跑项 blocked"):
+            self.assertIn(marker, qualification)
+
+
+class CtestReportReaderTests(unittest.TestCase):
+    def test_published_reader_rejects_missing_malformed_unknown_and_failure_results(self):
+        block = bash_example(CMAKE, "# cmake-build:")
+        reader, = re.findall(r"python3 - \"\$report\" <<'PY'\n(.*?)\nPY", block, re.S)
+        passing = '<testcase name="passing" status="run"/>'
+        skipped = '<testcase name="skipped" status="notrun"><skipped/></testcase>'
+        disabled = '<testcase name="disabled" status="disabled"/>'
+        cases = [
+            (f'<testsuite tests="1">{passing}</testsuite>', True, "status=pass passed=1"),
+            (f'<testsuite tests="3">{passing}{skipped}{disabled}</testsuite>', True,
+             "status=partial passed=1 selected=3 skipped=1 disabled=1"),
+            (f'<testsuite tests="1">{skipped}</testsuite>', False, "passed=0"),
+            (f'<testsuite tests="1">{disabled}</testsuite>', False, "passed=0"),
+            ('<testsuite tests="0"/>', False, "passed=0"),
+            (f'<other tests="1">{passing}</other>', False, "invalid CTest report"),
+            (f'<testsuite tests="2">{passing}<testcase/></testsuite>', False, "invalid CTest report"),
+            (f'<testsuite tests="2">{passing}<testcase status="unknown"/></testsuite>', False,
+             "invalid CTest report"),
+            (f'<testsuite tests="99">{passing}</testsuite>', False, "invalid CTest report"),
+            (f'<testsuite tests="2">{passing}<testcase status="fail"><failure/></testcase></testsuite>',
+             False, "CTest failures in report"),
+            (f'<testsuite tests="2">{passing}<testcase status="run"><error/></testcase></testsuite>',
+             False, "CTest failures in report"),
+            (f'<testsuite tests="2">{passing}<testcase status="run"><skipped/></testcase></testsuite>',
+             False, "invalid passing status"),
+            ("<testsuite", False, "ParseError"),
+            ("", False, "ParseError"),
+            (None, False, "FileNotFoundError"),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            for index, (xml, success, expected) in enumerate(cases):
+                with self.subTest(index=index):
+                    report = Path(directory) / f"report-{index}.xml"
+                    if xml is not None:
+                        report.write_text(xml)
+                    result = subprocess.run([sys.executable, "-c", reader, str(report)],
+                                            capture_output=True, text=True, timeout=15)
+                    self.assertEqual(success, result.returncode == 0, result.stdout + result.stderr)
+                    self.assertIn(expected, result.stdout + result.stderr)
 
 
 class InterfaceVersionExampleTests(unittest.TestCase):

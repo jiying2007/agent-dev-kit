@@ -1,7 +1,7 @@
 ---
 name: adk-archive-governance
 description: "用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。"
-version: 1.0.4
+version: 1.0.5
 last_updated: 2026-11-16
 triggers:
   - "归档治理"
@@ -40,7 +40,7 @@ constraints:
 1. 读取 archive README、registry/schema 和检查脚本说明。
 2. 运行或规划 archive check，收集错误列表。
 3. 分类问题：missing meta、bad filename、topic missing、hash mismatch、duplicate、sensitive、stale open item。
-4. 最小修复：补 meta、登记 topic、更新 hash、规范文件名、标记 superseded。
+4. 最小修复：补 meta/topic、规范文件名、标记 superseded。hash mismatch 先保留旧 hash、实测 hash 和当前内容，核对可信原件及已批准变更；仅确认授权编辑后重算，未知差异保持 needs-fix。
 5. 安全审查：排除 raw sessions、auth、cache、logs、private endpoints 和 secrets。
 6. 查询验证：对受影响 topic 做 targeted archive search。
 7. 最终运行 archive check 和项目总检查。

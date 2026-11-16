@@ -332,6 +332,142 @@ class SkillContentContractTests(unittest.TestCase):
                         self.assertTrue(required | {goal} <= fields, (name, fields))
                         self.assertIn("不扩大权限", body)
 
+    def test_exported_parallel_worker_package_is_self_contained(self) -> None:
+        """Resolve the published default from actual packages without ADK source aids."""
+        import re
+        import tempfile
+        from agent_dev_kit.compiler import export_assets
+        from agent_dev_kit.model import Manifest
+
+        manifest = Manifest.load(ROOT)
+        required = {"id", "goal", "owner", "work_item_kind", "implementation_permission",
+                    "scope_read", "scope_write", "must_not_touch", "verification_commands",
+                    "blocked_conditions", "report_schema", "context_noise_budget"}
+        source_aid = "templates/planning/worker-contract.md"
+        with tempfile.TemporaryDirectory() as directory:
+            for runtime in ("claude-code", "opencode"):
+                with self.subTest(runtime=runtime):
+                    exported = export_assets(manifest, runtime, Path(directory), ["core"])
+                    consumer = Path(exported["output"])
+                    skill = next(path for path in consumer.rglob("SKILL.md")
+                                 if path.parent.name == "adk-parallel-agent-governance")
+                    body = skill.read_text(encoding="utf-8")
+                    self.assertFalse((consumer / source_aid).exists())
+                    self.assertFalse((skill.parent / source_aid).exists())
+                    default = re.search(r"默认使用随包 `([^`]+)`", body)
+                    self.assertIsNotNone(default, "default package must resolve in the export")
+                    package = skill.parent / default.group(1)
+                    self.assertTrue(package.is_file())
+                    text = package.read_text(encoding="utf-8")
+                    fields = set(re.findall(r"(?m)^([a-z_]+):", text))
+                    self.assertTrue(required <= fields, required - fields)
+                    aid_line = next(line for line in body.splitlines() if source_aid in line)
+                    self.assertIn("源码根已核验且文件可读", aid_line)
+                    self.assertIn("可选", aid_line)
+                    helper = next(line for line in text.splitlines() if source_aid in line)
+                    self.assertIn("optional", helper)
+                    self.assertIn("verified ADK source root", helper)
+                    self.assertIn("file exists", helper)
+                    checklist = package.parent / "subagent-review-checklist.md"
+                    self.assertTrue(checklist.is_file())
+
+    def test_feedback_snapshot_uses_readonly_canonical_commands(self) -> None:
+        """A secondary shipped example must not refresh the real Git index."""
+        import os
+        import re
+        import shutil
+        import subprocess
+        import tempfile
+        from agent_dev_kit.model import Manifest
+        from agent_dev_kit.targets import load_target_contract, render_asset
+
+        manifest = Manifest.load(ROOT)
+        asset = next(item for item in manifest.all_assets("skill")
+                     if item.name == "adk-code-review-loop")
+        bash = shutil.which("bash")
+        self.assertIsNotNone(bash)
+        for runtime in ("claude-code", "opencode"):
+            with self.subTest(runtime=runtime), tempfile.TemporaryDirectory() as directory:
+                files = render_asset(manifest, load_target_contract(manifest, runtime), asset)
+                feedback = next(item for item in files
+                                if item.destination.endswith("/references/review-feedback-fixtures.md"))
+                text = feedback.content.decode()
+                link = re.search(r"\[[^\]]+\]\((review-evidence-template\.md)(?:#[^)]*)?\)", text)
+                if link is not None:
+                    destination = (Path(feedback.destination).parent / link.group(1)).as_posix()
+                    text = next(item.content.decode() for item in files
+                                if item.destination == destination)
+                # Baseline fallback executes its old published block, exposing the mutation.
+                block = re.search(r"```bash\n(.*?)\n```", text, re.DOTALL)
+                self.assertIsNotNone(block)
+                commands = block.group(1).split("<project-", 1)[0].replace("<path>", "fixture.txt")
+                target = Path(directory)
+                subprocess.run(["git", "init", "-q", str(target)], check=True)
+                fixture = target / "fixture.txt"
+                fixture.write_text("unchanged content\n", encoding="utf-8")
+                subprocess.run(["git", "-C", str(target), "add", "fixture.txt"], check=True)
+                subprocess.run(["git", "-C", str(target), "-c", "user.name=Test",
+                                "-c", "user.email=test@example.invalid", "commit", "-qm", "fixture"],
+                               check=True)
+                info = fixture.stat()
+                os.utime(fixture, ns=(info.st_atime_ns, info.st_mtime_ns + 3_000_000_000))
+                index = target / ".git/index"
+                before = index.read_bytes()
+                run = subprocess.run([bash, "--noprofile", "--norc", "-euc", commands], cwd=target,
+                                     env={**os.environ, "LC_ALL": "C", "review_target": "working-tree"},
+                                     capture_output=True, text=True, timeout=10)
+                self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+                self.assertEqual(index.read_bytes(), before, "published snapshot changed the index")
+                self.assertEqual(fixture.read_text(encoding="utf-8"), "unchanged content\n")
+                self.assertIsNotNone(link, "secondary examples must reuse the canonical snapshot")
+
+    def test_growth_scope_metadata_matches_bounded_body(self) -> None:
+        """Source consistency only; no model reading-cost claim."""
+        skill = ROOT / "skills/adk-engineering-growth-review"
+        content = (skill / "SKILL.md").read_text(encoding="utf-8")
+        _, header, body = content.split("---", 2)
+        constraints = "\n".join(yaml.safe_load(header)["constraints"])
+        for label, surface in (("metadata", constraints), ("body", body),
+                               ("readme", (skill / "README.md").read_text(encoding="utf-8"))):
+            with self.subTest(surface=label):
+                self.assertNotIn("允许本地宽读", surface)
+                self.assertNotIn("不限制单一项目", surface)
+                for term in ("index-first", "已授权", "跨项目", "明确"):
+                    self.assertIn(term, surface)
+
+    def test_fetch_parent_preserves_child_result_states(self) -> None:
+        """Check the shipped result contract, not a real network/IMAP fetch."""
+        import re
+
+        directory = ROOT / "optional-skills/adk-data-fetch"
+        statuses = r"pass|partial|needs-fix|not-verified"
+        children = set()
+        for name in ("adk-fetch-url-content", "adk-email-imap-fetch"):
+            source = (directory / name / "SKILL.md").read_text(encoding="utf-8")
+            declared = re.search(r"(?m)^- (?:获取|提取)状态: (.+)$", source)
+            self.assertIsNotNone(declared)
+            children.update(re.findall(statuses, declared.group(1)))
+        self.assertEqual(children, {"pass", "partial", "needs-fix", "not-verified"})
+        parent = (directory / "SKILL.md").read_text(encoding="utf-8")
+        mapping = dict(re.findall(r"(?m)^\| (" + statuses + r") \| (" + statuses + r") \|$", parent))
+        self.assertEqual(set(mapping), children)
+        for child_status in children:
+            self.assertEqual(mapping[child_status], child_status)
+        template = parent.split("## Evidence Template", 1)[1].split("## ", 1)[0]
+        for field in ("已取得内容", "未取得范围与原因", "逐项错误"):
+            self.assertIn(field, template)
+        self.assertIn("缺少子 Skill 时必须停止", parent)
+
+    def test_archive_unknown_hash_mismatch_keeps_original_evidence(self) -> None:
+        """Static recovery guidance; this does not replay a production archive incident."""
+        source = (ROOT / "skills/adk-archive-governance/SKILL.md").read_text(encoding="utf-8")
+        guidance = next((line for line in source.splitlines()
+                         if "hash mismatch" in line and "可信" in line), "")
+        for term in ("旧 hash", "实测 hash", "可信原件", "已批准", "未知", "needs-fix"):
+            self.assertIn(term, guidance)
+        self.assertLess(guidance.index("旧 hash"), guidance.index("已批准"))
+        self.assertNotIn("登记 topic、更新 hash", source)
+
     def test_fault_injection_defaults_never_write_live_device(self) -> None:
         import re
 

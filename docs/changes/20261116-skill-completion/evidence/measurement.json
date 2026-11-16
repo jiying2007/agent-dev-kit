@@ -1,0 +1,98 @@
+{
+  "baseline_commit": "e13bd4788d5638c1eb34c169870f19dfd5285b6b",
+  "candidate_version": "11.3.7",
+  "method": "Actual Git blob byte lengths before; current registered agent/Skill entries plus references/scripts/assets after; identical profile resolution.",
+  "policy_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+  "policy_unchanged": true,
+  "runtime_token_measurement": false,
+  "rows": [
+    {
+      "profile": "core",
+      "before_entry_bytes": 98496,
+      "after_entry_bytes": 98475,
+      "before_total_bytes": 173552,
+      "after_total_bytes": 173463,
+      "entry_delta_bytes": -21,
+      "total_delta_bytes": -89,
+      "total_limit_bytes": 184133,
+      "status": "pass"
+    },
+    {
+      "profile": "release-hardening",
+      "before_entry_bytes": 83145,
+      "after_entry_bytes": 83145,
+      "before_total_bytes": 157226,
+      "after_total_bytes": 157150,
+      "entry_delta_bytes": 0,
+      "total_delta_bytes": -76,
+      "total_limit_bytes": 159576,
+      "status": "pass"
+    },
+    {
+      "profile": "personal-core",
+      "before_entry_bytes": 113428,
+      "after_entry_bytes": 113557,
+      "before_total_bytes": 192221,
+      "after_total_bytes": 192282,
+      "entry_delta_bytes": 129,
+      "total_delta_bytes": 61,
+      "total_limit_bytes": 204293,
+      "status": "pass"
+    },
+    {
+      "profile": "embedded-fullstack",
+      "before_entry_bytes": 211227,
+      "after_entry_bytes": 211338,
+      "before_total_bytes": 316321,
+      "after_total_bytes": 316364,
+      "entry_delta_bytes": 111,
+      "total_delta_bytes": 43,
+      "total_limit_bytes": 316854,
+      "status": "pass"
+    },
+    {
+      "profile": "team-core",
+      "before_entry_bytes": 123962,
+      "after_entry_bytes": 124091,
+      "before_total_bytes": 211387,
+      "after_total_bytes": 211448,
+      "entry_delta_bytes": 129,
+      "total_delta_bytes": 61,
+      "total_limit_bytes": 223333,
+      "status": "pass"
+    },
+    {
+      "profile": "large-refactor",
+      "before_entry_bytes": 214252,
+      "after_entry_bytes": 214363,
+      "before_total_bytes": 323203,
+      "after_total_bytes": 323246,
+      "entry_delta_bytes": 111,
+      "total_delta_bytes": 43,
+      "total_limit_bytes": 323328,
+      "status": "pass"
+    },
+    {
+      "profile": "incident-response",
+      "before_entry_bytes": 30800,
+      "after_entry_bytes": 30800,
+      "before_total_bytes": 46556,
+      "after_total_bytes": 46556,
+      "entry_delta_bytes": 0,
+      "total_delta_bytes": 0,
+      "total_limit_bytes": 46612,
+      "status": "pass"
+    },
+    {
+      "profile": "research-intake",
+      "before_entry_bytes": 65806,
+      "after_entry_bytes": 65950,
+      "before_total_bytes": 118021,
+      "after_total_bytes": 118089,
+      "entry_delta_bytes": 144,
+      "total_delta_bytes": 68,
+      "total_limit_bytes": 124543,
+      "status": "pass"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "sources": [
+    {
+      "repo": "anthropics/skills",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "path": "skills/skill-creator/SKILL.md",
+      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/SKILL.md",
+      "git_blob_sha1": "65b3a402dbd09b8e83f9d637c6b553875189085c",
+      "sha256": "dcd4803e61e913e6fc27294184cd3a71f09f5e924ff20c8a9a20173e7b3c2bcf",
+      "bytes": 33168,
+      "license": "Apache-2.0",
+      "inspection": "selected methods sections"
+    },
+    {
+      "repo": "anthropics/skills",
+      "commit": "1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064",
+      "path": "skills/skill-creator/LICENSE.txt",
+      "url": "https://github.com/anthropics/skills/blob/1780c5e5a552fd4d1c9d6a7b0cab26b0c2bef064/skills/skill-creator/LICENSE.txt",
+      "git_blob_sha1": "4f881c52d1f72f4cfb720e339e2d35c3058d01a9",
+      "sha256": "bc6b3af2f331cbc7fb0da1344efb2cbe5877a31498b4d70dbc7000f3405a1362",
+      "bytes": 11345,
+      "license": "Apache-2.0",
+      "inspection": "license text"
+    },
+    {
+      "repo": "openai/skills",
+      "commit": "49f948faa9258a0c61caceaf225e179651397431",
+      "path": "skills/.system/skill-creator/SKILL.md",
+      "url": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/skill-creator/SKILL.md",
+      "git_blob_sha1": "72bc0b97e7a6476254a9d5c424c9971748402ec3",
+      "sha256": "a17383bfb1448637ac1f757ad891ddb9676fa30b0eff620200f0e1cbc0cc0d50",
+      "bytes": 18664,
+      "license": "Apache-2.0",
+      "inspection": "selected methods sections"
+    },
+    {
+      "repo": "openai/skills",
+      "commit": "49f948faa9258a0c61caceaf225e179651397431",
+      "path": "skills/.system/skill-creator/LICENSE.txt",
+      "url": "https://github.com/openai/skills/blob/49f948faa9258a0c61caceaf225e179651397431/skills/.system/skill-creator/LICENSE.txt",
+      "git_blob_sha1": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358,
+      "license": "Apache-2.0",
+      "inspection": "license text"
+    }
+  ],
+  "inspection": "Selected methods sections and actual local licenses; no third-party full text included.",
+  "negative_observation": "Repository root LICENSE404; skill-local LICENSE.txt verified."
+}
