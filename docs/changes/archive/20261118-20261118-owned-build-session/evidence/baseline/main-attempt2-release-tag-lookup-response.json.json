@@ -1,0 +1,7 @@
+{
+  "origin": "run44116100760/attempt2/release-tag-lookup-response.json",
+  "encoding": "utf-8",
+  "bytes": 593,
+  "sha256": "b0e3180a886c4077b9c9b5a99bf4edabfeb7e5ab1a70f18e7f871c2d88bda1dd",
+  "content": "{\"content\":[{\"type\":\"text\",\"text\":\"GitHub API error 404: {\\\"message\\\":\\\"Not Found\\\",\\\"documentation_url\\\":\\\"https://docs.github.com/rest/releases/releases#get-a-release-by-tag-name\\\",\\\"status\\\":\\\"404\\\"}\"}],\"structuredContent\":{\"error\":\"GitHub API error 404: {\\\"message\\\":\\\"Not Found\\\",\\\"documentation_url\\\":\\\"https://docs.github.com/rest/releases/releases#get-a-release-by-tag-name\\\",\\\"status\\\":\\\"404\\\"}\",\"error_code\":\"NOT_FOUND\",\"error_data\":{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/releases/releases#get-a-release-by-tag-name\",\"status\":\"404\"}},\"isError\":true}"
+}

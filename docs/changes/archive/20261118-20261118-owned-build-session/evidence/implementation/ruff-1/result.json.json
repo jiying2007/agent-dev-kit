@@ -1,0 +1,7 @@
+{
+  "origin": "ruff-1/result.json",
+  "encoding": "utf-8",
+  "bytes": 739,
+  "sha256": "cbb8cc3ededfe5463c0218f5e25efbd5d4622ee1c4f4f39910dc06d1be3b8907",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"ruff\",\n    \"check\",\n    \"tests/test_skill_command_examples.py\"\n  ],\n  \"cwd\": \"/workspace/scratch/d417066aafa8/agent-dev-kit\",\n  \"started_at\": \"2026-11-17T16:16:43.776968+00:00\",\n  \"ended_at\": \"2026-11-17T16:16:43.825038+00:00\",\n  \"elapsed_seconds\": 0.04807517899462255,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"ff49ba55577c7f5dc0d930bc9630b7ce10c490ab03873077d4516f57885f05cc\",\n  \"source_after_sha256\": \"ff49ba55577c7f5dc0d930bc9630b7ce10c490ab03873077d4516f57885f05cc\",\n  \"source_unchanged_during_command\": true,\n  \"stdout_sha256\": \"82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n}\n"
+}

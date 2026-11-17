@@ -1,0 +1,7 @@
+{
+  "origin": "red-ninja/result.json",
+  "encoding": "utf-8",
+  "bytes": 847,
+  "sha256": "7238baaab991ff4ed5a64093f8017d8e339b6bbcb41aaf4e968a8bd96e28263f",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_real_ninja_child_group_is_observed_and_cleaned_without_touching_another_session\",\n    \"-v\"\n  ],\n  \"cwd\": \"/workspace/scratch/d417066aafa8/agent-dev-kit\",\n  \"started_at\": \"2026-11-17T16:13:55.197447+00:00\",\n  \"ended_at\": \"2026-11-17T16:13:56.354960+00:00\",\n  \"elapsed_seconds\": 1.1575187249982264,\n  \"exit_code\": 1,\n  \"source_before_sha256\": \"36733724dd8699c470631fb2f770c2cd94e3c75b884cd33900c34f9fb76f9235\",\n  \"source_after_sha256\": \"36733724dd8699c470631fb2f770c2cd94e3c75b884cd33900c34f9fb76f9235\",\n  \"source_unchanged_during_command\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"99ed32569a77833e5b77e80a093b046db58612b48c0d0de4767643a22b9a0f40\"\n}\n"
+}

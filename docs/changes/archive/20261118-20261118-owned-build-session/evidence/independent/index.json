@@ -1,0 +1,49 @@
+{
+  "captured_at": "2026-11-17T16:21:16.794407+00:00",
+  "source_directory": "/workspace/scratch/d417066aafa8/independent-review/owned-build-session",
+  "records": [
+    {
+      "path": "original-counterexample/ninja-cleanup-probe-result.json.json",
+      "raw_bytes": 39200,
+      "raw_sha256": "a991880af1efff5e86735a8d7b75b8393fd56dcbafd3cf693e9c992a269aff42",
+      "wrapper_sha256": "30cc2efa4ea09387f8665faee148b48e46ca88dc50e60ee3bcb54f8a02475586"
+    },
+    {
+      "path": "original-counterexample/ninja_cleanup_probe.py.json",
+      "raw_bytes": 9573,
+      "raw_sha256": "7f73dae49a4bed54f090d18e44d137937c93b8dd7b6fa1de9165cd94685e3404",
+      "wrapper_sha256": "60c76914ec41b890b6c80c2fbf30da5719e1e6b8007400fae08d5e04c3bc803b"
+    },
+    {
+      "path": "original-counterexample/stderr.log.json",
+      "raw_bytes": 0,
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wrapper_sha256": "8725836d20059a585ba9788fac38c7a75e0d83e5e65577cdbeeef2dd374e8c77"
+    },
+    {
+      "path": "original-counterexample/stdout.log.json",
+      "raw_bytes": 3783,
+      "raw_sha256": "ca77290f011d7cd651a3f4e40b0e9c19e88f9693ed220e20b789b4fe88ccb255",
+      "wrapper_sha256": "b1b0d8d5118eb3b757e2960b8f38beb78273d726db8e362a8eb729b00bcce169"
+    },
+    {
+      "path": "probe-plan.json.json",
+      "raw_bytes": 2253,
+      "raw_sha256": "c01c3dce9c1290f5d56d6f7c5b4feeadf5e8c63797494bfc6e5404064cdb44ff",
+      "wrapper_sha256": "6a65efb15d580e75b9530f8bea6b3153fd28c657c0bd4a4e042d917ff8708afe"
+    },
+    {
+      "path": "probe-result.json.json",
+      "raw_bytes": 3636,
+      "raw_sha256": "d47ae17fab88b376e2cd137b3007f7e06ba89fe80182e50261c71f7a87fc0ff8",
+      "wrapper_sha256": "ebd685a568c4eef1ce953452c7eb22968e70b9736c9708fd829899fb6e87cbfb"
+    },
+    {
+      "path": "run_independent_probes.py.json",
+      "raw_bytes": 6098,
+      "raw_sha256": "79a746c014a150e3da51ed66cf645c637c570d76d564de3265b2883d6e2e42ce",
+      "wrapper_sha256": "9d0d26f854c3df480be5dd0ee0112d51342cdf98affb5de7270833292a763340"
+    }
+  ],
+  "boundary": "Actual original results retained; expected RED and unmet gates remain failures"
+}

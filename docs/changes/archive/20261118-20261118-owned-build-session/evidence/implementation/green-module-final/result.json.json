@@ -1,0 +1,7 @@
+{
+  "origin": "green-module-final/result.json",
+  "encoding": "utf-8",
+  "bytes": 734,
+  "sha256": "2f3c9ecd25d0ba9a0647876b230f616327898e38619705d3acb79939835d13ec",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"tests.test_skill_command_examples\",\n    \"-v\"\n  ],\n  \"cwd\": \"/workspace/scratch/d417066aafa8/agent-dev-kit\",\n  \"started_at\": \"2026-11-17T16:17:58.569628+00:00\",\n  \"ended_at\": \"2026-11-17T16:18:06.885383+00:00\",\n  \"elapsed_seconds\": 8.31575778000115,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"a17791efaf2ad0dd7b0923dc49b4c219df0a3eb563495b419cc9de281cb12fc0\",\n  \"source_after_sha256\": \"a17791efaf2ad0dd7b0923dc49b4c219df0a3eb563495b419cc9de281cb12fc0\",\n  \"source_unchanged_during_command\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"a4c743476586a9fb0ed1d824ee26149b64563551841a7b6d22858c057885c6f0\"\n}\n"
+}

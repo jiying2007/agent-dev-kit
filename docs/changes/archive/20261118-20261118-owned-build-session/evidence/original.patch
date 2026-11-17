@@ -1,0 +1,465 @@
+diff --git a/.version-lock b/.version-lock
+index 3bb4b0c..5843aaf 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.4.0
+-locked_at: 2026-11-17T14:46:27Z
++version: 11.4.1
++locked_at: 2026-11-17T16:13:02Z
+ locked_by: agent
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index af482a3..191e344 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,12 @@
+ 
+ ## Unreleased
+ 
++### 11.4.1 — 构建超时的自有会话观测与清理
++
++- 修复测试 helper 只看外层进程组而遗漏 Ninja 自建进程组的缺陷，按本次自有 session 与稳定进程身份观测、终止后代；缺测或不完整清理不再报告 complete。
++- 保留原默认15秒工作预算、1秒清理总期限、正常退出与双流，以及 ADC/CMake 和所有发布门禁；补真实 Ninja 后代与无关 session 负控制。
++- 11.4.0 主线两次 ADC/CMake 超时和发布停止原件保留；此修复不代表历史15秒等待根因已解决，新候选须获得自己的完整验证及发行回执。
++
+ ### 11.4.0 — 按需任务诊断与重规划凭据重放保护
+ 
+ - 在既有 `eval import-task` 增加显式 `--diagnostics`，从同次已核验 Trace 与事件账本投影失败、未运行验证、真实尝试及工具终态计数；默认报告、Trace/RunEvidence、回执和资格语义保持。
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 9e1e590..cc566d8 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.4.0
++> 产品版本：11.4.1
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 9a6dac7..76ed4e3 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.4.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.4.1`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/manifest.json b/manifest.json
+index e60ad93..a277cdf 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.4.0",
++  "version": "11.4.1",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index a36d546..c0df693 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.4.0",
++  "campaign_id": "software-m5-11.4.1",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index 0fa4b78..6f091c3 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.4.0"
++version = "11.4.1"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index 721f453..2bcc634 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.4.0"
++__version__ = "11.4.1"
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 1677e4a..7720f4c 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.4.0",
++    "planned_release": "v11.4.1",
+     "source_sha": null
+   },
+   "case_groups": {
+diff --git a/tests/test_skill_command_examples.py b/tests/test_skill_command_examples.py
+index 931440a..a4ebf03 100644
+--- a/tests/test_skill_command_examples.py
++++ b/tests/test_skill_command_examples.py
+@@ -5,6 +5,7 @@ import json
+ import os
+ from pathlib import Path
+ import re
++import shlex
+ import shutil
+ import signal
+ import subprocess
+@@ -36,7 +37,20 @@ def bash_example(path: str, marker: str) -> str:
+     return matches[0]
+ 
+ 
+-def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"), limit=16):
++def process_status(pid, *, proc_root=Path("/proc")):
++    """Read bounded status and stable identity, never arguments or environment."""
++    with (proc_root / str(pid) / "stat").open(encoding="utf-8", errors="replace") as stream:
++        before, fields = stream.read(4096).rsplit(") ", 1)
++    actual_pid, comm = before.split(" (", 1)
++    if int(actual_pid) != pid:
++        raise ValueError("process identity changed")
++    fields = fields.split()
++    return {"pid": pid, "ppid": int(fields[1]), "pgid": int(fields[2]), "sid": int(fields[3]),
++            "start_ticks": int(fields[19]), "comm": comm, "state": fields[0],
++            "user_ticks": int(fields[11]), "system_ticks": int(fields[12]), "wchan": "unavailable"}
++
++
++def owned_process_snapshot(session_id, deadline, *, proc_root=Path("/proc"), limit=16):
+     """Best-effort Linux status only; never collect arguments or environments."""
+     records = []
+     status = "observed"
+@@ -52,25 +66,19 @@ def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"),
+                     break
+                 if not entry.name.isdecimal():
+                     continue
+-                process = Path(entry.path)
+                 try:
+-                    with (process / "stat").open(encoding="utf-8", errors="replace") as stream:
+-                        raw = stream.read(4096)
+-                    before, fields = raw.rsplit(") ", 1)
+-                    pid, comm = before.split(" (", 1)
+-                    fields = fields.split()
+-                    if int(fields[2]) != process_group:
++                    record = process_status(int(entry.name), proc_root=proc_root)
++                    if record["sid"] != session_id:
+                         continue
+-                    record = {"pid": int(pid), "pgid": int(fields[2]), "comm": comm,
+-                              "state": fields[0], "user_ticks": int(fields[11]),
+-                              "system_ticks": int(fields[12]), "wchan": "unavailable"}
+                     if time.monotonic() < deadline:
+                         try:
+-                            with (process / "wchan").open(encoding="utf-8", errors="replace") as stream:
++                            with (Path(entry.path) / "wchan").open(encoding="utf-8", errors="replace") as stream:
+                                 record["wchan"] = stream.read(128).strip()
+                         except OSError:
+                             pass  # A process can exit between its stat and wchan reads.
+                     records.append(record)
++                except FileNotFoundError:
++                    pass  # A vanished process needs no signal; do not fail on unrelated churn.
+                 except (OSError, ValueError, IndexError):
+                     status = "partial"
+     except OSError:
+@@ -78,15 +86,72 @@ def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"),
+     return {"status": status, "processes": records}
+ 
+ 
++def same_process(left, right):
++    return all(left[key] == right[key] for key in ("pid", "sid", "start_ticks"))
++
++
++def terminate_owned_process(record, session_id, deadline):
++    """Signal an exact, freshly checked process; never a numeric foreign group."""
++    if record["sid"] != session_id or time.monotonic() >= deadline:
++        return False
++    if not hasattr(os, "pidfd_open") or not hasattr(signal, "pidfd_send_signal"):
++        return False
++    descriptor = None
++    try:
++        descriptor = os.pidfd_open(record["pid"])
++        current = process_status(record["pid"])
++        if not same_process(record, current) or time.monotonic() >= deadline:
++            return False
++        if current["state"] not in {"Z", "X"}:
++            signal.pidfd_send_signal(descriptor, signal.SIGKILL)
++        return True
++    except (ProcessLookupError, FileNotFoundError):
++        return True  # The exact process has already exited; never signal its replacement.
++    except (OSError, ValueError, IndexError):
++        return False
++    finally:
++        if descriptor is not None:
++            os.close(descriptor)
++
++
++def cleanup_owned_session(leader, snapshot, deadline):
++    """Use the original leader as an unreaped identity anchor until cleanup ends."""
++    if leader is None or leader["sid"] != leader["pid"]:
++        return "session-unverified"
++    if not same_process(leader, process_status(leader["pid"])):
++        return "session-unverified"
++    verified = (snapshot["status"] == "observed" and hasattr(os, "pidfd_open")
++                and hasattr(signal, "pidfd_send_signal"))
++    current = snapshot
++    while time.monotonic() < deadline:
++        verified = verified and current["status"] == "observed"
++        live = [item for item in current["processes"] if item["state"] not in {"Z", "X"}]
++        if not live:
++            return "complete" if verified else "session-unverified"
++        # Stop coordinators before their leaves; the leader is not reaped here.
++        signalling_failed = False
++        for record in sorted(live, key=lambda item: item["pid"] != leader["pid"]):
++            if not terminate_owned_process(record, leader["sid"], deadline):
++                signalling_failed = True
++        if signalling_failed:
++            return "session-unverified"
++        current = owned_process_snapshot(leader["sid"], deadline)
++    return "session-incomplete"
++
++
+ def run_example(code: str, root: Path, *arguments: str, environment=None,
+                 timeout=15, label="skill-example"):
+-    """Bound the whole example; keep diagnostics and terminate its own process group."""
++    """Bound the whole example and clean its owned session, including new groups."""
+     command = ["bash", "-c", code, "skill-example", *arguments]
+     started = time.monotonic()
+     process = subprocess.Popen(command, cwd=root, env=environment, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, text=True, start_new_session=True)
+     try:
+-        stdout, stderr = process.communicate(timeout=timeout)
++        leader = process_status(process.pid)
++    except Exception:
++        leader = None  # Fast normal exits or missing procfs must not fail normal commands.
++    try:
++        stdout, stderr = process.communicate(timeout=max(0, started + timeout - time.monotonic()))
+     except subprocess.TimeoutExpired as expired:
+         work_elapsed = time.monotonic() - started
+         cleanup_started = time.monotonic()
+@@ -97,10 +162,27 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
+             # Diagnostics must never prevent termination or replace the timeout.
+             snapshot = {"status": "unavailable", "error": type(error).__name__, "processes": []}
+         try:
+-            os.killpg(process.pid, signal.SIGKILL)
++            cleanup_status = cleanup_owned_session(leader, snapshot, cleanup_deadline)
++        except Exception:
++            cleanup_status = "session-unverified"
++        # The original outer group remains anchored by our unreaped Popen.
++        # Missing diagnostics must not disable that fallback; an observed
++        # replacement identity, however, must never authorize a group signal.
++        fallback_allowed = process.returncode is None
++        if leader is not None:
++            try:
++                if not same_process(leader, process_status(process.pid)):
++                    fallback_allowed = False
++                    cleanup_status = "session-unverified"
++            except Exception:
++                cleanup_status = "session-unverified"
++        try:
++            if fallback_allowed:
++                os.killpg(process.pid, signal.SIGKILL)
+         except ProcessLookupError:
+             pass
+-        cleanup_status = "complete"
++        except OSError:
++            cleanup_status = "session-unverified"
+         try:
+             stdout, stderr = process.communicate(timeout=max(0, cleanup_deadline - time.monotonic()))
+         except subprocess.TimeoutExpired as draining:
+@@ -137,6 +219,67 @@ class CommandExampleRunnerTests(unittest.TestCase):
+                 self.assertEqual("visible stdout\n", result.stdout)
+                 self.assertEqual("visible stderr\n", result.stderr)
+ 
++    @unittest.skipUnless(sys.platform == "linux", "owned-session observation uses Linux procfs")
++    def test_real_ninja_child_group_is_observed_and_cleaned_without_touching_another_session(self):
++        ninja = shutil.which("ninja")
++        if not ninja:
++            if os.environ.get("GITHUB_ACTIONS") == "true":
++                self.fail("hosted regression requires the existing Ninja tool")
++            self.skipTest("Ninja unavailable")
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            leaf = root / "leaf.py"
++            leaf.write_text(
++                "import json, os, time\nfrom pathlib import Path\n"
++                "fields = Path('/proc/self/stat').read_text().rsplit(') ', 1)[1].split()\n"
++                "Path('leaf.json').write_text(json.dumps({'pid': os.getpid(), "
++                "'pgid': os.getpgrp(), 'sid': os.getsid(0), 'start_ticks': int(fields[19])}))\n"
++                "time.sleep(60)\n"
++            )
++            command = shlex.join([sys.executable, str(leaf)]).replace("$", "$$")
++            (root / "build.ninja").write_text(f"rule hold\n  command = {command}\nbuild sentinel: hold\n")
++            unrelated = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(60)"],
++                                         start_new_session=True)
++            identity = None
++            try:
++                code = ('printf "%s\\n" "$$" > owner.pid; "$1" -f build.ninja -j 1; '
++                        'printf "unexpected completion\\n"')
++                with self.assertRaises(AssertionError) as failure:
++                    run_example(code, root, ninja, timeout=1, label="real-ninja-session")
++                message = str(failure.exception)
++                self.assertTrue((root / "leaf.json").exists(), message)
++                identity = json.loads((root / "leaf.json").read_text())
++                owner = int((root / "owner.pid").read_text())
++                self.assertEqual(owner, identity["sid"])
++                self.assertNotEqual(owner, identity["pgid"], "fixture must exercise Ninja's new group")
++                snapshot = json.loads(message.split("process_snapshot: ", 1)[1].split("\nstdout:", 1)[0])
++                with self.subTest("session snapshot"):
++                    self.assertIn(identity["pid"], [item["pid"] for item in snapshot["processes"]], message)
++                with self.subTest("live leaf cleanup"):
++                    try:
++                        fields = Path(f"/proc/{identity['pid']}/stat").read_text().rsplit(") ", 1)[1].split()
++                    except FileNotFoundError:
++                        pass
++                    else:
++                        self.assertIn(fields[0], {"Z", "X"}, message)
++                self.assertIsNone(unrelated.poll(), "unrelated session must survive cleanup")
++                self.assertNotIn(unrelated.pid, [item["pid"] for item in snapshot["processes"]])
++            finally:
++                unrelated.kill()
++                unrelated.wait(timeout=2)
++                # Independent fixture cleanup also protects a failing baseline.
++                if identity is None and (root / "leaf.json").exists():
++                    identity = json.loads((root / "leaf.json").read_text())
++                if identity is not None:
++                    try:
++                        fields = Path(f"/proc/{identity['pid']}/stat").read_text().rsplit(") ", 1)[1].split()
++                        if int(fields[3]) == identity["sid"] and int(fields[19]) == identity["start_ticks"]:
++                            os.killpg(identity["pgid"], signal.SIGKILL)
++                    except ProcessLookupError:
++                        pass
++                    except FileNotFoundError:
++                        pass
++
+     def test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group(self):
+         with tempfile.TemporaryDirectory() as directory:
+             root = Path(directory)
+@@ -166,7 +309,8 @@ class CommandExampleRunnerTests(unittest.TestCase):
+                 if snapshot["processes"]:
+                     self.assertEqual(1, len({record["pgid"] for record in snapshot["processes"]}))
+                 for record in snapshot["processes"]:
+-                    self.assertEqual({"pid", "pgid", "comm", "state", "user_ticks", "system_ticks", "wchan"},
++                    self.assertEqual({"pid", "ppid", "pgid", "sid", "start_ticks", "comm", "state",
++                                      "user_ticks", "system_ticks", "wchan"},
+                                      set(record))
+                 # Linux may briefly retain an already killed orphan as a zombie;
+                 # that is not a running child, and is reaped by its new parent.
+@@ -196,9 +340,82 @@ class CommandExampleRunnerTests(unittest.TestCase):
+             message = str(failure.exception)
+             self.assertIn("timeout; budget=0.1s", message)
+             self.assertIn('"status": "unavailable"', message)
+-            self.assertIn("cleanup=complete", message)
++            self.assertIn("cleanup=session-unverified", message)
+             self.assertNotIn("private detail", message)
+ 
++    def test_late_status_errors_preserve_timeout_and_original_group_cleanup(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            read_status = process_status
++            calls = 0
++            def fails_after_identity(pid, **kwargs):
++                nonlocal calls
++                calls += 1
++                if calls == 1:
++                    return read_status(pid, **kwargs)
++                raise RuntimeError("SYNTHETIC_PRIVATE_STATUS_FAILURE")
++            try:
++                with mock.patch(__name__ + ".process_status", side_effect=fails_after_identity):
++                    with self.assertRaises(AssertionError) as failure:
++                        run_example('printf "%s\\n" "$$" > owner.pid; printf "started\\n"; sleep 60',
++                                    root, timeout=0.1)
++                message = str(failure.exception)
++                self.assertIn("timeout; budget=0.1s", message)
++                self.assertIn("cleanup=session-unverified", message)
++                self.assertIn("stdout:\nstarted", message)
++                self.assertNotIn("SYNTHETIC_PRIVATE_STATUS_FAILURE", message)
++            finally:
++                if (root / "owner.pid").exists():
++                    try:
++                        owner = int((root / "owner.pid").read_text())
++                        if os.getsid(owner) == owner:
++                            os.killpg(owner, signal.SIGKILL)
++                    except ProcessLookupError:
++                        pass
++
++    def test_incomplete_session_observation_cannot_report_complete(self):
++        with tempfile.TemporaryDirectory() as directory:
++            for status in ("bounded", "partial", "unavailable"):
++                with self.subTest(status=status), mock.patch(
++                        __name__ + ".owned_process_snapshot", return_value={"status": status, "processes": []}):
++                    with self.assertRaises(AssertionError) as failure:
++                        run_example('printf "started\\n"; sleep 60', Path(directory), timeout=0.1)
++                    self.assertIn("cleanup=session-unverified", str(failure.exception))
++                    self.assertIn("stdout:\nstarted", str(failure.exception))
++
++    @unittest.skipUnless(hasattr(os, "pidfd_open") and hasattr(signal, "pidfd_send_signal"), "pidfd unavailable")
++    def test_process_identity_changes_are_rejected_before_signalling(self):
++        original = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
++        for replacement in (dict(original, start_ticks=11), dict(original, sid=999)):
++            with self.subTest(replacement=replacement), \
++                    mock.patch(__name__ + ".process_status", return_value=replacement), \
++                    mock.patch("os.pidfd_open", return_value=37), \
++                    mock.patch("signal.pidfd_send_signal") as send, mock.patch("os.close") as close:
++                self.assertFalse(terminate_owned_process(original, 123, time.monotonic() + 1))
++                send.assert_not_called()
++                close.assert_called_once_with(37)
++
++    @unittest.skipUnless(hasattr(os, "pidfd_open") and hasattr(signal, "pidfd_send_signal"), "pidfd unavailable")
++    def test_foreign_session_expired_budget_and_permission_failure_never_signal(self):
++        original = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
++        with mock.patch("os.pidfd_open") as opened, mock.patch("signal.pidfd_send_signal") as send:
++            self.assertFalse(terminate_owned_process(original, 999, time.monotonic() + 1))
++            self.assertFalse(terminate_owned_process(original, 123, time.monotonic() - 1))
++            opened.assert_not_called()
++            send.assert_not_called()
++        with mock.patch("os.pidfd_open", side_effect=PermissionError), \
++                mock.patch("signal.pidfd_send_signal") as send:
++            self.assertFalse(terminate_owned_process(original, 123, time.monotonic() + 1))
++            send.assert_not_called()
++
++    def test_replaced_leader_cannot_authorize_session_cleanup(self):
++        leader = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
++        snapshot = {"status": "observed", "processes": [leader]}
++        with mock.patch(__name__ + ".process_status", return_value=dict(leader, start_ticks=11)), \
++                mock.patch(__name__ + ".terminate_owned_process") as terminate:
++            self.assertEqual("session-unverified", cleanup_owned_session(leader, snapshot, time.monotonic() + 1))
++            terminate.assert_not_called()
++
+     def test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes(self):
+         with tempfile.TemporaryDirectory() as directory:
+             root = Path(directory)
+@@ -208,10 +425,10 @@ class CommandExampleRunnerTests(unittest.TestCase):
+             (root / "123").mkdir()  # Process disappears before stat can be read.
+             (root / "124").mkdir()
+             (root / "124/stat").write_text("incomplete procfs record")
+-            for pid, group in ((125, 123), (126, 999)):
++            for pid, group, session in ((125, 999, 123), (126, 123, 999)):
+                 (root / str(pid)).mkdir()
+                 (root / str(pid) / "stat").write_text(
+-                    f"{pid} (fixture process) S 1 {group} 0 0 0 0 0 0 0 0 7 8 0\n")
++                    f"{pid} (fixture process) S 1 {group} {session} 0 0 0 0 0 0 0 7 8 0 0 0 0 0 0 99\n")
+                 (root / str(pid) / "cmdline").write_text("SYNTHETIC_PRIVATE_ARGUMENT")
+                 (root / str(pid) / "environ").write_text("SYNTHETIC_PRIVATE_ENVIRONMENT")
+             snapshot = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root)
+@@ -228,7 +445,7 @@ class CommandExampleRunnerTests(unittest.TestCase):
+             for pid in range(123, 128):
+                 (root / str(pid)).mkdir()
+                 (root / str(pid) / "stat").write_text(
+-                    f"{pid} (fixture) S 1 123 0 0 0 0 0 0 0 0 7 8 0\n")
++                    f"{pid} (fixture) S 1 123 123 0 0 0 0 0 0 0 7 8 0 0 0 0 0 0 99\n")
+             result = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root, limit=2)
+             self.assertEqual("bounded", result["status"])
+             self.assertEqual(2, len(result["processes"]))

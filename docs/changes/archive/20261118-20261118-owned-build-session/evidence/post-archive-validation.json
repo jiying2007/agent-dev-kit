@@ -1,0 +1,382 @@
+{
+  "started_at": "2026-11-17T16:31:57.784230+00:00",
+  "completed_at": "2026-11-17T16:31:57.804616+00:00",
+  "exit_code": 0,
+  "product_files_unchanged": 10,
+  "result": {
+    "schema": "adk-review-evidence/v1",
+    "subject_id": "20261118-owned-build-session",
+    "scope": "source-change",
+    "author_id": "ai/implement-session-cleanup",
+    "owner": "leiwenjun",
+    "reviewer": {
+      "id": "ai/independent-review",
+      "kind": "ai",
+      "independence": "independent"
+    },
+    "reviewed_at": "2026-11-17T16:30:24Z",
+    "evidence_completed_at": "2026-11-17T16:28:19.119577Z",
+    "verdicts": {
+      "spec": "pass",
+      "quality": "pass"
+    },
+    "findings": [
+      {
+        "id": "owned-session-pgid-cleanup",
+        "severity": "major",
+        "disposition": "fixed",
+        "reason": "The baseline helper observed and killed only the outer PGID, so real Ninja rule shell/leaf processes in another PGID but the same owned SID remained alive after cleanup=complete. The final helper observes the owned session, retains the unreaped Popen leader identity, opens pidfds and rechecks PID/SID/starttime before signalling, then checks live members and stream/leader completion conservatively. The unchanged original 0.2-second probe independently observed the formerly omitted sh/leaf, preserved the timeout, and found no live leaf or need for independent cleanup after return. Its original expected-defect oracle exit 1/not-confirmed is retained; the preregistered reviewer harness separately passed."
+      },
+      {
+        "id": "late-status-timeout-preservation",
+        "severity": "major",
+        "disposition": "fixed",
+        "reason": "The first implementation could let a late process_status RuntimeError replace the original timeout and prevent fallback. The implementer preserved an actual RED using a real process and a narrow diagnostic-read failure. The final frozen helper treats that failure as session-unverified, preserves timeout and output, and retains the bounded original-group fallback while rejecting an observed replacement identity. The exact-source final module passed 52 tests with no skips, including this regression. The reviewer independently inspected the original RED, corrective diff and final source."
+      }
+    ],
+    "limitations": [
+      "This is an owner-delegated independent AI source review, not human review, field verification, provider execution or release authorization. Helper author is ai/implement-session-cleanup; the coordinator authored requirements/design, version metadata and evidence packaging. This reviewer did not modify the implementation, tests, requirements or design.",
+      "The tested product is 5ff076a14c88c65132e44dd8bfdb4c2ab71ee4f8 / tree 14e5482c9ea3f97abe6abfcc74f8251088e46e8e. Subsequent evidence and normal review/archive output is a separately reviewed packaging overlay, not a claim that it was present during the clean full suite.",
+      "Both original hosted main 15fa31d1 ADC/CMake 15-second timeouts remain UNKNOWN and outside the fixed findings. No attempt 3 of run 44116100760 was performed. Cleanup executes after TimeoutExpired, so this source fix and a new-head pass do not establish that the historical wait was cured or that runtime performance or stability improved.",
+      "The helper owns the SID created by start_new_session and retains bounded diagnostics: 50 ms, 256 scanned entries, 16 records, with one shared 1-second cleanup deadline and the original 15-second default work budget. Missing, inaccessible or truncated observations and missing pidfd capabilities cannot certify complete. Deliberate setsid escape is outside this finite helper guarantee.",
+      "Independent probes used actual local Ninja 1.11.1.git.kitware.jobserver-1 and actual pidfd operations on test-owned processes. No actual PID reuse, hosted Ninja binary equivalence, arbitrary process-tree containment or non-Linux full behavior was demonstrated. Forged SID/starttime and missing-capability branch scopes are explicit in retained raw results.",
+      "The original immutable probe was designed to confirm the old defect, so its new-source exit 1/not-confirmed is retained without relabelling. The independent preregistered outer harness separately verified timeout preservation, snapshot membership, no live leaf, no extra cleanup, and unaffected unrelated-session controls, and exited 0.",
+      "Frozen review-input-state and wrapper origin/source_directory values describe the historical observation location. Record-relative evidence survives normal archive moves; those original bytes must not be rewritten to imply later lifecycle state. Mutable tasks/checklist/state/history/review/archive outputs are not bound as future current-source invariants.",
+      "Format retains existing non-executable-script warnings and release check records runtime_eval_executed=false. No paid model, runtime installation, device operation or model effectiveness/Token/cost evaluation was performed. Remote PR/main CI, protected merge, immutable Release and Root source-only promotion require their own exact-source receipts and are not pre-certified."
+    ],
+    "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+    "validator_sha256": {
+      "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+      "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+      "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+    },
+    "target": {
+      "base_commit": "15fa31d1a3f994a516d5a9003edaadd1295c74b5",
+      "head_commit": "5ff076a14c88c65132e44dd8bfdb4c2ab71ee4f8",
+      "original_patch_sha256": "449e51ce95bb20f51ea51faaeda3ebc3aac77b957727e129fb2883a7a9b00b27"
+    },
+    "sources": [
+      {
+        "base": "repository",
+        "path": ".version-lock",
+        "sha256": "b618eb58577b61429990feff0a5e419e38aec275a28e5a9f592189d9e197130a"
+      },
+      {
+        "base": "repository",
+        "path": "CHANGELOG.md",
+        "sha256": "d2830659a3e0d4b91342936fbf2332605edfc7cfb8048a968b7bda04da47f4d3"
+      },
+      {
+        "base": "repository",
+        "path": "CONTEXT.md",
+        "sha256": "2c01d46afa0ecb3a5a6b4c69a5a35c552fe2775145663aa06565f235be89a2b9"
+      },
+      {
+        "base": "repository",
+        "path": "README.md",
+        "sha256": "95d5af23ee6685df4f09ab83ea060399e234f87549b6280a2a6d56f21bde57e1"
+      },
+      {
+        "base": "repository",
+        "path": "manifest.json",
+        "sha256": "068acd701598a26f0d95db9dac9bd2d6e88c048ba4c8bb559c972da797f85e72"
+      },
+      {
+        "base": "repository",
+        "path": "manifests/software_m5_eval_contract.json",
+        "sha256": "9b3462bc4d8a7bed47d85a2407f3abf2ec24ef66ae69dd99428533b86289fddf"
+      },
+      {
+        "base": "repository",
+        "path": "pyproject.toml",
+        "sha256": "e47d3bd4da16bcd5826c2bf3455d8dad326806c1fe1ecb005c842f1e357162ef"
+      },
+      {
+        "base": "repository",
+        "path": "src/agent_dev_kit/__init__.py",
+        "sha256": "ec47f1c151b9b95e6b53d20c4f74fd153dd3b74573d443cd8e10a85b33cb7f83"
+      },
+      {
+        "base": "repository",
+        "path": "tests/fixtures/skill_method_ab_prereg.json",
+        "sha256": "e7ed4685db45654d357a7e3ca86223d8522de9e855431f446b980b22b210be97"
+      },
+      {
+        "base": "repository",
+        "path": "tests/test_skill_command_examples.py",
+        "sha256": "a17791efaf2ad0dd7b0923dc49b4c219df0a3eb563495b419cc9de281cb12fc0"
+      },
+      {
+        "base": "repository",
+        "path": ".adk/review-policy.json",
+        "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24"
+      },
+      {
+        "base": "repository",
+        "path": ".adk/review-authorization.md",
+        "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5"
+      },
+      {
+        "base": "repository",
+        "path": "src/agent_dev_kit/review_evidence.py",
+        "sha256": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47"
+      },
+      {
+        "base": "repository",
+        "path": "src/agent_dev_kit/strict_json.py",
+        "sha256": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5"
+      },
+      {
+        "base": "repository",
+        "path": "src/agent_dev_kit/readiness_evidence.py",
+        "sha256": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+      },
+      {
+        "base": "record",
+        "path": "evidence/original.patch",
+        "sha256": "449e51ce95bb20f51ea51faaeda3ebc3aac77b957727e129fb2883a7a9b00b27"
+      },
+      {
+        "base": "record",
+        "path": "proposal.md",
+        "sha256": "c320d1a79d17cc6510a7c1acc2387457afbe007707dc0e11406c58965ff653c6"
+      },
+      {
+        "base": "record",
+        "path": "requirements.md",
+        "sha256": "ddf648a89c0f78f0b1c407e356710ec4f26377a7030445de570530550c7e1b16"
+      },
+      {
+        "base": "record",
+        "path": "design.md",
+        "sha256": "e563397234ef092d34db41951fcad3227474d06aa6d26be72a81c450f0c8d154"
+      }
+    ],
+    "evidence": [
+      {
+        "base": "record",
+        "path": "evidence/independent-review.md",
+        "sha256": "5143730af537805a1a883dc372a1b4e41ada2ff61d956dabf9a0e77082464303"
+      },
+      {
+        "base": "record",
+        "path": "verification.md",
+        "sha256": "1263a3754936cd69f022a945658d858168984137a29db25661c1795dffc8a72f"
+      },
+      {
+        "base": "record",
+        "path": "evidence/review-input-state.json",
+        "sha256": "c9978c2804530f19d615452d4867f32b21ef94cd85e52b77d759b46c21d096b7"
+      },
+      {
+        "base": "record",
+        "path": "evidence/independent/index.json",
+        "sha256": "5ac934d5591b575e8afdc8e25d603465b0d84fd66b2002bc53ecfdf818971f84"
+      },
+      {
+        "base": "record",
+        "path": "evidence/independent/probe-plan.json.json",
+        "sha256": "6a65efb15d580e75b9530f8bea6b3153fd28c657c0bd4a4e042d917ff8708afe"
+      },
+      {
+        "base": "record",
+        "path": "evidence/independent/probe-result.json.json",
+        "sha256": "ebd685a568c4eef1ce953452c7eb22968e70b9736c9708fd829899fb6e87cbfb"
+      },
+      {
+        "base": "record",
+        "path": "evidence/independent/run_independent_probes.py.json",
+        "sha256": "9d0d26f854c3df480be5dd0ee0112d51342cdf98affb5de7270833292a763340"
+      },
+      {
+        "base": "record",
+        "path": "evidence/independent/original-counterexample/ninja_cleanup_probe.py.json",
+        "sha256": "60c76914ec41b890b6c80c2fbf30da5719e1e6b8007400fae08d5e04c3bc803b"
+      },
+      {
+        "base": "record",
+        "path": "evidence/independent/original-counterexample/ninja-cleanup-probe-result.json.json",
+        "sha256": "30cc2efa4ea09387f8665faee148b48e46ca88dc50e60ee3bcb54f8a02475586"
+      },
+      {
+        "base": "record",
+        "path": "evidence/packaging-audit/index.json",
+        "sha256": "752361444a742603f61432b751c62090f85dc73c28c454a3401ecf68670da7e2"
+      },
+      {
+        "base": "record",
+        "path": "evidence/packaging-audit/audit_packaging.py.json",
+        "sha256": "52263cc657b55e5125310cdd3bafbab90ef9de10d338fb1e63a1d72d2e3d63fc"
+      },
+      {
+        "base": "record",
+        "path": "evidence/packaging-audit/packaging-audit-result.json.json",
+        "sha256": "c4d2e18c1023ee2a8132a51d86c28fae2b7a5966c9bd33eecc4f4f054ce28167"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/index.json",
+        "sha256": "a4dae84e6abd5f029b05fa2e4d7194b34d80aa47de2f3c3a45df12db81f39d0e"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/export.log.json",
+        "sha256": "283748363fbff4f4cc1a4df6ff14fb46480c46bb7d36bfc2952cfd32a6bb2b9a"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/focused-ruff.log.json",
+        "sha256": "56077ea2c947cb4fbcde07e84b8302445741a887c44808b313abee6bbfec3af1"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/format.log.json",
+        "sha256": "e89146f4dec3f6f306efd434ecb601bd9b6e67de3965cdfd51bf3dd70e1dc130"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/full-regression.log.json",
+        "sha256": "3dee8e223439dd11a3680bbbc1ff3510eeef74d8b0921991f810e08fcbbf0c82"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/full-timing.json.json",
+        "sha256": "ac3bb095bdc3f9a09891adadaaf6a429ce1c8d3826442a9f153e65dd140805b3"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/mypy.log.json",
+        "sha256": "ee5848763d8c1fea71044cac317f2f3d86c662a9ed50b80d980f8b853267baad"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/release-check.log.json",
+        "sha256": "0b558f2b0049159a4a20c344a3b647c4ab76900a119bb1c7eddb0665481a5ab9"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/results.json.json",
+        "sha256": "f5ecdff267afcf0f118398568d88e9929b1aa7f1ff1bb64ba8ec8480708ae1f1"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/ruff.log.json",
+        "sha256": "879aad4eec4aab2a34d1c1fedff1dbc77b4c25535712e400acd37ea1d33682ba"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/source-after.json.json",
+        "sha256": "8f35ce2ccb522b625b741137248b62059073d266d3d56c16e6913e89db41ae25"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/source-before.json.json",
+        "sha256": "6b4ecfbea1e7ccc2c2356fef4302e8ef48c3752e5c4401c4cbd488b7adbd51d8"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/strict.log.json",
+        "sha256": "caafbb048744e42ae12199700166cafc3f06774a9a02d5c8182ecd08c8328654"
+      },
+      {
+        "base": "record",
+        "path": "evidence/full/summary.json.json",
+        "sha256": "a8bfa5c53b7acbb2248e9d37b2894f5183690136c276dd46f4ae7c35fd72849b"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/index.json",
+        "sha256": "a2b9d4e55bbf5a2e9501aa75aed28c709818eb16222f9ec9633ceb5048392137"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/red-ninja/source-before.py.json",
+        "sha256": "6a8a929fa7dd5b5de4b4723d42b769ef21c1239a146de18c2cf876846b9bb75a"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/red-ninja/result.json.json",
+        "sha256": "e3222f1ef89f9234e62c9cb9d1ef29b1170c447e6d3a70b7e5f227c0ff52c3e6"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/red-ninja/stderr.log.json",
+        "sha256": "a9d69e8eaff4a2d0e1a8971070dee05f1a77eae465f0bc98d6c38cdd0801a7a0"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/red-late-status/source-before.py.json",
+        "sha256": "10a4b88e07555fd1e97c50bdcd68c075d9d538264ff55ef1f354d2f913de45e7"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/red-late-status/result.json.json",
+        "sha256": "346f1589713eeeee832f02ecdd78cf22100571aa2a83edf7f3d4ffd1a0de16d0"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/red-late-status/stderr.log.json",
+        "sha256": "b7405d9d36e4d9f08cbbd35340d0aa8dc372b419674969d1f0572cceee4c10e9"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/green-module-final/result.json.json",
+        "sha256": "26892df1ae9832480332e5c168d1c7086512b9f13f4fcb59e05c388823ffb934"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/green-module-final/stderr.log.json",
+        "sha256": "5d6c9a5bd77aae8f25ba3794801779f99e8de4ff28efbdf1890dc1f0c94baa43"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/ruff-final/result.json.json",
+        "sha256": "a93c38a5f23fbe4b6b0818228b545639b9de8ea02e95ed4d70027d34f8c81fcb"
+      },
+      {
+        "base": "record",
+        "path": "evidence/implementation/ruff-final/stdout.log.json",
+        "sha256": "0091b346f5712f5b33c75216e79aaf5894c5b0c8109a87322e6541799e91d07c"
+      },
+      {
+        "base": "record",
+        "path": "evidence/baseline/index.json",
+        "sha256": "0848b9bdc2bb9ca8942d2871ca4b0c766245772cc338dd607a6cadeb423b4960"
+      },
+      {
+        "base": "record",
+        "path": "evidence/baseline/diagnosis-ninja-cleanup-probe-result.json.json",
+        "sha256": "934ace519a2d718f9538e381ffd742a64509def04c5d3f72f214f795fd5b5ae3"
+      },
+      {
+        "base": "record",
+        "path": "evidence/baseline/main-attempt1-regression-failure-log.log.json",
+        "sha256": "f3874066ece916127a99f6e48c9707cfc4c21bcbecf5f684d05403b52de5d872"
+      },
+      {
+        "base": "record",
+        "path": "evidence/baseline/main-attempt2-regression-failure-log.log.json",
+        "sha256": "8fe16193db7f07391bd3380bad4ec81b9300bf7cdb0004af4d1ac27e370dc171"
+      },
+      {
+        "base": "record",
+        "path": "evidence/baseline/exhausted-reverification-plan.json",
+        "sha256": "23ecd4ae1058c019116d08e21643052af420c633d6a4566fdc542ca1fb7338d7"
+      },
+      {
+        "base": "record",
+        "path": "evidence/baseline/runtime-review.md.json",
+        "sha256": "de85638ec8e2607f808569774e3a1b552d2c3beaed228ccea9bae2d94b82a263"
+      }
+    ],
+    "status": "pass",
+    "record_sha256": "cc032d73b41338c672f2d07115017e0ab87e980b631d5b40c05ce9f8b08c4297",
+    "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+    "review_scope": "source-change",
+    "human_review_performed": false,
+    "field_evidence_verified": false,
+    "provider_execution_performed": false,
+    "product_release_authorized": false
+  },
+  "boundary": "Post-archive portability/source check; no external qualification"
+}

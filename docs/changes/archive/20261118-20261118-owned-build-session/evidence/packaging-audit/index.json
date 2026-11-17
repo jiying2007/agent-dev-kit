@@ -1,0 +1,19 @@
+{
+  "captured_at": "2026-11-17T16:28:18.332114+00:00",
+  "source_directory": "/workspace/scratch/d417066aafa8/independent-review/owned-build-session",
+  "records": [
+    {
+      "path": "audit_packaging.py.json",
+      "raw_bytes": 5860,
+      "raw_sha256": "3c75a6007b5040abf72e3ec16d5a83c919c8f739720d3beb1ecdee22653509b1",
+      "wrapper_sha256": "52263cc657b55e5125310cdd3bafbab90ef9de10d338fb1e63a1d72d2e3d63fc"
+    },
+    {
+      "path": "packaging-audit-result.json.json",
+      "raw_bytes": 33848,
+      "raw_sha256": "693f418fcc889be90f064d16c8532ed475ea33f22a822f8dcd48d75b71a532a7",
+      "wrapper_sha256": "c4d2e18c1023ee2a8132a51d86c28fae2b7a5966c9bd33eecc4f4f054ce28167"
+    }
+  ],
+  "boundary": "Actual original results retained; expected RED and unmet gates remain failures"
+}

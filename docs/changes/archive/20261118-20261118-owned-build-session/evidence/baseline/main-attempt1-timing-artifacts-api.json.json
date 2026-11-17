@@ -1,0 +1,7 @@
+{
+  "origin": "run44116100760/attempt1/timing-artifacts-api.json",
+  "encoding": "utf-8",
+  "bytes": 734,
+  "sha256": "3dfea3ee8bed418b77dc8e87e6f48025b3b976f9101727b1b51a6ed36e5b87a0",
+  "content": "{\"total_count\":1,\"artifacts\":[{\"id\":14342768488,\"node_id\":\"MDg6QXJ0aWZhY3QxNDM0Mjc2ODQ4OA==\",\"name\":\"adk-regression-timing-py3.12\",\"size_in_bytes\":2051,\"url\":\"https://api.github.com/repos/jiying2007/agent-dev-kit/actions/artifacts/14342768488\",\"archive_download_url\":\"https://api.github.com/repos/jiying2007/agent-dev-kit/actions/artifacts/14342768488/zip\",\"expired\":false,\"digest\":\"sha256:4c48e410ba1a3a9cbe90e7ced2c816b45474cce59a514a1fea7fccca005b6112\",\"created_at\":\"2026-11-17T15:45:00Z\",\"updated_at\":\"2026-11-17T15:45:00Z\",\"expires_at\":\"2026-12-01T15:44:59Z\",\"workflow_run\":{\"id\":44116100760,\"repository_id\":1233068961,\"head_repository_id\":1233068961,\"head_branch\":\"main\",\"head_sha\":\"15fa31d1a3f994a516d5a9003edaadd1295c74b5\"}}]}"
+}
