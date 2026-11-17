@@ -973,6 +973,9 @@
         "release_action"
       ],
       "properties": {
+        "requested_action": {
+          "$ref": "#/$defs/stringArray"
+        },
         "readonly_scope": {
           "$ref": "#/$defs/stringArray"
         },

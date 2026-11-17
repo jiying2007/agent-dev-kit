@@ -160,12 +160,8 @@ class SkillRelationshipContractTests(unittest.TestCase):
             local_schema.write_bytes(schema_path.read_bytes())
             with self.assertRaisesRegex(ManifestError, "Only delivery-precedence"):
                 _load_contract(
-                    str(bad_contract),
-                    bad_contract.stat().st_mtime_ns,
-                    bad_contract.stat().st_size,
-                    str(local_schema),
-                    local_schema.stat().st_mtime_ns,
-                    local_schema.stat().st_size,
+                    bad_contract.read_bytes(),
+                    local_schema.read_bytes(),
                 )
 
 

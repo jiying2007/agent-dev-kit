@@ -1,8 +1,8 @@
 ---
 name: adk-context-engineering
 description: "用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。"
-version: 2.0.2
-last_updated: 2026-11-16
+version: 2.0.3
+last_updated: 2026-11-17
 triggers:
   - 上下文工程
   - 上下文膨胀
@@ -32,44 +32,35 @@ constraints:
 # adk-context-engineering
 
 ## Goal
-生成最小充分、可恢复、可追溯的 context policy。
-
-## Use When
-- 长任务需 checkpoint / resume / handoff，或并行 Agent 需共享 contract 与上下文隔离。
-- 上下文膨胀、冲突、缺证、错误 reference 或过度压缩导致误解。
-
-没有 context 边界问题时仅作 supporting capability，不替代计划、编码或测试。
+生成最小充分、可恢复、可追溯的 context policy。无上下文边界问题时仅作 supporting capability，不替代计划、编码或测试。
 
 ## Prerequisites
-- 明确当前 objective、phase、risk level 与候选 primary Skill。
-- 知道哪些输入是 authoritative facts，哪些只是假设、历史摘要或按需 reference。
+明确 objective、phase、risk 与候选 primary；区分权威事实、假设、历史摘要和按需 reference。
 
 ## Context Policy
-1. **Stable core**：只保留长期稳定的 role/rules/contract；优先 cache-friendly 内容。
-2. **Task state**：目标、当前阶段、done/open/blocker、candidate identity。
-3. **Evidence**：先摘要与 evidence ref；高风险/争议结论保留 L3/raw pointer，不默认复制全文。
-4. **On-demand capability**：只有触发后才加载 Skill body、reference、tool schema。
-5. **Handoff isolation**：子任务只接收 objective、必要 facts/contract、scope、evidence refs；不默认继承完整聊天历史。
+1. **Stable core**：稳定 role/rules/contract，优先 cache-friendly。
+2. **Task state**：目标、phase、done/open/blocker、candidate identity。
+3. **Evidence**：摘要与 refs；高风险/争议保留 L3/raw pointer。
+4. **On-demand capability**：命中后加载 Skill、reference、tool schema。
+5. **Handoff isolation**：只交 objective、必要 facts/contract、scope、refs，不复制完整历史。
 
 ## Workflow
-1. 识别当前决策真正需要的事实、contract 和 evidence。
-2. 将信息标记为 `always | phase | on-demand | raw-pointer | exclude`。
-3. 删除重复、过期、低价值动态输出；冲突信息保留来源与 freshness，不静默覆盖。
-4. 为长任务写 summary-first checkpoint；raw output 仅保留 opaque/path pointer 和 retention decision。
-5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选根下 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
-6. 验证恢复能力：新执行者只读取摘要和 refs 应能知道目标、已确认事实、未决问题和下一步；若不能，补缺失信息而不是扩大所有上下文。
+1. 按当前决策将事实/contract/evidence 标为 `always | phase | on-demand | raw-pointer | exclude`；去重、去过期输出，冲突保留来源与 freshness。
+2. 长任务写 summary-first checkpoint；raw output 留 pointer 与 retention decision。
+3. 记录仍需 Skill 的来源、内容身份（可核版本/hash；未知注明）、必要 refs、正文状态 `intact | summarized | missing | changed`。
+4. 恢复先核目标/权限；仅同来源同内容且正文完整仍在当前上下文时去重。正文被摘要/丢失或来源/内容变化则按需重读；历史“已加载”不证明有效。排除不再适用的 Skill；必要内容不可读记 `needs-evidence`。
+5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
+6. 新执行者据摘要和 refs 核对目标、事实、未决问题与下一步；只补缺项，不全量重载。
 
 ## Failure / Abstain
-- 权威来源不明确：输出 `needs-evidence`，不要用历史摘要替代事实。
-- 压缩会让 blocker、permission、candidate identity 或原始证据不可追溯：保留 pointer 并拒绝继续压缩。
-- 问题实质是 routing/token-policy：分别交给 `adk-runtime-router` / `adk-token-context-governance`。
+- 来源不明记 `needs-evidence`；历史摘要不替代事实。
+- 压缩丢失 blocker、permission、candidate identity 或原始证据指针时停止。
+- routing/token-policy 交 `adk-runtime-router` / `adk-token-context-governance`。
 
 ## Quality Gate
-- 关键信息均有 provenance 或明确 assumption 标记。
-- dynamic/raw 内容不进入 always-loaded core。
-- handoff 不扩大权限，不复制无关完整历史。
-- 恢复摘要包含 objective、state、blockers、evidence refs、next action。
-- “质量提升”必须由具体误解/缺失样例或 eval 证明，不接受主观描述。
+- 事实有 provenance，假设明示；dynamic/raw 不进入 always-loaded core。
+- 恢复摘要覆盖目标、状态、阻塞、证据与下一步；Skill 有效性按当前内容核验，不扩大权限。
+- 质量提升须由误解/缺失样例或 eval 证明；本方法不证明宿主已实现自动恢复。
 
 ## Evidence Template
 ```md
@@ -77,6 +68,7 @@ constraints:
 - Confirmed Facts:
 - State / Blockers:
 - Scope / Permission:
+- Active Skills: source / content identity / required refs / content state
 - Evidence / Fallback:
 - Next Actions:
 - Context decisions: always / phase / on-demand / raw-pointer / excluded

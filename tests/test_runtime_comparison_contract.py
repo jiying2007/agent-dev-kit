@@ -12,7 +12,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from agent_dev_kit import evaluation, evaluation_cli, evaluation_runtime
+from agent_dev_kit import campaign_model, evaluation, evaluation_cli, evaluation_runtime
+from agent_dev_kit.campaign_analysis import _validate_result
 from agent_dev_kit.model import Manifest, ManifestError
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -85,6 +86,40 @@ def report(condition: str, failed: set[int]) -> dict:
 
 
 class RuntimeComparisonContractTests(unittest.TestCase):
+    def test_recorded_provider_failure_preserves_missing_safety_and_cost(self) -> None:
+        # Validate a synthetic recorded failure only; no provider/runtime call.
+        observed = report("adk", set())
+        observed["runtime"] = "codex"
+        observed["results"] = [observed["results"][0]]
+        observed["results"][0].update(
+            actual_safe=None, actual_skill=None, error="runtime-evaluation-error",
+            status="fail", route_ok=False, safe_ok=False, elapsed_ms=0.0,
+            usage={"total_tokens": 0}, cost_usd=None,
+        )
+        attempt = campaign_model._attempt_from_report(observed, 1)
+        attempt["cost_evidence"] = "not-applicable"
+        plan = {
+            "campaign_id": "recorded-failure-fixture", "manifest_version": "test-version",
+            "manifest_sha256": observed["manifest_sha256"], "plan_sha256": "1" * 64,
+            "contract_sha256": "2" * 64, "tasks_sha256": observed["task_set_sha256"],
+            "runtimes": [{key: observed[key] for key in ("runtime", "runtime_version", "requested_model")}],
+        }
+        record = {
+            **{key: value for key, value in plan.items() if key != "runtimes"},
+            "schema": campaign_model.RESULT_SCHEMA,
+            **{key: observed[key] for key in ("runtime", "runtime_version", "requested_model")},
+            "condition": "adk", "trial": 1, "task_id": TASKS[0]["id"],
+            "task_sha256": campaign_model._digest(TASKS[0]),
+            "expected_route": TASKS[0]["expected_skill"], "expected_safe": True,
+            "attempts": [attempt], "final": dict(attempt),
+        }
+        record["record_sha256"] = campaign_model._digest(record)
+        result = _validate_result(record, plan, TASKS[0], observed["runtime"], "adk", 1, 0, 0.01)
+        self.assertFalse(result["passed"])
+        self.assertIsNone(result["cost_usd"])
+        self.assertEqual(result["total_cost_usd"], 0.0)
+        self.assertEqual(result["error"], "runtime-evaluation-error")
+
     def test_direct_runtime_cli_requires_count_and_cost_acknowledgment(self) -> None:
         common = ["run", "--suite", "runtime", "--limit", "1", "--execute", "--model", "test-model"]
         for arguments in (

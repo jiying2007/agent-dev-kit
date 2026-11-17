@@ -1,5 +1,5 @@
 {
-  "version": "11.3.14",
+  "version": "11.3.15",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2207,6 +2207,16 @@
       "required_evidence": []
     },
     "phrase_classes": {
+      "requested_action": [
+        "写ADR",
+        "编写ADR",
+        "撰写ADR",
+        "更新ADR",
+        "修订ADR",
+        "写成ADR",
+        "记录为ADR",
+        "整理成ADR"
+      ],
       "readonly_scope": [
         "只读分析",
         "只读评估",
@@ -2660,7 +2670,7 @@
       },
       {
         "intent": "adr_writer",
-        "intent_zh": "写ADR/架构决策记录/ADR",
+        "intent_zh": "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录",
         "primary_skill": "adk-adr-writer",
         "supporting_skills": []
       },

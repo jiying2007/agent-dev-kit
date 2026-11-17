@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import json
 import subprocess
 import sys
@@ -9,6 +8,7 @@ import unittest
 from pathlib import Path
 
 from agent_dev_kit import campaign_model
+from agent_dev_kit.campaign_analysis import _validate_result
 from agent_dev_kit.effect_campaign_materializer import materialize_effect_campaign
 from agent_dev_kit.model import Manifest, ManifestError
 
@@ -346,6 +346,91 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
                 "claude",
                 campaign_root=self.root,
             )
+
+    def _record_and_plan(self):
+        path = campaign_model._result_path(self.state, "claude", "adk", 1, "task-a")
+        return path, json.loads(path.read_text()), json.loads((self.state / "campaign-plan.json").read_text())
+
+    def _validate_record(self, record, plan, runtime="claude", retry_limit=0, max_cost=0.01):
+        record.pop("record_sha256", None)
+        record["record_sha256"] = campaign_model._digest(record)
+        return _validate_result(record, plan, self.tasks[0], runtime, "adk", 1, retry_limit, max_cost)
+
+    def test_materializer_rejects_integer_safety_and_boolean_metrics(self) -> None:
+        for field, value in (("actual_safe", 1), ("elapsed_ms", True), ("cost_usd", False)):
+            with self.subTest(field=field):
+                self._write_state()
+                path, record, _ = self._record_and_plan()
+                record["attempts"][0][field] = record["final"][field] = value
+                record.pop("record_sha256")
+                record["record_sha256"] = campaign_model._digest(record)
+                write_json(path, record)
+                with self.assertRaises(ManifestError):
+                    materialize_effect_campaign(MANIFEST, self.contract_path, self.state,
+                                                self.effect_plan_path, "claude", campaign_root=self.root)
+
+    def test_result_validator_rejects_invalid_safety_and_nonfinite_numbers(self) -> None:
+        invalid = {
+            "actual_safe": (0, 1, "true", None),
+            "elapsed_ms": (False, True, float("nan"), float("inf"), -float("inf"), -1, "1", None),
+            "cost_usd": (False, True, float("nan"), float("inf"), -float("inf"), -1, "0", None),
+        }
+        for field, values in invalid.items():
+            for value in values:
+                with self.subTest(field=field, value=value):
+                    _, record, plan = self._record_and_plan()
+                    record["attempts"][0][field] = record["final"][field] = value
+                    with self.assertRaises(ManifestError):
+                        self._validate_record(record, plan)
+
+    def test_zero_numeric_measurements_and_false_safety_remain_valid(self) -> None:
+        _, record, plan = self._record_and_plan()
+        for attempt in (record["attempts"][0], record["final"]):
+            attempt.update(elapsed_ms=0, cost_usd=0.0, actual_safe=False, safe_ok=False, status="fail")
+        result = self._validate_record(record, plan)
+        self.assertEqual(result["elapsed_ms"], 0.0)
+        self.assertEqual(result["total_cost_usd"], 0.0)
+        self.assertFalse(result["safe_ok"])
+        self.assertFalse(result["passed"])
+
+    def test_final_snapshot_cannot_alias_boolean_and_integer_values(self) -> None:
+        _, record, plan = self._record_and_plan()
+        for attempt in (record["attempts"][0], record["final"]):
+            attempt.update(actual_safe=False, safe_ok=False, status="fail")
+        record["final"]["actual_safe"] = 0
+        with self.assertRaisesRegex(ManifestError, "final result does not match"):
+            self._validate_record(record, plan)
+
+    def test_unrepresentable_integer_measurements_fail_as_manifest_errors(self) -> None:
+        for field in ("elapsed_ms", "cost_usd"):
+            with self.subTest(field=field):
+                _, record, plan = self._record_and_plan()
+                record["attempts"][0][field] = record["final"][field] = 10 ** 400
+                with self.assertRaisesRegex(ManifestError, "is invalid"):
+                    self._validate_record(record, plan)
+
+    def test_finite_attempts_cannot_overflow_aggregated_measurements(self) -> None:
+        for field in ("elapsed_ms", "cost_usd"):
+            with self.subTest(field=field):
+                _, record, plan = self._record_and_plan()
+                record["attempts"][0][field] = 1e308
+                repeated = dict(record["attempts"][0], attempt=2)
+                record["attempts"].append(repeated)
+                record["final"] = dict(repeated)
+                with self.assertRaisesRegex(ManifestError, "total.*is invalid"):
+                    self._validate_record(record, plan, retry_limit=1, max_cost=1e308)
+
+    def test_finite_large_total_and_zero_measurements_remain_valid(self) -> None:
+        _, record, plan = self._record_and_plan()
+        record["attempts"][0].update(elapsed_ms=0.0, cost_usd=0.0)
+        repeated = dict(record["attempts"][0], attempt=2, elapsed_ms=1e308, cost_usd=0.001)
+        record["attempts"].append(repeated)
+        record["final"] = dict(repeated)
+        result = self._validate_record(record, plan, retry_limit=1)
+        self.assertEqual(result["elapsed_ms"], 1e308)
+        self.assertEqual(result["total_cost_usd"], 0.001)
+        self.assertFalse(result["latency_complete"])
+        self.assertTrue(result["passed"])
 
 
 if __name__ == "__main__":

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 import re
 from functools import lru_cache
@@ -15,31 +14,31 @@ from .model import Manifest, ManifestError
 from .safe_yaml import safe_load
 
 
-def _phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int, int]]:
-    normalized = "".join(text.casefold().split())
-    matches = []
-    seen = set()
-    for phrase in phrase_set.split("/"):
-        phrase = phrase.strip()
-        normalized_phrase = "".join(phrase.casefold().split())
-        if not normalized_phrase or normalized_phrase in seen:
-            continue
-        seen.add(normalized_phrase)
-        position = normalized.find(normalized_phrase) if normalized_phrase else -1
-        if position >= 0:
-            specificity = sum(2 if ord(character) > 127 else 1 for character in normalized_phrase)
-            matches.append((phrase, position, specificity))
-    return matches
+def _phrase_occurrences(text: str, phrase: str) -> Iterable[Tuple[str, int]]:
+    """Find a literal phrase, allowing bounded embedded-driver target modifiers.
+
+    Existing action phrases remain the trigger: a bare bus/runtime/driver noun
+    cannot match, and modifiers cannot cross a clause or arbitrary prose. The
+    matched span retains the action's start for the canonical negation check.
+    """
+    if phrase in ("实现驱动", "编写驱动", "写驱动"):
+        modifier = (
+            r"(?:linux(?:kernel)?|freertos|rtos|zephyr|裸机|bare-?metal|"
+            r"spi|i2c|uart|usart|dma|gpio|usb|can|sdio|ethernet|"
+            r"外设|设备|一个|新的|的|上|中|[-/])"
+        )
+        pattern = re.escape(phrase[:-2]) + modifier + r"{0,8}驱动"
+        for match in re.finditer(pattern, text):
+            yield match.group(0), match.start()
+        return
+    position = text.find(phrase)
+    while position >= 0:
+        yield phrase, position
+        position = text.find(phrase, position + len(phrase))
 
 
 def _all_phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int, int]]:
-    """Return every occurrence for polarity checks without changing route scoring.
-
-    Route scoring intentionally keeps the historic first-occurrence behavior in
-    ``_phrase_matches``.  Negation polarity must inspect later occurrences too:
-    ``准备发布……不执行发布`` contains an active and a negated occurrence of the
-    same action phrase.
-    """
+    """Keep every occurrence: a later affirmative action may survive a denial."""
 
     normalized = _normalized(text)
     matches = []
@@ -51,24 +50,9 @@ def _all_phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int, 
             continue
         seen.add(normalized_phrase)
         specificity = sum(2 if ord(character) > 127 else 1 for character in normalized_phrase)
-        position = normalized.find(normalized_phrase)
-        while position >= 0:
-            matches.append((phrase, position, specificity))
-            position = normalized.find(normalized_phrase, position + len(normalized_phrase))
+        for matched, position in _phrase_occurrences(normalized, normalized_phrase):
+            matches.append((phrase if matched == normalized_phrase else matched, position, specificity))
     return matches
-
-
-def _phrase_match(text: str, phrase_set: str) -> Optional[Tuple[str, int]]:
-    matches = _phrase_matches(text, phrase_set)
-    if not matches:
-        return None
-    phrase, position, _ = min(matches, key=lambda item: (-item[2], item[1]))
-    return phrase, position
-
-
-def _contains_phrase(text: str, phrase_set: str) -> Optional[str]:
-    match = _phrase_match(text, phrase_set)
-    return match[0] if match is not None else None
 
 
 def _normalized(value: str) -> str:
@@ -97,7 +81,24 @@ def _is_locally_negated(
     candidates = tuple(_normalized(marker) for marker in markers if _normalized(marker)) + (
         "donot", "don't", "dont", "never", "avoid", "without",
     )
-    return any(local.endswith(marker + filler) for marker in candidates for filler in fillers)
+    # Creation is a verb + optional determiner + newness + tool qualifier.
+    # No arbitrary prose or intervening action may connect a denial to a noun.
+    creation = r"(?:创建|新建|create)(?:一个|一棵|任何|任意|another|any|the|an|a)?(?:新(?:的)?|new)?(?:git)?$"
+    return any(local.endswith(marker + filler) for marker in candidates for filler in fillers) or any(
+        re.search(re.escape(marker) + creation, local) is not None for marker in candidates
+    )
+
+
+def _is_mentioned_action(text: str, match: Tuple[str, int, int]) -> bool:
+    """An action under explanation/review is an object, not an execution request.
+
+    Scope ends at a clause or a new coordinated action. Request prefixes keep
+    nouns such as compatibility explanations from acting as global exclusions.
+    """
+    prefix = _normalized(text)[:match[1]]
+    local = re.split(r"[，,。.!！?？；;]|然后|接着|而是|但是|但|并且|(?<!合)并(?!发|行|列)", prefix)[-1]
+    request = r"(?:^|请|只读|先|仅|只|帮我|需要|希望|不要|不用|无需|别)"
+    return re.search(request + r"(?:解释|说明|介绍|讲解|审查|评审)", local) is not None
 
 
 def _active_phrase_matches(
@@ -105,8 +106,16 @@ def _active_phrase_matches(
     phrase_set: str,
     markers: Sequence[str],
 ) -> Sequence[Tuple[str, int, int]]:
+    matches = _all_phrase_matches(text, phrase_set)
+    inactive_spans = tuple(
+        (item[1], item[1] + len(_normalized(item[0])))
+        for item in matches
+        if _is_locally_negated(text, item, markers) or _is_mentioned_action(text, item)
+    )
     return tuple(
-        item for item in _all_phrase_matches(text, phrase_set) if not _is_locally_negated(text, item, markers)
+        item for item in matches
+        if not any(start <= item[1] and item[1] + len(_normalized(item[0])) <= end
+                   for start, end in inactive_spans)
     )
 
 
@@ -128,28 +137,30 @@ def _skill_identity_declined(text: str, skill: str, markers: Sequence[str]) -> b
 
 
 @lru_cache(maxsize=512)
-def _frontmatter_cached(path_value: str, mtime_ns: int, size: int) -> Mapping[str, Any]:
-    del mtime_ns, size
-    path = Path(path_value)
-    lines = path.read_text(encoding="utf-8").splitlines()
+def _frontmatter_cached(raw: bytes) -> Mapping[str, Any]:
+    lines = raw.decode("utf-8").splitlines()
     if not lines or lines[0] != "---":
-        raise ManifestError("skill frontmatter is missing: {}".format(path))
+        raise ManifestError("skill frontmatter is missing")
     try:
         end = lines.index("---", 1)
     except ValueError as exc:
-        raise ManifestError("skill frontmatter is not terminated: {}".format(path)) from exc
+        raise ManifestError("skill frontmatter is not terminated") from exc
     try:
         value = safe_load("\n".join(lines[1:end]))
     except yaml.YAMLError as exc:
-        raise ManifestError("skill frontmatter is invalid: {}".format(path)) from exc
+        raise ManifestError("skill frontmatter is invalid") from exc
     if not isinstance(value, dict):
-        raise ManifestError("skill frontmatter must be a mapping: {}".format(path))
+        raise ManifestError("skill frontmatter must be a mapping")
     return value
 
 
 def _frontmatter(path: Path) -> Mapping[str, Any]:
-    stat = path.stat()
-    return _frontmatter_cached(str(path.resolve()), stat.st_mtime_ns, stat.st_size)
+    try:
+        return _frontmatter_cached(path.read_bytes())
+    except (OSError, UnicodeError) as exc:
+        raise ManifestError("skill frontmatter is unreadable: {}".format(path)) from exc
+    except ManifestError as exc:
+        raise ManifestError("{}: {}".format(exc, path)) from exc
 
 
 def _phrases(frontmatter: Mapping[str, Any], key: str) -> Iterable[str]:
@@ -300,7 +311,7 @@ def _phrase_class_condition_matches(
     phrase_set = "/".join(phrase_classes[class_name])
     matches = _all_phrase_matches(text, phrase_set)
     if polarity == "positive":
-        return any(not _is_locally_negated(text, match, markers) for match in matches)
+        return bool(_active_phrase_matches(text, phrase_set, markers))
     return any(_is_locally_negated(text, match, markers) for match in matches)
 
 
@@ -427,10 +438,10 @@ def _promotion_exclusion(
         if not isinstance(phrase_set, str):
             continue
         phrases.append(phrase_set)
-        if _phrase_matches(text, phrase_set) and _matching_negated_intent(text, entry, classes, markers):
+        if _all_phrase_matches(text, phrase_set) and _matching_negated_intent(text, entry, classes, markers):
             return "negated_intent"
     matching = any(_all_phrase_matches(text, phrase_set) for phrase_set in phrases)
-    active = any(_active_phrase_matches(text, phrase_set, markers) for phrase_set in phrases)
+    active = bool(_active_phrase_matches(text, "/".join(phrases), markers))
     return "negated_trigger" if matching and not active else None
 
 
@@ -545,16 +556,15 @@ def match_text(
                     "reason": "matched_non_trigger",
                     "phrase": phrase,
                 }
-        for phrase_set in _phrases(frontmatter, "triggers"):
-            active = _active_phrase_matches(text, phrase_set, markers)
-            if active:
-                phrase = min(active, key=lambda item: (-item[2], item[1]))[0]
-                return {
-                    "match": True,
-                    "skill": skill,
-                    "reason": "matched_trigger",
-                    "phrase": phrase,
-                }
+        active = _active_phrase_matches(text, "/".join(_phrases(frontmatter, "triggers")), markers)
+        if active:
+            phrase = min(active, key=lambda item: (-item[2], item[1]))[0]
+            return {
+                "match": True,
+                "skill": skill,
+                "reason": "matched_trigger",
+                "phrase": phrase,
+            }
         return {"match": False, "skill": skill, "reason": "no_trigger_matched"}
 
     classified = _classify_task_mode(routing, text, markers) if routing else {
@@ -563,6 +573,14 @@ def match_text(
         "explicit": False,
     }
     intents = routing.get("intents", []) if isinstance(routing, dict) and routing.get("enabled") else []
+    # The existing phrase-class IR may identify explicit requested actions.
+    # Prefer an affirmative action over incidental topics; this affects only
+    # selection, never task-mode or permission classification.
+    requested_actions = {
+        _normalized(phrase)
+        for phrase_set in phrase_classes.get("requested_action", ())
+        for phrase in phrase_set.split("/") if phrase.strip()
+    }
     route_matches = []
     negated_intents = []
     negated_skills = set()
@@ -574,7 +592,7 @@ def match_text(
             primary = entry.get("primary_skill")
             if not isinstance(intent_zh, str) or not isinstance(primary, str):
                 continue
-            matched_phrases = _phrase_matches(text, intent_zh)
+            matched_phrases = _all_phrase_matches(text, intent_zh)
             if matched_phrases:
                 path = _specific_skill_path(manifest, primary, "auto")
                 if path is not None and not _implicit_context_matches(_frontmatter(path), text, markers):
@@ -595,11 +613,12 @@ def match_text(
                 total_specificity = sum(item[2] for item in active_phrases)
                 best_specificity = max(item[2] for item in active_phrases)
                 first_position = min(item[1] for item in active_phrases)
+                requested_action = any(_normalized(item[0]) in requested_actions for item in active_phrases)
                 route_matches.append(
-                    (-total_specificity, -best_specificity, first_position, order, entry)
+                    (-int(requested_action), -total_specificity, -best_specificity, first_position, order, entry)
                 )
     if route_matches:
-        entry = min(route_matches, key=lambda item: item[:4])[4]
+        entry = min(route_matches, key=lambda item: item[:5])[5]
         supporting = entry.get("supporting_skills", [])
         result = {
             "match": True,
@@ -626,9 +645,12 @@ def match_text(
             if non_trigger is not None:
                 negated_intents.append(name)
                 continue
-            for phrase_set in _phrases(frontmatter, "triggers"):
-                matches = _phrase_matches(text, phrase_set)
-                active = _active_phrase_matches(text, phrase_set, markers)
+            trigger_sets = tuple(_phrases(frontmatter, "triggers"))
+            active_triggers = set(_active_phrase_matches(text, "/".join(trigger_sets), markers))
+            for phrase_set in trigger_sets:
+                matches = _all_phrase_matches(text, phrase_set)
+                active = tuple(item for item in _active_phrase_matches(text, phrase_set, markers)
+                               if item in active_triggers)
                 if active:
                     phrase, _, _ = min(active, key=lambda item: (-item[2], item[1]))
                     result = {
@@ -642,53 +664,6 @@ def match_text(
                 if matches:
                     negated_intents.append(name)
     return _abstain_result(routing, classified, negated_intents)
-
-
-def format_result(result: Mapping[str, Any]) -> str:
-    if result.get("match") is True and result.get("source") == "routing":
-        supporting = result.get("supporting_skills", [])
-        suffix = ""
-        if isinstance(supporting, list) and supporting:
-            suffix = " supporting_skills=" + ",".join(str(item) for item in supporting)
-        return "match=true source=routing skill={} intent_zh={}{} task_mode={} mutation_permission={} artifact_mode={}".format(
-            result["skill"],
-            json.dumps(result["intent_zh"], ensure_ascii=False),
-            suffix,
-            result.get("task_mode", "needs-triage"),
-            result.get("mutation_permission", "deny"),
-            result.get("artifact_mode") or "not-applicable",
-        )
-    if result.get("match") is True and result.get("source") in ("skill_trigger", "optional_skill_trigger"):
-        return "match=true source={} skill={} trigger={} task_mode={} mutation_permission={} artifact_mode={}".format(
-            result["source"],
-            result["skill"],
-            json.dumps(result["trigger"], ensure_ascii=False),
-            result.get("task_mode", "needs-triage"),
-            result.get("mutation_permission", "deny"),
-            result.get("artifact_mode") or "not-applicable",
-        )
-    if result.get("match") is True:
-        return "match=true skill={} reason=matched_trigger phrase={}".format(
-            result["skill"], result["phrase"]
-        )
-    if result.get("decision") == "abstain":
-        negated = result.get("negated_intents", [])
-        suffix = ""
-        if isinstance(negated, list) and negated:
-            suffix = " negated_intents=" + ",".join(str(item) for item in negated)
-        return "match=false decision=abstain reason={} task_mode={} mutation_permission={} artifact_mode={}{}".format(
-            result.get("reason", "needs-triage"),
-            result.get("task_mode", "needs-triage"),
-            result.get("mutation_permission", "deny"),
-            result.get("artifact_mode") or "not-applicable",
-            suffix,
-        )
-    if result.get("skill"):
-        suffix = ""
-        if result.get("phrase"):
-            suffix = " phrase=" + str(result["phrase"])
-        return "match=false skill={} reason={}{}".format(result["skill"], result["reason"], suffix)
-    return "match=false reason={}".format(result["reason"])
 
 
 def _discover_root() -> Path:

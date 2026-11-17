@@ -1,8 +1,8 @@
 ---
 name: adk-token-context-governance
 description: "用于日志与上下文过长时设置 Token 预算、分层读取和原文回退门禁；不用于压缩掉高风险证据或放宽验证要求。"
-version: 1.3.3
-last_updated: 2026-11-15
+version: 1.3.4
+last_updated: 2026-11-17
 triggers:
   - "省 token"
   - "上下文太大"
@@ -40,9 +40,7 @@ constraints:
 # 保真省 Token 上下文治理
 
 ## Goal
-- 全 profile/workflow 默认用最小充分上下文，减少输入、工具和证据噪音。
-- 保留 `raw_fallback`，避免压缩导致根因误判、审计漏判或交付证据缺失。
-- 机器策略以 `manifests/token_context_policy.json` 为准。
+全 profile/workflow 使用最小充分上下文并保留 `raw_fallback`，防止压缩丢证；机器策略以 `manifests/token_context_policy.json` 为准。
 
 ## Global Invariants
 - 默认 `balanced`；显式 Low Token 仅切到 `fast` runtime overlay，不新增资产 profile/skill。
@@ -53,8 +51,7 @@ constraints:
 - low confidence、缺 raw evidence、契约冲突或安全例外立即恢复更完整上下文；省 token 不得降低验证、review、回滚或证据强度。
 
 ## Prerequisites
-- 确认任务风险、原始证据入口与可用预算信息。
-- 高风险或缺 raw evidence 时先进入 `audit/L3`，不先压缩再猜测。
+核任务风险、原始证据与可用预算；高风险或缺 raw evidence 时先进入 `audit/L3`。
 
 ## Workflow
 1. 定风险：普通开发 low；跨模块 debug/接口变更 medium；安全、权限、支付、迁移、生产事故、协议兼容、签名逻辑 high。
@@ -64,12 +61,12 @@ constraints:
 5. 摘要记录 `raw_evidence/confidence/fallback_condition/budget_profile/read_tier`；关键条件缺失时回退 L2/L3。
 6. `HOT`、`CTX_PRESSURE`、阶段/目标切换时输出 handoff，只携带下一阶段必要证据。
 7. 长期项目用 `PROJECT_MAP.md` 保存入口、测试、禁读目录、高风险区域和验证时间，不保存一次性日志。
-8. code intelligence 仅缩小阅读面；记录 `code_intelligence_provider_contract`：provider、query、provider_answered、fallback_used、confidence、returned_files、raw_evidence、omitted_reasons、source_reread_required；高风险完成前回读 source。
-9. 大型 tool/skill 目录按 `tool_search_context_contract` 延迟加载：记录 namespace_summary、initial_surface、deferred_surface、loaded_tools、trusted_inventory、schema_review、omitted_reasons；不得把 deferred loading 当成权限审批。
+8. code intelligence 仅缩小阅读面，按下方模板记录 `code_intelligence_provider_contract`；高风险完成前回读 source。
+9. 大型 tool/skill 目录按下方 `tool_search_context_contract` 延迟加载；deferred loading 不提供权限审批。
 10. 完成前核对摘要能否支持当前决定、关键事实和阻塞是否保留、raw pointer 是否可用，并声明是否发生 `raw_fallback`。只有修改 ADK Skill/上下文策略资产且位于已核实源码工作区时才运行 token budget 与 strict asset validation；普通日志压缩不依赖 ADK Python 或内部测试。
 
 ## Impact-first Selection（有真实用量时）
-- 先按可观测的 `task_success / safety / latency / input_tokens / output_tokens / cached_tokens / tool_calls` 分清浪费来源：无新增事实的重复调用、串行外部检索瀑布、重复加载整段 reference、已知相同状态重复验证。能以缓存/确定性工具解决的，不触发额外模型轮次。
+- 按 `task_success / safety / latency / input_tokens / output_tokens / cached_tokens / tool_calls` 定位浪费：无新事实的重复调用、串行外部检索瀑布、重复 reference、同状态重复验证。仅同内容完整仍在当前上下文时复用已加载 Skill/引用；压缩丢失或来源/内容变化先重读。缓存/确定性工具可解决时不加模型轮次。
 - 仅在同模型、同任务、同权限和可比较的真实 trace 下决定先优化哪个瓶颈；证据不足标 `not-measured`，不以源码字节变小推定真实 Token/费用下降。先守住安全与任务成功率，再谈性能。
 - 修改高风险证据读取、审批、回滚或独立 Review 的步骤不属于“省 Token”范围；`audit/L3` 和原文回退机制优先。
 

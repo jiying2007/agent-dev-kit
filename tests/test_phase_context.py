@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import json
+import hashlib
+import os
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 from agent_dev_kit.model import Manifest, ManifestError
+from agent_dev_kit import matcher, phase_context, skill_relationships, _matcher_kernel
 from agent_dev_kit.phase_context import (
     _contract,
     _load_contract,
@@ -135,13 +139,143 @@ class PhaseContextContractTests(unittest.TestCase):
             local_schema.write_bytes(schema_path.read_bytes())
             with self.assertRaisesRegex(ManifestError, "schema validation failed"):
                 _load_contract(
-                    str(bad_contract),
-                    bad_contract.stat().st_mtime_ns,
-                    bad_contract.stat().st_size,
-                    str(local_schema),
-                    local_schema.stat().st_mtime_ns,
-                    local_schema.stat().st_size,
+                    bad_contract.read_bytes(),
+                    local_schema.read_bytes(),
                 )
+
+
+class ContentCacheIdentityTests(unittest.TestCase):
+    """A saved timestamp cannot stand in for the bytes a consumer is using."""
+
+    def setUp(self) -> None:
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.manifest = Manifest(self.root, Manifest.load(ROOT).data, self.root / "manifest.json")
+        for relative in (
+            phase_context._CONTRACT, phase_context._CONTRACT_SCHEMA,
+            skill_relationships._CONTRACT, skill_relationships._CONTRACT_SCHEMA,
+            matcher._CONTRACT,
+        ):
+            destination = self.root / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(ROOT / relative, destination)
+        for section in ("skills", "optional_skills"):
+            for entry in self.manifest.data[section]:
+                destination = self.root / entry["path"]
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(ROOT / entry["path"], destination)
+        for loader in (phase_context._load_contract, skill_relationships._load_contract,
+                       matcher._load_contract, _matcher_kernel._frontmatter_cached):
+            loader.cache_clear()
+            self.addCleanup(loader.cache_clear)
+
+    def replace_preserving_stat(self, path: Path, old: bytes, new: bytes) -> bytes:
+        raw, before = path.read_bytes(), path.stat()
+        self.assertEqual(len(old), len(new))
+        self.assertIn(old, raw)
+        changed = raw.replace(old, new, 1)
+        path.write_bytes(changed)
+        os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+        after = path.stat()
+        self.assertEqual((before.st_size, before.st_mtime_ns), (after.st_size, after.st_mtime_ns))
+        return changed
+
+    def test_phase_valid_replacement_refreshes_semantics_and_matching_digest(self) -> None:
+        before = resolve_phase_context(self.manifest, "general", "route")
+        self.assertEqual(before["skills"][0]["name"], "adk-runtime-router")
+        raw = self.replace_preserving_stat(self.root / phase_context._CONTRACT,
+                                          b'"runtime-routing"', b'"goal-authoring" ')
+        after = resolve_phase_context(self.manifest, "general", "route")
+        self.assertEqual(after["skills"][0]["name"], "adk-goal-authoring")
+        self.assertEqual(after["contract_sha256"], hashlib.sha256(raw).hexdigest())
+
+    def test_relationship_valid_replacement_refreshes_semantics_and_digest(self) -> None:
+        before = skill_relationships.resolve_skill_relationships(self.manifest)
+        self.assertEqual(before["typed_relationships"][0]["type"], "handoff")
+        raw = self.replace_preserving_stat(self.root / skill_relationships._CONTRACT,
+                                          b'"requirement": "when-applicable"',
+                                          b'"requirement": "required"       ')
+        after = skill_relationships.resolve_skill_relationships(self.manifest)
+        self.assertEqual(after["typed_relationships"][0]["requirement"], "required")
+        self.assertEqual(after["contract_sha256"], hashlib.sha256(raw).hexdigest())
+
+    def test_content_contract_valid_replacement_updates_selection_group(self) -> None:
+        self.assertEqual(matcher.resolve_skill_content(self.manifest, "adk-runtime-router")["selection_group"],
+                         "runtime-routing")
+        self.replace_preserving_stat(self.root / matcher._CONTRACT,
+                                     b'"runtime-routing"', b'"updated-routing"')
+        self.assertEqual(matcher.resolve_skill_content(self.manifest, "adk-runtime-router")["selection_group"],
+                         "updated-routing")
+
+    def test_frontmatter_valid_and_invalid_replacements_are_read(self) -> None:
+        path = self.root / "skills/adk-runtime-router/SKILL.md"
+        self.assertEqual(_matcher_kernel._frontmatter(path)["name"], "adk-runtime-router")
+        self.replace_preserving_stat(path, b"name: adk-runtime-router", b"name: adk-updated-router")
+        self.assertEqual(_matcher_kernel._frontmatter(path)["name"], "adk-updated-router")
+        self.replace_preserving_stat(path, b"---", b"xxx")
+        with self.assertRaisesRegex(ManifestError, "frontmatter is missing"):
+            _matcher_kernel._frontmatter(path)
+
+    def test_changed_invalid_contracts_cannot_reuse_previous_success(self) -> None:
+        for module in (phase_context, skill_relationships, matcher):
+            with self.subTest(module=module.__name__):
+                module._contract(self.manifest)
+                self.replace_preserving_stat(self.root / module._CONTRACT, b'/v2"', b'/v9"')
+                with self.assertRaises(ManifestError):
+                    module._contract(self.manifest)
+
+    def test_changed_schema_cannot_reuse_previous_validation(self) -> None:
+        for module in (phase_context, skill_relationships):
+            with self.subTest(module=module.__name__):
+                module._contract(self.manifest)
+                self.replace_preserving_stat(self.root / module._CONTRACT_SCHEMA,
+                                             b'"type": "object"', b'"type": "string"')
+                with self.assertRaisesRegex(ManifestError, "schema validation failed"):
+                    module._contract(self.manifest)
+
+    def test_unchanged_input_reuses_bounded_parsing_cache(self) -> None:
+        for module in (phase_context, skill_relationships, matcher):
+            with self.subTest(module=module.__name__):
+                first = module._contract(self.manifest)
+                stats = module._load_contract.cache_info()
+                self.assertEqual(module._contract(self.manifest), first)
+                after = module._load_contract.cache_info()
+                self.assertEqual(after.misses, stats.misses)
+                self.assertEqual(after.hits, stats.hits + 1)
+                self.assertEqual(after.maxsize, 8)
+        path = self.root / "skills/adk-runtime-router/SKILL.md"
+        first = _matcher_kernel._frontmatter(path)
+        stats = _matcher_kernel._frontmatter_cached.cache_info()
+        self.assertEqual(_matcher_kernel._frontmatter(path), first)
+        after = _matcher_kernel._frontmatter_cached.cache_info()
+        self.assertEqual(after.misses, stats.misses)
+        self.assertEqual(after.hits, stats.hits + 1)
+        self.assertEqual(after.maxsize, 512)
+
+    def test_removed_and_non_utf8_inputs_fail_after_warming(self) -> None:
+        for module in (phase_context, skill_relationships, matcher):
+            with self.subTest(module=module.__name__):
+                module._contract(self.manifest)
+                path = self.root / module._CONTRACT
+                raw = path.read_bytes()
+                path.unlink()
+                with self.assertRaisesRegex(ManifestError, "missing"):
+                    module._contract(self.manifest)
+                path.write_bytes(b"\xff" + raw[1:])
+                with self.assertRaises(ManifestError):
+                    module._contract(self.manifest)
+
+    def test_frontmatter_read_errors_and_invalid_utf8_are_manifest_errors(self) -> None:
+        path = self.root / "skills/adk-runtime-router/SKILL.md"
+        _matcher_kernel._frontmatter(path)
+        original = path.read_bytes()
+        self.replace_preserving_stat(path, original[:1], b"\xff")
+        with self.assertRaisesRegex(ManifestError, "frontmatter is unreadable"):
+            _matcher_kernel._frontmatter(path)
+        path.unlink()
+        with self.assertRaisesRegex(ManifestError, "frontmatter is unreadable"):
+            _matcher_kernel._frontmatter(path)
 
 
 if __name__ == "__main__":

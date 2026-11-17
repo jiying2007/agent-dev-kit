@@ -13,7 +13,6 @@ import argparse
 import json
 import sys
 from functools import lru_cache
-from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
 from ._matcher_kernel import (
@@ -25,7 +24,6 @@ from ._matcher_kernel import (
     _resolved_policy,
     _routing_ir,
     _routing_markers,
-    format_result as kernel_format_result,
     match_text as kernel_match_text,
 )
 from .model import Manifest, ManifestError
@@ -64,9 +62,56 @@ _ALLOWED_IMPLICIT_POLICIES = {"eligible", "promote-same-group", "explicit-only"}
 
 
 
+def _kernel_format_result(result: Mapping[str, Any]) -> str:
+    if result.get("match") is True and result.get("source") == "routing":
+        supporting = result.get("supporting_skills", [])
+        suffix = ""
+        if isinstance(supporting, list) and supporting:
+            suffix = " supporting_skills=" + ",".join(str(item) for item in supporting)
+        return "match=true source=routing skill={} intent_zh={}{} task_mode={} mutation_permission={} artifact_mode={}".format(
+            result["skill"],
+            json.dumps(result["intent_zh"], ensure_ascii=False),
+            suffix,
+            result.get("task_mode", "needs-triage"),
+            result.get("mutation_permission", "deny"),
+            result.get("artifact_mode") or "not-applicable",
+        )
+    if result.get("match") is True and result.get("source") in ("skill_trigger", "optional_skill_trigger"):
+        return "match=true source={} skill={} trigger={} task_mode={} mutation_permission={} artifact_mode={}".format(
+            result["source"],
+            result["skill"],
+            json.dumps(result["trigger"], ensure_ascii=False),
+            result.get("task_mode", "needs-triage"),
+            result.get("mutation_permission", "deny"),
+            result.get("artifact_mode") or "not-applicable",
+        )
+    if result.get("match") is True:
+        return "match=true skill={} reason=matched_trigger phrase={}".format(
+            result["skill"], result["phrase"]
+        )
+    if result.get("decision") == "abstain":
+        negated = result.get("negated_intents", [])
+        suffix = ""
+        if isinstance(negated, list) and negated:
+            suffix = " negated_intents=" + ",".join(str(item) for item in negated)
+        return "match=false decision=abstain reason={} task_mode={} mutation_permission={} artifact_mode={}{}".format(
+            result.get("reason", "needs-triage"),
+            result.get("task_mode", "needs-triage"),
+            result.get("mutation_permission", "deny"),
+            result.get("artifact_mode") or "not-applicable",
+            suffix,
+        )
+    if result.get("skill"):
+        suffix = ""
+        if result.get("phrase"):
+            suffix = " phrase=" + str(result["phrase"])
+        return "match=false skill={} reason={}{}".format(result["skill"], result["reason"], suffix)
+    return "match=false reason={}".format(result["reason"])
+
+
 def format_result(result: Mapping[str, Any]) -> str:
     """Render the stable matcher line plus canonical Skill Content v2 semantics."""
-    base = kernel_format_result(result)
+    base = _kernel_format_result(result)
     if result.get("match") is not True:
         return base
     extras = []
@@ -91,12 +136,10 @@ def format_result(result: Mapping[str, Any]) -> str:
 
 
 @lru_cache(maxsize=8)
-def _load_contract(path_value: str, mtime_ns: int, size: int) -> Mapping[str, Any]:
-    del mtime_ns, size
-    path = Path(path_value)
+def _load_contract(raw: bytes) -> Mapping[str, Any]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = json.loads(raw.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
         raise ManifestError("Skill v2 content contract is invalid: {}".format(exc)) from exc
     if not isinstance(value, dict) or value.get("schema_version") != "adk-skill-content-contract/v2":
         raise ManifestError("Skill v2 content contract has unsupported schema")
@@ -109,8 +152,11 @@ def _contract(manifest: Manifest) -> Mapping[str, Any]:
     path = manifest.root / _CONTRACT
     if not path.is_file():
         raise ManifestError("Skill v2 content contract is missing: {}".format(_CONTRACT))
-    stat = path.stat()
-    return _load_contract(str(path.resolve()), stat.st_mtime_ns, stat.st_size)
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise ManifestError("Skill v2 content contract is invalid: {}".format(exc)) from exc
+    return _load_contract(raw)
 
 
 def _skill_entry(manifest: Manifest, skill_id: str) -> tuple[str, Mapping[str, Any]]:

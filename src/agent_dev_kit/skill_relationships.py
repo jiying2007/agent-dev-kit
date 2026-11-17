@@ -36,20 +36,14 @@ _ALLOWED_TYPES = {
 
 @lru_cache(maxsize=8)
 def _load_contract(
-    path_value: str,
-    path_mtime_ns: int,
-    path_size: int,
-    schema_value: str,
-    schema_mtime_ns: int,
-    schema_size: int,
+    raw: bytes,
+    schema_raw: bytes,
 ) -> Mapping[str, Any]:
-    del path_mtime_ns, path_size, schema_mtime_ns, schema_size
-    path = Path(path_value)
-    schema_path = Path(schema_value)
+    """Reuse parsing only for the exact contract and schema bytes validated."""
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-        schema = json.loads(schema_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = json.loads(raw.decode("utf-8"))
+        schema = json.loads(schema_raw.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
         raise ManifestError(f"Skill relationship contract or schema is invalid: {exc}") from exc
     if not isinstance(value, dict) or not isinstance(schema, dict):
         raise ManifestError("Skill relationship contract and schema must be JSON objects")
@@ -98,17 +92,12 @@ def _contract(manifest: Manifest) -> tuple[Mapping[str, Any], str]:
         raise ManifestError(f"Skill relationship contract is missing: {_CONTRACT}")
     if not schema_path.is_file():
         raise ManifestError(f"Skill relationship schema is missing: {_CONTRACT_SCHEMA}")
-    stat = path.stat()
-    schema_stat = schema_path.stat()
-    value = _load_contract(
-        str(path.resolve()),
-        stat.st_mtime_ns,
-        stat.st_size,
-        str(schema_path.resolve()),
-        schema_stat.st_mtime_ns,
-        schema_stat.st_size,
-    )
-    return value, hashlib.sha256(path.read_bytes()).hexdigest()
+    try:
+        raw, schema_raw = path.read_bytes(), schema_path.read_bytes()
+    except OSError as exc:
+        raise ManifestError(f"Skill relationship contract or schema is invalid: {exc}") from exc
+    value = _load_contract(raw, schema_raw)
+    return value, hashlib.sha256(raw).hexdigest()
 
 
 def _entries(manifest: Manifest) -> Dict[str, Mapping[str, Any]]:

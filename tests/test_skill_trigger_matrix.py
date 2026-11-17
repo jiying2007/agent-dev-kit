@@ -643,6 +643,135 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                 if "不要修改" in prompt:
                     self.assertEqual(result.get("mutation_permission"), "deny", result)
 
+    def test_worktree_creation_prohibition_does_not_revive_a_short_alias(self) -> None:
+        manifest = Manifest.load(ROOT)
+        for prompt in (
+            "不要创建 worktree，在当前分支直接实现该修复",
+            "Do not create a worktree. Implement the fix in the current branch.",
+            "Never create a new worktree; use the current branch.",
+            "请勿新建工作树，只读审查代码",
+        ):
+            with self.subTest(prohibited=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+        for prompt in (
+            "创建 worktree 隔离这次修复",
+            "不要头脑风暴，请创建 worktree 实现修复",
+            "不要创建 worktree；之后需要 worktree 隔离实现",
+        ):
+            with self.subTest(affirmative=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                self.assertEqual(result.get("skill"), "adk-worktree-governance", result)
+                self.assertEqual(result.get("mutation_permission"), "workspace-write", result)
+
+    def test_creation_negation_accepts_composed_target_modifiers(self) -> None:
+        manifest = Manifest.load(ROOT)
+        for prompt in (
+            "不要创建新的 Git worktree，直接修复当前分支的代码",
+            "不创建新工作树，直接修复当前分支的代码",
+            "Don't create a git worktree; 直接修复当前分支",
+            "Do not create any worktree; 直接修复当前分支",
+            "请勿新建一个新的 Git 工作树，直接修复当前分支",
+            "Never create another new git worktree; 直接修复当前分支",
+        ):
+            with self.subTest(prohibited=prompt):
+                result = match_text(manifest, prompt)
+                self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+        for prompt in (
+            "不要更新 ADR，请创建新的 Git worktree 修复驱动",
+            "不要创建 worktree 做文档；创建新的 Git worktree 修复驱动",
+            "不要创建 worktree，然后请创建新的 Git worktree 实现修复",
+        ):
+            with self.subTest(affirmative=prompt):
+                result = match_text(manifest, prompt)
+                self.assertEqual(result.get("skill"), "adk-worktree-governance", result)
+                self.assertEqual(result.get("mutation_permission"), "workspace-write", result)
+
+    def test_explained_actions_do_not_become_authoring_or_implementation(self) -> None:
+        manifest = Manifest.load(ROOT)
+        for prompt, prohibited in (
+            ("请解释编写 ADR 的方法", "adk-adr-writer"),
+            ("只读解释“更新 ADR”这个术语与接口契约的关系", "adk-adr-writer"),
+            ("请解释为什么更新 ADR 有助于接口契约追溯", "adk-adr-writer"),
+            ("只读审查代码中的更新 ADR 实现", "adk-adr-writer"),
+            ("请解释如何实现 RTOS SPI DMA 驱动", "adk-driver-implementation"),
+            ("请说明怎样实现一个 RTOS SPI 驱动", "adk-driver-implementation"),
+        ):
+            with self.subTest(mentioned_action=prompt):
+                result = match_text(manifest, prompt)
+                self.assertNotEqual(result.get("skill"), prohibited, result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+                explicit = match_text(manifest, prompt, skill=prohibited, scope="skill")
+                self.assertIs(explicit.get("match"), False, explicit)
+        for prompt, expected, permission in (
+            ("请编写 ADR，解释接口契约的取舍", "adk-adr-writer", "deny"),
+            ("解释 API设计 的风险，然后请更新 ADR", "adk-adr-writer", "deny"),
+            ("不要解释如何编写 ADR，请直接编写 ADR", "adk-adr-writer", "deny"),
+            ("请实现 RTOS SPI DMA 驱动，并解释设计取舍", "adk-driver-implementation", "workspace-write"),
+            ("不要解释驱动原理；请实现 RTOS SPI DMA 驱动", "adk-driver-implementation", "workspace-write"),
+        ):
+            with self.subTest(requested_action=prompt):
+                result = match_text(manifest, prompt)
+                self.assertEqual(result.get("skill"), expected, result)
+                self.assertEqual(result.get("mutation_permission"), permission, result)
+
+    def test_adr_authoring_action_owns_the_interface_topic(self) -> None:
+        manifest = Manifest.load(ROOT)
+        for prompt in (
+            "请写ADR，记录接口契约的设计取舍",
+            "把这个 API 设计决定写成 ADR，不修改代码",
+            "请更新 ADR，记录 API设计 的兼容取舍",
+            "请将设计接口时确定的错误码方案记录为 ADR",
+        ):
+            with self.subTest(authoring=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                self.assertEqual(result.get("skill"), "adk-adr-writer", result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+        for prompt, expected in (
+            ("只读解释 ADR 概念", None),
+            ("什么是 ADR？", None),
+            ("按 ADR 实现接口契约", "adk-interface-contract-design"),
+            ("不要写 ADR，请设计接口并验证兼容性", "adk-interface-contract-design"),
+            ("不用更新 ADR，只读审查代码", "adk-code-review-loop"),
+            ("请审查代码里生成 ADR 文档的实现", None),
+        ):
+            with self.subTest(near_miss=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                self.assertNotEqual(result.get("skill"), "adk-adr-writer", result)
+                if expected is not None:
+                    self.assertEqual(result.get("skill"), expected, result)
+
+    def test_driver_implementation_accepts_bounded_target_modifiers(self) -> None:
+        manifest = Manifest.load(ROOT)
+        for prompt, permission in (
+            ("请实现 RTOS SPI DMA 驱动，补超时和恢复测试", "workspace-write"),
+            ("请为 Linux 实现 I2C 驱动", "workspace-write"),
+            ("在 FreeRTOS 上编写 SPI DMA 驱动，不执行设备刷写", "deny"),
+            ("请写裸机 UART 驱动", "deny"),
+            ("只读评估实现 RTOS SPI DMA 驱动的方案", "deny"),
+        ):
+            with self.subTest(implementation=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                self.assertEqual(result.get("skill"), "adk-driver-implementation", result)
+                self.assertEqual(result.get("mutation_permission"), permission, result)
+                self.assertEqual(result.get("effect_scope"), "workspace", result)
+                self.assertEqual(result.get("escalation_effects"), [], result)
+        for prompt in (
+            "解释 RTOS SPI DMA 驱动的原理",
+            "不要实现 RTOS SPI DMA 驱动，只做代码审查",
+            "请实现 Selenium 浏览器驱动",
+            "请实现接口；文档介绍 RTOS SPI DMA 驱动",
+        ):
+            with self.subTest(near_miss=prompt):
+                result = match_text(manifest, prompt, scope="auto")
+                self.assertNotEqual(result.get("skill"), "adk-driver-implementation", result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+        for prompt in ("不要编写 RTOS SPI DMA 驱动", "不要编写驱动"):
+            with self.subTest(explicit_negation=prompt):
+                result = match_text(manifest, prompt, skill="adk-driver-implementation", scope="skill")
+                self.assertIs(result.get("match"), False, result)
+
     def test_embedded_domain_routing_uses_intent_not_bare_nouns(self) -> None:
         """Source-only regression: specialist noun must not grant migration/build action."""
         manifest = Manifest.load(ROOT)
