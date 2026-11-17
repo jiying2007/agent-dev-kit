@@ -58,12 +58,32 @@ assert set(v['effective_capabilities'])=={'embedded','review'}
 PY
 
 run_json "$TMP/skills.json" portable-skills
-python3 - "$TMP/skills.json" <<'PY'
+python3 - "$TMP/skills.json" "$ROOT" "$TMP" <<'PY'
 import json, sys
+from pathlib import Path
+from agent_dev_kit.agent_platform import load_contract, portable_skill_audit
+from agent_dev_kit.model import Manifest
+
 v=json.load(open(sys.argv[1], encoding='utf-8'))
 assert v['status']=='pass', v
 assert v['checked_skills'] > 10
 assert v['failures']==[]
+
+root=Path(sys.argv[2])
+contract=load_contract(root)
+assert 'implicit_context' in contract['portable_skill']['internal_extension_fields']
+assert 'implicit_context' not in contract['portable_skill']['standard_top_level_fields']
+manifest=Manifest.load(root)
+entry=next(item for item in manifest.data['skills'] if item['name']=='adk-unit-test-embedded')
+fixture_root=Path(sys.argv[3]) / 'portable-skill-fixture'
+skill=fixture_root / entry['path']
+skill.parent.mkdir(parents=True)
+source=(root / entry['path']).read_text(encoding='utf-8')
+skill.write_text(source.replace('\nversion:', '\nunknown_internal_field: true\nversion:', 1), encoding='utf-8')
+fixture=Manifest(fixture_root, {'skills':[entry], 'optional_skills':[]}, fixture_root / 'manifest.json')
+rejected=portable_skill_audit(fixture, contract)
+assert rejected['status']=='fail', rejected
+assert rejected['failures']==["adk-unit-test-embedded: unknown internal frontmatter ['unknown_internal_field']"], rejected
 PY
 
 cat >"$TMP/trace.json" <<'JSON'
