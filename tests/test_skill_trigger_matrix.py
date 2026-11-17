@@ -716,6 +716,33 @@ class SkillTriggerMatrixTests(unittest.TestCase):
                 self.assertEqual(result.get("skill"), expected, result)
                 self.assertEqual(result.get("mutation_permission"), permission, result)
 
+    def test_first_explain_then_act_preserves_question_objects(self) -> None:
+        manifest = Manifest.load(ROOT)
+        for prompt, expected, permission in (
+            ("先说明方案再实现驱动", "adk-driver-implementation", "workspace-write"),
+            ("先说明方案再实现 RTOS SPI DMA 驱动", "adk-driver-implementation", "workspace-write"),
+            ("先解释隔离价值再创建 worktree", "adk-worktree-governance", "deny"),
+            ("请先解释取舍再更新 ADR", "adk-adr-writer", "deny"),
+            ("请先解释取舍然后更新 ADR", "adk-adr-writer", "deny"),
+        ):
+            with self.subTest(sequence=prompt):
+                result = match_text(manifest, prompt)
+                self.assertEqual(result.get("skill"), expected, result)
+                self.assertEqual(result.get("mutation_permission"), permission, result)
+        for prompt, prohibited in (
+            ("解释为什么再实现 RTOS SPI DMA 驱动", "adk-driver-implementation"),
+            ("解释为何再更新 ADR", "adk-adr-writer"),
+            ("请先解释为什么再实现 RTOS SPI DMA 驱动", "adk-driver-implementation"),
+            ("请先说明怎样先分析再实现驱动", "adk-driver-implementation"),
+            ("请先解释是否再创建 worktree", "adk-worktree-governance"),
+            ("先说明方案再不要实现驱动", "adk-driver-implementation"),
+            ("先说明方案再解释如何实现驱动", "adk-driver-implementation"),
+        ):
+            with self.subTest(question_or_denial=prompt):
+                result = match_text(manifest, prompt)
+                self.assertNotEqual(result.get("skill"), prohibited, result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+
     def test_adr_authoring_action_owns_the_interface_topic(self) -> None:
         manifest = Manifest.load(ROOT)
         for prompt in (

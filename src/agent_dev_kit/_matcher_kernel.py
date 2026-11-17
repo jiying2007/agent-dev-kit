@@ -98,7 +98,13 @@ def _is_mentioned_action(text: str, match: Tuple[str, int, int]) -> bool:
     prefix = _normalized(text)[:match[1]]
     local = re.split(r"[，,。.!！?？；;]|然后|接着|而是|但是|但|并且|(?<!合)并(?!发|行|列)", prefix)[-1]
     request = r"(?:^|请|只读|先|仅|只|帮我|需要|希望|不要|不用|无需|别)"
-    return re.search(request + r"(?:解释|说明|介绍|讲解|审查|评审)", local) is not None
+    operators = r"(?:解释|说明|介绍|讲解|审查|评审)"
+    sequence = re.match(r"^(?:请)?先" + operators + r"(.+)再(.*)$", local)
+    # Only a declared first/then sequence ends the first explanation's scope.
+    # Question complements retain their object: explain why/how to do it again.
+    if sequence and not re.search(r"为什么|为何|如何|怎样|怎么|是否|能否", "".join(sequence.groups())):
+        local = sequence.group(2)
+    return re.search(request + operators, local) is not None
 
 
 def _active_phrase_matches(
