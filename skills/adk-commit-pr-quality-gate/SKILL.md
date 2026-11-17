@@ -1,15 +1,14 @@
 ---
 name: adk-commit-pr-quality-gate
 description: "用于提交 PR 前核对测试证据、差异范围与质量门禁；不能替代独立代码审查，也不用于未授权的合并或发布。"
-version: 1.2.0
-last_updated: 2026-11-13
+version: 1.2.1
+last_updated: 2026-11-17
 triggers:
   - "提交代码"
   - "中文提交信息"
   - "提交信息格式"
   - "commit message"
   - "发起PR"
-  - "代码评审"
 non_triggers:
   - 纯探索性代码阅读
 inputs:

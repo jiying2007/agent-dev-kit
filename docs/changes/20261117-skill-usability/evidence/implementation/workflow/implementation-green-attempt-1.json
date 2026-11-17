@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "tests.test_task_package_delivery",
+    "tests.test_skill_trigger_matrix",
+    "tests.test_superagent_method_contract",
+    "tests.test_skill_method_efficiency",
+    "tests.test_external_core_methods",
+    "-v"
+  ],
+  "exit_code": 1,
+  "log": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-green-attempt-1.txt"
+}

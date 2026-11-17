@@ -1,0 +1,20 @@
+test_existing_assets_require_context_only_and_low_attention (test_superagent_method_contract.SuperagentMethodContractTests.test_existing_assets_require_context_only_and_low_attention) ... ok
+test_explicit_implementation_and_valid_prototype_baselines (test_superagent_method_contract.SuperagentMethodContractTests.test_explicit_implementation_and_valid_prototype_baselines) ... ok
+test_external_research_does_not_gain_implementation_authority (test_superagent_method_contract.SuperagentMethodContractTests.test_external_research_does_not_gain_implementation_authority) ... ok
+test_prototype_and_decision_reject_only_the_wrong_boundary (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_and_decision_reject_only_the_wrong_boundary) ... ok
+test_prototype_artifact_does_not_hide_permission_failures (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_artifact_does_not_hide_permission_failures) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+test_shipped_example_is_complete_and_preserves_scope_without_extra_fields (test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) ... ok
+test_all_work_kinds_preserve_their_permission_and_exit_gate (test_task_package_delivery.TaskPackageTypeTests.test_all_work_kinds_preserve_their_permission_and_exit_gate) ... ok
+test_prototype_malformed_types_and_expiry_are_not_coerced (test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) ... ok
+test_task_malformed_json_types_return_errors_without_exceptions (test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.163s
+
+OK
+[PASS] intent boundary governance

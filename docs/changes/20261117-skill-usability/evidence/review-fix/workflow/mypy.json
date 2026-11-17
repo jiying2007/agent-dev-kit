@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "bypass",
+    "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/mypy",
+    "--no-incremental",
+    "src/agent_dev_kit/_matcher_kernel.py"
+  ],
+  "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+  "exit_code": 0,
+  "timestamp_utc": "2026-11-17T06:44:46.567491+00:00",
+  "output": "Success: no issues found in 1 source file\n"
+}

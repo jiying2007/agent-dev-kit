@@ -1,0 +1,32 @@
+[
+  {
+    "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+    "sha256": "dea7c5247a20a86ac5c9430296340a5b6b0cce72583bc99ad844eb4624bb4db3",
+    "bytes": 7011
+  },
+  {
+    "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+    "sha256": "d9c4038697f3a8f2b2208d016b06b1684dee09e366543c8539ef6f232230df60",
+    "bytes": 8736
+  },
+  {
+    "path": "skills/adk-archive-governance/SKILL.md",
+    "sha256": "3720551d6cc04f428adf472c3887e0e09ba95c31318bc4d4d7655d17ef68fe4e",
+    "bytes": 3085
+  },
+  {
+    "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+    "sha256": "f126062fcddb2108447b8d5937aba8fb24e3b279dc0e2f76f3724f78753277ee",
+    "bytes": 2005
+  },
+  {
+    "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+    "sha256": "d8f9c172e4bd2353b0a4e1a74c81a4765baac90b203fa9bb37d7c3686ac025fd",
+    "bytes": 4887
+  },
+  {
+    "path": "tests/test_skill_consumer_usability.py",
+    "sha256": "fd5e7ef8ffdec9a644c6623e3fb27b8ffa7b93e00f6e212b808164c14450ac91",
+    "bytes": 10734
+  }
+]

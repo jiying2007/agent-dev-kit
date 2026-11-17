@@ -1,0 +1,383 @@
+test_shipped_example_is_complete_and_preserves_scope_without_extra_fields (tests.test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) ... 
+  test_shipped_example_is_complete_and_preserves_scope_without_extra_fields (tests.test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) (target='claude-code') ... FAIL
+  test_shipped_example_is_complete_and_preserves_scope_without_extra_fields (tests.test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) (target='opencode') ... FAIL
+test_all_work_kinds_preserve_their_permission_and_exit_gate (tests.test_task_package_delivery.TaskPackageTypeTests.test_all_work_kinds_preserve_their_permission_and_exit_gate) ... ok
+test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) ... 
+  test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='retention_decision', value={}) ... ERROR
+  test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='retention_decision', value=[]) ... ERROR
+  test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='retention_decision', value=['expire']) ... ERROR
+  test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='expires_at', value=20261201) ... FAIL
+test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) ... 
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=None) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=1) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=True) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=[1]) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=[None]) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='work_item_kind', value={}) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='work_item_kind', value=[]) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='work_item_kind', value=['research']) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='retention_decision', value={}) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='retention_decision', value=[]) ... ERROR
+  test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='retention_decision', value=['keep-final']) ... ERROR
+test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) ... 
+  test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) (prompt='请帮我做代码评审') ... FAIL
+  test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) (prompt='请核实这条代码评审意见，不修改代码') ... FAIL
+  test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) (prompt='只核实这条代码评审反馈') ... FAIL
+test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) ... 
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (diagnosis='诊断这个 Python 脚本的异常') ... FAIL
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (diagnosis='先诊断 Web API 超时的根因') ... FAIL
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (diagnosis='请诊断这个普通命令的失败，先不修改代码') ... FAIL
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='请检查数据库回滚方案') ... FAIL
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='帮我设计设备状态机，不涉及量产或OTA') ... FAIL
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='用模拟设备学习状态机') ... FAIL
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='文档示例：`OTA`；请检查数据库回滚方案') ... FAIL
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='不做量产；只分析普通服务的回滚方案') ... FAIL
+test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) ... 
+  test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='梳理这个 BSP 的启动、probe、clock/reset 依赖和历史 patch，不修改代码') ... FAIL
+  test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='请检查 DMA 缓存一致性，这是受 CPU budget 的场景限制的系统。') ... FAIL
+  test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='SPI DMA 轮询已经满足已量化 latency/CPU budget 的场景，仍需检查 DMA cache coherency。') ... FAIL
+  test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='请做一个季度销售团队任务设计。') ... FAIL
+  test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='项目没有 RTOS；请评估裸机主循环任务设计。') ... FAIL
+
+======================================================================
+ERROR: test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='retention_decision', value={})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 109, in test_prototype_malformed_types_and_expiry_are_not_coerced
+    errors = validate_prototype_evidence(dict(valid, **{field: value}),
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 182, in validate_prototype_evidence
+    if retention not in RETENTION_DECISIONS:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+
+======================================================================
+ERROR: test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='retention_decision', value=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 109, in test_prototype_malformed_types_and_expiry_are_not_coerced
+    errors = validate_prototype_evidence(dict(valid, **{field: value}),
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 182, in validate_prototype_evidence
+    if retention not in RETENTION_DECISIONS:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+
+======================================================================
+ERROR: test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='retention_decision', value=['expire'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 109, in test_prototype_malformed_types_and_expiry_are_not_coerced
+    errors = validate_prototype_evidence(dict(valid, **{field: value}),
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 182, in validate_prototype_evidence
+    if retention not in RETENTION_DECISIONS:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 123, in validate_task_package
+    for item in value["artifacts"]
+                ~~~~~^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 123, in validate_task_package
+    for item in value["artifacts"]
+                ~~~~~^^^^^^^^^^^^^
+TypeError: 'int' object is not iterable
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 123, in validate_task_package
+    for item in value["artifacts"]
+                ~~~~~^^^^^^^^^^^^^
+TypeError: 'bool' object is not iterable
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=[1])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 124, in validate_task_package
+    if item.startswith("prototype_evidence:")
+       ^^^^^^^^^^^^^^^
+AttributeError: 'int' object has no attribute 'startswith'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='artifacts', value=[None])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 124, in validate_task_package
+    if item.startswith("prototype_evidence:")
+       ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'startswith'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='work_item_kind', value={})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 113, in validate_task_package
+    if kind not in WORK_ITEM_RULES:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='work_item_kind', value=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 113, in validate_task_package
+    if kind not in WORK_ITEM_RULES:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='work_item_kind', value=['research'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 113, in validate_task_package
+    if kind not in WORK_ITEM_RULES:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='retention_decision', value={})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 128, in validate_task_package
+    if value["retention_decision"] not in RETENTION_DECISIONS:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='retention_decision', value=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 128, in validate_task_package
+    if value["retention_decision"] not in RETENTION_DECISIONS:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+
+======================================================================
+ERROR: test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) (field='retention_decision', value=['keep-final'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 96, in test_task_malformed_json_types_return_errors_without_exceptions
+    errors = validate_task_package(dict(research_package(), **{field: value}))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/src/agent_dev_kit/intent_boundary.py", line 128, in validate_task_package
+    if value["retention_decision"] not in RETENTION_DECISIONS:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'list'
+
+======================================================================
+FAIL: test_shipped_example_is_complete_and_preserves_scope_without_extra_fields (tests.test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) (target='claude-code')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 133, in test_shipped_example_is_complete_and_preserves_scope_without_extra_fields
+    self.assertEqual(1, len(blocks), "consumer needs one complete executable v2 example")
+AssertionError: 1 != 0 : consumer needs one complete executable v2 example
+
+======================================================================
+FAIL: test_shipped_example_is_complete_and_preserves_scope_without_extra_fields (tests.test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) (target='opencode')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 133, in test_shipped_example_is_complete_and_preserves_scope_without_extra_fields
+    self.assertEqual(1, len(blocks), "consumer needs one complete executable v2 example")
+AssertionError: 1 != 0 : consumer needs one complete executable v2 example
+
+======================================================================
+FAIL: test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) (field='expires_at', value=20261201)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_task_package_delivery.py", line 112, in test_prototype_malformed_types_and_expiry_are_not_coerced
+    self.assertTrue(errors)
+AssertionError: () is not true
+
+======================================================================
+FAIL: test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) (prompt='请帮我做代码评审')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 85, in test_chinese_review_alias_keeps_review_and_commit_owners
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-code-review-loop' != 'adk-commit-pr-quality-gate'
+- adk-code-review-loop
++ adk-commit-pr-quality-gate
+ : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-commit-pr-quality-gate', 'trigger': '代码评审', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'commit-quality', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) (prompt='请核实这条代码评审意见，不修改代码')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 85, in test_chinese_review_alias_keeps_review_and_commit_owners
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-code-review-loop' != 'adk-commit-pr-quality-gate'
+- adk-code-review-loop
++ adk-commit-pr-quality-gate
+ : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-commit-pr-quality-gate', 'trigger': '代码评审', 'task_mode': 'readonly', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'commit-quality', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E0', 'effort_basis': 'explicit-readonly'}
+
+======================================================================
+FAIL: test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) (prompt='只核实这条代码评审反馈')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 85, in test_chinese_review_alias_keeps_review_and_commit_owners
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-code-review-loop' != 'adk-commit-pr-quality-gate'
+- adk-code-review-loop
++ adk-commit-pr-quality-gate
+ : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-commit-pr-quality-gate', 'trigger': '代码评审', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'commit-quality', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (diagnosis='诊断这个 Python 脚本的异常')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 97, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertEqual("adk-systematic-debugging", result.get("skill"), result)
+AssertionError: 'adk-systematic-debugging' != 'adk-production-field-readiness'
+- adk-systematic-debugging
++ adk-production-field-readiness
+ : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (diagnosis='先诊断 Web API 超时的根因')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 97, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertEqual("adk-systematic-debugging", result.get("skill"), result)
+AssertionError: 'adk-systematic-debugging' != 'adk-production-field-readiness'
+- adk-systematic-debugging
++ adk-production-field-readiness
+ : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (diagnosis='请诊断这个普通命令的失败，先不修改代码')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 97, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertEqual("adk-systematic-debugging", result.get("skill"), result)
+AssertionError: 'adk-systematic-debugging' != 'adk-production-field-readiness'
+- adk-systematic-debugging
++ adk-production-field-readiness
+ : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'readonly', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E0', 'effort_basis': 'explicit-readonly'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='请检查数据库回滚方案')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 106, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertNotEqual(field, result.get("skill"), result)
+AssertionError: 'adk-production-field-readiness' == 'adk-production-field-readiness' : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='帮我设计设备状态机，不涉及量产或OTA')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 106, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertNotEqual(field, result.get("skill"), result)
+AssertionError: 'adk-production-field-readiness' == 'adk-production-field-readiness' : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='用模拟设备学习状态机')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 106, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertNotEqual(field, result.get("skill"), result)
+AssertionError: 'adk-production-field-readiness' == 'adk-production-field-readiness' : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='文档示例：`OTA`；请检查数据库回滚方案')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 106, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertNotEqual(field, result.get("skill"), result)
+AssertionError: 'adk-production-field-readiness' == 'adk-production-field-readiness' : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='不做量产；只分析普通服务的回滚方案')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 106, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertNotEqual(field, result.get("skill"), result)
+AssertionError: 'adk-production-field-readiness' == 'adk-production-field-readiness' : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'readonly', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E0', 'effort_basis': 'explicit-readonly'}
+
+======================================================================
+FAIL: test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='梳理这个 BSP 的启动、probe、clock/reset 依赖和历史 patch，不修改代码')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 133, in test_embedded_analysis_intent_boundaries_preserve_existing_neighbors
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-bsp-analysis' != None : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'readonly', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='请检查 DMA 缓存一致性，这是受 CPU budget 的场景限制的系统。')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 133, in test_embedded_analysis_intent_boundaries_preserve_existing_neighbors
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-interrupt-dma-patterns' != None : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': ['interrupt_dma_patterns']}
+
+======================================================================
+FAIL: test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='SPI DMA 轮询已经满足已量化 latency/CPU budget 的场景，仍需检查 DMA cache coherency。')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 133, in test_embedded_analysis_intent_boundaries_preserve_existing_neighbors
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-interrupt-dma-patterns' != None : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': ['interrupt_dma_patterns']}
+
+======================================================================
+FAIL: test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='请做一个季度销售团队任务设计。')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 145, in test_embedded_analysis_intent_boundaries_preserve_existing_neighbors
+    self.assertNotEqual(excluded, result.get("skill"), result)
+AssertionError: 'adk-rtos-task-design' == 'adk-rtos-task-design' : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-rtos-task-design', 'trigger': '任务设计', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'implementation', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) (prompt='项目没有 RTOS；请评估裸机主循环任务设计。')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 145, in test_embedded_analysis_intent_boundaries_preserve_existing_neighbors
+    self.assertNotEqual(excluded, result.get("skill"), result)
+AssertionError: 'adk-rtos-task-design' == 'adk-rtos-task-design' : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-rtos-task-design', 'trigger': '任务设计', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'implementation', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.323s
+
+FAILED (failures=19, errors=14)

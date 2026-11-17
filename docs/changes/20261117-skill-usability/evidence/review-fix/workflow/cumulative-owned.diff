@@ -1,0 +1,214 @@
+diff --git a/skills/adk-production-field-readiness/SKILL.md b/skills/adk-production-field-readiness/SKILL.md
+index 70499da..3e8afb4 100644
+--- a/skills/adk-production-field-readiness/SKILL.md
++++ b/skills/adk-production-field-readiness/SKILL.md
+@@ -1,13 +1,13 @@
+ ---
+ name: adk-production-field-readiness
+ description: "用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。"
+-version: 1.0.4
++version: 1.0.5
+ last_updated: 2026-11-17
+ triggers:
+   - "量产"
+   - "产测"
+   - "烧录"
+-  - "诊断"
++  - "现场诊断"
+   - "现场维护"
+   - "OTA"
+   - "回滚"
+@@ -16,9 +16,7 @@ triggers:
+   - "production-field"
+   - "field readiness"
+   - "embedded-production-field-readiness"
+-  - "simulate-device"
+-  - "模拟设备"
+-  - "设备状态机"
++implicit_context: ["量产/产测/产线/生产现场/烧录/OTA/RMA/现场维护/现场诊断/设备交付/设备健康检查/production-field/field readiness"]
+ non_triggers:
+   - 通用 Web 发布
+   - 纯版本号整理且不涉及设备交付
+@@ -35,8 +33,8 @@ constraints:
+ # adk-production-field-readiness
+ 
+ ## Goal
+-- 覆盖量产、产测、烧录、诊断、OTA、RMA 与现场维护。
+-- 版本策略归 `adk-release-versioning`，设备交付 readiness 归本 Skill。
++- 审查设备交付 readiness；普通诊断、回滚或状态机设计不因用词相同进入量产流程。
++- 版本策略交 `adk-release-versioning`；本 Skill 不提供设备写入授权。
+ 
+ ## Prerequisites
+ - 确认目标设备、硬件版本、BOM/板级差异、固件/镜像版本和生产批次约束。
+diff --git a/src/agent_dev_kit/_matcher_kernel.py b/src/agent_dev_kit/_matcher_kernel.py
+index 4a18ab5..4c0e2fe 100644
+--- a/src/agent_dev_kit/_matcher_kernel.py
++++ b/src/agent_dev_kit/_matcher_kernel.py
+@@ -161,6 +161,32 @@ def _phrases(frontmatter: Mapping[str, Any], key: str) -> Iterable[str]:
+             yield item
+ 
+ 
++def _has_affirmative_context(text: str, contexts: Sequence[str], markers: Sequence[str]) -> bool:
++    """Extend domain negation only across adjacent, declared domain names.
++
++    Punctuation and intervening actions break the compact list. This does not
++    change the action/mode/permission polarity used by the routing IR.
++    """
++    normalized = _normalized(text)
++    matches = sorted(
++        (match for phrase in contexts for match in _all_phrase_matches(text, phrase)),
++        key=lambda item: item[1],
++    )
++    negated_ends: set[int] = set()
++    conjunctions = {"或", "和", "与", "及", "、", "and", "or", "nor"}
++    for match in matches:
++        phrase, position, _ = match
++        inherited = any(
++            position - len(conjunction) in negated_ends
++            and normalized[position - len(conjunction):position] == conjunction
++            for conjunction in conjunctions
++        )
++        if not inherited and not _is_locally_negated(text, match, markers):
++            return True
++        negated_ends.add(position + len(_normalized(phrase)))
++    return False
++
++
+ def _implicit_context_matches(
+     frontmatter: Mapping[str, Any],
+     text: str,
+@@ -191,7 +217,7 @@ def _implicit_context_matches(
+     )
+     context_text = re.sub(inline, lambda match: match.group(0)[1:-1], context_text)
+     context_markers = (*markers, "非", "不涉及", "not", "non-")
+-    return any(_active_phrase_matches(context_text, phrase, context_markers) for phrase in contexts)
++    return _has_affirmative_context(context_text, contexts, context_markers)
+ 
+ 
+ def _managed_skill_entries(manifest: Manifest, section: str) -> Iterable[Tuple[str, Path]]:
+diff --git a/tests/test_skill_trigger_matrix.py b/tests/test_skill_trigger_matrix.py
+index 87e5505..2eada50 100644
+--- a/tests/test_skill_trigger_matrix.py
++++ b/tests/test_skill_trigger_matrix.py
+@@ -69,6 +69,121 @@ def _catalog_cases() -> list[tuple[int, str, str, str, str, str]]:
+ 
+ 
+ class SkillTriggerMatrixTests(unittest.TestCase):
++    def test_chinese_review_alias_keeps_review_and_commit_owners(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt, expected in (
++            ("请帮我做代码评审", "adk-code-review-loop"),
++            ("请核实这条代码评审意见，不修改代码", "adk-code-review-loop"),
++            ("只核实这条代码评审反馈", "adk-code-review-loop"),
++            ("请进行独立代码审查", "adk-code-review-loop"),
++            ("请校验 commit message", "adk-commit-pr-quality-gate"),
++            ("提交前检查", "adk-commit-pr-quality-gate"),
++            ("不要做代码评审，只校验 commit message", "adk-commit-pr-quality-gate"),
++        ):
++            with self.subTest(prompt=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(expected, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++
++    def test_field_readiness_does_not_capture_generic_diagnosis_or_rollback(self) -> None:
++        manifest = Manifest.load(ROOT)
++        field = "adk-production-field-readiness"
++        for prompt in (
++            "诊断这个 Python 脚本的异常", "先诊断 Web API 超时的根因",
++            "请诊断这个普通命令的失败，先不修改代码",
++        ):
++            with self.subTest(diagnosis=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual("adk-systematic-debugging", result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++        for prompt in (
++            "请检查数据库回滚方案", "帮我设计设备状态机，不涉及量产或OTA",
++            "用模拟设备学习状态机", "文档示例：`OTA`；请检查数据库回滚方案",
++            "不做量产；只分析普通服务的回滚方案",
++        ):
++            with self.subTest(outside_field=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(field, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++        for prompt in (
++            "检查嵌入式量产产测和现场维护 readiness",
++            "量产产测和OTA回滚 readiness",
++            "只读评估现场 OTA 回滚，不执行刷写",
++            "不涉及量产，只读评估 OTA 回滚",
++            "核对现场诊断和设备交付准备",
++            "评估候选版本是否具备生产现场就绪证据，检查可观测性、回滚、SLO 和长期运维闭环。",
++        ):
++            with self.subTest(field=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(field, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++                self.assertEqual("read-only", result.get("effect_ceiling"), result)
++
++    def test_embedded_analysis_intent_boundaries_preserve_existing_neighbors(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt, expected in (
++            ("请设计 RTOS 任务优先级、周期和共享资源。", "adk-rtos-task-design"),
++            ("请为 VxWorks 做任务设计", "adk-rtos-task-design"),
++            ("梳理这个 BSP 的启动、probe、clock/reset 依赖和历史 patch，不修改代码", "adk-bsp-analysis"),
++            ("SoC board 迁移分析", "adk-bsp-analysis"),
++            ("BSP移植", "adk-bsp-porting-playbook"),
++            ("实现驱动", "adk-driver-implementation"),
++            ("请检查 DMA 缓存一致性，这是受 CPU budget 的场景限制的系统。", "adk-interrupt-dma-patterns"),
++            ("SPI DMA 轮询已经满足已量化 latency/CPU budget 的场景，仍需检查 DMA cache coherency。", "adk-interrupt-dma-patterns"),
++        ):
++            with self.subTest(prompt=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(expected, result.get("skill"), result)
++                if expected not in ("adk-driver-implementation", "adk-bsp-porting-playbook"):
++                    self.assertEqual("deny", result.get("mutation_permission"), result)
++        for prompt, excluded in (
++            ("请做一个季度销售团队任务设计。", "adk-rtos-task-design"),
++            ("项目没有 RTOS；请评估裸机主循环任务设计。", "adk-rtos-task-design"),
++            ("不涉及 VxWorks；请为裸机主循环做任务设计", "adk-rtos-task-design"),
++            ("请梳理季度销售材料", "adk-bsp-analysis"),
++            ("不涉及 BSP；请梳理脚本入口", "adk-bsp-analysis"),
++            ("只检查无中断且无 DMA 的纯轮询任务", "adk-interrupt-dma-patterns"),
++        ):
++            with self.subTest(prompt=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(excluded, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++
++    def test_ota_context_preserves_affirmative_domains_and_coordinated_negation(self) -> None:
++        manifest = Manifest.load(ROOT)
++        field = "adk-production-field-readiness"
++        for prompt in (
++            "评估嵌入式设备 OTA 的断电恢复、回滚和上线 readiness",
++            "请只读检查 OTA 签名和回滚验证证据",
++            "Review OTA firmware rollback readiness",
++            "请只读检查 `OTA` 签名和回滚验证证据",
++            "不涉及量产，检查 OTA 签名和回滚验证证据",
++            "不涉及量产。检查 OTA 签名和回滚验证证据",
++            "不涉及量产；检查 OTA 签名和回滚验证证据",
++            "不涉及量产但要只读检查 OTA 签名和回滚验证证据",
++            "不涉及量产或OTA；请只读检查 OTA 签名和回滚验证证据",
++            "Review OTA firmware rollback readiness; do not flash the device",
++        ):
++            with self.subTest(affirmative=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(field, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++                self.assertEqual("read-only", result.get("effect_ceiling"), result)
++        for prompt in (
++            "不涉及量产或OTA；请检查数据库回滚方案",
++            "不涉及量产、OTA和RMA；请检查数据库回滚方案",
++            "不涉及量产与OTA及RMA；请检查数据库回滚方案",
++            "not production-field or OTA and RMA; inspect database rollback",
++            "without OTA nor RMA; inspect database rollback",
++            "文档示例：`OTA`；请检查数据库回滚方案",
++            "文档示例：```OTA```；请检查数据库回滚方案",
++            "不涉及 OTA；请检查数据库回滚方案",
++        ):
++            with self.subTest(excluded=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(field, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++
+     def test_embedded_unit_implicit_scope_and_host_controls(self) -> None:
+         manifest = Manifest.load(ROOT)
+         unit = "adk-unit-test-embedded"

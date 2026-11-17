@@ -1,15 +1,16 @@
 ---
 name: adk-rtos-task-design
 description: "用于 RTOS 任务优先级、周期唤醒、同步资源与调度风险设计；不用于裸机单循环或未经测量声称实时性达标。"
-version: 2.0.3
-last_updated: 2026-11-16
+version: 2.0.4
+last_updated: 2026-11-17
 triggers:
   - "RTOS任务"
   - "任务设计"
   - "实时任务"
   - "调度分析"
+implicit_context: ["RTOS/Zephyr/ThreadX/RT-Thread/VxWorks"]
 non_triggers:
-  - 无 RTOS 的裸机项目
+  - 无 RTOS/没有 RTOS
   - 普通线程划分且无实时约束
 inputs:
   - 任务周期、deadline、WCET/样本、中断负载、共享资源、栈与队列约束
@@ -30,12 +31,12 @@ constraints:
 5. 用目标 trace 记录 release/start/finish、response-time、jitter、deadline miss、队列/栈 high-water、CPU load。trace 超模型上界先查漏项；低于上界不证明可降低 WCET。缺板端证据 `needs-runtime-evidence`。
 
 ## 固定优先级计算（仅适用时）
-单核、抢占式、固定优先级、独立周期/有界 sporadic 任务、deadline 不大于 period、无未建模 release jitter 或自挂起时，使用同一时间单位：
+单核、抢占式、任务优先级固定且互异、独立周期/有界 sporadic 任务、deadline 不大于 period、无未建模 release jitter 或自挂起时，使用同一时间单位：
 ```text
 R0 = Ci + Bi
 Rnext = Ci + Bi + sum(ceil(R / Tj) * Cj, j in higher-priority tasks) + Ii(R)
 ```
-`C` 为有依据的 WCET 上界，`B` 为一次作业最坏阻塞，`T` 为周期/最小到达间隔，`Ii(R)` 为窗口内 IRQ 干扰。中断与调度开销不重复计数。收敛且 `R <= deadline` 只证明该模型/上界下可调度；超过 deadline 停止，缺上界/不收敛记未知。SMP、jitter、自挂起、任意 deadline 或动态优先级另选模型；RMA 指 Rate Monotonic Analysis。
+`C` 为有依据的 WCET 上界，`B` 为一次作业最坏阻塞，`T` 为周期/最小到达间隔，`Ii(R)` 为窗口内 IRQ 干扰。中断与调度开销不重复计数。收敛且 `R <= deadline` 只证明该模型/上界下可调度；超过 deadline 停止，缺上界/不收敛记未知。同优先级、SMP、jitter、自挂起、任意 deadline 或动态优先级另选模型；RMA 指 Rate Monotonic Analysis。
 
 例：`Ci=2, Bi=1, Di=5`、高优先级 `Cj=1,Tj=4`：`3→4→4`；加 `Cirq=0.5,Tirq=3` 得 `3→4.5→6`，超 deadline。这是计算示例，非板测。背景：https://www.cs.york.ac.uk/rts/publications/Davis2008a.html 。
 

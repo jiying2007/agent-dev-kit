@@ -1,0 +1,10 @@
+test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) ... ok
+test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) ... ok
+test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) ... ok
+test_exported_recovery_note_distinguishes_envelope_and_payload (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_recovery_note_distinguishes_envelope_and_payload) ... ok
+test_published_catalog_queries_cover_core_and_nested_optional (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_published_catalog_queries_cover_core_and_nested_optional) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.743s
+
+OK

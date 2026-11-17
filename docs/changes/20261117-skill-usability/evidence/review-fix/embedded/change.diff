@@ -1,0 +1,11 @@
+--- before/skills/adk-rtos-task-design/SKILL.md
++++ after/skills/adk-rtos-task-design/SKILL.md
+@@ -8,7 +8,7 @@
+   - "任务设计"
+   - "实时任务"
+   - "调度分析"
+-implicit_context: ["RTOS/Zephyr/ThreadX/RT-Thread"]
++implicit_context: ["RTOS/Zephyr/ThreadX/RT-Thread/VxWorks"]
+ non_triggers:
+   - 无 RTOS/没有 RTOS
+   - 普通线程划分且无实时约束

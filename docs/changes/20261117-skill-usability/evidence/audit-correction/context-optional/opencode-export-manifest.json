@@ -1,0 +1,651 @@
+{
+  "schema": "adk-export-manifest/v2",
+  "schema_version": 2,
+  "manifest_version": "11.3.13",
+  "manifest_sha256": "8fc37332a821e65fc83267c0dd113a6760d6c55a8d48b1a7ff8b7082c184a3d1",
+  "target": "opencode",
+  "contract_sha256": "f7f1f62d555eb9a07f58e275ab7bc6ac2aa3c4ae96b455e89343e121fd73d562",
+  "contract_status": "experimental",
+  "profiles": [
+    "core",
+    "team-core"
+  ],
+  "optional_skills": [
+    "adk-external-practice-absorption",
+    "adk-data-fetch",
+    "adk-email-imap-fetch",
+    "adk-fetch-url-content",
+    "adk-test-flakiness-triage",
+    "adk-security-supply-chain",
+    "adk-prose-revision",
+    "adk-incident-rca-report",
+    "adk-skill-composition-governance"
+  ],
+  "asset_kind": "skill",
+  "files": [
+    {
+      "kind": "skill",
+      "name": "adk-runtime-router",
+      "source": "skills/adk-runtime-router/SKILL.md",
+      "path": "skills/adk-runtime-router/SKILL.md",
+      "sha256": "bbc94c5e9619d0629dd89e694180549cba62ea7eaca711ed529e142d8020fd37",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-runtime-router",
+      "source": "skills/adk-runtime-router/references/runtime-routing-details.md",
+      "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+      "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-context-engineering",
+      "source": "skills/adk-context-engineering/SKILL.md",
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "sha256": "f18f5298075eb878e7fe891ad4a37ea6cb989094ddf246bbdddf9a29a79e768b",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-token-context-governance",
+      "source": "skills/adk-token-context-governance/SKILL.md",
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "sha256": "a887d039dbaed496ff8d6f45b2cd644c9ea626c4244092931de803b60e671233",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-requirements-triage",
+      "source": "skills/adk-requirements-triage/SKILL.md",
+      "path": "skills/adk-requirements-triage/SKILL.md",
+      "sha256": "91e6ecf633266866e3788ed521c4b56a329a79d79718010d051be8920858747d",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-requirements-triage",
+      "source": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+      "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+      "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-requirements-triage",
+      "source": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+      "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+      "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-structured-requirements-questioning",
+      "source": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "sha256": "9ea2974869831782a75ee71ba593aac3a810b0a50df4290fc7cd3a00c5148f8f",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-structured-requirements-questioning",
+      "source": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+      "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+      "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-lightweight-planning",
+      "source": "skills/adk-lightweight-planning/SKILL.md",
+      "path": "skills/adk-lightweight-planning/SKILL.md",
+      "sha256": "eaba0c39a5c226f784a762a25df9cb779dc63a2995d22d4406d39c55e767697c",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-goal-authoring",
+      "source": "skills/adk-goal-authoring/SKILL.md",
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "sha256": "8af8aa2130dba6866221c0a0ca199353aa0d0688d9774dd26695ac323a01a5b3",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-goal-authoring",
+      "source": "skills/adk-goal-authoring/references/goal-plan.json",
+      "path": "skills/adk-goal-authoring/references/goal-plan.json",
+      "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-task-breakdown",
+      "source": "skills/adk-task-breakdown/SKILL.md",
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "sha256": "c380470f57b8c4705a02d0106a5911eb97b0382fbfda4f60ef2e1de44a4d2cba",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-task-breakdown",
+      "source": "skills/adk-task-breakdown/references/task-packaging.md",
+      "path": "skills/adk-task-breakdown/references/task-packaging.md",
+      "sha256": "ff28210cab9e3fc4050891750431764d38cb873124037d7c2789dcd43fffa3db",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-task-breakdown",
+      "source": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+      "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+      "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-parallel-agent-governance",
+      "source": "skills/adk-parallel-agent-governance/SKILL.md",
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "sha256": "5320d11d02f730f7f1acee890a6412f4e14b894117c7c939fa394db980bc2666",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-parallel-agent-governance",
+      "source": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "sha256": "8b9ae9c13249cb1cc002e7bf090c1799fe83a2f625359ec4b79395dfaf56f3be",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-parallel-agent-governance",
+      "source": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-worktree-governance",
+      "source": "skills/adk-worktree-governance/SKILL.md",
+      "path": "skills/adk-worktree-governance/SKILL.md",
+      "sha256": "e2a6452a59dc07a7961d82f2e41d14508a610236d4c5590a465a07a69136da9f",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-worktree-governance",
+      "source": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+      "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+      "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-worktree-governance",
+      "source": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+      "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+      "sha256": "2ab200477eab8f816df4c958623030337693f05b3c5ea0dd2d23e1a36fe1eaa2",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-context-compress-handoff",
+      "source": "skills/adk-context-compress-handoff/SKILL.md",
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "sha256": "faea985df2a8e6b9cae73bb13c491ce52170b9ba994011833e9e9474fda13969",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-interface-contract-design",
+      "source": "skills/adk-interface-contract-design/SKILL.md",
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "sha256": "9e37490a926203af5e59dbcb417f9febc1aaf4c73034f77aa7517655dce81de8",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-interface-contract-design",
+      "source": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-interface-contract-design",
+      "source": "skills/adk-interface-contract-design/references/details.md",
+      "path": "skills/adk-interface-contract-design/references/details.md",
+      "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-interface-contract-design",
+      "source": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-interface-contract-design",
+      "source": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-interface-contract-design",
+      "source": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-adr-writer",
+      "source": "skills/adk-adr-writer/SKILL.md",
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "sha256": "82c08e9676b4a86bcd092bfdc58f10c5c0e872014e8ef5213f772c2a0a3cc87d",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-component-api-stability",
+      "source": "skills/adk-component-api-stability/SKILL.md",
+      "path": "skills/adk-component-api-stability/SKILL.md",
+      "sha256": "f25d8423e8261ad302148f83e959bb0bb9abb528ca6a2053c3df7389b9dfef53",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-systematic-debugging",
+      "source": "skills/adk-systematic-debugging/SKILL.md",
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "sha256": "2c527ba4725848ec251fd4b6839b41fb8c1dc613e80d700218fb7687200f59f4",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-systematic-debugging",
+      "source": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+      "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+      "sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-systematic-debugging",
+      "source": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-systematic-debugging",
+      "source": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-test-strategy",
+      "source": "skills/adk-test-strategy/SKILL.md",
+      "path": "skills/adk-test-strategy/SKILL.md",
+      "sha256": "8ae1ca2a346223d0d3d17663b917ae244ad930d21fd9d948b834319093e95f0c",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-test-strategy",
+      "source": "skills/adk-test-strategy/references/high-value-tdd.md",
+      "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+      "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-verification-before-completion",
+      "source": "skills/adk-verification-before-completion/SKILL.md",
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "sha256": "f856f021ee514e33c6ef8ddff0057c7e2dadb7e4f2f17de4c5698d7ea5e9ce37",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-verification-before-completion",
+      "source": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-code-review-loop",
+      "source": "skills/adk-code-review-loop/SKILL.md",
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "sha256": "e89457f720157d9aa8bec847dcc292d61935a5a90a2e938a3a019c1ff54e4c3d",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-code-review-loop",
+      "source": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+      "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+      "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-code-review-loop",
+      "source": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "sha256": "a82255232e618f5fd00f4532aa884c6df54f2dd97806da633d092286bc9d0af6",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-code-review-loop",
+      "source": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "sha256": "731f4b0dd24c9c3baea0e7d76bbeef6eeeb746d23335cf96893c694b68e91fa4",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-code-review-loop",
+      "source": "skills/adk-code-review-loop/references/review-governance-details.md",
+      "path": "skills/adk-code-review-loop/references/review-governance-details.md",
+      "sha256": "b82d16825e3a0ee15e4b6cd08f1f4e736e32d63c93fdf7381922ffab60c0a2ea",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-repo-drift-remediation",
+      "source": "skills/adk-repo-drift-remediation/SKILL.md",
+      "path": "skills/adk-repo-drift-remediation/SKILL.md",
+      "sha256": "173800ed5aa762ee0f4fd25d0603d58e35027f890a9fbd90fb89af6b209de449",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-commit-pr-quality-gate",
+      "source": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "sha256": "ba07afcb67b9ca70b2180433d1acd8e8d0d199966f6c1e7056903f1f3e2ad35a",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-commit-pr-quality-gate",
+      "source": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+      "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+      "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-branch-closeout",
+      "source": "skills/adk-branch-closeout/SKILL.md",
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "sha256": "ad333f2256af4c8c8033527dcaa16e696b0da6498605ffc9fc0ba3866e272913",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-branch-closeout",
+      "source": "skills/adk-branch-closeout/references/closeout-options.md",
+      "path": "skills/adk-branch-closeout/references/closeout-options.md",
+      "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-after-action-review",
+      "source": "skills/adk-after-action-review/SKILL.md",
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "sha256": "480b4258b7c6b8f9bfdcff427e5e0306df80cee8874e7298ffb7e852c87ca92e",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-after-action-review",
+      "source": "skills/adk-after-action-review/references/after-action-review.md",
+      "path": "skills/adk-after-action-review/references/after-action-review.md",
+      "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-after-action-review",
+      "source": "skills/adk-after-action-review/references/codify-decision.md",
+      "path": "skills/adk-after-action-review/references/codify-decision.md",
+      "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-after-action-review",
+      "source": "skills/adk-after-action-review/references/memory-candidate.md",
+      "path": "skills/adk-after-action-review/references/memory-candidate.md",
+      "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-planning-execution-loop",
+      "source": "skills/adk-planning-execution-loop/SKILL.md",
+      "path": "skills/adk-planning-execution-loop/SKILL.md",
+      "sha256": "0a6b87b195ddf5900e32dc320ae3b56811e47d0be27d8b4d83eb47f7bece13ca",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-planning-execution-loop",
+      "source": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "sha256": "1bb86490fb7f335fd7f5f478a6be9c750b25ac0c025039b561a55bc4467bc375",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-artifact-gating",
+      "source": "skills/adk-artifact-gating/SKILL.md",
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "sha256": "1f1e4fb24069730efbcd186575023c42b4aee422b31e161bd8203a3a8d36573d",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-artifact-gating",
+      "source": "skills/adk-artifact-gating/references/details.md",
+      "path": "skills/adk-artifact-gating/references/details.md",
+      "sha256": "c4f1f8675a02c8e3886417b48caa6c1ba2dad15fd5246dfb02e1ae6980b42f3f",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-pilot-framework",
+      "source": "skills/adk-pilot-framework/SKILL.md",
+      "path": "skills/adk-pilot-framework/SKILL.md",
+      "sha256": "84694778e0e3a77c7bb2c5767cfe32ce4880e662dd68e6c81da64d5c426891f2",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-pilot-framework",
+      "source": "skills/adk-pilot-framework/references/details.md",
+      "path": "skills/adk-pilot-framework/references/details.md",
+      "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-cross-team-handoff",
+      "source": "skills/adk-cross-team-handoff/SKILL.md",
+      "path": "skills/adk-cross-team-handoff/SKILL.md",
+      "sha256": "a2196f96cbba1bcb714bff35cf31741e15ed22f30ebcedde241f343c30ade125",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-memory-curator",
+      "source": "skills/adk-memory-curator/SKILL.md",
+      "path": "skills/adk-memory-curator/SKILL.md",
+      "sha256": "132b99aec72e9855842994117c9c00795bbeabf0b8e90d4f1de1076ff3186adb",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-archive-governance",
+      "source": "skills/adk-archive-governance/SKILL.md",
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "sha256": "5dca6453bfd0fd66dd300f4eb7e201ce74bdb540d6d1e09a1478d433752931ea",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-knowledge-archive",
+      "source": "skills/adk-knowledge-archive/SKILL.md",
+      "path": "skills/adk-knowledge-archive/SKILL.md",
+      "sha256": "83417d92313025b960aed1a7bc7debfcde5607182ecbb5a1e8ae906236217c50",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-engineering-growth-review",
+      "source": "skills/adk-engineering-growth-review/SKILL.md",
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "sha256": "0b0b4e76719982678406c027fd70fd96d1780a246d891a1d9655baac9526f132",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-engineering-growth-review",
+      "source": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+      "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+      "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-external-practice-absorption",
+      "source": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "path": "skills/adk-external-practice-absorption/SKILL.md",
+      "sha256": "73b43e019f3eac48c9e690d8b5e17dc7395e8046cc074f8f93a6ddf237fd6c52",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-data-fetch",
+      "source": "optional-skills/adk-data-fetch/SKILL.md",
+      "path": "skills/adk-data-fetch/SKILL.md",
+      "sha256": "0c5da5b8c89fe801011dd60c8bbe8e27fb57492e37e6e580d25753f79fb7db2c",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-email-imap-fetch",
+      "source": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "path": "skills/adk-email-imap-fetch/SKILL.md",
+      "sha256": "9fb653c994863362d2c2ed9e964cd74b36d09f28f109c1204dff00a25e99c5e8",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-fetch-url-content",
+      "source": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "path": "skills/adk-fetch-url-content/SKILL.md",
+      "sha256": "4317b63b76861d63829b5eaf73b2ed5e408290ae725bb0b73b4e57dcd92d558a",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-test-flakiness-triage",
+      "source": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "path": "skills/adk-test-flakiness-triage/SKILL.md",
+      "sha256": "d769ea8b51800d298c2e6424f4d737f6b520d1427f8743f66ab2d488477b93af",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-test-flakiness-triage",
+      "source": "optional-skills/adk-test-flakiness-triage/references/details.md",
+      "path": "skills/adk-test-flakiness-triage/references/details.md",
+      "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-security-supply-chain",
+      "source": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "path": "skills/adk-security-supply-chain/SKILL.md",
+      "sha256": "d3dd1fdbd6f2d23a09a3ce381eb1156bc7b155733010df5377285a97f6a6c40d",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-security-supply-chain",
+      "source": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "path": "skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+      "sha256": "7ec6f5e8647af1a59fd7dfb249965df257f414c40d4076871688f48b612aaa3f",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-prose-revision",
+      "source": "optional-skills/adk-prose-revision/SKILL.md",
+      "path": "skills/adk-prose-revision/SKILL.md",
+      "sha256": "0934f714563fc46f6dbfa298399d1ebf74e5e965756fdda569f00be6ece01c27",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-prose-revision",
+      "source": "optional-skills/adk-prose-revision/references/review-cases.md",
+      "path": "skills/adk-prose-revision/references/review-cases.md",
+      "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-incident-rca-report",
+      "source": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "path": "skills/adk-incident-rca-report/SKILL.md",
+      "sha256": "e0469dde987ccd3f89948353fdf823faa2c1b46ea6b54076167b50c2787c21a3",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-skill-composition-governance",
+      "source": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "path": "skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "4e1822ddd45c5d8eed8c36b044187b9f6ee9945dc8ebd874ec36ffad09849e84",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-skill-composition-governance",
+      "source": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "path": "skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+      "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
+      "mode": "0644"
+    },
+    {
+      "kind": "skill",
+      "name": "adk-skill-composition-governance",
+      "source": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+      "path": "skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+      "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
+      "mode": "0644"
+    }
+  ]
+}

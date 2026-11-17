@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "tests.test_task_package_delivery",
+    "tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners",
+    "tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback",
+    "tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors",
+    "-v"
+  ],
+  "exit_code": 1,
+  "source_sha256": {
+    "manifest.json": "07e887a7417f81ea279a107981aa0fd25836aa85d140f26734d78733c0e0ce68",
+    "src/agent_dev_kit/intent_boundary.py": "c05eefe5172be6c3477cb81106331a33de1457615442bcc5e5374e3ec620f7a4",
+    "skills/adk-task-breakdown/SKILL.md": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
+    "skills/adk-task-breakdown/references/task-packaging.md": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3",
+    "skills/adk-production-field-readiness/SKILL.md": "b661f56a96309870e2895423ee3646bd9e50a5f35da9286cd070a45ac75a60e6"
+  },
+  "log": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-red.txt"
+}

@@ -1,0 +1,1050 @@
+[
+  {
+    "target": "claude-code",
+    "status": "pass",
+    "output": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code",
+    "profiles": [
+      "core",
+      "team-core",
+      "research-intake",
+      "large-refactor",
+      "personal-core"
+    ],
+    "workflow_skills": [
+      {
+        "name": "adk-requirements-triage",
+        "source": "skills/adk-requirements-triage/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-requirements-triage/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/embedded-discovery-brief.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/exploratory-requirements-brief.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-structured-requirements-questioning",
+        "source": "skills/adk-structured-requirements-questioning/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-structured-requirements-questioning/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/prototype-as-experiment.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-repo-prompt-analysis",
+        "source": "skills/adk-repo-prompt-analysis/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-repo-prompt-analysis/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-skill-deep-analysis",
+        "source": "skills/adk-skill-deep-analysis/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-skill-deep-analysis/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-lightweight-planning",
+        "source": "skills/adk-lightweight-planning/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-lightweight-planning/SKILL.md",
+        "support_files": [
+          {
+            "path": "LICENSE",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "README.md",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "agents/openai.yaml",
+            "exists": false,
+            "bytes_equal": false
+          }
+        ]
+      },
+      {
+        "name": "adk-task-breakdown",
+        "source": "skills/adk-task-breakdown/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-task-breakdown/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/task-packaging.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/vertical-slice-planning.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-interface-contract-design",
+        "source": "skills/adk-interface-contract-design/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-interface-contract-design/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/design-quality-methods.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/lifecycle-operation-contract.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/spec-code-bidirectional.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/tool-effect-contract.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-adr-writer",
+        "source": "skills/adk-adr-writer/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-adr-writer/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-component-api-stability",
+        "source": "skills/adk-component-api-stability/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-component-api-stability/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-code-simplification",
+        "source": "skills/adk-code-simplification/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-code-simplification/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/deep-module-design.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-systematic-debugging",
+        "source": "skills/adk-systematic-debugging/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-systematic-debugging/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/embedded-diagnosis-branches.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/sanitizer-validation.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/tight-feedback-loop.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-offline-core-dump-triage",
+        "source": "skills/adk-offline-core-dump-triage/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-offline-core-dump-triage/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-test-strategy",
+        "source": "skills/adk-test-strategy/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-test-strategy/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/high-value-tdd.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-artifact-gating",
+        "source": "skills/adk-artifact-gating/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-artifact-gating/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-pilot-framework",
+        "source": "skills/adk-pilot-framework/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-pilot-framework/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-verification-before-completion",
+        "source": "skills/adk-verification-before-completion/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-verification-before-completion/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/verification-governance-details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-code-review-loop",
+        "source": "skills/adk-code-review-loop/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-code-review-loop/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/review-communication-guidance.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/review-evidence-template.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/review-feedback-fixtures.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/review-governance-details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-repo-drift-remediation",
+        "source": "skills/adk-repo-drift-remediation/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-repo-drift-remediation/SKILL.md",
+        "support_files": [
+          {
+            "path": "LICENSE",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "README.md",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "agents/openai.yaml",
+            "exists": false,
+            "bytes_equal": false
+          }
+        ]
+      },
+      {
+        "name": "adk-commit-pr-quality-gate",
+        "source": "skills/adk-commit-pr-quality-gate/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-commit-pr-quality-gate/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/pr-risk-gates.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-release-versioning",
+        "source": "skills/adk-release-versioning/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-release-versioning/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-production-field-readiness",
+        "source": "skills/adk-production-field-readiness/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-production-field-readiness/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/pilot-measurement-evidence.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-cross-team-handoff",
+        "source": "skills/adk-cross-team-handoff/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-cross-team-handoff/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-branch-closeout",
+        "source": "skills/adk-branch-closeout/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-branch-closeout/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/closeout-options.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-after-action-review",
+        "source": "skills/adk-after-action-review/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-after-action-review/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/after-action-review.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/codify-decision.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/memory-candidate.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-engineering-growth-review",
+        "source": "skills/adk-engineering-growth-review/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-engineering-growth-review/SKILL.md",
+        "support_files": [
+          {
+            "path": "LICENSE",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "README.md",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "agents/openai.yaml",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "references/growth-evidence-boundaries.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      }
+    ],
+    "v2_mentions": [
+      {
+        "path": "skills/adk-task-breakdown/SKILL.md",
+        "mentions": 1
+      },
+      {
+        "path": "skills/adk-task-breakdown/references/task-packaging.md",
+        "mentions": 1
+      }
+    ],
+    "source_contract_files_present": {
+      "manifests/structured_output_contracts.json": false,
+      "src/agent_dev_kit/intent_boundary.py": false,
+      "templates/artifacts/task-breakdown-template.md": false,
+      "templates/governance/codify-decision.md": false
+    },
+    "all_file_paths": [
+      "adk-export-manifest.json",
+      "agents/component-engineer.md",
+      "agents/code-review-governor.md",
+      "agents/driver-engineer.md",
+      "agents/hardware-debugger.md",
+      "agents/bsp-analyst.md",
+      "agents/architecture-planner.md",
+      "agents/requirements-analyst.md",
+      "agents/application-engineer.md",
+      "agents/test-validation-engineer.md",
+      "agents/external-practice-curator.md",
+      "agents/security-compliance-reviewer.md",
+      "skills/adk-repo-prompt-analysis/SKILL.md",
+      "skills/adk-release-versioning/SKILL.md",
+      "skills/adk-interface-contract-design/SKILL.md",
+      "skills/adk-rtos-task-design/SKILL.md",
+      "skills/adk-driver-bringup-checklist/SKILL.md",
+      "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "skills/adk-branch-closeout/SKILL.md",
+      "skills/adk-archive-governance/SKILL.md",
+      "skills/adk-repo-drift-remediation/SKILL.md",
+      "skills/adk-after-action-review/SKILL.md",
+      "skills/adk-skill-deep-analysis/SKILL.md",
+      "skills/adk-structured-requirements-questioning/SKILL.md",
+      "skills/adk-embedded-release-orchestration/SKILL.md",
+      "skills/adk-register-map-design/SKILL.md",
+      "skills/adk-requirements-triage/SKILL.md",
+      "skills/adk-offline-core-dump-triage/SKILL.md",
+      "skills/adk-cross-team-handoff/SKILL.md",
+      "skills/adk-fault-injection-recovery/SKILL.md",
+      "skills/adk-token-context-governance/SKILL.md",
+      "skills/adk-verification-before-completion/SKILL.md",
+      "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "skills/adk-artifact-gating/SKILL.md",
+      "skills/adk-runtime-router/SKILL.md",
+      "skills/adk-systematic-debugging/SKILL.md",
+      "skills/adk-knowledge-archive/SKILL.md",
+      "skills/adk-lightweight-planning/SKILL.md",
+      "skills/adk-worktree-governance/SKILL.md",
+      "skills/adk-bsp-porting-playbook/SKILL.md",
+      "skills/adk-hardware-debugging/SKILL.md",
+      "skills/adk-adr-writer/SKILL.md",
+      "skills/adk-code-review-loop/SKILL.md",
+      "skills/adk-test-strategy/SKILL.md",
+      "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "skills/adk-driver-implementation/SKILL.md",
+      "skills/adk-task-breakdown/SKILL.md",
+      "skills/adk-bsp-analysis/SKILL.md",
+      "skills/adk-performance-profiling-embedded/SKILL.md",
+      "skills/adk-protocol-stack-integration/SKILL.md",
+      "skills/adk-memory-curator/SKILL.md",
+      "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "skills/adk-cmake-cross-build/SKILL.md",
+      "skills/adk-production-field-readiness/SKILL.md",
+      "skills/adk-embedded-debug-transport/SKILL.md",
+      "skills/adk-context-compress-handoff/SKILL.md",
+      "skills/adk-parallel-agent-governance/SKILL.md",
+      "skills/adk-integration-hil-sil/SKILL.md",
+      "skills/adk-component-api-stability/SKILL.md",
+      "skills/adk-unit-test-embedded/SKILL.md",
+      "skills/adk-code-simplification/SKILL.md",
+      "skills/adk-planning-execution-loop/SKILL.md",
+      "skills/adk-pilot-framework/SKILL.md",
+      "skills/adk-context-engineering/SKILL.md",
+      "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "skills/adk-engineering-growth-review/SKILL.md",
+      "skills/adk-goal-authoring/SKILL.md",
+      "skills/adk-release-versioning/references/details.md",
+      "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "skills/adk-interface-contract-design/references/details.md",
+      "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+      "skills/adk-branch-closeout/references/closeout-options.md",
+      "skills/adk-after-action-review/references/memory-candidate.md",
+      "skills/adk-after-action-review/references/codify-decision.md",
+      "skills/adk-after-action-review/references/after-action-review.md",
+      "skills/adk-skill-deep-analysis/references/details.md",
+      "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+      "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+      "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+      "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+      "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "skills/adk-artifact-gating/references/details.md",
+      "skills/adk-runtime-router/references/runtime-routing-details.md",
+      "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+      "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+      "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+      "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+      "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "skills/adk-code-review-loop/references/review-governance-details.md",
+      "skills/adk-code-review-loop/references/review-communication-guidance.md",
+      "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "skills/adk-test-strategy/references/high-value-tdd.md",
+      "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+      "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+      "skills/adk-task-breakdown/references/task-packaging.md",
+      "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+      "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+      "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+      "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+      "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+      "skills/adk-code-simplification/references/details.md",
+      "skills/adk-code-simplification/references/deep-module-design.md",
+      "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "skills/adk-pilot-framework/references/details.md",
+      "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+      "skills/adk-interrupt-dma-patterns/references/details.md",
+      "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+      "skills/adk-goal-authoring/references/goal-plan.json"
+    ]
+  },
+  {
+    "target": "opencode",
+    "status": "pass",
+    "output": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode",
+    "profiles": [
+      "core",
+      "team-core",
+      "research-intake",
+      "large-refactor",
+      "personal-core"
+    ],
+    "workflow_skills": [
+      {
+        "name": "adk-requirements-triage",
+        "source": "skills/adk-requirements-triage/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-requirements-triage/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/embedded-discovery-brief.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/exploratory-requirements-brief.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-structured-requirements-questioning",
+        "source": "skills/adk-structured-requirements-questioning/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-structured-requirements-questioning/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/prototype-as-experiment.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-repo-prompt-analysis",
+        "source": "skills/adk-repo-prompt-analysis/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-repo-prompt-analysis/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-skill-deep-analysis",
+        "source": "skills/adk-skill-deep-analysis/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-skill-deep-analysis/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-lightweight-planning",
+        "source": "skills/adk-lightweight-planning/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-lightweight-planning/SKILL.md",
+        "support_files": [
+          {
+            "path": "LICENSE",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "README.md",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "agents/openai.yaml",
+            "exists": false,
+            "bytes_equal": false
+          }
+        ]
+      },
+      {
+        "name": "adk-task-breakdown",
+        "source": "skills/adk-task-breakdown/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-task-breakdown/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/task-packaging.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/vertical-slice-planning.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-interface-contract-design",
+        "source": "skills/adk-interface-contract-design/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-interface-contract-design/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/design-quality-methods.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/lifecycle-operation-contract.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/spec-code-bidirectional.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/tool-effect-contract.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-adr-writer",
+        "source": "skills/adk-adr-writer/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-adr-writer/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-component-api-stability",
+        "source": "skills/adk-component-api-stability/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-component-api-stability/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-code-simplification",
+        "source": "skills/adk-code-simplification/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-code-simplification/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/deep-module-design.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-systematic-debugging",
+        "source": "skills/adk-systematic-debugging/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-systematic-debugging/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/embedded-diagnosis-branches.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/sanitizer-validation.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/tight-feedback-loop.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-offline-core-dump-triage",
+        "source": "skills/adk-offline-core-dump-triage/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-offline-core-dump-triage/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-test-strategy",
+        "source": "skills/adk-test-strategy/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-test-strategy/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/high-value-tdd.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-artifact-gating",
+        "source": "skills/adk-artifact-gating/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-artifact-gating/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-pilot-framework",
+        "source": "skills/adk-pilot-framework/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-pilot-framework/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-verification-before-completion",
+        "source": "skills/adk-verification-before-completion/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-verification-before-completion/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/verification-governance-details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-code-review-loop",
+        "source": "skills/adk-code-review-loop/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-code-review-loop/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/review-communication-guidance.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/review-evidence-template.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/review-feedback-fixtures.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/review-governance-details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-repo-drift-remediation",
+        "source": "skills/adk-repo-drift-remediation/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-repo-drift-remediation/SKILL.md",
+        "support_files": [
+          {
+            "path": "LICENSE",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "README.md",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "agents/openai.yaml",
+            "exists": false,
+            "bytes_equal": false
+          }
+        ]
+      },
+      {
+        "name": "adk-commit-pr-quality-gate",
+        "source": "skills/adk-commit-pr-quality-gate/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-commit-pr-quality-gate/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/pr-risk-gates.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-release-versioning",
+        "source": "skills/adk-release-versioning/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-release-versioning/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/details.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-production-field-readiness",
+        "source": "skills/adk-production-field-readiness/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-production-field-readiness/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/pilot-measurement-evidence.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-cross-team-handoff",
+        "source": "skills/adk-cross-team-handoff/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-cross-team-handoff/SKILL.md",
+        "support_files": []
+      },
+      {
+        "name": "adk-branch-closeout",
+        "source": "skills/adk-branch-closeout/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-branch-closeout/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/closeout-options.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-after-action-review",
+        "source": "skills/adk-after-action-review/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-after-action-review/SKILL.md",
+        "support_files": [
+          {
+            "path": "references/after-action-review.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/codify-decision.md",
+            "exists": true,
+            "bytes_equal": true
+          },
+          {
+            "path": "references/memory-candidate.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      },
+      {
+        "name": "adk-engineering-growth-review",
+        "source": "skills/adk-engineering-growth-review/SKILL.md",
+        "exported_skill": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/opencode/skills/adk-engineering-growth-review/SKILL.md",
+        "support_files": [
+          {
+            "path": "LICENSE",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "README.md",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "agents/openai.yaml",
+            "exists": false,
+            "bytes_equal": false
+          },
+          {
+            "path": "references/growth-evidence-boundaries.md",
+            "exists": true,
+            "bytes_equal": true
+          }
+        ]
+      }
+    ],
+    "v2_mentions": [
+      {
+        "path": "skills/adk-task-breakdown/SKILL.md",
+        "mentions": 1
+      },
+      {
+        "path": "skills/adk-task-breakdown/references/task-packaging.md",
+        "mentions": 1
+      }
+    ],
+    "source_contract_files_present": {
+      "manifests/structured_output_contracts.json": false,
+      "src/agent_dev_kit/intent_boundary.py": false,
+      "templates/artifacts/task-breakdown-template.md": false,
+      "templates/governance/codify-decision.md": false
+    },
+    "all_file_paths": [
+      "adk-export-manifest.json",
+      "agents/component-engineer.md",
+      "agents/code-review-governor.md",
+      "agents/driver-engineer.md",
+      "agents/hardware-debugger.md",
+      "agents/bsp-analyst.md",
+      "agents/architecture-planner.md",
+      "agents/requirements-analyst.md",
+      "agents/application-engineer.md",
+      "agents/test-validation-engineer.md",
+      "agents/external-practice-curator.md",
+      "agents/security-compliance-reviewer.md",
+      "skills/adk-repo-prompt-analysis/SKILL.md",
+      "skills/adk-release-versioning/SKILL.md",
+      "skills/adk-interface-contract-design/SKILL.md",
+      "skills/adk-rtos-task-design/SKILL.md",
+      "skills/adk-driver-bringup-checklist/SKILL.md",
+      "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "skills/adk-branch-closeout/SKILL.md",
+      "skills/adk-archive-governance/SKILL.md",
+      "skills/adk-repo-drift-remediation/SKILL.md",
+      "skills/adk-after-action-review/SKILL.md",
+      "skills/adk-skill-deep-analysis/SKILL.md",
+      "skills/adk-structured-requirements-questioning/SKILL.md",
+      "skills/adk-embedded-release-orchestration/SKILL.md",
+      "skills/adk-register-map-design/SKILL.md",
+      "skills/adk-requirements-triage/SKILL.md",
+      "skills/adk-offline-core-dump-triage/SKILL.md",
+      "skills/adk-cross-team-handoff/SKILL.md",
+      "skills/adk-fault-injection-recovery/SKILL.md",
+      "skills/adk-token-context-governance/SKILL.md",
+      "skills/adk-verification-before-completion/SKILL.md",
+      "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "skills/adk-artifact-gating/SKILL.md",
+      "skills/adk-runtime-router/SKILL.md",
+      "skills/adk-systematic-debugging/SKILL.md",
+      "skills/adk-knowledge-archive/SKILL.md",
+      "skills/adk-lightweight-planning/SKILL.md",
+      "skills/adk-worktree-governance/SKILL.md",
+      "skills/adk-bsp-porting-playbook/SKILL.md",
+      "skills/adk-hardware-debugging/SKILL.md",
+      "skills/adk-adr-writer/SKILL.md",
+      "skills/adk-code-review-loop/SKILL.md",
+      "skills/adk-test-strategy/SKILL.md",
+      "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "skills/adk-driver-implementation/SKILL.md",
+      "skills/adk-task-breakdown/SKILL.md",
+      "skills/adk-bsp-analysis/SKILL.md",
+      "skills/adk-performance-profiling-embedded/SKILL.md",
+      "skills/adk-protocol-stack-integration/SKILL.md",
+      "skills/adk-memory-curator/SKILL.md",
+      "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "skills/adk-cmake-cross-build/SKILL.md",
+      "skills/adk-production-field-readiness/SKILL.md",
+      "skills/adk-embedded-debug-transport/SKILL.md",
+      "skills/adk-context-compress-handoff/SKILL.md",
+      "skills/adk-parallel-agent-governance/SKILL.md",
+      "skills/adk-integration-hil-sil/SKILL.md",
+      "skills/adk-component-api-stability/SKILL.md",
+      "skills/adk-unit-test-embedded/SKILL.md",
+      "skills/adk-code-simplification/SKILL.md",
+      "skills/adk-planning-execution-loop/SKILL.md",
+      "skills/adk-pilot-framework/SKILL.md",
+      "skills/adk-context-engineering/SKILL.md",
+      "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "skills/adk-engineering-growth-review/SKILL.md",
+      "skills/adk-goal-authoring/SKILL.md",
+      "skills/adk-release-versioning/references/details.md",
+      "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+      "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "skills/adk-interface-contract-design/references/details.md",
+      "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+      "skills/adk-branch-closeout/references/closeout-options.md",
+      "skills/adk-after-action-review/references/memory-candidate.md",
+      "skills/adk-after-action-review/references/codify-decision.md",
+      "skills/adk-after-action-review/references/after-action-review.md",
+      "skills/adk-skill-deep-analysis/references/details.md",
+      "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+      "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+      "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+      "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+      "skills/adk-verification-before-completion/references/verification-governance-details.md",
+      "skills/adk-artifact-gating/references/details.md",
+      "skills/adk-runtime-router/references/runtime-routing-details.md",
+      "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+      "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+      "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+      "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+      "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+      "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "skills/adk-code-review-loop/references/review-governance-details.md",
+      "skills/adk-code-review-loop/references/review-communication-guidance.md",
+      "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "skills/adk-test-strategy/references/high-value-tdd.md",
+      "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+      "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+      "skills/adk-task-breakdown/references/task-packaging.md",
+      "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+      "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+      "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+      "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+      "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+      "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+      "skills/adk-code-simplification/references/details.md",
+      "skills/adk-code-simplification/references/deep-module-design.md",
+      "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "skills/adk-pilot-framework/references/details.md",
+      "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+      "skills/adk-interrupt-dma-patterns/references/details.md",
+      "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+      "skills/adk-goal-authoring/references/goal-plan.json"
+    ]
+  }
+]

@@ -1,0 +1,83 @@
+{
+  "status": "fail",
+  "suite_result": {
+    "tests": 102,
+    "pass": 101,
+    "fail": 1
+  },
+  "failure": "test_software_m5_ready / deterministic-routing route-054",
+  "files": [
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/all-skill-verification.json",
+      "sha256": "a20ca5cb9f9d8d66f0c5d6d559f00235cc2ca92e8595ab6e1e0aa0b09283a27d"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/claude-code-export-inventory.json",
+      "sha256": "29a21b58282ff1564d5051ce2f41c64332651c6c2856d00e3f9bb834eb86fb52"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/export-verifier-negative.json",
+      "sha256": "9e653745e3d208571e1ebf2d3b1b1a03e2f2eb124102a2da698a4af18794512f"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/focused-ruff.log",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/format.log",
+      "sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/full-regression-result.json",
+      "sha256": "e53a7517feef99ac5cedd001fcb329ad8f614e486c92c4b6463e64582c4654e0"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/full-regression-timing.json",
+      "sha256": "8ee71e205688cafc0dd23ea49caa40841466e2c6e1b0946d04ffac7a4cbee512"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/full-regression.log",
+      "sha256": "cd235c737f138d433cc0f95fadbd78eafa354d222ae75b8c430e554acdf26b0c"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/module-size.log",
+      "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/mypy.log",
+      "sha256": "103f10fdbb5ad2b6ee08833a3e2b634aa94d13009cb96f89236e9d80e79aac15"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/opencode-export-inventory.json",
+      "sha256": "c9ff47982e2710b3456c52f04433302a48d32384079a2dee30f9dfa4e4395751"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/pip-audit.log",
+      "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/quality-results.json",
+      "sha256": "33331f19b34221729a0bf85594b07de6e6f7cd26094566c4cece8bdd25d4dba3"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/release-check.log",
+      "sha256": "757033095aa7507e1a48571a71cf5a8b565b2c1f2470469bc8b88eda0bdfe4ea"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/ruff.log",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/strict.log",
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/target-static.log",
+      "sha256": "4ff56721bd6efefc0ab15e08be7e50ec14ede0e6e9f45a369ed5ab5d2f1d1439"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/tested-source-files.json",
+      "sha256": "112247824afa94fba5a9a0ccf49dae33916f97d08dedb14956eb98db92acd57c"
+    }
+  ]
+}

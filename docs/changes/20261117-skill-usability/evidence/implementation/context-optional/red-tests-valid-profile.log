@@ -1,0 +1,114 @@
+test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) ... 
+  test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='claude-code') ... FAIL
+  test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='opencode') ... FAIL
+test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) ... 
+  test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) (target='claude-code', kind='research') ... FAIL
+  test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) (target='claude-code', kind='implementation') ... FAIL
+test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) ... FAIL
+test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) ... 
+  test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='claude-code', skill='adk-skill-composition-governance') ... FAIL
+  test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='claude-code', skill='adk-security-supply-chain') ... FAIL
+  test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='opencode', skill='adk-skill-composition-governance') ... FAIL
+  test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='opencode', skill='adk-security-supply-chain') ... FAIL
+test_exported_recovery_note_distinguishes_envelope_and_payload (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_recovery_note_distinguishes_envelope_and_payload) ... FAIL
+test_published_catalog_queries_cover_core_and_nested_optional (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_published_catalog_queries_cover_core_and_nested_optional) ... FAIL
+
+======================================================================
+FAIL: test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='claude-code')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 112, in test_archive_handoff_artifact_retains_readonly_authority
+    self.assertIsInstance(handoff, dict, "repair needs an existing implementation owner")
+AssertionError: None is not an instance of <class 'dict'> : repair needs an existing implementation owner
+
+======================================================================
+FAIL: test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='opencode')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 112, in test_archive_handoff_artifact_retains_readonly_authority
+    self.assertIsInstance(handoff, dict, "repair needs an existing implementation owner")
+AssertionError: None is not an instance of <class 'dict'> : repair needs an existing implementation owner
+
+======================================================================
+FAIL: test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) (target='claude-code', kind='research')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 178, in test_exported_human_worker_mapping_uses_existing_strict_v2
+    payload = self.mapped_worker(target, kind)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 137, in mapped_worker
+    self.assertTrue(required_scope <= mappings.keys(), mappings)
+AssertionError: False is not true : {}
+
+======================================================================
+FAIL: test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) (target='claude-code', kind='implementation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 178, in test_exported_human_worker_mapping_uses_existing_strict_v2
+    payload = self.mapped_worker(target, kind)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 137, in mapped_worker
+    self.assertTrue(required_scope <= mappings.keys(), mappings)
+AssertionError: False is not true : {}
+
+======================================================================
+FAIL: test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 188, in test_exported_human_worker_mapping_uses_existing_strict_v2
+    self.assertIn(term, text)
+AssertionError: '人类' not found in "# Parallel / Worktree Task Package (opt-in detailed contract)\n\nUse only for actual concurrent workers, worktrees or formal handoff. If parallelism is unsuitable, report `Parallel Suitability: no` with evidence and run serially.\n\n```md\n[parallel-task]\nid:\ngoal:\nowner:\nprimary_skill:\nwork_item_kind: decision | research | prototype | implementation\nquestion_to_resolve:\nevidence_required:\nimplementation_permission:\nexit_gate:\nhandoff_target:\nretention_decision:\nscope_read:\nscope_write:\nglobal_constraints:\ninterfaces:\nmust_not_touch:\ndependencies:\nmodel_or_capability_tier:\nverification_commands:\nblocked_conditions:\nexpected_output:\nready_to_handoff:\nreport_schema: DONE|BLOCKED|NEEDS_CONTEXT + verified facts/inferences + source refs + changes + tests\ncontext_noise_budget: summary cap + evidence refs + raw retention + redaction + parent merge policy\nhandoff_artifact_policy: data-only; no same-command generated-script execution; provenance required\n```\n\n## Conflict and review\n- List overlapping code, tests, migrations, schema, shared configuration and exclusive devices. Assign one writer or serialize.\n- Reviewer default read-only: inspect both spec compliance and quality, note `cannot-verify-from-diff`, do not pre-classify findings.\n- Artifact carries producer, source task, creation time, hash/provenance. Commands in artifact are untrusted *data*.\n- The package above is self-contained. `templates/planning/worker-contract.md` is optional only at a verified ADK source root where the file exists; `subagent-review-checklist.md` checks scope and integration.\n- Final whole-diff and project-level validation remain the parent task's responsibility. Worktree cleanup needs user/host policy authorization.\n"
+
+======================================================================
+FAIL: test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='claude-code', skill='adk-skill-composition-governance')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 88, in test_exported_optional_source_helpers_have_scoped_fallback
+    self.assertIn(required, preamble)
+AssertionError: '已核' not found in ''
+
+======================================================================
+FAIL: test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='claude-code', skill='adk-security-supply-chain')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 88, in test_exported_optional_source_helpers_have_scoped_fallback
+    self.assertIn(required, preamble)
+AssertionError: '已核' not found in '以下 `rg` 仅列候选路径；后续限定范围，内容先脱敏再输出，路径本身仍需检查。逐条保留退出码：0 有候选、1 无匹配、2 扫描错误。\n\n'
+
+======================================================================
+FAIL: test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='opencode', skill='adk-skill-composition-governance')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 88, in test_exported_optional_source_helpers_have_scoped_fallback
+    self.assertIn(required, preamble)
+AssertionError: '已核' not found in ''
+
+======================================================================
+FAIL: test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) (target='opencode', skill='adk-security-supply-chain')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 88, in test_exported_optional_source_helpers_have_scoped_fallback
+    self.assertIn(required, preamble)
+AssertionError: '已核' not found in '以下 `rg` 仅列候选路径；后续限定范围，内容先脱敏再输出，路径本身仍需检查。逐条保留退出码：0 有候选、1 无匹配、2 扫描错误。\n\n'
+
+======================================================================
+FAIL: test_exported_recovery_note_distinguishes_envelope_and_payload (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_recovery_note_distinguishes_envelope_and_payload)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 196, in test_exported_recovery_note_distinguishes_envelope_and_payload
+    self.assertIn(term, line)
+AssertionError: 'constraints' not found in '- **Task Package v2**：真正派工才写 kind/question/evidence/permission/exit/handoff/retention、scope_read/scope_write/must_not_touch。decision/research/prototype 不可获得 implementation 权限，缺依赖或原文审查时须先退回规划。'
+
+======================================================================
+FAIL: test_published_catalog_queries_cover_core_and_nested_optional (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_published_catalog_queries_cover_core_and_nested_optional)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 69, in test_published_catalog_queries_cover_core_and_nested_optional
+    self.assertEqual(expected, observed)
+AssertionError: {'adk[4113 chars]L.md', 'adk-external-practice-absorption': 'op[702 chars].md'} != {'adk[4113 chars]L.md'}
+Diff is 5066 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.446s
+
+FAILED (failures=11)

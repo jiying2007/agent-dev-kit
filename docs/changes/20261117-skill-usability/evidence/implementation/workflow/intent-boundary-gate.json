@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "bypass",
+    "bash",
+    "tests/test_intent_boundary_governance.sh"
+  ],
+  "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+  "exit_code": 0,
+  "timestamp_utc": "2026-11-17T06:33:48.651002+00:00",
+  "output": "test_existing_assets_require_context_only_and_low_attention (test_superagent_method_contract.SuperagentMethodContractTests.test_existing_assets_require_context_only_and_low_attention) ... ok\ntest_explicit_implementation_and_valid_prototype_baselines (test_superagent_method_contract.SuperagentMethodContractTests.test_explicit_implementation_and_valid_prototype_baselines) ... ok\ntest_external_research_does_not_gain_implementation_authority (test_superagent_method_contract.SuperagentMethodContractTests.test_external_research_does_not_gain_implementation_authority) ... ok\ntest_prototype_and_decision_reject_only_the_wrong_boundary (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_and_decision_reject_only_the_wrong_boundary) ... ok\ntest_prototype_artifact_does_not_hide_permission_failures (test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_artifact_does_not_hide_permission_failures) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.001s\n\nOK\ntest_shipped_example_is_complete_and_preserves_scope_without_extra_fields (test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) ... ok\ntest_all_work_kinds_preserve_their_permission_and_exit_gate (test_task_package_delivery.TaskPackageTypeTests.test_all_work_kinds_preserve_their_permission_and_exit_gate) ... ok\ntest_prototype_malformed_types_and_expiry_are_not_coerced (test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) ... ok\ntest_task_malformed_json_types_return_errors_without_exceptions (test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.163s\n\nOK\n[PASS] intent boundary governance\n"
+}

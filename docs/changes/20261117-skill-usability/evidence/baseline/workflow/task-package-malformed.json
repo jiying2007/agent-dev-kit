@@ -1,0 +1,48 @@
+[
+  {
+    "id": "bad-artifact-element",
+    "delta": {
+      "artifacts": [
+        1
+      ]
+    },
+    "errors": null,
+    "exception": {
+      "type": "AttributeError",
+      "message": "'int' object has no attribute 'startswith'"
+    }
+  },
+  {
+    "id": "bad-artifacts-container",
+    "delta": {
+      "artifacts": null
+    },
+    "errors": null,
+    "exception": {
+      "type": "TypeError",
+      "message": "'NoneType' object is not iterable"
+    }
+  },
+  {
+    "id": "bad-kind-container",
+    "delta": {
+      "work_item_kind": []
+    },
+    "errors": null,
+    "exception": {
+      "type": "TypeError",
+      "message": "unhashable type: 'list'"
+    }
+  },
+  {
+    "id": "bad-retention-container",
+    "delta": {
+      "retention_decision": []
+    },
+    "errors": null,
+    "exception": {
+      "type": "TypeError",
+      "message": "unhashable type: 'list'"
+    }
+  }
+]

@@ -1,0 +1,91 @@
+{
+  "source": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "observed_at": "2026-11-17T06:20:34.328480+00:00",
+  "action": "rta",
+  "result": {
+    "evidence_level": "host arithmetic; no RTOS or hardware measurement",
+    "published_formula": "Rnext = Ci + Bi + sum(ceil(R / Tj) * Cj, j in higher-priority tasks) + Ii(R)",
+    "counterexample": {
+      "tasks": [
+        {
+          "name": "A",
+          "C": 6,
+          "T": 10,
+          "D": 10,
+          "priority": 2
+        },
+        {
+          "name": "B",
+          "C": 6,
+          "T": 10,
+          "D": 10,
+          "priority": 2
+        }
+      ],
+      "B": 0,
+      "I": 0,
+      "formula_result": [
+        {
+          "iteration": [
+            6,
+            6
+          ],
+          "R": 6,
+          "passes": true
+        },
+        {
+          "iteration": [
+            6,
+            6
+          ],
+          "R": 6,
+          "passes": true
+        }
+      ],
+      "synchronous_release_time": 0,
+      "common_deadline": 10,
+      "required_work": 12,
+      "available_cpu_time": 10,
+      "feasible": false
+    },
+    "applicable_control": {
+      "tasks": [
+        {
+          "name": "A",
+          "C": 2,
+          "T": 10,
+          "D": 10,
+          "priority": 2
+        },
+        {
+          "name": "B",
+          "C": 3,
+          "T": 10,
+          "D": 10,
+          "priority": 1
+        }
+      ],
+      "B": 0,
+      "I": 0,
+      "formula_result": [
+        {
+          "iteration": [
+            2,
+            2
+          ],
+          "R": 2,
+          "passes": true
+        },
+        {
+          "iteration": [
+            3,
+            5,
+            5
+          ],
+          "R": 5,
+          "passes": true
+        }
+      ]
+    }
+  }
+}

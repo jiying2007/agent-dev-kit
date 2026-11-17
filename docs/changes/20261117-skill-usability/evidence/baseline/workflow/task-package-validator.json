@@ -1,0 +1,141 @@
+{
+  "schema": "adk-task-package-schema-v2",
+  "published_instruction": "skills/adk-task-breakdown/references/task-packaging.md:7",
+  "consumer": "src/agent_dev_kit/intent_boundary.py:validate_task_package",
+  "cases": [
+    {
+      "id": "canonical_control",
+      "payload": {
+        "structured_output_schema": "adk-task-package-schema-v2",
+        "strict_schema_decision": true,
+        "refusal_handling": "blocked or replan",
+        "goal": "Review the timeout boundary",
+        "context": "A frozen source snapshot and already authorized read scope",
+        "constraints": [
+          "read-only",
+          "scope_read: src/retry.py",
+          "scope_write: []"
+        ],
+        "done_when": [
+          "The boundary result has a source and test citation"
+        ],
+        "primary_action": "research",
+        "action_mode": "read-only",
+        "verification": [
+          "Inspect the timeout boundary fixture"
+        ],
+        "artifacts": [
+          "timeout-review.md"
+        ],
+        "blockers": [
+          "Source unavailable"
+        ],
+        "work_item_kind": "research",
+        "question_to_resolve": "Is elapsed_ms == deadline_ms allowed?",
+        "evidence_required": [
+          "Current condition and its boundary test"
+        ],
+        "implementation_permission": "forbidden",
+        "exit_gate": "evidence-reviewed",
+        "handoff_target": "task-owner",
+        "retention_decision": "keep-final"
+      },
+      "errors": []
+    },
+    {
+      "id": "with_published_machine_fields",
+      "payload": {
+        "structured_output_schema": "adk-task-package-schema-v2",
+        "strict_schema_decision": true,
+        "refusal_handling": "blocked or replan",
+        "goal": "Review the timeout boundary",
+        "context": "A frozen source snapshot and already authorized read scope",
+        "constraints": [
+          "read-only",
+          "scope_read: src/retry.py",
+          "scope_write: []"
+        ],
+        "done_when": [
+          "The boundary result has a source and test citation"
+        ],
+        "primary_action": "research",
+        "action_mode": "read-only",
+        "verification": [
+          "Inspect the timeout boundary fixture"
+        ],
+        "artifacts": [
+          "timeout-review.md"
+        ],
+        "blockers": [
+          "Source unavailable"
+        ],
+        "work_item_kind": "research",
+        "question_to_resolve": "Is elapsed_ms == deadline_ms allowed?",
+        "evidence_required": [
+          "Current condition and its boundary test"
+        ],
+        "implementation_permission": "forbidden",
+        "exit_gate": "evidence-reviewed",
+        "handoff_target": "task-owner",
+        "retention_decision": "keep-final",
+        "global_constraints": [
+          "read-only"
+        ],
+        "interfaces": [
+          "timeout boundary"
+        ],
+        "scope_read": [
+          "src/retry.py"
+        ],
+        "scope_write": [],
+        "ready_to_handoff": true
+      },
+      "errors": [
+        "unexpected fields: global_constraints,interfaces,ready_to_handoff,scope_read,scope_write"
+      ]
+    },
+    {
+      "id": "forbidden_write_control",
+      "payload": {
+        "structured_output_schema": "adk-task-package-schema-v2",
+        "strict_schema_decision": true,
+        "refusal_handling": "blocked or replan",
+        "goal": "Review the timeout boundary",
+        "context": "A frozen source snapshot and already authorized read scope",
+        "constraints": [
+          "read-only",
+          "scope_read: src/retry.py",
+          "scope_write: []"
+        ],
+        "done_when": [
+          "The boundary result has a source and test citation"
+        ],
+        "primary_action": "research",
+        "action_mode": "read-only",
+        "verification": [
+          "Inspect the timeout boundary fixture"
+        ],
+        "artifacts": [
+          "timeout-review.md"
+        ],
+        "blockers": [
+          "Source unavailable"
+        ],
+        "work_item_kind": "research",
+        "question_to_resolve": "Is elapsed_ms == deadline_ms allowed?",
+        "evidence_required": [
+          "Current condition and its boundary test"
+        ],
+        "implementation_permission": "approved",
+        "exit_gate": "evidence-reviewed",
+        "handoff_target": "task-owner",
+        "retention_decision": "keep-final"
+      },
+      "errors": [
+        "research requires implementation_permission=forbidden"
+      ]
+    }
+  ],
+  "evidence_layer": "actual-production-validator-invocation",
+  "model_behavior": "not-measured"
+}

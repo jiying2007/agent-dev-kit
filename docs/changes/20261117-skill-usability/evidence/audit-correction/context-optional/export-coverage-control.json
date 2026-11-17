@@ -1,0 +1,18 @@
+[
+  {
+    "target": "claude-code",
+    "profile": "team-core",
+    "output": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/fixtures/team-exports/claude-code",
+    "covered": 20,
+    "missing": [],
+    "source_helpers_present": false
+  },
+  {
+    "target": "opencode",
+    "profile": "team-core",
+    "output": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/fixtures/team-exports/opencode",
+    "covered": 20,
+    "missing": [],
+    "source_helpers_present": false
+  }
+]

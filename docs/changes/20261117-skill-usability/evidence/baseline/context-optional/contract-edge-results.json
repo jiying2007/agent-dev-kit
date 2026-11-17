@@ -1,0 +1,109 @@
+{
+  "baseline": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "catalog": {
+    "published_core_query_count": 56,
+    "optional_query_count": 9,
+    "omitted_by_published_core_query": [
+      "adk-data-fetch",
+      "adk-email-imap-fetch",
+      "adk-external-practice-absorption",
+      "adk-fetch-url-content",
+      "adk-incident-rca-report",
+      "adk-prose-revision",
+      "adk-security-supply-chain",
+      "adk-skill-composition-governance",
+      "adk-test-flakiness-triage"
+    ],
+    "two_query_union_matches_manifest": true
+  },
+  "task_package": {
+    "source": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+    "template_is_markdown_human_envelope": true,
+    "template_declares_structured_output_schema": false,
+    "template_fields": [
+      "id",
+      "goal",
+      "owner",
+      "primary_skill",
+      "work_item_kind",
+      "question_to_resolve",
+      "evidence_required",
+      "implementation_permission",
+      "exit_gate",
+      "handoff_target",
+      "retention_decision",
+      "scope_read",
+      "scope_write",
+      "global_constraints",
+      "interfaces",
+      "must_not_touch",
+      "dependencies",
+      "model_or_capability_tier",
+      "verification_commands",
+      "blocked_conditions",
+      "expected_output",
+      "ready_to_handoff",
+      "report_schema",
+      "context_noise_budget",
+      "handoff_artifact_policy"
+    ],
+    "direct_field_conversion_errors": [
+      "missing fields: structured_output_schema,strict_schema_decision,refusal_handling,context,constraints,done_when,primary_action,action_mode,verification,artifacts,blockers",
+      "unexpected fields: blocked_conditions,context_noise_budget,dependencies,expected_output,global_constraints,handoff_artifact_policy,id,interfaces,model_or_capability_tier,must_not_touch,owner,primary_skill,ready_to_handoff,report_schema,scope_read,scope_write,verification_commands"
+    ],
+    "canonical_control_errors": [],
+    "extra_top_level_field_errors": {
+      "scope_read": [
+        "unexpected fields: scope_read"
+      ],
+      "scope_write": [
+        "unexpected fields: scope_write"
+      ],
+      "global_constraints": [
+        "unexpected fields: global_constraints"
+      ],
+      "interfaces": [
+        "unexpected fields: interfaces"
+      ],
+      "ready_to_handoff": [
+        "unexpected fields: ready_to_handoff"
+      ]
+    },
+    "canonical_mapping_control": {
+      "structured_output_schema": "adk-task-package-schema-v2",
+      "strict_schema_decision": true,
+      "refusal_handling": "BLOCKED if source is unavailable or scope would expand",
+      "goal": "Review one immutable source snapshot",
+      "context": "Task T1; owner reviewer; primary_skill adk-security-supply-chain; source SHA pinned",
+      "constraints": [
+        "scope_read: selected source files",
+        "scope_write: no repository writes",
+        "must_not_touch: runtime credentials and unrelated work",
+        "global_constraints: read-only; no remote execution",
+        "interfaces: no shared contract changes"
+      ],
+      "done_when": [
+        "Report evidence and cannot-verify limits; ready_to_handoff only after review"
+      ],
+      "primary_action": "Review trusted source evidence",
+      "action_mode": "read-only",
+      "verification": [
+        "Check report paths against the frozen source"
+      ],
+      "artifacts": [
+        "report.md"
+      ],
+      "blockers": [],
+      "work_item_kind": "research",
+      "question_to_resolve": "Is the source compatible with the bounded request?",
+      "evidence_required": [
+        "source paths and immutable SHA"
+      ],
+      "implementation_permission": "forbidden",
+      "exit_gate": "evidence-reviewed",
+      "handoff_target": "parent reviewer",
+      "retention_decision": "keep-final"
+    },
+    "interpretation": "Direct conversion is incompatible. The reference is Markdown and does not claim to be a typed JSON payload. This probe alone does not establish a runtime defect; an explicit mapping note would prevent confusion when a host requires v2."
+  }
+}

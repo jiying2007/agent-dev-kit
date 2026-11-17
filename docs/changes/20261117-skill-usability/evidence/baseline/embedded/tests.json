@@ -1,0 +1,26 @@
+{
+  "source": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "observed_at": "2026-11-17T06:20:39.899574+00:00",
+  "action": "tests",
+  "result": {
+    "tests_run": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": [],
+    "success": true,
+    "selection": [
+      "tests.test_skill_domain_execution",
+      "tests.test_skill_rtos_methods",
+      "tests.test_skill_cmake_methods",
+      "tests.test_skill_command_examples.BspBuildExampleTests",
+      "tests.test_skill_command_examples.CmakeBuildExampleTests",
+      "tests.test_skill_command_examples.CtestQualificationExampleTests",
+      "tests.test_skill_command_examples.CtestReportReaderTests",
+      "tests.test_skill_fault_activation",
+      "tests.test_skill_runtime_methods.RunningObjectEvidenceTests",
+      "tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_state_sequence_replays_and_rejects_the_bug",
+      "tests.test_external_domain_methods.PublishedDomainExamplesTests.test_public_gcc_stack_example_exposes_dynamic_part"
+    ],
+    "log": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/targeted-tests.log"
+  }
+}

@@ -1,0 +1,66 @@
+[
+  {
+    "target": "claude-code",
+    "status": "pass",
+    "output": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-exports/claude-code",
+    "skills": [
+      {
+        "name": "adk-rtos-task-design",
+        "source_sha256": "d087ee87d5b513e82319045ccbf1952f2f62764831e1ad6681263df730713f7a",
+        "body_preserved": true,
+        "references": []
+      },
+      {
+        "name": "adk-bsp-analysis",
+        "source_sha256": "a35cac1e4e20ceb519e027da15b448c712a94dab37fb594e7954ca21bd8aaa86",
+        "body_preserved": true,
+        "references": [
+          "bsp-analysis-details.md"
+        ]
+      },
+      {
+        "name": "adk-interrupt-dma-patterns",
+        "source_sha256": "f5fc8aa352b4767764b5f81f5f7ce3326c051382b9b2b72372ec43e1ad0e4c70",
+        "body_preserved": true,
+        "references": [
+          "rtos-isr-dma-diagnostics.md",
+          "details.md"
+        ]
+      }
+    ],
+    "current_render_matches_written_export": true,
+    "current_render_checked_files": 6
+  },
+  {
+    "target": "opencode",
+    "status": "pass",
+    "output": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-exports/opencode",
+    "skills": [
+      {
+        "name": "adk-rtos-task-design",
+        "source_sha256": "d087ee87d5b513e82319045ccbf1952f2f62764831e1ad6681263df730713f7a",
+        "body_preserved": true,
+        "references": []
+      },
+      {
+        "name": "adk-bsp-analysis",
+        "source_sha256": "a35cac1e4e20ceb519e027da15b448c712a94dab37fb594e7954ca21bd8aaa86",
+        "body_preserved": true,
+        "references": [
+          "bsp-analysis-details.md"
+        ]
+      },
+      {
+        "name": "adk-interrupt-dma-patterns",
+        "source_sha256": "f5fc8aa352b4767764b5f81f5f7ce3326c051382b9b2b72372ec43e1ad0e4c70",
+        "body_preserved": true,
+        "references": [
+          "rtos-isr-dma-diagnostics.md",
+          "details.md"
+        ]
+      }
+    ],
+    "current_render_matches_written_export": true,
+    "current_render_checked_files": 6
+  }
+]

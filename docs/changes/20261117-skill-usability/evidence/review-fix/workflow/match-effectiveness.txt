@@ -1,0 +1,56 @@
+=== Match Effectiveness Tests ===
+=================================
+
+--- Positive cases (should match routing) ---
+Testing 开始任务前判断技能 -> adk-runtime-router... [0;32mPASS[0m
+Testing 需求不清楚 -> adk-requirements-triage... [0;32mPASS[0m
+Testing 新功能自然语言 -> adk-requirements-triage... [0;32mPASS[0m
+Testing 测试矩阵 -> adk-test-strategy... [0;32mPASS[0m
+Testing review 反馈闭环 -> adk-code-review-loop... [0;32mPASS[0m
+Testing 外部 Skill 名称只保留 review 意图 -> adk-code-review-loop... [0;32mPASS[0m
+Testing 多 agent 并行 -> adk-parallel-agent-governance... [0;32mPASS[0m
+Testing 子代理驱动开发 -> adk-parallel-agent-governance... [0;32mPASS[0m
+Testing worktree 隔离 -> adk-worktree-governance... [0;32mPASS[0m
+Testing 分支收尾 -> adk-branch-closeout... [0;32mPASS[0m
+Testing 任务太大 -> adk-task-breakdown... [0;32mPASS[0m
+Testing MCU 单元测试 -> adk-unit-test-embedded... [0;32mPASS[0m
+Testing 调试问题 -> adk-systematic-debugging... [0;32mPASS[0m
+Testing 真实问题排查 -> adk-systematic-debugging... [0;32mPASS[0m
+Testing 提交代码 -> adk-commit-pr-quality-gate... [0;32mPASS[0m
+Testing 设计寄存器 -> adk-register-map-design... [0;32mPASS[0m
+Testing 写驱动 -> adk-driver-implementation... [0;32mPASS[0m
+Testing 首板联调 -> adk-driver-bringup-checklist... [0;32mPASS[0m
+Testing 准备发布 -> adk-release-versioning... [0;32mPASS[0m
+Testing BSP移植 -> adk-bsp-porting-playbook... [0;32mPASS[0m
+Testing 启动链 -> adk-bsp-porting-playbook... [0;32mPASS[0m
+Testing 量产现场 -> adk-production-field-readiness... [0;32mPASS[0m
+Testing production-field pilot id -> adk-production-field-readiness... [0;32mPASS[0m
+Testing 性能分析 -> adk-performance-profiling-embedded... [0;32mPASS[0m
+Testing 长任务执行计划 -> adk-planning-execution-loop... [0;32mPASS[0m
+Testing 调试正向对照 -> adk-systematic-debugging... [0;32mPASS[0m
+Testing 调试 intent 限制实现权限... [0;32mPASS[0m
+Testing 否定 non-trigger 不得压制调试... [0;32mPASS[0m
+Testing 发布正向对照 -> adk-release-versioning... [0;32mPASS[0m
+Testing review mode -> readonly artifact mode + selection-group primary... [0;32mPASS[0m
+
+--- Negative cases (should not match) ---
+Testing 只读长任务且无需执行 -> abstain... [0;32mPASS[0m
+Testing 架构评估且不要调试 -> abstain... [0;32mPASS[0m
+Testing 只解释发布现状且不执行 -> abstain... [0;32mPASS[0m
+Testing 规划动作否定 phrase classes 变形 -> abstain... [0;32mPASS[0m
+Testing 调试动作否定 phrase classes 变形 -> abstain... [0;32mPASS[0m
+Testing 发布动作否定 phrase classes 变形 -> abstain... [0;32mPASS[0m
+Testing 多轮 release -> readonly 以最新 turn 为准... [0;32mPASS[0m
+Testing 多轮 readonly -> implementation mode 仍受 Skill effect ceiling 限制... [0;32mPASS[0m
+Testing 完全无关的文本xyz -> no match... [0;32mPASS[0m
+Testing 今天天气很好 -> no match... [0;32mPASS[0m
+Testing abc123 -> no match... [0;32mPASS[0m
+
+=================================
+Total: 41, Passed: 41, Failed: 0
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.333s
+
+OK
+[0;32mAll match effectiveness tests passed[0m

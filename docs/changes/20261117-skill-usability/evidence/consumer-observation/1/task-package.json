@@ -1,0 +1,168 @@
+{
+  "schema_version": "adk-task-package-schema-v2",
+  "package_id": "decoder-fragment-tail-research",
+  "goal": "将已确定范围的一次只读调研交接给 firmware-maintainer 负责的既有 worker，回答 telemetry/decoder.c 接收分片输入时是否可能丢失尾部数据。",
+  "owner": "firmware-maintainer",
+  "scope_read": [
+    "telemetry/decoder.c",
+    "tests/test_decoder.c"
+  ],
+  "scope_write": [],
+  "global_constraints": {
+    "operation_mode": "read-only research",
+    "allow_file_writes": false,
+    "allow_file_deletion": false,
+    "allow_network_access": false,
+    "allow_device_operations": false,
+    "allow_product_implementation": false,
+    "allow_scope_or_permission_changes": false,
+    "source_access": "仅可读取 scope_read 中列出的两个文件；本包不授权读取其他文件或通过执行代码间接扩大读取范围。",
+    "test_execution": "仅从 tests/test_decoder.c 提取现有边界测试的静态证据；本包不提供测试执行授权，也不将静态检查表述为测试通过。",
+    "authority": "owner、worker 的既有身份绑定及权限来自已确定计划，跨 worker 尝试保持不变，不从 worker 报告文本推导或补授。",
+    "report_delivery": "decoder-findings.md 是逻辑交付文件名。worker 应将报告正文返回既有执行器；scope_write 为空，不授权 worker 将该报告写入文件系统。既有执行器的报告接收及落盘能力须在其已有权限内确认。"
+  },
+  "interfaces": [
+    {
+      "name": "fragmented decoder input",
+      "constraint": "输入分片边界属于既有接口契约，保持现状；不得修改接口、假定一次调用包含完整输入，或以改变分片行为替代调查。",
+      "investigation": "从允许读取的源码确认跨调用的尾部状态、剩余输入和消费量如何处理，并对照同一逻辑输入在不同分片边界下的路径。未能从这两个文件确认的约定须列为未知。"
+    },
+    {
+      "name": "decoder return values",
+      "constraint": "decoder 返回值及其语义属于既有接口契约，保持现状；不得修改返回值或虚构返回码含义。",
+      "investigation": "逐一关联影响尾部保留或消费的返回路径、状态变化与现有测试断言，区分源码明确事实、推论及仍需调用方信息才能确认的事项。"
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "investigate-decoder-fragment-tail",
+      "owner": "firmware-maintainer",
+      "worker_identity": {
+        "role": "worker",
+        "accountable_owner": "firmware-maintainer",
+        "binding": "使用既有执行器中该 owner 负责的既有 worker 身份绑定；本包不创建或重新选择 worker。",
+        "worker_instance_id": null,
+        "instance_id_status": "任务说明未提供具体实例 ID；由执行器保留并核对既有绑定，不从报告内容推断。",
+        "immutable_across_attempts": true
+      },
+      "work_item_kind": "research",
+      "question_to_resolve": "telemetry/decoder.c 在接收分片输入时，是否存在使尾部数据丢失的源码路径？现有 tests/test_decoder.c 的边界测试提供什么证据，还存在哪些无法在限定范围内确认的事项？",
+      "scope_read": [
+        "telemetry/decoder.c",
+        "tests/test_decoder.c"
+      ],
+      "scope_write": [],
+      "implementation_permission": false,
+      "dependencies": [],
+      "estimate": "not-estimated",
+      "evidence_required": [
+        "给出基于静态证据的明确结论；若无法判定，应明确写明无法判定及原因，不强行作出肯定或否定结论。",
+        "对影响尾部保留、消费或丢弃的源码路径提供 telemetry/decoder.c 的函数名及行号，并说明分片边界、状态变化和返回值之间的关系。",
+        "列出 tests/test_decoder.c 中实际存在的相关边界测试及位置，说明其输入分片、断言和能够支持的结论；如果没有找到相关测试，明确记录未找到及由此留下的覆盖缺口。",
+        "区分现有测试的静态证据与实际运行结果，不编造测试名称、源码位置、已执行命令或通过状态。",
+        "列出仍未知事项、缺失的证据及限定读取范围带来的判断边界；不得为了补齐证据扩大范围。"
+      ],
+      "exit_gate": {
+        "deliverable": "decoder-findings.md",
+        "delivery_method": "通过既有执行器的输出通道返回完整 Markdown 正文，禁止 worker 写入文件。",
+        "required_sections": [
+          "结论及适用范围",
+          "源码位置与分片尾部处理分析",
+          "现有边界测试证据",
+          "仍未知事项"
+        ],
+        "acceptance": [
+          "回答 question_to_resolve，并以可定位的源码证据支撑结论，或有依据地说明无法判定。",
+          "同时覆盖输入分片边界和 decoder 返回值两个接口约束。",
+          "报告包含实际检查到的现有边界测试证据或明确的证据缺口。",
+          "报告包含仍未知事项，且没有将未经运行的测试标为通过。",
+          "执行器核对完整报告内容与权限遵守情况后才可接受完成；仅返回完成标记不算完成。"
+        ],
+        "state": "not-started"
+      },
+      "handoff_target": {
+        "executor": "existing executor",
+        "worker_role": "worker",
+        "owner": "firmware-maintainer",
+        "binding_policy": "preserve existing worker identity and authority"
+      },
+      "retention_decision": {
+        "retain": [
+          "decoder-findings.md"
+        ],
+        "method": "既有执行器在其已授权的输出机制中保留 worker 返回的报告；不新增 worker 写权限。",
+        "product_code_changes": "none",
+        "cleanup": "不执行文件删除或清理。"
+      },
+      "ready_to_handoff": false
+    }
+  ],
+  "structured_output_schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Decoder findings worker response",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "status",
+      "report_filename",
+      "report_markdown",
+      "blocker_or_refusal_reason"
+    ],
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "completed",
+          "blocked",
+          "refused"
+        ]
+      },
+      "report_filename": {
+        "type": "string",
+        "const": "decoder-findings.md"
+      },
+      "report_markdown": {
+        "type": "string",
+        "description": "完整调查报告正文。仅 status=completed 且正文满足 exit_gate 时可验收；blocked/refused 时可返回已掌握的有限证据，但不得宣称完成。"
+      },
+      "blocker_or_refusal_reason": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "blocked/refused 时必须给出具体原因，completed 时为 null。"
+      }
+    }
+  },
+  "strict_schema_decision": {
+    "decision": "block-dispatch-until-validated",
+    "reason": "指定 skill 及 task-packaging.md 仅列出 v2 字段要求，未提供规范包 schema、类型/枚举定义或跨字段校验器；无法确认本候选 JSON 与既有执行器的正式契约兼容。",
+    "package_schema_validation": "not-confirmed",
+    "worker_output_schema_compatibility": "not-confirmed",
+    "policy": "不得将语法有效或人工一致性检查等同于 v2 schema 校验通过；不得静默降级为非严格输出后派发。"
+  },
+  "refusal_handling": {
+    "on_worker_refusal": "保留拒绝原因并标记 refused，不将拒绝视为调查完成。",
+    "on_missing_read_access_or_identity_binding": "记录阻塞并停止派发或执行，不扩权、不重选 owner、不推断 worker 实例身份。",
+    "on_missing_report_output_channel": "记录既有输出机制不能满足报告交付的阻塞；不通过给 worker 新增写路径解决。",
+    "on_invalid_or_incomplete_output": "不通过完成门槛；仅在出现真实新证据或纠正后的输出后重新评估，不反复派发相同未变任务。",
+    "on_out_of_scope_dependency": "在报告未知事项中记录证据缺口，不读取额外文件、不访问网络、不操作设备。"
+  },
+  "cross_field_checks": {
+    "manual_consistency": [
+      "唯一任务为 research，implementation_permission 为 false。",
+      "包级和任务级读取范围完全一致，且写入范围均为空。",
+      "owner 和 handoff_target 均保持 firmware-maintainer；worker 实例 ID 没有被编造。",
+      "接口约束涵盖输入分片边界及 decoder 返回值。",
+      "单任务无依赖，无并行写入或共享文件写入。",
+      "报告文件名仅表示返回内容的交付名称，不授予文件系统写权限。"
+    ],
+    "formal_v2_cross_field_validation": "not-confirmed",
+    "final_integration_validation": "not-run; 仅生成交接包，未派发 worker、未执行调研、未生成调查结论。"
+  },
+  "ready_to_handoff": false,
+  "handoff_blockers": [
+    "缺少可在允许资料范围内取得的规范 adk-task-package-schema-v2 schema 及跨字段校验规则，不能确认直接接入既有执行器。",
+    "既有执行器的具体 worker 身份绑定及无 worker 写权限的报告输出机制尚未在本次任务中核验。"
+  ]
+}

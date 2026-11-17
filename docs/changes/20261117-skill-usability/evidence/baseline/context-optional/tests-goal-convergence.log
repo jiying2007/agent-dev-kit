@@ -1,0 +1,14 @@
+test_counter_oscillation_and_malformed_kind_cannot_reset_progress (tests.test_goal_convergence.GoalConvergenceTest.test_counter_oscillation_and_malformed_kind_cannot_reset_progress) ... ok
+test_evidence_bound_progress_and_hypothesis_are_valid (tests.test_goal_convergence.GoalConvergenceTest.test_evidence_bound_progress_and_hypothesis_are_valid) ... ok
+test_final_evidence_pass_and_budget_exhaustion_are_separate (tests.test_goal_convergence.GoalConvergenceTest.test_final_evidence_pass_and_budget_exhaustion_are_separate) ... ok
+test_milestone_never_completes_parent_or_grants_final (tests.test_goal_convergence.GoalConvergenceTest.test_milestone_never_completes_parent_or_grants_final) ... ok
+test_milestone_rejects_stale_legacy_unrelated_and_over_budget (tests.test_goal_convergence.GoalConvergenceTest.test_milestone_rejects_stale_legacy_unrelated_and_over_budget) ... ok
+test_non_closing_progress_requires_replan_despite_new_evidence (tests.test_goal_convergence.GoalConvergenceTest.test_non_closing_progress_requires_replan_despite_new_evidence) ... ok
+test_progress_rejects_missing_out_of_scope_and_renamed_evidence (tests.test_goal_convergence.GoalConvergenceTest.test_progress_rejects_missing_out_of_scope_and_renamed_evidence) ... ok
+test_replan_requires_changed_registered_plan_and_execution_adjustment (tests.test_goal_convergence.GoalConvergenceTest.test_replan_requires_changed_registered_plan_and_execution_adjustment) ... ok
+test_revision_only_cannot_keep_clearing_no_progress (tests.test_goal_convergence.GoalConvergenceTest.test_revision_only_cannot_keep_clearing_no_progress) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.012s
+
+OK

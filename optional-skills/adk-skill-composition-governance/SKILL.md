@@ -1,7 +1,7 @@
 ---
 name: adk-skill-composition-governance
 description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
-version: 1.1.8
+version: 1.1.9
 last_updated: 2026-11-17
 triggers:
   - "技能组合"
@@ -73,8 +73,10 @@ adk 原生 skill 创作和弃用生命周期模板：`references/adk-skill-lifec
 - Pipeline：必须声明阶段状态、检查点、resume/abort 路径和最终整合验证。
 
 ## Commands
+以下管理命令仅在已核 ADK 源码根且 helper 可读时运行。纯 Skill 消费使用目标项目已有清单/验证入口；缺失则输出候选与限制，源码检查记 `not-run`，不安装依赖、不伪报通过。目录盘点合并 core 与 optional；可见不等于已安装。
 ```bash
 bash scripts/devkit.sh catalog find --keyword adk --type skill
+bash scripts/devkit.sh catalog find --keyword adk --type optional-skill
 bash scripts/devkit.sh match --skill <skill> --text "<task text>"
 rg -n --glob SKILL.md "triggers:" skills optional-skills
 bash scripts/devkit.sh validate --strict

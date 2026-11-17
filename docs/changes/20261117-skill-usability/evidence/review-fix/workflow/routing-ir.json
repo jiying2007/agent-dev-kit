@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "bypass",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "tests.test_routing_ir_contract",
+    "-v"
+  ],
+  "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+  "exit_code": 0,
+  "timestamp_utc": "2026-11-17T06:44:45.508743+00:00",
+  "output": "test_catalog_matrix_is_a_routing_ir_projection (tests.test_routing_ir_contract.RoutingIrContractTest.test_catalog_matrix_is_a_routing_ir_projection) ... ok\ntest_negated_intent_conditions_fail_closed (tests.test_routing_ir_contract.RoutingIrContractTest.test_negated_intent_conditions_fail_closed) ... ok\ntest_negation_phrase_classes_are_closed_and_required (tests.test_routing_ir_contract.RoutingIrContractTest.test_negation_phrase_classes_are_closed_and_required) ... ok\ntest_phrase_classes_cover_readonly_and_generic_execution_synonyms (tests.test_routing_ir_contract.RoutingIrContractTest.test_phrase_classes_cover_readonly_and_generic_execution_synonyms) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.345s\n\nOK\n"
+}

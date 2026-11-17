@@ -1,6 +1,7 @@
 """Execute the published host tick-range example; no RTOS/HIL qualification."""
 from __future__ import annotations
 
+import math
 import os
 from pathlib import Path
 import re
@@ -102,6 +103,36 @@ class RtosPeriodMethodTests(unittest.TestCase):
         result = self.execute(mutant)
         self.assertEqual(1, result.returncode, result.stdout + result.stderr)
         self.assertIn("case 13:", result.stderr)
+
+
+class RtosResponseTimeModelTests(unittest.TestCase):
+    """Model eligibility plus independent arithmetic controls, not an RTOS run."""
+
+    def test_hp_only_formula_requires_distinct_task_priorities(self):
+        text = (ROOT / "skills/adk-rtos-task-design/SKILL.md").read_text(encoding="utf-8")
+        model = text.split("## 固定优先级计算", 1)[1].split("## 周期与回调执行", 1)[0]
+        assumptions = model.split("```text", 1)[0]
+        self.assertIn("优先级固定且互异", assumptions)
+        self.assertIn("j in higher-priority tasks", model)
+        alternative, = [line for line in model.splitlines() if "同优先级" in line]
+        self.assertIn("另选模型", alternative)
+
+    def test_distinct_priority_control_and_equal_priority_capacity_counterexample(self):
+        # Existing valid example: C_i=2, B_i=1, D_i=5; higher task C_j=1, T_j=4.
+        # Its first two substitutions converge. These are independent literal
+        # controls, not a new response-time calculator or scheduling simulator.
+        self.assertEqual([3, 3 + math.ceil(3 / 4), 3 + math.ceil(4 / 4)], [3, 4, 4])
+        self.assertLessEqual(4, 5)
+
+        # Both tasks have the same priority and release at t=0: C=6, T=D=10.
+        # The published hp-only sum is empty for each, so R=6 would appear to
+        # pass. The independent single-core demand bound proves this impossible.
+        hp_only_response, deadline = 6, 10
+        self.assertLessEqual(hp_only_response, deadline)
+        self.assertGreater(sum((6, 6)), deadline)
+        # Equal priority is not itself an infeasibility proof: a smaller demand
+        # also needs the matching FIFO/time-slicing analysis, rather than rejection.
+        self.assertLess(sum((2, 3)), deadline)
 
 
 if __name__ == "__main__":

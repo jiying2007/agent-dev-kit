@@ -1,5 +1,5 @@
 {
-  "version": "11.3.13",
+  "version": "11.3.14",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2644,7 +2644,7 @@
       },
       {
         "intent": "code_review_loop",
-        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查/只读审查代码/只读代码审查",
+        "intent_zh": "独立代码审查/代码评审/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查/只读审查代码/只读代码审查",
         "primary_skill": "adk-code-review-loop",
         "supporting_skills": [
           "adk-commit-pr-quality-gate"
@@ -2775,7 +2775,7 @@
       },
       {
         "intent": "production_field_readiness",
-        "intent_zh": "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
         "primary_skill": "adk-production-field-readiness",
         "supporting_skills": [
           "adk-release-versioning",

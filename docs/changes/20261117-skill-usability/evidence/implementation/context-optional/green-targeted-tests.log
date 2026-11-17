@@ -1,0 +1,43 @@
+test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) ... 
+  test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='claude-code') ... FAIL
+  test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='opencode') ... FAIL
+test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) ... ok
+test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) ... ok
+test_exported_recovery_note_distinguishes_envelope_and_payload (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_recovery_note_distinguishes_envelope_and_payload) ... ok
+test_published_catalog_queries_cover_core_and_nested_optional (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_published_catalog_queries_cover_core_and_nested_optional) ... ok
+test_exported_parallel_worker_package_is_self_contained (tests.test_skill_content_contract.SkillContentContractTests.test_exported_parallel_worker_package_is_self_contained)
+Resolve the published default from actual packages without ADK source aids. ... ok
+test_archive_unknown_hash_mismatch_keeps_original_evidence (tests.test_skill_content_contract.SkillContentContractTests.test_archive_unknown_hash_mismatch_keeps_original_evidence)
+Static recovery guidance; this does not replay a production archive incident. ... ok
+test_portable_description_discovery_boundaries (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_portable_description_discovery_boundaries)
+Only source metadata preflight; never native host routing evidence. ... ok
+test_full_inventory_description_and_isolated_trigger_contract (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_full_inventory_description_and_isolated_trigger_contract)
+All declared Skills have both discovery boundaries and executable isolated match cases. ... ok
+test_actual_published_allowlist_preserves_changed_nested_public_fields (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_actual_published_allowlist_preserves_changed_nested_public_fields) ... ok
+test_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) ... ok
+test_published_example_exercises_paths_without_echoing_values (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_published_example_exercises_paths_without_echoing_values) ... ok
+test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) ... ok
+test_no_match_and_io_errors_keep_distinct_status_and_diagnostics (tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics) ... ok
+test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion (tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion) ... ok
+test_outcome_first_evaluation_and_minimal_verification_without_overclaim (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_outcome_first_evaluation_and_minimal_verification_without_overclaim) ... ok
+
+======================================================================
+FAIL: test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='claude-code')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 119, in test_archive_handoff_artifact_retains_readonly_authority
+    self.assertIn(boundary, workflow)
+AssertionError: '只读' not found in '1. 读取 archive README、registry/schema 和检查脚本说明。\n2. 运行或规划 archive check，收集错误列表。\n3. 分类问题：missing meta、bad filename、topic missing、hash mismatch、duplicate、sensitive、stale open item。\n4. 提出候选 patch/修复 task：补 meta/topic、规范文件名、标记 superseded。hash mismatch 先保留旧 hash、实测 hash 和当前内容，核对可信原件及已批准变更；仅确认授权编辑后交实施者重算，未知差异保持 needs-fix。\n5. 安全审查：排除 raw sessions、auth、cache、logs、private endpoints 和 secrets。\n6. 交接既有已授权的实施 owner/步骤，带范围、候选、原任务授权引用和验证；不重复索取已有授权。本 Skill 不直接写入；缺实施权限/owner 则保留候选并标 blocked。\n7. 收回实施回执，核受影响 topic 的 targeted archive search、archive check 和项目总检查；未执行项如实记录。\n'
+
+======================================================================
+FAIL: test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) (target='opencode')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_consumer_usability.py", line 119, in test_archive_handoff_artifact_retains_readonly_authority
+    self.assertIn(boundary, workflow)
+AssertionError: '只读' not found in '1. 读取 archive README、registry/schema 和检查脚本说明。\n2. 运行或规划 archive check，收集错误列表。\n3. 分类问题：missing meta、bad filename、topic missing、hash mismatch、duplicate、sensitive、stale open item。\n4. 提出候选 patch/修复 task：补 meta/topic、规范文件名、标记 superseded。hash mismatch 先保留旧 hash、实测 hash 和当前内容，核对可信原件及已批准变更；仅确认授权编辑后交实施者重算，未知差异保持 needs-fix。\n5. 安全审查：排除 raw sessions、auth、cache、logs、private endpoints 和 secrets。\n6. 交接既有已授权的实施 owner/步骤，带范围、候选、原任务授权引用和验证；不重复索取已有授权。本 Skill 不直接写入；缺实施权限/owner 则保留候选并标 blocked。\n7. 收回实施回执，核受影响 topic 的 targeted archive search、archive check 和项目总检查；未执行项如实记录。\n'
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.299s
+
+FAILED (failures=2)

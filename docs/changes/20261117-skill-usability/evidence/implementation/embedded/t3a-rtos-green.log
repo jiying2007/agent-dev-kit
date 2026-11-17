@@ -1,0 +1,10 @@
+test_oracle_rejects_accepting_a_quantized_zero_period (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_accepting_a_quantized_zero_period) ... ok
+test_oracle_rejects_narrowing_before_range_validation (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_narrowing_before_range_validation) ... ok
+test_published_example_rejects_zero_overflow_and_preserves_output (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_published_example_rejects_zero_overflow_and_preserves_output) ... ok
+test_distinct_priority_control_and_equal_priority_capacity_counterexample (tests.test_skill_rtos_methods.RtosResponseTimeModelTests.test_distinct_priority_control_and_equal_priority_capacity_counterexample) ... ok
+test_hp_only_formula_requires_distinct_task_priorities (tests.test_skill_rtos_methods.RtosResponseTimeModelTests.test_hp_only_formula_requires_distinct_task_priorities) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.117s
+
+OK

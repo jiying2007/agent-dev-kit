@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.3.13",
+    "planned_release": "v11.3.14",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.3.13",
+      "merged_main_sha": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+      "model_runs": 0,
+      "reason": "The source release and Root source-only integration completed without executing this author-exposed campaign. The successor's validator, routing, export and bounded task-consumption observations remain separate from native A/B, provider-token, latency and cost results."
+    },
     {
       "planned_release": "v11.3.12",
       "merged_main_sha": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",

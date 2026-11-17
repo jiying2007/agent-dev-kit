@@ -1,8 +1,8 @@
 ---
 name: adk-interrupt-dma-patterns
 description: "用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。"
-version: 2.0.2
-last_updated: 2026-11-10
+version: 2.0.3
+last_updated: 2026-11-17
 triggers:
   - "中断处理"
   - "DMA处理"
@@ -13,7 +13,7 @@ triggers:
   - "FromISR断言"
   - "DMA cache coherency"
 non_triggers:
-  - 轮询已经满足已量化 latency/CPU budget 的场景
+  - 无中断且无 DMA 的纯轮询任务
 inputs:
   - 外设速率与 burst、latency/jitter budget、buffer ownership、DMA/cache 特性、错误恢复约束
 outputs:

@@ -1,0 +1,13 @@
+test_exported_context_defaults_are_self_contained (tests.test_skill_content_contract.SkillContentContractTests.test_exported_context_defaults_are_self_contained)
+Inspect actual consumer packages, which intentionally omit ADK source aids. ... ok
+test_exported_parallel_worker_package_is_self_contained (tests.test_skill_content_contract.SkillContentContractTests.test_exported_parallel_worker_package_is_self_contained)
+Resolve the published default from actual packages without ADK source aids. ... ok
+test_fetch_parent_preserves_child_result_states (tests.test_skill_content_contract.SkillContentContractTests.test_fetch_parent_preserves_child_result_states)
+Check the shipped result contract, not a real network/IMAP fetch. ... ok
+test_archive_unknown_hash_mismatch_keeps_original_evidence (tests.test_skill_content_contract.SkillContentContractTests.test_archive_unknown_hash_mismatch_keeps_original_evidence)
+Static recovery guidance; this does not replay a production archive incident. ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.343s
+
+OK

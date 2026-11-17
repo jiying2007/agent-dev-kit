@@ -1,0 +1,55 @@
+{
+  "structured_output_schema": "adk-task-package-schema-v2",
+  "strict_schema_decision": true,
+  "refusal_handling": "blocked or replan",
+  "goal": "Prepare a read-only evidence-based answer for firmware-maintainer on whether telemetry/decoder.c loses trailing data when input arrives in fragments.",
+  "context": "This is a proposed downstream research handoff only. The preparer has not read telemetry/decoder.c or tests/test_decoder.c, executed research, run tests, or established a source revision. The receiving worker must retain the existing task ownership and permissions; worker identity and parent affiliation are recorded separately in notes.md because they do not belong in the v2 payload.",
+  "constraints": [
+    "scope_read: [\"telemetry/decoder.c\", \"tests/test_decoder.c\"]; these are the only authorized research source paths. Their repository root, existence, and revision have not been verified. No other source files, tests, configuration, dependencies, or work directories may be inspected.",
+    "scope_write: []; no product, test, configuration, temporary-file, or report-path write authorization is added by this package. decoder-findings.md is the requested future deliverable name, not an expansion of scope_write.",
+    "global_constraints: read-only research; no deletion, network access, device operations, implementation changes, or scope expansion. This preparation step does not authorize or perform the research itself.",
+    "global_constraints: use static inspection of the two authorized source files for evidence. Do not run tests, builds, firmware, or the decoder under this handoff; execution permissions and its additional accesses have not been established.",
+    "interfaces: preserve the existing fragmented-input contract, including how trailing incomplete data is retained or returned and how later fragments are combined, as established by the authorized source. Exact symbols, state representation, and input ownership are not yet known; do not invent or change them.",
+    "interfaces: preserve the existing return-value contract, including any consumed-length, produced-length, status, error, or caller retry semantics actually present. Trace returned values together with remaining input and retained state; do not assume what a return value means before inspecting the authorized source.",
+    "global_constraints: findings must distinguish directly observed code and existing test assertions, static reasoning, proposed but unexecuted cases, and unresolved questions. Missing caller context outside scope remains unresolved rather than prompting unauthorized reads.",
+    "global_constraints: any refusal, missing permission, scope conflict, invalid package, or unavailable required evidence results in blocked or replan; do not coerce the schema, weaken constraints, retry blocked dispatch unchanged, or invent approval.",
+    "global_constraints: retain final evidence under keep-final; no cleanup, expiry, or deletion action is authorized. Worker attempts do not alter the original owner or authorization."
+  ],
+  "done_when": [
+    "The downstream decoder-findings.md deliverable answers whether trailing data can be lost under fragmented input, or explicitly states why the two authorized files cannot establish an answer.",
+    "Each material conclusion identifies exact file and line locations, relevant existing test assertions where available, and a fragment-by-fragment account of input, retained or unconsumed tail, output, and return values.",
+    "Boundary-case evidence covers the meaningful split positions and incomplete-tail conditions exposed by the actual interface, and clearly identifies gaps and unexecuted proposals without claiming runtime verification.",
+    "Unresolved questions, missing caller assumptions, source revision uncertainty, and the preserved fragmented-input and return-value contracts are recorded for firmware-maintainer.",
+    "The authorized evidence reviewer has reviewed the research evidence; preparation of this package alone does not satisfy evidence-reviewed."
+  ],
+  "primary_action": "inspect",
+  "action_mode": "read-only",
+  "verification": [
+    "Before dispatch, use the receiving system's actual v2 validator and separately validate its worker/report envelope. If either contract or validator is unavailable, keep the corresponding status unverified and blocked rather than claiming readiness.",
+    "During authorized downstream research, read only telemetry/decoder.c and tests/test_decoder.c and cite exact locations for decoder state changes, tail handling, and return values; do not infer unavailable caller behavior as fact.",
+    "Compare existing assertions with a static trace of split input. Where supported by the actual format, consider a split at each relevant boundary, incomplete final data, successive short fragments, complete data followed by a partial tail, and empty or insufficient input. Label unsupported or untested cases explicitly.",
+    "Review every claim in decoder-findings.md against cited code or existing test assertions, identify static-only evidence, and list any unresolved question that requires access or execution beyond the granted scope.",
+    "Do not write decoder-findings.md until an existing authorized reporting channel or an explicit artifact-write allowance is established; the requested artifact name must not silently override scope_write: []."
+  ],
+  "artifacts": [
+    "decoder-findings.md"
+  ],
+  "blockers": [
+    "The receiving system's actual v2 validator is not available within the permitted preparation materials. Only reference-based structural checks can be performed; receiver validation and dispatch readiness are unverified.",
+    "The separate worker/report envelope contract is not provided. notes.md preserves the observed preparation worker identity and parent affiliation, but no schema-valid execution envelope, assigned research worker, or explicit task owner can be inferred.",
+    "The requested future report has no established filesystem destination or reporting transport compatible with scope_write: []. Producing its contents may be planned, but persisting the file requires an already authorized channel or an explicit permission decision outside this preparation.",
+    "The research repository root and source revision are unspecified and were not inspected. The receiver must bind the two relative authorized paths without adding read scope; if it cannot, the research remains blocked."
+  ],
+  "work_item_kind": "research",
+  "question_to_resolve": "Does telemetry/decoder.c lose any trailing input data when data is supplied in fragments, considering the actual retained-state and return-value contract visible in telemetry/decoder.c and tests/test_decoder.c?",
+  "evidence_required": [
+    "Exact file and line references for relevant decoder entry points, state retention or compaction, boundary conditions, tail handling, and returned values, using only the two authorized files.",
+    "Existing boundary-test assertions and their locations in tests/test_decoder.c, with a clear statement that tests were inspected rather than executed.",
+    "A static fragment-by-fragment trace for each material conclusion, relating supplied bytes, consumed or retained bytes, emitted data, state transitions, and actual return semantics without inventing unavailable details.",
+    "A separate list of missing coverage, unexecuted boundary cases, caller-dependent assumptions, and unresolved questions, together with the additional permission or evidence that would be needed to resolve each gap."
+  ],
+  "implementation_permission": "forbidden",
+  "exit_gate": "evidence-reviewed",
+  "handoff_target": "firmware-maintainer",
+  "retention_decision": "keep-final"
+}

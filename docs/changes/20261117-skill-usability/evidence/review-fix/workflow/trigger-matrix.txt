@@ -1,0 +1,38 @@
+test_all_cases_match_once_loaded_manifest (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_all_cases_match_once_loaded_manifest) ... ok
+test_catalog_auto_selection_and_abstention (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_catalog_auto_selection_and_abstention) ... ok
+test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) ... ok
+test_cli_optional_install_requirement_and_negation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_cli_optional_install_requirement_and_negation) ... ok
+test_cli_smoke_uses_same_contract (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_cli_smoke_uses_same_contract) ... ok
+test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) ... ok
+test_embedded_audit_method_and_reference_boundaries (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_audit_method_and_reference_boundaries)
+Source-only policy checks, not claimed board or native-runtime evidence. ... ok
+test_embedded_domain_routing_uses_intent_not_bare_nouns (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_domain_routing_uses_intent_not_bare_nouns)
+Source-only regression: specialist noun must not grant migration/build action. ... ok
+test_embedded_unit_explicit_diagnostic_preserves_non_triggers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_explicit_diagnostic_preserves_non_triggers) ... ok
+test_embedded_unit_formatted_scope_preserves_task_context (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) ... ok
+test_embedded_unit_implicit_scope_and_host_controls (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) ... ok
+test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) ... ok
+test_full_inventory_description_and_isolated_trigger_contract (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_full_inventory_description_and_isolated_trigger_contract)
+All declared Skills have both discovery boundaries and executable isolated match cases. ... ok
+test_goal_skill_route_positive_negative_and_no_generic_hijack (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_goal_skill_route_positive_negative_and_no_generic_hijack) ... ok
+test_implicit_context_applies_to_same_group_promotion (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_applies_to_same_group_promotion) ... ok
+test_implicit_context_applies_to_secondary_primary_candidates (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_applies_to_secondary_primary_candidates) ... ok
+test_implicit_context_keeps_existing_native_export_contract (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_keeps_existing_native_export_contract) ... ok
+test_implicit_context_metadata_fails_closed_and_absence_is_compatible (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_metadata_fails_closed_and_absence_is_compatible) ... ok
+test_interactive_discovery_modes_and_routing (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_interactive_discovery_modes_and_routing)
+Source-only routing/contract checks, not native E2/E4 evidence. ... ok
+test_negation_scope_and_paraphrase_regressions (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_negation_scope_and_paraphrase_regressions)
+Source-only routing checks: negated actions are not selected as primary. ... ok
+test_optional_skill_is_not_implicitly_installed_by_a_catalog_hit (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_optional_skill_is_not_implicitly_installed_by_a_catalog_hit)
+Production matcher: routed and lexical Optional matches both need installation. ... ok
+test_ota_context_preserves_affirmative_domains_and_coordinated_negation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_ota_context_preserves_affirmative_domains_and_coordinated_negation) ... ok
+test_portable_description_discovery_boundaries (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_portable_description_discovery_boundaries)
+Only source metadata preflight; never native host routing evidence. ... ok
+test_repo_drift_local_commands_refer_to_real_scripts (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_repo_drift_local_commands_refer_to_real_scripts)
+Reject stale in-repository script references without guessing target project paths. ... ok
+test_source_only_routing_inventory_has_minimum_case_coverage (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_source_only_routing_inventory_has_minimum_case_coverage) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 1.817s
+
+OK

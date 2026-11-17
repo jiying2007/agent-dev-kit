@@ -1,0 +1,358 @@
+{
+  "source_version": "11.3.14",
+  "verified_at": "2026-11-17T06:47:16.626575+00:00",
+  "core": 56,
+  "optional": 9,
+  "audited_groups": {
+    "embedded": 20,
+    "workflow": 25,
+    "context_optional": 20
+  },
+  "identity_paths_preserved": true,
+  "manifest_authority_metadata_unchanged": true,
+  "unchanged_contracts": {
+    "manifests/profile_context_ratchets.json": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+    "src/agent_dev_kit/matcher.py": "27d9519150922ceaf7a65f196bbdadb3c8915834becd41cf13cd1c8914ed7209",
+    "manifests/structured_output_contracts.json": "f98c4475f513eea3e24b154f97d4cc8c46ce838e5c3615240fee18753cd5267c"
+  },
+  "exports": [
+    {
+      "target": "claude-code",
+      "status": "pass",
+      "source_manifest_sha256": "70a4389d6313ea2da89db418f9cb19c3534b612219f6e1127b205930ba24b2b1",
+      "skill_count": 65,
+      "files": 119,
+      "support_files": 54,
+      "declared_support_directories": [
+        "references",
+        "scripts",
+        "assets",
+        "templates",
+        "examples"
+      ],
+      "all_file_hashes_match": true,
+      "all_declared_source_assets_present": true,
+      "export_inventory_sha256": "29a21b58282ff1564d5051ce2f41c64332651c6c2856d00e3f9bb834eb86fb52",
+      "identities": {
+        "adk-runtime-router": "skills/adk-runtime-router/SKILL.md",
+        "adk-context-engineering": "skills/adk-context-engineering/SKILL.md",
+        "adk-token-context-governance": "skills/adk-token-context-governance/SKILL.md",
+        "adk-requirements-triage": "skills/adk-requirements-triage/SKILL.md",
+        "adk-structured-requirements-questioning": "skills/adk-structured-requirements-questioning/SKILL.md",
+        "adk-lightweight-planning": "skills/adk-lightweight-planning/SKILL.md",
+        "adk-goal-authoring": "skills/adk-goal-authoring/SKILL.md",
+        "adk-task-breakdown": "skills/adk-task-breakdown/SKILL.md",
+        "adk-parallel-agent-governance": "skills/adk-parallel-agent-governance/SKILL.md",
+        "adk-worktree-governance": "skills/adk-worktree-governance/SKILL.md",
+        "adk-context-compress-handoff": "skills/adk-context-compress-handoff/SKILL.md",
+        "adk-interface-contract-design": "skills/adk-interface-contract-design/SKILL.md",
+        "adk-adr-writer": "skills/adk-adr-writer/SKILL.md",
+        "adk-component-api-stability": "skills/adk-component-api-stability/SKILL.md",
+        "adk-systematic-debugging": "skills/adk-systematic-debugging/SKILL.md",
+        "adk-test-strategy": "skills/adk-test-strategy/SKILL.md",
+        "adk-verification-before-completion": "skills/adk-verification-before-completion/SKILL.md",
+        "adk-code-review-loop": "skills/adk-code-review-loop/SKILL.md",
+        "adk-repo-drift-remediation": "skills/adk-repo-drift-remediation/SKILL.md",
+        "adk-commit-pr-quality-gate": "skills/adk-commit-pr-quality-gate/SKILL.md",
+        "adk-branch-closeout": "skills/adk-branch-closeout/SKILL.md",
+        "adk-after-action-review": "skills/adk-after-action-review/SKILL.md",
+        "adk-performance-profiling-embedded": "skills/adk-performance-profiling-embedded/SKILL.md",
+        "adk-unit-test-embedded": "skills/adk-unit-test-embedded/SKILL.md",
+        "adk-fault-injection-recovery": "skills/adk-fault-injection-recovery/SKILL.md",
+        "adk-static-analysis-c-cpp": "skills/adk-static-analysis-c-cpp/SKILL.md",
+        "adk-release-versioning": "skills/adk-release-versioning/SKILL.md",
+        "adk-embedded-release-orchestration": "skills/adk-embedded-release-orchestration/SKILL.md",
+        "adk-memory-curator": "skills/adk-memory-curator/SKILL.md",
+        "adk-archive-governance": "skills/adk-archive-governance/SKILL.md",
+        "adk-knowledge-archive": "skills/adk-knowledge-archive/SKILL.md",
+        "adk-engineering-growth-review": "skills/adk-engineering-growth-review/SKILL.md",
+        "adk-planning-execution-loop": "skills/adk-planning-execution-loop/SKILL.md",
+        "adk-register-map-design": "skills/adk-register-map-design/SKILL.md",
+        "adk-bsp-analysis": "skills/adk-bsp-analysis/SKILL.md",
+        "adk-driver-implementation": "skills/adk-driver-implementation/SKILL.md",
+        "adk-driver-bringup-checklist": "skills/adk-driver-bringup-checklist/SKILL.md",
+        "adk-bsp-porting-playbook": "skills/adk-bsp-porting-playbook/SKILL.md",
+        "adk-rtos-task-design": "skills/adk-rtos-task-design/SKILL.md",
+        "adk-interrupt-dma-patterns": "skills/adk-interrupt-dma-patterns/SKILL.md",
+        "adk-protocol-stack-integration": "skills/adk-protocol-stack-integration/SKILL.md",
+        "adk-cmake-cross-build": "skills/adk-cmake-cross-build/SKILL.md",
+        "adk-embedded-debug-transport": "skills/adk-embedded-debug-transport/SKILL.md",
+        "adk-embedded-remote-debug-log-triage": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+        "adk-offline-core-dump-triage": "skills/adk-offline-core-dump-triage/SKILL.md",
+        "adk-hardware-debugging": "skills/adk-hardware-debugging/SKILL.md",
+        "adk-integration-hil-sil": "skills/adk-integration-hil-sil/SKILL.md",
+        "adk-embedded-diagnostic-harness": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+        "adk-production-field-readiness": "skills/adk-production-field-readiness/SKILL.md",
+        "adk-embedded-storage-layout-migration": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+        "adk-artifact-gating": "skills/adk-artifact-gating/SKILL.md",
+        "adk-pilot-framework": "skills/adk-pilot-framework/SKILL.md",
+        "adk-cross-team-handoff": "skills/adk-cross-team-handoff/SKILL.md",
+        "adk-code-simplification": "skills/adk-code-simplification/SKILL.md",
+        "adk-repo-prompt-analysis": "skills/adk-repo-prompt-analysis/SKILL.md",
+        "adk-skill-deep-analysis": "skills/adk-skill-deep-analysis/SKILL.md",
+        "adk-external-practice-absorption": "optional-skills/adk-external-practice-absorption/SKILL.md",
+        "adk-data-fetch": "optional-skills/adk-data-fetch/SKILL.md",
+        "adk-email-imap-fetch": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+        "adk-fetch-url-content": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+        "adk-test-flakiness-triage": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+        "adk-security-supply-chain": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "adk-prose-revision": "optional-skills/adk-prose-revision/SKILL.md",
+        "adk-incident-rca-report": "optional-skills/adk-incident-rca-report/SKILL.md",
+        "adk-skill-composition-governance": "optional-skills/adk-skill-composition-governance/SKILL.md"
+      }
+    },
+    {
+      "target": "opencode",
+      "status": "pass",
+      "source_manifest_sha256": "70a4389d6313ea2da89db418f9cb19c3534b612219f6e1127b205930ba24b2b1",
+      "skill_count": 65,
+      "files": 119,
+      "support_files": 54,
+      "declared_support_directories": [
+        "references",
+        "scripts",
+        "assets",
+        "templates",
+        "examples"
+      ],
+      "all_file_hashes_match": true,
+      "all_declared_source_assets_present": true,
+      "export_inventory_sha256": "c9ff47982e2710b3456c52f04433302a48d32384079a2dee30f9dfa4e4395751",
+      "identities": {
+        "adk-runtime-router": "skills/adk-runtime-router/SKILL.md",
+        "adk-context-engineering": "skills/adk-context-engineering/SKILL.md",
+        "adk-token-context-governance": "skills/adk-token-context-governance/SKILL.md",
+        "adk-requirements-triage": "skills/adk-requirements-triage/SKILL.md",
+        "adk-structured-requirements-questioning": "skills/adk-structured-requirements-questioning/SKILL.md",
+        "adk-lightweight-planning": "skills/adk-lightweight-planning/SKILL.md",
+        "adk-goal-authoring": "skills/adk-goal-authoring/SKILL.md",
+        "adk-task-breakdown": "skills/adk-task-breakdown/SKILL.md",
+        "adk-parallel-agent-governance": "skills/adk-parallel-agent-governance/SKILL.md",
+        "adk-worktree-governance": "skills/adk-worktree-governance/SKILL.md",
+        "adk-context-compress-handoff": "skills/adk-context-compress-handoff/SKILL.md",
+        "adk-interface-contract-design": "skills/adk-interface-contract-design/SKILL.md",
+        "adk-adr-writer": "skills/adk-adr-writer/SKILL.md",
+        "adk-component-api-stability": "skills/adk-component-api-stability/SKILL.md",
+        "adk-systematic-debugging": "skills/adk-systematic-debugging/SKILL.md",
+        "adk-test-strategy": "skills/adk-test-strategy/SKILL.md",
+        "adk-verification-before-completion": "skills/adk-verification-before-completion/SKILL.md",
+        "adk-code-review-loop": "skills/adk-code-review-loop/SKILL.md",
+        "adk-repo-drift-remediation": "skills/adk-repo-drift-remediation/SKILL.md",
+        "adk-commit-pr-quality-gate": "skills/adk-commit-pr-quality-gate/SKILL.md",
+        "adk-branch-closeout": "skills/adk-branch-closeout/SKILL.md",
+        "adk-after-action-review": "skills/adk-after-action-review/SKILL.md",
+        "adk-performance-profiling-embedded": "skills/adk-performance-profiling-embedded/SKILL.md",
+        "adk-unit-test-embedded": "skills/adk-unit-test-embedded/SKILL.md",
+        "adk-fault-injection-recovery": "skills/adk-fault-injection-recovery/SKILL.md",
+        "adk-static-analysis-c-cpp": "skills/adk-static-analysis-c-cpp/SKILL.md",
+        "adk-release-versioning": "skills/adk-release-versioning/SKILL.md",
+        "adk-embedded-release-orchestration": "skills/adk-embedded-release-orchestration/SKILL.md",
+        "adk-memory-curator": "skills/adk-memory-curator/SKILL.md",
+        "adk-archive-governance": "skills/adk-archive-governance/SKILL.md",
+        "adk-knowledge-archive": "skills/adk-knowledge-archive/SKILL.md",
+        "adk-engineering-growth-review": "skills/adk-engineering-growth-review/SKILL.md",
+        "adk-planning-execution-loop": "skills/adk-planning-execution-loop/SKILL.md",
+        "adk-register-map-design": "skills/adk-register-map-design/SKILL.md",
+        "adk-bsp-analysis": "skills/adk-bsp-analysis/SKILL.md",
+        "adk-driver-implementation": "skills/adk-driver-implementation/SKILL.md",
+        "adk-driver-bringup-checklist": "skills/adk-driver-bringup-checklist/SKILL.md",
+        "adk-bsp-porting-playbook": "skills/adk-bsp-porting-playbook/SKILL.md",
+        "adk-rtos-task-design": "skills/adk-rtos-task-design/SKILL.md",
+        "adk-interrupt-dma-patterns": "skills/adk-interrupt-dma-patterns/SKILL.md",
+        "adk-protocol-stack-integration": "skills/adk-protocol-stack-integration/SKILL.md",
+        "adk-cmake-cross-build": "skills/adk-cmake-cross-build/SKILL.md",
+        "adk-embedded-debug-transport": "skills/adk-embedded-debug-transport/SKILL.md",
+        "adk-embedded-remote-debug-log-triage": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+        "adk-offline-core-dump-triage": "skills/adk-offline-core-dump-triage/SKILL.md",
+        "adk-hardware-debugging": "skills/adk-hardware-debugging/SKILL.md",
+        "adk-integration-hil-sil": "skills/adk-integration-hil-sil/SKILL.md",
+        "adk-embedded-diagnostic-harness": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+        "adk-production-field-readiness": "skills/adk-production-field-readiness/SKILL.md",
+        "adk-embedded-storage-layout-migration": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+        "adk-artifact-gating": "skills/adk-artifact-gating/SKILL.md",
+        "adk-pilot-framework": "skills/adk-pilot-framework/SKILL.md",
+        "adk-cross-team-handoff": "skills/adk-cross-team-handoff/SKILL.md",
+        "adk-code-simplification": "skills/adk-code-simplification/SKILL.md",
+        "adk-repo-prompt-analysis": "skills/adk-repo-prompt-analysis/SKILL.md",
+        "adk-skill-deep-analysis": "skills/adk-skill-deep-analysis/SKILL.md",
+        "adk-external-practice-absorption": "optional-skills/adk-external-practice-absorption/SKILL.md",
+        "adk-data-fetch": "optional-skills/adk-data-fetch/SKILL.md",
+        "adk-email-imap-fetch": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+        "adk-fetch-url-content": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+        "adk-test-flakiness-triage": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+        "adk-security-supply-chain": "optional-skills/adk-security-supply-chain/SKILL.md",
+        "adk-prose-revision": "optional-skills/adk-prose-revision/SKILL.md",
+        "adk-incident-rca-report": "optional-skills/adk-incident-rca-report/SKILL.md",
+        "adk-skill-composition-governance": "optional-skills/adk-skill-composition-governance/SKILL.md"
+      }
+    }
+  ],
+  "consumer_input_matches_final_export": [
+    {
+      "path": "SKILL.md",
+      "sha256": "070ce3a6d970e768b6537e881318de5e79ed69d1c3714dd04968bd4ec788ab6c"
+    },
+    {
+      "path": "references/task-packaging.md",
+      "sha256": "1c10d654b9015f356333e515009224a630d102e039db2731c58c1191cab5a34e"
+    }
+  ],
+  "ratchets": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 97035,
+        "potential_full_source_bytes": 173124
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 81591,
+        "potential_full_source_bytes": 156211
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 112467,
+        "potential_full_source_bytes": 192293
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 209279,
+        "potential_full_source_bytes": 316398
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123001,
+        "potential_full_source_bytes": 211218
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 212304,
+        "potential_full_source_bytes": 323280
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30415,
+        "potential_full_source_bytes": 46515
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 64960,
+        "potential_full_source_bytes": 117370
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "limitations": [
+    "Static compiler/export and source-byte evidence; no native runtime discovery or provider token measurements.",
+    "Only target-contract declared support_directories are exported; repository README/LICENSE/agents metadata outside that contract are not silently added."
+  ]
+}

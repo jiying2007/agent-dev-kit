@@ -1,0 +1,149 @@
+{
+  "semantics": "Post-review implementation self-tests; original independent findings retained separately. Pre-review full suite was interrupted, not passed.",
+  "files": [
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/change.diff",
+      "sha256": "1d9042859a8b806054f14586ce0d196d3e0b869cdcee737bdb553fa9a66e8bac"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/fix-note.md",
+      "sha256": "016bc843f80bb376f91440420a0e9467592ac26d0a47364d7a17cdab1de9a19c"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/green.json",
+      "sha256": "158ce2a9bd296b3b815abb93376568523bb7d7666b0dd6b6b4244b25cc5549ef"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/red.json",
+      "sha256": "73c4d729761e82967f0348633bd1c33977dfa591e5a394aced219250332d1891"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/summary.json",
+      "sha256": "60ef9a152bd6b63da005a2c5f2d6124c8d1031bc1f999c105b2c537aa1e0e5dc"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/verify_vxworks.py",
+      "sha256": "b2138d026a4500b62f011b233f817804d059d21c58b72c6043c4ddb20c76f665"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/cumulative-owned.diff",
+      "sha256": "82376f9b6d62f634f69e89d8b2d7f1533a01a8aff3e605a78a4773d8cc8e9569"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/green-probes.json",
+      "sha256": "4a8b5891051099d0bac4397a5db58ba40171ca234f6c7172a1127351de70d473"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/green-tests.json",
+      "sha256": "661ffbcb686abf24d79ea4be82f486cbabe568cb6e3ec6afd5ed06b651be1f6e"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/green-tests.txt",
+      "sha256": "9319a9e0fce41f204602669d04e907c18f4e9c4d85bf2b491f1849fdb618fec3"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-boundary.json",
+      "sha256": "89717375a7aaccf63889e7a060fa49f06296e36888b5da03f3fc19b953338ef1"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-boundary.txt",
+      "sha256": "d31f128a2c2f4ea29688e46fdf620be8cbd361aa0d1deb4b58b61dd87b93d116"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-effectiveness.json",
+      "sha256": "97b6f48cf4da1076d4df597debe423b926ca0d9d6e0f9d46f177a19bd5654418"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-effectiveness.txt",
+      "sha256": "ed63274218786e390b7cec8a2481465f6061b5c0e2688f6c7240d4a526306120"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/module-budget.json",
+      "sha256": "abc22d7c12ac203f84e13d8ab4fe96cfcfd9b47e7676635fc014f87c2e6a0d37"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/module-budget.txt",
+      "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/mypy.json",
+      "sha256": "6c44f7d22584093f157499239b2f7a6fd24d92388296a26d7489490f17e4622b"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/mypy.txt",
+      "sha256": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/probe.py",
+      "sha256": "97088bbd0520be49642e8be817a1eb35292f348856d0d81eeafb34b7b60dc256"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-probes.json",
+      "sha256": "70d027e8fb14535bc8ecd79dc051fa3879e28d47b7dc18a0dba31f106f4dac25"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-tests.json",
+      "sha256": "04af74b55a8dec9d2b0e97b1758e6c935369522a36c6337481fc6b1560dc3839"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-tests.txt",
+      "sha256": "b071ba5bce605f313283a5ecc896c07718b1afb1230b1cfaf7b4792d7c60ffde"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/routing-ir.json",
+      "sha256": "df5b8d2c81947e4e4ee623beb59420e15408d591b03b050bec8cafcc0a62a107"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/routing-ir.txt",
+      "sha256": "073253226bec96b20dafb41a56d0ba85c68e63bf748b87114c9e996494aa4519"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/ruff.json",
+      "sha256": "2234440a97c9913aab5350e8ba2dbfd965068ba2d55cab25b39013706a2e0837"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/ruff.txt",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/snapshot.json",
+      "sha256": "e039b2e88cd46c298ef4850067096b9a6b029938d7cb84fc00ecad0830ef1d8f"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/snapshot.py",
+      "sha256": "996661cb797dc4c04179542a02c5dacd55231758951562519babd381f2e873bd"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/trigger-matrix.json",
+      "sha256": "e1f0ef49c561bcc1617471df5d2085e267c7dc247ca40d6ab3256dca29e0e938"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/trigger-matrix.txt",
+      "sha256": "58f00d4da2700a7590c80417de33c41176af821435878a6ee180dfe7537ade67"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/verify.py",
+      "sha256": "232295685df5aa82c406b7a55eff1f4c1e193d79b885131ce2c7e5dedd13e70c"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/full-regression.log",
+      "sha256": "1c299cb50ff8ea63f5188ec1794c8d62e67ddbba4c196bf19ad2ee01d049a019"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/full-regression-stopped.json",
+      "sha256": "a0d14047fd868c690a660163f5bf5f67b677c41a8d975bb0bb479107a063eeef"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/quality-results.json",
+      "sha256": "75e706765dc2ce3b587bf4d1de0e690ac2d194a9d359c0097a20e7ed76ce8455"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/tested-source-files.json",
+      "sha256": "9cbd841ce2a8b148e9a7b49b0709c8196c4cba3cbc466cdea05dd097857802b5"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/all-skill-verification.json",
+      "sha256": "9f72d9a71c2429ce5ea056791b1b14ee55a68355384cfc6b68cf0b49af285a11"
+    }
+  ]
+}

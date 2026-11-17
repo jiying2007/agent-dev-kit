@@ -2,3 +2,14 @@
 docs/changes/**/evidence/original.patch -whitespace
 # Preserve the literal whitespace in this retained failed regression stderr.
 docs/changes/20261116-skill-failure-paths/evidence/initial-regression.stderr.log -whitespace
+# Preserve exact raw patches and failing-test output; source whitespace checks remain enabled.
+docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a.diff -whitespace
+docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b.diff -whitespace
+docs/changes/20261117-skill-usability/evidence/implementation/workflow/skill-content-gate.txt -whitespace
+docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green-attempt-1.txt -whitespace
+docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-red.txt -whitespace
+docs/changes/20261117-skill-usability/evidence/implementation/context-optional/green-targeted-tests.log -whitespace
+docs/changes/20261117-skill-usability/evidence/implementation/context-optional/red-tests.log -whitespace
+docs/changes/20261117-skill-usability/evidence/implementation/context-optional/red-tests-valid-profile.log -whitespace
+docs/changes/20261117-skill-usability/evidence/review-fix/workflow/cumulative-owned.diff -whitespace
+docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-tests.txt -whitespace

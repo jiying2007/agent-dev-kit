@@ -1,0 +1,64 @@
+{
+  "schema": "adk-skill-development-consumption-observation/v1",
+  "recorded_at": "2026-11-17T06:40:53.730339+00:00",
+  "validator_path": "src/agent_dev_kit/intent_boundary.py",
+  "validator_sha256": "d4a8631aadf33fc43b9802bd086c0130db282ef5df048c5e99d6e08dc83a6850",
+  "registered_ab_trial": false,
+  "native_runtime_qualification": false,
+  "provider_usage_measured": false,
+  "records": [
+    {
+      "consumer": 1,
+      "files": [
+        {
+          "path": "1/task-package.json",
+          "sha256": "f09731c26f0add2231d01021cffb89fe0ab86b83055521bd66c0b2ead13b84b4"
+        },
+        {
+          "path": "1/notes.md",
+          "sha256": "ba5b52a8001f8e63fa72aa22243f0b1493fb01b224c31db3a581f447b3ff18d0"
+        }
+      ],
+      "source_files": [
+        {
+          "exported_path": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-task-breakdown/SKILL.md",
+          "sha256": "a73227dad120c8786d55176a67e7a3cc5190d687964b5e38ca8770d2ba0fd598"
+        },
+        {
+          "exported_path": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/exports/claude-code/skills/adk-task-breakdown/references/task-packaging.md",
+          "sha256": "6a417e248ca5bd0f31f63758d6921779ae68e8800365d67f463d89b54b5e5aa3"
+        }
+      ],
+      "validator_errors": [
+        "missing fields: context,constraints,done_when,primary_action,action_mode,verification,artifacts,blockers,work_item_kind,question_to_resolve,evidence_required,implementation_permission,exit_gate,handoff_target,retention_decision",
+        "unexpected fields: cross_field_checks,global_constraints,handoff_blockers,interfaces,owner,package_id,ready_to_handoff,schema_version,scope_read,scope_write,tasks"
+      ],
+      "valid_v2_payload": false
+    },
+    {
+      "consumer": 2,
+      "files": [
+        {
+          "path": "2/task-package.json",
+          "sha256": "2bfd1f3f8996a7a33ecfd20f0b6083f56ce394b61d4dae7dd899a3c13b94a94a"
+        },
+        {
+          "path": "2/notes.md",
+          "sha256": "dfef9fcf92d407fb2b0f77b6d0f33361dcf4d90542bc976bf15e92315ef86fd1"
+        }
+      ],
+      "source_files": [
+        {
+          "exported_path": "/workspace/scratch/fe8de3b42084/packet-source-2/claude-code/skills/adk-task-breakdown/SKILL.md",
+          "sha256": "070ce3a6d970e768b6537e881318de5e79ed69d1c3714dd04968bd4ec788ab6c"
+        },
+        {
+          "exported_path": "/workspace/scratch/fe8de3b42084/packet-source-2/claude-code/skills/adk-task-breakdown/references/task-packaging.md",
+          "sha256": "1c10d654b9015f356333e515009224a630d102e039db2731c58c1191cab5a34e"
+        }
+      ],
+      "validator_errors": [],
+      "valid_v2_payload": true
+    }
+  ]
+}

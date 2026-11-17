@@ -1,8 +1,8 @@
 ---
 name: adk-archive-governance
-description: "用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。"
-version: 1.0.5
-last_updated: 2026-11-16
+description: "用于只读检查现有归档的元数据、topic、hash 与安全问题，提出修复计划并交接既有实施者；不负责新建知识笔记或代替知识候选的正式审核。"
+version: 1.0.6
+last_updated: 2026-11-17
 triggers:
   - "归档治理"
   - "归档检查"
@@ -28,8 +28,7 @@ constraints:
 # adk-archive-governance
 
 ## Goal
-- 治理 `docs/archive` 的可检索性、可审计性和安全边界。
-- 修复 meta、topic、hash、重复与敏感信息问题。
+只读定位 `docs/archive` 的 meta、topic、hash、重复与安全问题，提出最小修复并核验实施回执。
 
 ## Prerequisites
 - 已定位归档入口。
@@ -40,10 +39,10 @@ constraints:
 1. 读取 archive README、registry/schema 和检查脚本说明。
 2. 运行或规划 archive check，收集错误列表。
 3. 分类问题：missing meta、bad filename、topic missing、hash mismatch、duplicate、sensitive、stale open item。
-4. 最小修复：补 meta/topic、规范文件名、标记 superseded。hash mismatch 先保留旧 hash、实测 hash 和当前内容，核对可信原件及已批准变更；仅确认授权编辑后重算，未知差异保持 needs-fix。
+4. 提出候选 patch/修复 task：补 meta/topic、规范文件名、标记 superseded。hash mismatch 先保留旧 hash、实测 hash 和当前内容，核对可信原件及已批准变更；仅确认授权编辑后交实施者重算，未知差异保持 needs-fix。
 5. 安全审查：排除 raw sessions、auth、cache、logs、private endpoints 和 secrets。
-6. 查询验证：对受影响 topic 做 targeted archive search。
-7. 最终运行 archive check 和项目总检查。
+6. 交接既有已授权的实施 owner/步骤，带范围、候选、原任务授权引用和验证；不重复索取已有授权。本 Skill 只读，不直接写入；缺实施权限/owner 则保留候选并标 blocked。
+7. 收回实施回执，核受影响 topic 的 targeted archive search、archive check 和项目总检查；未执行项如实记录。
 
 ## Commands
 先核实目标仓路径与检查脚本；没有对应目录/脚本则记录 unavailable 并用已声明的目标项目入口，不假定纯 Skill 导出包包含 ADK 源码。
@@ -62,6 +61,11 @@ issues:
   action:
 changed:
 - path:
+handoff:
+  implementation_owner:
+  authorized_task_ref:
+  candidate_patch_or_task:
+  verification:
 checks:
 - archive-check:
 - archive-search:

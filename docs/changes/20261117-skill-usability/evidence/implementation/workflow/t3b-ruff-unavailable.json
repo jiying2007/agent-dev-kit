@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "bypass",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "-m",
+    "ruff",
+    "check",
+    "src/agent_dev_kit/intent_boundary.py",
+    "tests/test_task_package_delivery.py",
+    "tests/test_skill_trigger_matrix.py"
+  ],
+  "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+  "exit_code": 1,
+  "timestamp_utc": "2026-11-17T06:32:39.017198+00:00",
+  "output": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3: No module named ruff\n"
+}
