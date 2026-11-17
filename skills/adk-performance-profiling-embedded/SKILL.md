@@ -1,8 +1,8 @@
 ---
 name: adk-performance-profiling-embedded
 description: "用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。"
-version: 1.1.7
-last_updated: 2026-11-16
+version: 1.1.8
+last_updated: 2026-11-17
 triggers:
   - "性能分析"
   - "性能优化"
@@ -31,7 +31,7 @@ constraints:
 4. 核功能/内存/功耗/热稳定，超预算回滚；候选做真实长稳复验。无效 `invalid`，样本不足/噪声不可分 `inconclusive`，有效证据支持无收益才 `no-gain`；均留原因、不宣传收益。噪声先查环境；只读诊断不授权优化/设备配置变更。
 
 ## Target Execution Gate
-- `linux-embedded`：核内核/用户态、架构、计数器权限/资源。CPU 用 perf/flame graph；堆峰值/时间线用 Massif，核采样与时间单位；错误/泄漏用 Memcheck；RSS 含非堆常驻页，另测不互代。I/O 用 strace -T/perf trace，锁用 perf lock/lockstat，LLC miss 用 perf stat -e cache-misses。核采样计数；热点不等于整体收益，用户态工具不通用于内核/MCU。
+- `linux-embedded`：核内核/用户态、架构、计数器权限/资源。CPU 用 perf/flame graph；堆峰值/时间线用 Massif，核采样/时间单位；错误/泄漏用 Memcheck；RSS 含非堆页，另测不互代。I/O 用 strace -T/perf trace，锁用 perf lock/lockstat；cache-misses 按 CPU/PMU/内核映射解释，不默认等同 LLC miss，LLC 须核专用事件；未知/不支持记 unavailable。核采样计数；热点不等于整体收益，用户态工具不通用于内核/MCU。
 - `mcu-rtos` / `mcu-baremetal`：按支持用板端计数/trace、DWT/ETM、GPIO timing、stack/heap high-water、ELF/map；host 分析不能替代板端 `not-measured`。
 - 核工具/系统/编译身份、权限和扰动；缺工具记 unavailable，不隐式注入/改配置。Valgrind 插桩耗时不当原生性能；不跨优化等级比较。
 

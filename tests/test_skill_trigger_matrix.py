@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+import json
+import shutil
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
 from agent_dev_kit._matcher_kernel import _frontmatter
 from agent_dev_kit.matcher import format_result, match_text
-from agent_dev_kit.model import Manifest
+from agent_dev_kit.model import Manifest, ManifestError
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -66,6 +69,175 @@ def _catalog_cases() -> list[tuple[int, str, str, str, str, str]]:
 
 
 class SkillTriggerMatrixTests(unittest.TestCase):
+    def test_embedded_unit_implicit_scope_and_host_controls(self) -> None:
+        manifest = Manifest.load(ROOT)
+        unit = "adk-unit-test-embedded"
+        negatives = (
+            "帮我写一个 Python 单元测试，用 pytest，不涉及嵌入式",
+            "为已有 Rust 函数补 cargo test 单元测试，不需要硬件",
+            "写单元测试",
+            "不是 MCU 工程；写单元测试",
+            "不涉及 RTOS；给普通函数编写测试用例",
+            "not embedded; 写单元测试",
+            "文档写着“MCU”；给普通函数写单元测试",
+            "文档写着 'MCU'；给普通函数写单元测试",
+            "文档示例：```MCU```；给普通函数写单元测试",
+            "之前开发过 MCU，现在给非嵌入式服务写单元测试",
+        )
+        for prompt in negatives:
+            with self.subTest(negative=prompt):
+                result = match_text(manifest, prompt)
+                self.assertNotEqual(result.get("skill"), unit, result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+        for prompt in (
+            "给 MCU UART 驱动补单元测试，覆盖队列溢出",
+            "给嵌入式协议解析器的 Python host 模型写单元测试",
+            "为嵌入式 Rust 固件函数补 cargo test 单元测试",
+            "不在硬件跑，只为嵌入式 host 模型写单元测试",
+            "MCU 工程；补 UART 单测",
+            "MCU 性质测试",
+        ):
+            with self.subTest(positive=prompt):
+                result = match_text(manifest, prompt)
+                self.assertIs(result.get("match"), True, result)
+                self.assertEqual(result.get("skill"), unit, result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+
+    def test_embedded_unit_formatted_scope_preserves_task_context(self) -> None:
+        manifest = Manifest.load(ROOT)
+        unit = "adk-unit-test-embedded"
+        for prompt in (
+            "给 `MCU` UART 驱动补单元测试，覆盖队列溢出",
+            "给 `Zephyr` 项目中的 UART 模块写单元测试",
+            "给 `embedded` 协议解析器的 Python host 模型写单元测试",
+            "给‘RTOS’任务队列写单元测试",
+            "给“RTOS”任务队列写单元测试，覆盖队列溢出",
+            '给 "MCU" UART 驱动写单元测试',
+            "`MCU` 工程；补 UART 单测",
+        ):
+            with self.subTest(positive=prompt):
+                result = match_text(manifest, prompt)
+                self.assertIs(result.get("match"), True, result)
+                self.assertEqual(result.get("skill"), unit, result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+        for prompt in (
+            "不是 `MCU` 工程；写单元测试",
+            "不涉及‘RTOS’；给普通函数编写测试用例",
+            'not "embedded"; 写单元测试',
+            "文档写着 `MCU`；给普通函数写单元测试",
+            "示例：“MCU 单元测试”；给普通函数补单测",
+            "示例：'Zephyr'；给普通函数写单元测试",
+            'Example: "MCU"; 写单元测试',
+            "文档示例：```MCU```；给普通函数写单元测试",
+            "示例：\n~~~\nembedded\n~~~\n给普通函数写单元测试",
+        ):
+            with self.subTest(negative=prompt):
+                result = match_text(manifest, prompt)
+                self.assertNotEqual(result.get("skill"), unit, result)
+                self.assertEqual(result.get("mutation_permission"), "deny", result)
+
+    def test_embedded_unit_explicit_diagnostic_preserves_non_triggers(self) -> None:
+        manifest = Manifest.load(ROOT)
+        unit = "adk-unit-test-embedded"
+        result = match_text(manifest, "写单元测试", skill=unit, scope="skill")
+        self.assertIs(result.get("match"), True, result)
+        self.assertNotEqual(result.get("mutation_permission"), "workspace-write", result)
+        for prompt in ("写单元测试，不涉及嵌入式", "纯硬件连线问题", "不要使用 adk-unit-test-embedded；写单元测试"):
+            with self.subTest(prompt=prompt):
+                result = match_text(manifest, prompt, skill=unit, scope="skill")
+                self.assertIs(result.get("match"), False, result)
+
+    def test_implicit_context_metadata_fails_closed_and_absence_is_compatible(self) -> None:
+        from agent_dev_kit.validation_contract import _validate_skills
+
+        manifest = Manifest.load(ROOT)
+        relative = "skills/adk-unit-test-embedded/SKILL.md"
+        source = (ROOT / relative).read_text(encoding="utf-8")
+        legacy = "\n".join(line for line in source.splitlines()
+                           if not line.startswith("implicit_context:")) + "\n"
+        with tempfile.TemporaryDirectory(prefix="adk-implicit-context-") as directory:
+            root = Path(directory)
+            path = root / relative
+            path.parent.mkdir(parents=True)
+            (root / "manifests").mkdir()
+            shutil.copyfile(ROOT / "manifests/skill_content_contracts_v2.json",
+                            root / "manifests/skill_content_contracts_v2.json")
+            fixture = Manifest(root, manifest.data, root / "manifest.json")
+            path.write_text(legacy, encoding="utf-8")
+            self.assertTrue(match_text(fixture, "写单元测试").get("match"))
+            for value in (None, [], "MCU", {}, [""], ["/"], ["MCU", 7]):
+                with self.subTest(invalid=value):
+                    field = "implicit_context: " + json.dumps(value) + "\n"
+                    path.write_text(legacy.replace("version:", field + "version:", 1), encoding="utf-8")
+                    failures: list[str] = []
+                    _validate_skills(fixture, False, failures)
+                    self.assertTrue(any("implicit_context" in failure for failure in failures), failures)
+                    with self.assertRaisesRegex(ManifestError, "implicit_context"):
+                        match_text(fixture, "MCU 写单元测试")
+
+    def test_implicit_context_applies_to_same_group_promotion(self) -> None:
+        manifest = Manifest.load(ROOT)
+        with tempfile.TemporaryDirectory(prefix="adk-promoted-context-") as directory:
+            root = Path(directory)
+            paths = (
+                "skills/adk-context-engineering/SKILL.md",
+                "skills/adk-token-context-governance/SKILL.md",
+                "manifests/skill_content_contracts_v2.json",
+            )
+            for relative in paths:
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, target)
+            path = root / paths[1]
+            content = path.read_text(encoding="utf-8")
+            path.write_text(content.replace("version:", 'implicit_context: ["MCU"]\nversion:', 1), encoding="utf-8")
+            fixture = Manifest(root, manifest.data, root / "manifest.json")
+            denied = match_text(fixture, "上下文工程")
+            self.assertFalse(denied.get("match"), denied)
+            self.assertEqual(denied.get("reason"), "promoted-primary-excluded", denied)
+            self.assertEqual(denied.get("exclusion_reason"), "missing_implicit_context", denied)
+            self.assertEqual(denied.get("mutation_permission"), "deny", denied)
+            accepted = match_text(fixture, "MCU 项目；上下文工程")
+            self.assertEqual(accepted.get("skill"), "adk-token-context-governance", accepted)
+            self.assertTrue(accepted.get("selection_group_promoted"), accepted)
+            self.assertEqual(accepted.get("mutation_permission"), "deny", accepted)
+            supporting_path = root / paths[0]
+            supporting = supporting_path.read_text(encoding="utf-8")
+            supporting_path.write_text(
+                supporting.replace("version:", 'implicit_context: ["MCU"]\nversion:', 1),
+                encoding="utf-8",
+            )
+            explicit = match_text(fixture, "上下文工程", skill="adk-context-engineering")
+            self.assertTrue(explicit.get("match"), explicit)
+
+    def test_implicit_context_applies_to_secondary_primary_candidates(self) -> None:
+        from agent_dev_kit.matcher import _next_primary_trigger
+
+        manifest = Manifest.load(ROOT)
+        self.assertIsNone(_next_primary_trigger(manifest, "写单元测试"))
+        accepted = _next_primary_trigger(manifest, "MCU 工程；补 UART 单测")
+        self.assertIsNotNone(accepted)
+        self.assertEqual(accepted.get("skill"), "adk-unit-test-embedded", accepted)
+        self.assertEqual(accepted.get("mutation_permission"), "deny", accepted)
+
+    def test_implicit_context_keeps_existing_native_export_contract(self) -> None:
+        from agent_dev_kit.compiler import export_assets
+
+        manifest = Manifest.load(ROOT)
+        with tempfile.TemporaryDirectory(prefix="adk-unit-export-") as directory:
+            for target in ("claude-code", "opencode"):
+                with self.subTest(target=target):
+                    result = export_assets(manifest, target, Path(directory), ["release-hardening"])
+                    self.assertEqual(result["status"], "pass", result)
+                    paths = list(Path(result["output"]).rglob("adk-unit-test-embedded/SKILL.md"))
+                    self.assertEqual(len(paths), 1, paths)
+                    metadata = _frontmatter(paths[0])
+                    self.assertEqual(metadata["name"], "adk-unit-test-embedded")
+                    self.assertIn("MCU/RTOS", metadata["description"])
+                    self.assertIn("host", metadata["description"])
+                    # ADK-only eligibility metadata is not a native host gate.
+                    self.assertNotIn("implicit_context", metadata)
+
     def test_all_cases_match_once_loaded_manifest(self) -> None:
         manifest = Manifest.load(ROOT)
         for line_number, skill, scope, expected, prompt in _cases():

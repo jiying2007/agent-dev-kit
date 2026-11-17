@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-storage-layout-migration
 description: "用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。"
-version: 2.0.3
-last_updated: 2026-11-16
+version: 2.0.4
+last_updated: 2026-11-17
 triggers:
   - "UBIFS转SquashFS"
   - "SquashFS转UBIFS"
@@ -32,23 +32,23 @@ constraints:
 
 ## Goal
 - 管理 UBI/UBIFS/SquashFS/ubiblock、partition/volume 与 OTA layout 的迁移一致性。
-- 把 layout 设计、artifact 构建、dry-run 验证与真实设备 destructive mutation 分开授权。
+- layout 设计、artifact 构建/dry-run 与真实设备 destructive mutation 分开授权。
 
 ## Prerequisites
 - 已知道产品 profile、分区布局、升级方式和目标设备/板卡 identity。
 - 已拿到配置、构建产物或 boot log 中至少一种证据。
-- 已明确必须保留的数据分区、最后可恢复版本和 recovery/backup 能力。
+- 已明确保留分区、最后可恢复版本和 recovery/backup 能力。
 
 ## Workflow
-0. **问题分流**：仅解释 SquashFS 只读/df 100%、UBIFS 只读退化、挂载或 I/O 错误时，交给 `adk-systematic-debugging`；只有明确的布局/文件系统变更计划才进入迁移。分析迁移风险（即使明确不执行迁移）仍属于本 Skill。
+0. **问题分流**：仅解释 SquashFS 只读/df 100%、UBIFS 只读退化、挂载或 I/O 错误，交 `adk-systematic-debugging`；明确布局/FS 变更计划或迁移风险分析（含只读分析）才进入本 Skill。
 1. **现状矩阵**：列 boot/rootfs、factory/data/ota、misc/pstore 等 partition/volume 的 FS、mount、update method、preserve policy 和运行态证据。
 2. **变更分类**：区分普通内容更新、布局迁移、FS 切换、回滚迁移、产线重刷；不同类别不能共享同一风险结论。
-3. **配置链对齐**：核 defconfig/current config、partition table、ubinize、mount script、OTA layout、release metadata 和 artifact hash。
+3. **配置链对齐**：核 defconfig/current config、partition table、ubinize、mount script、OTA layout、release metadata、artifact hash；UBI/UBIFS 另对齐目标与镜像构建的擦除块 PEB、min-I/O/subpage、VID/data offset、LEB、volume 对齐/容量；未知或不符停在 host，不交设备。
 4. **现场数据保护**：优先只更新目标 volume；whole-UBI/whole-device 覆盖默认禁止，除非明确说明为什么无法增量迁移并有完整备份恢复。
 5. **host/build 验证**：重新生成 rootfs/customer/OTA/SD artifact，在不写真实设备的前提下校验 layout、manifest、size、hash 和 migration script dry-run。
-6. **device escalation gate**：真实 erase/flash/storage-write 前生成 operator handoff：device identity、目标 partition/volume、预期前后布局、artifact hash、显式授权、backup/recovery 和 post-write readback/boot verification；缺任一项固定 blocked。本 Skill 不输出可直接执行的设备写命令。
-7. **受控迁移证据消费**：只消费受控 operator 返回的单设备/测试板 receipt，再验证 cold boot、数据保留、read-only/write semantics、断电/失败恢复、rollback 和重复升级。
-8. **扩展准入**：只有单设备证据通过且 residual risk 可接受，才允许形成下一批 operator handoff；批量授权不能由单设备授权自动继承。
+6. **device escalation gate**：真实 erase/flash/storage-write 前生成 operator handoff：device identity、目标 partition/volume、前后布局、artifact hash、显式授权、backup/recovery、post-write readback/boot verification；缺项 blocked。本 Skill 不输出设备写命令。
+7. **受控迁移证据消费**：消费受控 operator 的单设备/测试板 receipt；验证 cold boot、数据保留、read-only/write semantics、断电/失败恢复、rollback、重复升级。
+8. **扩展准入**：单设备证据通过且 residual risk 可接受，才生成下一批 handoff；批量授权不得继承单设备授权。
 
 ## Commands
 ```bash

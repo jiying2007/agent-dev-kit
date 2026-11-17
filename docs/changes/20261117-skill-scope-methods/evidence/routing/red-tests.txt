@@ -1,0 +1,85 @@
+FFFFFFFFFF
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='帮我写一个 Python 单元测试，用 pytest，不涉及嵌入式')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-unit-test-embedded', 'trigger': '单元测试', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='为已有 Rust 函数补 cargo test 单元测试，不需要硬件')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-unit-test-embedded', 'trigger': '单元测试', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'routing', 'skill': 'adk-unit-test-embedded', 'intent': 'unit_test_embedded', 'intent_zh': '写单元测试/补单测/嵌入式单测', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='不是 MCU 工程；写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'routing', 'skill': 'adk-unit-test-embedded', 'intent': 'unit_test_embedded', 'intent_zh': '写单元测试/补单测/嵌入式单测', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='不涉及 RTOS；给普通函数编写测试用例')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'skill_trigger', 'skill': 'adk-unit-test-embedded', 'trigger': '写测试', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='not embedded; 写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'routing', 'skill': 'adk-unit-test-embedded', 'intent': 'unit_test_embedded', 'intent_zh': '写单元测试/补单测/嵌入式单测', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='文档写着“MCU”；给普通函数写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'routing', 'skill': 'adk-unit-test-embedded', 'intent': 'unit_test_embedded', 'intent_zh': '写单元测试/补单测/嵌入式单测', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (negative='之前开发过 MCU，现在给非嵌入式服务写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 85, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertNotEqual(result.get("skill"), unit, result)
+AssertionError: 'adk-unit-test-embedded' == 'adk-unit-test-embedded' : {'match': True, 'source': 'routing', 'skill': 'adk-unit-test-embedded', 'intent': 'unit_test_embedded', 'intent_zh': '写单元测试/补单测/嵌入式单测', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_embedded_unit_implicit_scope_and_host_controls (__main__.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) (positive='MCU 工程；补 UART 单测')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 97, in test_embedded_unit_implicit_scope_and_host_controls
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_unit_explicit_diagnostic_preserves_non_triggers (__main__.SkillTriggerMatrixTests.test_embedded_unit_explicit_diagnostic_preserves_non_triggers) (prompt='写单元测试，不涉及嵌入式')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 110, in test_embedded_unit_explicit_diagnostic_preserves_non_triggers
+    self.assertIs(result.get("match"), False, result)
+AssertionError: True is not False : {'match': True, 'skill': 'adk-unit-test-embedded', 'reason': 'matched_trigger', 'phrase': '单元测试', 'runtime_role': 'primary', 'selection_group': 'verification', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'mutation_permission': 'deny', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.170s
+
+FAILED (failures=10)

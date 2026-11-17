@@ -1,0 +1,36 @@
+{
+  "completed_at": "2026-11-17T02:30:47.441823+00:00",
+  "purpose": "preflight after independent formatted-domain regression fix",
+  "checks": [
+    {
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "validate",
+        "--strict"
+      ],
+      "returncode": 0,
+      "stdout": "Validation passed. strict=1 quick=0\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "tests/test_module_size_budget.sh"
+      ],
+      "returncode": 0,
+      "stdout": "{\"default_max_bytes\": 30000, \"import_fan_out_hotspot\": \"src/agent_dev_kit/cli.py\", \"largest_baseline_bytes\": 0, \"legacy_exception_count\": 0, \"max_import_fan_out\": 28, \"observed_max_import_fan_out\": 28, \"preferred_execution_namespace\": \"execution_policy\", \"schema\": \"adk-module-size-budget/v1\", \"status\": \"pass\", \"support_module_count\": 0, \"transitional_support_debt_count\": 0}\n[PASS] module size and bounded-context architecture policy pass\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

@@ -161,6 +161,39 @@ def _phrases(frontmatter: Mapping[str, Any], key: str) -> Iterable[str]:
             yield item
 
 
+def _implicit_context_matches(
+    frontmatter: Mapping[str, Any],
+    text: str,
+    markers: Sequence[str],
+) -> bool:
+    """Require an affirmative domain hint only when the Skill opts in.
+
+    This lexical eligibility check is not the runtime Fit Gate. Context may
+    precede the task in another sentence. Inline formatting preserves domain
+    names; fenced code and explicitly introduced quotations are not domain facts.
+    Explicit single-Skill diagnostics do not apply this implicit-only filter.
+    """
+    if "implicit_context" not in frontmatter:
+        return True
+    contexts = frontmatter["implicit_context"]
+    if (
+        not isinstance(contexts, list) or not contexts
+        or not all(isinstance(value, str) and any(part.strip() for part in value.split("/"))
+                   for value in contexts)
+    ):
+        raise ManifestError("skill implicit_context must be a non-empty phrase list")
+    context_text = re.sub(r"\x60{3}.*?\x60{3}|~{3}.*?~{3}", " ", text, flags=re.DOTALL)
+    inline = r"\x60[^\x60\n]*\x60|\"[^\"\n]*\"|“[^”\n]*”|‘[^’\n]*’|(?<!\w)'[^'\n]*'(?!\w)"
+    context_text = re.sub(
+        r"(^|[，,。.!！?？；;：:\n])\s*(?:文档写着|(?:文档)?示例|引述|example|quoted?)\s*[:：]?\s*(?:"
+        + inline + ")",
+        r"\1 ", context_text, flags=re.IGNORECASE,
+    )
+    context_text = re.sub(inline, lambda match: match.group(0)[1:-1], context_text)
+    context_markers = (*markers, "非", "不涉及", "not", "non-")
+    return any(_active_phrase_matches(context_text, phrase, context_markers) for phrase in contexts)
+
+
 def _managed_skill_entries(manifest: Manifest, section: str) -> Iterable[Tuple[str, Path]]:
     entries = manifest.data.get(section, [])
     if not isinstance(entries, list):
@@ -354,6 +387,8 @@ def _promotion_exclusion(
     path = _specific_skill_path(manifest, skill, "auto")
     if path is None:
         return "skill_not_found"
+    if not _implicit_context_matches(_frontmatter(path), text, markers):
+        return "missing_implicit_context"
     if _skill_identity_declined(text, skill, markers):
         return "negated_skill_identity"
     phrases = list(_phrases(_frontmatter(path), "triggers"))
@@ -515,6 +550,9 @@ def match_text(
                 continue
             matched_phrases = _phrase_matches(text, intent_zh)
             if matched_phrases:
+                path = _specific_skill_path(manifest, primary, "auto")
+                if path is not None and not _implicit_context_matches(_frontmatter(path), text, markers):
+                    continue
                 active_phrases = _active_phrase_matches(text, intent_zh, markers)
                 negated_rule = _matching_negated_intent(
                     text,
@@ -556,6 +594,8 @@ def match_text(
                     or _skill_identity_declined(text, name, markers)):
                 continue
             frontmatter = _frontmatter(path)
+            if not _implicit_context_matches(frontmatter, text, markers):
+                continue
             non_trigger = _matched_skill_non_trigger(manifest, name, text, markers)
             if non_trigger is not None:
                 negated_intents.append(name)

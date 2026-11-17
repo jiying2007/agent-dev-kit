@@ -1,0 +1,215 @@
+{
+  "completed_at": "2026-11-17T02:23:52.517739+00:00",
+  "candidate_version": "11.3.13",
+  "checks": [
+    {
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "validate",
+        "--strict"
+      ],
+      "returncode": 0,
+      "output": "preflight-1.txt"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/version-manager.sh",
+        "verify"
+      ],
+      "returncode": 0,
+      "output": "preflight-2.txt"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "returncode": 0,
+      "output": "preflight-3.txt"
+    },
+    {
+      "command": [
+        "bash",
+        "tests/test_module_size_budget.sh"
+      ],
+      "returncode": 0,
+      "output": "preflight-4.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "output": "preflight-5.txt"
+    }
+  ],
+  "ratchets": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 97817,
+        "potential_full_source_bytes": 172867
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 82373,
+        "potential_full_source_bytes": 156243
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 112851,
+        "potential_full_source_bytes": 191638
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 209914,
+        "potential_full_source_bytes": 316262
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123385,
+        "potential_full_source_bytes": 210831
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 212939,
+        "potential_full_source_bytes": 323144
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30434,
+        "potential_full_source_bytes": 46534
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 65344,
+        "potential_full_source_bytes": 117004
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "unchanged_constraints": {
+    "manifests/profile_context_ratchets.json": {
+      "matches_baseline": true,
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff"
+    },
+    "src/agent_dev_kit/profile_context_footprint.py": {
+      "matches_baseline": true,
+      "sha256": "e649c724054e6bf6ed8467dddf9766a29dffff0d54591add25980d0dfa9f009d"
+    }
+  },
+  "measurement": "UTF-8 source bytes; not runtime token or usage measurement"
+}

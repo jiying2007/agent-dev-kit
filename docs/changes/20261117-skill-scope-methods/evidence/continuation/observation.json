@@ -1,0 +1,40 @@
+{
+  "observed_at": "2026-11-17T02:12:31.480722+00:00",
+  "consumer": "/root/goal_continuation_consumer",
+  "context": "fresh fork without prior conversation; supplied actual current task-state input and two existing Skills",
+  "source_commit": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+  "skills": [
+    {
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a"
+    },
+    {
+      "path": "skills/adk-planning-execution-loop/SKILL.md",
+      "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca"
+    }
+  ],
+  "input_sha256": "05737e3266efcb5411b346d6749a3a929a28194d82dff441edf1e706555beb48",
+  "output_sha256": "eb4506e883ba54d92fe7c7c279e4ef2f8f8e695e07214946c10c0b5f52396e35",
+  "output_bytes": 5861,
+  "checks": {
+    "goal_identity_preserved": true,
+    "approval_preserved": true,
+    "acceptance_preserved": true,
+    "tasks_and_owners_preserved": true,
+    "no_false_completion": true,
+    "bounded_batch": true,
+    "same_owners": true,
+    "no_model_polling_requested": true,
+    "usage_unknown_preserved": true,
+    "resume_bytes_under_8k": true,
+    "at_most_three_next_actions": true
+  },
+  "provider_usage": null,
+  "evidence_level": "single-task-local-conversation-observation",
+  "limits": [
+    "No paired baseline/candidate or repetition; the two Skills are unchanged.",
+    "No provider-verified usage/cost or native discovery/load/trigger trace.",
+    "State output is a supplied-input projection, not canonical project writes or independent verification of the supplied facts.",
+    "Local byte and assertion checks do not establish generalized task success or Token savings."
+  ]
+}

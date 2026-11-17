@@ -1,0 +1,67 @@
+{
+  "phase": "after-test-hardening",
+  "test_path": "tests/test_skill_scope_methods.py",
+  "test_sha256": "bb6aefafed45d77f482b39046ab933c414c2365f1f3568adc1f66d0444964f62",
+  "source_sha256": "551c03d625fb6d884f03e112d49d9d39eee8d50a628009a93b5cf67ab051b5b8",
+  "source_unchanged": true,
+  "cases": [
+    {
+      "case": "ordinary-suggestion-forced-promotion",
+      "mutation_find": "普通建议不需晋级",
+      "mutation_replace": "普通建议也必须先晋级",
+      "fixture_sha256": "a62002e34979a61ab7719ed2e3201e202ba07e19b626d51342dcfed837f8683e",
+      "expected": "RED",
+      "was_successful": false,
+      "tests_run": 1,
+      "output": "test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... FAIL\n\n======================================================================\nFAIL: test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py\", line 93, in test_growth_metadata_limits_promotion_to_persistent_assets\n    self.assertIn(\"普通建议不需晋级\", promotion)\nAssertionError: '普通建议不需晋级' not found in '5. 仅正式晋级 prompt/Skill/Workflow/AGENTS/记忆时输出 `trace-feedback-eval-handoff` 的 `eval candidate`、验证与 `human approval` 状态；普通建议也必须先晋级，修改仍按原任务授权。'\n\n----------------------------------------------------------------------\nRan 1 test in 0.002s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "case": "body-omits-agents",
+      "mutation_find": "仅正式晋级 prompt/Skill/Workflow/AGENTS/记忆",
+      "mutation_replace": "仅正式晋级 prompt/Skill/Workflow/记忆",
+      "fixture_sha256": "bce2aeb06dcc309e5684872e15b4784f556096466e9235a59f84f893ac0888aa",
+      "expected": "RED",
+      "was_successful": false,
+      "tests_run": 1,
+      "output": "test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... FAIL\n\n======================================================================\nFAIL: test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py\", line 92, in test_growth_metadata_limits_promotion_to_persistent_assets\n    self.assertIn(asset, promotion.split(\"时输出\", 1)[0])\nAssertionError: 'AGENTS' not found in '5. 仅正式晋级 prompt/Skill/Workflow/记忆'\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "case": "body-omits-memory",
+      "mutation_find": "仅正式晋级 prompt/Skill/Workflow/AGENTS/记忆",
+      "mutation_replace": "仅正式晋级 prompt/Skill/Workflow/AGENTS",
+      "fixture_sha256": "9c2d40cf2efd5a4a55d1164c20d3c546e34a1dc843dbb84447bf0dc09f11ad51",
+      "expected": "RED",
+      "was_successful": false,
+      "tests_run": 1,
+      "output": "test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... FAIL\n\n======================================================================\nFAIL: test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py\", line 92, in test_growth_metadata_limits_promotion_to_persistent_assets\n    self.assertIn(asset, promotion.split(\"时输出\", 1)[0])\nAssertionError: '记忆' not found in '5. 仅正式晋级 prompt/Skill/Workflow/AGENTS'\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "case": "metadata-omits-agents",
+      "mutation_find": "仅长期 prompt/Skill/Workflow/AGENTS/记忆",
+      "mutation_replace": "仅长期 prompt/Skill/Workflow/记忆",
+      "fixture_sha256": "9de7aaea2ff14d4ed69d1ceea170f2b26cc6ba124a6d8048ccaf8b91b73f36e5",
+      "expected": "RED",
+      "was_successful": false,
+      "tests_run": 1,
+      "output": "test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... FAIL\n\n======================================================================\nFAIL: test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py\", line 91, in test_growth_metadata_limits_promotion_to_persistent_assets\n    self.assertIn(asset, constraint.split(\"晋级\", 1)[0])\nAssertionError: 'AGENTS' not found in '仅长期 prompt/Skill/Workflow/记忆'\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "case": "metadata-omits-memory",
+      "mutation_find": "仅长期 prompt/Skill/Workflow/AGENTS/记忆",
+      "mutation_replace": "仅长期 prompt/Skill/Workflow/AGENTS",
+      "fixture_sha256": "06718e95b73ff655bda437024ce5a96b47fea4d2fc6aea174c41bbd8961a7ece",
+      "expected": "RED",
+      "was_successful": false,
+      "tests_run": 1,
+      "output": "test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... FAIL\n\n======================================================================\nFAIL: test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py\", line 91, in test_growth_metadata_limits_promotion_to_persistent_assets\n    self.assertIn(asset, constraint.split(\"晋级\", 1)[0])\nAssertionError: '记忆' not found in '仅长期 prompt/Skill/Workflow/AGENTS'\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "case": "current-real-source",
+      "expected": "GREEN",
+      "was_successful": true,
+      "tests_run": 4,
+      "output": "test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... ok\ntest_perf_generic_event_has_no_universal_llc_label (scope_case.PublishedSkillScopeMethodsTests.test_perf_generic_event_has_no_universal_llc_label) ... ok\ntest_published_trigger_scan_covers_the_manifest_including_nested_skills (scope_case.PublishedSkillScopeMethodsTests.test_published_trigger_scan_covers_the_manifest_including_nested_skills) ... ok\ntest_real_team_exports_scope_nonbundled_root_helpers (scope_case.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.201s\n\nOK\n"
+    }
+  ],
+  "limits": "Five mutations were applied only in owned temporary fixtures. Source contract checks and actual scan/export executions do not certify model behavior."
+}

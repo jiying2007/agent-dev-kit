@@ -1,0 +1,38 @@
+{
+  "baseline_commit": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+  "scope": "T1 canonical embedded unit-test eligibility",
+  "stage": "working-tree; coordinator owns final version and integration gates",
+  "implementation_owner": "route_implementation",
+  "manifest_edited": false,
+  "skill_entry": {
+    "version": "1.1.8",
+    "last_updated": "2026-11-17",
+    "before_bytes": 3068,
+    "after_bytes": 3066,
+    "delta_bytes": -2
+  },
+  "before_probe": {
+    "total": 12,
+    "pass": 5
+  },
+  "after_probe": {
+    "total": 12,
+    "pass": 12
+  },
+  "native_trigger_effect": "not-measured",
+  "model_token_effect": "not-measured",
+  "ruff": {
+    "status": "not-run",
+    "reason": "python3 -m ruff: No module named ruff"
+  },
+  "source_sha256": {
+    "src/agent_dev_kit/_matcher_kernel.py": "a76d693519dfeb04ae94e97820026a3922eb6d08728457240e16491071d6f301",
+    "src/agent_dev_kit/matcher.py": "27d9519150922ceaf7a65f196bbdadb3c8915834becd41cf13cd1c8914ed7209",
+    "src/agent_dev_kit/validation_contract.py": "055051177bda58f8a2558afe654fbf7117b1b4334730f4c296c10cf9c21e03ab",
+    "skills/adk-unit-test-embedded/SKILL.md": "a17d781e18dc5f72d6485f1ca8f5a9e6f6612ddeb761340110083b35181ffbe9",
+    "tests/test_skill_trigger_matrix.py": "0d858b27edfabbd69c44dc563ce298a9afcfca8f94d9564d37bd460a68a90110",
+    "tests/test_match_effectiveness.sh": "db3a0e902f9addeab80d9a48d953b9f8b49f0919807f423b96b50bf20e3b0af2",
+    "tests/test_boundary_conditions_match.sh": "22d364ecdb59bbae8108be0ef829cde302ec25400381e062bcbc1661f3c34ea8",
+    "docs/commands.md": "2af451e6167526f3dae7e6b05d91e8cb0f6e348406e3f175a9d7bfc2a76976f8"
+  }
+}

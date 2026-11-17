@@ -1,0 +1,61 @@
+FFFFFFF
+======================================================================
+FAIL: test_embedded_unit_formatted_scope_preserves_task_context (test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) (positive='给 `MCU` UART 驱动补单元测试，覆盖队列溢出')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 120, in test_embedded_unit_formatted_scope_preserves_task_context
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_unit_formatted_scope_preserves_task_context (test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) (positive='给 `Zephyr` 项目中的 UART 模块写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 120, in test_embedded_unit_formatted_scope_preserves_task_context
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_unit_formatted_scope_preserves_task_context (test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) (positive='给 `embedded` 协议解析器的 Python host 模型写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 120, in test_embedded_unit_formatted_scope_preserves_task_context
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_unit_formatted_scope_preserves_task_context (test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) (positive='给‘RTOS’任务队列写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 120, in test_embedded_unit_formatted_scope_preserves_task_context
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_unit_formatted_scope_preserves_task_context (test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) (positive='给“RTOS”任务队列写单元测试，覆盖队列溢出')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 120, in test_embedded_unit_formatted_scope_preserves_task_context
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_unit_formatted_scope_preserves_task_context (test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) (positive='给 "MCU" UART 驱动写单元测试')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 120, in test_embedded_unit_formatted_scope_preserves_task_context
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+======================================================================
+FAIL: test_embedded_unit_formatted_scope_preserves_task_context (test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) (positive='`MCU` 工程；补 UART 单测')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_trigger_matrix.py", line 120, in test_embedded_unit_formatted_scope_preserves_task_context
+    self.assertIs(result.get("match"), True, result)
+AssertionError: False is not True : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': []}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.251s
+
+FAILED (failures=7)

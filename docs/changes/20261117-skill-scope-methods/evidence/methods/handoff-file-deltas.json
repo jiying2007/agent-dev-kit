@@ -1,0 +1,74 @@
+[
+  {
+    "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+    "bytes": 2983,
+    "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd",
+    "after_bytes": 3066,
+    "delta": 83,
+    "after_sha256": "429e8f4bdab43522b6deb89ad98cf20f30c7a8b8f80be2810e6511ca62149000"
+  },
+  {
+    "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+    "bytes": 5590,
+    "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76",
+    "after_bytes": 5597,
+    "delta": 7,
+    "after_sha256": "60689906562d9146431960b421c1d2731090f5377c1cd5923adb13ab589b7c27"
+  },
+  {
+    "path": "skills/adk-production-field-readiness/SKILL.md",
+    "bytes": 5395,
+    "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63",
+    "after_bytes": 5013,
+    "delta": -382,
+    "after_sha256": "b661f56a96309870e2895423ee3646bd9e50a5f35da9286cd070a45ac75a60e6"
+  },
+  {
+    "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+    "bytes": 1793,
+    "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355",
+    "after_bytes": 1911,
+    "delta": 118,
+    "after_sha256": "33e1ecdae9f7baed2e7a050bc718e716200d76934489419f2d7be5c4b3776a62"
+  },
+  {
+    "path": "skills/adk-artifact-gating/SKILL.md",
+    "bytes": 2061,
+    "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c",
+    "after_bytes": 2061,
+    "delta": 0,
+    "after_sha256": "17f658a180bb848f98a0ffa91831e82fc980d7fcdae78782c103fb4862f5fa4e"
+  },
+  {
+    "path": "skills/adk-artifact-gating/references/details.md",
+    "bytes": 2316,
+    "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+    "after_bytes": 2343,
+    "delta": 27,
+    "after_sha256": "c4f1f8675a02c8e3886417b48caa6c1ba2dad15fd5246dfb02e1ae6980b42f3f"
+  },
+  {
+    "path": "skills/adk-engineering-growth-review/SKILL.md",
+    "bytes": 3853,
+    "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd",
+    "after_bytes": 3805,
+    "delta": -48,
+    "after_sha256": "551c03d625fb6d884f03e112d49d9d39eee8d50a628009a93b5cf67ab051b5b8"
+  },
+  {
+    "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+    "bytes": 6646,
+    "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f",
+    "after_bytes": 6640,
+    "delta": -6,
+    "after_sha256": "062d145077d6d56ad0d038cf8d3de62f3368bc3f1c561660aa209830dcaa38f6"
+  },
+  {
+    "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+    "bytes": 2892,
+    "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39",
+    "after_bytes": 3024,
+    "delta": 132,
+    "after_sha256": "21e9223a92ec6f50b336fc9bb8cd041f7db533cbfc216350c64a0b748ce2328a"
+  }
+]

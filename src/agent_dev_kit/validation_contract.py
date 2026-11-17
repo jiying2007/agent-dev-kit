@@ -140,6 +140,14 @@ def _validate_skills(manifest: Manifest, strict: bool, failures: list[str]) -> N
             for key in ("triggers", "non_triggers", "constraints"):
                 if not _strings(frontmatter.get(key)):
                     failures.append(f"{label} '{name}' frontmatter list '{key}' is empty")
+            if "implicit_context" in frontmatter:
+                contexts = frontmatter["implicit_context"]
+                if (
+                    not isinstance(contexts, list) or not contexts
+                    or not all(isinstance(value, str) and any(part.strip() for part in value.split("/"))
+                               for value in contexts)
+                ):
+                    failures.append(f"{label} '{name}' implicit_context must be a non-empty phrase list")
             for key in ("inputs", "outputs"):
                 if not _nonempty_list(frontmatter.get(key)):
                     failures.append(f"{label} '{name}' frontmatter list '{key}' is empty")

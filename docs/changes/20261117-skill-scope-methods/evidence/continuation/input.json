@@ -1,0 +1,37 @@
+{
+  "goal_id": "adk-skill-scope-methods-20261117",
+  "source_version": "11.3.12",
+  "status": "in_progress",
+  "approved_scope": "落实既有审查中的5个问题和3项条件说明，经验证发布并接入Root",
+  "approved": true,
+  "acceptance": [
+    {"id":"A1","text":"领域外单测不误选，MCU/host正控保留"},
+    {"id":"A2","text":"7项方法和适用条件修正"},
+    {"id":"A3","text":"8个原Profile字节门槛不放宽并通过"},
+    {"id":"A4","text":"独立复审和当前源码验证通过"},
+    {"id":"A5","text":"不可变ADK发布完成并完成Root source-only接入"}
+  ],
+  "tasks": [
+    {"id":"T1","status":"in_progress","owner":"route_implementation","acceptance":["A1"]},
+    {"id":"T2","status":"in_progress","owner":"method_implementation","acceptance":["A2"]},
+    {"id":"T3","status":"pending","depends_on":["T1","T2"],"acceptance":["A3","A4"]},
+    {"id":"T4","status":"pending","depends_on":["T3"],"acceptance":["A5"]}
+  ],
+  "verified": [
+    {"id":"V1","text":"两仓主线与审查基线一致；独立工作树已建立"},
+    {"id":"V2","text":"Root接入流程已核实为两路径source-only事务"}
+  ],
+  "new_event": {
+    "id":"root-prepare-completed",
+    "kind":"read_only_preparation",
+    "result":"准备完成，无源码修改；等待ADK不可变Release和精确SHA",
+    "does_not_complete":["T1","T2","T3","T4"]
+  },
+  "usage": null,
+  "constraints": [
+    "不调用外部付费模型或Codex CLI/Cloud/Work开发任务",
+    "不增加周期巡检",
+    "当前没有实测usage，不估造Token或预算",
+    "保持已批准验收与任务归属"
+  ]
+}

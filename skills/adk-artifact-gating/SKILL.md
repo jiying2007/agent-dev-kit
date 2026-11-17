@@ -1,8 +1,8 @@
 ---
 name: adk-artifact-gating
 description: "用于跨仓交付物需要标签、状态与验收交接协议时定义 Artifact 门禁；不用于单仓常规测试、直接上传制品或发布批准。"
-version: 1.0.2
-last_updated: 2026-11-15
+version: 1.0.3
+last_updated: 2026-11-17
 triggers:
   - "artifact 门禁"
   - "跨角色交接"

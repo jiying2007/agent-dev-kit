@@ -1,0 +1,50 @@
+{
+  "source": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+  "files": [
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "bytes": 2983,
+      "sha256": "0db37bd62e0f54e13098390ad2e95b215961de0348701f7f172bcb9b1dca64cd"
+    },
+    {
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "bytes": 5590,
+      "sha256": "7afc136ec22f48ef346c7535030e2590f5ccc919d4631ddf34853380ce0f4c76"
+    },
+    {
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "bytes": 5395,
+      "sha256": "bc708d31b288c346035a97459e6a08c001112d7f4979adc65311a39fe8588c63"
+    },
+    {
+      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "bytes": 1793,
+      "sha256": "ead5542e88462d8d5e599755991be6fecfa92b061fb4dc4471dfda8977c2a355"
+    },
+    {
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "bytes": 2061,
+      "sha256": "f19df4551579597b09c5a400c6ffdef6b48b4a8d0c27ce911c1429a5eb04947c"
+    },
+    {
+      "path": "skills/adk-artifact-gating/references/details.md",
+      "bytes": 2316,
+      "sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7"
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "bytes": 3853,
+      "sha256": "0e3e8a5d3b55cbad4b32bdc113f3cace04ea36efeb20315033ceb8a6792991fd"
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "bytes": 6646,
+      "sha256": "b2685d8bb2f85a5c562ab28176204a294be0d1b9c87aef2b9749339f351f5e5f"
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "bytes": 2892,
+      "sha256": "39a05fb731de1c3251c887587ffdb9cedcfa10d5c547910f8fb0969748d64b39"
+    }
+  ]
+}

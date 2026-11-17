@@ -263,6 +263,10 @@ bash scripts/devkit.sh catalog find --type workflow --keyword 完成前验证
 
 根据输入文本判断是否命中 skill 触发条件，优先过滤 `non_triggers`。
 
+Skill 源可选的 `implicit_context` 是非空短语列表，沿用 `/` 分隔候选词；ADK canonical matcher 的隐式路由、trigger fallback 和同组主技能晋级还须命中至少一个未被局部否定的领域词。普通成对行内反引号/引号只去包符，保留技术名；代码围栏及分句起始处由“文档写着/示例/引述”等有限标记引入的引文不提供领域证据。领域与任务可分句；这是词法筛选，不能判定所有无关背景，仍须执行 Skill 的 Fit Gate。缺省保持原匹配语义，空值或类型错误由验证器和隐式消费路径拒绝。显式 `--skill` 诊断保留 trigger / `non_triggers` 规则，不受该隐式条件限制；该字段不授予执行或写入权限。
+
+此扩展只由 ADK canonical matcher 消费；原生导出仍使用宿主既有 frontmatter 字段，由 description / 正文表达适用范围，不宣称宿主执行 `implicit_context`。原生宿主触发效果未实测时保留 `not-measured`。
+
 ```bash
 bash scripts/devkit.sh match --skill adk-requirements-triage --text "收到模糊需求或跨团队需求时"
 bash scripts/devkit.sh match --skill adk-incident-rca-report --scope optional-skill --text "出现线上故障且需要复盘闭环"

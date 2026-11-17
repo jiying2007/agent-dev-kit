@@ -1,0 +1,5 @@
+{
+  "check": "_validate_skills(strict=True)",
+  "failures": [],
+  "status": "pass"
+}

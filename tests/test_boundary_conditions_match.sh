@@ -118,7 +118,7 @@ test_emoji_input() {
 # ============================================================
 test_unicode_mixed() {
     local output
-    output=$(match_cli --text 'Write 单元测试 for module' 2>&1) || true
+    output=$(match_cli --text 'Write 单元测试 for MCU module' 2>&1) || true
     [[ "$output" == *"match=true"* ]]
 }
 
@@ -150,7 +150,7 @@ test_routing_03_interface_design() {
 # 4. adk-unit-test-embedded
 test_routing_04_unit_test() {
     local output
-    output=$(match_cli --text "写单元测试" 2>&1) || true
+    output=$(match_cli --text "MCU 工程写单元测试" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"skill=adk-unit-test-embedded"* ]]
 }
 
