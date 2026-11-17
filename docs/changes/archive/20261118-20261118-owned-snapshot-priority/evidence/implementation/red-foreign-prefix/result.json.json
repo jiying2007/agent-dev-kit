@@ -1,0 +1,7 @@
+{
+  "origin": "red-foreign-prefix/result.json",
+  "encoding": "utf-8",
+  "bytes": 892,
+  "sha256": "303241da1ab47520694948eb28f3ac09dbdbb11088c7037634cd487edeab43f4",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"-v\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_foreign_global_prefix_does_not_starve_owned_thread_descendants\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_real_ninja_cleanup_survives_an_unrelated_global_proc_prefix\"\n  ],\n  \"started_at\": \"2026-11-17T16:54:03.962658+00:00\",\n  \"finished_at\": \"2026-11-17T16:54:05.127794+00:00\",\n  \"elapsed_seconds\": 1.1651394670043373,\n  \"exit_code\": 1,\n  \"source_before_sha256\": \"326309d4a96f3289f53ac71545f7a50cd1d0b0f2d74a834aa3f9ff54f33f67b1\",\n  \"source_after_sha256\": \"326309d4a96f3289f53ac71545f7a50cd1d0b0f2d74a834aa3f9ff54f33f67b1\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"cf7365931f4aa7034432387e168c3766fb29e5b331f295e98d67f40744db4486\"\n}\n"
+}

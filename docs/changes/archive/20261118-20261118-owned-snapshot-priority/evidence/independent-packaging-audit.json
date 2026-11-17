@@ -1,0 +1,98 @@
+{
+  "reviewer": "ai/independent-review",
+  "started_at": "2026-11-17T17:22:51.587334+00:00",
+  "completed_at": "2026-11-17T17:22:51.939321+00:00",
+  "exit_code": 0,
+  "status": "pass",
+  "script_sha256": "cc520d2970314ddf846e43bb603038932d3c4a60053f4ad549f9e015559fe24c",
+  "head_commit": "64d120ebcbc5d77fd90af99bac2bb9f4f3a13682",
+  "tree": "35a666c2b4349b1890f5788241ac32bcf8080e38",
+  "original_patch_sha256": "2c13a35d33d1c56872efa32b0f337e7fbbfbb9f6804eb146f8c646b990c7d605",
+  "frozen_input_state_sha256": "6066a4c2ebfbbf0fde109048638bc5a81a84fcf4e24b0f7d212305d4252c9f4c",
+  "product_files_bound_to_git_and_current_tree": 10,
+  "frozen_change_inputs_verified": 166,
+  "tracked_overlay": [],
+  "wrapper_indexes": [
+    {
+      "path": "evidence/baseline/index.json",
+      "sha256": "6053da28e43d8db8a3666a63af12eb21fb9efb86106bcbd5cd595b5c7c1268ef",
+      "wrappers": 14
+    },
+    {
+      "path": "evidence/boundary-revision/index.json",
+      "sha256": "6dc4946221253422da80831c7717e3fdc94d26261e5ff4b91f5871ab1991fee5",
+      "wrappers": 21
+    },
+    {
+      "path": "evidence/diagnosis/index.json",
+      "sha256": "c46d2701d8d9de10c12259c1a880501ded0dc5becfacc62104cbcc87b36fa7db",
+      "wrappers": 4
+    },
+    {
+      "path": "evidence/full/index.json",
+      "sha256": "13206d8f6e98b2ce5a5a9078832ecfca5bd36d0a6da0b0d5ce329bdbc45c7590",
+      "wrappers": 13
+    },
+    {
+      "path": "evidence/implementation/index.json",
+      "sha256": "07de1d94f1ea0ed8d47850477dfae97c42bc44a679f690206e3f0349952f9c04",
+      "wrappers": 40
+    },
+    {
+      "path": "evidence/independent/index.json",
+      "sha256": "30349046006045fee815e7decd510b511451cb9f7865dd0e7dcdbf23019f4ef8",
+      "wrappers": 22
+    },
+    {
+      "path": "evidence/rejected-boundary-full/index.json",
+      "sha256": "e5b19ae7f1b95f70afeb394695b557a9c4069ce219d51d4de5e8e0bdbf572b9b",
+      "wrappers": 4
+    },
+    {
+      "path": "evidence/rejected-full/index.json",
+      "sha256": "ff44ab70411012a21a08eff495944f14b0da10c2f95fc1bf9339dcaa9b8b8ab5",
+      "wrappers": 4
+    },
+    {
+      "path": "evidence/report-cap-revision/index.json",
+      "sha256": "8165afd006fb320490e64fb2f5e5f0d77abc224bd5d1861640e5ccab09a8dd70",
+      "wrappers": 21
+    },
+    {
+      "path": "evidence/verify-format-failure/index.json",
+      "sha256": "d5ce41e032e1744f9c56380c8679ceb9c47e7729e92aab9e4bc6da465e15115a",
+      "wrappers": 2
+    }
+  ],
+  "wrapper_count": 145,
+  "decoded_raw_bytes": 1636250,
+  "historical_origin_differences": [
+    {
+      "wrapper": "evidence/verify-format-failure/verify-report.md.json",
+      "original_location": "/workspace/scratch/d417066aafa8/agent-dev-kit/docs/changes/20261118-owned-snapshot-priority/verify-report.md",
+      "retained_raw_sha256": "70b52381ce206a299013f252368b03dca45a4939411efa571a1532efc4c3bc85",
+      "current_location_sha256": "6cac237de2ead7723f6bb13631ff166dae14810ed5339df4f9748b8dc08516ef",
+      "meaning": "Historical failed-verify snapshot; origin is not a current-content identity claim"
+    },
+    {
+      "wrapper": "evidence/verify-format-failure/negative-results.md.json",
+      "original_location": "/workspace/scratch/d417066aafa8/agent-dev-kit/docs/changes/20261118-owned-snapshot-priority/negative-results.md",
+      "retained_raw_sha256": "a5051d28513e5cac2367990b55e17f58624ad5874967537e4966e6541f33fe51",
+      "current_location_sha256": "2f8e00831e3b1f2970d8ba8786222ab3e0cc278f1e8654f205ee31f9c72eda7b",
+      "meaning": "Historical failed-verify snapshot; origin is not a current-content identity claim"
+    }
+  ],
+  "full": {
+    "stages_exit_zero": 8,
+    "tests_passed": 102,
+    "tests_failed": 0,
+    "timing_elapsed_ms": 410588,
+    "process_elapsed_seconds": 410.70866752700385,
+    "started_at": "2026-11-17T17:13:37.985541Z",
+    "completed_at": "2026-11-17T17:20:28.694200Z",
+    "source_before_after_equal": true,
+    "current_operational_files_equal": 1082
+  },
+  "independent_originals_verified": 21,
+  "boundary": "Artifact integrity and actual recorded execution reviewed; this audit does not rerun product tests or certify remote/release/runtime outcomes"
+}

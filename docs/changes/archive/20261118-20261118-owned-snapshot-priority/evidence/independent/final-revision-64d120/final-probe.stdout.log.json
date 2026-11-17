@@ -1,0 +1,7 @@
+{
+  "origin": "final-revision-64d120/final-probe.stdout.log",
+  "encoding": "utf-8",
+  "bytes": 436,
+  "sha256": "2e7bd4461f3c30e4945206afba132653963823acc0b543317455f615f956535b",
+  "content": "{\n  \"candidate\": \"64d120ebcbc5d77fd90af99bac2bb9f4f3a13682\",\n  \"source\": \"2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295\",\n  \"verdict\": \"pass\",\n  \"recovery\": {\n    \"OSP-1\": \"pass\",\n    \"OSP-2-records\": \"pass\",\n    \"original_defect_oracle_exits\": [\n      1,\n      1\n    ]\n  },\n  \"batch_log\": \"session-unverified\",\n  \"real\": \"pass\",\n  \"fixture_rescue_signal_pids\": [],\n  \"ended_at\": \"2026-11-17T17:13:16.505572+00:00\"\n}\n"
+}

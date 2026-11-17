@@ -1,0 +1,7 @@
+{
+  "origin": "probe-real-children/stdout.log",
+  "encoding": "utf-8",
+  "bytes": 710,
+  "sha256": "fbccde1c37d7acca1489d88ad206c0d4317b46aca0e20ff36345ea00ae131f86",
+  "content": "{\"observed_at\": \"2026-11-17T16:55:32.324728+00:00\", \"processes\": [{\"pid\": 9, \"ppid\": 8, \"pgid\": 9, \"sid\": 9, \"state\": \"S\", \"threads\": [{\"tid\": \"9\", \"children_error\": \"FileNotFoundError\", \"errno\": 2}]}, {\"pid\": 10, \"ppid\": 9, \"pgid\": 9, \"sid\": 9, \"state\": \"S\", \"threads\": [{\"tid\": \"10\", \"children_error\": \"FileNotFoundError\", \"errno\": 2}]}, {\"pid\": 11, \"ppid\": 10, \"pgid\": 11, \"sid\": 9, \"state\": \"S\", \"threads\": [{\"tid\": \"11\", \"children_error\": \"FileNotFoundError\", \"errno\": 2}]}, {\"pid\": 12, \"ppid\": 11, \"pgid\": 11, \"sid\": 9, \"state\": \"S\", \"threads\": [{\"tid\": \"12\", \"children_error\": \"FileNotFoundError\", \"errno\": 2}]}], \"owner_pid\": 9, \"leaf_created\": true, \"finished_at\": \"2026-11-17T16:55:32.367289+00:00\"}\n"
+}

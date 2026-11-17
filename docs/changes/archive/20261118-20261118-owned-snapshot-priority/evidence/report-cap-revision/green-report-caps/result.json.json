@@ -1,0 +1,7 @@
+{
+  "origin": "green-report-caps/result.json",
+  "encoding": "utf-8",
+  "bytes": 894,
+  "sha256": "64d450519c76f7abb70b7936345f33675cbf7ed0ae0ddc47dffb1020817475e5",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"-v\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_cleanup_keeps_record_cap_unverified_while_signalling_all_fresh_members\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_cleanup_keeps_actual_batch_log_truncation_unverified\"\n  ],\n  \"started_at\": \"2026-11-17T17:09:19.802127+00:00\",\n  \"finished_at\": \"2026-11-17T17:09:20.068373+00:00\",\n  \"elapsed_seconds\": 0.26623899699916365,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295\",\n  \"source_after_sha256\": \"2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"ccb6985fcc47984e10622b258d0f031681ce0e86a0f99d13e7575685a2be69e0\"\n}\n"
+}

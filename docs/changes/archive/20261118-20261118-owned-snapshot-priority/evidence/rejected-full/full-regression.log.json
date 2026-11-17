@@ -1,0 +1,7 @@
+{
+  "origin": "full-regression.log",
+  "encoding": "utf-8",
+  "bytes": 764,
+  "sha256": "4f3b9567423653b753d596443750c87d8222bf9894a0761451e23129a09a4d9c",
+  "content": "[PASS] test_validate\n[PASS] test_manifest_contract\n[PASS] test_catalog\n[PASS] test_skill_content\n[PASS] test_skill_trigger_matrix\n[PASS] test_skill_sop_quality\n[PASS] test_token_context_governance\n[PASS] test_strict_json\n[PASS] test_contract_hardening\n[PASS] test_boundary_rehearsal\n[PASS] test_contract_registry\n[PASS] test_schema_resource_sync\n[PASS] test_manifest_consumer_boundary\n[PASS] test_manifest_composition_contract\n[PASS] test_manifest_composition_cli\n[PASS] test_test_registry\n[PASS] test_python_launcher\n[PASS] test_asset_content_quality\n[PASS] test_format\n[PASS] test_no_external_repo_refs\n[PASS] test_file_modes\n[PASS] test_install\n[PASS] test_profile_coherence\n[PASS] test_profile_context_footprint\n[PASS] test_optional_skills\n[PASS] test_convert\n"
+}

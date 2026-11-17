@@ -1,0 +1,7 @@
+{
+  "origin": "diff-check/result.json",
+  "encoding": "utf-8",
+  "bytes": 669,
+  "sha256": "0ca7bb3552f09ebdab94619718c839fbee325d7aa037322adec54451e3cbdaa0",
+  "content": "{\n  \"command\": [\n    \"git\",\n    \"diff\",\n    \"--check\",\n    \"--\",\n    \"tests/test_skill_command_examples.py\"\n  ],\n  \"started_at\": \"2026-11-17T17:10:51.824501+00:00\",\n  \"finished_at\": \"2026-11-17T17:10:51.833597+00:00\",\n  \"elapsed_seconds\": 0.009091929998248816,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295\",\n  \"source_after_sha256\": \"2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n}\n"
+}

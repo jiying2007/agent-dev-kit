@@ -1,0 +1,7 @@
+{
+  "origin": "interruption.json",
+  "encoding": "utf-8",
+  "bytes": 298,
+  "sha256": "1ac0277662e3c13a76005281808bef96ecd777df507f8fc940478d25d82d43c5",
+  "content": "{\n  \"observed_at\": \"2026-11-17 17:05:06 UTC\",\n  \"session_id\": 66216,\n  \"exit_code\": 130,\n  \"candidate\": \"955d982448d88fa297b91ee8544d04cc1af1a9ed\",\n  \"reason\": \"Independent deterministic counterexample: consumed numeric entry skipped at batch boundary; full intentionally interrupted, not PASS.\"\n}\n"
+}

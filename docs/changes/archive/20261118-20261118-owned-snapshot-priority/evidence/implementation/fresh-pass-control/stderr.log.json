@@ -1,0 +1,7 @@
+{
+  "origin": "fresh-pass-control/stderr.log",
+  "encoding": "utf-8",
+  "bytes": 298,
+  "sha256": "518ffe9fb880d330906fc40ca2d0790bab307c64b733410f8593c0da15099ba4",
+  "content": "test_cleanup_requires_a_fresh_pass_after_signalling_the_last_page (tests.test_skill_command_examples.CommandExampleRunnerTests.test_cleanup_requires_a_fresh_pass_after_signalling_the_last_page) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nOK\n"
+}

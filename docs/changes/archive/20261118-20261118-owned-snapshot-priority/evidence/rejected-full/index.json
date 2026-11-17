@@ -1,0 +1,31 @@
+{
+  "captured_at": "2026-11-17T17:05:12.165318+00:00",
+  "source_directory": "/workspace/scratch/d417066aafa8/delivery-11.4.2/adk-local-final",
+  "records": [
+    {
+      "path": "interruption.json.json",
+      "raw_bytes": 298,
+      "raw_sha256": "1ac0277662e3c13a76005281808bef96ecd777df507f8fc940478d25d82d43c5",
+      "wrapper_sha256": "9f6e367b639e7bfe717d4ec58ad0289704eea0f6ec83125b994a9a7e9e647367"
+    },
+    {
+      "path": "source-before.json.json",
+      "raw_bytes": 177830,
+      "raw_sha256": "41c80cd01ea36e352555b2e3555979da041e3e2efd6772a4be547c9700a2a5d8",
+      "wrapper_sha256": "43a7c2522576475e42d481e258e9c5ab1ef33ea33524a6a9a40eb7aa5f9d43c1"
+    },
+    {
+      "path": "results.json.json",
+      "raw_bytes": 4367,
+      "raw_sha256": "c3c2371d24ec49d4037d8b32fa764f2df8a8c78ace3ebeb90e3885929844ab5c",
+      "wrapper_sha256": "7adc0529a1a22e8c0ea3e002913646587a59723eb4d0a6d007a63f7fd45d0f89"
+    },
+    {
+      "path": "full-regression.log.json",
+      "raw_bytes": 764,
+      "raw_sha256": "4f3b9567423653b753d596443750c87d8222bf9894a0761451e23129a09a4d9c",
+      "wrapper_sha256": "61bd46e086237303b05ddcce506ae4920e0cb7214907271687e22e2fa806067a"
+    }
+  ],
+  "boundary": "Original bytes/results retained; no retrospective qualification"
+}

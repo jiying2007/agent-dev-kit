@@ -1,0 +1,7 @@
+{
+  "origin": "release-check.log",
+  "encoding": "utf-8",
+  "bytes": 432,
+  "sha256": "ac16e2a2757dafc7cb91f9ab74ecdb34b827e88a46b87591af5f21bb84ec4ba0",
+  "content": "{\"schema_version\":1,\"status\":\"pass\",\"version\":\"11.4.2\",\"direct_targets\":[\"claude-code\",\"opencode\"],\"external_targets\":[\"codex\"],\"eval_catalog\":{\"catalog_valid\":true,\"catalog_sha256\":\"f8c77405ee0ae55a33caaffa5b31ba4118d6e7d17afd38db7c49b93eb34914b1\",\"snapshot_atomic\":false,\"dataset_fixture_alignment_scope\":[\"governance-eval-guardrail-regression-dataset\"],\"contract_only_suite_count\":9,\"runtime_eval_executed\":false},\"failures\":[]}\n"
+}

@@ -1,0 +1,7 @@
+{
+  "origin": "real-children-capability.json",
+  "encoding": "utf-8",
+  "bytes": 1134,
+  "sha256": "9326facc800334a782887d9515615e3255c9e014631024fcd72fd30e82722633",
+  "content": "{\n  \"observed_at\": \"2026-11-17T16:55:32.324728+00:00\",\n  \"processes\": [\n    {\n      \"pid\": 9,\n      \"ppid\": 8,\n      \"pgid\": 9,\n      \"sid\": 9,\n      \"state\": \"S\",\n      \"threads\": [\n        {\n          \"tid\": \"9\",\n          \"children_error\": \"FileNotFoundError\",\n          \"errno\": 2\n        }\n      ]\n    },\n    {\n      \"pid\": 10,\n      \"ppid\": 9,\n      \"pgid\": 9,\n      \"sid\": 9,\n      \"state\": \"S\",\n      \"threads\": [\n        {\n          \"tid\": \"10\",\n          \"children_error\": \"FileNotFoundError\",\n          \"errno\": 2\n        }\n      ]\n    },\n    {\n      \"pid\": 11,\n      \"ppid\": 10,\n      \"pgid\": 11,\n      \"sid\": 9,\n      \"state\": \"S\",\n      \"threads\": [\n        {\n          \"tid\": \"11\",\n          \"children_error\": \"FileNotFoundError\",\n          \"errno\": 2\n        }\n      ]\n    },\n    {\n      \"pid\": 12,\n      \"ppid\": 11,\n      \"pgid\": 11,\n      \"sid\": 9,\n      \"state\": \"S\",\n      \"threads\": [\n        {\n          \"tid\": \"12\",\n          \"children_error\": \"FileNotFoundError\",\n          \"errno\": 2\n        }\n      ]\n    }\n  ],\n  \"owner_pid\": 9,\n  \"leaf_created\": true,\n  \"finished_at\": \"2026-11-17T16:55:32.367289+00:00\"\n}\n"
+}

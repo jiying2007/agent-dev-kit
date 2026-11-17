@@ -1,0 +1,7 @@
+{
+  "origin": "green-boundary/stderr.log",
+  "encoding": "utf-8",
+  "bytes": 316,
+  "sha256": "7cdeb6eb79e85170c923bf4720753edc081b6611427be51cd790c81e60db82e9",
+  "content": "test_numeric_entries_at_cursor_boundaries_are_inspected_in_each_fresh_pass (tests.test_skill_command_examples.CommandExampleRunnerTests.test_numeric_entries_at_cursor_boundaries_are_inspected_in_each_fresh_pass) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.016s\n\nOK\n"
+}

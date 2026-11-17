@@ -1,0 +1,377 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261118-owned-snapshot-priority",
+  "scope": "source-change",
+  "author_id": "ai/implement-snapshot-priority",
+  "owner": "leiwenjun",
+  "reviewer": {
+    "id": "ai/independent-review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-17T17:24:54.311043Z",
+  "evidence_completed_at": "2026-11-17T17:24:54.311025Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "osp-1",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "原 global cursor 在第256个numeric项先advance再二次取额度，固定255-prefix/PID9000反例在两个fresh pass均漏读。最终64d120e为global entry/stat预留同一单元；仅更新来源绑定后的原核心输入两次均读取9000，advanced上限256及cursor关闭保留。原defect collector exit1/not-confirmed真实保留，独立恢复oracle exit0。"
+    },
+    {
+      "id": "osp-2",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "原各批observed仍可累计17PID使report截断/bounded而cleanup complete；该反例只证明资格矛盾，不证明live漏杀。最终verified纳入累计status及records/batch_results两类截断。原17PID/3pass仍处理全部17个fresh记录并返回session-unverified；独立17observed批次控制也因batch日志截断保持unverified。"
+    }
+  ],
+  "limitations": [
+    "本记录仅为exact64d120ebcbc5d77fd90af99bac2bb9f4f3a13682/tree35a666c2的source-change审查。full测试产品tree；后续change证据包装另审，未冒称包含在该full tree。PR/main、不可变Release、Root和TASK-003仍需各自真实回执。",
+    "旧11.4.0两次ADC/CMake15s等待原因和11.4.1 hosted bounded具体原因仍UNKNOWN。源级反例和本地通过不补写旧hosted原因、不关闭历史失败。",
+    "helper保持15s工作、总1s清理及每批50ms/256 entries、累计16records。缺测/截断保守unverified；本轮不保证任意主动另建SID逃逸的整树隔离。",
+    "fake procfs、固定clock、模拟ACK只验证相应分支。一次独立真实Ninja1.11.1.git.kitware.jobserver-1/非主线程leaf/foreign会话通过且无fixture补杀，但不是hosted、压力性能或长期运行证明。本地children ENOENT不推广为hosted能力。",
+    "原两个缺陷collector在新来源上的真实退出码为1/not-confirmed，副本仅改candidate和expected hash；恢复oracle独立exit0。两轮被停止的full均exit130；原RED、首版实际失败、fixture/PATH和verify格式失败原件保留。",
+    "完整回归102/102、八阶段0、1082输入前后一致。紧凑成功日志可能与其他run同hash；本次身份由实际UTC、timing、head/tree及前后source snapshots共同绑定。",
+    "Canonical使用record-relative change证据及repository-relative稳定产品/政策/validator，不直接绑定未来tasks/checklist/state/history/review/archive输出。review-input-state、wrapper origin和成功verify快照保留历史路径含义，归档不改原字节。",
+    "未执行付费模型、live runtime安装、设备、当前M5或Token/费用收益测量；没有人类审查、provider执行、现场资格或发布授权声明。Typed validator验证记录与摘要，不代替语义审查或外部授权。"
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "021d81aa4923dbc68a934d9cd0d64c4dfed76167",
+    "head_commit": "64d120ebcbc5d77fd90af99bac2bb9f4f3a13682",
+    "original_patch_sha256": "2c13a35d33d1c56872efa32b0f337e7fbbfbb9f6804eb146f8c646b990c7d605"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "bee07b1f78db1b30608a9f73bb9bb199e18bc2d1b69b31caf506e7e87c44fbdf"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "7b83508c5fcf7736b70608945228e1b5b49aa38a880e8129751d9fefee91fccc"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "dab4b2d0aaaeb89e3ba341217198e64fad31ae7376dcb7dcc656e82ecd7f5107"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "1c2519dfae6f7cf006fb2a5163e7367aa3107a1854f07057aa24aae2cba91878"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "4cb5df2b7ac562232b169e490b3f36ce68964cf03f8ea1ba3be514cfc1a15966"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "7e1c0ed74abd79e5f8f6440de058bc67e3c29dc032cd4cb8245e60cadf70b4d6"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "04a1a19f34520374d6b5b2d13635e8f4bb71af5d2a34d0d8c420ca859d9b6eb4"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "07b42cbaf6c62efbe62b6bfa875aac620465621ffe70e182082c781994974eb3"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "30a340eb0f8450c406f8db93950f2488841865fe3e60f5193339746182d5686a"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_command_examples.py",
+      "sha256": "2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295"
+    },
+    {
+      "base": "repository",
+      "path": "AGENTS.md",
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167"
+    },
+    {
+      "base": "repository",
+      "path": "docs/agent-operating-rules.md",
+      "sha256": "dc517366846889f088f350fdf1466719c4d655e9651bd5f2e12323e7ae8a541b"
+    },
+    {
+      "base": "repository",
+      "path": ".adk/review-policy.json",
+      "sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24"
+    },
+    {
+      "base": "repository",
+      "path": ".adk/review-authorization.md",
+      "sha256": "1594e628184cb0e4ad6c669bf5ce39dcb1f333d03d0798bebb080856e703cda5"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/review_evidence.py",
+      "sha256": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/strict_json.py",
+      "sha256": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/readiness_evidence.py",
+      "sha256": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "32892ee58e1d71af2c0ce916cc9b738ee21db3b471b22e6edc47b0a6bc9b552b"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "0839736adfcad091e939185a0b144e560230a8d9ba7c0f03adf040eb520285c1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "2c13a35d33d1c56872efa32b0f337e7fbbfbb9f6804eb146f8c646b990c7d605"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/review-input-state.json",
+      "sha256": "6066a4c2ebfbbf0fde109048638bc5a81a84fcf4e24b0f7d212305d4252c9f4c"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "6188f6789e70face225d96cf41b0d9e104a2ba3556292cbcd5cc43c7f85f46b2"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review.md",
+      "sha256": "050f46cbfa2f259518e66ef2ffe0fab143cf96293051d3b0a33e1eb88d101118"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-packaging-audit.json",
+      "sha256": "35a27dc40e37edf9069f8776a52cdfba2219687a76c7a79546cf75fc518b7920"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-packaging-audit.py",
+      "sha256": "cc520d2970314ddf846e43bb603038932d3c4a60053f4ad549f9e015559fe24c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-verified-lifecycle.json",
+      "sha256": "ba8bcb58d1a38c0adc2487447d17592778fec5b3b4720585d440f4e03a9f579d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/baseline/index.json",
+      "sha256": "6053da28e43d8db8a3666a63af12eb21fb9efb86106bcbd5cd595b5c7c1268ef"
+    },
+    {
+      "base": "record",
+      "path": "evidence/boundary-revision/index.json",
+      "sha256": "6dc4946221253422da80831c7717e3fdc94d26261e5ff4b91f5871ab1991fee5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/diagnosis/index.json",
+      "sha256": "c46d2701d8d9de10c12259c1a880501ded0dc5becfacc62104cbcc87b36fa7db"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full/index.json",
+      "sha256": "13206d8f6e98b2ce5a5a9078832ecfca5bd36d0a6da0b0d5ce329bdbc45c7590"
+    },
+    {
+      "base": "record",
+      "path": "evidence/implementation/index.json",
+      "sha256": "07de1d94f1ea0ed8d47850477dfae97c42bc44a679f690206e3f0349952f9c04"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/index.json",
+      "sha256": "30349046006045fee815e7decd510b511451cb9f7865dd0e7dcdbf23019f4ef8"
+    },
+    {
+      "base": "record",
+      "path": "evidence/rejected-boundary-full/index.json",
+      "sha256": "e5b19ae7f1b95f70afeb394695b557a9c4069ce219d51d4de5e8e0bdbf572b9b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/rejected-full/index.json",
+      "sha256": "ff44ab70411012a21a08eff495944f14b0da10c2f95fc1bf9339dcaa9b8b8ab5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/report-cap-revision/index.json",
+      "sha256": "8165afd006fb320490e64fb2f5e5f0d77abc224bd5d1861640e5ccab09a8dd70"
+    },
+    {
+      "base": "record",
+      "path": "evidence/verify-format-failure/index.json",
+      "sha256": "d5ce41e032e1744f9c56380c8679ceb9c47e7729e92aab9e4bc6da465e15115a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full/results.json.json",
+      "sha256": "bfb2574ca2a37333a32a71f0512ae03fe53f1794214a3ba06e5efd3b2f8ece00"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full/full-timing.json.json",
+      "sha256": "78e4919e761582f35b52f1ba0013764c4cba51af74b1a0ae081a41f836a72c61"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full/source-before.json.json",
+      "sha256": "894251fcd2c6bbce13c5d61ed4436d55d4d4de76dd2d82578db58c2a8eaf120b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full/source-after.json.json",
+      "sha256": "cd8f169238b4de2500eef5b176fe6e1bdceb310a21502e27c7dd8f184b18b098"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full/summary.json.json",
+      "sha256": "0b210a90b038fba5fb58278b8345129f93e6e73bcf420e5424261b4215ffb06a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full/full-regression.log.json",
+      "sha256": "3dee8e223439dd11a3680bbbc1ff3510eeef74d8b0921991f810e08fcbbf0c82"
+    },
+    {
+      "base": "record",
+      "path": "evidence/report-cap-revision/module-final/result.json.json",
+      "sha256": "c39d25953709413c210ef4b0cbc56687d60c3d1cb5b2c3e8581f9489b8eeb7a7"
+    },
+    {
+      "base": "record",
+      "path": "evidence/report-cap-revision/module-final/stderr.log.json",
+      "sha256": "f90e5cc951a1afb89a00bc5cf0ad0b4e310c9a18426091f6c5659734ed804d3d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/cursor-boundary-counterexample-result.json.json",
+      "sha256": "bb479965d47becdb913621083fa6e68f3fabaf9dcb03b5b5018b0611733c0c8c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-revision-64d120/cursor-boundary-counterexample-result.json.json",
+      "sha256": "c50d214831e9bb862a29c25566096a8aab7b43fdf6368eab6e8c4c228bffc9a5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/accumulated-report-cap-result.json.json",
+      "sha256": "c05e5d2d418c4c7d6288aba2fbb5de2062cae84a6e4cd7c67f6733ccb164b4c3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/report-cap-revision-e622/accumulated-report-cap-result.json.json",
+      "sha256": "b9f1ba93ee54c4fd3cb7ce5ea96bed8dff9e1845194c36471c8b82859f55731a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-revision-64d120/accumulated-report-cap-result.json.json",
+      "sha256": "187a4cf2971d321802f320d6c271721762bbdaa76436b3651869ca9f39c94a56"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-revision-64d120/recovery-and-real-result.json.json",
+      "sha256": "0395430b0d0b13c129372533f8369ec7693175a0c4002482f4dbe0436adaae66"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-revision-64d120/recovery_and_real_probe.py.json",
+      "sha256": "013b77dafdd6e385244b571eb4493aae2307e3dc7281f2a6b6e16fa85c468b70"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-revision-64d120/final-probe-execution.json.json",
+      "sha256": "0ff90f6829582623ae2ebc4fa57590cd0c3f4492952751a4d5ac1a1af526af12"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-revision-64d120/real-prefix-observation.json.json",
+      "sha256": "dd2740e3fbdbb093a2db9c5b0b616c9cb0daf330dfe93bf0766895a639394a77"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/cursor_boundary_counterexample.py.json",
+      "sha256": "d1c843328a20f22d8d2be2819e8bc4e605b79e5ca430e51f84798968d9d0ad04"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/accumulated_report_cap_counterexample.py.json",
+      "sha256": "8fe8fcbb3ab0c27856ffb02e1f9218872d8480a4c932994255e7d8a6c38901b9"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-revision-64d120/first-invocation-failure.json.json",
+      "sha256": "ab6ef97d30c06c49f6269792e5bdf03229e617b17c645abb25907c1fef95e787"
+    },
+    {
+      "base": "record",
+      "path": "evidence/report-cap-revision/red-report-caps/result.json.json",
+      "sha256": "45f22a97860c44b0e9ed0dba3431b5049e09baf579814fb132c504683e7c8e40"
+    },
+    {
+      "base": "record",
+      "path": "evidence/report-cap-revision/green-report-caps/result.json.json",
+      "sha256": "28bb4b1965bd485a3dcb1ae1c7353cec25a01aeeb52bc1e8e8d323cecc717620"
+    },
+    {
+      "base": "record",
+      "path": "evidence/boundary-revision/red-boundary/result.json.json",
+      "sha256": "b9f8f9a1ac751b513ea29a92d39c17b08e21f1b72577c2751a383f2af2520d90"
+    },
+    {
+      "base": "record",
+      "path": "evidence/boundary-revision/green-boundary/result.json.json",
+      "sha256": "208d1331341498cac181d2ad70183ffac26429da52a709204f7c48045b233db0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-and-probe-review.md.json",
+      "sha256": "fc9e86d51626356d4d774af3d67b89065afef0ac3519f9c5a28eab7e9d7fcd60"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-probe-index.json.json",
+      "sha256": "6bb4349ee7bee715b88c30e0e449bb482d19ec8e3a8900cf749c121a6bf604d2"
+    },
+    {
+      "base": "record",
+      "path": "evidence/rejected-full/interruption.json.json",
+      "sha256": "9f6e367b639e7bfe717d4ec58ad0289704eea0f6ec83125b994a9a7e9e647367"
+    },
+    {
+      "base": "record",
+      "path": "evidence/rejected-boundary-full/interruption.json.json",
+      "sha256": "b8d05f17f12e2ba36fd52e9bc03cee698743d600e56264e01dfcbc486a30bd53"
+    }
+  ]
+}

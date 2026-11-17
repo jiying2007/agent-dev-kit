@@ -1,0 +1,7 @@
+{
+  "origin": "module-final/result.json",
+  "encoding": "utf-8",
+  "bytes": 665,
+  "sha256": "1ec253d9455ce076c95cd6c080d4c0c6a6c83474183e4fde8a62b274519ebfe4",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"-v\",\n    \"tests.test_skill_command_examples\"\n  ],\n  \"started_at\": \"2026-11-17T17:10:51.830617+00:00\",\n  \"finished_at\": \"2026-11-17T17:11:01.177017+00:00\",\n  \"elapsed_seconds\": 9.346407570003066,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295\",\n  \"source_after_sha256\": \"2be3cbba83ee965bdba635fc5e5d30263e6ecce7f694a1e9c75833b8a39be295\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"779dcde2845c112c89bd6e2e7ab0d8d246ae5420dc75464d9a844785e3f00369\"\n}\n"
+}

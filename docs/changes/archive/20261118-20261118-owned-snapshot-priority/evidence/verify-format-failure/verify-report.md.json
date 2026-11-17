@@ -1,0 +1,7 @@
+{
+  "origin": "verify-report.md",
+  "encoding": "utf-8",
+  "bytes": 648,
+  "sha256": "70b52381ce206a299013f252368b03dca45a4939411efa571a1532efc4c3bc85",
+  "content": "# 验证报告：20261118-owned-snapshot-priority\n\n- 时间：2026-11-17T17:14:32Z\n- 执行人：ai/coordinator\n- 验证命令：\n  - scripts/devkit.sh validate --strict\n  - scripts/check-format.sh\n  - scripts/check-change-governance.sh <change_dir>\n- 工件检查：proposal/design/tasks/checklist/negative-results\n\n## Verification Traceability\n- VERIFY-001: workflow verification gate + Evidence Index\n- VERIFY-002: workflow verification gate + Evidence Index\n- VERIFY-003: workflow verification gate + Evidence Index\n- VERIFY-004: workflow verification gate + Evidence Index\n\n[FAIL] negative-results.md missing section: ## 已验证的负结果\n"
+}
