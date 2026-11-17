@@ -1,0 +1,53 @@
+test_growth_metadata_limits_promotion_to_persistent_assets (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... FAIL
+test_perf_generic_event_has_no_universal_llc_label (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_perf_generic_event_has_no_universal_llc_label) ... FAIL
+test_published_trigger_scan_covers_the_manifest_including_nested_skills (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_published_trigger_scan_covers_the_manifest_including_nested_skills) ... FAIL
+test_real_team_exports_scope_nonbundled_root_helpers (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) ...
+  test_real_team_exports_scope_nonbundled_root_helpers (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) (target='claude-code') ... FAIL
+  test_real_team_exports_scope_nonbundled_root_helpers (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) (target='opencode') ... FAIL
+
+======================================================================
+FAIL: test_growth_metadata_limits_promotion_to_persistent_assets (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py", line 84, in test_growth_metadata_limits_promotion_to_persistent_assets
+    self.assertTrue(constraint.startswith("仅"), constraint)
+AssertionError: False is not true : 改进建议进入执行层前必须先形成 trace-feedback-eval-handoff 候选
+
+======================================================================
+FAIL: test_perf_generic_event_has_no_universal_llc_label (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_perf_generic_event_has_no_universal_llc_label)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py", line 73, in test_perf_generic_event_has_no_universal_llc_label
+    self.assertNotIn("LLC miss 用 perf stat -e cache-misses", text)
+AssertionError: 'LLC miss 用 perf stat -e cache-misses' unexpectedly found in '---\nname: adk-performance-profiling-embedded\ndescription: "用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。"\nversion: 1.1.7\nlast_updated: 2026-11-16\ntriggers:\n  - "性能分析"\n  - "性能优化"\n  - "性能调优"\n  - "评估 MCU 栈上界"\n  - "评估 RTOS 栈上界"\nnon_triggers:\n  - 无性能指标诉求的小改\ninputs:\n  - 性能指标、采样数据\noutputs:\n  - 瓶颈定位与优化建议\nconstraints:\n  - 优化收益须量化对比；仅定位瓶颈不要求候选改动\n---\n\n# adk-performance-profiling-embedded\n\n## Goal\n固定场景/KPI（时延、吞吐、CPU、内存、功耗），量化瓶颈/收益。\n\n## Workflow\n1. 核真实负载计数/正确输出；无活动 `run-validity=invalid`。固定源码/编译/输入 hash、设备、频率/温度/供电/预热、采样预算及扰动。\n2. **定位瓶颈**：先低开销统计 CPU、等待/I/O、锁、内存，再按证据选可证伪候选/最小实验；无候选不强制 A/B。\n3. **比较候选**：等价输入输出/有效负载下 A/B/A/B，核波动/漂移。时延 p50/p95/p99，吞吐 有效工作量/时间，Flash/RAM 段/峰值，能耗按同工作量；段大小不用分位数。\n4. 核功能/内存/功耗/热稳定，超预算回滚；候选做真实长稳复验。无效 `invalid`，样本不足/噪声不可分 `inconclusive`，有效证据支持无收益才 `no-gain`；均留原因、不宣传收益。噪声先查环境；只读诊断不授权优化/设备配置变更。\n\n## Target Execution Gate\n- `linux-embedded`：核内核/用户态、架构、计数器权限/资源。CPU 用 perf/flame graph；堆峰值/时间线用 Massif，核采样与时间单位；错误/泄漏用 Memcheck；RSS 含非堆常驻页，另测不互代。I/O 用 strace -T/perf trace，锁用 perf lock/lockstat，LLC miss 用 perf stat -e cache-misses。核采样计数；热点不等于整体收益，用户态工具不通用于内核/MCU。\n- `mcu-rtos` / `mcu-baremetal`：按支持用板端计数/trace、DWT/ETM、GPIO timing、stack/heap high-water、ELF/map；host 分析不能替代板端 `not-measured`。\n- 核工具/系统/编译身份、权限和扰动；缺工具记 unavailable，不隐式注入/改配置。Valgrind 插桩耗时不当原生性能；不跨优化等级比较。\n\n## Commands\n按工具/窗口预算执行，留命令/退出码/耗时；失败不消费旧结果：\n```bash\nperf stat -p <pid> -- sleep <sample-window-seconds>\nperf record -g -p <pid> -- sleep <sample-window-seconds> && perf report --stdio\nvalgrind --tool=callgrind --callgrind-out-file=callgrind.out <binary> && callgrind_annotate callgrind.out\n```\nbenchmark 用项目命令，不猜参数。\n\n## 按需实测\n核运行对象/dispatch，或测 Flash/RAM/stack、DMA/retention、KWS/音频时读 `references/mcu-memory-footprint.md`。\n\n交付原始证据、样本数/KPI/不确定性及复现入口；无有效采样只给假设与缺口。\n'
+
+======================================================================
+FAIL: test_published_trigger_scan_covers_the_manifest_including_nested_skills (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_published_trigger_scan_covers_the_manifest_including_nested_skills)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py", line 42, in test_published_trigger_scan_covers_the_manifest_including_nested_skills
+    self.assertEqual(expected, paths, "the published command must include nested children")
+AssertionError: Items in the first set but not the second:
+'optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md'
+'optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md' : the published command must include nested children
+
+======================================================================
+FAIL: test_real_team_exports_scope_nonbundled_root_helpers (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) (target='claude-code')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py", line 64, in test_real_team_exports_scope_nonbundled_root_helpers
+    self.assertRegex(helper_lines[0], r"仅.{0,12}llm_agent Root")
+AssertionError: Regex didn't match: '仅.{0,12}llm_agent Root' not found in '- **adk → explicit tool target**：adk 变更必须先通过 `check-adk-harden-readiness.sh` 与 `runtime-boundary` 门禁，再进入目标运行时适配层'
+
+======================================================================
+FAIL: test_real_team_exports_scope_nonbundled_root_helpers (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) (target='opencode')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-optimization/tests/test_skill_scope_methods.py", line 64, in test_real_team_exports_scope_nonbundled_root_helpers
+    self.assertRegex(helper_lines[0], r"仅.{0,12}llm_agent Root")
+AssertionError: Regex didn't match: '仅.{0,12}llm_agent Root' not found in '- **adk → explicit tool target**：adk 变更必须先通过 `check-adk-harden-readiness.sh` 与 `runtime-boundary` 门禁，再进入目标运行时适配层'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.217s
+
+FAILED (failures=5)

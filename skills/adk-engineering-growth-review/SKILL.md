@@ -1,8 +1,8 @@
 ---
 name: adk-engineering-growth-review
 description: "用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。"
-version: 1.1.1
-last_updated: 2026-11-16
+version: 1.1.2
+last_updated: 2026-11-17
 triggers:
   - "开发者成长复盘"
   - "成长分析"
@@ -25,14 +25,14 @@ constraints:
   - 默认 index-first，只读已授权范围；跨项目/全历史仅按明确请求扩展
   - 默认本地 report-only，不自动外发 Slack、邮件或外部服务
   - 不静默写入 ~/.codex/memories；长期记忆只输出候选和人工确认项
-  - 改进建议进入执行层前必须先形成 trace-feedback-eval-handoff 候选
+  - 仅长期 prompt/Skill/Workflow/AGENTS/记忆晋级须形成 trace-feedback-eval-handoff 候选
   - 联网查学习资源或外部发送必须由用户显式授权
 ---
 
 # adk-engineering-growth-review
 
 ## Goal
-根据**已授权且与问题相关**的工程证据，给出有用的成长复盘。不是对个人作无证据评价，也不把“成长报告”变成全盘扫描、模板填充或额外付费模型调用。
+基于**已授权且相关**的工程证据复盘；不作无证据个人评价，不全盘扫描、填充模板或额外付费调用。
 
 ## Scope / permissions
 - 默认 **index-first**：当前项目及已提供的近期交付摘要先读目录/标题/结果与证据索引；只对影响结论的少量样本回读原文。
@@ -45,7 +45,7 @@ constraints:
 2. 选最小相关时间窗与项目范围，先检索索引、再按需读取高信号证据；事实与推断分开，不能凭一次故障推断长期能力或私人属性。
 3. 找到有重复证据的模式：可复用优势、常见返工、环境摩擦或测试/审查盲区；没有趋势就明确说样本不足，不凑满 3–5 个建议。
 4. 为每个有效建议给出“事实证据 → 可执行动作 → 可检查信号”，不用强制生成一周、两周、四周全套训练计划。
-5. 仅需要正式升级 prompt、Skill、Workflow 时输出 `trace-feedback-eval-handoff` 的 `eval candidate`、验证与 `human approval` 状态；普通成长复盘不自动修改长期资产。
+5. 仅正式晋级 prompt/Skill/Workflow/AGENTS/记忆时输出 `trace-feedback-eval-handoff` 的 `eval candidate`、验证与 `human approval` 状态；普通建议不需晋级，修改仍按原任务授权。
 6. 限定输出长度并保留 raw evidence pointer；保密/权限、跨项目评估等深入细节按需读 `references/growth-evidence-boundaries.md`。
 
 ## Output

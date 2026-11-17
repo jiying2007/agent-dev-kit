@@ -336,6 +336,8 @@ def _next_primary_trigger(
             metadata = resolve_skill_content(manifest, name)
             if metadata["runtime_role"] != "primary":
                 continue
+            if _promotion_exclusion(manifest, name, text, markers) is not None:
+                continue
             candidate = kernel_match_text(manifest, text, skill=name, scope=scope)
             if candidate.get("match") is not True:
                 continue

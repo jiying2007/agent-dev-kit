@@ -1,0 +1,983 @@
+{
+  "schema": "adk-independent-source-review/v1",
+  "review_id": "skill-scope-methods-20261117-independent-source",
+  "reviewer": "/root/independent_source_review",
+  "delegated_reviewer": "/root/independent_source_review/packaging_review",
+  "review_role": "independent-read-only-spec-and-quality",
+  "reviewer_authored_production_changes": false,
+  "reviewer_wrote_worktree_index_or_refs": false,
+  "reviewed_at": "2026-11-17T02:44:27.097238+00:00",
+  "evidence_completed_at": "2026-11-17T02:44:27.097228+00:00",
+  "target": {
+    "repository": "/workspace/scratch/fe8de3b42084/adk-optimization",
+    "base_commit": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+    "head_commit": "66df0ce7092aabbbd05411ef2950cc9ee59a3592",
+    "local_equivalent_commit": "5d62b7e3da38ac7c9571cfd32707d9d2f4410ff8",
+    "tree": "081cddd941f16a98aee76014998856bd33799610",
+    "merge_base": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+    "scope": "source-change",
+    "original_diff_sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a",
+    "local_and_canonical_tree_and_diff_identical": true
+  },
+  "spec_verdict": "PASS",
+  "quality_verdict": "PASS",
+  "verdict_scope": "29 changed product/test/documentation/packaging files plus 3 change-contract files at the exact target, with bounded regression reuse",
+  "overall_delivery_status": "pending-exact-ci-release-and-root-integration",
+  "requirement_dispositions": {
+    "1": "verified-source-routing-and-permission-boundaries",
+    "2": "verified-source-perf-event-meaning",
+    "3": "verified-source-and-real-consumer-exports",
+    "4": "verified-real-recursive-scan-65-skills-9-optional",
+    "5": "verified-source-and-independent-contradiction-controls",
+    "6": "verified-source-method-only-no-live-network-client",
+    "7": "verified-source-method-only-no-device-operation",
+    "8": "verified-definitions-and-arithmetic-only-no-field-trial",
+    "9": "verified-eight-original-ratchets-and-bounded-success-denial-controls",
+    "10": "source-review-and-bounded-regression-evidence-complete; exact-CI-release-and-Root-integration-pending"
+  },
+  "findings": [
+    {
+      "id": "Q-01",
+      "severity": "Low",
+      "category": "test-discrimination",
+      "title": "Growth source test permitted an ordinary-work promotion contradiction",
+      "initial_disposition": "reported-to-implementer",
+      "final_disposition": "fixed-and-independently-verified",
+      "production_source_was_correct": true,
+      "resolution": "Existing test now checks the ordinary-work exemption and AGENTS/memory in metadata and body.",
+      "verification": "Current source passes; five independently mutated bad variants each fail with no infrastructure errors.",
+      "test_sha256": "bb6aefafed45d77f482b39046ab933c414c2365f1f3568adc1f66d0444964f62",
+      "evidence": [
+        "raw/method-controls.result.json",
+        "raw/growth-revised-controls.json"
+      ]
+    },
+    {
+      "id": "R-01",
+      "severity": "Medium",
+      "priority": "P2",
+      "category": "legitimate-routing-regression",
+      "title": "Implicit context deleted ordinary inline formatting and lost four prior-success embedded requests",
+      "initial_disposition": "needs-fix-at-3f80b613",
+      "final_disposition": "fixed-and-independently-verified",
+      "resolution": "Retain ordinary paired inline content; exclude fences and narrowly introduced quoted examples.",
+      "verification": "All four baseline-success requests recovered; 22 independent positive/negative/mixed neighbors agree, all mutation_permission=deny; 25 fresh method/route tests pass.",
+      "evidence": [
+        "routing-review-3f80-needs-fix.md",
+        "raw/routing-baseline-success.json",
+        "raw/routing-r2-neighbors.result.json",
+        "raw/routing-r2-tests.json"
+      ]
+    },
+    {
+      "id": "P-01",
+      "severity": "Low",
+      "category": "release-fixture-consistency",
+      "title": "Unexecuted preregistration candidate version lagged the manifest bump",
+      "initial_disposition": "full-suite-failure-observed",
+      "final_disposition": "fixed-and-independently-verified",
+      "resolution": "Move planned_release to v11.3.13, preserve the unexecuted v11.3.12 identity/history with zero model runs.",
+      "verification": "Only two allowed JSON changes; all other structure unchanged. Coordinator reran the complete failed suite: 204/204 PASS. Independent packaging reviewer reran the original failing test: 1/1 PASS.",
+      "fixture_sha256": "ff535f0c999111ab50c2a4ba8ce0daa5de2c17bd3691d2007d010c438456aeb5",
+      "evidence": [
+        "raw/regression-r2.result.json",
+        "raw/source-final-bindings.json",
+        "raw/prereg-repair-result.json",
+        "packaging/raw/prereg-specific-test.json"
+      ]
+    }
+  ],
+  "open_findings": [],
+  "source_count": 32,
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "568734e9c06433abc958919a68b3ddab5c84f72c875175e874bdd19ea3da640d",
+      "bytes": 80,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "c606936f71eedf938b847bc169e5cefc9d3c56b7884ea4b7f83b6d2f46a1450d",
+      "bytes": 107742,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "a426e5463488a1107e43483c6cb1ccd35b4313ce6ccc46eecdf84cea11c1f91a",
+      "bytes": 8644,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "38f647d6648ad5e6aeba9464c89ad5c71b49ef6b63dccb0328b8476d4b116b78",
+      "bytes": 13087,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "docs/agent-skill-catalog.md",
+      "sha256": "6804c7a0f8424898912c6b8daf03128d235d5945081b987e99a40a2269b94fa6",
+      "bytes": 38526,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-scope-methods/design.md",
+      "sha256": "06aae095e7ea200dffe9051d7cadae46b9f922e1551e43d98aa4dc17ffeeb147",
+      "bytes": 2408,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-scope-methods/requirements.md",
+      "sha256": "987f00a4cc1deee41ca302195648452fc354ad96d2f47f0a9aa060c70ce55098",
+      "bytes": 2048,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-scope-methods/tasks.md",
+      "sha256": "0bdeae2656bca57ba008eee2ae1d40f4e39d252f1dea6a73cd2d552c4f7a5c49",
+      "bytes": 2309,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "docs/commands.md",
+      "sha256": "07e722cc8d90c06d006ef3ef9e880b1c911fc1ab00a956ae0bd7f47465e18c28",
+      "bytes": 36446,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "07e887a7417f81ea279a107981aa0fd25836aa85d140f26734d78733c0e0ce68",
+      "bytes": 90988,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "92f186adf1d906b84e6925ff1001a9b353ebbedb784744669c21db3d6f0037ce",
+      "bytes": 706,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "sha256": "21e9223a92ec6f50b336fc9bb8cd041f7db533cbfc216350c64a0b748ce2328a",
+      "bytes": 3024,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "062d145077d6d56ad0d038cf8d3de62f3368bc3f1c561660aa209830dcaa38f6",
+      "bytes": 6640,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "18c4ea37d322fe5453019a1e674a27d22ede1741e3f8ebf01d0c019183de4a54",
+      "bytes": 1310,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "sha256": "17f658a180bb848f98a0ffa91831e82fc980d7fcdae78782c103fb4862f5fa4e",
+      "bytes": 2061,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-artifact-gating/references/details.md",
+      "sha256": "c4f1f8675a02c8e3886417b48caa6c1ba2dad15fd5246dfb02e1ae6980b42f3f",
+      "bytes": 2343,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "sha256": "60689906562d9146431960b421c1d2731090f5377c1cd5923adb13ab589b7c27",
+      "bytes": 5597,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "sha256": "551c03d625fb6d884f03e112d49d9d39eee8d50a628009a93b5cf67ab051b5b8",
+      "bytes": 3805,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "429e8f4bdab43522b6deb89ad98cf20f30c7a8b8f80be2810e6511ca62149000",
+      "bytes": 3066,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "sha256": "b661f56a96309870e2895423ee3646bd9e50a5f35da9286cd070a45ac75a60e6",
+      "bytes": 5013,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "sha256": "33e1ecdae9f7baed2e7a050bc718e716200d76934489419f2d7be5c4b3776a62",
+      "bytes": 1911,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "sha256": "a17d781e18dc5f72d6485f1ca8f5a9e6f6612ddeb761340110083b35181ffbe9",
+      "bytes": 3066,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "2e6f4cf157d25085a13582c7aaa16d5ddaae5ac8aca72a41c04c9d2fbaf0a1b8",
+      "bytes": 71,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review/packaging_review",
+      "review_mode": "complete-byte-or-structure-comparison-and-diff",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "sha256": "a573041b767280f3c390a563308ec580c51d6e7c92427099681e46b2f850a58d",
+      "bytes": 28210,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/matcher.py",
+      "sha256": "27d9519150922ceaf7a65f196bbdadb3c8915834becd41cf13cd1c8914ed7209",
+      "bytes": 18455,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/validation_contract.py",
+      "sha256": "055051177bda58f8a2558afe654fbf7117b1b4334730f4c296c10cf9c21e03ab",
+      "bytes": 21277,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "sha256": "ff535f0c999111ab50c2a4ba8ce0daa5de2c17bd3691d2007d010c438456aeb5",
+      "bytes": 7447,
+      "matches_frozen_commit": true,
+      "unchanged_since_full_regression": false,
+      "additional_reviewer": "/root/independent_source_review/packaging_review"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_boundary_conditions_match.sh",
+      "sha256": "22d364ecdb59bbae8108be0ef829cde302ec25400381e062bcbc1661f3c34ea8",
+      "bytes": 15233,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_match_effectiveness.sh",
+      "sha256": "db3a0e902f9addeab80d9a48d953b9f8b49f0919807f423b96b50bf20e3b0af2",
+      "bytes": 17718,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content.sh",
+      "sha256": "d10d6b5e7a79811d2a8ef87439c81bd3db22e5284ccc0602c54e4a8af6a14f5d",
+      "bytes": 1213,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_scope_methods.py",
+      "sha256": "bb6aefafed45d77f482b39046ab933c414c2365f1f3568adc1f66d0444964f62",
+      "bytes": 5297,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "2b6d67cc774b25a817141b370cdadd6c3661d13e3ef35500e8a5767ce3131d64",
+      "bytes": 36989,
+      "matches_frozen_commit": true,
+      "review_owner": "/root/independent_source_review",
+      "review_mode": "semantic-diff-and-file-review",
+      "unchanged_since_full_regression": true
+    }
+  ],
+  "policy_sources": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "61a06f86a6b5382855fab70a3098f878e9f7d3e0af653a86fbd199d8d5d13167",
+      "bytes": 2914,
+      "unchanged_from_base": true
+    },
+    {
+      "path": "docs/agent-operating-rules.md",
+      "sha256": "dc517366846889f088f350fdf1466719c4d655e9651bd5f2e12323e7ae8a541b",
+      "bytes": 13278,
+      "unchanged_from_base": true
+    }
+  ],
+  "coverage": {
+    "method_entries_and_references": 9,
+    "method_tests_and_registration": 2,
+    "routing_source_skill_docs_and_tests": 8,
+    "version_catalog_changelog": 9,
+    "prereg_fixture_repair": 1,
+    "requirements_design_tasks": 3,
+    "changed_source_scope_complete": true,
+    "not_product_source_claims": [
+      "docs/changes/20261117-skill-scope-methods/evidence/baseline/audit-findings.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/continuation/input.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/continuation/observation.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/continuation/output.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/interrupted-regression.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-1.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-2.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-3.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-4.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-5.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-r2.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/acceptance-review.md",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/baseline-files.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/file-deltas.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/final-file-deltas.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/final-profile-ratchets.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/final-targeted-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/growth-test-after.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/growth-test-before.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/handoff-file-deltas.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/handoff-targeted-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/negative-results.md",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/profile-ratchets-after-compaction.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/profile-ratchets.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/red-tests.raw.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/red-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/targeted-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/verified-file-deltas.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/verified-profile-ratchets.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/methods/verified-targeted-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/after.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/before.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/boundary-final.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/after.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/before.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/green-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/matrix-final.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/red-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/result.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/verification.md",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/match-effectiveness.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/red-tests.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/result.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/routing-contracts.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/skill-validation.json",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/trigger-matrix-final.txt",
+      "docs/changes/20261117-skill-scope-methods/evidence/routing/verification.md"
+    ]
+  },
+  "verification": {
+    "independent_targeted_method_and_route_tests": {
+      "tests": 25,
+      "status": "PASS",
+      "source_commit": "78ee2c7941a88cd2e2af307b5155e950f7af4e2c"
+    },
+    "independent_adjacent_route_controls": {
+      "cases": 22,
+      "agreed": 22,
+      "all_mutation_permissions": "deny"
+    },
+    "independent_growth_controls": {
+      "current_source_green": true,
+      "bad_variants_red": 5,
+      "infrastructure_errors": 0
+    },
+    "new_method_tests_against_baseline": {
+      "tests": 4,
+      "expected_assertion_failures": 5,
+      "errors": 0
+    },
+    "independent_related_quality_and_footprint_tests": {
+      "tests": 19,
+      "status": "PASS"
+    },
+    "independent_original_profile_ratchets": {
+      "profiles": 8,
+      "status": "PASS",
+      "contract_and_meter_unchanged": true
+    },
+    "last_complete_local_suite": {
+      "inspected_at": "2026-11-17T02:38:12.253210+00:00",
+      "source": "/workspace/scratch/fe8de3b42084/adk-11.3.13-regression-r2",
+      "review_copy": "/workspace/scratch/fe8de3b42084/independent-scope-review/raw/regression-r2",
+      "reviewer_executed_full_suite": false,
+      "evidence_completed_at": "2026-11-17T02:37:12.039313+00:00",
+      "source_identity": {
+        "head": "78ee2c7941a88cd2e2af307b5155e950f7af4e2c",
+        "tree": "5adf14f3b9475c32da668ac3221689df8c9182d3",
+        "status": ""
+      },
+      "command": [
+        "bash",
+        "tests/run_all.sh",
+        "--timing-json",
+        "/workspace/scratch/fe8de3b42084/adk-11.3.13-regression-r2/timing.json"
+      ],
+      "returncode": 1,
+      "timed_out": false,
+      "total": 102,
+      "pass": 101,
+      "fail": 1,
+      "failed_suites": [
+        "test_skill_content"
+      ],
+      "elapsed_seconds": 353.886889,
+      "raw_hashes_verified": true,
+      "source_identity_stable_and_clean": true,
+      "files": {
+        "receipt.json": {
+          "sha256": "bf95de6e3b3318a4b85f9d8fbe71c6de96f6eb4075bd59453efaa4d23c996d4b",
+          "bytes": 1117
+        },
+        "timing.json": {
+          "sha256": "bd0fa105cd3ce224c050368844fb39bd956030b71f017d6c57755147a535d2ab",
+          "bytes": 8224
+        },
+        "stdout.txt": {
+          "sha256": "0e3ee82f48db56d9e4af94a26677ae0690f444c90494a26bf243f4ed609f3f37",
+          "bytes": 3131
+        },
+        "stderr.txt": {
+          "sha256": "5a316d135f517a64624c1be1ee502d6aae5f9169151e4f0081b9d2ed73bb41a5",
+          "bytes": 15735
+        }
+      }
+    },
+    "repaired_full_failed_suite": {
+      "receipt_path": "/workspace/scratch/fe8de3b42084/independent-scope-review/raw/prereg-repair-result.json",
+      "receipt_sha256": "a6858c46c1d732b79f1244a3b600784101d86c380fd8b81f84f6cd1ba211603c",
+      "completed_at": "2026-11-17T02:38:54.471694+00:00",
+      "returncode": 0,
+      "tests": 204,
+      "source_before_commit": "ab5ec7b695afd46b4b2bdbcd6943d6e07aa57bb9",
+      "working_diff": [
+        "tests/fixtures/skill_method_ab_prereg.json"
+      ],
+      "fixture_sha256": "ff535f0c999111ab50c2a4ba8ce0daa5de2c17bd3691d2007d010c438456aeb5",
+      "stdout_sha256": "ceab90bc4356d4cba349af3e3d90696686cbf495962054633e414d2b8d43348c",
+      "stderr_sha256": "b2f04db122d8e7036867c2ce7d9581f07f5365655f9c3aeb33347ed3c449fd58",
+      "reviewer_executed": false,
+      "final_tree_binding": "identical prior tree plus exactly the repaired fixture bytes"
+    },
+    "regression_reuse": {
+      "prior_status": "FAIL",
+      "prior_pass_suites": 101,
+      "prior_failed_suites": 1,
+      "failed_suite_reexecuted": "test_skill_content",
+      "not_a_new_full_102_suite_pass": true,
+      "exact_pr_main_full_ci": "pending",
+      "rationale": "Only the unexecuted prereg fixture changed; all 28 previously reviewed production/test/packaging paths and contracts are byte-identical, and the entire sole failed suite was rerun."
+    },
+    "independent_prereg_original_failure_test": {
+      "tests": 1,
+      "status": "PASS"
+    },
+    "remote_exact_ci": "pending"
+  },
+  "ratchets": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 97817,
+        "potential_full_source_bytes": 172867
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 209914,
+        "potential_full_source_bytes": 316262
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30434,
+        "potential_full_source_bytes": 46534
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 212939,
+        "potential_full_source_bytes": 323144
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 112851,
+        "potential_full_source_bytes": 191638
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 82373,
+        "potential_full_source_bytes": 156243
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 65344,
+        "potential_full_source_bytes": 117004
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123385,
+        "potential_full_source_bytes": 210831
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "method_files_byte_delta": -69,
+  "evidence": [
+    {
+      "base": "review-directory",
+      "path": "raw/source-final-bindings.json",
+      "sha256": "f1e98eacd09de1712a0f2616110b8ab2b85537bee78672a773be8d808e750b41",
+      "bytes": 20414
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/source-final-snapshot.json",
+      "sha256": "90ec2bd722f0982b8eb024d8fa72b70625c844b943ef1f2932a55e3cea62157a",
+      "bytes": 801
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/source-final.patch",
+      "sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a",
+      "bytes": 321621
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/source-final-repair.patch",
+      "sha256": "b9587144c346e5332ecfc788a284736b0af56d74d82581e0d85a2601d4eba369",
+      "bytes": 1140
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/final-source-bindings.json",
+      "sha256": "38a86e2c7821adb685e1dc79c082a82a3ad406d92a7f69f945a3cd1d0b9bd60a",
+      "bytes": 22429
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/final-ratchet.result.json",
+      "sha256": "7b966d64ba3d0d6739bb130a0b6827bcbb6c4fba104b29e402adec3552ae5b4e",
+      "bytes": 8216
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/routing-r2-neighbors.result.json",
+      "sha256": "48b5f7cf95fe7217c4999ee9756333f624b5a48bd4a48edd99333595dc0199f1",
+      "bytes": 20405
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/routing-r2-tests.json",
+      "sha256": "b76af67c6a65d7c9cae4380c7144fcf09e9a939e04ac5aeaa212a75a89dec386",
+      "bytes": 825
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/routing-r2-tests.stderr.txt",
+      "sha256": "6865a8d524e9bb99563d9e1c21d853105b2c18223392edb1d5e808b974436add",
+      "bytes": 5107
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/routing-neighbors.result.json",
+      "sha256": "c5840c822d4fbbfd77cdddf6e127976a9cbbb71360d0c43a0060cf93edc553de",
+      "bytes": 11442
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/routing-baseline-success.json",
+      "sha256": "a081720f15bb5655af2cebad63f5582b28ea24102147a26baf77e16cce9a0a22",
+      "bytes": 4672
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/growth-revised-controls.json",
+      "sha256": "97ac996dbaf943c3d07a8ff08e6272e5ff21768730dc80ee614156253bae0aa4",
+      "bytes": 1709
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/growth-q01-revalidation.json",
+      "sha256": "e88c36ce0fe525ae6784b7c2ad9803f5681e19a2c7c320bf332057d4bf12da2f",
+      "bytes": 801
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/method-controls.result.json",
+      "sha256": "9b4f4c94e225ac413bd0a8fda3db481b608ddb6dd4d5d0ee5be98b3bc1a876c8",
+      "bytes": 1058
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/targeted-methods.json",
+      "sha256": "52255565c2d313c16f5a20f11d51f6d6d8cf6379035345dff3d7be7fada575b3",
+      "bytes": 755
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/method-regressions.json",
+      "sha256": "02d3da53cb429673e0c6ca3200123ddc9af465b859848176c4daa7f34273a2b8",
+      "bytes": 845
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/regression-r2.result.json",
+      "sha256": "6f589c3760e4e4ce52bf3c09d0b5abf055b735ead1f20cab978cd9e962fbaece",
+      "bytes": 1428
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/regression-r2/receipt.json",
+      "sha256": "bf95de6e3b3318a4b85f9d8fbe71c6de96f6eb4075bd59453efaa4d23c996d4b",
+      "bytes": 1117
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/regression-r2/timing.json",
+      "sha256": "bd0fa105cd3ce224c050368844fb39bd956030b71f017d6c57755147a535d2ab",
+      "bytes": 8224
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/regression-r2/stdout.txt",
+      "sha256": "0e3ee82f48db56d9e4af94a26677ae0690f444c90494a26bf243f4ed609f3f37",
+      "bytes": 3131
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/regression-r2/stderr.txt",
+      "sha256": "5a316d135f517a64624c1be1ee502d6aae5f9169151e4f0081b9d2ed73bb41a5",
+      "bytes": 15735
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/prereg-repair-result.json",
+      "sha256": "a6858c46c1d732b79f1244a3b600784101d86c380fd8b81f84f6cd1ba211603c",
+      "bytes": 43169
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/prereg-repair-stdout.txt",
+      "sha256": "ceab90bc4356d4cba349af3e3d90696686cbf495962054633e414d2b8d43348c",
+      "bytes": 3136
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/prereg-repair-stderr.txt",
+      "sha256": "b2f04db122d8e7036867c2ce7d9581f07f5365655f9c3aeb33347ed3c449fd58",
+      "bytes": 38612
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/prereg-consumers.json",
+      "sha256": "1300ec5580dfff1c345abf7874e9e654ce308e1a5883ae3c927d7d0ed4c23b88",
+      "bytes": 829
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/prereg-consumers.stdout.txt",
+      "sha256": "a31eed474a79d6798b26ca933fed1225669c9e1fb581b3d5ca84e7f302ea1afa",
+      "bytes": 1435
+    },
+    {
+      "base": "review-directory",
+      "path": "packaging/raw/frozen-packaging-result.json",
+      "sha256": "141c4a131cd86f25cc99f608808c9df3efb202cfc4a4a8ef881a92518310f061",
+      "bytes": 5391
+    },
+    {
+      "base": "review-directory",
+      "path": "packaging/raw/transport-equivalence.json",
+      "sha256": "3bec74d9490bae7add944de1ee0ea0afa15f1245fad39eccd2ad3dc1ebbb858c",
+      "bytes": 14922
+    },
+    {
+      "base": "review-directory",
+      "path": "packaging/raw/prereg-specific-test.json",
+      "sha256": "ca85ee6938cd2d14c5b841bcf711ec2a428ae8d4d55c0a10632c1c116366e4d8",
+      "bytes": 892
+    },
+    {
+      "base": "review-directory",
+      "path": "packaging/raw/prereg-specific-test.stderr.txt",
+      "sha256": "23bdc15081437d8ac87e6f669d7aa236561225f9a3f03908b2cd62178f2f68e4",
+      "bytes": 302
+    },
+    {
+      "base": "review-directory",
+      "path": "method-review.md",
+      "sha256": "4b929bba177c07248d7c35009c5215064859d520ff34202a9474767d48807b55",
+      "bytes": 9334
+    },
+    {
+      "base": "review-directory",
+      "path": "routing-review-3f80-needs-fix.md",
+      "sha256": "3816c7fa283dbdaa7fa84d313189b2ff1cf366081d311c928fd7070974603081",
+      "bytes": 4012
+    },
+    {
+      "base": "review-directory",
+      "path": "packaging/review.md",
+      "sha256": "8632c06dcebe15b73bc4e5845a1691e6ba9cbe112e6e9d8486b6dcd4ebb7938d",
+      "bytes": 7013
+    },
+    {
+      "base": "review-directory",
+      "path": "packaging/transport-and-prereg-addendum.md",
+      "sha256": "d9674022e133eee7e11e1c1e2e56561809763cdda502d96ec1b995d47b6047f5",
+      "bytes": 6000
+    },
+    {
+      "base": "review-directory",
+      "path": "negative-results.md",
+      "sha256": "e9245ebf72348454c19907484a67dde9da1e54ed8191af8de9341b33c5ad60b1",
+      "bytes": 2247
+    }
+  ],
+  "limitations": [
+    "Source-change Spec/Quality opinion only. Requirement 10 release, exact-SHA CI, and Root source-only integration are not completed or authorized by this report.",
+    "The last local full 102-suite run remains FAIL (101 pass, 1 fail). The full failed suite passed after its isolated fixture repair; no new local full-102 PASS is claimed.",
+    "The other 101 suite results are reused only because the exact tree difference is the repaired prereg fixture; the final PR/main exact-SHA full CI remains pending.",
+    "No global Harness readiness approval is created or refreshed. Prior historical Harness evidence retains its existing scope.",
+    "No native host discovery/load/trigger, model A/B, provider usage/Token/cost/latency improvement, real PMU, UBI flashing, DNS client, device or field measurement is established.",
+    "Implicit context is a bounded lexical filter, not a semantic classifier; unsupported phrasing and arbitrary unrelated affirmative background remain subject to the existing Skill Fit and target gates.",
+    "Source byte ratchets measure source growth, not runtime context, provider token use, or effectiveness.",
+    "The remote identity is verified through already fetched local Git objects and transport evidence, not an independent fresh network/ref or protected-branch-policy check.",
+    "Change evidence documents are indexed and selected receipts checked; this is not a claim to have independently reproduced every historical evidence item or reviewed every unchanged Skill.",
+    "Future report/evidence packaging, commits, CI results, releases and consumer changes require their own concrete checks; they are not pre-approved."
+  ],
+  "permissions": {
+    "merge_authorized_by_this_report": false,
+    "release_authorized": false,
+    "root_integration_authorized": false,
+    "runtime_qualified": false,
+    "product_qualified": false,
+    "new_global_harness_approval": false
+  }
+}

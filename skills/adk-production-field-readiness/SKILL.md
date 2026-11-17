@@ -1,8 +1,8 @@
 ---
 name: adk-production-field-readiness
 description: "用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。"
-version: 1.0.3
-last_updated: 2026-11-04
+version: 1.0.4
+last_updated: 2026-11-17
 triggers:
   - "量产"
   - "产测"
@@ -35,14 +35,13 @@ constraints:
 # adk-production-field-readiness
 
 ## Goal
-- 覆盖嵌入式全栈中容易被软件开发流程遗漏的量产、产测、烧录、诊断、OTA、RMA 和现场维护闭环。
-- 把“可运行”提升为“可生产、可诊断、可升级、可回退、可维护”。
-- 明确该 skill 与 `adk-release-versioning` 的边界：版本策略归 release，设备交付 readiness 归本 skill。
+- 覆盖量产、产测、烧录、诊断、OTA、RMA 与现场维护。
+- 版本策略归 `adk-release-versioning`，设备交付 readiness 归本 Skill。
 
 ## Prerequisites
-- 已确认目标设备、硬件版本、BOM/板级差异、固件/镜像版本和生产批次约束。
-- 已知道烧录入口、产测入口、日志/诊断入口和现场升级入口。
-- 已明确哪些验证可自动化，哪些必须由 HIL、工装或人工板级证据补足。
+- 确认目标设备、硬件版本、BOM/板级差异、固件/镜像版本和生产批次约束。
+- 确认烧录、产测、日志/诊断和现场升级入口。
+- 区分自动验证与必须由 HIL、工装或人工板级证据补足的项目。
 
 ## Workflow
 1. **范围确认**：记录设备型号、硬件版本、固件版本、生产线/现场约束和非目标。
@@ -76,10 +75,10 @@ git -C <target-repo> status --short
 rg -n 'firmware|ota|rollback|flash|partition|self-test|checksum' <target-repo>
 sha256sum <reviewed-firmware-artifact>
 ```
-构建、烧录、readback 与 OTA 必须由经授权的目标操作者，按受审查的项目命令和先行 dry-run 实际执行；缺失实机证据不得宣称 ready。
+构建/烧录/readback/OTA 由授权操作者按受审项目命令、先行 dry-run 执行；缺实机证据不得宣称 ready。
 
 ## Evidence Promotion
-- `planned -> evidence-ready`: 至少有一个真实工程输入、一组可复跑命令、制品清单、正负路径证据和残留缺口。
+- `planned -> evidence-ready`: 至少一项真实工程输入、可复跑命令、制品清单、正负路径证据和缺口。
 - `evidence-ready -> regression-ready`: 必须补实机烧录/readback、boot log、HIL/SIL 或产测报告、OTA/rollback 演练和现场诊断包。
 - `production-ready`: 不是 pilot 状态；必须由项目 release gate 另行签署。
 
@@ -98,14 +97,14 @@ sha256sum <reviewed-firmware-artifact>
 ```
 
 ## Failure Handling
-- 无法获取硬件或工装时，结论最多为 `blocked` 或 `needs-fix`，不得声明 ready。
-- 烧录失败或启动失败时，切到 `adk-systematic-debugging`，先定位 boot log、分区、签名和电源状态。
+- 缺硬件/工装时为 `blocked` 或 `needs-fix`，不得声明 ready。
+- 烧录/启动失败切 `adk-systematic-debugging`，先定位 boot log、分区、签名和电源状态。
 - OTA 成功但回滚未验证时，不能发布现场可升级结论。
 - 产测脚本不稳定时，先归类为测试波动或工装问题，不得把失败静默忽略。
 
 ## Quality Gate
-- 必须列出制品、烧录、产测、诊断、升级、回滚六类证据或明确缺口。
-- 必须说明硬件版本和固件版本，禁止只写“当前版本”。
+- 制品、烧录、产测、诊断、升级、回滚须有证据或明确缺口。
+- 明确硬件/固件版本，不写“当前版本”。
 - 发布到现场前必须有回滚或恢复路径。
 - 诊断包不得包含未脱敏密钥、凭证或用户隐私。
-- 最终 ready 结论必须可由命令、日志或报告复核。
+- ready 须可由命令、日志或报告复核。

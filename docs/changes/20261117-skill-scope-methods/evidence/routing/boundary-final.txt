@@ -1,0 +1,44 @@
+Running match boundary condition tests...
+==========================================
+Testing Empty string input... [0;32mPASS[0m
+Testing Very long input (1024 chars)... [0;32mPASS[0m
+Testing Special chars: double quotes... [0;32mPASS[0m
+Testing Special chars: single quotes... [0;32mPASS[0m
+Testing Special chars: backslash... [0;32mPASS[0m
+Testing Special chars: pipe... [0;32mPASS[0m
+Testing Unicode Chinese... [0;32mPASS[0m
+Testing Emoji input... [0;32mPASS[0m
+Testing Unicode mixed (EN+CN)... [0;32mPASS[0m
+Testing Routing 01: adk-requirements-triage... [0;32mPASS[0m
+Testing Routing 02: adk-task-breakdown... [0;32mPASS[0m
+Testing Routing 03: adk-interface-contract-design... [0;32mPASS[0m
+Testing Routing 04: adk-unit-test-embedded... [0;32mPASS[0m
+Testing Routing 05: adk-static-analysis-c-cpp... [0;32mPASS[0m
+Testing Routing 06: adk-systematic-debugging... [0;32mPASS[0m
+Testing Routing 07: adk-verification-before-completion... [0;32mPASS[0m
+Testing Routing 08: adk-commit-pr-quality-gate... [0;32mPASS[0m
+Testing Routing 09: adk-adr-writer... [0;32mPASS[0m
+Testing Routing 10: adk-register-map-design... [0;32mPASS[0m
+Testing Routing 11: adk-driver-bringup-checklist... [0;32mPASS[0m
+Testing Routing 12: adk-bsp-porting-playbook... [0;32mPASS[0m
+Testing Routing 12b: boot chain -> adk-bsp-porting-playbook... [0;32mPASS[0m
+Testing Routing 13: adk-rtos-task-design... [0;32mPASS[0m
+Testing Routing 14: adk-interrupt-dma-patterns... [0;32mPASS[0m
+Testing Routing 15: adk-protocol-stack-integration... [0;32mPASS[0m
+Testing Routing 16: adk-component-api-stability... [0;32mPASS[0m
+Testing Routing 17: adk-cmake-cross-build... [0;32mPASS[0m
+Testing Routing 18: adk-embedded-debug-transport... [0;32mPASS[0m
+Testing Routing 19: adk-integration-hil-sil... [0;32mPASS[0m
+Testing Routing 20: adk-fault-injection-recovery... [0;32mPASS[0m
+Testing Routing 21: adk-performance-profiling-embedded... [0;32mPASS[0m
+Testing Routing 22: adk-release-versioning... [0;32mPASS[0m
+Testing Routing 23: adk-production-field-readiness... [0;32mPASS[0m
+Testing Routing 23b: production-field sim-device alias... [0;32mPASS[0m
+Testing Routing 24: adk-skill-composition-governance... [0;32mPASS[0m
+Testing Multi-slash: first segment... [0;32mPASS[0m
+Testing Multi-slash: last segment... [0;32mPASS[0m
+Testing Multi-slash: middle segment... [0;32mPASS[0m
+Testing Multi-slash: partial match... [0;32mPASS[0m
+==========================================
+Total: 39, Passed: 39, Failed: 0
+[0;32mAll match boundary condition tests passed[0m

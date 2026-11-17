@@ -70,5 +70,5 @@ tests_run:
 ### 5. 跨仓库场景适配
 
 - **子仓 → adk**：子仓变更必须产出 TestReport，adk 侧做 ReviewReport
-- **adk → explicit tool target**：adk 变更必须先通过 `check-adk-harden-readiness.sh` 与 `runtime-boundary` 门禁，再进入目标运行时适配层
+- **adk → tool target**：沿用已核验项目门禁；仅在 llm_agent Root 接入时核实并运行 `check-adk-harden-readiness.sh`/`runtime-boundary`；适用门禁缺失 BLOCKED。
 - **多仓联动**：每个仓独立 artifact，汇总为 change-set 后统一门禁

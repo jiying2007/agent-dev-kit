@@ -1,0 +1,39 @@
+{
+  "baseline_commit": "3f80b613bf18cd121e3c782cc0a8d69c646f078d",
+  "stage": "working-tree; full regression owned by coordinator",
+  "issue": "formatted technical domain names rejected by unconditional quote stripping",
+  "red": {
+    "methods": 1,
+    "failed_positive_subcases": 7,
+    "exit_code": 1
+  },
+  "green": {
+    "methods": 1,
+    "positive_subcases": 7,
+    "negative_subcases": 9,
+    "exit_code": 0
+  },
+  "matrix": {
+    "methods": 21,
+    "exit_code": 0
+  },
+  "review_prompt_replay": {
+    "before_pass": 10,
+    "after_pass": 14,
+    "total": 14,
+    "all_mutation_permission_deny": true
+  },
+  "skill_entry_bytes": {
+    "baseline": 3066,
+    "current": 3066,
+    "delta": 0
+  },
+  "manifest_edited": false,
+  "native_host_behavior": "not-measured",
+  "model_token_effect": "not-measured",
+  "source_sha256": {
+    "src/agent_dev_kit/_matcher_kernel.py": "a573041b767280f3c390a563308ec580c51d6e7c92427099681e46b2f850a58d",
+    "tests/test_skill_trigger_matrix.py": "2b6d67cc774b25a817141b370cdadd6c3661d13e3ef35500e8a5767ce3131d64",
+    "docs/commands.md": "07e722cc8d90c06d006ef3ef9e880b1c911fc1ab00a956ae0bd7f47465e18c28"
+  }
+}

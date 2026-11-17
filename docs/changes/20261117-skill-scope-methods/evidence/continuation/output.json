@@ -1,0 +1,106 @@
+{
+  "goal_id": "adk-skill-scope-methods-20261117",
+  "source_version": "11.3.12",
+  "source_sha": "UNKNOWN",
+  "status": "in_progress",
+  "logical_task_open": true,
+  "approved_scope": "落实既有审查中的5个问题和3项条件说明，经验证发布并接入Root",
+  "approved": true,
+  "acceptance": [
+    {"id":"A1","text":"领域外单测不误选，MCU/host正控保留"},
+    {"id":"A2","text":"7项方法和适用条件修正"},
+    {"id":"A3","text":"8个原Profile字节门槛不放宽并通过"},
+    {"id":"A4","text":"独立复审和当前源码验证通过"},
+    {"id":"A5","text":"不可变ADK发布完成并完成Root source-only接入"}
+  ],
+  "tasks": [
+    {"id":"T1","status":"in_progress","owner":"route_implementation","acceptance":["A1"]},
+    {"id":"T2","status":"in_progress","owner":"method_implementation","acceptance":["A2"]},
+    {"id":"T3","status":"pending","depends_on":["T1","T2"],"acceptance":["A3","A4"]},
+    {"id":"T4","status":"pending","depends_on":["T3"],"acceptance":["A5"]}
+  ],
+  "verified": [
+    {"id":"V1","text":"两仓主线与审查基线一致；独立工作树已建立","raw_ref":"/workspace/scratch/fe8de3b42084/goal-continuation-input-20261117.json#/verified/0"},
+    {"id":"V2","text":"Root接入流程已核实为两路径source-only事务","raw_ref":"/workspace/scratch/fe8de3b42084/goal-continuation-input-20261117.json#/verified/1"}
+  ],
+  "event_receipt": {
+    "id": "root-prepare-completed",
+    "kind": "read_only_preparation",
+    "result": "准备完成，无源码修改；等待ADK不可变Release和精确SHA",
+    "raw_ref": "/workspace/scratch/fe8de3b42084/goal-continuation-input-20261117.json#/new_event",
+    "evidence_level": "reported_preparation_only",
+    "processed": true,
+    "does_not_complete": ["T1","T2","T3","T4"],
+    "completed_acceptance": [],
+    "task_status_changed": false,
+    "approval_changed": false,
+    "replan_required": false,
+    "reason": "仅补充Root准备状态；目标、验收、任务归属、依赖和验证路径未变。"
+  },
+  "unresolved": [
+    {"task":"T3","kind":"dependency","requires":["T1","T2"],"detail":"输入没有实现完成和实际验证回执；收到两项真实交付证据后进入原验证门禁。"},
+    {"task":"T4","kind":"dependency","requires":["T3"],"detail":"T3通过后按原批准范围处理不可变ADK发布；Root接入仍需真实Release和精确SHA，准备完成不满足A5。"}
+  ],
+  "root_integration": {
+    "preparation": "completed_read_only",
+    "immutable_release": "UNKNOWN",
+    "exact_sha": "UNKNOWN",
+    "execution": "pending_T3_and_release_evidence",
+    "scope": "已核实的两路径source-only事务"
+  },
+  "next_batch": [
+    {
+      "task_id": "T1",
+      "owner": "route_implementation",
+      "mode": "continue_existing_in_flight_work",
+      "dependencies_satisfied": true,
+      "acceptance": ["A1"],
+      "scope": "继续既有路由修正；领域外单测不误选，保留MCU/host正控。",
+      "file_boundary": "沿用现有负责人已批准写集；本输入未提供路径，不推定或扩张。",
+      "minimum_validation": "针对领域外单测反例及MCU/host正控执行既有定向验证；批末复核受影响范围。",
+      "verification_command": null,
+      "verification_command_status": "UNKNOWN_FROM_INPUT",
+      "done_criteria": "实际改动和定向验证证明A1满足，提交可回读的原始回执；摘要或准备事件不能关闭任务。",
+      "evidence_required": ["对应源码SHA或差异引用","实际验证命令、结果及raw_ref"]
+    },
+    {
+      "task_id": "T2",
+      "owner": "method_implementation",
+      "mode": "continue_existing_in_flight_work",
+      "dependencies_satisfied": true,
+      "acceptance": ["A2"],
+      "scope": "继续既有7项方法和适用条件修正，不改原验收分母。",
+      "file_boundary": "沿用现有负责人已批准写集；本输入未提供路径，不推定或扩张。",
+      "minimum_validation": "按既有7项方法及适用条件逐项定向验证；批末复核受影响范围。",
+      "verification_command": null,
+      "verification_command_status": "UNKNOWN_FROM_INPUT",
+      "done_criteria": "实际改动和逐项验证证明A2满足，提交可回读的原始回执；摘要或准备事件不能关闭任务。",
+      "evidence_required": ["对应源码SHA或差异引用","7项修正与适用条件的验证结果及raw_ref"]
+    }
+  ],
+  "next_actions": [
+    {"task":"T1","action":"由原负责人继续在途工作并返回真实实现及定向验证证据；不重复启动实现者。"},
+    {"task":"T2","action":"由原负责人继续在途工作并返回真实实现及逐项验证证据；不重复启动实现者。"},
+    {"task":"T3","when":"T1和T2均有实际完成及验证证据","action":"进入原8个Profile字节门槛验证、独立复审和当前源码验证；通过后才解锁T4。"}
+  ],
+  "stop_conditions": [
+    "出现共享写集冲突或真实阻塞时先交由原执行入口处理，不额外启动竞争执行者。",
+    "原验收、权限、依赖或验证路径实质变化时按既有规则裁决或重规划；不借事件扩大授权。"
+  ],
+  "event_policy": {
+    "processed_event_ids": ["root-prepare-completed"],
+    "duplicate_event_action": "no_op_unless_new_evidence",
+    "polling": false,
+    "wait_for_workers": false,
+    "resume_trigger": "真实交付、验证、Release或阻塞事件",
+    "current_update_boundary": "仅更新状态和工作包；未执行实现、验证、发布、Root接入或对外消息。"
+  },
+  "usage": null,
+  "usage_status": "UNKNOWN",
+  "constraints": [
+    "不调用外部付费模型或Codex CLI/Cloud/Work开发任务",
+    "不增加周期巡检",
+    "当前没有实测usage，不估造Token或预算",
+    "保持已批准验收与任务归属"
+  ]
+}

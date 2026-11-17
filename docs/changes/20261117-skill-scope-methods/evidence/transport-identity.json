@@ -1,0 +1,22 @@
+{
+  "implementation_transport": {
+    "verified_at": "2026-11-17T02:35:07.596117+00:00",
+    "local_head": "78ee2c7941a88cd2e2af307b5155e950f7af4e2c",
+    "remote_head": "ab5ec7b695afd46b4b2bdbcd6943d6e07aa57bb9",
+    "base": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+    "local_tree": "5adf14f3b9475c32da668ac3221689df8c9182d3",
+    "remote_tree": "5adf14f3b9475c32da668ac3221689df8c9182d3",
+    "tree_equal": true,
+    "complete_diff_equal": true,
+    "original_patch_sha256": "7d89a68168c99ad559e09f5d8a0acc9050c2e6a987e220fe734ca2dd50a4befa",
+    "remote_parent": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+    "transport": "connected GitHub Git Data API",
+    "fallback_reason": "standard git push --dry-run exit128: no HTTPS credential; no credentials extracted or injected"
+  },
+  "repaired_local_head": "5d62b7e3da38ac7c9571cfd32707d9d2f4410ff8",
+  "repaired_remote_head": "66df0ce7092aabbbd05411ef2950cc9ee59a3592",
+  "tree": "081cddd941f16a98aee76014998856bd33799610",
+  "tree_and_complete_patch_equal": true,
+  "patch_sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a",
+  "verified_at": "2026-11-17T02:43:56.159997+00:00"
+}

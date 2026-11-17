@@ -76,7 +76,7 @@
 | 60 | 50 | `debugging` | primary | playbook | `adk-hardware-debugging` | 用于板级电源、时钟、复位和硬件异常的假设验证与证据定位；不用于把 Linux oops 直接归咎硬件或未经许可执行带风险的硬件操作。 | 硬件调试 | `skills/adk-hardware-debugging/SKILL.md` |
 | 60 | 60 | `debugging` | primary | tool-wrapper | `adk-performance-profiling-embedded` | 用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。 | 性能分析 | `skills/adk-performance-profiling-embedded/SKILL.md` |
 | 70 | 10 | `verification` | primary | playbook | `adk-test-strategy` | 用于跨模块测试策略、独立期望值、检查器校准、风险与行为覆盖；不用于只生成嵌入式局部替身代码或代替真实执行结果。 | 测试策略 | `skills/adk-test-strategy/SKILL.md` |
-| 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | 用于 MCU/RTOS 单元测试断言、性质/状态序列测试与外设替身；非跨模块策略，不用于证明真实 HIL 性能。 | 单元测试 | `skills/adk-unit-test-embedded/SKILL.md` |
+| 70 | 20 | `verification` | primary | generator | `adk-unit-test-embedded` | 用于 MCU/RTOS 及其 host 模型的单元测试断言、性质/状态序列测试与外设替身；非跨模块策略，不用于证明真实 HIL 性能。 | 单元测试/单测 | `skills/adk-unit-test-embedded/SKILL.md` |
 | 70 | 30 | `verification` | primary | playbook | `adk-integration-hil-sil` | 用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。 | 集成测试 | `skills/adk-integration-hil-sil/SKILL.md` |
 | 70 | 40 | `verification` | primary | tool-wrapper | `adk-embedded-diagnostic-harness` | 用于诊断 CLI、prog_tool、strict 套件及 HIL/SIL 证据的返回码和行为验证；不用于无许可的现场产测写入或直接放行量产。 | 诊断 harness | `skills/adk-embedded-diagnostic-harness/SKILL.md` |
 | 70 | 50 | `verification` | primary | playbook | `adk-fault-injection-recovery` | 用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。 | 故障注入 | `skills/adk-fault-injection-recovery/SKILL.md` |

@@ -1,0 +1,408 @@
+{
+  "base_commit": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+  "head_commit": "66df0ce7092aabbbd05411ef2950cc9ee59a3592",
+  "tree": "081cddd941f16a98aee76014998856bd33799610",
+  "original_patch_sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a",
+  "files": [
+    {
+      "path": ".version-lock",
+      "sha256": "568734e9c06433abc958919a68b3ddab5c84f72c875175e874bdd19ea3da640d",
+      "bytes": 80
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "c606936f71eedf938b847bc169e5cefc9d3c56b7884ea4b7f83b6d2f46a1450d",
+      "bytes": 107742
+    },
+    {
+      "path": "CONTEXT.md",
+      "sha256": "a426e5463488a1107e43483c6cb1ccd35b4313ce6ccc46eecdf84cea11c1f91a",
+      "bytes": 8644
+    },
+    {
+      "path": "README.md",
+      "sha256": "38f647d6648ad5e6aeba9464c89ad5c71b49ef6b63dccb0328b8476d4b116b78",
+      "bytes": 13087
+    },
+    {
+      "path": "docs/agent-skill-catalog.md",
+      "sha256": "6804c7a0f8424898912c6b8daf03128d235d5945081b987e99a40a2269b94fa6",
+      "bytes": 38526
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/design.md",
+      "sha256": "06aae095e7ea200dffe9051d7cadae46b9f922e1551e43d98aa4dc17ffeeb147",
+      "bytes": 2408
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/baseline/audit-findings.json",
+      "sha256": "303cb3bfd059275b8f5098c697e28cc0f81b2fecd4cf0f1a25651654abe9e2ab",
+      "bytes": 23817
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/continuation/input.json",
+      "sha256": "05737e3266efcb5411b346d6749a3a929a28194d82dff441edf1e706555beb48",
+      "bytes": 1627
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/continuation/observation.json",
+      "sha256": "854135bda664b7cf47f9338fdfd5825080dab18aac306163b37d1fdb3b4aede8",
+      "bytes": 1708
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/continuation/output.json",
+      "sha256": "eb4506e883ba54d92fe7c7c279e4ef2f8f8e695e07214946c10c0b5f52396e35",
+      "bytes": 5861
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/interrupted-regression.json",
+      "sha256": "c9a273a6819459a8f07529e75f5c63464cd5eb465aa8a9aaa76c4875a0fafe9b",
+      "bytes": 18342
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-1.txt",
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848",
+      "bytes": 36
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-2.txt",
+      "sha256": "03f8eb7f76d409d092ed29b8942e0eb0ee8bfd4bb08ab6ea93278a4f1e55be16",
+      "bytes": 35
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-3.txt",
+      "sha256": "e36085da8747ca4646af0937fcd4d6d64d324bd782fc0791c17d2bb769814ba6",
+      "bytes": 2251
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-4.txt",
+      "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd",
+      "bytes": 441
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-5.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight-r2.json",
+      "sha256": "cf144ff45af3652c3f5acccf3093ec3c884a23e03043f85f9cbb7c3d688e3713",
+      "bytes": 1162
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/integration/preflight.json",
+      "sha256": "bdb21f805c2222d0d0bf2930fcdb052a131841c1c68c0846646d7d65f055677d",
+      "bytes": 6074
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/acceptance-review.md",
+      "sha256": "53bbe4f402125d5e1688e9ae94fc29e22750d70cd5e727b5058a4f33dd974e8f",
+      "bytes": 3993
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/baseline-files.json",
+      "sha256": "0a748a1775d6be195a2f09af32ac5439dd085f2f320302a63681058d6b6eaba4",
+      "bytes": 1764
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/file-deltas.json",
+      "sha256": "936be49b599f2e1f9f69fd2e55fc96aca212269101ddd285ce859e0a76773ed1",
+      "bytes": 2773
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/final-file-deltas.json",
+      "sha256": "1ee64675207c0c67ae7ecdfbed5fd33cc2e56ad0dd343274977c8f6971c0a69e",
+      "bytes": 2773
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/final-profile-ratchets.json",
+      "sha256": "7b8796c24aed06a855ebf76f0c4bf13429f62028fcca572b11528e9eaedf067f",
+      "bytes": 4456
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/final-targeted-tests.txt",
+      "sha256": "a75e355df4eefc99f69fbd80c2fdd507d62efc91b202240c9f650f7be997c5e4",
+      "bytes": 8407
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/growth-test-after.json",
+      "sha256": "fec04408c6fcd8c6a6f3839264994a07ed3c4ec1bf3127916a98dff939ee3275",
+      "bytes": 8293
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/growth-test-before.json",
+      "sha256": "2b73c43ca5206f5c73a14261c12f427aaeca0d40eae62f7372430d9df6b3d867",
+      "bytes": 752
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/handoff-file-deltas.json",
+      "sha256": "233165d2eb99a6c27ddbe411c37fe79827311da878191cdbbda46fc215db6446",
+      "bytes": 2774
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/handoff-targeted-tests.txt",
+      "sha256": "569b0f6ac130ef358785f3f910f64d05f799c30b0a9b587b77f2e532cea53d5a",
+      "bytes": 3076
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/negative-results.md",
+      "sha256": "4fca6407c3a30cc70d57224c8c6bf5d0e8cf91af8f62fed9180bf43110de8f5a",
+      "bytes": 1022
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/profile-ratchets-after-compaction.json",
+      "sha256": "6d842f6b2d95d11bdcb67b4e07990ee34efba6d7836698c20029a87d3b9f2e95",
+      "bytes": 4380
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/profile-ratchets.json",
+      "sha256": "c91f1b77fca50e3aced7801248293769890dadabe7a98bae56a080d6984124d3",
+      "bytes": 4456
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/red-tests.raw.json",
+      "sha256": "459706c68b7adbac001c2a700c771f71d6d50f0fa19f86d917d8f435e4977cca",
+      "bytes": 8528
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/red-tests.txt",
+      "sha256": "d0ad15a8d67476854c57df60104f9fb034354e00b397d52040143335278d47e2",
+      "bytes": 8266
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/targeted-tests.txt",
+      "sha256": "c584673d3442751c020e42df598a162548abf54a29926462d280eb694560ec17",
+      "bytes": 3076
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/verified-file-deltas.json",
+      "sha256": "fff99a770d74ba1710c39f9315921cc81e155fcf85a05ddced23467040483ee1",
+      "bytes": 2773
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/verified-profile-ratchets.json",
+      "sha256": "def0ca4c145fe76953074f86f7e7fd59ea9dab446e3a0682eb33484e71483f98",
+      "bytes": 4380
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/methods/verified-targeted-tests.txt",
+      "sha256": "dbc3852b0cf89a42a3b20d4f8fad659d106302839e963355e5d4a24da577b047",
+      "bytes": 8407
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/after.json",
+      "sha256": "96ffe2a3249c33ef48e2d03ab36542348de6c6c74117a3dddab1b5c2ac7a495b",
+      "bytes": 9546
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/before.json",
+      "sha256": "9f5deca329bd053a8b78f13d3424a111be64d80c8d42ca4390a2e51154ce0146",
+      "bytes": 13193
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/boundary-final.txt",
+      "sha256": "d31f128a2c2f4ea29688e46fdf620be8cbd361aa0d1deb4b58b61dd87b93d116",
+      "bytes": 2598
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/after.json",
+      "sha256": "341a704eb6398da8f7f8a4a321427e88a16e63a52c1cec3388918989b5b3d391",
+      "bytes": 14488
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/before.json",
+      "sha256": "c5840c822d4fbbfd77cdddf6e127976a9cbbb71360d0c43a0060cf93edc553de",
+      "bytes": 11442
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/green-tests.txt",
+      "sha256": "bea978647b19fd843a9f21262ecfaac3c8b7fed8b6dd6f7dccc63bc04fbbe217",
+      "bytes": 98
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/matrix-final.txt",
+      "sha256": "7b879a270346a4c8dea69eb01e5495ef527b751ddd781541444edf70f977fc7a",
+      "bytes": 120
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/red-tests.txt",
+      "sha256": "d747c7a7323425a02f1df9df6edcd11f6dce9f2bc978091be708058fc6247ece",
+      "bytes": 6008
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/result.json",
+      "sha256": "cf70fdba108b7a3bc4b41a4b35f7ddb276885b1fd729b4064e0c44aaa8a62695",
+      "bytes": 1151
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/formatted-context/verification.md",
+      "sha256": "b620673377a82c49464af057692cbd808acb5ec00936a4870af10b8f28640883",
+      "bytes": 3268
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/match-effectiveness.txt",
+      "sha256": "2262387e1402e1474e56110fb6ac5a0604d16a22822ac4eafb7e3ad26e7d265c",
+      "bytes": 3335
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/red-tests.txt",
+      "sha256": "b52621c09e5ed45506cc2c4db8a101bff48fac4bd486b0c0bda99d3166bcb7a8",
+      "bytes": 13476
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/result.json",
+      "sha256": "74bbe4b20e3d03633498dc89f1395a873fc11ccf276d9251530602249b35f75c",
+      "bytes": 1628
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/routing-contracts.txt",
+      "sha256": "45894826c06becdecc8bfb0b98a0faa2101a71618ca249f7b9d74740b49e4ad2",
+      "bytes": 129
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/skill-validation.json",
+      "sha256": "7a2d746041a792ba4e335e586d88f88a18abe01f273b0ef9d060466275512805",
+      "bytes": 85
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/trigger-matrix-final.txt",
+      "sha256": "364a856da28d9d97db2856654d213df2af45e0e767debe1582000ca16edfab7d",
+      "bytes": 119
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/routing/verification.md",
+      "sha256": "d83d8c1f4208bd2e76a0acc68610a1c2caa944e1a9135d4abedd460318815c24",
+      "bytes": 5593
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/requirements.md",
+      "sha256": "987f00a4cc1deee41ca302195648452fc354ad96d2f47f0a9aa060c70ce55098",
+      "bytes": 2048
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/tasks.md",
+      "sha256": "0bdeae2656bca57ba008eee2ae1d40f4e39d252f1dea6a73cd2d552c4f7a5c49",
+      "bytes": 2309
+    },
+    {
+      "path": "docs/commands.md",
+      "sha256": "07e722cc8d90c06d006ef3ef9e880b1c911fc1ab00a956ae0bd7f47465e18c28",
+      "bytes": 36446
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "07e887a7417f81ea279a107981aa0fd25836aa85d140f26734d78733c0e0ce68",
+      "bytes": 90988
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "92f186adf1d906b84e6925ff1001a9b353ebbedb784744669c21db3d6f0037ce",
+      "bytes": 706
+    },
+    {
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "sha256": "21e9223a92ec6f50b336fc9bb8cd041f7db533cbfc216350c64a0b748ce2328a",
+      "bytes": 3024
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "062d145077d6d56ad0d038cf8d3de62f3368bc3f1c561660aa209830dcaa38f6",
+      "bytes": 6640
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "18c4ea37d322fe5453019a1e674a27d22ede1741e3f8ebf01d0c019183de4a54",
+      "bytes": 1310
+    },
+    {
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "sha256": "17f658a180bb848f98a0ffa91831e82fc980d7fcdae78782c103fb4862f5fa4e",
+      "bytes": 2061
+    },
+    {
+      "path": "skills/adk-artifact-gating/references/details.md",
+      "sha256": "c4f1f8675a02c8e3886417b48caa6c1ba2dad15fd5246dfb02e1ae6980b42f3f",
+      "bytes": 2343
+    },
+    {
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "sha256": "60689906562d9146431960b421c1d2731090f5377c1cd5923adb13ab589b7c27",
+      "bytes": 5597
+    },
+    {
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "sha256": "551c03d625fb6d884f03e112d49d9d39eee8d50a628009a93b5cf67ab051b5b8",
+      "bytes": 3805
+    },
+    {
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "429e8f4bdab43522b6deb89ad98cf20f30c7a8b8f80be2810e6511ca62149000",
+      "bytes": 3066
+    },
+    {
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "sha256": "b661f56a96309870e2895423ee3646bd9e50a5f35da9286cd070a45ac75a60e6",
+      "bytes": 5013
+    },
+    {
+      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "sha256": "33e1ecdae9f7baed2e7a050bc718e716200d76934489419f2d7be5c4b3776a62",
+      "bytes": 1911
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "sha256": "a17d781e18dc5f72d6485f1ca8f5a9e6f6612ddeb761340110083b35181ffbe9",
+      "bytes": 3066
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "2e6f4cf157d25085a13582c7aaa16d5ddaae5ac8aca72a41c04c9d2fbaf0a1b8",
+      "bytes": 71
+    },
+    {
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "sha256": "a573041b767280f3c390a563308ec580c51d6e7c92427099681e46b2f850a58d",
+      "bytes": 28210
+    },
+    {
+      "path": "src/agent_dev_kit/matcher.py",
+      "sha256": "27d9519150922ceaf7a65f196bbdadb3c8915834becd41cf13cd1c8914ed7209",
+      "bytes": 18455
+    },
+    {
+      "path": "src/agent_dev_kit/validation_contract.py",
+      "sha256": "055051177bda58f8a2558afe654fbf7117b1b4334730f4c296c10cf9c21e03ab",
+      "bytes": 21277
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "ff535f0c999111ab50c2a4ba8ce0daa5de2c17bd3691d2007d010c438456aeb5",
+      "bytes": 7447
+    },
+    {
+      "path": "tests/test_boundary_conditions_match.sh",
+      "sha256": "22d364ecdb59bbae8108be0ef829cde302ec25400381e062bcbc1661f3c34ea8",
+      "bytes": 15233
+    },
+    {
+      "path": "tests/test_match_effectiveness.sh",
+      "sha256": "db3a0e902f9addeab80d9a48d953b9f8b49f0919807f423b96b50bf20e3b0af2",
+      "bytes": 17718
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "sha256": "d10d6b5e7a79811d2a8ef87439c81bd3db22e5284ccc0602c54e4a8af6a14f5d",
+      "bytes": 1213
+    },
+    {
+      "path": "tests/test_skill_scope_methods.py",
+      "sha256": "bb6aefafed45d77f482b39046ab933c414c2365f1f3568adc1f66d0444964f62",
+      "bytes": 5297
+    },
+    {
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "2b6d67cc774b25a817141b370cdadd6c3661d13e3ef35500e8a5767ce3131d64",
+      "bytes": 36989
+    }
+  ]
+}

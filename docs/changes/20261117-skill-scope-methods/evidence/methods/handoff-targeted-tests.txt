@@ -1,0 +1,22 @@
+test_growth_metadata_limits_promotion_to_persistent_assets (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... ok
+test_perf_generic_event_has_no_universal_llc_label (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_perf_generic_event_has_no_universal_llc_label) ... ok
+test_published_trigger_scan_covers_the_manifest_including_nested_skills (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_published_trigger_scan_covers_the_manifest_including_nested_skills) ... ok
+test_real_team_exports_scope_nonbundled_root_helpers (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) ... ok
+test_65_manifest_skills_have_one_frozen_source_audit_row (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_65_manifest_skills_have_one_frozen_source_audit_row) ... ok
+test_composition_light_mode_does_not_downgrade_risk (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_composition_light_mode_does_not_downgrade_risk) ... ok
+test_embedded_tool_and_fake_register_example_gates (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_embedded_tool_and_fake_register_example_gates) ... ok
+test_external_fetch_untrusted_url_and_redirect_denials (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_external_fetch_untrusted_url_and_redirect_denials) ... ok
+test_imap_read_does_not_imply_mailbox_mutation (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_imap_read_does_not_imply_mailbox_mutation) ... ok
+test_scenarios_are_unmeasured_hypotheses (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_scenarios_are_unmeasured_hypotheses) ... ok
+test_supply_chain_has_readonly_and_install_boundaries (tests.test_skill_portfolio_quality.SkillPortfolioQualityTests.test_supply_chain_has_readonly_and_install_boundaries) ... ok
+test_authority_coverage_survives_compaction (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_authority_coverage_survives_compaction) ... ok
+test_design_cases_not_model_success (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_design_cases_not_model_success) ... ok
+test_feedback_triage_remains_read_only_and_non_final (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_feedback_triage_remains_read_only_and_non_final) ... ok
+test_no_new_global_skill_or_injected_lifecycle (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_no_new_global_skill_or_injected_lifecycle) ... ok
+test_small_work_does_not_force_heavy_plan_or_parallel (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_small_work_does_not_force_heavy_plan_or_parallel) ... ok
+test_task_timeout_is_failure_not_discarded_as_incomplete (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_task_timeout_is_failure_not_discarded_as_incomplete) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.212s
+
+OK

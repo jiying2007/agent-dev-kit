@@ -105,7 +105,7 @@ test_routing_task_breakdown() {
 
 test_routing_unit_test() {
     local output
-    output=$(match_cli --text "写单元测试" 2>&1) || true
+    output=$(match_cli --text "MCU 工程写单元测试" 2>&1) || true
     [[ "$output" == *"match=true"* && "$output" == *"source=routing"* && "$output" == *"skill=adk-unit-test-embedded"* ]]
 }
 
@@ -376,7 +376,7 @@ run_test "子代理驱动开发 -> adk-parallel-agent-governance" test_routing_p
 run_test "worktree 隔离 -> adk-worktree-governance" test_routing_worktree_governance
 run_test "分支收尾 -> adk-branch-closeout" test_routing_branch_closeout
 run_test "任务太大 -> adk-task-breakdown" test_routing_task_breakdown
-run_test "写单元测试 -> adk-unit-test-embedded" test_routing_unit_test
+run_test "MCU 单元测试 -> adk-unit-test-embedded" test_routing_unit_test
 run_test "调试问题 -> adk-systematic-debugging" test_routing_debugging
 run_test "真实问题排查 -> adk-systematic-debugging" test_routing_debugging_natural_language
 run_test "提交代码 -> adk-commit-pr-quality-gate" test_routing_commit_pr

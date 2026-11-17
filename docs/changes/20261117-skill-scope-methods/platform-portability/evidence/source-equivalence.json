@@ -1,0 +1,13 @@
+{
+  "base_commit": "da34b8bed95d164eaab8982b0e13de508054ecfc",
+  "head_commit": "3568327a9877e2e789e079c6251cdf26af3c10c0",
+  "local_commit": "da32fcea0249120fa9828f22bf0add7bdf4f744b",
+  "tree": "0f248f25597d33165b775e05ece5f8f6813a8103",
+  "tree_and_patch_equal": true,
+  "original_patch_sha256": "76ccd29706ce6bd7f6a577ab450791dda37858dd172d4b2128c3968344b4c27c",
+  "verified_at": "2026-11-17T02:58:08.139266+00:00",
+  "changed_files": [
+    "manifests/agent_platform_contracts.json",
+    "tests/test_agent_platform.sh"
+  ]
+}

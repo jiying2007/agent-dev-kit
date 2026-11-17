@@ -1,0 +1,11 @@
+{
+  "phase": "before-test-hardening",
+  "case": "ordinary-suggestion-forced-promotion",
+  "fixture_sha256": "a62002e34979a61ab7719ed2e3201e202ba07e19b626d51342dcfed837f8683e",
+  "test_sha256": "be086b47562de016f4c362a23ce2be812dd9ca4312f095fcfabe81806567894a",
+  "source_unchanged": true,
+  "tests_run": 1,
+  "was_successful": true,
+  "output": "test_growth_metadata_limits_promotion_to_persistent_assets (scope_case.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.001s\n\nOK\n",
+  "meaning": "Known bad source variant passed the prior test; this is the test coverage defect, not a candidate source defect."
+}

@@ -1,0 +1,389 @@
+{
+  "source_commit": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+  "source_version": "11.3.12",
+  "audit_report": "https://chatgpt.com/library?file_id=libfile_46622057dc1c8191ae6a6ae4bd2fb06a&account_id=personal",
+  "original_audit_files": [
+    {
+      "name": "audit-embedded-20261117.json",
+      "sha256": "5164653bac6dd8a2959de84bc425b99778b2785d5e6d2c3da3527c7e769bbc35"
+    },
+    {
+      "name": "audit-delivery-20261117.json",
+      "sha256": "756a2cfbcf96b302956a5bbd922edd70da65bf9f38511632a5bc2478db7f093b"
+    },
+    {
+      "name": "audit-optional-20261117.json",
+      "sha256": "71c1152d0f64f50caa9dd704a55a70f14c8b8d4e0fc769833b13c9f633b0be6d"
+    }
+  ],
+  "findings": [
+    {
+      "id": "EMB-PERF-001",
+      "priority": "P2",
+      "classification": "confirmed-technical-misstatement",
+      "title": "Generic perf cache-misses is not a portable LLC-miss counter",
+      "locations": [
+        {
+          "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+          "line_start": 34,
+          "line_end": 34
+        }
+      ],
+      "observation": "The Linux target gate labels perf stat -e cache-misses as LLC miss without binding that label to the target PMU mapping.",
+      "counterexample": "Official Linux v6.12 ARM PMUv3 maps PERF_COUNT_HW_CACHE_MISSES to L1D_CACHE_REFILL; LLC read misses use a separate LL cache event. The ARMv7 Cortex-A8 map likewise maps the generic hardware cache-miss counter to L1 data-cache refills. A valid generic count can therefore be mislabeled as last-level misses.",
+      "primary_sources": [
+        {
+          "url": "https://github.com/torvalds/linux/blob/v6.12/drivers/perf/arm_pmuv3.c#L48",
+          "blob_sha": "0afe02f879b45a8600b9cea1bfd88e6a68096a67",
+          "relevant_lines": [
+            48,
+            72
+          ],
+          "retrieval": "GitHub connector fetch_file, tag v6.12, lines 40-91"
+        },
+        {
+          "url": "https://github.com/torvalds/linux/blob/v6.12/drivers/perf/arm_v7_pmu.c#L161",
+          "blob_sha": "420cadd108e79821f43537fab23fe081ca6fd9bc",
+          "relevant_lines": [
+            156,
+            161
+          ],
+          "retrieval": "GitHub connector fetch_file, tag v6.12, full source"
+        }
+      ],
+      "minimal_optimization": "Replace the universal LLC label with target-resolved cache-event semantics. For an LLC claim, identify CPU/PMU and running kernel mapping, inspect supported events/encodings and the applicable vendor documentation, and use a verified LLC-specific event. Keep unsupported or unmapped counters unavailable/unknown. No new profiling framework is needed.",
+      "acceptance": [
+        "An ARM PMUv3 or ARMv7 mapping example reports the generic cache-misses value as its documented L1D refill event rather than LLC misses.",
+        "An LLC-specific example records its actual target/event mapping and unsupported-event outcomes are not interpreted as zero misses.",
+        "The existing workload-validity and A/B evidence boundaries remain intact."
+      ],
+      "limits": "This is an official-source counterexample to a portable claim. It is not an on-board perf experiment and does not assert the mapping of a particular vendor BSP or SoC."
+    },
+    {
+      "id": "EMB-ROUTE-001",
+      "priority": "P2",
+      "classification": "reproduced-candidate-selection-false-positive",
+      "title": "Generic unit-test triggers select an MCU/RTOS Skill for explicit non-embedded tasks",
+      "locations": [
+        {
+          "path": "skills/adk-unit-test-embedded/SKILL.md",
+          "line_start": 3,
+          "line_end": 15
+        },
+        {
+          "path": "src/agent_dev_kit/_matcher_kernel.py",
+          "line_start": 477,
+          "line_end": 496
+        },
+        {
+          "path": "src/agent_dev_kit/matcher.py",
+          "line_start": 369,
+          "line_end": 377
+        }
+      ],
+      "observation": "The Skill description is MCU/RTOS-specific, but its generic triggers include 单元测试, 写测试 and 测试用例; its only non-trigger is a pure hardware wiring issue.",
+      "counterexamples": [
+        {
+          "query": "帮我写一个 Python 单元测试，用 pytest，不涉及嵌入式",
+          "actual": {
+            "match": true,
+            "skill": "adk-unit-test-embedded",
+            "source": "skill_trigger",
+            "trigger": "单元测试",
+            "mutation_permission": "deny"
+          }
+        },
+        {
+          "query": "为已有 Rust 函数补 cargo test 单元测试，不需要硬件",
+          "actual": {
+            "match": true,
+            "skill": "adk-unit-test-embedded",
+            "source": "skill_trigger",
+            "trigger": "单元测试",
+            "mutation_permission": "deny"
+          }
+        }
+      ],
+      "positive_controls": [
+        {
+          "query": "给 MCU UART 驱动补单元测试，覆盖队列溢出",
+          "actual_skill": "adk-unit-test-embedded",
+          "source": "skill_trigger"
+        },
+        {
+          "query": "给嵌入式协议解析器的 Python host 模型写单元测试",
+          "actual_skill": "adk-unit-test-embedded",
+          "source": "routing"
+        }
+      ],
+      "existing_mitigation": {
+        "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+        "line_start": 33,
+        "line_end": 38,
+        "meaning": "The existing Skill Fit Gate requires supported scope and explicit non-goals to be checked after routing, and permits no-skill/abstain. Both reproduced negatives retain mutation_permission=deny."
+      },
+      "minimal_optimization": "Tighten domain-external non-trigger or implicit candidate semantics through the existing canonical routing mechanism. Reuse the existing Fit Gate; do not add an authorization system or a generic unit-test Skill just to mask the match. Do not exclude Python or Rust wholesale, because embedded host models and embedded Rust tests may fit.",
+      "acceptance": [
+        "The explicit non-embedded Python request does not implicitly load the MCU/RTOS Skill.",
+        "A generic Rust request without embedded context abstains or follows the existing project test workflow without inventing hardware scope.",
+        "MCU UART tests and a Python host model for embedded logic retain an applicable route.",
+        "Explicit user selection and existing permission semantics are preserved; scoped execution still honors Fit Gate conflicts."
+      ],
+      "limits": "This is a deterministic routing-quality issue, not an authorization bypass. Four selected probes are counterexamples and controls, not an estimate of overall matcher accuracy or real agent task success."
+    },
+    {
+      "id": "EMB-UBI-001",
+      "priority": "P3-conditional",
+      "classification": "static-method-gap-with-primary-source-failure-condition",
+      "title": "UBI image compatibility should include target geometry when migration touches UBI/UBIFS",
+      "locations": [
+        {
+          "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+          "line_start": 44,
+          "line_end": 49
+        },
+        {
+          "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+          "line_start": 68,
+          "line_end": 70
+        }
+      ],
+      "observation": "The workflow names logical partitions/volumes, configuration-chain alignment, sizes, manifests and hashes, but does not explicitly identify the target MTD/UBI geometry or image-builder geometry parameters. The broad configuration check could include them; the written method does not ensure that.",
+      "counterexample_condition": "A logically matching, hash-verified image can contain a VID-header offset or data offset different from those expected by the target UBI device. Linux checks those physical fields independently and rejects the mismatch. A file hash alone establishes identity, not compatibility with a different target geometry.",
+      "primary_sources": [
+        {
+          "url": "https://github.com/torvalds/linux/blob/v6.12/drivers/mtd/ubi/io.c#L642-L667",
+          "blob_sha": "a4999bce435f5618986dc9b96f973cf4e64676c0",
+          "relevant_lines": [
+            658,
+            659,
+            664,
+            665
+          ],
+          "retrieval": "GitHub connector fetch_file, tag v6.12, full source"
+        }
+      ],
+      "minimal_optimization": "Only for applicable UBI/UBIFS migrations, add a compact target-versus-image geometry record: physical erase-block and minimum I/O/subpage geometry, VID/data offsets and derived logical erase-block size, plus relevant volume alignment/capacity constraints. Derive image-builder options from the actual target and compare before operator handoff. Missing target geometry should remain an explicit host-verification gap, without a new general checklist.",
+      "acceptance": [
+        "A host-side fixture with matching volume names/sizes but a mismatched VID or data offset is identified as incompatible before handoff.",
+        "A matched geometry fixture retains the existing logical layout, data-preservation and operator-receipt checks.",
+        "The added check applies conditionally to UBI/UBIFS; ordinary unrelated filesystem migrations do not acquire unnecessary work."
+      ],
+      "limits": "This audit did not generate, attach or flash a UBI image. ubinize and mkfs.ubifs are unavailable locally. The report identifies a conditional documentation/method gap and the kernel failure predicate, not a reproduced product migration failure or a permission bypass."
+    },
+    {
+      "id": "EMB-TIME-001",
+      "priority": "P3-conditional",
+      "classification": "measurement-definition-ambiguity-with-arithmetic-counterexample",
+      "title": "The human-active bound needs a single-person or union-time definition",
+      "locations": [
+        {
+          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+          "line_start": 10,
+          "line_end": 11
+        },
+        {
+          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+          "line_start": 20,
+          "line_end": 21
+        },
+        {
+          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+          "line_start": 30,
+          "line_end": 31
+        }
+      ],
+      "observation": "The reference requires human_active_minutes <= wall_clock_minutes but does not define whether human-active means one person's time, the union of human-active intervals, or aggregate labor. Agent-active time has an explicit concurrent-agent adjustment.",
+      "counterexample": {
+        "wall_minutes": 20,
+        "human_intervals": {
+          "engineer_a": [
+            [
+              0,
+              15
+            ]
+          ],
+          "engineer_b": [
+            [
+              5,
+              20
+            ]
+          ]
+        },
+        "aggregate_person_minutes": 30,
+        "union_active_minutes": 20,
+        "bound_accepts_aggregate_person_minutes": false,
+        "bound_accepts_union_active_minutes": true,
+        "meaning": "A valid two-person effort violates the written bound if human-active is aggregate labor, but satisfies it if the field means union time. Without a definition, efficiency comparisons may mix the two."
+      },
+      "minimal_optimization": "Define the existing field as single-person or union active time, or explicitly distinguish aggregate person-minutes when multiple people participate. Add participant/overlap detail only for the multi-person case and keep labor-effort and elapsed-time comparisons separate.",
+      "acceptance": [
+        "A one-person pilot retains a human-active value bounded by wall-clock time.",
+        "The two-person example is represented as 30 person-minutes and 20 union-active minutes without rejecting valid evidence or silently discarding labor.",
+        "The reference states which time quantity is used in each claimed efficiency comparison."
+      ],
+      "limits": "This is a conditional reference ambiguity, not a demonstrated production validator bug. No actual pilot dataset or productivity gain was inferred."
+    },
+    {
+      "id": "DELIVERY-01",
+      "priority": "P2",
+      "classification": "reproduced-export-dependency-gap",
+      "title": "将 Root 专属 harden 门禁限定到实际 Root 接入场景",
+      "skill": "adk-artifact-gating",
+      "location": {
+        "path": "skills/adk-artifact-gating/references/details.md",
+        "line_start": 70,
+        "line_end": 74
+      },
+      "exact_requirement": "adk → explicit tool target：adk 变更必须先通过 check-adk-harden-readiness.sh 与 runtime-boundary 门禁",
+      "counterexample": "一个没有 llm_agent Root/~/codex 的已授权团队消费者，使用 ADK 的 team-core profile 导出到 claude-code 或 opencode，并交接自身项目中的 ADK 适配变更。随包 reference 要求先运行 check-adk-harden-readiness.sh，但消费者及完整 ADK 发布源都不提供该脚本；它实际依赖 llm_agent 的 agent-dev-kit、subrepos/phase-gate.env 等布局。",
+      "observed": {
+        "production_api": "agent_dev_kit.compiler.export_assets",
+        "profile": "team-core",
+        "targets": [
+          "claude-code",
+          "opencode"
+        ],
+        "export_statuses": [
+          "pass",
+          "pass"
+        ],
+        "reference_matches_release_source": [
+          true,
+          true
+        ],
+        "reference_sha256": "def3c5a6ce7066b09bbd28a77260f1682e39c0ffd1f5383f5fe47d3e02b9e9e7",
+        "harden_script_in_release_source": false,
+        "harden_script_in_either_export": false,
+        "runtime_boundary_script_in_release_source": true,
+        "runtime_boundary_script_in_either_export": false,
+        "root_script_existence_verified": true,
+        "root_script_executed": false
+      },
+      "impact": "对本应采用目标既有 workflow 的独立消费者引入无法满足的外部前置条件，可能导致无必要停顿、要求安装 Root 或误补不存在的命令。已证明依赖缺失和原文传播；尚未观察模型实际停顿、误调用或返工。",
+      "minimal_change": "仅改 references/details.md 第 73 行：通用场景采用已核验的源/目标项目门禁；check-adk-harden-readiness.sh 明确只适用于实际 llm_agent Root source-to-live 接入，并核验存在/授权。runtime-boundary 同样按目标可用入口说明。保留真实 Root 门禁和缺失适用证据时的 BLOCKED，不复制 Root 脚本或新增状态机。",
+      "acceptance": [
+        "在两个现有 team-core production exports 中，脱离 Root 的消费者参考页不再无条件要求未随包的 Root helper。",
+        "独立消费者反例能仅凭目标已声明的验证入口形成 artifact 交接，不伪造 Root readiness，也不为满足文档而安装 Root。",
+        "真实 llm_agent Root 接入仍明确执行适用的 harden/runtime 边界门禁；不因便携措辞获得 source-to-live 权限。",
+        "若使用 source contract regression，只针对该条件与实际随包 reference 加小型覆盖；不新增全局 helper 存在性治理。"
+      ],
+      "existing_test_gap": "tests/test_skill_content_contract.py:106-124 只扫描 SKILL.md 中 fenced bash/sh 的特定命令形态，未覆盖 reference 中裸 inline helper 名称。该测试通过不能证明当前 reference 的外部依赖可满足。",
+      "prior_fix_relation": "不是已修的 READY/PASS/approved 状态问题，也不是已修的 rtk 隐式依赖；问题位于未限定作用域的 Root helper。",
+      "evidence_files": [
+        "/workspace/scratch/fe8de3b42084/delivery-audit-portability-probe.py",
+        "/workspace/scratch/fe8de3b42084/delivery-audit-portability-observation.json",
+        "/workspace/scratch/fe8de3b42084/delivery-audit-portability-initial-attempt.txt"
+      ],
+      "initial_control": "首次选择 core profile 的 fixture assertion 失败，因为 artifact-gating 未属于 core；这不是产品失败，已保留失败记录。按 manifest 改成 team-core 和新 scratch 目录后两种导出观察成功。",
+      "effect_status": "not-measured"
+    },
+    {
+      "id": "DELIVERY-02",
+      "priority": "P3",
+      "classification": "static-contract-inconsistency",
+      "title": "成长建议执行前置条件应与持久规则晋级范围一致",
+      "skill": "adk-engineering-growth-review",
+      "locations": [
+        {
+          "path": "skills/adk-engineering-growth-review/SKILL.md",
+          "line_start": 28,
+          "line_end": 28
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/SKILL.md",
+          "line_start": 47,
+          "line_end": 48
+        },
+        {
+          "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+          "line_start": 15,
+          "line_end": 15
+        }
+      ],
+      "counterexample": "成长复盘从多次遗漏错误路径的证据提出：在下一次已授权的小修复中增加一个针对性的错误路径回归测试。这个动作不修改 prompt、Skill、Workflow、AGENTS 或长期记忆。frontmatter 第 28 行仍要求任何改进建议进入执行前先形成 trace-feedback-eval-handoff 候选，正文第 48 行却明确仅正式升级 prompt/Skill/Workflow 时需要。",
+      "impact": "两个等效入口层级给出不同适用范围，消费者可能为普通训练/工程改进额外生成 eval handoff。这里只确认文本条件冲突；未证明实际用户流程已经被阻断，未测量 Token 或周期损失。",
+      "minimal_change": "把第 28 行收窄为长期规则/prompt/Skill/Workflow 晋级前须形成 trace-feedback-eval-handoff 候选，与正文和 reference 一致；保留普通报告只读、实际写操作需要原任务授权、持久晋级需 owner review 与真实验证。",
+      "acceptance": [
+        "普通学习/工程习惯建议及不改长期资产的已授权代码/测试改进，不因本 Skill 额外要求 trace-feedback-eval-handoff。",
+        "prompt/Skill/Workflow/AGENTS/长期 memory 晋级仍保持候选、适用授权、owner review 与真实验证要求。",
+        "frontmatter、Workflow 与 reference 的适用范围一致；优先用措辞替换减少歧义，不增加新小节或状态。",
+        "仅静态案例检查可确认条件一致；真实任务效率改善需另行固定源/任务/模型/预算观察，不能由字节缩减推断。"
+      ],
+      "prior_fix_relation": "20261116-skill-completion G3 已修默认跨项目宽读；本项不重复读取范围问题，针对仍留下的执行前置条件宽于正文。",
+      "existing_test_gap": "tests/test_skill_method_efficiency.py:57-59 检查 index-first/trace-feedback/human approval/insufficient-evidence 术语存在，tests/test_skill_content_contract.py 的成长回归检查读取范围；均不区分普通改进与长期规则晋级。",
+      "effect_status": "not-measured"
+    },
+    {
+      "id": "OPT-01",
+      "priority": "P2",
+      "classification": "reproduced_command_coverage_omission",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "line": 79,
+      "title": "组合审查示例使用一层 glob，漏掉嵌套 optional 子 Skill",
+      "current_example": "rg -n \"triggers:\" skills/*/SKILL.md optional-skills/*/SKILL.md",
+      "counterexample": "当前 release 共有 65 个 Skill；该参数枚举仅覆盖 63 个，其中 optional 为 7/9。adk-email-imap-fetch 与 adk-fetch-url-content 均位于 optional-skills/adk-data-fetch/ 下第二层，被命令无声遗漏。",
+      "observed": {
+        "original_total": 63,
+        "recursive_total": 65,
+        "original_optional": 7,
+        "recursive_optional": 9
+      },
+      "impact": "照抄该命令做 triggers/non_triggers 覆盖审查时看不到两个子项；未发现 canonical manifest/matcher 或安装逻辑存在同样漏项。",
+      "minimal_change": "将示例替换为 rg -n --glob SKILL.md \"triggers:\" skills optional-skills；沿用原审查流程，不新增扫描器或治理矩阵。",
+      "acceptance": [
+        "在冻结源上原命令对应路径集合为 63，修正后为 65",
+        "optional 集合精确等于 manifest 的 9 项并包含两个嵌套子项",
+        "保持现有 triggers/non_triggers 检索语义，不意外扫描 references 或测试夹具"
+      ],
+      "verification": "trigger_inventory() 使用真实 rg 执行原路径枚举与候选递归命令，并核对实际源文件集合；退出 0。"
+    },
+    {
+      "id": "OPT-02",
+      "priority": "P2-conditional",
+      "classification": "static_method_gap_with_controlled_counterexample",
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "line": 32,
+      "related_lines": [
+        33,
+        34
+      ],
+      "title": "DNS 预检与实际连接地址的绑定方法未明确",
+      "current_boundary": "当前已要求拒绝内网地址、DNS rebinding 与逐跳复核，并在无法安全检查时停止；这些限制有效且应保留。",
+      "counterexample": "实现者先 getaddrinfo(host) 得公网 93.184.216.34 并通过检查，再向 socket.create_connection((host, 443)) 传原 hostname；标准库再次解析可得到 127.0.0.1。无网络模拟显示第二次解析被实际连接路径采用。",
+      "observed": {
+        "python": "3.12.14",
+        "unbound_dns_answers": [
+          "93.184.216.34",
+          "127.0.0.1"
+        ],
+        "unbound_simulated_connection": "127.0.0.1",
+        "bound_simulated_connection": "93.184.216.34",
+        "initial_private_destination": "denied before connect",
+        "real_network_calls": 0
+      },
+      "impact": "只检查一次 DNS 的具体做法不能兑现 Skill 宣称的 rebinding 边界。是否影响实际宿主取决于目标抓取工具是否已经在连接时阻止未核地址；本仓没有生产客户端，未证明任何 ADK 真实网络绕过。",
+      "minimal_change": "按目标工具能力加一条方法要求：连接、重试与重定向只使用已核准的实际地址，并保持原 hostname 的 Host/SNI/证书校验；优先复用提供此保证的现有工具。无法确认边界时按现有规则停止并报告不可验证。不要为这项说明新写生产 HTTP 客户端。",
+      "acceptance": [
+        "给出公网上游地址在检查/连接间变化为 loopback/private 的负控，实际连接必须被阻止或仍绑定已核准公网地址",
+        "保持同一合规公开地址的成功路径及原域名 Host/SNI/证书验证",
+        "逐跳、重试和 fallback 仍遵守地址策略；工具无法提供该保证时不得把安全检查标为 PASS",
+        "测试只作工具方法控制；真实宿主未执行仍 not-measured"
+      ],
+      "existing_test_boundary": "tests/test_skill_portfolio_quality.py:36-46 仅断言 SSRF、DNS rebinding、重定向等标记存在，没有执行真实或模拟连接地址绑定。",
+      "primary_sources": [
+        {
+          "url": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+          "section": "Domain name: connection-time enforcement, validated IP, Host/SNI and retries",
+          "retrieved": "2026-11-17"
+        },
+        {
+          "url": "https://docs.python.org/3.12/library/socket.html#socket.create_connection",
+          "section": "socket.create_connection resolves nonnumeric host and tries returned addresses",
+          "retrieved": "2026-11-17"
+        }
+      ]
+    }
+  ],
+  "boundary": "Frozen prior audit inputs, not post-fix acceptance or real-model/field qualification."
+}
