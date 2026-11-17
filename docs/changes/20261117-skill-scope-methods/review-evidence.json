@@ -1,0 +1,266 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261117-skill-scope-methods",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-skill-scope-methods",
+  "reviewer": {
+    "id": "ai/root/independent_source_review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-17T02:44:27.097238Z",
+  "evidence_completed_at": "2026-11-17T02:44:27.097228Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "q-01",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Growth source test permitted an ordinary-work promotion contradiction. Existing test now checks the ordinary-work exemption and AGENTS/memory in metadata and body. Current source passes; five independently mutated bad variants each fail with no infrastructure errors."
+    },
+    {
+      "id": "r-01",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Implicit context deleted ordinary inline formatting and lost four prior-success embedded requests. Retain ordinary paired inline content; exclude fences and narrowly introduced quoted examples. All four baseline-success requests recovered; 22 independent positive/negative/mixed neighbors agree, all mutation_permission=deny; 25 fresh method/route tests pass."
+    },
+    {
+      "id": "p-01",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "Unexecuted preregistration candidate version lagged the manifest bump. Move planned_release to v11.3.13, preserve the unexecuted v11.3.12 identity/history with zero model runs. Only two allowed JSON changes; all other structure unchanged. Coordinator reran the complete failed suite: 204/204 PASS. Independent packaging reviewer reran the original failing test: 1/1 PASS."
+    }
+  ],
+  "limitations": [
+    "Source-change Spec/Quality opinion only. Requirement 10 release, exact-SHA CI, and Root source-only integration are not completed or authorized by this report.",
+    "The last local full 102-suite run remains FAIL (101 pass, 1 fail). The full failed suite passed after its isolated fixture repair; no new local full-102 PASS is claimed.",
+    "The other 101 suite results are reused only because the exact tree difference is the repaired prereg fixture; the final PR/main exact-SHA full CI remains pending.",
+    "No global Harness readiness approval is created or refreshed. Prior historical Harness evidence retains its existing scope.",
+    "No native host discovery/load/trigger, model A/B, provider usage/Token/cost/latency improvement, real PMU, UBI flashing, DNS client, device or field measurement is established.",
+    "Implicit context is a bounded lexical filter, not a semantic classifier; unsupported phrasing and arbitrary unrelated affirmative background remain subject to the existing Skill Fit and target gates.",
+    "Source byte ratchets measure source growth, not runtime context, provider token use, or effectiveness.",
+    "The remote identity is verified through already fetched local Git objects and transport evidence, not an independent fresh network/ref or protected-branch-policy check.",
+    "Change evidence documents are indexed and selected receipts checked; this is not a claim to have independently reproduced every historical evidence item or reviewed every unchanged Skill.",
+    "Future report/evidence packaging, commits, CI results, releases and consumer changes require their own concrete checks; they are not pre-approved.",
+    "The original reviewed tasks.md is retained in the complete original patch. Post-review task-status and evidence packaging updates receive a separate incremental review."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "0973b9dce75e7bde289a9915fc58dfd53cb79b0d",
+    "head_commit": "66df0ce7092aabbbd05411ef2950cc9ee59a3592",
+    "original_patch_sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "568734e9c06433abc958919a68b3ddab5c84f72c875175e874bdd19ea3da640d"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "c606936f71eedf938b847bc169e5cefc9d3c56b7884ea4b7f83b6d2f46a1450d"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "a426e5463488a1107e43483c6cb1ccd35b4313ce6ccc46eecdf84cea11c1f91a"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "38f647d6648ad5e6aeba9464c89ad5c71b49ef6b63dccb0328b8476d4b116b78"
+    },
+    {
+      "base": "repository",
+      "path": "docs/agent-skill-catalog.md",
+      "sha256": "6804c7a0f8424898912c6b8daf03128d235d5945081b987e99a40a2269b94fa6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-scope-methods/design.md",
+      "sha256": "06aae095e7ea200dffe9051d7cadae46b9f922e1551e43d98aa4dc17ffeeb147"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-scope-methods/requirements.md",
+      "sha256": "987f00a4cc1deee41ca302195648452fc354ad96d2f47f0a9aa060c70ce55098"
+    },
+    {
+      "base": "repository",
+      "path": "docs/commands.md",
+      "sha256": "07e722cc8d90c06d006ef3ef9e880b1c911fc1ab00a956ae0bd7f47465e18c28"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "07e887a7417f81ea279a107981aa0fd25836aa85d140f26734d78733c0e0ce68"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "92f186adf1d906b84e6925ff1001a9b353ebbedb784744669c21db3d6f0037ce"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "sha256": "21e9223a92ec6f50b336fc9bb8cd041f7db533cbfc216350c64a0b748ce2328a"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "062d145077d6d56ad0d038cf8d3de62f3368bc3f1c561660aa209830dcaa38f6"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "18c4ea37d322fe5453019a1e674a27d22ede1741e3f8ebf01d0c019183de4a54"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "sha256": "17f658a180bb848f98a0ffa91831e82fc980d7fcdae78782c103fb4862f5fa4e"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-artifact-gating/references/details.md",
+      "sha256": "c4f1f8675a02c8e3886417b48caa6c1ba2dad15fd5246dfb02e1ae6980b42f3f"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "sha256": "60689906562d9146431960b421c1d2731090f5377c1cd5923adb13ab589b7c27"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "sha256": "551c03d625fb6d884f03e112d49d9d39eee8d50a628009a93b5cf67ab051b5b8"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "429e8f4bdab43522b6deb89ad98cf20f30c7a8b8f80be2810e6511ca62149000"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "sha256": "b661f56a96309870e2895423ee3646bd9e50a5f35da9286cd070a45ac75a60e6"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+      "sha256": "33e1ecdae9f7baed2e7a050bc718e716200d76934489419f2d7be5c4b3776a62"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "sha256": "a17d781e18dc5f72d6485f1ca8f5a9e6f6612ddeb761340110083b35181ffbe9"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "2e6f4cf157d25085a13582c7aaa16d5ddaae5ac8aca72a41c04c9d2fbaf0a1b8"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "sha256": "a573041b767280f3c390a563308ec580c51d6e7c92427099681e46b2f850a58d"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/matcher.py",
+      "sha256": "27d9519150922ceaf7a65f196bbdadb3c8915834becd41cf13cd1c8914ed7209"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/validation_contract.py",
+      "sha256": "055051177bda58f8a2558afe654fbf7117b1b4334730f4c296c10cf9c21e03ab"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "ff535f0c999111ab50c2a4ba8ce0daa5de2c17bd3691d2007d010c438456aeb5"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_boundary_conditions_match.sh",
+      "sha256": "22d364ecdb59bbae8108be0ef829cde302ec25400381e062bcbc1661f3c34ea8"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_match_effectiveness.sh",
+      "sha256": "db3a0e902f9addeab80d9a48d953b9f8b49f0919807f423b96b50bf20e3b0af2"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content.sh",
+      "sha256": "d10d6b5e7a79811d2a8ef87439c81bd3db22e5284ccc0602c54e4a8af6a14f5d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_scope_methods.py",
+      "sha256": "bb6aefafed45d77f482b39046ab933c414c2365f1f3568adc1f66d0444964f62"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "2b6d67cc774b25a817141b370cdadd6c3661d13e3ef35500e8a5767ce3131d64"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/independent-source-review.json",
+      "sha256": "8a98d938f775728d426888a7d7d6dfa013c99cb6627e5c2b4bceb39b32bad6a7"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-source-review.md",
+      "sha256": "3f9e920dba86b3c59bec7277e81f71b97f4973681fe63d9ad04f9c37ec84409b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-evidence-bundle.json",
+      "sha256": "f74152496716ccb79f9655ff4e1a2abb0f4de4cc8a4a871b58b75fb61ad57e51"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "1f1849cd27ab51ce38e06a7df54be75084aa73ffd22e63a07695b54ff6314554"
+    },
+    {
+      "base": "record",
+      "path": "evidence/regression-bundle.json",
+      "sha256": "5a5c09d2de43d8aec8d4eba293ca5288326acd4b98271dee84950462d610d060"
+    },
+    {
+      "base": "record",
+      "path": "evidence/repaired-suite.json",
+      "sha256": "a6858c46c1d732b79f1244a3b600784101d86c380fd8b81f84f6cd1ba211603c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/transport-identity.json",
+      "sha256": "55583b2f96d0366d50c797032a886680d11118e3f9fb95a8d09cf77dce0a7591"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-footprint.json",
+      "sha256": "3b4aecb6c1ecd366ab627ed446bcdd9e0e9aa74751fdfd7be0d4c15f42c464aa"
+    }
+  ]
+}

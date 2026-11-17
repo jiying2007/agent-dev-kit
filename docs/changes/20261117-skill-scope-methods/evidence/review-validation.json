@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "record_sha256": "36b722287468397036087e15573520b952c620c0ef28f2e55df711e2ffe27f00",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "validated_at": "2026-11-17T02:46:47.530694+00:00"
+}
