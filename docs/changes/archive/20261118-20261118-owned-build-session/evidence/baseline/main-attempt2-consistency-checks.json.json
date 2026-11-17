@@ -1,0 +1,7 @@
+{
+  "origin": "run44116100760/attempt2/consistency-checks.json",
+  "encoding": "utf-8",
+  "bytes": 1138,
+  "sha256": "b9afa14a6c1b322cbc12a64f8786eff16d01e5355a5c95823f30f2b655a9beab",
+  "content": "{\n  \"schema\": \"adk-ci-attempt-evidence-checks/v1\",\n  \"run_id\": 44116100760,\n  \"run_attempt\": 2,\n  \"head\": \"15fa31d1a3f994a516d5a9003edaadd1295c74b5\",\n  \"api_run_attempt_matches\": true,\n  \"api_run_head_matches\": true,\n  \"api_run_completed_failure\": true,\n  \"timing_count\": {\n    \"listed\": 102,\n    \"unique\": 102,\n    \"passed\": 101,\n    \"failed\": 1\n  },\n  \"log_count\": {\n    \"passed\": 101,\n    \"unique_passed\": 101,\n    \"failed\": [\n      \"test_skill_content\"\n    ]\n  },\n  \"timing_totals_consistent\": true,\n  \"performance_same_source_run_elapsed\": true,\n  \"exact_job_upload_binds_timing_artifact\": true,\n  \"original_timeout_observed\": true,\n  \"zip_api_byte_check\": true,\n  \"reused_success_times\": [\n    {\n      \"name\": \"static-security\",\n      \"job_id\": 134164822236,\n      \"started_at\": \"2026-11-17T15:35:36Z\",\n      \"completed_at\": \"2026-11-17T15:36:01Z\"\n    },\n    {\n      \"name\": \"contract-py3.12\",\n      \"job_id\": 134164892723,\n      \"started_at\": \"2026-11-17T15:35:36Z\",\n      \"completed_at\": \"2026-11-17T15:38:05Z\"\n    }\n  ],\n  \"scope\": \"Raw evidence consistency only; confirms CI failure and does not grant release qualification.\"\n}\n"
+}

@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import signal
 import subprocess
@@ -36,7 +37,20 @@ def bash_example(path: str, marker: str) -> str:
     return matches[0]
 
 
-def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"), limit=16):
+def process_status(pid, *, proc_root=Path("/proc")):
+    """Read bounded status and stable identity, never arguments or environment."""
+    with (proc_root / str(pid) / "stat").open(encoding="utf-8", errors="replace") as stream:
+        before, fields = stream.read(4096).rsplit(") ", 1)
+    actual_pid, comm = before.split(" (", 1)
+    if int(actual_pid) != pid:
+        raise ValueError("process identity changed")
+    fields = fields.split()
+    return {"pid": pid, "ppid": int(fields[1]), "pgid": int(fields[2]), "sid": int(fields[3]),
+            "start_ticks": int(fields[19]), "comm": comm, "state": fields[0],
+            "user_ticks": int(fields[11]), "system_ticks": int(fields[12]), "wchan": "unavailable"}
+
+
+def owned_process_snapshot(session_id, deadline, *, proc_root=Path("/proc"), limit=16):
     """Best-effort Linux status only; never collect arguments or environments."""
     records = []
     status = "observed"
@@ -52,25 +66,19 @@ def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"), 
                     break
                 if not entry.name.isdecimal():
                     continue
-                process = Path(entry.path)
                 try:
-                    with (process / "stat").open(encoding="utf-8", errors="replace") as stream:
-                        raw = stream.read(4096)
-                    before, fields = raw.rsplit(") ", 1)
-                    pid, comm = before.split(" (", 1)
-                    fields = fields.split()
-                    if int(fields[2]) != process_group:
+                    record = process_status(int(entry.name), proc_root=proc_root)
+                    if record["sid"] != session_id:
                         continue
-                    record = {"pid": int(pid), "pgid": int(fields[2]), "comm": comm,
-                              "state": fields[0], "user_ticks": int(fields[11]),
-                              "system_ticks": int(fields[12]), "wchan": "unavailable"}
                     if time.monotonic() < deadline:
                         try:
-                            with (process / "wchan").open(encoding="utf-8", errors="replace") as stream:
+                            with (Path(entry.path) / "wchan").open(encoding="utf-8", errors="replace") as stream:
                                 record["wchan"] = stream.read(128).strip()
                         except OSError:
                             pass  # A process can exit between its stat and wchan reads.
                     records.append(record)
+                except FileNotFoundError:
+                    pass  # A vanished process needs no signal; do not fail on unrelated churn.
                 except (OSError, ValueError, IndexError):
                     status = "partial"
     except OSError:
@@ -78,15 +86,72 @@ def owned_process_snapshot(process_group, deadline, *, proc_root=Path("/proc"), 
     return {"status": status, "processes": records}
 
 
+def same_process(left, right):
+    return all(left[key] == right[key] for key in ("pid", "sid", "start_ticks"))
+
+
+def terminate_owned_process(record, session_id, deadline):
+    """Signal an exact, freshly checked process; never a numeric foreign group."""
+    if record["sid"] != session_id or time.monotonic() >= deadline:
+        return False
+    if not hasattr(os, "pidfd_open") or not hasattr(signal, "pidfd_send_signal"):
+        return False
+    descriptor = None
+    try:
+        descriptor = os.pidfd_open(record["pid"])
+        current = process_status(record["pid"])
+        if not same_process(record, current) or time.monotonic() >= deadline:
+            return False
+        if current["state"] not in {"Z", "X"}:
+            signal.pidfd_send_signal(descriptor, signal.SIGKILL)
+        return True
+    except (ProcessLookupError, FileNotFoundError):
+        return True  # The exact process has already exited; never signal its replacement.
+    except (OSError, ValueError, IndexError):
+        return False
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+
+
+def cleanup_owned_session(leader, snapshot, deadline):
+    """Use the original leader as an unreaped identity anchor until cleanup ends."""
+    if leader is None or leader["sid"] != leader["pid"]:
+        return "session-unverified"
+    if not same_process(leader, process_status(leader["pid"])):
+        return "session-unverified"
+    verified = (snapshot["status"] == "observed" and hasattr(os, "pidfd_open")
+                and hasattr(signal, "pidfd_send_signal"))
+    current = snapshot
+    while time.monotonic() < deadline:
+        verified = verified and current["status"] == "observed"
+        live = [item for item in current["processes"] if item["state"] not in {"Z", "X"}]
+        if not live:
+            return "complete" if verified else "session-unverified"
+        # Stop coordinators before their leaves; the leader is not reaped here.
+        signalling_failed = False
+        for record in sorted(live, key=lambda item: item["pid"] != leader["pid"]):
+            if not terminate_owned_process(record, leader["sid"], deadline):
+                signalling_failed = True
+        if signalling_failed:
+            return "session-unverified"
+        current = owned_process_snapshot(leader["sid"], deadline)
+    return "session-incomplete"
+
+
 def run_example(code: str, root: Path, *arguments: str, environment=None,
                 timeout=15, label="skill-example"):
-    """Bound the whole example; keep diagnostics and terminate its own process group."""
+    """Bound the whole example and clean its owned session, including new groups."""
     command = ["bash", "-c", code, "skill-example", *arguments]
     started = time.monotonic()
     process = subprocess.Popen(command, cwd=root, env=environment, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, text=True, start_new_session=True)
     try:
-        stdout, stderr = process.communicate(timeout=timeout)
+        leader = process_status(process.pid)
+    except Exception:
+        leader = None  # Fast normal exits or missing procfs must not fail normal commands.
+    try:
+        stdout, stderr = process.communicate(timeout=max(0, started + timeout - time.monotonic()))
     except subprocess.TimeoutExpired as expired:
         work_elapsed = time.monotonic() - started
         cleanup_started = time.monotonic()
@@ -97,10 +162,27 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
             # Diagnostics must never prevent termination or replace the timeout.
             snapshot = {"status": "unavailable", "error": type(error).__name__, "processes": []}
         try:
-            os.killpg(process.pid, signal.SIGKILL)
+            cleanup_status = cleanup_owned_session(leader, snapshot, cleanup_deadline)
+        except Exception:
+            cleanup_status = "session-unverified"
+        # The original outer group remains anchored by our unreaped Popen.
+        # Missing diagnostics must not disable that fallback; an observed
+        # replacement identity, however, must never authorize a group signal.
+        fallback_allowed = process.returncode is None
+        if leader is not None:
+            try:
+                if not same_process(leader, process_status(process.pid)):
+                    fallback_allowed = False
+                    cleanup_status = "session-unverified"
+            except Exception:
+                cleanup_status = "session-unverified"
+        try:
+            if fallback_allowed:
+                os.killpg(process.pid, signal.SIGKILL)
         except ProcessLookupError:
             pass
-        cleanup_status = "complete"
+        except OSError:
+            cleanup_status = "session-unverified"
         try:
             stdout, stderr = process.communicate(timeout=max(0, cleanup_deadline - time.monotonic()))
         except subprocess.TimeoutExpired as draining:
@@ -137,6 +219,67 @@ class CommandExampleRunnerTests(unittest.TestCase):
                 self.assertEqual("visible stdout\n", result.stdout)
                 self.assertEqual("visible stderr\n", result.stderr)
 
+    @unittest.skipUnless(sys.platform == "linux", "owned-session observation uses Linux procfs")
+    def test_real_ninja_child_group_is_observed_and_cleaned_without_touching_another_session(self):
+        ninja = shutil.which("ninja")
+        if not ninja:
+            if os.environ.get("GITHUB_ACTIONS") == "true":
+                self.fail("hosted regression requires the existing Ninja tool")
+            self.skipTest("Ninja unavailable")
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            leaf = root / "leaf.py"
+            leaf.write_text(
+                "import json, os, time\nfrom pathlib import Path\n"
+                "fields = Path('/proc/self/stat').read_text().rsplit(') ', 1)[1].split()\n"
+                "Path('leaf.json').write_text(json.dumps({'pid': os.getpid(), "
+                "'pgid': os.getpgrp(), 'sid': os.getsid(0), 'start_ticks': int(fields[19])}))\n"
+                "time.sleep(60)\n"
+            )
+            command = shlex.join([sys.executable, str(leaf)]).replace("$", "$$")
+            (root / "build.ninja").write_text(f"rule hold\n  command = {command}\nbuild sentinel: hold\n")
+            unrelated = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(60)"],
+                                         start_new_session=True)
+            identity = None
+            try:
+                code = ('printf "%s\\n" "$$" > owner.pid; "$1" -f build.ninja -j 1; '
+                        'printf "unexpected completion\\n"')
+                with self.assertRaises(AssertionError) as failure:
+                    run_example(code, root, ninja, timeout=1, label="real-ninja-session")
+                message = str(failure.exception)
+                self.assertTrue((root / "leaf.json").exists(), message)
+                identity = json.loads((root / "leaf.json").read_text())
+                owner = int((root / "owner.pid").read_text())
+                self.assertEqual(owner, identity["sid"])
+                self.assertNotEqual(owner, identity["pgid"], "fixture must exercise Ninja's new group")
+                snapshot = json.loads(message.split("process_snapshot: ", 1)[1].split("\nstdout:", 1)[0])
+                with self.subTest("session snapshot"):
+                    self.assertIn(identity["pid"], [item["pid"] for item in snapshot["processes"]], message)
+                with self.subTest("live leaf cleanup"):
+                    try:
+                        fields = Path(f"/proc/{identity['pid']}/stat").read_text().rsplit(") ", 1)[1].split()
+                    except FileNotFoundError:
+                        pass
+                    else:
+                        self.assertIn(fields[0], {"Z", "X"}, message)
+                self.assertIsNone(unrelated.poll(), "unrelated session must survive cleanup")
+                self.assertNotIn(unrelated.pid, [item["pid"] for item in snapshot["processes"]])
+            finally:
+                unrelated.kill()
+                unrelated.wait(timeout=2)
+                # Independent fixture cleanup also protects a failing baseline.
+                if identity is None and (root / "leaf.json").exists():
+                    identity = json.loads((root / "leaf.json").read_text())
+                if identity is not None:
+                    try:
+                        fields = Path(f"/proc/{identity['pid']}/stat").read_text().rsplit(") ", 1)[1].split()
+                        if int(fields[3]) == identity["sid"] and int(fields[19]) == identity["start_ticks"]:
+                            os.killpg(identity["pgid"], signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    except FileNotFoundError:
+                        pass
+
     def test_timeout_keeps_both_streams_kills_its_descendant_and_spares_another_group(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -166,7 +309,8 @@ class CommandExampleRunnerTests(unittest.TestCase):
                 if snapshot["processes"]:
                     self.assertEqual(1, len({record["pgid"] for record in snapshot["processes"]}))
                 for record in snapshot["processes"]:
-                    self.assertEqual({"pid", "pgid", "comm", "state", "user_ticks", "system_ticks", "wchan"},
+                    self.assertEqual({"pid", "ppid", "pgid", "sid", "start_ticks", "comm", "state",
+                                      "user_ticks", "system_ticks", "wchan"},
                                      set(record))
                 # Linux may briefly retain an already killed orphan as a zombie;
                 # that is not a running child, and is reaped by its new parent.
@@ -196,8 +340,81 @@ class CommandExampleRunnerTests(unittest.TestCase):
             message = str(failure.exception)
             self.assertIn("timeout; budget=0.1s", message)
             self.assertIn('"status": "unavailable"', message)
-            self.assertIn("cleanup=complete", message)
+            self.assertIn("cleanup=session-unverified", message)
             self.assertNotIn("private detail", message)
+
+    def test_late_status_errors_preserve_timeout_and_original_group_cleanup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            read_status = process_status
+            calls = 0
+            def fails_after_identity(pid, **kwargs):
+                nonlocal calls
+                calls += 1
+                if calls == 1:
+                    return read_status(pid, **kwargs)
+                raise RuntimeError("SYNTHETIC_PRIVATE_STATUS_FAILURE")
+            try:
+                with mock.patch(__name__ + ".process_status", side_effect=fails_after_identity):
+                    with self.assertRaises(AssertionError) as failure:
+                        run_example('printf "%s\\n" "$$" > owner.pid; printf "started\\n"; sleep 60',
+                                    root, timeout=0.1)
+                message = str(failure.exception)
+                self.assertIn("timeout; budget=0.1s", message)
+                self.assertIn("cleanup=session-unverified", message)
+                self.assertIn("stdout:\nstarted", message)
+                self.assertNotIn("SYNTHETIC_PRIVATE_STATUS_FAILURE", message)
+            finally:
+                if (root / "owner.pid").exists():
+                    try:
+                        owner = int((root / "owner.pid").read_text())
+                        if os.getsid(owner) == owner:
+                            os.killpg(owner, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+
+    def test_incomplete_session_observation_cannot_report_complete(self):
+        with tempfile.TemporaryDirectory() as directory:
+            for status in ("bounded", "partial", "unavailable"):
+                with self.subTest(status=status), mock.patch(
+                        __name__ + ".owned_process_snapshot", return_value={"status": status, "processes": []}):
+                    with self.assertRaises(AssertionError) as failure:
+                        run_example('printf "started\\n"; sleep 60', Path(directory), timeout=0.1)
+                    self.assertIn("cleanup=session-unverified", str(failure.exception))
+                    self.assertIn("stdout:\nstarted", str(failure.exception))
+
+    @unittest.skipUnless(hasattr(os, "pidfd_open") and hasattr(signal, "pidfd_send_signal"), "pidfd unavailable")
+    def test_process_identity_changes_are_rejected_before_signalling(self):
+        original = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
+        for replacement in (dict(original, start_ticks=11), dict(original, sid=999)):
+            with self.subTest(replacement=replacement), \
+                    mock.patch(__name__ + ".process_status", return_value=replacement), \
+                    mock.patch("os.pidfd_open", return_value=37), \
+                    mock.patch("signal.pidfd_send_signal") as send, mock.patch("os.close") as close:
+                self.assertFalse(terminate_owned_process(original, 123, time.monotonic() + 1))
+                send.assert_not_called()
+                close.assert_called_once_with(37)
+
+    @unittest.skipUnless(hasattr(os, "pidfd_open") and hasattr(signal, "pidfd_send_signal"), "pidfd unavailable")
+    def test_foreign_session_expired_budget_and_permission_failure_never_signal(self):
+        original = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
+        with mock.patch("os.pidfd_open") as opened, mock.patch("signal.pidfd_send_signal") as send:
+            self.assertFalse(terminate_owned_process(original, 999, time.monotonic() + 1))
+            self.assertFalse(terminate_owned_process(original, 123, time.monotonic() - 1))
+            opened.assert_not_called()
+            send.assert_not_called()
+        with mock.patch("os.pidfd_open", side_effect=PermissionError), \
+                mock.patch("signal.pidfd_send_signal") as send:
+            self.assertFalse(terminate_owned_process(original, 123, time.monotonic() + 1))
+            send.assert_not_called()
+
+    def test_replaced_leader_cannot_authorize_session_cleanup(self):
+        leader = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
+        snapshot = {"status": "observed", "processes": [leader]}
+        with mock.patch(__name__ + ".process_status", return_value=dict(leader, start_ticks=11)), \
+                mock.patch(__name__ + ".terminate_owned_process") as terminate:
+            self.assertEqual("session-unverified", cleanup_owned_session(leader, snapshot, time.monotonic() + 1))
+            terminate.assert_not_called()
 
     def test_process_snapshot_tolerates_missing_procfs_and_disappearing_processes(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -208,10 +425,10 @@ class CommandExampleRunnerTests(unittest.TestCase):
             (root / "123").mkdir()  # Process disappears before stat can be read.
             (root / "124").mkdir()
             (root / "124/stat").write_text("incomplete procfs record")
-            for pid, group in ((125, 123), (126, 999)):
+            for pid, group, session in ((125, 999, 123), (126, 123, 999)):
                 (root / str(pid)).mkdir()
                 (root / str(pid) / "stat").write_text(
-                    f"{pid} (fixture process) S 1 {group} 0 0 0 0 0 0 0 0 7 8 0\n")
+                    f"{pid} (fixture process) S 1 {group} {session} 0 0 0 0 0 0 0 7 8 0 0 0 0 0 0 99\n")
                 (root / str(pid) / "cmdline").write_text("SYNTHETIC_PRIVATE_ARGUMENT")
                 (root / str(pid) / "environ").write_text("SYNTHETIC_PRIVATE_ENVIRONMENT")
             snapshot = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root)
@@ -228,7 +445,7 @@ class CommandExampleRunnerTests(unittest.TestCase):
             for pid in range(123, 128):
                 (root / str(pid)).mkdir()
                 (root / str(pid) / "stat").write_text(
-                    f"{pid} (fixture) S 1 123 0 0 0 0 0 0 0 0 7 8 0\n")
+                    f"{pid} (fixture) S 1 123 123 0 0 0 0 0 0 0 7 8 0 0 0 0 0 0 99\n")
             result = owned_process_snapshot(123, time.monotonic() + 1, proc_root=root, limit=2)
             self.assertEqual("bounded", result["status"])
             self.assertEqual(2, len(result["processes"]))

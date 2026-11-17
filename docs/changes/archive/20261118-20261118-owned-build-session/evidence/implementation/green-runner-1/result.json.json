@@ -1,0 +1,7 @@
+{
+  "origin": "green-runner-1/result.json",
+  "encoding": "utf-8",
+  "bytes": 762,
+  "sha256": "3087911229a7621a6d2c5cff566a1b7a8c3a2f142e4670896afa4b3ca98c842a",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests\",\n    \"-v\"\n  ],\n  \"cwd\": \"/workspace/scratch/d417066aafa8/agent-dev-kit\",\n  \"started_at\": \"2026-11-17T16:16:03.700031+00:00\",\n  \"ended_at\": \"2026-11-17T16:16:05.771384+00:00\",\n  \"elapsed_seconds\": 2.0713577610003995,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"ff49ba55577c7f5dc0d930bc9630b7ce10c490ab03873077d4516f57885f05cc\",\n  \"source_after_sha256\": \"ff49ba55577c7f5dc0d930bc9630b7ce10c490ab03873077d4516f57885f05cc\",\n  \"source_unchanged_during_command\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"ae9794c7b67ce4d3d362e1b707dc3447f25aa5713c8ffc4b733d9588c1310415\"\n}\n"
+}

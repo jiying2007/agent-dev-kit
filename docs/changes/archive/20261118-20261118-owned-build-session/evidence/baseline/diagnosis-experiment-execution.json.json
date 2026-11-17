@@ -1,0 +1,7 @@
+{
+  "origin": "post-attempt2/experiment-execution.json",
+  "encoding": "utf-8",
+  "bytes": 974,
+  "sha256": "98d7af16a2a62bbf76d60158feb1376e61edb4ead4baace66778718ebbb4b052",
+  "content": "{\n  \"observed_at\": \"2026-11-17T16:12:26.985581+00:00\",\n  \"command\": [\n    \"/workspace/scratch/fe8de3b42084/verification-tools/rtk\",\n    \"proxy\",\n    \"/workspace/scratch/d417066aafa8/agent-dev-kit/.venv/bin/python\",\n    \"/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-ci-timeout-diagnosis/post-attempt2/ninja_cleanup_probe.py\"\n  ],\n  \"exit_code\": 0,\n  \"actual_experiments\": 1,\n  \"utc_start\": \"2026-11-17T16:07:48.052889+00:00\",\n  \"utc_end\": \"2026-11-17T16:07:48.424660+00:00\",\n  \"classification\": \"baseline behavioral counterexample; observer exited successfully; no implementation GREEN\",\n  \"helper_sha256_after\": \"301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461\",\n  \"helper_unchanged\": true,\n  \"source_status_after\": {\n    \"exit_code\": 0,\n    \"stdout\": \"?? docs/changes/20261118-owned-build-session/\\n\",\n    \"stderr\": \"\"\n  },\n  \"original_adc_work_budget_seconds\": 15,\n  \"synthetic_budget_seconds\": 0.2,\n  \"no_further_adc_full_or_ci_execution\": true\n}\n"
+}

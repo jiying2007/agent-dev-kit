@@ -1,0 +1,7 @@
+{
+  "origin": "baseline.json",
+  "encoding": "utf-8",
+  "bytes": 206,
+  "sha256": "d9232d15848cb0029bda84b2bfce067326ab19c6002348d983d3153358eb2075",
+  "content": "{\n  \"sha256\": \"301fb52ff31802f2601b6a8baf3416380735c420371a5d0fa22bc4913c461461\",\n  \"bytes\": 60666,\n  \"head\": \"15fa31d1a3f994a516d5a9003edaadd1295c74b5\",\n  \"frozen_at\": \"2026-11-17T16:13:21.661847+00:00\"\n}\n"
+}
