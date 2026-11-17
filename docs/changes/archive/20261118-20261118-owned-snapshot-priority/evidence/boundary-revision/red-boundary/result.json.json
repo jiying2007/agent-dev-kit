@@ -1,0 +1,7 @@
+{
+  "origin": "red-boundary/result.json",
+  "encoding": "utf-8",
+  "bytes": 767,
+  "sha256": "10921960a1ddd7edc5496d0b3e14d75d437f8fd9d7d6018e627ddb46dcf93d71",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"-v\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_numeric_entries_at_cursor_boundaries_are_inspected_in_each_fresh_pass\"\n  ],\n  \"started_at\": \"2026-11-17T17:05:29.072570+00:00\",\n  \"finished_at\": \"2026-11-17T17:05:29.305341+00:00\",\n  \"elapsed_seconds\": 0.2327740030013956,\n  \"exit_code\": 1,\n  \"source_before_sha256\": \"2a65c5633ba4b4482e2f6e17404564d8bb78cc144745d05dbf0b0abb33b2adcc\",\n  \"source_after_sha256\": \"2a65c5633ba4b4482e2f6e17404564d8bb78cc144745d05dbf0b0abb33b2adcc\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"053e43596c90f47baff829ed312615149ecd9e06fba6b945b6bd03ff6f655530\"\n}\n"
+}

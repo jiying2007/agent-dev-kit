@@ -1,0 +1,7 @@
+{
+  "origin": "timing-14350265141-api.json",
+  "encoding": "utf-8",
+  "bytes": 785,
+  "sha256": "ecdf239ab3d0527ed00e8193456567af179855d69ed2906a7aeb389cdd406c83",
+  "content": "{\n  \"id\": 14350265141,\n  \"node_id\": \"MDg6QXJ0aWZhY3QxNDM1MDI2NTE0MQ==\",\n  \"name\": \"adk-regression-timing-py3.12\",\n  \"size_in_bytes\": 2014,\n  \"url\": \"https://api.github.com/repos/jiying2007/agent-dev-kit/actions/artifacts/14350265141\",\n  \"archive_download_url\": \"https://api.github.com/repos/jiying2007/agent-dev-kit/actions/artifacts/14350265141/zip\",\n  \"expired\": false,\n  \"digest\": \"sha256:66efddb4dfe29340392b26e1bb9ed771c0f01301f842166faf43d76d513fce9b\",\n  \"created_at\": \"2026-11-17T16:48:27Z\",\n  \"updated_at\": \"2026-11-17T16:48:27Z\",\n  \"expires_at\": \"2026-12-01T16:48:26Z\",\n  \"workflow_run\": {\n    \"id\": 44128721869,\n    \"repository_id\": 1233068961,\n    \"head_repository_id\": 1233068961,\n    \"head_branch\": \"main\",\n    \"head_sha\": \"021d81aa4923dbc68a934d9cd0d64c4dfed76167\"\n  }\n}\n"
+}

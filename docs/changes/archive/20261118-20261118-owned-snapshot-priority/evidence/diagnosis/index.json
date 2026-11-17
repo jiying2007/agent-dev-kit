@@ -1,0 +1,31 @@
+{
+  "captured_at": "2026-11-17T16:55:08.933742+00:00",
+  "source_directory": "/workspace/scratch/d417066aafa8/delivery-11.4.1/owned-discovery-review",
+  "records": [
+    {
+      "path": "probe_foreign_prefix.py.json",
+      "raw_bytes": 4814,
+      "raw_sha256": "d8aa4a5472fcd4660d95e8593405120273c8137c40a2fb05b85d7a6e9c849b20",
+      "wrapper_sha256": "82cb4b5388027e88984ec2be66daa357cacf37d9ec2449d1157411d99ac94263"
+    },
+    {
+      "path": "foreign-prefix-result.json.json",
+      "raw_bytes": 9930,
+      "raw_sha256": "fc05bbfb8b1519c14ad730784eece4e3de989dd37166ea13008eb1c507533573",
+      "wrapper_sha256": "9ff1dc7c8f29ebaff9028815fcbf93c7671e6250f7da02e900c61f98f2f7ae86"
+    },
+    {
+      "path": "diagnosis-and-design-risks.md.json",
+      "raw_bytes": 9179,
+      "raw_sha256": "67e1001c98642251e571857a1fd09a5102fc53e594492bc782a56ab3135fa816",
+      "wrapper_sha256": "45b887d69cdcf859bf5332d9e022cbc6b29ee4034b5e999c8a1229aff20612bc"
+    },
+    {
+      "path": "evidence-hashes.json.json",
+      "raw_bytes": 869,
+      "raw_sha256": "ee9e77d5938ac17c2e3a175300d263276a0eb9d11eac51018b7b032b19eea6b3",
+      "wrapper_sha256": "a195def1e21fda678b269ae7642630158f30c8c7932b939cf4dea618f9c06a89"
+    }
+  ],
+  "boundary": "Original bytes/results retained; no retrospective qualification"
+}

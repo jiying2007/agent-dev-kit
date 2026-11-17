@@ -1,0 +1,7 @@
+{
+  "origin": "final-revision-64d120/final-probe-execution.json",
+  "encoding": "utf-8",
+  "bytes": 699,
+  "sha256": "5cbdb63a21a291c78d2b6bf8aa3ff84902150b46c3c5323f4d7c0973c2cefc34",
+  "content": "{\n  \"command\": [\n    \"/workspace/scratch/fe8de3b42084/verification-tools/rtk\",\n    \"proxy\",\n    \"/workspace/scratch/d417066aafa8/agent-dev-kit/.venv/bin/python\",\n    \"recovery_and_real_probe.py\"\n  ],\n  \"started_at\": \"2026-11-17T17:13:14.999417+00:00\",\n  \"path_prefix\": \"/workspace/scratch/d417066aafa8/agent-dev-kit/.venv/bin\",\n  \"script_sha256\": \"8d41c04d0adfb37593b417c3fa6a25527a251c89e115cd15cd2b972e11f803ce\",\n  \"ended_at\": \"2026-11-17T17:13:16.527131+00:00\",\n  \"elapsed_seconds\": 1.5276138130066101,\n  \"exit_code\": 0,\n  \"stdout_sha256\": \"2e7bd4461f3c30e4945206afba132653963823acc0b543317455f615f956535b\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n}\n"
+}

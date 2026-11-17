@@ -1,0 +1,7 @@
+{
+  "origin": "full-regression.log",
+  "encoding": "utf-8",
+  "bytes": 130,
+  "sha256": "fe871ee9b41e5b9099171f7c2ce53debeb6dccf479b1fb2135fc94ea2c840918",
+  "content": "[PASS] test_validate\n[PASS] test_manifest_contract\n[PASS] test_catalog\n[PASS] test_skill_content\n[PASS] test_skill_trigger_matrix\n"
+}

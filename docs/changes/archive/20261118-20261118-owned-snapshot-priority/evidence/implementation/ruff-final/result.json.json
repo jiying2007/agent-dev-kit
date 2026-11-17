@@ -1,0 +1,7 @@
+{
+  "origin": "ruff-final/result.json",
+  "encoding": "utf-8",
+  "bytes": 668,
+  "sha256": "66f82c606e86cd5c0550ff93976830d0f6b7d40a7467099340abdc01824b33c4",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"ruff\",\n    \"check\",\n    \"tests/test_skill_command_examples.py\"\n  ],\n  \"started_at\": \"2026-11-17T17:00:46.963223+00:00\",\n  \"finished_at\": \"2026-11-17T17:00:47.042303+00:00\",\n  \"elapsed_seconds\": 0.0790871170029277,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"6c03216b222eb0559a59197dc73433f25b75c20eb1dce7b8ad7813b35193be92\",\n  \"source_after_sha256\": \"6c03216b222eb0559a59197dc73433f25b75c20eb1dce7b8ad7813b35193be92\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n}\n"
+}

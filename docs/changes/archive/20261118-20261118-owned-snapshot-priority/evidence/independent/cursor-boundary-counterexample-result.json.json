@@ -1,0 +1,7 @@
+{
+  "origin": "cursor-boundary-counterexample-result.json",
+  "encoding": "utf-8",
+  "bytes": 1123,
+  "sha256": "3f413932e145fa60a299be30a39e7d45856864a4020a522141c82008061a81a6",
+  "content": "{\n  \"started_at\": \"2026-11-17T17:04:06.312645+00:00\",\n  \"candidate\": \"955d982448d88fa297b91ee8544d04cc1af1a9ed\",\n  \"source_sha256\": \"408ef93e0128ec81773e68b6e903956ae5e300956096ac5eed3ba5189a0e7638\",\n  \"scope\": \"Fixed-clock fake-proc cursor boundary; no real process, Ninja, ADC, full, CI or signal\",\n  \"first\": {\n    \"status\": \"bounded\",\n    \"processes\": [],\n    \"bounded_by\": \"entries\"\n  },\n  \"after_first\": {\n    \"advanced\": 256,\n    \"exhausted\": false\n  },\n  \"second\": {\n    \"status\": \"observed\",\n    \"processes\": []\n  },\n  \"after_second\": {\n    \"advanced\": 256,\n    \"exhausted\": true\n  },\n  \"fresh_pass\": [\n    {\n      \"status\": \"bounded\",\n      \"processes\": [],\n      \"bounded_by\": \"entries\"\n    },\n    {\n      \"status\": \"observed\",\n      \"processes\": []\n    }\n  ],\n  \"process_status_pids\": [],\n  \"iterator_opens\": 2,\n  \"iterator_closes\": 2,\n  \"owned_entry_yield_count\": 2,\n  \"owned_stat_still_exists\": true,\n  \"counterexample_confirmed\": true,\n  \"source_after_sha256\": \"408ef93e0128ec81773e68b6e903956ae5e300956096ac5eed3ba5189a0e7638\",\n  \"ended_at\": \"2026-11-17T17:04:06.323191+00:00\",\n  \"collector_exit_code\": 0\n}\n"
+}

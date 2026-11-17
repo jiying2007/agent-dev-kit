@@ -1,0 +1,16 @@
+{
+  "command": "validate_review(root, record_path, expected_subject=20261118-owned-snapshot-priority, expected_scope=source-change)",
+  "clock": "actual datetime.now(UTC); no now override",
+  "started_at": "2026-11-17T17:24:56.784530+00:00",
+  "completed_at": "2026-11-17T17:24:56.797025+00:00",
+  "elapsed_seconds": 0.01302724500419572,
+  "exit_code": 0,
+  "status": "pass",
+  "record_sha256": "13f345f48bd2ec745c630683ebc24dd2342a9b14502cf3405a33b3d48a8ddb95",
+  "stdout_sha256": "96fc9b17d19c4a3eed1da66e5720ed895d04605690c4225bdc8dab9234776b44",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "report_sha256": "050f46cbfa2f259518e66ef2ffe0fab143cf96293051d3b0a33e1eb88d101118",
+  "reference_count": 64,
+  "tested_product_head": "64d120ebcbc5d77fd90af99bac2bb9f4f3a13682",
+  "no_product_tests_rerun": true
+}

@@ -1,0 +1,7 @@
+{
+  "origin": "evidence-hashes.json",
+  "encoding": "utf-8",
+  "bytes": 869,
+  "sha256": "ee9e77d5938ac17c2e3a175300d263276a0eb9d11eac51018b7b032b19eea6b3",
+  "content": "{\n  \"observed_at\": \"2026-11-17T16:54:30.552889+00:00\",\n  \"role\": \"read-only diagnosis / design advisory; not implementation review\",\n  \"ci_log\": {\n    \"path\": \"/workspace/scratch/d417066aafa8/delivery-11.4.1/release-audit/main-021d81aa/failure-attempt1/regression-failure-log.log\",\n    \"sha256\": \"67a7e53456a9efdbe275254aa005da3bc5ce7d3eb1ca0a1cecab41edbfa79a95\"\n  },\n  \"files\": [\n    {\n      \"path\": \"diagnosis-and-design-risks.md\",\n      \"bytes\": 9179,\n      \"sha256\": \"67e1001c98642251e571857a1fd09a5102fc53e594492bc782a56ab3135fa816\"\n    },\n    {\n      \"path\": \"foreign-prefix-result.json\",\n      \"bytes\": 9930,\n      \"sha256\": \"fc05bbfb8b1519c14ad730784eece4e3de989dd37166ea13008eb1c507533573\"\n    },\n    {\n      \"path\": \"probe_foreign_prefix.py\",\n      \"bytes\": 4814,\n      \"sha256\": \"d8aa4a5472fcd4660d95e8593405120273c8137c40a2fb05b85d7a6e9c849b20\"\n    }\n  ]\n}\n"
+}

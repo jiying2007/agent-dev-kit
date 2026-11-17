@@ -1,0 +1,7 @@
+{
+  "origin": "probe-real-children/result.json",
+  "encoding": "utf-8",
+  "bytes": 687,
+  "sha256": "46e28638716d1a591f5a7942699411585c51ad1abc2e050434484d8edefa22f2",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"/workspace/scratch/d417066aafa8/delivery-11.4.2/snapshot-implementation/probe_children.py\"\n  ],\n  \"started_at\": \"2026-11-17T16:55:32.277009+00:00\",\n  \"finished_at\": \"2026-11-17T16:55:32.373042+00:00\",\n  \"elapsed_seconds\": 0.09603082299872767,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"a7a8cb66f3599ed27cf495439e37b9b6d7c7a40550357ce9481d53231d1bcbce\",\n  \"source_after_sha256\": \"a7a8cb66f3599ed27cf495439e37b9b6d7c7a40550357ce9481d53231d1bcbce\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"fbccde1c37d7acca1489d88ad206c0d4317b46aca0e20ff36345ea00ae131f86\",\n  \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\"\n}\n"
+}

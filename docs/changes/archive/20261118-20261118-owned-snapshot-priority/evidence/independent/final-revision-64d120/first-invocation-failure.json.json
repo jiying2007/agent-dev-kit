@@ -1,0 +1,7 @@
+{
+  "origin": "final-revision-64d120/first-invocation-failure.json",
+  "encoding": "utf-8",
+  "bytes": 998,
+  "sha256": "399378f670f2b10d1e6aa89434995b4d4b2a2b4954553a560d5ddd3e4a5e58a9",
+  "content": "{\n  \"kind\": \"reviewer-harness-precondition-failure\",\n  \"tool_chunk_id\": \"9871f1\",\n  \"exit_code\": 1,\n  \"wall_time_seconds\": 0.264664149,\n  \"exact_start_and_finish_utc\": null,\n  \"stderr\": \"Traceback (most recent call last):\\n  File \\\"/workspace/scratch/d417066aafa8/delivery-11.4.2/independent-review/final-revision-64d120/recovery_and_real_probe.py\\\", line 133, in <module>\\n    assert ninja and hasattr(os, 'pidfd_open') and hasattr(signal, 'pidfd_send_signal')\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError\\n\",\n  \"observed_cause\": \"The initial invocation did not prepend the existing repository .venv/bin to PATH. shutil.which('ninja') returned null; both pidfd capabilities were present. The existing .venv/bin/ninja was then found. No package was installed.\",\n  \"real_fixture_started\": false,\n  \"recovery\": \"Invoke the unchanged probe with the same existing toolchain PATH used by implementation verification; retain this failed invocation.\"\n}\n"
+}

@@ -1,0 +1,7 @@
+{
+  "origin": "green-report-caps/stderr.log",
+  "encoding": "utf-8",
+  "bytes": 504,
+  "sha256": "ccb6985fcc47984e10622b258d0f031681ce0e86a0f99d13e7575685a2be69e0",
+  "content": "test_cleanup_keeps_record_cap_unverified_while_signalling_all_fresh_members (tests.test_skill_command_examples.CommandExampleRunnerTests.test_cleanup_keeps_record_cap_unverified_while_signalling_all_fresh_members) ... ok\ntest_cleanup_keeps_actual_batch_log_truncation_unverified (tests.test_skill_command_examples.CommandExampleRunnerTests.test_cleanup_keeps_actual_batch_log_truncation_unverified) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.010s\n\nOK\n"
+}

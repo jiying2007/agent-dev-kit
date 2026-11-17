@@ -1,0 +1,763 @@
+diff --git a/.version-lock b/.version-lock
+index 5843aaf..ef0651d 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.4.1
+-locked_at: 2026-11-17T16:13:02Z
++version: 11.4.2
++locked_at: 2026-11-17T16:53:31Z
+ locked_by: agent
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 191e344..a6e3132 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,12 @@
+ 
+ ## Unreleased
+ 
++### 11.4.2 — 有界快照优先发现自有后代
++
++- 修复全局procfs前缀条目可能耗尽单批预算而遗漏本次会话的缺口；优先使用可用的各线程子进程线索，在原清理截止内续扫全局游标，不反复从头或把空有界批次当完成。
++- 保留每批50ms/256 discovery entries、合并16records、15秒工作及1秒清理上限和既有pidfd身份校验；游标正常/异常均关闭，缺测保守降级，已发现合法成员仍执行有界清理。
++- 11.4.1主线真实Ninja失败及旧ADC超时原件保留，新的来源资格只由本候选实际验证和发行链决定；不修改ADC/CMake或CI门禁。
++
+ ### 11.4.1 — 构建超时的自有会话观测与清理
+ 
+ - 修复测试 helper 只看外层进程组而遗漏 Ninja 自建进程组的缺陷，按本次自有 session 与稳定进程身份观测、终止后代；缺测或不完整清理不再报告 complete。
+diff --git a/CONTEXT.md b/CONTEXT.md
+index cc566d8..27c988f 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.4.1
++> 产品版本：11.4.2
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 76ed4e3..89cb971 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.4.1`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.4.2`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/manifest.json b/manifest.json
+index a277cdf..92c01ec 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.4.1",
++  "version": "11.4.2",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index c0df693..87f7bff 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.4.1",
++  "campaign_id": "software-m5-11.4.2",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index 6f091c3..e13074f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.4.1"
++version = "11.4.2"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index 2bcc634..8bde627 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.4.1"
++__version__ = "11.4.2"
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 7720f4c..ebb39de 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.4.1",
++    "planned_release": "v11.4.2",
+     "source_sha": null
+   },
+   "case_groups": {
+diff --git a/tests/test_skill_command_examples.py b/tests/test_skill_command_examples.py
+index a4ebf03..407b933 100644
+--- a/tests/test_skill_command_examples.py
++++ b/tests/test_skill_command_examples.py
+@@ -1,6 +1,9 @@
+ """Execute the published Skill examples against isolated, observable failures."""
+ from __future__ import annotations
+ 
++from collections import deque
++from contextlib import contextmanager
++from itertools import chain
+ import json
+ import os
+ from pathlib import Path
+@@ -12,6 +15,7 @@ import subprocess
+ import sys
+ import tempfile
+ import time
++from types import SimpleNamespace
+ import unittest
+ from unittest import mock
+ import xml.etree.ElementTree as ET
+@@ -50,40 +54,176 @@ def process_status(pid, *, proc_root=Path("/proc")):
+             "user_ticks": int(fields[11]), "system_ticks": int(fields[12]), "wchan": "unavailable"}
+ 
+ 
+-def owned_process_snapshot(session_id, deadline, *, proc_root=Path("/proc"), limit=16):
++def close_owned_scan(scan_state):
++    context = scan_state.pop("context", None)
++    scan_state.pop("entries", None)
++    if context is not None:
++        try:
++            context.__exit__(None, None, None)
++        except Exception:
++            return False
++    return True
++
++
++def owned_process_snapshot(session_id, deadline, *, proc_root=Path("/proc"), limit=16, scan_state=None):
++    """One bounded batch; a caller-owned cursor can continue within cleanup's deadline."""
++    state = {} if scan_state is None else scan_state
++    result = None
++    try:
++        result = process_snapshot_batch(session_id, deadline, proc_root, limit, state)
++    finally:
++        if scan_state is None and not close_owned_scan(state) and result is not None:
++            result["status"] = "unavailable"
++    return result
++
++
++def process_snapshot_batch(session_id, deadline, proc_root, limit, scan_state):
+     """Best-effort Linux status only; never collect arguments or environments."""
++    scan_state["started"] = True
+     records = []
+     status = "observed"
++    bounded_by = None
++    scanned = 0
++    seen = set()
+     # A diagnostic shares the caller's cleanup deadline and gets at most 50 ms.
+     deadline = min(deadline, time.monotonic() + 0.05)
+-    if time.monotonic() >= deadline:
+-        return {"status": "bounded", "processes": records}
+-    try:
+-        with os.scandir(proc_root) as entries:
+-            for scanned, entry in enumerate(entries):
+-                if scanned >= 256 or len(records) >= limit or time.monotonic() >= deadline:
+-                    status = "bounded"
+-                    break
+-                if not entry.name.isdecimal():
+-                    continue
++
++    def bound(reason):
++        nonlocal status, bounded_by
++        status = "bounded"
++        bounded_by = bounded_by or reason
++
++    def available():
++        if time.monotonic() >= deadline:
++            bound("deadline")
++        elif scanned >= 256:
++            bound("entries")
++        elif len(records) >= limit:
++            bound("records")
++        else:
++            return True
++        return False
++
++    def take():
++        nonlocal scanned
++        if not available():
++            return False
++        scanned += 1
++        return True
++
++    def partial():
++        nonlocal status
++        if status == "observed":
++            status = "partial"
++
++    def observe(pid, *, owned_path, entry_reserved=False):
++        if pid in seen or (not entry_reserved and not take()):
++            return None
++        seen.add(pid)
++        try:
++            record = process_status(pid, proc_root=proc_root)
++            if record["sid"] != session_id:
++                return None
++            records.append(record)
++            if available():
+                 try:
+-                    record = process_status(int(entry.name), proc_root=proc_root)
+-                    if record["sid"] != session_id:
++                    with (proc_root / str(pid) / "wchan").open(encoding="utf-8", errors="replace") as stream:
++                        record["wchan"] = stream.read(128).strip()
++                except OSError:
++                    pass  # Optional wait detail does not establish process membership.
++            return record
++        except FileNotFoundError:
++            if owned_path:
++                partial()  # A vanished owned parent can leave reparented descendants.
++        except (OSError, ValueError, IndexError):
++            partial()
++        return None
++
++    # Spend the same bounded budget on our own tree before unrelated global PIDs.
++    pending = deque([] if scan_state.get("priority_done") else [session_id])
++    scan_state["priority_done"] = True
++    queued = {session_id}
++    while pending and available():
++        record = observe(pending.popleft(), owned_path=True)
++        if record is None or not available():
++            continue
++        try:
++            with os.scandir(proc_root / str(record["pid"]) / "task") as threads:
++                while take():
++                    thread = next(threads, None)
++                    if thread is None:
++                        break
++                    if not thread.name.isdecimal():
+                         continue
+-                    if time.monotonic() < deadline:
+-                        try:
+-                            with (Path(entry.path) / "wchan").open(encoding="utf-8", errors="replace") as stream:
+-                                record["wchan"] = stream.read(128).strip()
+-                        except OSError:
+-                            pass  # A process can exit between its stat and wchan reads.
+-                    records.append(record)
+-                except FileNotFoundError:
+-                    pass  # A vanished process needs no signal; do not fail on unrelated churn.
+-                except (OSError, ValueError, IndexError):
+-                    status = "partial"
+-    except OSError:
+-        status = "unavailable"
+-    return {"status": status, "processes": records}
++                    with (Path(thread.path) / "children").open("rb") as stream:
++                        children = stream.read(4097)
++                    if len(children) > 4096:
++                        bound("children-bytes")
++                        children = children[:4096]
++                        if children and not children[-1:].isspace():
++                            pieces = children.rsplit(None, 1)
++                            children = pieces[0] if len(pieces) == 2 else b""
++                    for child in children.split():
++                        if not take():
++                            break
++                        if not child.isdigit() or int(child) <= 0:
++                            partial()
++                            continue
++                        pid = int(child)
++                        if pid not in queued:
++                            pending.append(pid)
++                            queued.add(pid)
++        except (OSError, ValueError):
++            partial()  # Missing owned task/children data cannot prove tree completion.
++
++    # A tree alone misses reparented same-session processes. Only a complete
++    # global sweep can establish full observation; a bounded sweep retains the
++    # owned records above so cleanup can still terminate their verified PIDs.
++    if available() and not scan_state.get("exhausted"):
++        try:
++            if "entries" not in scan_state:
++                scan_state["context"] = os.scandir(proc_root)
++                scan_state["entries"] = scan_state["context"].__enter__()
++            while take():
++                entry = next(scan_state["entries"], None)
++                if entry is None:
++                    scan_state["exhausted"] = True
++                    break
++                scan_state["advanced"] = scan_state.get("advanced", 0) + 1
++                if entry.name.isdecimal():
++                    # The global directory entry and its bounded stat read are
++                    # one reserved unit. Charging twice would consume a numeric
++                    # boundary entry without observing it on any later page.
++                    observe(int(entry.name), owned_path=False, entry_reserved=True)
++        except OSError:
++            status = "unavailable"
++            scan_state["exhausted"] = True
++    result = {"status": status, "processes": records}
++    if status == "bounded":
++        result["bounded_by"] = bounded_by
++    report = scan_state.setdefault("report", {"status": "observed", "processes": [], "batches": 0,
++                                               "scope": "accumulated-batches", "batch_results": []})
++    report["batches"] += 1
++    if status != "observed" and report["status"] == "observed":
++        report["status"] = status  # Later complete pages must not erase earlier missing evidence.
++    if len(report["batch_results"]) < 16:
++        report["batch_results"].append({"status": status, "bounded_by": bounded_by,
++                                         "records": len(records), "exhausted": bool(scan_state.get("exhausted"))})
++    else:
++        report["batch_results_truncated"] = True
++    for record in records:
++        for index, previous in enumerate(report["processes"]):
++            if previous["pid"] == record["pid"]:
++                report["processes"][index] = record
++                break
++        else:
++            if len(report["processes"]) < 16:
++                report["processes"].append(record)
++            else:
++                report["records_truncated"] = True
++                if report["status"] == "observed":
++                    report["status"] = "bounded"
++    return result
+ 
+ 
+ def same_process(left, right):
+@@ -114,7 +254,7 @@ def terminate_owned_process(record, session_id, deadline):
+             os.close(descriptor)
+ 
+ 
+-def cleanup_owned_session(leader, snapshot, deadline):
++def cleanup_owned_session(leader, snapshot, deadline, *, scan_state=None):
+     """Use the original leader as an unreaped identity anchor until cleanup ends."""
+     if leader is None or leader["sid"] != leader["pid"]:
+         return "session-unverified"
+@@ -123,11 +263,19 @@ def cleanup_owned_session(leader, snapshot, deadline):
+     verified = (snapshot["status"] == "observed" and hasattr(os, "pidfd_open")
+                 and hasattr(signal, "pidfd_send_signal"))
+     current = snapshot
++    pass_had_live = False
+     while time.monotonic() < deadline:
+         verified = verified and current["status"] == "observed"
++        report = scan_state.get("report") if scan_state is not None else None
++        if report is not None:
++            # A complete final page cannot erase gaps in accumulated evidence.
++            verified = (verified and report.get("status") == "observed"
++                        and not report.get("records_truncated") and not report.get("batch_results_truncated"))
+         live = [item for item in current["processes"] if item["state"] not in {"Z", "X"}]
+-        if not live:
++        continuing = scan_state is not None and scan_state.get("started")
++        if not live and not continuing:
+             return "complete" if verified else "session-unverified"
++        pass_had_live = pass_had_live or bool(live)
+         # Stop coordinators before their leaves; the leader is not reaped here.
+         signalling_failed = False
+         for record in sorted(live, key=lambda item: item["pid"] != leader["pid"]):
+@@ -135,7 +283,21 @@ def cleanup_owned_session(leader, snapshot, deadline):
+                 signalling_failed = True
+         if signalling_failed:
+             return "session-unverified"
+-        current = owned_process_snapshot(leader["sid"], deadline)
++        if continuing and scan_state.get("exhausted"):
++            if not pass_had_live:
++                return "complete" if verified else "session-unverified"
++            # Killing a member seen on an earlier page is not proof it exited.
++            # A new pass must observe no live members before cleanup can finish.
++            if not close_owned_scan(scan_state):
++                return "session-unverified"
++            scan_state["exhausted"] = False
++            pass_had_live = False
++        previous_progress = scan_state.get("advanced", 0) if continuing else 0
++        current = owned_process_snapshot(leader["sid"], deadline, scan_state=scan_state)
++        if (continuing and not scan_state.get("exhausted")
++                and scan_state.get("advanced", 0) == previous_progress
++                and not any(item["state"] not in {"Z", "X"} for item in current["processes"])):
++            return "session-unverified"  # No new page or live member: do not spin on an empty observation.
+     return "session-incomplete"
+ 
+ 
+@@ -156,15 +318,20 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
+         work_elapsed = time.monotonic() - started
+         cleanup_started = time.monotonic()
+         cleanup_deadline = cleanup_started + 1
++        scan_state = {}
+         try:
+-            snapshot = owned_process_snapshot(process.pid, cleanup_deadline)
++            snapshot = owned_process_snapshot(process.pid, cleanup_deadline, scan_state=scan_state)
+         except Exception as error:
+             # Diagnostics must never prevent termination or replace the timeout.
+             snapshot = {"status": "unavailable", "error": type(error).__name__, "processes": []}
+         try:
+-            cleanup_status = cleanup_owned_session(leader, snapshot, cleanup_deadline)
++            cleanup_status = cleanup_owned_session(leader, snapshot, cleanup_deadline, scan_state=scan_state)
+         except Exception:
+             cleanup_status = "session-unverified"
++        finally:
++            if not close_owned_scan(scan_state):
++                cleanup_status = "session-unverified"
++            snapshot = scan_state.get("report", snapshot)
+         # The original outer group remains anchored by our unreaped Popen.
+         # Missing diagnostics must not disable that fallback; an observed
+         # replacement identity, however, must never authorize a group signal.
+@@ -209,6 +376,340 @@ def run_example(code: str, root: Path, *arguments: str, environment=None,
+ 
+ 
+ class CommandExampleRunnerTests(unittest.TestCase):
++    @contextmanager
++    def foreign_proc_prefix(self, proc_root):
++        """Add only unrelated directory entries; leave real procfs and signals intact."""
++        original_scandir = os.scandir
++        @contextmanager
++        def scan(path):
++            with original_scandir(path) as entries:
++                prefix = (SimpleNamespace(name=f"unrelated-{number}") for number in range(256))
++                yield chain(prefix, entries) if path == proc_root else entries
++        with mock.patch("os.scandir", side_effect=scan):
++            yield
++
++    @staticmethod
++    def proc_fixture(root, pid, *, sid=9000, children="", parent=1):
++        path = root / str(pid)
++        path.mkdir()
++        (path / "stat").write_text(
++            f"{pid} (fixture) S {parent} {pid} {sid} 0 0 0 0 0 0 0 7 8 0 0 0 0 0 0 99\n")
++        thread = path / "task" / str(pid)
++        thread.mkdir(parents=True)
++        (thread / "children").write_text(children)
++        return path
++
++    def test_foreign_global_prefix_does_not_starve_owned_thread_descendants(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            owner = self.proc_fixture(root, 9000)
++            thread = owner / "task/9004"
++            thread.mkdir()
++            (thread / "children").write_text("9001 9100 9001 ")
++            self.proc_fixture(root, 9001, children="9002 ", parent=9000)
++            self.proc_fixture(root, 9002, children="9003 ", parent=9001)
++            self.proc_fixture(root, 9003, parent=9002)
++            self.proc_fixture(root, 9100, sid=9100)
++            # A controlled clock isolates traversal order/count, not runtime performance.
++            with self.foreign_proc_prefix(root), mock.patch("time.monotonic", return_value=100):
++                snapshot = owned_process_snapshot(9000, 101, proc_root=root)
++            self.assertEqual({9000, 9001, 9002, 9003},
++                             {record["pid"] for record in snapshot["processes"]}, snapshot)
++            self.assertEqual(4, len(snapshot["processes"]), "duplicate children must be deduplicated")
++            self.assertEqual("bounded", snapshot["status"], "the full SID was not observed")
++
++    @unittest.skipUnless(sys.platform == "linux", "owned-session observation uses Linux procfs")
++    def test_real_ninja_cleanup_survives_an_unrelated_global_proc_prefix(self):
++        with self.foreign_proc_prefix(Path("/proc")):
++            self.test_real_ninja_child_group_is_observed_and_cleaned_without_touching_another_session()
++
++    def test_truncated_children_do_not_invent_a_partial_pid_or_lose_known_children(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            owner = self.proc_fixture(root, 9000)
++            self.proc_fixture(root, 9001)
++            self.proc_fixture(root, 3)
++            (owner / "task/9000/children").write_bytes(b"9001 " + b" " * 4090 + b"345 ")
++            with self.foreign_proc_prefix(root), mock.patch("time.monotonic", return_value=100), \
++                    mock.patch(__name__ + ".process_status", wraps=process_status) as read:
++                snapshot = owned_process_snapshot(9000, 101, proc_root=root)
++            self.assertEqual({9000, 9001}, {record["pid"] for record in snapshot["processes"]}, snapshot)
++            self.assertNotIn(3, [call.args[0] for call in read.call_args_list])
++            self.assertEqual("children-bytes", snapshot["bounded_by"])
++
++    def test_missing_owned_children_remains_partial_after_a_complete_global_sweep(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            owner = self.proc_fixture(root, 9000)
++            (owner / "task/9000/children").unlink()
++            with mock.patch("time.monotonic", return_value=100):
++                snapshot = owned_process_snapshot(9000, 101, proc_root=root)
++            self.assertEqual("partial", snapshot["status"])
++            self.assertEqual([9000], [record["pid"] for record in snapshot["processes"]])
++
++    def test_thread_and_global_discovery_share_the_existing_entry_budget(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            owner = self.proc_fixture(root, 9000)
++            for tid in range(9001, 9301):
++                thread = owner / "task" / str(tid)
++                thread.mkdir()
++                (thread / "children").write_text("")
++            with mock.patch("time.monotonic", return_value=100), \
++                    mock.patch("os.scandir", wraps=os.scandir) as scan:
++                snapshot = owned_process_snapshot(9000, 101, proc_root=root)
++            self.assertEqual("entries", snapshot["bounded_by"])
++            self.assertNotIn(root, [call.args[0] for call in scan.call_args_list],
++                             "global traversal cannot receive a second independent entry budget")
++
++    def test_global_cursor_continues_without_restarting_and_closes_on_error(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            self.proc_fixture(root, 9000)
++            original_scandir = os.scandir
++            opened, closed, yielded = [], [], []
++            def foreign_entries():
++                for number in range(1024):
++                    yielded.append(number)
++                    yield SimpleNamespace(name="unrelated")
++                raise RuntimeError("synthetic iterator error")
++            @contextmanager
++            def scan(path):
++                if path == root:
++                    opened.append(path)
++                    try:
++                        yield foreign_entries()
++                    finally:
++                        closed.append(path)
++                else:
++                    with original_scandir(path) as entries:
++                        yield entries
++            state = {}
++            with mock.patch("time.monotonic", return_value=100), mock.patch("os.scandir", side_effect=scan):
++                try:
++                    for _ in range(3):
++                        owned_process_snapshot(9000, 101, proc_root=root, scan_state=state)
++                    self.assertEqual(1, len(opened))
++                    self.assertEqual([], closed)
++                    self.assertEqual(list(range(len(yielded))), yielded)
++                    self.assertLessEqual(len(yielded), 3 * 256)
++                    self.assertGreater(len(yielded), 2 * 256)
++                    with self.assertRaisesRegex(RuntimeError, "synthetic iterator error"):
++                        for _ in range(3):
++                            owned_process_snapshot(9000, 101, proc_root=root, scan_state=state)
++                finally:
++                    self.assertTrue(close_owned_scan(state))
++            self.assertEqual(1, len(closed))
++            self.assertNotIn("entries", state)
++            self.assertNotIn("context", state)
++
++    def test_numeric_entries_at_cursor_boundaries_are_inspected_in_each_fresh_pass(self):
++        for prefix_length in (255, 511):
++            with self.subTest(prefix_length=prefix_length), tempfile.TemporaryDirectory() as directory:
++                root = Path(directory)
++                self.proc_fixture(root, 9000)
++                opened, closed = [], []
++                @contextmanager
++                def scan(path):
++                    self.assertEqual(root, path)
++                    opened.append(path)
++                    entries = chain((SimpleNamespace(name="unrelated") for _ in range(prefix_length)),
++                                    [SimpleNamespace(name="9000")])
++                    try:
++                        yield entries
++                    finally:
++                        closed.append(path)
++                state = {"priority_done": True}
++                passes = []
++                with mock.patch("time.monotonic", return_value=100), \
++                        mock.patch("os.scandir", side_effect=scan), \
++                        mock.patch(__name__ + ".process_status", wraps=process_status) as read:
++                    for _ in range(2):
++                        pages = []
++                        try:
++                            for _ in range(prefix_length // 256 + 2):
++                                advanced = state.get("advanced", 0)
++                                page = owned_process_snapshot(9000, 101, proc_root=root, scan_state=state)
++                                self.assertLessEqual(state.get("advanced", 0) - advanced, 256)
++                                pages.append([record["pid"] for record in page["processes"]])
++                            self.assertTrue(state.get("exhausted"))
++                            passes.append(pages)
++                        finally:
++                            self.assertTrue(close_owned_scan(state))
++                        state["exhausted"] = False
++                self.assertEqual([9000, 9000], [call.args[0] for call in read.call_args_list], passes)
++                self.assertTrue(all(sum(page.count(9000) for page in pages) == 1 for pages in passes), passes)
++                self.assertEqual(2, len(opened))
++                self.assertEqual(opened, closed)
++
++    def test_standalone_snapshot_closes_its_cursor_when_observation_raises(self):
++        closed = []
++        @contextmanager
++        def broken_scan(path):
++            if path != Path("/synthetic-proc"):
++                raise FileNotFoundError
++            def broken_entries():
++                yield SimpleNamespace(name="unrelated")
++                raise RuntimeError("synthetic iterator error")
++            try:
++                yield broken_entries()
++            finally:
++                closed.append(True)
++        with mock.patch("time.monotonic", return_value=100), \
++                mock.patch("os.scandir", side_effect=broken_scan), \
++                mock.patch(__name__ + ".process_status", side_effect=FileNotFoundError):
++            with self.assertRaisesRegex(RuntimeError, "synthetic iterator error"):
++                owned_process_snapshot(9000, 101, proc_root=Path("/synthetic-proc"))
++        self.assertEqual([True], closed)
++
++    def test_accumulated_diagnostics_keep_at_most_sixteen_records_and_prior_gaps(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            for pid in range(9000, 9040):
++                self.proc_fixture(root, pid)
++            state = {}
++            with mock.patch("time.monotonic", return_value=100):
++                try:
++                    for _ in range(5):
++                        batch = owned_process_snapshot(9000, 101, proc_root=root, scan_state=state)
++                        self.assertLessEqual(len(batch["processes"]), 16)
++                        if state.get("exhausted"):
++                            break
++                    self.assertTrue(state.get("exhausted"))
++                    self.assertEqual(16, len(state["report"]["processes"]))
++                    self.assertTrue(state["report"]["records_truncated"])
++                    self.assertEqual("bounded", state["report"]["status"])
++                    self.assertEqual("observed", batch["status"])
++                finally:
++                    self.assertTrue(close_owned_scan(state))
++
++    def test_cleanup_keeps_record_cap_unverified_while_signalling_all_fresh_members(self):
++        with tempfile.TemporaryDirectory() as directory:
++            roots = [Path(directory) / str(number) for number in range(3)]
++            for root, pids in zip(roots, [range(9000, 9009), [9000, *range(9009, 9017)], [9000]]):
++                root.mkdir()
++                for pid in pids:
++                    path = self.proc_fixture(root, pid)
++                    if root != roots[0] and pid == 9000:
++                        (path / "stat").write_text((path / "stat").read_text().replace(") S ", ") Z ", 1))
++            real_snapshot, real_status = owned_process_snapshot, process_status
++            leader = real_status(9000, proc_root=roots[0])
++            state = {"priority_done": True}
++            batches = []
++            def snapshot(session_id, deadline, *, scan_state):
++                batch = real_snapshot(session_id, deadline, proc_root=roots[len(batches)], scan_state=scan_state)
++                batches.append(batch)
++                return batch
++            def status(pid, **kwargs):
++                return real_status(pid, **kwargs) if kwargs else leader
++            with mock.patch("time.monotonic", return_value=100), \
++                    mock.patch(__name__ + ".process_status", side_effect=status), \
++                    mock.patch(__name__ + ".owned_process_snapshot", side_effect=snapshot), \
++                    mock.patch(__name__ + ".terminate_owned_process", return_value=True) as terminate:
++                try:
++                    first = snapshot(9000, 101, scan_state=state)
++                    result = cleanup_owned_session(leader, first, 101, scan_state=state)
++                finally:
++                    self.assertTrue(close_owned_scan(state))
++            self.assertEqual(["observed"] * 3, [batch["status"] for batch in batches])
++            self.assertEqual(set(range(9000, 9017)), {call.args[0]["pid"] for call in terminate.call_args_list})
++            self.assertEqual(17, terminate.call_count, "truncated diagnostics must not disable fresh cleanup")
++            self.assertEqual(16, len(state["report"]["processes"]))
++            self.assertTrue(state["report"]["records_truncated"])
++            self.assertEqual("session-unverified", result, state["report"])
++
++    def test_cleanup_keeps_actual_batch_log_truncation_unverified(self):
++        with tempfile.TemporaryDirectory() as directory:
++            root = Path(directory)
++            owner = self.proc_fixture(root, 9000)
++            real_snapshot, real_status = owned_process_snapshot, process_status
++            leader = real_status(9000, proc_root=root)
++            state = {"priority_done": True}
++            batches = []
++            def snapshot(session_id, deadline, *, scan_state):
++                if len(batches) == 16:
++                    (owner / "stat").write_text((owner / "stat").read_text().replace(") S ", ") Z ", 1))
++                batch = real_snapshot(session_id, deadline, proc_root=root, scan_state=scan_state)
++                batches.append(batch)
++                return batch
++            def status(pid, **kwargs):
++                return real_status(pid, **kwargs) if kwargs else leader
++            with mock.patch("time.monotonic", return_value=100), \
++                    mock.patch(__name__ + ".process_status", side_effect=status), \
++                    mock.patch(__name__ + ".owned_process_snapshot", side_effect=snapshot), \
++                    mock.patch(__name__ + ".terminate_owned_process", return_value=True) as terminate:
++                try:
++                    first = snapshot(9000, 101, scan_state=state)
++                    result = cleanup_owned_session(leader, first, 101, scan_state=state)
++                finally:
++                    self.assertTrue(close_owned_scan(state))
++            self.assertEqual(["observed"] * 17, [batch["status"] for batch in batches])
++            self.assertEqual(16, terminate.call_count)
++            self.assertEqual(16, len(state["report"]["batch_results"]))
++            self.assertTrue(state["report"]["batch_results_truncated"])
++            self.assertNotIn("records_truncated", state["report"])
++            self.assertEqual("session-unverified", result, state["report"])
++
++    def test_cleanup_requires_a_fresh_pass_after_signalling_the_last_page(self):
++        leader = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
++        contexts = [mock.MagicMock() for _ in range(3)]
++        state = {"started": True, "exhausted": True, "context": contexts[0], "entries": iter(())}
++        observed = {"status": "observed", "processes": [leader]}
++        fresh_passes = []
++        def read_fresh(session_id, deadline, *, scan_state):
++            self.assertFalse(scan_state["exhausted"], "an exhausted cursor is not an exit observation")
++            self.assertNotIn("entries", scan_state)
++            fresh_passes.append(True)
++            scan_state.update(context=contexts[len(fresh_passes)], entries=iter(()), exhausted=True)
++            record = dict(leader, state="S" if len(fresh_passes) == 1 else "Z")
++            return {"status": "observed", "processes": [record]}
++        with mock.patch("time.monotonic", return_value=100), \
++                mock.patch(__name__ + ".process_status", return_value=leader), \
++                mock.patch(__name__ + ".terminate_owned_process", return_value=True) as terminate, \
++                mock.patch(__name__ + ".owned_process_snapshot", side_effect=read_fresh):
++            try:
++                result = cleanup_owned_session(leader, observed, 101, scan_state=state)
++            finally:
++                self.assertTrue(close_owned_scan(state))
++        self.assertEqual("complete", result)
++        self.assertEqual(2, len(fresh_passes))
++        self.assertEqual(2, terminate.call_count)
++        for context in contexts:
++            context.__exit__.assert_called_once()
++
++    def test_empty_bounded_continuation_stops_at_the_original_cleanup_deadline(self):
++        leader = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
++        state = {"started": True, "exhausted": False}
++        now = [100.0]
++        bounded = {"status": "bounded", "bounded_by": "entries", "processes": []}
++        def next_batch(session_id, deadline, *, scan_state):
++            self.assertIs(state, scan_state)
++            self.assertEqual(101, deadline)
++            now[0] += 0.25
++            scan_state["advanced"] = scan_state.get("advanced", 0) + 256
++            return bounded
++        with mock.patch("time.monotonic", side_effect=lambda: now[0]), \
++                mock.patch(__name__ + ".process_status", return_value=leader), \
++                mock.patch(__name__ + ".terminate_owned_process") as terminate, \
++                mock.patch(__name__ + ".owned_process_snapshot", side_effect=next_batch) as snapshot:
++            result = cleanup_owned_session(leader, bounded, 101, scan_state=state)
++        self.assertEqual("session-incomplete", result)
++        self.assertEqual(4, snapshot.call_count)
++        terminate.assert_not_called()
++
++    def test_empty_continuation_without_cursor_progress_does_not_busy_loop(self):
++        leader = {"pid": 123, "sid": 123, "start_ticks": 10, "state": "S"}
++        state = {"started": True, "exhausted": False, "advanced": 12}
++        bounded = {"status": "bounded", "bounded_by": "deadline", "processes": []}
++        with mock.patch("time.monotonic", return_value=100), \
++                mock.patch(__name__ + ".process_status", return_value=leader), \
++                mock.patch(__name__ + ".terminate_owned_process") as terminate, \
++                mock.patch(__name__ + ".owned_process_snapshot", return_value=bounded) as snapshot:
++            result = cleanup_owned_session(leader, bounded, 101, scan_state=state)
++        self.assertEqual("session-unverified", result)
++        snapshot.assert_called_once()
++        terminate.assert_not_called()
++
+     def test_default_budget_and_normal_exit_keep_the_original_contract(self):
+         self.assertEqual(15, run_example.__kwdefaults__["timeout"])
+         with tempfile.TemporaryDirectory() as directory:
+@@ -439,7 +940,7 @@ class CommandExampleRunnerTests(unittest.TestCase):
+     def test_process_snapshot_respects_record_and_expired_cleanup_budgets(self):
+         with mock.patch("os.scandir", side_effect=AssertionError("expired diagnostic must not scan")):
+             result = owned_process_snapshot(123, time.monotonic() - 1)
+-        self.assertEqual({"status": "bounded", "processes": []}, result)
++        self.assertEqual({"status": "bounded", "bounded_by": "deadline", "processes": []}, result)
+         with tempfile.TemporaryDirectory() as directory:
+             root = Path(directory)
+             for pid in range(123, 128):

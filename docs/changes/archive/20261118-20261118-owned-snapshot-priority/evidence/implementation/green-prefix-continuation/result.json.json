@@ -1,0 +1,7 @@
+{
+  "origin": "green-prefix-continuation/result.json",
+  "encoding": "utf-8",
+  "bytes": 892,
+  "sha256": "3e598834c95d37c110a7553439ae717b5bd211f7bc91bb77a784a81070b36253",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"-v\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_foreign_global_prefix_does_not_starve_owned_thread_descendants\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests.test_real_ninja_cleanup_survives_an_unrelated_global_proc_prefix\"\n  ],\n  \"started_at\": \"2026-11-17T16:58:50.927349+00:00\",\n  \"finished_at\": \"2026-11-17T16:58:52.115745+00:00\",\n  \"elapsed_seconds\": 1.1884016530020745,\n  \"exit_code\": 0,\n  \"source_before_sha256\": \"21f08c4cc990447879d06fa514fb98540efbb461416246ca97cc95b905c021fc\",\n  \"source_after_sha256\": \"21f08c4cc990447879d06fa514fb98540efbb461416246ca97cc95b905c021fc\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"808d282e50f49f0d36176814c7ddd9357c1649defc1af5f5d4877166d80da15c\"\n}\n"
+}

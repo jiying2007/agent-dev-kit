@@ -1,0 +1,19 @@
+{
+  "captured_at": "2026-11-17T17:14:47.810652+00:00",
+  "source_directory": "/workspace/scratch/d417066aafa8/agent-dev-kit/docs/changes/20261118-owned-snapshot-priority",
+  "records": [
+    {
+      "path": "verify-report.md.json",
+      "raw_bytes": 648,
+      "raw_sha256": "70b52381ce206a299013f252368b03dca45a4939411efa571a1532efc4c3bc85",
+      "wrapper_sha256": "337ae892fda897b691feb4d0620bd26b2c4edc002023a90c37d88824e0ce9742"
+    },
+    {
+      "path": "negative-results.md.json",
+      "raw_bytes": 3380,
+      "raw_sha256": "a5051d28513e5cac2367990b55e17f58624ad5874967537e4966e6541f33fe51",
+      "wrapper_sha256": "545ad06a2ff6f789d0360d501dc131ba6ada21b29559e4e76e9365bf14c8a5a6"
+    }
+  ],
+  "boundary": "Original bytes/results retained; no retrospective qualification"
+}

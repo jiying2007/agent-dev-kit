@@ -1,0 +1,7 @@
+{
+  "origin": "interruption.json",
+  "encoding": "utf-8",
+  "bytes": 282,
+  "sha256": "e862a31a07902bf541524013e867708b6320033b6241d0bf7a386c3e6013fd23",
+  "content": "{\n  \"observed_at\": \"2026-11-17 17:08:15 UTC\",\n  \"session_id\": 2460,\n  \"exit_code\": 130,\n  \"candidate\": \"4f94c302bc8412e2abc5e80832b1c68f6076c0e5\",\n  \"reason\": \"OSP-2: accumulated diagnostic truncation did not constrain cleanup=complete; full intentionally interrupted, not PASS.\"\n}\n"
+}

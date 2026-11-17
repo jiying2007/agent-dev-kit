@@ -1,0 +1,7 @@
+{
+  "origin": "runner-final/result.json",
+  "encoding": "utf-8",
+  "bytes": 692,
+  "sha256": "4d356260e83924483319a1867e927183243ac61deafb2bf7f0de5da486d2efbf",
+  "content": "{\n  \"command\": [\n    \"python\",\n    \"-m\",\n    \"unittest\",\n    \"-v\",\n    \"tests.test_skill_command_examples.CommandExampleRunnerTests\"\n  ],\n  \"started_at\": \"2026-11-17T17:00:13.763278+00:00\",\n  \"finished_at\": \"2026-11-17T17:00:16.984097+00:00\",\n  \"elapsed_seconds\": 3.2208245099973283,\n  \"exit_code\": 1,\n  \"source_before_sha256\": \"f48f154eaded88ec0ab3eefce9acfc0b26ff993aae098b74db0f29ac7719f6aa\",\n  \"source_after_sha256\": \"f48f154eaded88ec0ab3eefce9acfc0b26ff993aae098b74db0f29ac7719f6aa\",\n  \"source_unchanged\": true,\n  \"stdout_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n  \"stderr_sha256\": \"e672fae399ad0e7dc8a06a7df31fd32f6a331804dd2629b4c8f8b7739a38d9d1\"\n}\n"
+}
