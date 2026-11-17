@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+from copy import deepcopy
 from dataclasses import dataclass
 from importlib import resources
 from functools import lru_cache
@@ -353,3 +354,48 @@ def validate_trace_summary(
             raise ManifestError("trace_summary_invalid: first_pass_success requires passed verification evidence")
 
     return value
+
+
+def diagnose_trace_summary(value: Any) -> dict[str, Any]:
+    """Project validated facts for an explicit review, without causal inference.
+
+    Finding locations refer to the input Trace v2; their facts retain original
+    statuses and opaque evidence references. Counts absent from the summary
+    stay unavailable, including exact terminal counts for a partial tool
+    aggregate. Neither first-pass failure, repeated calls nor wall time proves
+    blind retries, waste, parallel waiting or savings. No input is modified.
+    """
+    summary = validate_trace_summary(value)
+    facts = {name: deepcopy(summary[name]) for name in (
+        "outcome", "failure_pattern", "first_pass_success", "tool_calls", "tools_used",
+        "handoffs", "guardrails", "verification", "token_usage", "cost", "elapsed_ms",
+        "human_interventions", "wrong_skill", "abstained", "blockers",
+    )}
+    for name in ("attempt_count", "recorded_model_call_count", "tool_outcome_counts"):
+        facts[name] = {"status": "not-available", "reason": "not-recorded-in-trace-summary"}
+    findings: list[dict[str, Any]] = []
+
+    def record(code: str, location: str, fact: Any) -> None:
+        findings.append({"code": code, "location": location, "fact": deepcopy(fact)})
+
+    if summary["outcome"]["status"] != "succeeded":
+        record("outcome-status", "/outcome", summary["outcome"])
+    for name in ("token_usage", "cost"):
+        if summary[name].get("status") == "not-available":
+            record("metric-unavailable", "/" + name, summary[name])
+    for name, state, statuses, code in (
+        ("tools_used", "outcome", {"partial", "failed", "blocked", "cancelled", "not-available"}, "tool-outcome"),
+        ("handoffs", "outcome", {"failed", "blocked", "cancelled"}, "handoff-outcome"),
+        ("guardrails", "status", {"failed"}, "guardrail-failed"),
+        ("verification", "status", {"failed", "not-run"}, "verification-status"),
+    ):
+        for index, item in enumerate(summary[name]):
+            if item[state] in statuses:
+                record(code, f"/{name}/{index}", item)
+    for index, blocker in enumerate(summary["blockers"]):
+        record("blocker", f"/blockers/{index}", blocker)
+    if summary["failure_pattern"] != "none":
+        record("failure-pattern", "/failure_pattern", summary["failure_pattern"])
+    if summary["wrong_skill"]:
+        record("wrong-skill", "/wrong_skill", True)
+    return {"facts": facts, "findings": findings}

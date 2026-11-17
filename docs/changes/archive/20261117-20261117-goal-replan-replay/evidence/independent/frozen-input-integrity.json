@@ -1,0 +1,7 @@
+{
+  "chunk_id": "79d231",
+  "wall_time_seconds": 0.00003451,
+  "exit_code": 0,
+  "original_token_count": 57,
+  "output": "{\"frozen_inputs_intact\": true, \"sha256\": {\"frozen-inputs.json\": \"1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60\", \"replay_frozen_probe.py\": \"b6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d\"}}\n"
+}

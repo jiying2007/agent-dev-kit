@@ -1,0 +1,61 @@
+{
+  "baseline_sha": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d",
+  "verifier_scope": "Synthetic unit-test verifier copied from the baseline test helper; not production authority or evidence of host bypass.",
+  "cases": [
+    {
+      "case": "latest_implementation",
+      "managed_verifier": true,
+      "rejected": false,
+      "intake_revision": 3,
+      "task_mode": "implementation",
+      "effective_artifact_mode": "implementation",
+      "missing_artifacts": [
+        "build",
+        "repo"
+      ],
+      "gate_allowed": false,
+      "completion_allowed": false,
+      "expectation_met": true
+    },
+    {
+      "case": "replayed_older_readonly_new_event_id",
+      "managed_verifier": true,
+      "rejected": false,
+      "intake_revision": 4,
+      "task_mode": "readonly",
+      "effective_artifact_mode": "readonly",
+      "missing_artifacts": [],
+      "gate_allowed": true,
+      "completion_allowed": true,
+      "expectation_met": false
+    },
+    {
+      "case": "replay_without_trusted_verifier",
+      "managed_verifier": false,
+      "rejected": false,
+      "intake_revision": 4,
+      "task_mode": "readonly",
+      "effective_artifact_mode": "implementation",
+      "missing_artifacts": [
+        "build",
+        "repo"
+      ],
+      "gate_allowed": false,
+      "completion_allowed": false,
+      "expectation_met": false
+    },
+    {
+      "case": "fresh_readonly_after_implementation",
+      "managed_verifier": true,
+      "rejected": false,
+      "intake_revision": 4,
+      "task_mode": "readonly",
+      "effective_artifact_mode": "readonly",
+      "missing_artifacts": [],
+      "gate_allowed": true,
+      "completion_allowed": true,
+      "expectation_met": true
+    }
+  ],
+  "all_expectations_met": false
+}

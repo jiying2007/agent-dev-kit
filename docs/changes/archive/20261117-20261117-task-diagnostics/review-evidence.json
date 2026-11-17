@@ -1,0 +1,354 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261117-task-diagnostics",
+  "scope": "source-change",
+  "author_id": "ai/implement_diagnostics",
+  "owner": "leiwenjun",
+  "reviewer": {
+    "id": "ai/independent-review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-17T15:20:19Z",
+  "evidence_completed_at": "2026-11-17T15:19:54Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "c1-footprint-ratchet",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "The original d0d2 clean full suite was 101/102: embedded-fullstack and large-refactor potential source bytes exceeded unchanged ratchets. Only repeated AAR reference/template text was compressed to 819 bytes each, preserving the original task body. Exact final d01d full suite is 102/102; original failure and raw logs remain retained."
+    },
+    {
+      "id": "c1-footprint-headroom",
+      "severity": "minor",
+      "disposition": "accepted-risk",
+      "reason": "Final potential source bytes are 316356 and 323238 against unchanged limits 316854 and 323328, leaving 498 and 90 bytes. Current source passes; later growth remains subject to the existing ratchet. This is not a runtime context or Token measurement."
+    },
+    {
+      "id": "c1-checklist-label",
+      "severity": "minor",
+      "disposition": "fixed",
+      "reason": "The first lifecycle verify rejected an explanation appended to an exact checklist label. The explanation moved to prose without changing the gate; the failed report remains retained and the subsequent current lifecycle verify passed."
+    }
+  ],
+  "limitations": [
+    "This owner-delegated AI source review is not human review, field verification, provider execution or release authorization. No paid model, live runtime installation, device operation or GitHub write was performed by this reviewer.",
+    "The tested product is d01d1bcb7c2f322c342656a95e523fba8b55505e / tree 4fe0cfa656ad7feeabf1a25daa9012dcfd673ce0. Subsequent change evidence and lifecycle packaging is a separately reviewed overlay, not a claim that these files were present during the clean full suite.",
+    "Independent targeted probes actually ran on d0d2b2dc7cac3e7e7bb853bc372d4afc9975f6bd. The reviewed delta to d01d changes only two AAR text files; Python, tests and budgets are byte-identical. The exact d01d full suite separately passed 102/102.",
+    "Frozen review-input-state paths and source_path fields identify their original observation location. Record-relative evidence survives ordinary archive moves; the historical snapshot must not be rewritten to imply a later lifecycle state.",
+    "Format passed with retained existing non-executable-script warnings. Runtime/model evaluation remains unexecuted; deterministic tests, synthetic fixtures and source-byte budgets do not measure model effectiveness, Token savings, time savings or cost improvement.",
+    "Knowledge Provider and real host evidence remain unavailable / needs review. No replacement Goal authority, controller, runtime adapter or host final gate is created by these source changes.",
+    "Remote PR/main CI, protected merge, immutable Release, Root promotion and actual host/native qualification require their own exact-source receipts and are not pre-certified here.",
+    "Diagnostics remains explicit opt-in, caller-observed and test-only; counts and wall time provide facts but do not establish waste, blind retries, parallel waiting, causal improvement or release eligibility.",
+    "C1 TASK-003 includes later external delivery and remains incomplete at this source-review point; this pass does not mark publishing or Root promotion complete."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d",
+    "head_commit": "d01d1bcb7c2f322c342656a95e523fba8b55505e",
+    "original_patch_sha256": "52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "bf30e631322e40ed767a2caf95ce9a7b95c425bab30eafe9c53a42e63ff62915"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "21dc38c7355d545707c26cd5f4e5508d3126e4ceecb07565c20363db446960e3"
+    },
+    {
+      "base": "record",
+      "path": "proposal.md",
+      "sha256": "602f15ecc32499302814764cc7f0c78934b963025f400cb267d8b8ca8e6d76da"
+    },
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "4f258117ad824a39f8bde24851e3ad229b1944be39c14cbdd43dffa7796129b4"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "80f772c1cd1153cdb5aa229d8870efc47fae20bf2bbbedccbb46fc9c9bf568ab"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "80f246a91bea754effb4c0e9842f28979283e02cb1faf4560d23975c6b8361b5"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "341e8a2254eda295d4f25e386390506c86132e5f988810eeed4bf2c64e740e64"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/task-evidence.md",
+      "sha256": "bb9403525800f5c86b4eeba43d46642d0fc81e8d948a9963b318482e5bec96f6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/trace-summary-emitter.md",
+      "sha256": "4d8dbe1f2823f48324a057426ee2d8ff7d13956991272b61170e749ea38719f6"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "74840f26c805604efd2fb6852a4013b57a18c6acd1e3abde86b742589f463315"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "80f1c1cc05eb43a29669226a71b50a5a4b59de43b892b3d29e0805e48a7f6083"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "fd17408ebbba530f4d1a1a3179db881b1afc8199b6f10239021207c4a77c5b9b"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "sha256": "e803543b0a432df849c494f8e6e845dd9a0798e6df665555a19f50b1f4cb3017"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-after-action-review/references/after-action-review.md",
+      "sha256": "4309116aed223b77218b8ad69ab3ba2623e434bea9e23f651bc635c4c0d62ccf"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "ae00d797c5281511ca7e2797466ac27c352547818b0a6374eb20edb251ee3137"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/evaluation_cli.py",
+      "sha256": "66878c047c92041e877114f79b302d7d1cb194c9b67ac4fe2e09bd6d73767628"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/execution_policy/reducer.py",
+      "sha256": "810f9aa92da2304cdb4455c5b52ffe54ef780e8bdc6987c1640d402d7eccd213"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/task_evidence.py",
+      "sha256": "74e15cf2aed1f97caebbcfd0efb104d1bc1442e2e3c34509e2fdd4e340071cc5"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/trace_summary.py",
+      "sha256": "c161e03f85d131f71f6fa9572adde864d2eee86e039bd7a11c2c74dede2a3ced"
+    },
+    {
+      "base": "repository",
+      "path": "templates/memory/after-action-review.md",
+      "sha256": "4309116aed223b77218b8ad69ab3ba2623e434bea9e23f651bc635c4c0d62ccf"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "a1baefc49f467368d5460b4353605a2f0873d2407dd314501698f9de4d9c8631"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_execution_policy.py",
+      "sha256": "2ce7da625e933c1999be52e2a7e02cd8ebb0801df6f7e56e70c041f6cd714af2"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_target_contracts.sh",
+      "sha256": "22fb2eaeb14e5611186c7277fad938f95446181b89a094391e0f984fe84de5aa"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_task_evidence.py",
+      "sha256": "6ae8defff93a2541d8584cf6086ba1c6aeec95838acba9b0cfc9ec853da72ca2"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_trace_summary.py",
+      "sha256": "9d58a497b023299d7dc0e6a836795deb0845e71ec7a673294e449b09075d9bae"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/independent/audit-final-evidence.py",
+      "sha256": "4c67fc858ee442f5006ea0a7a97d9ab2ebbca62588fca7fdb54f02700c42ae64"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/c1-independent-compatibility-probe.py",
+      "sha256": "3f5d1c322a8d65023f2eeb7e7ea64869974dfaf2ef876ad266c1e15d10ae2de5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/c1-independent-compatibility-result.json",
+      "sha256": "c1d701618761d2fd86e05dd549d201aa383b096b4aada2e32fd4a66dc8e5c003"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-two-file-delta.json",
+      "sha256": "b4b800ee976b8a61c58a6dc8fcf5812cc1dbec27067ca2c4608980c3a04cacde"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/first-reviewed-original.json",
+      "sha256": "48112d8bd77007999e1872c3e70750c114b6397e260938ccd2f7f67715d80b76"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/full-snapshot-integrity.json",
+      "sha256": "f8bed4698416226a9268eac60af5a8d9b0765412e6d34f9fb3324aedb9ced53d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/packaging-audit.json",
+      "sha256": "45aaeb584a55ff3196a5df019f942c5ecc2d1f2ac0f325a2d1f41c53283ae381"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/review.md",
+      "sha256": "f3991458fcc4518cc0cd0c853df69c157e670b6fceccd9cc3e608e4225aa28d8"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-identity.json",
+      "sha256": "475b430aadb7748895bb2baeab226d8cdfe7b6cda9ea7cb7008a1546dc04b150"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-review-stage.md",
+      "sha256": "988c91f88de0c3ccd548d17922bf3c02bdd667ecd0a0218bacce5814a8298401"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/task-evidence-fresh.json",
+      "sha256": "50d4aadae3068dcc5deb01b87e99cc652f2a9175387fbb983fdf4018c8553877"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/trace-summary-fresh.json",
+      "sha256": "188301b86ebed7e19707545c62a42831bf4a9fe8720fc158cb6ade0de4c30d3f"
+    },
+    {
+      "base": "record",
+      "path": "evidence/review-input-state.json",
+      "sha256": "02a5258c6dafb709ba9c4b7281364de3c60bd28da87a8f43cf452fe4b3cb17a0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/implementation-observations.json",
+      "sha256": "d1c1e0d3cde8253abf05433e368bec3a6e0bb840aafb03cce9cf313f66a0de35"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "73b3dfe548495b682b3ac4c30f072c8e67192a7e5f36dc7ab10e76c26894f5a3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/footprint-fix-observations.json",
+      "sha256": "785d2f5f81d5514c167d30f6d522fff3f7b4ad927d1089cb2cfc9a6426d41a87"
+    },
+    {
+      "base": "record",
+      "path": "evidence/workflow-verify-attempt1.md",
+      "sha256": "fe25a55ee1c869b9f8da2959c7379693eef715ce91a43b49073ad4744c8b7ff5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/full-timing.json",
+      "sha256": "1e542a10994a03601bbe78ce26905dedab0a6b7598db89d81142a62dce04a953"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/raw-command-output.json",
+      "sha256": "d68ed399894f73a72cda4a1fbad1d31bb0281e48a5f3c5b43587290323b1e57d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/results.json",
+      "sha256": "3aeb4f5e6507ce19fc169724bd44832a1945367fb82d05609eed0eb2919e8323"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/run_checks.py",
+      "sha256": "d76c9f833b709e0a28afbb4ff9a45b93b5f6298f8f3d6bfecfbacfa18cf58eb5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/source-after.json",
+      "sha256": "5d6722c689a3e279b4390799898d9e4bcf5327adf08d31f8d5756683ce456556"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/source-before.json",
+      "sha256": "5d6722c689a3e279b4390799898d9e4bcf5327adf08d31f8d5756683ce456556"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/summary.json",
+      "sha256": "604d5eed3d1a2548006f4cd4bebf440596ae9d138fb92483f1c4ee3a010061ef"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-attempt1/full-timing.json",
+      "sha256": "ce0d08e7b9f1a392116fa3a68d7db1fe849fa0162f81f15bfa485968429f678d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-attempt1/raw-command-output.json",
+      "sha256": "97370dc880a50208216e9b63e6c1c9fed25fcb9ce114bf226113183bf17f0616"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-attempt1/results.json",
+      "sha256": "4fed88d04724549ea4923178923ffde6974dd8a00ceedd4c42b6224660dcbaee"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-attempt1/run_checks.py",
+      "sha256": "d76c9f833b709e0a28afbb4ff9a45b93b5f6298f8f3d6bfecfbacfa18cf58eb5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-attempt1/source-after.json",
+      "sha256": "0ef48c673e5a73c2773ef246b3641b7c71a39f37862e24a8dfecd6d85d81458e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-attempt1/source-before.json",
+      "sha256": "0ef48c673e5a73c2773ef246b3641b7c71a39f37862e24a8dfecd6d85d81458e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/full-attempt1/summary.json",
+      "sha256": "25cb5cee99f9f9e366f6053c8c1e55a6eb4e3dfd498c6ec5d9135d28faef2544"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/index.json",
+      "sha256": "dd89557d0f8d50b525e83c26d49b401f7a025e6fc965b1c3c954bb7a3f440d6e"
+    }
+  ]
+}

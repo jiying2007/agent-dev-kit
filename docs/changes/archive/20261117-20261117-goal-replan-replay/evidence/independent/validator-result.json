@@ -1,0 +1,12 @@
+{
+  "scope": "Actual typed validate_review invocation after independent canonical records were written; preserved separately to avoid self-referential source evidence.",
+  "command": "rtk proxy env PYTHONPATH=src .venv/bin/python -B -c validate_review(root, record, expected_subject=subject, expected_scope='source-change')",
+  "original_working_directory": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+  "tool_result": {
+    "chunk_id": "45d23c",
+    "wall_time_seconds": 0.000033686,
+    "exit_code": 0,
+    "original_token_count": 400,
+    "output": "[\n  {\n    \"subject_id\": \"20261117-task-diagnostics\",\n    \"status\": \"pass\",\n    \"record_sha256\": \"0fb666941199f6625ce14dead72b138697bd4a2e5ca446818d806f05c1351cd8\",\n    \"reviewed_at\": \"2026-11-17T15:20:19Z\",\n    \"evidence_completed_at\": \"2026-11-17T15:19:54Z\",\n    \"verdicts\": {\n      \"spec\": \"pass\",\n      \"quality\": \"pass\"\n    },\n    \"target\": {\n      \"base_commit\": \"5f113b8f5ae6f83662d41d99d0907026f4e44c9d\",\n      \"head_commit\": \"d01d1bcb7c2f322c342656a95e523fba8b55505e\",\n      \"original_patch_sha256\": \"52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe\"\n    },\n    \"human_review_performed\": false,\n    \"field_evidence_verified\": false,\n    \"provider_execution_performed\": false,\n    \"product_release_authorized\": false,\n    \"reference_count\": 58,\n    \"record_bytes\": 14501\n  },\n  {\n    \"subject_id\": \"20261117-goal-replan-replay\",\n    \"status\": \"pass\",\n    \"record_sha256\": \"2f782d9a0a6bef04b89d6ff0f2f9757507bea8e39ef25db6d39189fb18c34d65\",\n    \"reviewed_at\": \"2026-11-17T15:20:19Z\",\n    \"evidence_completed_at\": \"2026-11-17T15:19:54Z\",\n    \"verdicts\": {\n      \"spec\": \"pass\",\n      \"quality\": \"pass\"\n    },\n    \"target\": {\n      \"base_commit\": \"5f113b8f5ae6f83662d41d99d0907026f4e44c9d\",\n      \"head_commit\": \"d01d1bcb7c2f322c342656a95e523fba8b55505e\",\n      \"original_patch_sha256\": \"52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe\"\n    },\n    \"human_review_performed\": false,\n    \"field_evidence_verified\": false,\n    \"provider_execution_performed\": false,\n    \"product_release_authorized\": false,\n    \"reference_count\": 58,\n    \"record_bytes\": 14169\n  }\n]\n"
+  }
+}

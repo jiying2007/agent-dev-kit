@@ -1,0 +1,342 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261117-goal-replan-replay",
+  "scope": "source-change",
+  "author_id": "ai/audit_core",
+  "owner": "leiwenjun",
+  "reviewer": {
+    "id": "ai/independent-review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-17T15:20:19Z",
+  "evidence_completed_at": "2026-11-17T15:19:54Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "c2-historical-intake-replay",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "The independently frozen A(readonly)->B(implementation)->old A history with a new event_id previously accepted a consumed attestation. A per-reduction consumed_intakes set now rejects reuse for valid starts/replans after exact-event idempotence checks, while preserving fresh C, distinct Goals, legacy missing intake and the conservative verifier floor. The original unmodified four-case probe passes; its baseline failure is retained."
+    }
+  ],
+  "limitations": [
+    "This owner-delegated AI source review is not human review, field verification, provider execution or release authorization. No paid model, live runtime installation, device operation or GitHub write was performed by this reviewer.",
+    "The tested product is d01d1bcb7c2f322c342656a95e523fba8b55505e / tree 4fe0cfa656ad7feeabf1a25daa9012dcfd673ce0. Subsequent change evidence and lifecycle packaging is a separately reviewed overlay, not a claim that these files were present during the clean full suite.",
+    "Independent targeted probes actually ran on d0d2b2dc7cac3e7e7bb853bc372d4afc9975f6bd. The reviewed delta to d01d changes only two AAR text files; Python, tests and budgets are byte-identical. The exact d01d full suite separately passed 102/102.",
+    "Frozen review-input-state paths and source_path fields identify their original observation location. Record-relative evidence survives ordinary archive moves; the historical snapshot must not be rewritten to imply a later lifecycle state.",
+    "Format passed with retained existing non-executable-script warnings. Runtime/model evaluation remains unexecuted; deterministic tests, synthetic fixtures and source-byte budgets do not measure model effectiveness, Token savings, time savings or cost improvement.",
+    "Knowledge Provider and real host evidence remain unavailable / needs review. No replacement Goal authority, controller, runtime adapter or host final gate is created by these source changes.",
+    "Remote PR/main CI, protected merge, immutable Release, Root promotion and actual host/native qualification require their own exact-source receipts and are not pre-certified here.",
+    "Consumption tracking covers the complete event history supplied to one reduce_events call. It does not persist an independent ledger across truncated histories or prove crash recovery, host revocation, worker leases, external commit/ACK or side-effect no-replay.",
+    "The synthetic verifier demonstrates deterministic semantics only. The no-verifier path already preserved its implementation floor, so the original counterexample does not prove an actual host authorization bypass. Native verifier false/exception/non-True controls exercise unchanged existing production rejection."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d",
+    "head_commit": "d01d1bcb7c2f322c342656a95e523fba8b55505e",
+    "original_patch_sha256": "52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe"
+  },
+  "sources": [
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "076764b5b503d84fb6ff22950d46f42bd7543f33fce82b9f901a89132e6b1414"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "62b25073ba89f46dcafa5cfb8029d5a9f8ed57819d507931df0aa3a81022ba34"
+    },
+    {
+      "base": "record",
+      "path": "proposal.md",
+      "sha256": "1cb65ab80dd7c6944cc01106f1915629abbc50dd550f091fbb17a099bbce7d45"
+    },
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "4f258117ad824a39f8bde24851e3ad229b1944be39c14cbdd43dffa7796129b4"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "80f772c1cd1153cdb5aa229d8870efc47fae20bf2bbbedccbb46fc9c9bf568ab"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "80f246a91bea754effb4c0e9842f28979283e02cb1faf4560d23975c6b8361b5"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "341e8a2254eda295d4f25e386390506c86132e5f988810eeed4bf2c64e740e64"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/task-evidence.md",
+      "sha256": "bb9403525800f5c86b4eeba43d46642d0fc81e8d948a9963b318482e5bec96f6"
+    },
+    {
+      "base": "repository",
+      "path": "docs/runbooks/trace-summary-emitter.md",
+      "sha256": "4d8dbe1f2823f48324a057426ee2d8ff7d13956991272b61170e749ea38719f6"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "74840f26c805604efd2fb6852a4013b57a18c6acd1e3abde86b742589f463315"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "80f1c1cc05eb43a29669226a71b50a5a4b59de43b892b3d29e0805e48a7f6083"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "fd17408ebbba530f4d1a1a3179db881b1afc8199b6f10239021207c4a77c5b9b"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "sha256": "e803543b0a432df849c494f8e6e845dd9a0798e6df665555a19f50b1f4cb3017"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-after-action-review/references/after-action-review.md",
+      "sha256": "4309116aed223b77218b8ad69ab3ba2623e434bea9e23f651bc635c4c0d62ccf"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "ae00d797c5281511ca7e2797466ac27c352547818b0a6374eb20edb251ee3137"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/evaluation_cli.py",
+      "sha256": "66878c047c92041e877114f79b302d7d1cb194c9b67ac4fe2e09bd6d73767628"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/execution_policy/reducer.py",
+      "sha256": "810f9aa92da2304cdb4455c5b52ffe54ef780e8bdc6987c1640d402d7eccd213"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/task_evidence.py",
+      "sha256": "74e15cf2aed1f97caebbcfd0efb104d1bc1442e2e3c34509e2fdd4e340071cc5"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/trace_summary.py",
+      "sha256": "c161e03f85d131f71f6fa9572adde864d2eee86e039bd7a11c2c74dede2a3ced"
+    },
+    {
+      "base": "repository",
+      "path": "templates/memory/after-action-review.md",
+      "sha256": "4309116aed223b77218b8ad69ab3ba2623e434bea9e23f651bc635c4c0d62ccf"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "a1baefc49f467368d5460b4353605a2f0873d2407dd314501698f9de4d9c8631"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_execution_policy.py",
+      "sha256": "2ce7da625e933c1999be52e2a7e02cd8ebb0801df6f7e56e70c041f6cd714af2"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_target_contracts.sh",
+      "sha256": "22fb2eaeb14e5611186c7277fad938f95446181b89a094391e0f984fe84de5aa"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_task_evidence.py",
+      "sha256": "6ae8defff93a2541d8584cf6086ba1c6aeec95838acba9b0cfc9ec853da72ca2"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_trace_summary.py",
+      "sha256": "9d58a497b023299d7dc0e6a836795deb0845e71ec7a673294e449b09075d9bae"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/target_contracts.py",
+      "sha256": "aea9b0a1fb395d157f61d1860f762ecb80da0bc9365bbeaac46bd96b5892dc26"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/independent/audit-final-evidence.py",
+      "sha256": "4c67fc858ee442f5006ea0a7a97d9ab2ebbca62588fca7fdb54f02700c42ae64"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/c2-frozen-probe-after.json",
+      "sha256": "6fc1ff738b2ce69091e48d440b6bf38d443116feb5ceade74db86689b1028405"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/execution-policy-fresh.json",
+      "sha256": "9621b07fa91fede953d2d58d3cc6dc232f19b55d377abccde923257b7d218201"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-two-file-delta.json",
+      "sha256": "b4b800ee976b8a61c58a6dc8fcf5812cc1dbec27067ca2c4608980c3a04cacde"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/frozen-input-integrity.json",
+      "sha256": "3a41ad7964762d1759ce7504e9a275b2a6ee6450929867734f2b7afad09bab50"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/packaging-audit.json",
+      "sha256": "45aaeb584a55ff3196a5df019f942c5ecc2d1f2ac0f325a2d1f41c53283ae381"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/review.md",
+      "sha256": "06890032003822ff731c7049c67b6d59349a74346eec7a1ba9ec4464bd6c95ba"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-identity.json",
+      "sha256": "475b430aadb7748895bb2baeab226d8cdfe7b6cda9ea7cb7008a1546dc04b150"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/target-contracts-fresh.json",
+      "sha256": "9b664702745e3d28db7cb34aec0f272e9414a7df67dac96ea9c5a4d3ee35a911"
+    },
+    {
+      "base": "record",
+      "path": "evidence/review-input-state.json",
+      "sha256": "02a5258c6dafb709ba9c4b7281364de3c60bd28da87a8f43cf452fe4b3cb17a0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/implementation-observations.json",
+      "sha256": "16279b6eb2a2e9ec6d4f0b1dede23a191dd316996c5a5a89e0ceacc3fda1ab62"
+    },
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "78211479e5e57d92d1874c62d88ff9357a525d23a2ef762fa74534ef5015c85e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-final/full-timing.json",
+      "sha256": "1e542a10994a03601bbe78ce26905dedab0a6b7598db89d81142a62dce04a953"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-final/raw-command-output.json",
+      "sha256": "d68ed399894f73a72cda4a1fbad1d31bb0281e48a5f3c5b43587290323b1e57d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-final/results.json",
+      "sha256": "3aeb4f5e6507ce19fc169724bd44832a1945367fb82d05609eed0eb2919e8323"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-final/run_checks.py",
+      "sha256": "d76c9f833b709e0a28afbb4ff9a45b93b5f6298f8f3d6bfecfbacfa18cf58eb5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-final/source-after.json",
+      "sha256": "5d6722c689a3e279b4390799898d9e4bcf5327adf08d31f8d5756683ce456556"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-final/source-before.json",
+      "sha256": "5d6722c689a3e279b4390799898d9e4bcf5327adf08d31f8d5756683ce456556"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-final/summary.json",
+      "sha256": "604d5eed3d1a2548006f4cd4bebf440596ae9d138fb92483f1c4ee3a010061ef"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-attempt1/full-timing.json",
+      "sha256": "ce0d08e7b9f1a392116fa3a68d7db1fe849fa0162f81f15bfa485968429f678d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-attempt1/raw-command-output.json",
+      "sha256": "97370dc880a50208216e9b63e6c1c9fed25fcb9ce114bf226113183bf17f0616"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-attempt1/results.json",
+      "sha256": "4fed88d04724549ea4923178923ffde6974dd8a00ceedd4c42b6224660dcbaee"
+    },
+    {
+      "base": "record",
+      "path": "evidence/shared-attempt1/summary.json",
+      "sha256": "25cb5cee99f9f9e366f6053c8c1e55a6eb4e3dfd498c6ec5d9135d28faef2544"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original-counterexample/README.md",
+      "sha256": "645002d3278b6c59bb198974ed0c4c02c31e0e27588639838a3cb9b45d7cd336"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original-counterexample/frozen-before.json",
+      "sha256": "8c591659eaf44ba34ec233a26db75bb1b76a0b0a839d2c4cea76c482b8275c76"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original-counterexample/frozen-inputs.json",
+      "sha256": "1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original-counterexample/original-before.jsonl",
+      "sha256": "0b9e6f42b4fb530929523ed838318352e5aa6859c8742b72aa65528ef39c60d5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original-counterexample/original_probe.py",
+      "sha256": "26c7e0347f013ad30ba7376291b6f1f0612c3fc0007a43ee5e37696b7e48c168"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original-counterexample/replay_frozen_probe.py",
+      "sha256": "b6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original-counterexample/source-index.json",
+      "sha256": "7e0a62d4a2ed13514ff6aac4f97de8e30de44b08cf7170cda26cd6069ad930dc"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/index.json",
+      "sha256": "55af6c5de569c6d28b17837f6dced5022ff73fdbed292dd0e4ab559cea0c0296"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Actual post-amendment validator and staged format gate; not product test re-execution.",
+  "validator": {
+    "chunk_id": "17ba46",
+    "wall_time_seconds": 0.002469277,
+    "exit_code": 0,
+    "original_token_count": 398,
+    "output": "[\n  {\n    \"subject_id\": \"20261117-task-diagnostics\",\n    \"status\": \"pass\",\n    \"record_sha256\": \"0fb666941199f6625ce14dead72b138697bd4a2e5ca446818d806f05c1351cd8\",\n    \"reviewed_at\": \"2026-11-17T15:20:19Z\",\n    \"evidence_completed_at\": \"2026-11-17T15:19:54Z\",\n    \"verdicts\": {\n      \"spec\": \"pass\",\n      \"quality\": \"pass\"\n    },\n    \"target\": {\n      \"base_commit\": \"5f113b8f5ae6f83662d41d99d0907026f4e44c9d\",\n      \"head_commit\": \"d01d1bcb7c2f322c342656a95e523fba8b55505e\",\n      \"original_patch_sha256\": \"52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe\"\n    },\n    \"human_review_performed\": false,\n    \"field_evidence_verified\": false,\n    \"provider_execution_performed\": false,\n    \"product_release_authorized\": false,\n    \"references\": 58,\n    \"record_bytes\": 14501\n  },\n  {\n    \"subject_id\": \"20261117-goal-replan-replay\",\n    \"status\": \"pass\",\n    \"record_sha256\": \"f79a98170bd6f0bbfe151f23af1d35965fa90c1db1caeaacc52222b3548dd91f\",\n    \"reviewed_at\": \"2026-11-17T15:24:37Z\",\n    \"evidence_completed_at\": \"2026-11-17T15:24:37Z\",\n    \"verdicts\": {\n      \"spec\": \"pass\",\n      \"quality\": \"pass\"\n    },\n    \"target\": {\n      \"base_commit\": \"5f113b8f5ae6f83662d41d99d0907026f4e44c9d\",\n      \"head_commit\": \"d01d1bcb7c2f322c342656a95e523fba8b55505e\",\n      \"original_patch_sha256\": \"52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe\"\n    },\n    \"human_review_performed\": false,\n    \"field_evidence_verified\": false,\n    \"provider_execution_performed\": false,\n    \"product_release_authorized\": false,\n    \"references\": 62,\n    \"record_bytes\": 16108\n  }\n]\n"
+  },
+  "format_gate": {
+    "chunk_id": "6191ad",
+    "wall_time_seconds": 0.000032654,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  }
+}

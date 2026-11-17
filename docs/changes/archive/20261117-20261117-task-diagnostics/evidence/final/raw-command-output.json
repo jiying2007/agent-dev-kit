@@ -1,0 +1,62 @@
+{
+  "captured_at": "2026-11-17T15:11:08.538739Z",
+  "scope": "Unmodified local final verification stdout/stderr for the exact clean candidate; JSON decoding preserves original bytes.",
+  "observations": {
+    "export.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/export.log",
+      "bytes": 128,
+      "sha256": "e7e1742df86f61cfc341ed4ed5aef19ccdc1964fb204b368a490a3dc0fb2b1de",
+      "encoding": "UTF-8",
+      "content": "Export pass: 5 agents, 22 skills -> /workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/export/claude-code\n"
+    },
+    "focused-ruff.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/focused-ruff.log",
+      "bytes": 19,
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "encoding": "UTF-8",
+      "content": "All checks passed!\n"
+    },
+    "format.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/format.log",
+      "bytes": 2251,
+      "sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1",
+      "encoding": "UTF-8",
+      "content": "[WARN] script is not executable: tests/run_all.sh\n[WARN] script is not executable: tests/test_agent_platform.sh\n[WARN] script is not executable: tests/test_agent_value_trust.sh\n[WARN] script is not executable: tests/test_archive_restore.sh\n[WARN] script is not executable: tests/test_asset_taxonomy.sh\n[WARN] script is not executable: tests/test_branch_gc.sh\n[WARN] script is not executable: tests/test_catalog.sh\n[WARN] script is not executable: tests/test_change_governance.sh\n[WARN] script is not executable: tests/test_effect_campaign_materializer.sh\n[WARN] script is not executable: tests/test_evidence_bridge.sh\n[WARN] script is not executable: tests/test_evidence_envelope.sh\n[WARN] script is not executable: tests/test_execution_policy.sh\n[WARN] script is not executable: tests/test_external_reference_binding.sh\n[WARN] script is not executable: tests/test_manifest_composition_cli.sh\n[WARN] script is not executable: tests/test_mcp_freshness_ssot.sh\n[WARN] script is not executable: tests/test_native_campaign.sh\n[WARN] script is not executable: tests/test_native_campaign_boundaries.sh\n[WARN] script is not executable: tests/test_native_campaign_diagnostics.sh\n[WARN] script is not executable: tests/test_native_trust.sh\n[WARN] script is not executable: tests/test_official_upstream_drift.sh\n[WARN] script is not executable: tests/test_optional_skills.sh\n[WARN] script is not executable: tests/test_performance_budgets.sh\n[WARN] script is not executable: tests/test_profile_coherence.sh\n[WARN] script is not executable: tests/test_profile_context_footprint.sh\n[WARN] script is not executable: tests/test_review_evidence.sh\n[WARN] script is not executable: tests/test_runtime_comparison_contract.sh\n[WARN] script is not executable: tests/test_schema_resource_sync.sh\n[WARN] script is not executable: tests/test_sigstore_blob.sh\n[WARN] script is not executable: tests/test_skill_content.sh\n[WARN] script is not executable: tests/test_skill_governance.sh\n[WARN] script is not executable: tests/test_target_adapter_spi.sh\n[WARN] script is not executable: tests/test_target_contracts.sh\n[WARN] script is not executable: tests/test_target_source_probe.sh\n[WARN] script is not executable: tests/test_token_context_governance.sh\nFormat check passed\n"
+    },
+    "full-regression.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/full-regression.log",
+      "bytes": 3174,
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+      "encoding": "UTF-8",
+      "content": "[PASS] test_validate\n[PASS] test_manifest_contract\n[PASS] test_catalog\n[PASS] test_skill_content\n[PASS] test_skill_trigger_matrix\n[PASS] test_skill_sop_quality\n[PASS] test_token_context_governance\n[PASS] test_strict_json\n[PASS] test_contract_hardening\n[PASS] test_boundary_rehearsal\n[PASS] test_contract_registry\n[PASS] test_schema_resource_sync\n[PASS] test_manifest_consumer_boundary\n[PASS] test_manifest_composition_contract\n[PASS] test_manifest_composition_cli\n[PASS] test_test_registry\n[PASS] test_python_launcher\n[PASS] test_asset_content_quality\n[PASS] test_format\n[PASS] test_no_external_repo_refs\n[PASS] test_file_modes\n[PASS] test_install\n[PASS] test_profile_coherence\n[PASS] test_profile_context_footprint\n[PASS] test_optional_skills\n[PASS] test_convert\n[PASS] test_runtime_boundary\n[PASS] test_target_contracts\n[PASS] test_target_adapter_spi\n[PASS] test_native_trust\n[PASS] test_sigstore_blob\n[PASS] test_native_campaign\n[PASS] test_native_campaign_boundaries\n[PASS] test_native_campaign_diagnostics\n[PASS] test_target_source_probe\n[PASS] test_effect_eval\n[PASS] test_completion_coverage\n[PASS] test_eval_catalog\n[PASS] test_external_reference_binding\n[PASS] test_runtime_comparison_contract\n[PASS] test_product_maturity\n[PASS] test_runtime_bundle\n[PASS] test_release_manifest_contract\n[PASS] test_software_m5_ready\n[PASS] test_repository_runtime_evidence\n[PASS] test_token_budget\n[PASS] test_task_cost\n[PASS] test_execution_policy\n[PASS] test_official_docs_governance\n[PASS] test_official_docs_timezone\n[PASS] test_official_upstream_drift\n[PASS] test_intent_boundary_governance\n[PASS] test_agent_ecosystem_standards\n[PASS] test_agent_value\n[PASS] test_agent_value_trust\n[PASS] test_trace_summary\n[PASS] test_run_evidence\n[PASS] test_evidence_envelope\n[PASS] test_evidence_bridge\n[PASS] test_effect_comparator\n[PASS] test_effect_trials\n[PASS] test_effect_campaign_materializer\n[PASS] test_runtime_capabilities\n[PASS] test_tool_skill_evidence_contracts\n[PASS] test_asset_taxonomy\n[PASS] test_workflow_contract\n[PASS] test_workflow_ir\n[PASS] test_workflow_closure\n[PASS] test_goal_contracts\n[PASS] test_capability_health\n[PASS] test_harness_readiness\n[PASS] test_review_evidence\n[PASS] test_archive_restore\n[PASS] test_local_ci_parity\n[PASS] test_hosted_workflow_hygiene\n[PASS] test_github_governance_admin\n[PASS] test_performance_budgets\n[PASS] test_change_governance\n[PASS] test_evidence_index\n[PASS] test_evidence_graph\n[PASS] test_pilot_readiness\n[PASS] test_embedded_production_field_pilot\n[PASS] test_embedded_workflow_pilots\n[PASS] test_embedded_test_matrix_example\n[PASS] test_workflow\n[PASS] test_workflow_verify_fail_closed\n[PASS] test_openspec_isolation\n[PASS] test_boundary_conditions_match\n[PASS] test_enhanced_gate_check\n[PASS] test_templates\n[PASS] test_context_md\n[PASS] test_boundary_conditions\n[PASS] test_integration\n[PASS] test_profile_coherence_enhanced\n[PASS] test_match_effectiveness\n[PASS] test_skill_governance\n[PASS] test_skill_dependencies\n[PASS] test_memory_governance\n[PASS] test_capability_uplift\n[PASS] test_docs_cli_alignment\n[PASS] test_performance_ops\n[PASS] test_scripts_smoke\n[SUMMARY] tests=102 pass=102 fail=0\nAll tests passed\n"
+    },
+    "mypy.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/mypy.log",
+      "bytes": 44,
+      "sha256": "103f10fdbb5ad2b6ee08833a3e2b634aa94d13009cb96f89236e9d80e79aac15",
+      "encoding": "UTF-8",
+      "content": "Success: no issues found in 32 source files\n"
+    },
+    "release-check.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/release-check.log",
+      "bytes": 432,
+      "sha256": "9ca93d42f8f0b8988b187bd2214041bb1b7dd77a519c419f6143732411a613fe",
+      "encoding": "UTF-8",
+      "content": "{\"schema_version\":1,\"status\":\"pass\",\"version\":\"11.4.0\",\"direct_targets\":[\"claude-code\",\"opencode\"],\"external_targets\":[\"codex\"],\"eval_catalog\":{\"catalog_valid\":true,\"catalog_sha256\":\"f8c77405ee0ae55a33caaffa5b31ba4118d6e7d17afd38db7c49b93eb34914b1\",\"snapshot_atomic\":false,\"dataset_fixture_alignment_scope\":[\"governance-eval-guardrail-regression-dataset\"],\"contract_only_suite_count\":9,\"runtime_eval_executed\":false},\"failures\":[]}\n"
+    },
+    "ruff.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/ruff.log",
+      "bytes": 19,
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "encoding": "UTF-8",
+      "content": "All checks passed!\n"
+    },
+    "strict.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/delivery-11.4.0/adk-local-final-attempt2/strict.log",
+      "bytes": 36,
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848",
+      "encoding": "UTF-8",
+      "content": "Validation passed. strict=1 quick=0\n"
+    }
+  }
+}

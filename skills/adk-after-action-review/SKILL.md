@@ -28,7 +28,7 @@ constraints:
 复盘实际任务，提炼能减少下次返工的经验；普通 AAR 与长期规则/Skill 晋级分离，避免把一次性噪声包装成长期资产。
 
 ## Depth
-- **lite（默认）**：目标、结果与证据、遇到的失败/返工、下一次有用的做法、剩余风险。没有可复用经验则 `memory_candidates: []`。
+- **lite（默认）**：目标、结果与证据、遇到的失败/返工、下一次有用的做法、剩余风险。无可复用经验则 `memory_candidates: []`。
 - **standard**：重复出现的技术问题，补复现条件、例外和复验信号。
 - **promotion**：用户或正式交付流程明确要求沉淀到长周期规则、Skill、AGENTS 或 memory 时，才使用 `Codify Decision` 和完整审查合同。此模式的证据、owner、权限及回退不能简化。
 
@@ -41,7 +41,7 @@ constraints:
 6. 生产事故分析交给 `adk-incident-rca-report`，本 Skill 复用其结论不生成第二份 RCA。
 
 ## References (only on demand)
-- 简要复盘：`references/after-action-review.md`
+- 复盘/诊断：`references/after-action-review.md`
 - 候选存储：`references/memory-candidate.md`，与 `templates/memory/memory-candidate.md` 语义一致
 - 长期资产晋级：`references/codify-decision.md`，正式执行使用原有 `templates/governance/codify-decision.md` 合同
 

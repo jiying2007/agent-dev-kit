@@ -1,0 +1,65 @@
+{
+  "scope": "Independent review outputs retained before canonical signing; later validator outputs are separate.",
+  "files": [
+    {
+      "path": "evidence/independent/audit-final-evidence.py",
+      "sha256": "4c67fc858ee442f5006ea0a7a97d9ab2ebbca62588fca7fdb54f02700c42ae64",
+      "bytes": 7627
+    },
+    {
+      "path": "evidence/independent/c1-independent-compatibility-probe.py",
+      "sha256": "3f5d1c322a8d65023f2eeb7e7ea64869974dfaf2ef876ad266c1e15d10ae2de5",
+      "bytes": 6307
+    },
+    {
+      "path": "evidence/independent/c1-independent-compatibility-result.json",
+      "sha256": "c1d701618761d2fd86e05dd549d201aa383b096b4aada2e32fd4a66dc8e5c003",
+      "bytes": 4408
+    },
+    {
+      "path": "evidence/independent/final-two-file-delta.json",
+      "sha256": "b4b800ee976b8a61c58a6dc8fcf5812cc1dbec27067ca2c4608980c3a04cacde",
+      "bytes": 6672
+    },
+    {
+      "path": "evidence/independent/first-reviewed-original.json",
+      "sha256": "48112d8bd77007999e1872c3e70750c114b6397e260938ccd2f7f67715d80b76",
+      "bytes": 93196
+    },
+    {
+      "path": "evidence/independent/full-snapshot-integrity.json",
+      "sha256": "f8bed4698416226a9268eac60af5a8d9b0765412e6d34f9fb3324aedb9ced53d",
+      "bytes": 3050
+    },
+    {
+      "path": "evidence/independent/packaging-audit.json",
+      "sha256": "45aaeb584a55ff3196a5df019f942c5ecc2d1f2ac0f325a2d1f41c53283ae381",
+      "bytes": 5648
+    },
+    {
+      "path": "evidence/independent/review.md",
+      "sha256": "f3991458fcc4518cc0cd0c853df69c157e670b6fceccd9cc3e608e4225aa28d8",
+      "bytes": 6369
+    },
+    {
+      "path": "evidence/independent/source-identity.json",
+      "sha256": "475b430aadb7748895bb2baeab226d8cdfe7b6cda9ea7cb7008a1546dc04b150",
+      "bytes": 1075
+    },
+    {
+      "path": "evidence/independent/source-review-stage.md",
+      "sha256": "988c91f88de0c3ccd548d17922bf3c02bdd667ecd0a0218bacce5814a8298401",
+      "bytes": 6249
+    },
+    {
+      "path": "evidence/independent/task-evidence-fresh.json",
+      "sha256": "50d4aadae3068dcc5deb01b87e99cc652f2a9175387fbb983fdf4018c8553877",
+      "bytes": 776
+    },
+    {
+      "path": "evidence/independent/trace-summary-fresh.json",
+      "sha256": "188301b86ebed7e19707545c62a42831bf4a9fe8720fc158cb6ade0de4c30d3f",
+      "bytes": 249
+    }
+  ]
+}

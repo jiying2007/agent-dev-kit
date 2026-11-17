@@ -29,7 +29,7 @@ from .run_evidence import RunEvidenceObservation, emit_run_evidence
 from .strict_json import loads
 from .trace_summary import (
     CostFact, GuardrailFact, HandoffFact, MetricUnavailable, OutcomeFact,
-    TokenUsageFact, ToolUseFact, TraceRunFacts, VerificationFact,
+    TokenUsageFact, ToolUseFact, TraceRunFacts, VerificationFact, diagnose_trace_summary,
 )
 
 MAX_FILE_BYTES = 4 * 1024 * 1024
@@ -365,7 +365,8 @@ def _acceptance(value: Any, package: _Package, run: Mapping[str, Any],
     return status, grader
 
 
-def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any]) -> dict[str, Any]:
+def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any], *,
+            diagnostics: bool = False) -> dict[str, Any]:
     raw = package.read(package.name)
     data = _object(loads(raw), {"schema_version", "provenance", "run", "input_snapshot", "workspace_snapshot",
                                "events", "acceptance", "artifacts", "skill_exposure"}, "observation")
@@ -447,7 +448,7 @@ def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any]) 
         failure_pattern=failure_pattern, next_goal_ref=None, token_usage=token_usage, cost=cost, outcome=outcome,
     )
     result = emit_run_evidence(RunEvidenceObservation(facts, finished), manifest, contract)
-    return {
+    report = {
         "schema_version": "adk-task-evidence-import/v1", "status": "imported", "provenance": provenance,
         "acceptance_status": acceptance_status,
         "trust": "caller-observed", "evidence_scope": "test-only", "quality_evidence_eligible": False,
@@ -460,6 +461,18 @@ def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any]) 
         "assigned_exposure": {"target_skill": target, "expected": expected, "content_sha256": skill_ref[4:]},
         "run_evidence": result,
     }
+    if diagnostics:
+        diagnostic = diagnose_trace_summary(result["trace_summary"])
+        diagnostic["facts"].update(
+            attempt_count=len(ledger.attempts), recorded_model_call_count=len(ledger.model_ids),
+            tool_outcome_counts={
+                name: {status: results.count(status) for status in sorted(_TOOL_OUTCOMES)}
+                for name, results in sorted(ledger.tools.items())
+            },
+        )
+        diagnostic["evidence_refs"] = {"trace_ref": result["trace_ref"], "events_ref": events_ref}
+        report["diagnostics"] = diagnostic
+    return report
 
 
 @dataclass(frozen=True)
@@ -471,18 +484,18 @@ class ImportedTaskEvidence:
     bytes_read: int
 
 
-def read_task_evidence(input_path: Path, manifest: Manifest) -> ImportedTaskEvidence:
+def read_task_evidence(input_path: Path, manifest: Manifest, *, diagnostics: bool = False) -> ImportedTaskEvidence:
     """Read a local package without scanning, writing, executing or networking."""
     contract = load_contract(manifest.root / "manifests/agent_value_contracts.json")
-    return _read_task_evidence(input_path, manifest, contract)
+    return _read_task_evidence(input_path, manifest, contract, diagnostics=diagnostics)
 
 
 def _read_task_evidence(input_path: Path, manifest: Manifest,
-                        contract: Mapping[str, Any]) -> ImportedTaskEvidence:
+                        contract: Mapping[str, Any], *, diagnostics: bool = False) -> ImportedTaskEvidence:
     """Reuse one caller-validated snapshot only within a comparison invocation."""
     package = _Package(input_path)
     try:
-        report = _import(package, manifest, contract)
+        report = _import(package, manifest, contract, diagnostics=diagnostics)
         return ImportedTaskEvidence(report, tuple(package.directory / name for name in package.cache), package.total)
     finally:
         package.close()
@@ -498,7 +511,8 @@ def publish_task_report(report: dict[str, Any], output_path: Path, inputs: tuple
     write_texts_atomic([(output_path, encode_json_document(report, "task evidence report"))])
 
 
-def import_task_evidence(input_path: Path, manifest: Manifest, *, output_path: Path | None = None) -> dict[str, Any]:
+def import_task_evidence(input_path: Path, manifest: Manifest, *, output_path: Path | None = None,
+                         diagnostics: bool = False) -> dict[str, Any]:
     """Import one local package, optionally publishing a separate safe report.
 
     All required process-counter coverage must be explicit. Partial model
@@ -507,7 +521,7 @@ def import_task_evidence(input_path: Path, manifest: Manifest, *, output_path: P
     unchanged composition accepted by compare-trials. No asset receipts or
     production qualification are issued.
     """
-    imported = read_task_evidence(input_path, manifest)
+    imported = read_task_evidence(input_path, manifest, diagnostics=diagnostics)
     if output_path is not None:
         publish_task_report(imported.report, output_path, imported.inputs + (
             manifest.root / "manifest.json", manifest.root / "manifests/agent_value_contracts.json",

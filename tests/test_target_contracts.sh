@@ -223,6 +223,35 @@ try:
         manifest, "claude-code", adapter, contract, trusted_verifier
     )
 
+    for response in (False, RuntimeError("synthetic verifier failure"), 1, "verified", {"verified": True}):
+        verifier_calls = []
+
+        def rejecting_verifier(value, policy):
+            assert value == receipt, "verifier must receive the same valid synthetic receipt"
+            assert policy == adapter["conformance_trust_policy"]
+            verifier_calls.append(value["receipt_id"])
+            if isinstance(response, Exception):
+                raise response
+            return response
+
+        try:
+            _validate_native_conformance_evidence(
+                manifest, "claude-code", adapter, contract, rejecting_verifier
+            )
+        except ManifestError as exc:
+            if isinstance(response, Exception):
+                assert "native trust verifier failed" in str(exc), exc
+                assert exc.__cause__ is response
+            else:
+                assert "native receipt was not verified" in str(exc), exc
+        else:
+            raise AssertionError("non-True verifier response was trusted: {!r}".format(response))
+        assert verifier_calls == [receipt["receipt_id"]], verifier_calls
+
+    _validate_native_conformance_evidence(
+        manifest, "claude-code", adapter, contract, trusted_verifier
+    )
+
     missing = copy.deepcopy(adapter)
     missing["conformance"]["evidence"][0]["path"] = "tests/fixtures/missing-native.json"
     try:

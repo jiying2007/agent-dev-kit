@@ -1,0 +1,293 @@
+{
+  "captured_at": "2026-11-17T14:59:34.779617Z",
+  "scope": "Unmodified C2 implementation observations, actual exit-code/time files and implementation report; not independent review.",
+  "observations": {
+    "baseline-sha.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/baseline-sha.txt",
+      "bytes": 41,
+      "sha256": "fbcd7ff79d392943d79728490e12e785b04b3ea65dacbc04f0d4665d0874315a",
+      "encoding": "UTF-8",
+      "content": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d\n"
+    },
+    "baseline-target-contracts.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/baseline-target-contracts.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "baseline-target-contracts.finished-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/baseline-target-contracts.finished-at.txt",
+      "bytes": 21,
+      "sha256": "d1194a92aeba7046156b637860e079abf6863dd78d69f36f7485ce5feeaf116e",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:46:59Z\n"
+    },
+    "baseline-target-contracts.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/baseline-target-contracts.log",
+      "bytes": 131,
+      "sha256": "563095ea51667d7e15622d827533d43b39a42034c96d02d07e3bf8f86dc30fb8",
+      "encoding": "UTF-8",
+      "content": ".........\n----------------------------------------------------------------------\nRan 9 tests in 9.613s\n\nOK\n[PASS] target contracts\n"
+    },
+    "baseline-target-contracts.started-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/baseline-target-contracts.started-at.txt",
+      "bytes": 21,
+      "sha256": "dac4e21ae254613f5e1b649f7f79033f627826235ea8e1d3908f653c766899c9",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:46:44Z\n"
+    },
+    "diff-check.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/diff-check.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "diff-check.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/diff-check.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "encoding": "UTF-8",
+      "content": ""
+    },
+    "execution-policy-suite.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/execution-policy-suite.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "execution-policy-suite.finished-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/execution-policy-suite.finished-at.txt",
+      "bytes": 21,
+      "sha256": "90617c66305df1057c94e2820cf5547a2f1a0e3d7b90c91441022eab8e4ee7ec",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:48:02Z\n"
+    },
+    "execution-policy-suite.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/execution-policy-suite.log",
+      "bytes": 712,
+      "sha256": "3d211ea88fb8baef76d160d775b6496032ad76fd523394e70da2ae77400bf283",
+      "encoding": "UTF-8",
+      "content": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.106s\n\nOK\n........................................\n----------------------------------------------------------------------\nRan 40 tests in 4.854s\n\nOK\n{\"schema_version\":\"adk.goal-plan-check/v1\",\"status\":\"pass\",\"read_only\":true,\"runtime_authority\":false,\"completion_allowed\":false,\"evidence_contents_verified\":false,\"reasons\":[],\"parent_count\":2,\"deliverable_count\":2,\"plan_sha256\":\"17012ffbcb456dca13e48a40ee9a1d7be4deff009a29ec908ad70e6671c4c68e\"}\n{\"status\": \"fail\", \"read_only\": true, \"error\": \"resume requires --state\"}\n[PASS] execution_policy is the sole Python namespace for execution decisions\n"
+    },
+    "execution-policy-suite.started-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/execution-policy-suite.started-at.txt",
+      "bytes": 21,
+      "sha256": "46949b00ce878ab7e5a13a70bb5544494bc8555348e31ac75824f36bbd7bbf7e",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:47:56Z\n"
+    },
+    "frozen-input-sha256.after.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/frozen-input-sha256.after.txt",
+      "bytes": 320,
+      "sha256": "d0ddd8f1c327a4bb84abbfb10d389c05a27b287216b8edddefbaa354b5d8e56f",
+      "encoding": "UTF-8",
+      "content": "1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60  /workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/frozen-inputs.json\nb6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d  /workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/replay_frozen_probe.py\n"
+    },
+    "frozen-input-sha256.before.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/frozen-input-sha256.before.txt",
+      "bytes": 320,
+      "sha256": "d0ddd8f1c327a4bb84abbfb10d389c05a27b287216b8edddefbaa354b5d8e56f",
+      "encoding": "UTF-8",
+      "content": "1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60  /workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/frozen-inputs.json\nb6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d  /workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/replay_frozen_probe.py\n"
+    },
+    "goal-convergence.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/goal-convergence.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "goal-convergence.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/goal-convergence.log",
+      "bytes": 107,
+      "sha256": "ca76ae23d74a4f8311220fb98bf9133410292fe2127b0b3238e002043c23db77",
+      "encoding": "UTF-8",
+      "content": ".........\n----------------------------------------------------------------------\nRan 9 tests in 0.013s\n\nOK\n"
+    },
+    "green-execution-policy.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-execution-policy.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "green-execution-policy.finished-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-execution-policy.finished-at.txt",
+      "bytes": 21,
+      "sha256": "4d7f4216c6c71ed0c83492a1bdb6b5519ff9dff0fa5da5407402c3f800dbe3ce",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:47:20Z\n"
+    },
+    "green-execution-policy.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-execution-policy.log",
+      "bytes": 124,
+      "sha256": "626fc5c582bf0a0b3bc0ce8a3fc46ee3a05e0cab5751e56d964f3b09fa08353e",
+      "encoding": "UTF-8",
+      "content": ".........................\n----------------------------------------------------------------------\nRan 25 tests in 0.064s\n\nOK\n"
+    },
+    "green-execution-policy.started-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-execution-policy.started-at.txt",
+      "bytes": 21,
+      "sha256": "4d7f4216c6c71ed0c83492a1bdb6b5519ff9dff0fa5da5407402c3f800dbe3ce",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:47:20Z\n"
+    },
+    "green-frozen-probe.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-frozen-probe.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "green-frozen-probe.finished-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-frozen-probe.finished-at.txt",
+      "bytes": 21,
+      "sha256": "4d7f4216c6c71ed0c83492a1bdb6b5519ff9dff0fa5da5407402c3f800dbe3ce",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:47:20Z\n"
+    },
+    "green-frozen-probe.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-frozen-probe.log",
+      "bytes": 1430,
+      "sha256": "9041b3be488e72b327f189cd8abb5eb091f9cd98757565b25f2ee9ed47c329f8",
+      "encoding": "UTF-8",
+      "content": "{\n  \"baseline_sha\": \"5f113b8f5ae6f83662d41d99d0907026f4e44c9d\",\n  \"verifier_scope\": \"Synthetic unit-test verifier copied from the baseline test helper; not production authority or evidence of host bypass.\",\n  \"cases\": [\n    {\n      \"case\": \"latest_implementation\",\n      \"managed_verifier\": true,\n      \"rejected\": false,\n      \"intake_revision\": 3,\n      \"task_mode\": \"implementation\",\n      \"effective_artifact_mode\": \"implementation\",\n      \"missing_artifacts\": [\n        \"build\",\n        \"repo\"\n      ],\n      \"gate_allowed\": false,\n      \"completion_allowed\": false,\n      \"expectation_met\": true\n    },\n    {\n      \"case\": \"replayed_older_readonly_new_event_id\",\n      \"managed_verifier\": true,\n      \"rejected\": true,\n      \"error\": \"goal replan must carry a new intake attestation\",\n      \"expectation_met\": true\n    },\n    {\n      \"case\": \"replay_without_trusted_verifier\",\n      \"managed_verifier\": false,\n      \"rejected\": true,\n      \"error\": \"goal replan must carry a new intake attestation\",\n      \"expectation_met\": true\n    },\n    {\n      \"case\": \"fresh_readonly_after_implementation\",\n      \"managed_verifier\": true,\n      \"rejected\": false,\n      \"intake_revision\": 4,\n      \"task_mode\": \"readonly\",\n      \"effective_artifact_mode\": \"readonly\",\n      \"missing_artifacts\": [],\n      \"gate_allowed\": true,\n      \"completion_allowed\": true,\n      \"expectation_met\": true\n    }\n  ],\n  \"all_expectations_met\": true\n}\n"
+    },
+    "green-frozen-probe.started-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/green-frozen-probe.started-at.txt",
+      "bytes": 21,
+      "sha256": "4d7f4216c6c71ed0c83492a1bdb6b5519ff9dff0fa5da5407402c3f800dbe3ce",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:47:20Z\n"
+    },
+    "implementation-file-sha256.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/implementation-file-sha256.txt",
+      "bytes": 306,
+      "sha256": "8c03f9b23b624556ab0dbcadbf05bbcb88d5409852ee891786750029ca1afa0b",
+      "encoding": "UTF-8",
+      "content": "810f9aa92da2304cdb4455c5b52ffe54ef780e8bdc6987c1640d402d7eccd213  src/agent_dev_kit/execution_policy/reducer.py\n2ce7da625e933c1999be52e2a7e02cd8ebb0801df6f7e56e70c041f6cd714af2  tests/test_execution_policy.py\n22fb2eaeb14e5611186c7277fad938f95446181b89a094391e0f984fe84de5aa  tests/test_target_contracts.sh\n"
+    },
+    "implementation-report.md": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/implementation-report.md",
+      "bytes": 6652,
+      "sha256": "2cf228cf0e03f6d6334dfa9a1674b21954592a4e9ce5235ff29f9f3c37b271b2",
+      "encoding": "UTF-8",
+      "content": "# C2 实现者交接：Goal replan attestation 历史消费\n\n## 范围与身份\n\n- 实现者：audit_core；本记录不是独立 Spec/Quality 审查。\n- 基线：`5f113b8f5ae6f83662d41d99d0907026f4e44c9d`，ADK 11.3.15。\n- 合同：`docs/changes/20261117-goal-replan-replay/{requirements,design,tasks,proposal}.md`，只读遵循，未修改。\n- 已读根 AGENTS、agent-operating-rules；目标源码/测试目录未发现额外 AGENTS。\n- Build 历史检索：`knowledge/L2-domain/lessons.md` 不存在，负结果为 `LESSONS_NOT_FOUND`；未虚构历史条目。\n- 未 commit、push、发布或调用真实模型/runtime；仅在既有测试临时目录执行原测试所需导出/安装操作。\n\n## 改动\n\n生产仅修改 `src/agent_dev_kit/execution_policy/reducer.py`：\n\n1. `reduce_events` 在单次完整历史归约内维护局部 `consumed_intakes` 集合。\n2. 原 event_id 指纹检查和 exact-event 幂等仍先执行。\n3. 有效 goal.started intake 与有效 replan attestation 加入集合；新 event_id 不得重新消费历史摘要。\n4. Goal 状态重置不清除历史集合。摘要本来就绑定 goal_id；不同 Goal 的合法 intake 独立。\n5. 无 intake 的历史兼容启动不加入 None。没有增加返回字段、schema、外部存储或 verifier 权威。\n\n测试仅修改：\n\n- `tests/test_execution_policy.py`：新增 6 个需求回归，覆盖 A→B→A 的有/无 verifier 拒绝，新 C、exact event 幂等与冲突、同 logical Goal 重启历史、不同 Goal、无 intake 兼容、错 Goal/错摘要以及保守 artifact floor。\n- `tests/test_target_contracts.sh`：在同一摘要一致的合法 synthetic receipt 上，断言 verifier 返回 False、抛异常、返回整数 1、字符串和字典均不取得信任；验证回调确实收到同一 receipt 且被调用一次，前后明确 True 正控制都成立。\n\n`target_contracts.py` 原本已经捕获 verifier 异常且使用 `trusted is not True` 拒绝，生产实现未修改。因此 native trust 新测试首次即通过，不宣称它存在需要修复的 RED。\n\n## 实际 RED 与 GREEN\n\n所有 shell 都由真实 `/workspace/scratch/fe8de3b42084/verification-tools/rtk proxy` 执行。以下命令的 cwd 均为 `/workspace/scratch/d417066aafa8/agent-dev-kit`，测试环境为 `PATH=$PWD/.venv/bin:$PATH`、`PYTHONPATH=src`；python 是该仓 `.venv/bin/python`。\n\n| 阶段 | 实际命令（在上述 RTK/env 内） | 实际退出码 | 原始日志 |\n|---|---|---:|---|\n| 原始冻结 RED | `python -B /workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/replay_frozen_probe.py \"$PWD\"` | 1 | `red-frozen-probe.log` |\n| 新回归 RED，生产未修 | `python -m unittest discover -s tests -p test_execution_policy.py` | 1 | `red-execution-policy.log` |\n| native trust 窄控制首次运行 | `bash tests/test_target_contracts.sh` | 0 | `baseline-target-contracts.log` |\n| 修复后单元 GREEN | `python -m unittest discover -s tests -p test_execution_policy.py` | 0 | `green-execution-policy.log` |\n| 原始冻结 GREEN | 同上原样 frozen probe | 0 | `green-frozen-probe.log` |\n| 相关 reducer 回归 | `python -m unittest discover -s tests -p test_goal_convergence.py` | 0 | `goal-convergence.log` |\n| 既有完整策略入口 | `bash tests/test_execution_policy.sh` | 0 | `execution-policy-suite.log` |\n| 定向 Python 质量 | `ruff check src/agent_dev_kit/execution_policy/reducer.py tests/test_execution_policy.py` | 0 | `ruff.log` |\n| 定向 Shell 质量 | `shellcheck -S error -x -P scripts tests/test_target_contracts.sh` | 0 | `shellcheck.log` |\n| 补丁空白检查 | `git diff --check -- src/agent_dev_kit/execution_policy/reducer.py tests/test_execution_policy.py tests/test_target_contracts.sh` | 0 | `diff-check.log` |\n\n每项测试退出码保存于同名前缀的 `.exit-code.txt`。RED/GREEN、target 与完整策略入口各有 UTC `.started-at.txt` / `.finished-at.txt`；定向质量与 convergence 使用 `quality.started-at.txt` / `quality.finished-at.txt`。\n\nRED 单元结果为 25 个测试、3 个 failure：旧 A 重放的无/有 verifier 两个 subtest，以及重启复用启动 intake。失败原因均为应抛 ExecutionPolicyError 而未抛出。没有因缺环境或无效 fixture 形成假 RED。\n\nGREEN 单元为 25/25。完整策略入口再次运行该 25 个测试，并运行 Goal convergence、planning state、Goal authoring 共 40 个测试，均通过；日志中的 `resume requires --state` 是该套件预期的拒绝控制，整体退出 0。单独 convergence 为 9/9。\n\ntarget contracts 入口整体 PASS，内含既有 9 个 Python 测试和 standalone 合同断言；新增 native trust 控制包含在该次实际执行中。它在 reducer 修改前运行，因为被测 native trust 生产实现不变；这不是绕过目标测试。\n\n## 原始冻结探针的四项实际结果\n\n| 输入 | before | after |\n|---|---|---|\n| readonly A→implementation B，managed verifier | revision 3，implementation，缺 build/repo，gate=false | 同前，控制保持 |\n| A→B→旧 A 新 event_id，managed verifier | 被接纳至 revision 4，readonly，gate=true | reducer 拒绝 |\n| 同样旧 A 重放，无 verifier | reducer 接纳，evaluate 保留 implementation floor、gate=false | reducer 拒绝 |\n| A→B→真正新 readonly C，managed verifier | 被接纳至 revision 4，gate=true | 同前，合法新凭据保持 |\n\n冻结 probe 自己的 `all_expectations_met` 从 false 变为 true。此处只是实现者运行原始独立输入的结果，后续独立 reviewer 仍需独立复验。\n\n## 可核对证据\n\n- `frozen-input-sha256.before.txt` 与 `.after.txt` 已用 cmp 核对相同；原目录内容未改。\n- `frozen-inputs.json`：`1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60`。\n- `replay_frozen_probe.py`：`b6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d`。\n- `implementation.diff` 只包含三个授权文件；对应字节摘要见 `implementation-file-sha256.txt`。\n- 工具版本原文见 `tool-versions.txt`：Python 3.12.14、ruff 0.17.4、ShellCheck 0.10.0、RTK 1.2.0。\n\n## 边界与交接\n\n本修复拒绝同一次完整事件历史中的已消费 attestation，旧错误历史将明确失败，不静默忽略。它不新增跨截断历史的持久消费账本，不证明实际宿主身份、外部副作用去重、租约、crash/ACK 对账或 native certification。\n\n父协调者负责候选整体冻结后的完整 run_all、strict validation、独立 Spec/Quality、版本与发布校验。本实现者尚未运行这些整体验证，也未标记整个 change 已完成。\n"
+    },
+    "implementation.diff": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/implementation.diff",
+      "bytes": 11072,
+      "sha256": "97a70b6db1934750dccb6e3b60b8dbf016908119ec6980a8fa3206ac711cbaa2",
+      "encoding": "UTF-8",
+      "content": "diff --git a/src/agent_dev_kit/execution_policy/reducer.py b/src/agent_dev_kit/execution_policy/reducer.py\nindex 3446508..65659cd 100644\n--- a/src/agent_dev_kit/execution_policy/reducer.py\n+++ b/src/agent_dev_kit/execution_policy/reducer.py\n@@ -146,6 +146,8 @@ def _reset_goal_state(state: dict[str, Any], payload: Mapping[str, Any], at: dat\n def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:\n     state: dict[str, Any] | None = None\n     seen: dict[str, str] = {}\n+    # Digests bind goal_id; retain consumption across goal resets in this history.\n+    consumed_intakes: set[str] = set()\n     last_at: datetime | None = None\n \n     for raw in events:\n@@ -174,6 +176,11 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:\n             if goal[\"status\"] == \"active\":\n                 raise ExecutionPolicyError(\"cannot start a second active goal\")\n             _reset_goal_state(state, payload, at)\n+            attestation = state[\"goal\"][\"intake_attestation_sha256\"]\n+            if attestation is not None:\n+                if attestation in consumed_intakes:\n+                    raise ExecutionPolicyError(\"goal intake attestation has already been consumed\")\n+                consumed_intakes.add(attestation)\n         elif kind == \"goal.updated\":\n             allowed = {\n                 \"open_items_count\", \"token_budget\", \"time_budget_seconds\",\n@@ -194,8 +201,9 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:\n                     payload.get(\"intake\"), event_at=at, expected_kind=\"goal-replan\",\n                     expected_goal_id=str(goal[\"goal_id\"]),\n                 )\n-                if intake[\"attestation_sha256\"] == goal.get(\"intake_attestation_sha256\"):\n+                if intake[\"attestation_sha256\"] in consumed_intakes:\n                     raise ExecutionPolicyError(\"goal replan must carry a new intake attestation\")\n+                consumed_intakes.add(intake[\"attestation_sha256\"])\n                 goal[\"task_mode\"] = intake[\"task_mode\"]\n                 goal[\"artifact_mode\"] = intake[\"artifact_mode\"]\n                 goal[\"request_sha256\"] = intake[\"request_sha256\"]\ndiff --git a/tests/test_execution_policy.py b/tests/test_execution_policy.py\nindex cbc17e9..a2b9a6e 100644\n--- a/tests/test_execution_policy.py\n+++ b/tests/test_execution_policy.py\n@@ -148,6 +148,14 @@ def goal_started_v2(task_mode: str, artifact_mode: str, index: int = 1) -> dict:\n     return value\n \n \n+def goal_replan(index: int, mode: str, decision_id: str, *, minute: int | None = None) -> dict:\n+    minute = index if minute is None else minute\n+    return event(index, \"goal.updated\", {\n+        \"intake\": goal_intake(mode, mode, kind=\"goal-replan\", decision_id=decision_id, minute=minute),\n+        \"mode_change_reason\": \"replan\",\n+    }, minute=minute)\n+\n+\n def usage(index: int, total: int, last_input: int = 100, window: int = 1000) -> dict:\n     return event(index, \"usage.snapshot\", {\n         \"cwd_hash\": \"a\" * 64,\n@@ -685,6 +693,102 @@ class ExecutionPolicyTest(unittest.TestCase):\n         with self.assertRaisesRegex(ExecutionPolicyError, \"provenance kind must be goal-replan\"):\n             reduce_events(invalid_replan)\n \n+    def test_historical_replan_attestation_cannot_use_a_new_event_id(self) -> None:\n+        events = [goal_started(), goal_replan(2, \"readonly\", \"replan-a\"),\n+                  goal_replan(3, \"implementation\", \"replan-b\")]\n+        replay = event(4, \"goal.updated\", copy.deepcopy(events[1][\"payload\"]))\n+        frozen = copy.deepcopy(events + [replay])\n+        self.assertEqual(\"implementation\", reduce_events(events)[\"goal\"][\"task_mode\"])\n+        for verifier in (None, managed_mode_verifier):\n+            with self.subTest(managed_verifier=verifier is not None):\n+                with self.assertRaisesRegex(ExecutionPolicyError, \"attestation\"):\n+                    evaluate(reduce_events(events + [replay]), policy_v2(), gate_event=\"final\",\n+                             mode_authority_verifier=verifier, as_of=AS_OF)\n+        self.assertEqual(frozen, events + [replay])\n+\n+    def test_fresh_replan_preserves_managed_mode_and_unmanaged_floor(self) -> None:\n+        events = completed_events_without_artifacts(\"implementation\", \"implementation\")\n+        events[1:1] = [goal_replan(20, \"readonly\", \"replan-a\", minute=1),\n+                       goal_replan(21, \"implementation\", \"replan-b\", minute=1)]\n+        latest = reduce_events(events)\n+        self.assertEqual(3, latest[\"goal\"][\"intake_revision\"])\n+        self.assertFalse(evaluate(latest, policy_v2(), gate_event=\"final\",\n+                                  mode_authority_verifier=managed_mode_verifier,\n+                                  as_of=AS_OF)[\"gate_allowed\"])\n+        events.insert(3, goal_replan(22, \"readonly\", \"replan-c\", minute=1))\n+        state = reduce_events(events)\n+        self.assertEqual(4, state[\"goal\"][\"intake_revision\"])\n+        self.assertEqual(\"replan-c\", state[\"goal\"][\"intake_provenance\"][\"decision_id\"])\n+        self.assertEqual(state, reduce_events(iter(events)))\n+        for verifier, artifact_mode, allowed in (\n+            (managed_mode_verifier, \"readonly\", True), (None, \"implementation\", False),\n+        ):\n+            with self.subTest(managed_verifier=verifier is not None):\n+                decision = evaluate(state, policy_v2(), gate_event=\"final\",\n+                                    mode_authority_verifier=verifier, as_of=AS_OF)\n+                self.assertEqual(artifact_mode, decision[\"effective_artifact_mode\"])\n+                self.assertIs(allowed, decision[\"gate_allowed\"])\n+                self.assertIs(allowed, decision[\"completion_allowed\"])\n+                self.assertEqual([] if allowed else [\"build\", \"repo\"], decision[\"missing_artifacts\"])\n+\n+    def test_replan_exact_event_replay_precedes_attestation_consumption(self) -> None:\n+        events = [goal_started(), goal_replan(2, \"readonly\", \"replan-a\"),\n+                  goal_replan(3, \"implementation\", \"replan-b\")]\n+        state = reduce_events(events)\n+        self.assertEqual(state, reduce_events(events + [copy.deepcopy(events[1])]))\n+        conflict = copy.deepcopy(events[1])\n+        conflict[\"payload\"][\"open_items_count\"] = 0\n+        with self.assertRaisesRegex(ExecutionPolicyError, \"duplicate event_id has a different payload\"):\n+            reduce_events(events + [conflict])\n+\n+    def test_goal_restart_does_not_clear_attestation_consumption(self) -> None:\n+        start = goal_started()\n+        duplicate_start = event(3, \"goal.started\", copy.deepcopy(start[\"payload\"]))\n+        with self.assertRaisesRegex(ExecutionPolicyError, \"attestation\"):\n+            reduce_events([start, event(2, \"goal.completed\", {}), duplicate_start])\n+\n+        fresh_start = goal_started(4)\n+        fresh_start[\"payload\"][\"intake\"] = goal_intake(\n+            \"implementation\", \"implementation\", decision_id=\"route-2\", minute=4,\n+        )\n+        events = [start, goal_replan(2, \"readonly\", \"replan-a\"),\n+                  event(3, \"goal.completed\", {}), fresh_start]\n+        self.assertEqual(\"route-2\", reduce_events(events)[\"goal\"][\"intake_provenance\"][\"decision_id\"])\n+        replay = event(5, \"goal.updated\", copy.deepcopy(events[1][\"payload\"]))\n+        with self.assertRaisesRegex(ExecutionPolicyError, \"attestation\"):\n+            reduce_events(events + [replay])\n+\n+    def test_distinct_goal_and_legacy_intakes_remain_valid(self) -> None:\n+        other = goal_started(3)\n+        other[\"payload\"][\"goal_id\"] = \"goal-other\"\n+        other[\"payload\"][\"intake\"] = goal_intake(\"implementation\", \"implementation\", goal_id=\"goal-other\")\n+        state = reduce_events([goal_started(), event(2, \"goal.completed\", {}), other])\n+        self.assertEqual(\"goal-other\", state[\"goal\"][\"goal_id\"])\n+        self.assertEqual(1, state[\"goal\"][\"intake_revision\"])\n+\n+        legacy = goal_started()\n+        del legacy[\"payload\"][\"intake\"]\n+        events = [legacy, event(2, \"goal.completed\", {}),\n+                  event(3, \"goal.started\", copy.deepcopy(legacy[\"payload\"]))]\n+        state = reduce_events(events)\n+        self.assertIsNone(state[\"goal\"][\"intake_attestation_sha256\"])\n+        self.assertEqual(0, state[\"goal\"][\"intake_revision\"])\n+        state = reduce_events(events + [goal_replan(4, \"readonly\", \"first-attested-replan\")])\n+        self.assertEqual(1, state[\"goal\"][\"intake_revision\"])\n+\n+    def test_replan_still_validates_goal_and_attestation_digest(self) -> None:\n+        wrong_goal = goal_replan(2, \"readonly\", \"replan-a\")\n+        wrong_goal[\"payload\"][\"intake\"] = goal_intake(\n+            \"readonly\", \"readonly\", kind=\"goal-replan\", decision_id=\"replan-a\", minute=2,\n+            goal_id=\"goal-other\",\n+        )\n+        bad_digest = goal_replan(2, \"readonly\", \"replan-a\")\n+        bad_digest[\"payload\"][\"intake\"][\"attestation_sha256\"] = \"f\" * 64\n+        for invalid, reason in ((wrong_goal, \"goal_id does not match\"), (bad_digest, \"digest mismatch\")):\n+            with self.subTest(reason=reason):\n+                with self.assertRaisesRegex(ExecutionPolicyError, reason):\n+                    reduce_events([goal_started(), invalid])\n+\n     def test_v1_policy_is_rejected_and_v2_json_schemas_validate(self) -> None:\n         old_policy = {\n             \"schema_version\": \"runtime_control.policy/v1\",\ndiff --git a/tests/test_target_contracts.sh b/tests/test_target_contracts.sh\nindex 542e5b0..f10d8b7 100644\n--- a/tests/test_target_contracts.sh\n+++ b/tests/test_target_contracts.sh\n@@ -223,6 +223,35 @@ try:\n         manifest, \"claude-code\", adapter, contract, trusted_verifier\n     )\n \n+    for response in (False, RuntimeError(\"synthetic verifier failure\"), 1, \"verified\", {\"verified\": True}):\n+        verifier_calls = []\n+\n+        def rejecting_verifier(value, policy):\n+            assert value == receipt, \"verifier must receive the same valid synthetic receipt\"\n+            assert policy == adapter[\"conformance_trust_policy\"]\n+            verifier_calls.append(value[\"receipt_id\"])\n+            if isinstance(response, Exception):\n+                raise response\n+            return response\n+\n+        try:\n+            _validate_native_conformance_evidence(\n+                manifest, \"claude-code\", adapter, contract, rejecting_verifier\n+            )\n+        except ManifestError as exc:\n+            if isinstance(response, Exception):\n+                assert \"native trust verifier failed\" in str(exc), exc\n+                assert exc.__cause__ is response\n+            else:\n+                assert \"native receipt was not verified\" in str(exc), exc\n+        else:\n+            raise AssertionError(\"non-True verifier response was trusted: {!r}\".format(response))\n+        assert verifier_calls == [receipt[\"receipt_id\"]], verifier_calls\n+\n+    _validate_native_conformance_evidence(\n+        manifest, \"claude-code\", adapter, contract, trusted_verifier\n+    )\n+\n     missing = copy.deepcopy(adapter)\n     missing[\"conformance\"][\"evidence\"][0][\"path\"] = \"tests/fixtures/missing-native.json\"\n     try:\n"
+    },
+    "quality.finished-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/quality.finished-at.txt",
+      "bytes": 21,
+      "sha256": "c3089ce153669ef13489afcf482dfee5ff7897865112289d6bd257309f968b89",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:47:40Z\n"
+    },
+    "quality.started-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/quality.started-at.txt",
+      "bytes": 21,
+      "sha256": "c3089ce153669ef13489afcf482dfee5ff7897865112289d6bd257309f968b89",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:47:40Z\n"
+    },
+    "red-execution-policy.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-execution-policy.exit-code.txt",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "encoding": "UTF-8",
+      "content": "1\n"
+    },
+    "red-execution-policy.finished-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-execution-policy.finished-at.txt",
+      "bytes": 21,
+      "sha256": "dac4e21ae254613f5e1b649f7f79033f627826235ea8e1d3908f653c766899c9",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:46:44Z\n"
+    },
+    "red-execution-policy.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-execution-policy.log",
+      "bytes": 2273,
+      "sha256": "7c5d7019aeb424df5b524386dd0ec7927877e713b985993e8e8d275ca79a931e",
+      "encoding": "UTF-8",
+      "content": ".........FFF..............\n======================================================================\nFAIL: test_goal_restart_does_not_clear_attestation_consumption (test_execution_policy.ExecutionPolicyTest.test_goal_restart_does_not_clear_attestation_consumption)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_execution_policy.py\", line 747, in test_goal_restart_does_not_clear_attestation_consumption\n    with self.assertRaisesRegex(ExecutionPolicyError, \"attestation\"):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ExecutionPolicyError not raised\n\n======================================================================\nFAIL: test_historical_replan_attestation_cannot_use_a_new_event_id (test_execution_policy.ExecutionPolicyTest.test_historical_replan_attestation_cannot_use_a_new_event_id) (managed_verifier=False)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_execution_policy.py\", line 704, in test_historical_replan_attestation_cannot_use_a_new_event_id\n    with self.assertRaisesRegex(ExecutionPolicyError, \"attestation\"):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ExecutionPolicyError not raised\n\n======================================================================\nFAIL: test_historical_replan_attestation_cannot_use_a_new_event_id (test_execution_policy.ExecutionPolicyTest.test_historical_replan_attestation_cannot_use_a_new_event_id) (managed_verifier=True)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_execution_policy.py\", line 704, in test_historical_replan_attestation_cannot_use_a_new_event_id\n    with self.assertRaisesRegex(ExecutionPolicyError, \"attestation\"):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ExecutionPolicyError not raised\n\n----------------------------------------------------------------------\nRan 25 tests in 0.097s\n\nFAILED (failures=3)\n"
+    },
+    "red-execution-policy.started-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-execution-policy.started-at.txt",
+      "bytes": 21,
+      "sha256": "dac4e21ae254613f5e1b649f7f79033f627826235ea8e1d3908f653c766899c9",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:46:44Z\n"
+    },
+    "red-frozen-probe.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-frozen-probe.exit-code.txt",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "encoding": "UTF-8",
+      "content": "1\n"
+    },
+    "red-frozen-probe.finished-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-frozen-probe.finished-at.txt",
+      "bytes": 21,
+      "sha256": "d3a4ed5c8c0cf06448d36912801e235d56924c41d4d7cf6114d93139905a5725",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:45:33Z\n"
+    },
+    "red-frozen-probe.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-frozen-probe.log",
+      "bytes": 1744,
+      "sha256": "8c591659eaf44ba34ec233a26db75bb1b76a0b0a839d2c4cea76c482b8275c76",
+      "encoding": "UTF-8",
+      "content": "{\n  \"baseline_sha\": \"5f113b8f5ae6f83662d41d99d0907026f4e44c9d\",\n  \"verifier_scope\": \"Synthetic unit-test verifier copied from the baseline test helper; not production authority or evidence of host bypass.\",\n  \"cases\": [\n    {\n      \"case\": \"latest_implementation\",\n      \"managed_verifier\": true,\n      \"rejected\": false,\n      \"intake_revision\": 3,\n      \"task_mode\": \"implementation\",\n      \"effective_artifact_mode\": \"implementation\",\n      \"missing_artifacts\": [\n        \"build\",\n        \"repo\"\n      ],\n      \"gate_allowed\": false,\n      \"completion_allowed\": false,\n      \"expectation_met\": true\n    },\n    {\n      \"case\": \"replayed_older_readonly_new_event_id\",\n      \"managed_verifier\": true,\n      \"rejected\": false,\n      \"intake_revision\": 4,\n      \"task_mode\": \"readonly\",\n      \"effective_artifact_mode\": \"readonly\",\n      \"missing_artifacts\": [],\n      \"gate_allowed\": true,\n      \"completion_allowed\": true,\n      \"expectation_met\": false\n    },\n    {\n      \"case\": \"replay_without_trusted_verifier\",\n      \"managed_verifier\": false,\n      \"rejected\": false,\n      \"intake_revision\": 4,\n      \"task_mode\": \"readonly\",\n      \"effective_artifact_mode\": \"implementation\",\n      \"missing_artifacts\": [\n        \"build\",\n        \"repo\"\n      ],\n      \"gate_allowed\": false,\n      \"completion_allowed\": false,\n      \"expectation_met\": false\n    },\n    {\n      \"case\": \"fresh_readonly_after_implementation\",\n      \"managed_verifier\": true,\n      \"rejected\": false,\n      \"intake_revision\": 4,\n      \"task_mode\": \"readonly\",\n      \"effective_artifact_mode\": \"readonly\",\n      \"missing_artifacts\": [],\n      \"gate_allowed\": true,\n      \"completion_allowed\": true,\n      \"expectation_met\": true\n    }\n  ],\n  \"all_expectations_met\": false\n}\n"
+    },
+    "red-frozen-probe.started-at.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/red-frozen-probe.started-at.txt",
+      "bytes": 21,
+      "sha256": "d3a4ed5c8c0cf06448d36912801e235d56924c41d4d7cf6114d93139905a5725",
+      "encoding": "UTF-8",
+      "content": "2026-11-17T14:45:33Z\n"
+    },
+    "ruff.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/ruff.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "ruff.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/ruff.log",
+      "bytes": 19,
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "encoding": "UTF-8",
+      "content": "All checks passed!\n"
+    },
+    "shellcheck.exit-code.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/shellcheck.exit-code.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "encoding": "UTF-8",
+      "content": "0\n"
+    },
+    "shellcheck.log": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/shellcheck.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "encoding": "UTF-8",
+      "content": ""
+    },
+    "tool-versions.txt": {
+      "source_path": "/workspace/scratch/d417066aafa8/verification/c2-goal-replan-replay/tool-versions.txt",
+      "bytes": 176,
+      "sha256": "739009f0ddcb44fb60d20b8c5431dfcd6c716205c8043a5d4d36da1788f52d9f",
+      "encoding": "UTF-8",
+      "content": "Python 3.12.14\nruff 0.17.4\nShellCheck - shell script analysis tool\nversion: 0.10.0\nlicense: GNU General Public License, version 3\nwebsite: https://www.shellcheck.net\nrtk 1.2.0\n"
+    }
+  }
+}

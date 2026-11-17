@@ -1,0 +1,19 @@
+{
+  "command": "/workspace/scratch/fe8de3b42084/verification-tools/rtk proxy env PATH=/workspace/scratch/d417066aafa8/agent-dev-kit/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin bash tests/test_target_contracts.sh",
+  "captured_at": "2026-11-17 14:58:22 UTC",
+  "initial": {
+    "chunk_id": "64ff82",
+    "wall_time_seconds": 1.000340451,
+    "session_id": 74381,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "completion": {
+    "chunk_id": "02cf2d",
+    "wall_time_seconds": 0.000021399,
+    "exit_code": 0,
+    "original_token_count": 33,
+    "output": ".........\n----------------------------------------------------------------------\nRan 9 tests in 9.859s\n\nOK\n[PASS] target contracts\n"
+  },
+  "scope": "deterministic local target-contract script; not native host qualification"
+}

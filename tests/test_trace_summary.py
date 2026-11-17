@@ -7,6 +7,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
+from agent_dev_kit import trace_summary
 from agent_dev_kit.model import ManifestError
 from agent_dev_kit.trace_summary import (
     CostFact,
@@ -221,6 +222,101 @@ class TraceSummaryTest(unittest.TestCase):
         value["cost"] = {"status": "available", "amount": 0, "currency": "USD"}
         value["elapsed_ms"] = 0
         self.assertEqual(value, validate_trace_summary(value, self.schema))
+
+    def test_diagnostics_are_repeatable_and_keep_every_failed_or_unrun_fact(self) -> None:
+        value = summary()
+        value.update(outcome={"status": "failed", "category": "runtime-failure"},
+                     first_pass_success=False, failure_pattern="runtime-timeout",
+                     blockers=["permission-pending", "external-unavailable"])
+        value["tools_used"][0]["outcome"] = "partial"
+        value["handoffs"] = [{"target": "child", "outcome": status}
+                             for status in ("failed", "blocked", "cancelled", "succeeded")]
+        value["guardrails"] = [{"name": "same-check", "status": status} for status in ("failed", "passed")]
+        value["verification"] = [
+            {"name": "same-check", "status": status, "evidence_ref": reference}
+            for status, reference in (("failed", "ref:" + "2" * 64), ("failed", "ref:" + "3" * 64),
+                                      ("not-run", None), ("passed", "ref:" + "4" * 64))
+        ]
+        original = copy.deepcopy(value)
+        diagnosed = trace_summary.diagnose_trace_summary(value)
+        self.assertEqual(diagnosed, trace_summary.diagnose_trace_summary(value))
+        self.assertEqual(value, original)
+        for name in ("outcome", "failure_pattern", "first_pass_success", "tools_used", "handoffs",
+                     "guardrails", "verification", "blockers"):
+            self.assertEqual(diagnosed["facts"][name], value[name])
+        findings = {(item["code"], item["location"]): item["fact"] for item in diagnosed["findings"]}
+        for index in range(3):
+            self.assertEqual(findings[("verification-status", f"/verification/{index}")],
+                             value["verification"][index])
+            self.assertEqual(findings[("handoff-outcome", f"/handoffs/{index}")], value["handoffs"][index])
+        self.assertEqual(findings[("guardrail-failed", "/guardrails/0")], value["guardrails"][0])
+        self.assertEqual(findings[("tool-outcome", "/tools_used/0")], value["tools_used"][0])
+        self.assertEqual(findings[("failure-pattern", "/failure_pattern")], "runtime-timeout")
+        self.assertEqual(findings[("blocker", "/blockers/1")], "external-unavailable")
+        diagnosed["facts"]["verification"][0]["status"] = "passed"
+        next(item for item in diagnosed["findings"] if item["location"] == "/outcome")["fact"]["status"] = "succeeded"
+        self.assertEqual(value, original)
+
+    def test_diagnostics_do_not_infer_waste_retries_or_parallel_savings(self) -> None:
+        value = summary()
+        value.update(tool_calls=50, first_pass_success=False, elapsed_ms=1000)
+        value["tools_used"][0]["call_count"] = 50
+        value["handoffs"] *= 4
+        diagnosed = trace_summary.diagnose_trace_summary(value)
+        self.assertEqual(diagnosed["facts"]["tool_calls"], 50)
+        self.assertEqual(diagnosed["facts"]["elapsed_ms"], 1000)
+        self.assertFalse(diagnosed["facts"]["first_pass_success"])
+        for name in ("attempt_count", "recorded_model_call_count", "tool_outcome_counts"):
+            self.assertEqual(diagnosed["facts"][name], {
+                "status": "not-available", "reason": "not-recorded-in-trace-summary",
+            })
+        self.assertEqual(diagnosed["findings"], [])
+        for unsupported in ("waste", "blind-retry", "parallel_wait", "savings"):
+            self.assertNotIn(unsupported, json.dumps(diagnosed))
+
+    def test_partial_tool_summary_cannot_supply_exact_terminal_counts(self) -> None:
+        value = summary()
+        value["tools_used"][0]["outcome"] = "partial"
+        diagnosed = trace_summary.diagnose_trace_summary(value)
+        self.assertEqual(diagnosed["facts"]["tool_outcome_counts"]["status"], "not-available")
+        self.assertEqual(diagnosed["findings"], [{
+            "code": "tool-outcome", "location": "/tools_used/0", "fact": value["tools_used"][0],
+        }])
+
+    def test_diagnostics_preserve_unavailable_reasons_and_real_zero_values(self) -> None:
+        value = summary()
+        value.update(first_pass_success=False, tool_calls=0, tools_used=[], elapsed_ms=0)
+        for name, reason in (("token_usage", "provider-token-metrics-disabled"),
+                             ("cost", "provider-pricing-evidence-disabled"),
+                             ("outcome", "artifact-acceptance-not-observed")):
+            value[name] = {"status": "not-available", "reason": reason}
+        value["verification"][0]["status"] = "not-run"
+        diagnosed = trace_summary.diagnose_trace_summary(value)
+        for name in ("token_usage", "cost", "outcome"):
+            self.assertEqual(diagnosed["facts"][name], value[name])
+            self.assertTrue(any(item["location"] == "/" + name and item["fact"] == value[name]
+                                for item in diagnosed["findings"]))
+        self.assertTrue(any(item["fact"] == value["verification"][0] for item in diagnosed["findings"]))
+        value["token_usage"] = {"input": 0, "cached_input": 0, "output": 0}
+        value["cost"] = {"status": "available", "amount": 0, "currency": "USD"}
+        diagnosed = trace_summary.diagnose_trace_summary(value)
+        for name in ("token_usage", "cost", "tool_calls", "elapsed_ms"):
+            self.assertEqual(diagnosed["facts"][name], value[name])
+        self.assertFalse(any(item["code"] == "metric-unavailable" for item in diagnosed["findings"]))
+
+    def test_diagnostics_use_existing_schema_privacy_and_relationship_validation(self) -> None:
+        cases = [None, {"raw_prompt": "must-not-copy"}]
+        for field, replacement in (("tool_calls", 3), ("runtime_version", "sk-abcdefghijklmnop"),
+                                   ("unknown-field", "untrusted")):
+            value = summary()
+            value[field] = replacement
+            cases.append(value)
+        value = summary()
+        value["guardrails"][0]["status"] = "failed"
+        cases.append(value)
+        for value in cases:
+            with self.subTest(value=value), self.assertRaises(ManifestError):
+                trace_summary.diagnose_trace_summary(value)
 
     def test_token_latency_hash_and_numeric_boundaries_fail_closed(self) -> None:
         cases = []

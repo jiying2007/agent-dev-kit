@@ -148,6 +148,14 @@ def goal_started_v2(task_mode: str, artifact_mode: str, index: int = 1) -> dict:
     return value
 
 
+def goal_replan(index: int, mode: str, decision_id: str, *, minute: int | None = None) -> dict:
+    minute = index if minute is None else minute
+    return event(index, "goal.updated", {
+        "intake": goal_intake(mode, mode, kind="goal-replan", decision_id=decision_id, minute=minute),
+        "mode_change_reason": "replan",
+    }, minute=minute)
+
+
 def usage(index: int, total: int, last_input: int = 100, window: int = 1000) -> dict:
     return event(index, "usage.snapshot", {
         "cwd_hash": "a" * 64,
@@ -684,6 +692,102 @@ class ExecutionPolicyTest(unittest.TestCase):
         }, minute=3))
         with self.assertRaisesRegex(ExecutionPolicyError, "provenance kind must be goal-replan"):
             reduce_events(invalid_replan)
+
+    def test_historical_replan_attestation_cannot_use_a_new_event_id(self) -> None:
+        events = [goal_started(), goal_replan(2, "readonly", "replan-a"),
+                  goal_replan(3, "implementation", "replan-b")]
+        replay = event(4, "goal.updated", copy.deepcopy(events[1]["payload"]))
+        frozen = copy.deepcopy(events + [replay])
+        self.assertEqual("implementation", reduce_events(events)["goal"]["task_mode"])
+        for verifier in (None, managed_mode_verifier):
+            with self.subTest(managed_verifier=verifier is not None):
+                with self.assertRaisesRegex(ExecutionPolicyError, "attestation"):
+                    evaluate(reduce_events(events + [replay]), policy_v2(), gate_event="final",
+                             mode_authority_verifier=verifier, as_of=AS_OF)
+        self.assertEqual(frozen, events + [replay])
+
+    def test_fresh_replan_preserves_managed_mode_and_unmanaged_floor(self) -> None:
+        events = completed_events_without_artifacts("implementation", "implementation")
+        events[1:1] = [goal_replan(20, "readonly", "replan-a", minute=1),
+                       goal_replan(21, "implementation", "replan-b", minute=1)]
+        latest = reduce_events(events)
+        self.assertEqual(3, latest["goal"]["intake_revision"])
+        self.assertFalse(evaluate(latest, policy_v2(), gate_event="final",
+                                  mode_authority_verifier=managed_mode_verifier,
+                                  as_of=AS_OF)["gate_allowed"])
+        events.insert(3, goal_replan(22, "readonly", "replan-c", minute=1))
+        state = reduce_events(events)
+        self.assertEqual(4, state["goal"]["intake_revision"])
+        self.assertEqual("replan-c", state["goal"]["intake_provenance"]["decision_id"])
+        self.assertEqual(state, reduce_events(iter(events)))
+        for verifier, artifact_mode, allowed in (
+            (managed_mode_verifier, "readonly", True), (None, "implementation", False),
+        ):
+            with self.subTest(managed_verifier=verifier is not None):
+                decision = evaluate(state, policy_v2(), gate_event="final",
+                                    mode_authority_verifier=verifier, as_of=AS_OF)
+                self.assertEqual(artifact_mode, decision["effective_artifact_mode"])
+                self.assertIs(allowed, decision["gate_allowed"])
+                self.assertIs(allowed, decision["completion_allowed"])
+                self.assertEqual([] if allowed else ["build", "repo"], decision["missing_artifacts"])
+
+    def test_replan_exact_event_replay_precedes_attestation_consumption(self) -> None:
+        events = [goal_started(), goal_replan(2, "readonly", "replan-a"),
+                  goal_replan(3, "implementation", "replan-b")]
+        state = reduce_events(events)
+        self.assertEqual(state, reduce_events(events + [copy.deepcopy(events[1])]))
+        conflict = copy.deepcopy(events[1])
+        conflict["payload"]["open_items_count"] = 0
+        with self.assertRaisesRegex(ExecutionPolicyError, "duplicate event_id has a different payload"):
+            reduce_events(events + [conflict])
+
+    def test_goal_restart_does_not_clear_attestation_consumption(self) -> None:
+        start = goal_started()
+        duplicate_start = event(3, "goal.started", copy.deepcopy(start["payload"]))
+        with self.assertRaisesRegex(ExecutionPolicyError, "attestation"):
+            reduce_events([start, event(2, "goal.completed", {}), duplicate_start])
+
+        fresh_start = goal_started(4)
+        fresh_start["payload"]["intake"] = goal_intake(
+            "implementation", "implementation", decision_id="route-2", minute=4,
+        )
+        events = [start, goal_replan(2, "readonly", "replan-a"),
+                  event(3, "goal.completed", {}), fresh_start]
+        self.assertEqual("route-2", reduce_events(events)["goal"]["intake_provenance"]["decision_id"])
+        replay = event(5, "goal.updated", copy.deepcopy(events[1]["payload"]))
+        with self.assertRaisesRegex(ExecutionPolicyError, "attestation"):
+            reduce_events(events + [replay])
+
+    def test_distinct_goal_and_legacy_intakes_remain_valid(self) -> None:
+        other = goal_started(3)
+        other["payload"]["goal_id"] = "goal-other"
+        other["payload"]["intake"] = goal_intake("implementation", "implementation", goal_id="goal-other")
+        state = reduce_events([goal_started(), event(2, "goal.completed", {}), other])
+        self.assertEqual("goal-other", state["goal"]["goal_id"])
+        self.assertEqual(1, state["goal"]["intake_revision"])
+
+        legacy = goal_started()
+        del legacy["payload"]["intake"]
+        events = [legacy, event(2, "goal.completed", {}),
+                  event(3, "goal.started", copy.deepcopy(legacy["payload"]))]
+        state = reduce_events(events)
+        self.assertIsNone(state["goal"]["intake_attestation_sha256"])
+        self.assertEqual(0, state["goal"]["intake_revision"])
+        state = reduce_events(events + [goal_replan(4, "readonly", "first-attested-replan")])
+        self.assertEqual(1, state["goal"]["intake_revision"])
+
+    def test_replan_still_validates_goal_and_attestation_digest(self) -> None:
+        wrong_goal = goal_replan(2, "readonly", "replan-a")
+        wrong_goal["payload"]["intake"] = goal_intake(
+            "readonly", "readonly", kind="goal-replan", decision_id="replan-a", minute=2,
+            goal_id="goal-other",
+        )
+        bad_digest = goal_replan(2, "readonly", "replan-a")
+        bad_digest["payload"]["intake"]["attestation_sha256"] = "f" * 64
+        for invalid, reason in ((wrong_goal, "goal_id does not match"), (bad_digest, "digest mismatch")):
+            with self.subTest(reason=reason):
+                with self.assertRaisesRegex(ExecutionPolicyError, reason):
+                    reduce_events([goal_started(), invalid])
 
     def test_v1_policy_is_rejected_and_v2_json_schemas_validate(self) -> None:
         old_policy = {

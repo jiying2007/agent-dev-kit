@@ -1,0 +1,19 @@
+{
+  "command": "/workspace/scratch/fe8de3b42084/verification-tools/rtk proxy env PYTHONPATH=src /workspace/scratch/d417066aafa8/agent-dev-kit/.venv/bin/python -B tests/test_task_evidence.py",
+  "captured_at": "2026-11-17 14:58:22 UTC",
+  "initial": {
+    "chunk_id": "b8db61",
+    "wall_time_seconds": 1.000949613,
+    "session_id": 92849,
+    "original_token_count": 1,
+    "output": "...."
+  },
+  "completion": {
+    "chunk_id": "5ddcbd",
+    "wall_time_seconds": 0.000019335,
+    "exit_code": 0,
+    "original_token_count": 34,
+    "output": ".................................\n----------------------------------------------------------------------\nRan 37 tests in 11.182s\n\nOK\n"
+  },
+  "scope": "synthetic deterministic importer tests; no runtime or model execution"
+}
