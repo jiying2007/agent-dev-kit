@@ -1,0 +1,50 @@
+{
+  "scope": "Independent review outputs retained before canonical signing; later validator outputs are separate.",
+  "files": [
+    {
+      "path": "evidence/independent/audit-final-evidence.py",
+      "sha256": "4c67fc858ee442f5006ea0a7a97d9ab2ebbca62588fca7fdb54f02700c42ae64",
+      "bytes": 7627
+    },
+    {
+      "path": "evidence/independent/c2-frozen-probe-after.json",
+      "sha256": "6fc1ff738b2ce69091e48d440b6bf38d443116feb5ceade74db86689b1028405",
+      "bytes": 1702
+    },
+    {
+      "path": "evidence/independent/execution-policy-fresh.json",
+      "sha256": "9621b07fa91fede953d2d58d3cc6dc232f19b55d377abccde923257b7d218201",
+      "bytes": 256
+    },
+    {
+      "path": "evidence/independent/final-two-file-delta.json",
+      "sha256": "b4b800ee976b8a61c58a6dc8fcf5812cc1dbec27067ca2c4608980c3a04cacde",
+      "bytes": 6672
+    },
+    {
+      "path": "evidence/independent/frozen-input-integrity.json",
+      "sha256": "3a41ad7964762d1759ce7504e9a275b2a6ee6450929867734f2b7afad09bab50",
+      "bytes": 366
+    },
+    {
+      "path": "evidence/independent/packaging-audit.json",
+      "sha256": "45aaeb584a55ff3196a5df019f942c5ecc2d1f2ac0f325a2d1f41c53283ae381",
+      "bytes": 5648
+    },
+    {
+      "path": "evidence/independent/review.md",
+      "sha256": "06890032003822ff731c7049c67b6d59349a74346eec7a1ba9ec4464bd6c95ba",
+      "bytes": 4466
+    },
+    {
+      "path": "evidence/independent/source-identity.json",
+      "sha256": "475b430aadb7748895bb2baeab226d8cdfe7b6cda9ea7cb7008a1546dc04b150",
+      "bytes": 1075
+    },
+    {
+      "path": "evidence/independent/target-contracts-fresh.json",
+      "sha256": "9b664702745e3d28db7cb34aec0f272e9414a7df67dac96ea9c5a4d3ee35a911",
+      "bytes": 824
+    }
+  ]
+}

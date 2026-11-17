@@ -18,7 +18,7 @@ from agent_dev_kit.agent_value_contracts import load_contract
 from agent_dev_kit.effect_trials import compare_effect_trials
 from agent_dev_kit.model import Manifest, ManifestError, sha256_bytes
 from agent_dev_kit.run_evidence import validate_run_evidence
-from agent_dev_kit.task_evidence import import_task_evidence
+from agent_dev_kit.task_evidence import _Package, import_task_evidence, read_task_evidence
 
 from test_effect_trials import document, rebind
 
@@ -108,6 +108,10 @@ class TaskEvidenceTest(unittest.TestCase):
         self.persist()
         return import_task_evidence(self.path, MANIFEST)
 
+    def diagnose_data(self):
+        self.persist()
+        return import_task_evidence(self.path, MANIFEST, diagnostics=True)
+
     def process_observations(self, statuses):
         template = next(item for item in self.events["events"] if item["kind"] == "guardrail")
         self.events["events"] = [item for item in self.events["events"] if item["kind"] != "guardrail"]
@@ -149,6 +153,229 @@ class TaskEvidenceTest(unittest.TestCase):
         self.assertIsNone(result["run_evidence"]["measurement"])
         self.assertNotIn("copy the expected", json.dumps(result))
         self.assertNotIn(str(self.root), json.dumps(result))
+
+    def test_diagnostics_are_opt_in_and_reuse_exactly_the_same_verified_reads(self):
+        self.persist()
+        reads = []
+        original_read = _Package.read
+
+        def observed_read(package, path):
+            reads.append(path)
+            return original_read(package, path)
+
+        with patch.object(_Package, "read", observed_read):
+            plain = read_task_evidence(self.path, MANIFEST)
+            plain_reads = tuple(reads)
+            reads.clear()
+            diagnosed = read_task_evidence(self.path, MANIFEST, diagnostics=True)
+        self.assertEqual(tuple(reads), plain_reads)
+        self.assertEqual(diagnosed.inputs, plain.inputs)
+        self.assertEqual(diagnosed.bytes_read, plain.bytes_read)
+        self.assertNotIn("diagnostics", plain.report)
+        diagnostic = diagnosed.report.pop("diagnostics")
+        self.assertEqual(diagnosed.report, plain.report)
+        self.assertEqual(diagnostic, self.diagnose_data()["diagnostics"])
+        self.assertEqual(diagnostic["facts"]["attempt_count"], 1)
+        self.assertEqual(diagnostic["facts"]["recorded_model_call_count"], 1)
+        self.assertEqual(diagnostic["evidence_refs"], {
+            "trace_ref": plain.report["run_evidence"]["trace_ref"],
+            "events_ref": plain.report["bindings"]["events_ref"],
+        })
+        self.assertEqual(plain.report["run_evidence"]["receipts"], [])
+        self.assertIsNone(plain.report["run_evidence"]["measurement"])
+        self.assertFalse(plain.report["quality_evidence_eligible"])
+        self.assertFalse(plain.report["release_authorized"])
+        self.assertNotIn(str(self.root), json.dumps(diagnostic))
+
+    def test_diagnostics_fifty_successful_calls_are_counts_without_waste_judgment(self):
+        for index in range(2, 51):
+            self.events["events"].append({
+                "event_id": f"tool-{index}", "kind": "tool-call", "attempt_id": "attempt-1",
+                "tool": "read-artifact", "outcome": "succeeded",
+            })
+        diagnostic = self.diagnose_data()["diagnostics"]
+        self.assertEqual(diagnostic["facts"]["tool_calls"], 50)
+        self.assertEqual(diagnostic["facts"]["tool_outcome_counts"], {"read-artifact": {
+            "succeeded": 50, "failed": 0, "partial": 0, "blocked": 0, "cancelled": 0, "not-available": 0,
+        }})
+        self.assertEqual(diagnostic["findings"], [])
+        self.assertNotIn("waste", json.dumps(diagnostic))
+
+    def test_diagnostics_mixed_terminal_counts_and_successful_attempts_are_not_inferred(self):
+        self.events["events"].append({"event_id": "attempt-2", "kind": "attempt", "attempt_id": "attempt-2"})
+        outcomes = ("failed", "failed", "succeeded", "blocked", "cancelled", "partial", "not-available")
+        for index, outcome in enumerate(outcomes, 2):
+            self.events["events"].append({
+                "event_id": f"tool-{index}", "kind": "tool-call", "attempt_id": "attempt-2",
+                "tool": "read-artifact", "outcome": outcome,
+            })
+        self.events["events"].append({"event_id": "attempt-3", "kind": "attempt", "attempt_id": "attempt-3"})
+        retry = copy.deepcopy(self.events["events"][3])
+        retry.update(event_id="model-2", call_id="model-2", attempt_id="attempt-3")
+        self.events["events"].append(retry)
+        result = self.diagnose_data()
+        diagnostic = result["diagnostics"]
+        facts = diagnostic["facts"]
+        self.assertEqual(facts["outcome"], {"status": "succeeded", "category": "completed"})
+        self.assertFalse(facts["first_pass_success"])
+        self.assertEqual(facts["attempt_count"], 3)
+        self.assertEqual(facts["recorded_model_call_count"], 2)
+        self.assertEqual(facts["tool_calls"], 8)
+        self.assertEqual(facts["tools_used"], [{"name": "read-artifact", "call_count": 8, "outcome": "partial"}])
+        self.assertEqual(facts["tool_outcome_counts"], {"read-artifact": {
+            "succeeded": 2, "failed": 2, "partial": 1, "blocked": 1, "cancelled": 1, "not-available": 1,
+        }})
+        self.assertEqual(diagnostic["findings"], [{
+            "code": "tool-outcome", "location": "/tools_used/0", "fact": facts["tools_used"][0],
+        }])
+        for unsupported in ("waste", "blind-retry", "savings"):
+            self.assertNotIn(unsupported, json.dumps(diagnostic))
+
+    def test_diagnostics_keep_process_failures_even_when_later_checks_and_artifact_pass(self):
+        references = self.process_observations(("failed", "passed"))
+        self.events["events"].append({
+            "event_id": "guardrail-other", "kind": "guardrail", "name": "other-boundary",
+            "status": "failed", "evidence": references[0],
+        })
+        result = self.diagnose_data()
+        self.assertEqual(result["acceptance_status"], "passed")
+        facts = result["diagnostics"]["facts"]
+        self.assertEqual(facts["outcome"]["status"], "failed")
+        self.assertEqual(facts["failure_pattern"], "process-guardrail-failed")
+        failures = [item for item in result["diagnostics"]["findings"] if item["code"] == "verification-status"]
+        self.assertEqual({item["fact"]["name"] for item in failures},
+                         {"process/permission-boundary", "process/other-boundary"})
+        self.assertTrue(all(item["fact"]["status"] == "failed" for item in failures))
+        self.assertTrue(all(item["fact"]["evidence_ref"] == "ref:" + references[0]["sha256"] for item in failures))
+        self.assertEqual(facts["verification"], result["run_evidence"]["trace_summary"]["verification"])
+
+    def test_diagnostics_unrun_acceptance_stays_unknown_until_observed_timeout(self):
+        self.acceptance["status"] = "not-run"
+        self.acceptance["checks"][0]["status"] = "not-run"
+        self.acceptance["checks"].append({**self.acceptance["checks"][0], "name": "second-check"})
+        result = self.diagnose_data()
+        self.assertEqual(result["diagnostics"]["facts"]["outcome"], {
+            "status": "not-available", "reason": "artifact-acceptance-not-observed",
+        })
+        self.events["events"].append({
+            "event_id": "timeout", "kind": "termination", "status": "failed", "category": "timeout",
+            "evidence": self.events["events"][-1]["evidence"],
+        })
+        diagnosed = self.diagnose_data()["diagnostics"]
+        self.assertEqual(diagnosed["facts"]["outcome"], {"status": "failed", "category": "runtime-failure"})
+        self.assertEqual(diagnosed["facts"]["failure_pattern"], "runtime-timeout")
+        for report in (result["diagnostics"], diagnosed):
+            unrun = [item["fact"]["name"] for item in report["findings"]
+                     if item["code"] == "verification-status" and item["fact"]["status"] == "not-run"]
+            self.assertEqual(unrun, ["acceptance/expected-result", "acceptance/second-check"])
+        self.assertTrue(any(item["fact"].get("name") == "runtime-termination"
+                            for item in diagnosed["findings"] if isinstance(item["fact"], dict)))
+
+    def test_diagnostics_preserve_missing_and_estimated_metric_reasons(self):
+        original = copy.deepcopy(self.events)
+        for change in ("coverage", "usage", "cost", "estimated-usage", "estimated-cost", "no-model-calls"):
+            with self.subTest(change=change):
+                self.events = copy.deepcopy(original)
+                model = self.events["events"][3]
+                if change == "coverage":
+                    self.events["coverage"]["model_calls"] = False
+                elif change == "no-model-calls":
+                    self.events["events"] = [item for item in self.events["events"] if item["kind"] != "model-call"]
+                elif change.startswith("estimated-"):
+                    model["usage_source" if change.endswith("usage") else "cost_source"] = "estimated"
+                else:
+                    model[change] = None
+                result = self.diagnose_data()
+                trace = result["run_evidence"]["trace_summary"]
+                facts = result["diagnostics"]["facts"]
+                self.assertEqual(facts["recorded_model_call_count"], 0 if change == "no-model-calls" else 1)
+                for metric in ("token_usage", "cost"):
+                    self.assertEqual(facts[metric], trace[metric])
+                    if trace[metric].get("status") == "not-available":
+                        self.assertTrue(any(item["code"] == "metric-unavailable" and item["fact"] == trace[metric]
+                                            for item in result["diagnostics"]["findings"]))
+
+    def test_diagnostics_observed_zero_and_handoff_walltime_have_no_efficiency_inference(self):
+        model = self.events["events"][3]
+        model["usage"] = {"input": 0, "cached_input": 0, "output": 0}
+        model["cost"]["amount"] = 0
+        self.events["events"] = [item for item in self.events["events"] if item["kind"] != "tool-call"]
+        start = datetime.fromisoformat(self.data["run"]["started_at"])
+        self.data["run"]["finished_at"] = (start + timedelta(milliseconds=1000)).isoformat()
+        for index in range(3):
+            self.events["events"].append({
+                "event_id": f"handoff-{index}", "kind": "handoff", "target": "child", "outcome": "succeeded",
+            })
+        diagnostic = self.diagnose_data()["diagnostics"]
+        self.assertEqual(diagnostic["facts"]["tool_calls"], 0)
+        self.assertEqual(diagnostic["facts"]["tool_outcome_counts"], {})
+        self.assertEqual(diagnostic["facts"]["token_usage"], {"input": 0, "cached_input": 0, "output": 0})
+        self.assertEqual(diagnostic["facts"]["cost"], {"status": "available", "amount": 0, "currency": "USD"})
+        self.assertEqual(diagnostic["facts"]["elapsed_ms"], 1000)
+        self.assertEqual(len(diagnostic["facts"]["handoffs"]), 3)
+        self.assertEqual(diagnostic["findings"], [])
+        for unsupported in ("parallel_wait", "savings"):
+            self.assertNotIn(unsupported, json.dumps(diagnostic))
+
+    def test_diagnostics_cli_preserves_failed_task_import_and_sanitized_invalid_output(self):
+        self.acceptance["status"] = self.acceptance["checks"][0]["status"] = "failed"
+        self.persist()
+        plain = self.cli("import-task", "--input", self.path, "--summary-json")
+        self.assertEqual(plain.returncode, 0, plain.stdout + plain.stderr)
+        self.assertNotIn("diagnostics", json.loads(plain.stdout))
+        output = self.root.parent / "diagnosed.json"
+        completed = self.cli("import-task", "--input", self.path, "--diagnostics", "--output", output,
+                             "--summary-json")
+        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+        result = json.loads(completed.stdout)
+        self.assertEqual(result, json.loads(output.read_text()))
+        self.assertEqual(result["diagnostics"]["facts"]["outcome"]["status"], "failed")
+        result.pop("diagnostics")
+        self.assertEqual(result, json.loads(plain.stdout))
+        previous = output.read_bytes()
+        self.path.write_text('{"raw_secret":"do-not-echo-this-secret"}', encoding="utf-8")
+        completed = self.cli("import-task", "--input", self.path, "--diagnostics", "--output", output,
+                             "--summary-json")
+        self.assertEqual(completed.returncode, 2)
+        self.assertEqual(json.loads(completed.stdout)["status"], "invalid")
+        self.assertNotIn("diagnostics", json.loads(completed.stdout))
+        self.assertNotIn("do-not-echo", completed.stdout + completed.stderr)
+        self.assertEqual(output.read_bytes(), previous)
+
+    def test_diagnostics_cannot_overwrite_inputs_or_any_output_alias(self):
+        original_process = self.events["events"][-1]["evidence"]
+        self.process_observations(("failed", "passed"))
+        self.events["events"].append({
+            "event_id": "guardrail-extra", "kind": "guardrail", "name": "another-boundary",
+            "status": "passed", "evidence": original_process,
+        })
+        self.persist()
+        originals = {path: path.read_bytes() for path in self.root.iterdir() if path.is_file()}
+        hardlink = self.root / "hardlink.json"
+        os.link(self.path, hardlink)
+        symbolic = self.root / "symlink.json"
+        symbolic.symlink_to(self.path)
+        directory_alias = self.root.parent / "linked-output"
+        directory_alias.symlink_to(self.root, target_is_directory=True)
+        for output in (*originals, hardlink, symbolic, directory_alias / "new.json"):
+            with self.subTest(output=output), self.assertRaises(ManifestError):
+                import_task_evidence(self.path, MANIFEST, output_path=output, diagnostics=True)
+        for path, content in originals.items():
+            self.assertEqual(path.read_bytes(), content)
+        self.assertFalse((self.root / "new.json").exists())
+
+    def test_diagnostics_keep_digest_and_no_follow_input_checks(self):
+        self.persist()
+        source = self.root / "input.json"
+        original = source.read_bytes()
+        source.write_bytes(original + b" ")
+        with self.assertRaisesRegex(ManifestError, "digest mismatch"):
+            import_task_evidence(self.path, MANIFEST, diagnostics=True)
+        source.write_bytes(original)
+        source.rename(self.root / "original.json")
+        source.symlink_to("original.json")
+        with self.assertRaises(OSError):
+            import_task_evidence(self.path, MANIFEST, diagnostics=True)
 
     def test_failed_retry_and_handoff_costs_are_retained(self):
         self.events["events"][2]["outcome"] = "failed"
@@ -492,13 +719,14 @@ class TaskEvidenceTest(unittest.TestCase):
             "synthetic": True, "command": f"touch {sentinel}",
             "instructions": "import arbitrary.module; access https://invalid.example",
         })
-        with patch("subprocess.run", side_effect=AssertionError("execution forbidden")), \
-                patch("os.system", side_effect=AssertionError("execution forbidden")), \
-                patch("socket.socket", side_effect=AssertionError("network forbidden")):
-            result = self.import_data()
-        self.assertEqual(result["status"], "imported")
-        self.assertFalse(sentinel.exists())
-        self.assertNotIn("arbitrary.module", json.dumps(result))
+        for importer in (self.import_data, self.diagnose_data):
+            with patch("subprocess.run", side_effect=AssertionError("execution forbidden")), \
+                    patch("os.system", side_effect=AssertionError("execution forbidden")), \
+                    patch("socket.socket", side_effect=AssertionError("network forbidden")):
+                result = importer()
+            self.assertEqual(result["status"], "imported")
+            self.assertFalse(sentinel.exists())
+            self.assertNotIn("arbitrary.module", json.dumps(result))
 
     def test_real_cli_sanitizes_errors_and_outputs_imported_evidence(self):
         self.persist()

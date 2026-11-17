@@ -1,0 +1,933 @@
+{
+  "schema": "independent-c2-attestation-probe/v1",
+  "baseline_sha": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d",
+  "as_of": "2026-08-24T01:12:00+00:00",
+  "gate_event": "final",
+  "policy": {
+    "schema_version": "runtime_control.policy/v2",
+    "token": {
+      "checkpoint_ratio": 0.7,
+      "compact_ratio": 0.9,
+      "stop_ratio": 1.0
+    },
+    "context": {
+      "compact_ratio": 0.5
+    },
+    "progress": {
+      "staleness_seconds": 900,
+      "retry_limit": 2,
+      "no_progress_limit": 3
+    },
+    "artifact_applicability": {
+      "readonly": {
+        "steady": [],
+        "final": [],
+        "commit": null,
+        "apply": null,
+        "release": null
+      },
+      "implementation": {
+        "steady": [],
+        "final": [
+          "repo",
+          "build"
+        ],
+        "commit": [
+          "repo",
+          "build",
+          "review"
+        ],
+        "apply": [
+          "repo",
+          "build",
+          "plan",
+          "dry-run"
+        ],
+        "release": null
+      },
+      "release": {
+        "steady": [],
+        "final": [
+          "repo",
+          "build"
+        ],
+        "commit": [
+          "repo",
+          "build",
+          "review"
+        ],
+        "apply": [
+          "repo",
+          "build",
+          "plan",
+          "dry-run"
+        ],
+        "release": [
+          "repo",
+          "build",
+          "live",
+          "review"
+        ]
+      }
+    },
+    "mode_authority_policy": {
+      "managed": true,
+      "trusted_mode_authorities": [
+        "routing-authority"
+      ],
+      "verification_backend": "managed-authority-registry"
+    },
+    "retention": {
+      "journal_days": 14,
+      "raw_content_stored": false
+    }
+  },
+  "verifier_scope": "Synthetic unit-test verifier copied from the baseline test helper; not production authority or evidence of host bypass.",
+  "cases": [
+    {
+      "case": "latest_implementation",
+      "events": [
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-1",
+          "event_type": "goal.started",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:01:00Z",
+          "payload": {
+            "goal_id": "goal-1",
+            "token_budget": 1000,
+            "time_budget_seconds": 7200,
+            "usage_baseline_tokens": 100,
+            "success_criteria": [
+              "tests",
+              "review"
+            ],
+            "required_evidence": [
+              "tests",
+              "review"
+            ],
+            "open_items_count": 2,
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "c838ce2d7c984cd1eb3f6dd1c3f3d723c5c5fdd0f47c79d753dd1ffc62f33b44",
+              "provenance": {
+                "kind": "routing-decision",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "route-1",
+                "issued_at": "2026-08-24T01:00:00Z"
+              }
+            }
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-2",
+          "event_type": "progress.advanced",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:02:00Z",
+          "payload": {
+            "revision": 1
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-3",
+          "event_type": "heartbeat.recorded",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:03:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-4",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:04:00Z",
+          "payload": {
+            "evidence_id": "tests",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-5",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:05:00Z",
+          "payload": {
+            "evidence_id": "review",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-6",
+          "event_type": "checkpoint.verified",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:06:00Z",
+          "payload": {
+            "revision": 1,
+            "evidence_ids": [
+              "tests",
+              "review"
+            ]
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-7",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "open_items_count": 0
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-20",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "readonly",
+              "artifact_mode": "readonly",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "ff486e0451f7d987ce2191e7445cd9908530d4934c7b2abf942ecf0493357d72",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-readonly-older",
+                "issued_at": "2026-08-24T01:03:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-21",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "6af2357f7a0ba6a238acf82a258c6d9eb13a97495c7580942a49ba8f09994c20",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-implementation-newer",
+                "issued_at": "2026-08-24T01:04:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-8",
+          "event_type": "goal.completed",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:08:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-9",
+          "event_type": "usage.snapshot",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:09:00Z",
+          "payload": {
+            "cwd_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "model": "gpt-5.6-sol",
+            "input_tokens": 1190,
+            "cached_input_tokens": 1180,
+            "output_tokens": 10,
+            "reasoning_tokens": 2,
+            "total_tokens": 1200,
+            "context_window": 1000,
+            "last_input_tokens": 100,
+            "last_delta_tokens": 10,
+            "rate_per_minute": 100.0
+          }
+        }
+      ],
+      "managed_verifier": true
+    },
+    {
+      "case": "replayed_older_readonly_new_event_id",
+      "events": [
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-1",
+          "event_type": "goal.started",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:01:00Z",
+          "payload": {
+            "goal_id": "goal-1",
+            "token_budget": 1000,
+            "time_budget_seconds": 7200,
+            "usage_baseline_tokens": 100,
+            "success_criteria": [
+              "tests",
+              "review"
+            ],
+            "required_evidence": [
+              "tests",
+              "review"
+            ],
+            "open_items_count": 2,
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "c838ce2d7c984cd1eb3f6dd1c3f3d723c5c5fdd0f47c79d753dd1ffc62f33b44",
+              "provenance": {
+                "kind": "routing-decision",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "route-1",
+                "issued_at": "2026-08-24T01:00:00Z"
+              }
+            }
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-2",
+          "event_type": "progress.advanced",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:02:00Z",
+          "payload": {
+            "revision": 1
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-3",
+          "event_type": "heartbeat.recorded",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:03:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-4",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:04:00Z",
+          "payload": {
+            "evidence_id": "tests",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-5",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:05:00Z",
+          "payload": {
+            "evidence_id": "review",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-6",
+          "event_type": "checkpoint.verified",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:06:00Z",
+          "payload": {
+            "revision": 1,
+            "evidence_ids": [
+              "tests",
+              "review"
+            ]
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-7",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "open_items_count": 0
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-20",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "readonly",
+              "artifact_mode": "readonly",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "ff486e0451f7d987ce2191e7445cd9908530d4934c7b2abf942ecf0493357d72",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-readonly-older",
+                "issued_at": "2026-08-24T01:03:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-21",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "6af2357f7a0ba6a238acf82a258c6d9eb13a97495c7580942a49ba8f09994c20",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-implementation-newer",
+                "issued_at": "2026-08-24T01:04:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-22",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "readonly",
+              "artifact_mode": "readonly",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "ff486e0451f7d987ce2191e7445cd9908530d4934c7b2abf942ecf0493357d72",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-readonly-older",
+                "issued_at": "2026-08-24T01:03:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-8",
+          "event_type": "goal.completed",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:08:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-9",
+          "event_type": "usage.snapshot",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:09:00Z",
+          "payload": {
+            "cwd_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "model": "gpt-5.6-sol",
+            "input_tokens": 1190,
+            "cached_input_tokens": 1180,
+            "output_tokens": 10,
+            "reasoning_tokens": 2,
+            "total_tokens": 1200,
+            "context_window": 1000,
+            "last_input_tokens": 100,
+            "last_delta_tokens": 10,
+            "rate_per_minute": 100.0
+          }
+        }
+      ],
+      "managed_verifier": true
+    },
+    {
+      "case": "replay_without_trusted_verifier",
+      "events": [
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-1",
+          "event_type": "goal.started",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:01:00Z",
+          "payload": {
+            "goal_id": "goal-1",
+            "token_budget": 1000,
+            "time_budget_seconds": 7200,
+            "usage_baseline_tokens": 100,
+            "success_criteria": [
+              "tests",
+              "review"
+            ],
+            "required_evidence": [
+              "tests",
+              "review"
+            ],
+            "open_items_count": 2,
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "c838ce2d7c984cd1eb3f6dd1c3f3d723c5c5fdd0f47c79d753dd1ffc62f33b44",
+              "provenance": {
+                "kind": "routing-decision",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "route-1",
+                "issued_at": "2026-08-24T01:00:00Z"
+              }
+            }
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-2",
+          "event_type": "progress.advanced",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:02:00Z",
+          "payload": {
+            "revision": 1
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-3",
+          "event_type": "heartbeat.recorded",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:03:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-4",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:04:00Z",
+          "payload": {
+            "evidence_id": "tests",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-5",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:05:00Z",
+          "payload": {
+            "evidence_id": "review",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-6",
+          "event_type": "checkpoint.verified",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:06:00Z",
+          "payload": {
+            "revision": 1,
+            "evidence_ids": [
+              "tests",
+              "review"
+            ]
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-7",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "open_items_count": 0
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-20",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "readonly",
+              "artifact_mode": "readonly",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "ff486e0451f7d987ce2191e7445cd9908530d4934c7b2abf942ecf0493357d72",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-readonly-older",
+                "issued_at": "2026-08-24T01:03:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-21",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "6af2357f7a0ba6a238acf82a258c6d9eb13a97495c7580942a49ba8f09994c20",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-implementation-newer",
+                "issued_at": "2026-08-24T01:04:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-22",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "readonly",
+              "artifact_mode": "readonly",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "ff486e0451f7d987ce2191e7445cd9908530d4934c7b2abf942ecf0493357d72",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-readonly-older",
+                "issued_at": "2026-08-24T01:03:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-8",
+          "event_type": "goal.completed",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:08:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-9",
+          "event_type": "usage.snapshot",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:09:00Z",
+          "payload": {
+            "cwd_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "model": "gpt-5.6-sol",
+            "input_tokens": 1190,
+            "cached_input_tokens": 1180,
+            "output_tokens": 10,
+            "reasoning_tokens": 2,
+            "total_tokens": 1200,
+            "context_window": 1000,
+            "last_input_tokens": 100,
+            "last_delta_tokens": 10,
+            "rate_per_minute": 100.0
+          }
+        }
+      ],
+      "managed_verifier": false
+    },
+    {
+      "case": "fresh_readonly_after_implementation",
+      "events": [
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-1",
+          "event_type": "goal.started",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:01:00Z",
+          "payload": {
+            "goal_id": "goal-1",
+            "token_budget": 1000,
+            "time_budget_seconds": 7200,
+            "usage_baseline_tokens": 100,
+            "success_criteria": [
+              "tests",
+              "review"
+            ],
+            "required_evidence": [
+              "tests",
+              "review"
+            ],
+            "open_items_count": 2,
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "c838ce2d7c984cd1eb3f6dd1c3f3d723c5c5fdd0f47c79d753dd1ffc62f33b44",
+              "provenance": {
+                "kind": "routing-decision",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "route-1",
+                "issued_at": "2026-08-24T01:00:00Z"
+              }
+            }
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-2",
+          "event_type": "progress.advanced",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:02:00Z",
+          "payload": {
+            "revision": 1
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-3",
+          "event_type": "heartbeat.recorded",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:03:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-4",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:04:00Z",
+          "payload": {
+            "evidence_id": "tests",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-5",
+          "event_type": "evidence.added",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:05:00Z",
+          "payload": {
+            "evidence_id": "review",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-6",
+          "event_type": "checkpoint.verified",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:06:00Z",
+          "payload": {
+            "revision": 1,
+            "evidence_ids": [
+              "tests",
+              "review"
+            ]
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-7",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "open_items_count": 0
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-20",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "readonly",
+              "artifact_mode": "readonly",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "ff486e0451f7d987ce2191e7445cd9908530d4934c7b2abf942ecf0493357d72",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-readonly-older",
+                "issued_at": "2026-08-24T01:03:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-21",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "implementation",
+              "artifact_mode": "implementation",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "6af2357f7a0ba6a238acf82a258c6d9eb13a97495c7580942a49ba8f09994c20",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-implementation-newer",
+                "issued_at": "2026-08-24T01:04:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-23",
+          "event_type": "goal.updated",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:07:00Z",
+          "payload": {
+            "intake": {
+              "schema_version": "runtime_control.goal-intake/v1",
+              "task_mode": "readonly",
+              "artifact_mode": "readonly",
+              "goal_id": "goal-1",
+              "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "routing_decision_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "authority_id": "routing-authority",
+              "attestation_sha256": "6da5e755e7ad662261e667bfdc4e83dae5397ae150999777dafd71a1d9cb9415",
+              "provenance": {
+                "kind": "goal-replan",
+                "source_id": "adk-routing-ir",
+                "source_version": "v2",
+                "decision_id": "replan-readonly-fresh",
+                "issued_at": "2026-08-24T01:05:00Z"
+              }
+            },
+            "mode_change_reason": "replan"
+          }
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-8",
+          "event_type": "goal.completed",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:08:00Z",
+          "payload": {}
+        },
+        {
+          "schema_version": "runtime_control.event/v1",
+          "event_id": "evt-9",
+          "event_type": "usage.snapshot",
+          "thread_id": "thread-1",
+          "observed_at": "2026-08-24T01:09:00Z",
+          "payload": {
+            "cwd_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "model": "gpt-5.6-sol",
+            "input_tokens": 1190,
+            "cached_input_tokens": 1180,
+            "output_tokens": 10,
+            "reasoning_tokens": 2,
+            "total_tokens": 1200,
+            "context_window": 1000,
+            "last_input_tokens": 100,
+            "last_delta_tokens": 10,
+            "rate_per_minute": 100.0
+          }
+        }
+      ],
+      "managed_verifier": true
+    }
+  ]
+}

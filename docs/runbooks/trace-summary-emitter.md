@@ -54,3 +54,43 @@ summary = emit_trace_summary_v2(facts)
 - API 可用不等于 target 已自动集成。runtime adapter 只有完成 native conformance 后，才能声明自动
   per-run emission。
 - 持久化、retention、Evidence Graph 关联和外部 exporter 由调用方的已审查边界负责，本 API 不扩权。
+
+## 按需诊断纯投影
+
+`agent_dev_kit.trace_summary.diagnose_trace_summary(value)` 先调用同一 `validate_trace_summary`，
+再返回独立的 `facts` 与 `findings`。它不修改输入，同一输入重复调用结果相同；不读取任务包、
+网络、时间或随机数，不调用模型、不估价、不写状态。不接受未经校验的额外字段或原始日志正文。
+
+```python
+from agent_dev_kit.trace_summary import diagnose_trace_summary
+
+diagnostics = diagnose_trace_summary(summary)
+```
+
+`facts` 保留原 outcome、failure_pattern、first_pass_success、全部 tools/handoffs/guardrails/verification、
+Token/cost、elapsed_ms、human_interventions、wrong_skill、abstained 和 blockers。缺测值与 reason
+原样保留；合法实测零值不变。Trace 没有记录的 `attempt_count`、`recorded_model_call_count`、
+`tool_outcome_counts` 明确为 `not-available / not-recorded-in-trace-summary`。
+成功与失败混合的工具 `partial` 不提供精确失败次数；`first_pass_success=false` 不提供重试次数。
+
+每条 finding 包含 `code`、指向原 Trace 的 `location` 和独立复制的原 `fact`。
+重复名称不合并，全部匹配项按原数组位置保留；检查的已有 opaque `evidence_ref` 随事实保留。
+
+| Code | 记录条件 |
+|---|---|
+| `outcome-status` | outcome 不是 succeeded，包括原始 not-available 原因 |
+| `metric-unavailable` | Token 或 cost 明确 not-available |
+| `tool-outcome` | 工具汇总为 partial、failed、blocked、cancelled 或 not-available |
+| `handoff-outcome` | handoff 为 failed、blocked 或 cancelled |
+| `guardrail-failed` | guardrail 为 failed |
+| `verification-status` | 每个 failed 或 not-run 检查 |
+| `blocker` | 每个已有 blocker |
+| `failure-pattern` | 已有 failure_pattern 不是 none |
+| `wrong-skill` | 已有 wrong_skill 为 true |
+
+finding 是事实索引，不是新的成功裁决、风险分数或因果分析。重复调用数不能证明浪费或盲重试，
+墙钟与 handoff 数不能证明并行等待、节省或模型效果。无需关注的项目仍可在 `facts` 与原 Trace 回读。
+
+只有 [task import 的显式 `--diagnostics`](task-evidence.md#按需查看诊断) 会用同次已核验账本补充
+三个计数字段，并加上已有 trace/events refs；它不改变 RunEvidence 或资格值。现有任务比较调用
+仍采用默认路径，不自动生成诊断。

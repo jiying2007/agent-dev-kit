@@ -1,0 +1,1405 @@
+diff --git a/.version-lock b/.version-lock
+index 61882dc..3bb4b0c 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.3.15
+-locked_at: 2026-11-17T12:09:22Z
+-locked_by: ai/root-routing-context-integrity
++version: 11.4.0
++locked_at: 2026-11-17T14:46:27Z
++locked_by: agent
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 7e241c2..af482a3 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,13 @@
+ 
+ ## Unreleased
+ 
++### 11.4.0 — 按需任务诊断与重规划凭据重放保护
++
++- 在既有 `eval import-task` 增加显式 `--diagnostics`，从同次已核验 Trace 与事件账本投影失败、未运行验证、真实尝试及工具终态计数；默认报告、Trace/RunEvidence、回执和资格语义保持。
++- 诊断保留全部失败与原始缺测原因，区分合法实测零值；工具次数不推断浪费或盲重试，墙钟与并行事件不推断等待或节省。既有 AAR 引用按需使用诊断，不自动调整规则或门禁。
++- 既有 Goal reducer 拒绝已消费 intake attestation 在新 event ID 下的历史重放，保留新有效重规划、相同事件幂等及无 verifier 的保守下限；补充 native trust verifier 拒绝、异常及非布尔真值控制。
++- 本轮为源码、确定性测试和受保护发行改进；不新增运行平台、调度器、Goal、Schema、Skill 身份、依赖、预算例外或模型调用，不代表真实宿主、模型效果、Token/费用或设备资格。
++
+ ### 11.3.15 — 内容一致缓存、当前动作路由与压缩恢复
+ 
+ - 四处既有有界缓存按实际内容复用，合同与 schema 同长度、同 mtime 的变化仍重新解析；报告摘要绑定同一份输入字节，错误编码保留明确失败。
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 33c6ae2..9e1e590 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.3.15
++> 产品版本：11.4.0
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index f646222..9a6dac7 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.3.15`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.4.0`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/changes/20261117-goal-replan-replay/checklist.md b/docs/changes/20261117-goal-replan-replay/checklist.md
+new file mode 100644
+index 0000000..8c25607
+--- /dev/null
++++ b/docs/changes/20261117-goal-replan-replay/checklist.md
+@@ -0,0 +1,12 @@
++# 交付清单：20261117-goal-replan-replay
++
++- [ ] 关键场景覆盖
++- [ ] 风险项评估完成
++- [ ] 回退方案可执行
++- [ ] 验证证据可追溯
++- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）
++- [ ] Canonical Change Contract 追溯关系完整
++- [ ] 评审结果为 pass（无 blocker/major 未闭环）
++- [ ] Prompt before/after 对比证据
++- [ ] Skill Intake 归属与安装范围结论
++- [ ] 收敛结论或阻塞说明
+diff --git a/docs/changes/20261117-goal-replan-replay/design.md b/docs/changes/20261117-goal-replan-replay/design.md
+new file mode 100644
+index 0000000..169f4a0
+--- /dev/null
++++ b/docs/changes/20261117-goal-replan-replay/design.md
+@@ -0,0 +1,17 @@
++# 设计说明：20261117-goal-replan-replay
++
++## 架构影响
++
++coordinator 冻结契约；audit_core 仅实现本 C2，不实现其设计过的 C1；independent_review 保留原始反例并只读复核。现有 reduce_events 对完整输入事件逐条归约，可在同一次归约维护已消费 attestation 集合。有效 goal 创建及 replan 的 attestation 进入集合；同 event_id 的既有幂等处理仍先执行；新 event_id 携带已消费 attestation 应明确拒绝。该集合仅服务确定性重放，不新增外部持久账本或返回 schema。
++
++## 数据与配置影响
++
++不改输入 schema、trusted verifier contract、policy/revision 或输出结构。实际实现先检索所有调用者与既有初始化、缺失 intake 兼容路径；无 intake 的历史兼容输入不虚构 attestation。新有效 replan 的验证仍沿用唯一 _validate_goal_intake。
++
++## 兼容性与迁移方案
++
++拒绝先前不正确接受的历史凭据重用；合法 replan 与 exact event replay 不变。回滚通过受保护 revert 恢复源码和 Root gitlink，不删除或重写原始历史证据。
++
++## 验证策略
++
++执行既有 execution policy 全测试，新增同 Goal A→B→A（有/无 verifier）及全新 C 正控制。独立 reviewer 用冻结输入/生产函数复验，不能依赖新测试 helper。既有 target_contracts synthetic receipt 测试增加 verifier false/exception/truthy-nonboolean 控制，不改生产授权语义。安全逻辑变更要求完整 tests/run_all.sh、strict validation、独立 Spec/Quality 与发布校验。
+diff --git a/docs/changes/20261117-goal-replan-replay/negative-results.md b/docs/changes/20261117-goal-replan-replay/negative-results.md
+new file mode 100644
+index 0000000..65ae159
+--- /dev/null
++++ b/docs/changes/20261117-goal-replan-replay/negative-results.md
+@@ -0,0 +1,15 @@
++# 负结果记录：20261117-goal-replan-replay
++
++## 已验证的负结果
++
++| 时间 | 假设/方案 | 验证方法 | 结果 | 不采用原因 |
++|---|---|---|---|---|
++| 2026-11-17 | 当前 attestation 比较足以防止历史重放 | 独立冻结 A→B→A | 旧 A 被再次接纳 | 新 event_id 不能证明凭据未消费 |
++| 2026-11-17 | 无 verifier 路径已发生实际授权绕过 | 原始无 verifier 控制 | gate=false，implementation floor 保持 | 不作真实宿主绕过声明 |
++
++## Evidence Index（命令级）
++
++| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
++|---|---|---|---|---|---|
++| rtk proxy python replay_frozen_probe.py BASELINE | 1 | 历史旧 A 被接纳；全新 C 正控制通过 | /workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/frozen-before.json | independent synthetic | requirements.md |
++| rtk proxy python original_probe.py | 0 | 原始三个观察已保存 | /workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/original-before.jsonl | independent synthetic | design.md |
+diff --git a/docs/changes/20261117-goal-replan-replay/proposal.md b/docs/changes/20261117-goal-replan-replay/proposal.md
+new file mode 100644
+index 0000000..ce5ae0a
+--- /dev/null
++++ b/docs/changes/20261117-goal-replan-replay/proposal.md
+@@ -0,0 +1,56 @@
++# 变更提案：20261117-goal-replan-replay
++
++## 背景
++在用户授权的全面优化中，独立 reviewer 从既有 canonical reducer 复现历史 replan 重放；原始输入及 before 结果已冻结。
++
++## 问题陈述（单问题）
++goal.updated 只比较当前 attestation，导致 A→B→A 在新 event_id 下被接纳。该问题是既有确定性历史消费检测缺口。
++
++## 目标
++拒绝已消费 intake attestation，同时保持全新有效 replan、事件幂等与保守 trust floor。
++
++## 非目标
++不添加宿主权限体系、adapter、持久总账或外部副作用执行；synthetic verifier 反例不证明真实宿主已被绕过。
++
++## 上下文充分性检查
++- [x] requirements.md 固定正负控制和证据限定。
++- [x] 已识别旧日志重放、兼容 intake 和事件幂等边界。
++- [x] 已冻结独立输入与生产函数复验命令。
++- [x] 实际宿主恢复场景继续由宿主验证。
++
++## Core/Optional 边界检查
++- [x] 属于通用核心能力（core）
++- 归属结论：修复既有 execution_policy reducer，不创建新权威。
++
++## 变更重复性检查
++现有测试覆盖同 event_id、错 Goal/摘要、旧 checkpoint 和 verifier 缺失；本次新增历史 attestation 装入新 event_id 的实质不同反例。
++
++## Breaking Change 检查
++- [x] 否：拒绝错误历史重用，合法新 replan 及既有输入/输出 schema 不变。
++
++## Spec 链路检查
++requirements.md 定义验收；design.md 约束局部集合与角色分离；tasks.md 绑定测试和独立冻结探针。
++
++## Canonical Change Contract
++
++| Requirement ID | Requirement | Operation | Target | Affected Surface | Acceptance ID | Acceptance Criterion | Task ID | Verification ID | Evidence Target |
++|---|---|---|---|---|---|---|---|---|---|
++| REQ-001 | 拒绝历史凭据重放 | MODIFIED | execution_policy/reducer.py | goal.updated | ACC-001 | A→B→A 新 event_id 被拒绝且不依赖 verifier | TASK-001 | VERIFY-001 | verify-report.md |
++| REQ-002 | 保持合法重规划 | MODIFIED | tests/test_execution_policy.py | existing reducer contract | ACC-002 | 新 C 接纳，事件幂等和保守 floor 保持 | TASK-001 | VERIFY-002 | verify-report.md |
++| REQ-003 | 保持信任拒绝 | MODIFIED | tests/test_target_contracts.sh | native trust verifier | ACC-003 | 拒绝、异常及 truthy 非 True 不取得信任 | TASK-002 | VERIFY-003 | verify-report.md |
++| REQ-004 | 原始反例与安全回归 | MODIFIED | change evidence | independent review | ACC-004 | 冻结输入复验、完整回归与独立审核通过 | TASK-003 | VERIFY-004 | verify-report.md |
++
++## 安装范围与依赖边界
++现有 core global-ready 资产，无新依赖；在 reducer 完整事件归约中检查历史，不改变实际宿主准入职责。
++
++## Prompt 回归证据计划
++本变更无 Prompt 改动；N/A 由 diff 与原始程序反例证明，不执行模型测量。before 原始输入不改，after 另存。
++
++## 收敛模式与退出条件
++execution。独立旧 A 拒绝、新 C 接纳、完整安全回归和 Spec/Quality 通过后收敛；真实宿主证明保持未认证。
++
++## 备选方案与取舍
++选择现有归约局部历史集合；拒绝禁用所有 mode change、相信新 event_id 或另建持久账本，避免破坏合法流程与权威边界。
++
++## 风险与回退
++旧错误日志会明确被拒绝；不得静默吞掉已重放的变更。受保护 revert 与 Root gitlink 回退可恢复源码，原始证据永久保留。
+diff --git a/docs/changes/20261117-goal-replan-replay/requirements.md b/docs/changes/20261117-goal-replan-replay/requirements.md
+new file mode 100644
+index 0000000..1fc6d6c
+--- /dev/null
++++ b/docs/changes/20261117-goal-replan-replay/requirements.md
+@@ -0,0 +1,20 @@
++# 需求：拒绝已消费的 Goal 重规划凭据重放
++
++## 问题与范围
++
++独立复核在 11.3.15 `5f113b8f5ae6f83662d41d99d0907026f4e44c9d` 复现：readonly replan A → implementation replan B → 将旧 A 装入新 event_id，现有 reducer 再次接纳并递增 intake_revision。只比较当前 attestation 无法证明凭据尚未消费。本变更修复同一 logical Goal 的历史消费检测，不新增宿主、adapter 或权威状态。
++
++## 验收
++
++- REQ-001 / ACC-001：已消费的历史 intake attestation 即使换外层 event_id，也不能再次改变该 Goal 的 canonical 状态；拒绝不依赖 verifier。原始冻结 A→B→A 反例修复前失败、修复后拒绝。
++- REQ-002 / ACC-002：真正全新且有效的 replan 仍可接纳；同 event_id 同 payload 幂等、冲突 payload 拒绝、错 Goal/错摘要拒绝及无 verifier 的保守 implementation floor 均保持。
++- REQ-003 / ACC-003：在既有摘要一致 synthetic native receipt 上，trust verifier 明确拒绝、抛异常、返回 truthy 非 True 均不能取得信任；生产实现若已正确则只补窄测试。
++- REQ-004 / ACC-004：独立 reviewer 原样复跑冻结反例、核对全新 replan 控制，并核验完整安全回归和当前源码 Spec/Quality；原始 RED 不覆盖。
++
++## 证据限定
++
++复现使用既有 synthetic unit-test managed verifier。默认无 verifier 路径仍保持 implementation floor，不能据此声称真实宿主权限被绕过。真实外部副作用去重、来源身份准入、旧租约和 crash/ACK 对账由实际宿主验证，本变更不赋予 native certification。
++
++## 原始冻结输入
++
++独立反例目录为 `/workspace/scratch/d417066aafa8/independent-review/c2-attestation-replay/`。`frozen-inputs.json` SHA-256 为 `1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60`，`replay_frozen_probe.py` 为 `b6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d`。复审须原样保留 before、输入和 verifier，候选结果另存。
+diff --git a/docs/changes/20261117-goal-replan-replay/state.yaml b/docs/changes/20261117-goal-replan-replay/state.yaml
+new file mode 100644
+index 0000000..1e0738d
+--- /dev/null
++++ b/docs/changes/20261117-goal-replan-replay/state.yaml
+@@ -0,0 +1,3 @@
++stage: applied
++owner: unknown
++updated_at: 2026-11-17T14:43:48Z
+diff --git a/docs/changes/20261117-goal-replan-replay/tasks.md b/docs/changes/20261117-goal-replan-replay/tasks.md
+new file mode 100644
+index 0000000..4c39ebb
+--- /dev/null
++++ b/docs/changes/20261117-goal-replan-replay/tasks.md
+@@ -0,0 +1,19 @@
++# 执行任务：20261117-goal-replan-replay
++
++- [x] 需求与设计冻结，独立原始反例保留。
++- [x] TASK-001：修复 reducer 历史消费检测与确定性回归；verify：execution policy 25 项通过，相关 Goal 40 项及 convergence 9 项通过，原 RED 保留。
++- [x] TASK-002：补充 native trust verifier 拒绝/异常/非布尔真值控制；verify：`bash tests/test_target_contracts.sh` 实际 exit 0。
++- [ ] TASK-003：原始冻结反例复验、完整回归和独立 Spec/Quality；verify：独立 `replay_frozen_probe.py`、`bash tests/run_all.sh`、strict validation 及 release check。
++
++## Ownership 与并行冲突检查
++
++- scope_write：audit_core 独占 src/agent_dev_kit/execution_policy/reducer.py、tests/test_execution_policy.py、tests/test_target_contracts.sh；不改需求/设计或冻结反例。
++- scope_read：execution_policy/contracts.py、现有调用方及独立 before 证据。
++- coordinator 管理 change evidence 和共享版本/发布文件；C1 文件独立，无生产写入冲突。reviewer 不修改实现。
++
++## 轻量工件与收敛结论
++
++- 需求梳理工件：requirements.md 与 proposal.md canonical contract。
++- task checklist 工件：本文件及 checklist.md。
++- 执行反馈/验收记录：verify-report.md 和独立冻结 before/after。
++- 当前 execution；原反例拒绝、新 replan 保持、完整测试及独立审查通过才完成。仅源码修复，不产生真实宿主认证。
+diff --git a/docs/changes/20261117-task-diagnostics/checklist.md b/docs/changes/20261117-task-diagnostics/checklist.md
+new file mode 100644
+index 0000000..af9a802
+--- /dev/null
++++ b/docs/changes/20261117-task-diagnostics/checklist.md
+@@ -0,0 +1,12 @@
++# 交付清单：20261117-task-diagnostics
++
++- [ ] 关键场景覆盖
++- [ ] 风险项评估完成
++- [ ] 回退方案可执行
++- [ ] 验证证据可追溯
++- [ ] Evidence Index 命令级字段完整（命令/退出码/结果摘要/证据路径/层级/关联工件）
++- [ ] Canonical Change Contract 追溯关系完整
++- [ ] 评审结果为 pass（无 blocker/major 未闭环）
++- [ ] Prompt before/after 对比证据
++- [ ] Skill Intake 归属与安装范围结论
++- [ ] 收敛结论或阻塞说明
+diff --git a/docs/changes/20261117-task-diagnostics/design.md b/docs/changes/20261117-task-diagnostics/design.md
+new file mode 100644
+index 0000000..04a462e
+--- /dev/null
++++ b/docs/changes/20261117-task-diagnostics/design.md
+@@ -0,0 +1,21 @@
++# 设计说明：20261117-task-diagnostics
++
++## 架构影响
++
++设计者为 coordinator 与 read-only `audit_core`；实现者使用独立代理，不修改本契约。既有 `trace_summary.py` 提供纯函数 `diagnose_trace_summary(value)`，首先使用唯一的 `validate_trace_summary`，投影有限固定 finding codes、事实位置、原状态及已有 evidence refs。所有失败和缺测项保留，不使用模型、网络、时间或随机值，不修改输入。
++
++既有 `evaluation_cli.py` 为 `eval import-task` 增加 `--diagnostics`。`import_task_evidence → read_task_evidence → _read_task_evidence → _import` 只增加默认 false 的 keyword 参数。生成既有 RunEvidence 后，使用同次已核验 `_Ledger` 补充实际 attempt 数、已记录 model-call 数和工具终态计数，以及 trace/events refs；仅显式请求时增加外层 `diagnostics`。`task_trials.py` 保持默认路径。
++
++## 数据与配置影响
++
++不新增 schema、持久状态、支持模块或依赖。Trace v2、RunEvidence、receipt、measurement、资格字段不变。诊断是现有报告的可选展示投影。导入器接线需保持 30000 bytes 模块预算；主体放在既有 trace_summary。严格 JSON、4 MiB 单文件、32 MiB 包、128 个文件、4096 个事件、no-follow 读取和 read-set/输出保护全部继承。
++
++计量 unavailable 保留原原因，不将估算视作实测；合法零值保留。工具重复次数不等于无新证据重复；墙钟不等于并行等待。已有 repository certification 的调用方过程字段仍由原合同判断，诊断不能自动填充它们。
++
++## 兼容性与迁移方案
++
++新增兼容 CLI 功能发布为 11.4.0，无调用方迁移要求。无 flag 路径保持原报告。导入成功不等于任务成功，exit code 语义不变。回滚使用受保护 revert，并将 Root gitlink 恢复到已验证的 11.3.15；不改历史证据。
++
++## 验证策略
++
++验收驱动扩展既有 test_trace_summary.py/test_task_evidence.py，覆盖 requirements 的反例、CLI、输入/输出保护及资格不升格。AAR Skill 只增强现有 reference 与发现路径，并按 test_skill_content_contract.py 的既有字节一致契约同步 templates/memory/after-action-review.md，运行方法/路由/预算静态验证，不声称模型效果。共享发布门要求完整回归、strict validation、export、release check，以及独立 Spec/Quality 复核。
+diff --git a/docs/changes/20261117-task-diagnostics/negative-results.md b/docs/changes/20261117-task-diagnostics/negative-results.md
+new file mode 100644
+index 0000000..fbfe633
+--- /dev/null
++++ b/docs/changes/20261117-task-diagnostics/negative-results.md
+@@ -0,0 +1,15 @@
++# 负结果记录：20261117-task-diagnostics
++
++## 已验证的负结果
++
++| 时间 | 假设/方案 | 验证方法 | 结果 | 不采用原因 |
++|---|---|---|---|---|
++| 2026-11-17 | 可复用本地 lessons 历史 | rg --files knowledge | 未发现 knowledge/L2-domain/lessons.md | 不虚构历史经验 |
++| 2026-11-17 | 当前环境可进行宿主认证 | 检查 ~/codex 与 knowledge-provider.sh | 宿主与知识入口不可用 | 仅交付源码和已实际验证材料 |
++
++## Evidence Index（命令级）
++
++| Command | Exit Code | Result Summary | Evidence Path | Layer | Related Artifact |
++|---|---|---|---|---|---|
++| rtk proxy rg --files knowledge | 0 | 目录存在但无 lessons.md | 本记录及仓库 knowledge/ | repository | requirements.md |
++| rtk proxy test -d ~/codex | 1 | 无实际宿主工作目录 | 本次环境观察 | environment | design.md |
+diff --git a/docs/changes/20261117-task-diagnostics/proposal.md b/docs/changes/20261117-task-diagnostics/proposal.md
+new file mode 100644
+index 0000000..f36b79f
+--- /dev/null
++++ b/docs/changes/20261117-task-diagnostics/proposal.md
+@@ -0,0 +1,57 @@
++# 变更提案：20261117-task-diagnostics
++
++## 背景
++用户要求完成 LoopForge 与同类方案审查后的优化。Root 固定来源与独立 owner 决策记录在 docs/changes/20261117-loopforge-adoption；只吸收适合 ADK 的最小增量，第三方源码不进入产品。原 reports 路径的收集与 CI 失败保留为该包的历史证据。
++
++## 问题陈述（单问题）
++既有 task/trace 事实已验证，但缺少一个明确按需、不会制造测量结论的诊断视图。接口勘察确认无需另建 schema 或 runtime。
++
++## 目标
++在既有 eval import-task 提供可选 --diagnostics，保留原始失败、缺测与证据引用，并供既有 AAR 按需使用。
++
++## 非目标
++不新增调度器、Goal、MCP、默认诊断、外部价格估算或模型调用，不宣称 native/runtime/Token 改善已经测量。
++
++## 上下文充分性检查
++- [x] 已明确输入/输出与接口契约：requirements.md。
++- [x] 已识别兼容、隐私、输入输出别名及模块大小风险。
++- [x] 已明确验证命令与通过标准：tasks.md。
++- [x] 宿主缺失已记录，源码工作不依赖宿主测量。
++
++## Core/Optional 边界检查
++- [x] 属于通用核心能力（core）
++- 归属结论：现有 typed core 的可选事实视图及既有 AAR reference，无新资产。
++
++## 变更重复性检查
++已检索 trace_summary、task_evidence、evaluation_cli、repository_evaluation 和 AAR。既有过程认证字段不由调用次数推断；本次只增加 task import 按需投影。
++
++## Breaking Change 检查
++- [x] 否：默认 false，旧报告/返回码/资格与数据格式保持。新增兼容 CLI 功能按 SemVer 发布 11.4.0。
++
++## Spec 链路检查
++requirements.md 冻结反例；design.md 冻结边界；tasks.md 标明独立实现、审查和可执行 verify。
++
++## Canonical Change Contract
++
++| Requirement ID | Requirement | Operation | Target | Affected Surface | Acceptance ID | Acceptance Criterion | Task ID | Verification ID | Evidence Target |
++|---|---|---|---|---|---|---|---|---|---|
++| REQ-001 | 显式按需诊断 | ADDED | eval import-task | CLI/import report | ACC-001 | 无 flag 原行为，失败导入和无效输入语义保持 | TASK-001 | VERIFY-001 | verify-report.md |
++| REQ-002 | 事实与缺测无损投影 | ADDED | trace_summary.py | diagnostics | ACC-002 | 保留全部失败与 unavailable，不推断浪费或节省 | TASK-001 | VERIFY-002 | verify-report.md |
++| REQ-003 | 复用既有核验边界 | MODIFIED | task_evidence.py | verified ledger | ACC-003 | 稳定纯投影、无额外读取、别名保护不变 | TASK-001 | VERIFY-003 | verify-report.md |
++| REQ-004 | 按需复盘引用 | MODIFIED | adk-after-action-review | existing references | ACC-004 | 有命令、来源和限制，方法静态验证通过 | TASK-002 | VERIFY-004 | verify-report.md |
++| REQ-005 | 受保护源码交付 | MODIFIED | release metadata | 11.4.0 | ACC-005 | 完整回归与独立审查，CI/release 当前提交核验 | TASK-003 | VERIFY-005 | verify-report.md |
++
++## 安装范围与依赖边界
++global-ready 的现有 ADK 资产，调用仅访问明确提供的任务包。不增加依赖和运行态安装；Root 只晋级源码 gitlink。
++
++## Prompt 回归证据计划
++同一 AAR 请求的 before/after 静态差异绑定 Git diff；保留既有 Skill method fixture。没有模型运行，效果为 not-measured；不得将静态验证升级成效果认证。
++
++## 收敛模式与退出条件
++execution。验收反例、完整回归、独立审核与当前发布证据齐备后收敛；宿主和效果缺测作为明确边界。
++
++## 备选方案与取舍
++选择现有 trace/task 导入的纯投影；不选新分析平台或扩展 repository certify，因为已有接口足以容纳事实且认证保持独立。
++
++## 风险与回退
++可选字段需保持默认兼容，计数不能形成推断标签，敏感原文不得回显。发现回归以受保护 revert 回滚，并将 Root 恢复到已核验 11.3.15 gitlink；历史证据保留。
+diff --git a/docs/changes/20261117-task-diagnostics/requirements.md b/docs/changes/20261117-task-diagnostics/requirements.md
+new file mode 100644
+index 0000000..3d8bc15
+--- /dev/null
++++ b/docs/changes/20261117-task-diagnostics/requirements.md
+@@ -0,0 +1,21 @@
++# 需求：按需诊断已验证任务证据
++
++## 目标与授权
++
++用户在 LoopForge 与同类方案审查后明确要求“按建议全部优化落地完成”。本变更只吸收事实优先、按需复盘这一增量，沿用 ADK 的 Trace v2、RunEvidence 与任务包导入边界。基线为 11.3.15，提交 `5f113b8f5ae6f83662d41d99d0907026f4e44c9d`。
++
++## 验收
++
++- REQ-001 / ACC-001：`eval import-task --diagnostics` 显式请求才向现有外层报告增加诊断；无参数报告及 RunEvidence、receipt、measurement、资格值不变。有效失败任务仍可成功导入；无效包仍脱敏拒绝。
++- REQ-002 / ACC-002：诊断只展示同次核验的事实、原状态、opaque evidence ref 和缺测原因。保留全部失败、未运行项、真实尝试数及工具终态计数；合法零值与 unavailable 区分。不得由调用数推断浪费、盲重试，由墙钟推断并行等待或节省。
++- REQ-003 / ACC-003：纯 Trace 投影可重复且不修改输入；task importer 复用已验证账本，不能新增读取或绕过输出别名保护。Trace 汇总中的 partial 不伪造精确失败次数。
++- REQ-004 / ACC-004：既有 AAR Skill 通过按需引用说明诊断用法、来源和限制，不增加默认提示预算、不新增 Skill。静态方法检查不冒充模型效果测量。
++- REQ-005 / ACC-005：兼容功能按 11.4.0 统一版本；完整源码回归、独立 Spec/Quality、受保护 CI、不可变发行和 Root source-only 晋级分别以实际回执验收，不提前授予产品资格。
++
++## 必须保留的反例
++
++50 次同工具成功调用无浪费判断；混合成功/失败保留 partial 和准确终态计数；多个 attempt 最终成功不推断盲重试；仅 first_pass_success=false 不虚构 attempt 数；产物通过不能覆盖过程失败；同名 guardrail 先失败后通过仍保留失败；验收 not-run 无终止事实时 outcome unavailable；明确 timeout 时保留 failed/runtime-timeout 和 not-run；缺失或估计计量保持原 unavailable reason；合法实测零值；多个 handoff 和 1000 ms 墙钟不推断并行收益；无 flag 原行为；重复投影稳定且输入不变；无效包和输出输入别名仍拒绝。
++
++## 非目标与资格
++
++不新增 schema、runtime、调度器、Goal、MCP、定时任务、每日预算、价格估算或模型调用；不复制第三方代码。保持 caller-observed、test-only、quality_evidence_eligible=false、release_authorized=false。宿主原生恢复和真实效果测量需实际宿主证据，不能由本变更获得。
+diff --git a/docs/changes/20261117-task-diagnostics/state.yaml b/docs/changes/20261117-task-diagnostics/state.yaml
+new file mode 100644
+index 0000000..32be903
+--- /dev/null
++++ b/docs/changes/20261117-task-diagnostics/state.yaml
+@@ -0,0 +1,3 @@
++stage: applied
++owner: unknown
++updated_at: 2026-11-17T14:43:47Z
+diff --git a/docs/changes/20261117-task-diagnostics/tasks.md b/docs/changes/20261117-task-diagnostics/tasks.md
+new file mode 100644
+index 0000000..3d77aa1
+--- /dev/null
++++ b/docs/changes/20261117-task-diagnostics/tasks.md
+@@ -0,0 +1,19 @@
++# 执行任务：20261117-task-diagnostics
++
++- [x] 需求确认与边界冻结：requirements.md/design.md。
++- [x] TASK-001：在既有 Trace/import/CLI 实现显式诊断及验收反例；verify：Trace 18、Task 37 项实际通过，原 RED 保留。
++- [x] TASK-002：增强既有 runbook 和 AAR 按需引用并同步既有模板；verify：Skill content 211、SOP 22 项实际通过；clean candidate strict 仍由 TASK-003 统一执行。
++- [ ] TASK-003：统一 11.4.0 元数据，完整回归、export、release check、独立 Spec/Quality、受保护发布和 Root 源码晋级；verify：`bash tests/run_all.sh`、`bash scripts/devkit.sh validate --strict`、`bash scripts/devkit.sh release check` 及当前提交 CI/Release 实际回执。
++
++## Ownership 与并行冲突检查
++
++- scope_write：独立 C1 实现者独占 trace_summary.py、task_evidence.py、evaluation_cli.py、两个对应测试及既有 runbook/AAR reference、与其字节一致的 templates/memory/after-action-review.md；不得修改 requirements/design。
++- scope_read：既有 Trace/RunEvidence/TaskEvidence、安全读取、repository certification 及来源审查。
++- coordinator 独占 change evidence、manifest、版本文件与共享发布配置；C2 实现者独占 reducer 与 execution-policy/target-contract 回归。共享文件不得并写。
++
++## 轻量工件与收敛结论
++
++- 需求梳理工件：requirements.md 与 proposal.md canonical contract。
++- task checklist 工件：本文件与 checklist.md。
++- 执行反馈/验收记录工件：verify-report.md 与 evidence 索引在真实运行后生成。
++- 当前为 execution；代码、完整测试、独立审查及源码发布回执齐备后收敛。当前无宿主及模型效果证据，保持 not-measured。
+diff --git a/docs/runbooks/task-evidence.md b/docs/runbooks/task-evidence.md
+index 12195f1..58615bc 100644
+--- a/docs/runbooks/task-evidence.md
++++ b/docs/runbooks/task-evidence.md
+@@ -129,6 +129,39 @@ bash scripts/devkit.sh eval import-task \
+ 直接把两个 run 拼进通用 `compare-trials`，不能证明它们具有相同初始工作区或干预条件。
+ 任务比较应走下一步的专用前置核查。
+ 
++### 按需查看诊断
++
++需要复盘已有任务包时，显式增加 `--diagnostics`：
++
++```bash
++bash scripts/devkit.sh eval import-task \
++  --input /absolute/path/to/recorded-run/observation.json \
++  --output /absolute/path/to/reports/run-1-diagnostics.json \
++  --diagnostics --summary-json
++```
++
++仅外层报告增加 `diagnostics`；无参数时报告保持原样。`run_evidence`、身份绑定、receipt、measurement
++及所有资格字段不变。有效失败任务仍返回 `status=imported`、exit 0；无效包仍脱敏拒绝、exit 2。
++诊断复用同次核验的 Trace 和事件账本，不读取其他文件；所有已读输入及其输出别名继续受保护。
++
++- `facts` 保留结果、失败模式、全部检查/工具/handoff 状态、计量和原始缺测原因。
++  `attempt_count` 是已核验的实际 attempt 数；`recorded_model_call_count` 仅表示账本已记录的模型调用数，
++  不证明采集完整，也不能把0次记录解释为零用量。`tool_outcome_counts` 按工具列出各原始终态的准确计数，
++  包括 `partial`、`not-available` 和合法零值；其含义是事件终态计数，不是失败根因统计。
++- `findings` 用固定 code、Trace 内 `location` 和原始 `fact` 定位非成功状态、全部失败/未运行检查、
++  blocker 及缺测，不裁决根因或效果。`evidence_refs` 绑定同一 `trace_ref` 与 `events_ref`；
++  检查自身的 opaque evidence ref 保留在事实中，不复制日志正文。
++- 同一 guardrail 先失败后通过时，既有汇总仍保留失败及其实际证据；所有重复观测由 `events_ref` 绑定。
++  最终产物通过不能覆盖过程失败。没有终止事实的 `not-run` 验收保持 outcome unavailable；明确 timeout
++  才保留 failed / runtime-timeout。缺失或估算计量仍是原来的 unavailable，不用实测零值替代。
++- 50次同工具成功调用不等于浪费；多次 attempt 最终成功不等于盲重试；多个 handoff 和1000 ms墙钟
++  不证明并行等待或节省。仅有 Trace 时也不能从 `first_pass_success=false` 猜测 attempt 数，或从
++  `partial` 猜测精确失败次数。纯投影 API 与 finding code 见 [Trace 说明](trace-summary-emitter.md#按需诊断纯投影)。
++
++诊断用于既有 AAR 的按需证据阅读，不改变 repository certification 的过程字段，不提供新的运行态、
++权限、模型评判或认证能力。静态测试与方法文档通过后，真实模型效果仍为 `not-measured`；
++需要效果结论时使用下节已冻结的完整配对流程和真实观测。
++
+ ## 5. 冻结并比较完整分组
+ 
+ `schema_version=adk-task-trials/v1` 复用已有 `effect-trials-v1` 的 `plan`，另包含以下字段：
+diff --git a/docs/runbooks/trace-summary-emitter.md b/docs/runbooks/trace-summary-emitter.md
+index ccd51d9..879aec9 100644
+--- a/docs/runbooks/trace-summary-emitter.md
++++ b/docs/runbooks/trace-summary-emitter.md
+@@ -54,3 +54,43 @@ summary = emit_trace_summary_v2(facts)
+ - API 可用不等于 target 已自动集成。runtime adapter 只有完成 native conformance 后，才能声明自动
+   per-run emission。
+ - 持久化、retention、Evidence Graph 关联和外部 exporter 由调用方的已审查边界负责，本 API 不扩权。
++
++## 按需诊断纯投影
++
++`agent_dev_kit.trace_summary.diagnose_trace_summary(value)` 先调用同一 `validate_trace_summary`，
++再返回独立的 `facts` 与 `findings`。它不修改输入，同一输入重复调用结果相同；不读取任务包、
++网络、时间或随机数，不调用模型、不估价、不写状态。不接受未经校验的额外字段或原始日志正文。
++
++```python
++from agent_dev_kit.trace_summary import diagnose_trace_summary
++
++diagnostics = diagnose_trace_summary(summary)
++```
++
++`facts` 保留原 outcome、failure_pattern、first_pass_success、全部 tools/handoffs/guardrails/verification、
++Token/cost、elapsed_ms、human_interventions、wrong_skill、abstained 和 blockers。缺测值与 reason
++原样保留；合法实测零值不变。Trace 没有记录的 `attempt_count`、`recorded_model_call_count`、
++`tool_outcome_counts` 明确为 `not-available / not-recorded-in-trace-summary`。
++成功与失败混合的工具 `partial` 不提供精确失败次数；`first_pass_success=false` 不提供重试次数。
++
++每条 finding 包含 `code`、指向原 Trace 的 `location` 和独立复制的原 `fact`。
++重复名称不合并，全部匹配项按原数组位置保留；检查的已有 opaque `evidence_ref` 随事实保留。
++
++| Code | 记录条件 |
++|---|---|
++| `outcome-status` | outcome 不是 succeeded，包括原始 not-available 原因 |
++| `metric-unavailable` | Token 或 cost 明确 not-available |
++| `tool-outcome` | 工具汇总为 partial、failed、blocked、cancelled 或 not-available |
++| `handoff-outcome` | handoff 为 failed、blocked 或 cancelled |
++| `guardrail-failed` | guardrail 为 failed |
++| `verification-status` | 每个 failed 或 not-run 检查 |
++| `blocker` | 每个已有 blocker |
++| `failure-pattern` | 已有 failure_pattern 不是 none |
++| `wrong-skill` | 已有 wrong_skill 为 true |
++
++finding 是事实索引，不是新的成功裁决、风险分数或因果分析。重复调用数不能证明浪费或盲重试，
++墙钟与 handoff 数不能证明并行等待、节省或模型效果。无需关注的项目仍可在 `facts` 与原 Trace 回读。
++
++只有 [task import 的显式 `--diagnostics`](task-evidence.md#按需查看诊断) 会用同次已核验账本补充
++三个计数字段，并加上已有 trace/events refs；它不改变 RunEvidence 或资格值。现有任务比较调用
++仍采用默认路径，不自动生成诊断。
+diff --git a/manifest.json b/manifest.json
+index f86197a..e60ad93 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.15",
++  "version": "11.4.0",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index 0da1e8b..a36d546 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.3.15",
++  "campaign_id": "software-m5-11.4.0",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index a468730..0fa4b78 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.3.15"
++version = "11.4.0"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/skills/adk-after-action-review/SKILL.md b/skills/adk-after-action-review/SKILL.md
+index cec7d4b..4af0c20 100644
+--- a/skills/adk-after-action-review/SKILL.md
++++ b/skills/adk-after-action-review/SKILL.md
+@@ -28,7 +28,7 @@ constraints:
+ 复盘实际任务，提炼能减少下次返工的经验；普通 AAR 与长期规则/Skill 晋级分离，避免把一次性噪声包装成长期资产。
+ 
+ ## Depth
+-- **lite（默认）**：目标、结果与证据、遇到的失败/返工、下一次有用的做法、剩余风险。没有可复用经验则 `memory_candidates: []`。
++- **lite（默认）**：目标、结果与证据、遇到的失败/返工、下一次有用的做法、剩余风险。无可复用经验则 `memory_candidates: []`。
+ - **standard**：重复出现的技术问题，补复现条件、例外和复验信号。
+ - **promotion**：用户或正式交付流程明确要求沉淀到长周期规则、Skill、AGENTS 或 memory 时，才使用 `Codify Decision` 和完整审查合同。此模式的证据、owner、权限及回退不能简化。
+ 
+@@ -41,7 +41,7 @@ constraints:
+ 6. 生产事故分析交给 `adk-incident-rca-report`，本 Skill 复用其结论不生成第二份 RCA。
+ 
+ ## References (only on demand)
+-- 简要复盘：`references/after-action-review.md`
++- 复盘/诊断：`references/after-action-review.md`
+ - 候选存储：`references/memory-candidate.md`，与 `templates/memory/memory-candidate.md` 语义一致
+ - 长期资产晋级：`references/codify-decision.md`，正式执行使用原有 `templates/governance/codify-decision.md` 合同
+ 
+diff --git a/skills/adk-after-action-review/references/after-action-review.md b/skills/adk-after-action-review/references/after-action-review.md
+index 33c0825..2ee16e7 100644
+--- a/skills/adk-after-action-review/references/after-action-review.md
++++ b/skills/adk-after-action-review/references/after-action-review.md
+@@ -1,5 +1,15 @@
+ # After Action Review
+ 
++纯 Skill 缺 ADK 环境/包时用现有证据。
++
++```bash
++bash scripts/devkit.sh eval import-task --input run.json --diagnostics --summary-json
++```
++
++据 evidence_refs 回读；保留失败/not-run；imported 非任务成功。
++缺测非0；调用数非浪费/盲重试，墙钟非等待/收益。
++不升格资格；无实测 not-measured。详见 docs/runbooks/task-evidence.md。
++
+ task:
+   goal:
+   scope:
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index cf0524f..721f453 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.3.15"
++__version__ = "11.4.0"
+diff --git a/src/agent_dev_kit/evaluation_cli.py b/src/agent_dev_kit/evaluation_cli.py
+index 3b29c44..0f252a1 100644
+--- a/src/agent_dev_kit/evaluation_cli.py
++++ b/src/agent_dev_kit/evaluation_cli.py
+@@ -57,6 +57,7 @@ def main(argv: Sequence[str] | None = None) -> int:
+     trials.add_argument("--output")
+     trials.add_argument("--summary-json", action="store_true")
+     task_import = sub.add_parser("import-task", help="Import bounded local task observations without execution")
++    task_import.add_argument("--diagnostics", action="store_true", help="Include a verified-fact diagnostic view")
+     task_import.add_argument("--input", required=True)
+     task_import.add_argument("--output")
+     task_import.add_argument("--summary-json", action="store_true")
+@@ -145,7 +146,8 @@ def main(argv: Sequence[str] | None = None) -> int:
+         try:
+             if args.action == "import-task":
+                 value = import_task_evidence(Path(args.input), _manifest(),
+-                                             output_path=Path(args.output) if args.output else None)
++                                             output_path=Path(args.output) if args.output else None,
++                                             diagnostics=args.diagnostics)
+             elif args.action == "compare-task-trials":
+                 value = compare_task_trials(Path(args.input), _manifest(),
+                                             output_path=Path(args.output) if args.output else None)
+diff --git a/src/agent_dev_kit/execution_policy/reducer.py b/src/agent_dev_kit/execution_policy/reducer.py
+index 3446508..65659cd 100644
+--- a/src/agent_dev_kit/execution_policy/reducer.py
++++ b/src/agent_dev_kit/execution_policy/reducer.py
+@@ -146,6 +146,8 @@ def _reset_goal_state(state: dict[str, Any], payload: Mapping[str, Any], at: dat
+ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
+     state: dict[str, Any] | None = None
+     seen: dict[str, str] = {}
++    # Digests bind goal_id; retain consumption across goal resets in this history.
++    consumed_intakes: set[str] = set()
+     last_at: datetime | None = None
+ 
+     for raw in events:
+@@ -174,6 +176,11 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
+             if goal["status"] == "active":
+                 raise ExecutionPolicyError("cannot start a second active goal")
+             _reset_goal_state(state, payload, at)
++            attestation = state["goal"]["intake_attestation_sha256"]
++            if attestation is not None:
++                if attestation in consumed_intakes:
++                    raise ExecutionPolicyError("goal intake attestation has already been consumed")
++                consumed_intakes.add(attestation)
+         elif kind == "goal.updated":
+             allowed = {
+                 "open_items_count", "token_budget", "time_budget_seconds",
+@@ -194,8 +201,9 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
+                     payload.get("intake"), event_at=at, expected_kind="goal-replan",
+                     expected_goal_id=str(goal["goal_id"]),
+                 )
+-                if intake["attestation_sha256"] == goal.get("intake_attestation_sha256"):
++                if intake["attestation_sha256"] in consumed_intakes:
+                     raise ExecutionPolicyError("goal replan must carry a new intake attestation")
++                consumed_intakes.add(intake["attestation_sha256"])
+                 goal["task_mode"] = intake["task_mode"]
+                 goal["artifact_mode"] = intake["artifact_mode"]
+                 goal["request_sha256"] = intake["request_sha256"]
+diff --git a/src/agent_dev_kit/task_evidence.py b/src/agent_dev_kit/task_evidence.py
+index 35f16f6..31b20fc 100644
+--- a/src/agent_dev_kit/task_evidence.py
++++ b/src/agent_dev_kit/task_evidence.py
+@@ -29,7 +29,7 @@ from .run_evidence import RunEvidenceObservation, emit_run_evidence
+ from .strict_json import loads
+ from .trace_summary import (
+     CostFact, GuardrailFact, HandoffFact, MetricUnavailable, OutcomeFact,
+-    TokenUsageFact, ToolUseFact, TraceRunFacts, VerificationFact,
++    TokenUsageFact, ToolUseFact, TraceRunFacts, VerificationFact, diagnose_trace_summary,
+ )
+ 
+ MAX_FILE_BYTES = 4 * 1024 * 1024
+@@ -365,7 +365,8 @@ def _acceptance(value: Any, package: _Package, run: Mapping[str, Any],
+     return status, grader
+ 
+ 
+-def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any]) -> dict[str, Any]:
++def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any], *,
++            diagnostics: bool = False) -> dict[str, Any]:
+     raw = package.read(package.name)
+     data = _object(loads(raw), {"schema_version", "provenance", "run", "input_snapshot", "workspace_snapshot",
+                                "events", "acceptance", "artifacts", "skill_exposure"}, "observation")
+@@ -447,7 +448,7 @@ def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any])
+         failure_pattern=failure_pattern, next_goal_ref=None, token_usage=token_usage, cost=cost, outcome=outcome,
+     )
+     result = emit_run_evidence(RunEvidenceObservation(facts, finished), manifest, contract)
+-    return {
++    report = {
+         "schema_version": "adk-task-evidence-import/v1", "status": "imported", "provenance": provenance,
+         "acceptance_status": acceptance_status,
+         "trust": "caller-observed", "evidence_scope": "test-only", "quality_evidence_eligible": False,
+@@ -460,6 +461,18 @@ def _import(package: _Package, manifest: Manifest, contract: Mapping[str, Any])
+         "assigned_exposure": {"target_skill": target, "expected": expected, "content_sha256": skill_ref[4:]},
+         "run_evidence": result,
+     }
++    if diagnostics:
++        diagnostic = diagnose_trace_summary(result["trace_summary"])
++        diagnostic["facts"].update(
++            attempt_count=len(ledger.attempts), recorded_model_call_count=len(ledger.model_ids),
++            tool_outcome_counts={
++                name: {status: results.count(status) for status in sorted(_TOOL_OUTCOMES)}
++                for name, results in sorted(ledger.tools.items())
++            },
++        )
++        diagnostic["evidence_refs"] = {"trace_ref": result["trace_ref"], "events_ref": events_ref}
++        report["diagnostics"] = diagnostic
++    return report
+ 
+ 
+ @dataclass(frozen=True)
+@@ -471,18 +484,18 @@ class ImportedTaskEvidence:
+     bytes_read: int
+ 
+ 
+-def read_task_evidence(input_path: Path, manifest: Manifest) -> ImportedTaskEvidence:
++def read_task_evidence(input_path: Path, manifest: Manifest, *, diagnostics: bool = False) -> ImportedTaskEvidence:
+     """Read a local package without scanning, writing, executing or networking."""
+     contract = load_contract(manifest.root / "manifests/agent_value_contracts.json")
+-    return _read_task_evidence(input_path, manifest, contract)
++    return _read_task_evidence(input_path, manifest, contract, diagnostics=diagnostics)
+ 
+ 
+ def _read_task_evidence(input_path: Path, manifest: Manifest,
+-                        contract: Mapping[str, Any]) -> ImportedTaskEvidence:
++                        contract: Mapping[str, Any], *, diagnostics: bool = False) -> ImportedTaskEvidence:
+     """Reuse one caller-validated snapshot only within a comparison invocation."""
+     package = _Package(input_path)
+     try:
+-        report = _import(package, manifest, contract)
++        report = _import(package, manifest, contract, diagnostics=diagnostics)
+         return ImportedTaskEvidence(report, tuple(package.directory / name for name in package.cache), package.total)
+     finally:
+         package.close()
+@@ -498,7 +511,8 @@ def publish_task_report(report: dict[str, Any], output_path: Path, inputs: tuple
+     write_texts_atomic([(output_path, encode_json_document(report, "task evidence report"))])
+ 
+ 
+-def import_task_evidence(input_path: Path, manifest: Manifest, *, output_path: Path | None = None) -> dict[str, Any]:
++def import_task_evidence(input_path: Path, manifest: Manifest, *, output_path: Path | None = None,
++                         diagnostics: bool = False) -> dict[str, Any]:
+     """Import one local package, optionally publishing a separate safe report.
+ 
+     All required process-counter coverage must be explicit. Partial model
+@@ -507,7 +521,7 @@ def import_task_evidence(input_path: Path, manifest: Manifest, *, output_path: P
+     unchanged composition accepted by compare-trials. No asset receipts or
+     production qualification are issued.
+     """
+-    imported = read_task_evidence(input_path, manifest)
++    imported = read_task_evidence(input_path, manifest, diagnostics=diagnostics)
+     if output_path is not None:
+         publish_task_report(imported.report, output_path, imported.inputs + (
+             manifest.root / "manifest.json", manifest.root / "manifests/agent_value_contracts.json",
+diff --git a/src/agent_dev_kit/trace_summary.py b/src/agent_dev_kit/trace_summary.py
+index 769bcb0..18b90a5 100644
+--- a/src/agent_dev_kit/trace_summary.py
++++ b/src/agent_dev_kit/trace_summary.py
+@@ -4,6 +4,7 @@ from __future__ import annotations
+ 
+ import json
+ import math
++from copy import deepcopy
+ from dataclasses import dataclass
+ from importlib import resources
+ from functools import lru_cache
+@@ -353,3 +354,48 @@ def validate_trace_summary(
+             raise ManifestError("trace_summary_invalid: first_pass_success requires passed verification evidence")
+ 
+     return value
++
++
++def diagnose_trace_summary(value: Any) -> dict[str, Any]:
++    """Project validated facts for an explicit review, without causal inference.
++
++    Finding locations refer to the input Trace v2; their facts retain original
++    statuses and opaque evidence references. Counts absent from the summary
++    stay unavailable, including exact terminal counts for a partial tool
++    aggregate. Neither first-pass failure, repeated calls nor wall time proves
++    blind retries, waste, parallel waiting or savings. No input is modified.
++    """
++    summary = validate_trace_summary(value)
++    facts = {name: deepcopy(summary[name]) for name in (
++        "outcome", "failure_pattern", "first_pass_success", "tool_calls", "tools_used",
++        "handoffs", "guardrails", "verification", "token_usage", "cost", "elapsed_ms",
++        "human_interventions", "wrong_skill", "abstained", "blockers",
++    )}
++    for name in ("attempt_count", "recorded_model_call_count", "tool_outcome_counts"):
++        facts[name] = {"status": "not-available", "reason": "not-recorded-in-trace-summary"}
++    findings: list[dict[str, Any]] = []
++
++    def record(code: str, location: str, fact: Any) -> None:
++        findings.append({"code": code, "location": location, "fact": deepcopy(fact)})
++
++    if summary["outcome"]["status"] != "succeeded":
++        record("outcome-status", "/outcome", summary["outcome"])
++    for name in ("token_usage", "cost"):
++        if summary[name].get("status") == "not-available":
++            record("metric-unavailable", "/" + name, summary[name])
++    for name, state, statuses, code in (
++        ("tools_used", "outcome", {"partial", "failed", "blocked", "cancelled", "not-available"}, "tool-outcome"),
++        ("handoffs", "outcome", {"failed", "blocked", "cancelled"}, "handoff-outcome"),
++        ("guardrails", "status", {"failed"}, "guardrail-failed"),
++        ("verification", "status", {"failed", "not-run"}, "verification-status"),
++    ):
++        for index, item in enumerate(summary[name]):
++            if item[state] in statuses:
++                record(code, f"/{name}/{index}", item)
++    for index, blocker in enumerate(summary["blockers"]):
++        record("blocker", f"/blockers/{index}", blocker)
++    if summary["failure_pattern"] != "none":
++        record("failure-pattern", "/failure_pattern", summary["failure_pattern"])
++    if summary["wrong_skill"]:
++        record("wrong-skill", "/wrong_skill", True)
++    return {"facts": facts, "findings": findings}
+diff --git a/templates/memory/after-action-review.md b/templates/memory/after-action-review.md
+index 33c0825..2ee16e7 100644
+--- a/templates/memory/after-action-review.md
++++ b/templates/memory/after-action-review.md
+@@ -1,5 +1,15 @@
+ # After Action Review
+ 
++纯 Skill 缺 ADK 环境/包时用现有证据。
++
++```bash
++bash scripts/devkit.sh eval import-task --input run.json --diagnostics --summary-json
++```
++
++据 evidence_refs 回读；保留失败/not-run；imported 非任务成功。
++缺测非0；调用数非浪费/盲重试，墙钟非等待/收益。
++不升格资格；无实测 not-measured。详见 docs/runbooks/task-evidence.md。
++
+ task:
+   goal:
+   scope:
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index cc3b6a8..1677e4a 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.3.15",
++    "planned_release": "v11.4.0",
+     "source_sha": null
+   },
+   "case_groups": {
+diff --git a/tests/test_execution_policy.py b/tests/test_execution_policy.py
+index cbc17e9..a2b9a6e 100644
+--- a/tests/test_execution_policy.py
++++ b/tests/test_execution_policy.py
+@@ -148,6 +148,14 @@ def goal_started_v2(task_mode: str, artifact_mode: str, index: int = 1) -> dict:
+     return value
+ 
+ 
++def goal_replan(index: int, mode: str, decision_id: str, *, minute: int | None = None) -> dict:
++    minute = index if minute is None else minute
++    return event(index, "goal.updated", {
++        "intake": goal_intake(mode, mode, kind="goal-replan", decision_id=decision_id, minute=minute),
++        "mode_change_reason": "replan",
++    }, minute=minute)
++
++
+ def usage(index: int, total: int, last_input: int = 100, window: int = 1000) -> dict:
+     return event(index, "usage.snapshot", {
+         "cwd_hash": "a" * 64,
+@@ -685,6 +693,102 @@ class ExecutionPolicyTest(unittest.TestCase):
+         with self.assertRaisesRegex(ExecutionPolicyError, "provenance kind must be goal-replan"):
+             reduce_events(invalid_replan)
+ 
++    def test_historical_replan_attestation_cannot_use_a_new_event_id(self) -> None:
++        events = [goal_started(), goal_replan(2, "readonly", "replan-a"),
++                  goal_replan(3, "implementation", "replan-b")]
++        replay = event(4, "goal.updated", copy.deepcopy(events[1]["payload"]))
++        frozen = copy.deepcopy(events + [replay])
++        self.assertEqual("implementation", reduce_events(events)["goal"]["task_mode"])
++        for verifier in (None, managed_mode_verifier):
++            with self.subTest(managed_verifier=verifier is not None):
++                with self.assertRaisesRegex(ExecutionPolicyError, "attestation"):
++                    evaluate(reduce_events(events + [replay]), policy_v2(), gate_event="final",
++                             mode_authority_verifier=verifier, as_of=AS_OF)
++        self.assertEqual(frozen, events + [replay])
++
++    def test_fresh_replan_preserves_managed_mode_and_unmanaged_floor(self) -> None:
++        events = completed_events_without_artifacts("implementation", "implementation")
++        events[1:1] = [goal_replan(20, "readonly", "replan-a", minute=1),
++                       goal_replan(21, "implementation", "replan-b", minute=1)]
++        latest = reduce_events(events)
++        self.assertEqual(3, latest["goal"]["intake_revision"])
++        self.assertFalse(evaluate(latest, policy_v2(), gate_event="final",
++                                  mode_authority_verifier=managed_mode_verifier,
++                                  as_of=AS_OF)["gate_allowed"])
++        events.insert(3, goal_replan(22, "readonly", "replan-c", minute=1))
++        state = reduce_events(events)
++        self.assertEqual(4, state["goal"]["intake_revision"])
++        self.assertEqual("replan-c", state["goal"]["intake_provenance"]["decision_id"])
++        self.assertEqual(state, reduce_events(iter(events)))
++        for verifier, artifact_mode, allowed in (
++            (managed_mode_verifier, "readonly", True), (None, "implementation", False),
++        ):
++            with self.subTest(managed_verifier=verifier is not None):
++                decision = evaluate(state, policy_v2(), gate_event="final",
++                                    mode_authority_verifier=verifier, as_of=AS_OF)
++                self.assertEqual(artifact_mode, decision["effective_artifact_mode"])
++                self.assertIs(allowed, decision["gate_allowed"])
++                self.assertIs(allowed, decision["completion_allowed"])
++                self.assertEqual([] if allowed else ["build", "repo"], decision["missing_artifacts"])
++
++    def test_replan_exact_event_replay_precedes_attestation_consumption(self) -> None:
++        events = [goal_started(), goal_replan(2, "readonly", "replan-a"),
++                  goal_replan(3, "implementation", "replan-b")]
++        state = reduce_events(events)
++        self.assertEqual(state, reduce_events(events + [copy.deepcopy(events[1])]))
++        conflict = copy.deepcopy(events[1])
++        conflict["payload"]["open_items_count"] = 0
++        with self.assertRaisesRegex(ExecutionPolicyError, "duplicate event_id has a different payload"):
++            reduce_events(events + [conflict])
++
++    def test_goal_restart_does_not_clear_attestation_consumption(self) -> None:
++        start = goal_started()
++        duplicate_start = event(3, "goal.started", copy.deepcopy(start["payload"]))
++        with self.assertRaisesRegex(ExecutionPolicyError, "attestation"):
++            reduce_events([start, event(2, "goal.completed", {}), duplicate_start])
++
++        fresh_start = goal_started(4)
++        fresh_start["payload"]["intake"] = goal_intake(
++            "implementation", "implementation", decision_id="route-2", minute=4,
++        )
++        events = [start, goal_replan(2, "readonly", "replan-a"),
++                  event(3, "goal.completed", {}), fresh_start]
++        self.assertEqual("route-2", reduce_events(events)["goal"]["intake_provenance"]["decision_id"])
++        replay = event(5, "goal.updated", copy.deepcopy(events[1]["payload"]))
++        with self.assertRaisesRegex(ExecutionPolicyError, "attestation"):
++            reduce_events(events + [replay])
++
++    def test_distinct_goal_and_legacy_intakes_remain_valid(self) -> None:
++        other = goal_started(3)
++        other["payload"]["goal_id"] = "goal-other"
++        other["payload"]["intake"] = goal_intake("implementation", "implementation", goal_id="goal-other")
++        state = reduce_events([goal_started(), event(2, "goal.completed", {}), other])
++        self.assertEqual("goal-other", state["goal"]["goal_id"])
++        self.assertEqual(1, state["goal"]["intake_revision"])
++
++        legacy = goal_started()
++        del legacy["payload"]["intake"]
++        events = [legacy, event(2, "goal.completed", {}),
++                  event(3, "goal.started", copy.deepcopy(legacy["payload"]))]
++        state = reduce_events(events)
++        self.assertIsNone(state["goal"]["intake_attestation_sha256"])
++        self.assertEqual(0, state["goal"]["intake_revision"])
++        state = reduce_events(events + [goal_replan(4, "readonly", "first-attested-replan")])
++        self.assertEqual(1, state["goal"]["intake_revision"])
++
++    def test_replan_still_validates_goal_and_attestation_digest(self) -> None:
++        wrong_goal = goal_replan(2, "readonly", "replan-a")
++        wrong_goal["payload"]["intake"] = goal_intake(
++            "readonly", "readonly", kind="goal-replan", decision_id="replan-a", minute=2,
++            goal_id="goal-other",
++        )
++        bad_digest = goal_replan(2, "readonly", "replan-a")
++        bad_digest["payload"]["intake"]["attestation_sha256"] = "f" * 64
++        for invalid, reason in ((wrong_goal, "goal_id does not match"), (bad_digest, "digest mismatch")):
++            with self.subTest(reason=reason):
++                with self.assertRaisesRegex(ExecutionPolicyError, reason):
++                    reduce_events([goal_started(), invalid])
++
+     def test_v1_policy_is_rejected_and_v2_json_schemas_validate(self) -> None:
+         old_policy = {
+             "schema_version": "runtime_control.policy/v1",
+diff --git a/tests/test_target_contracts.sh b/tests/test_target_contracts.sh
+index 542e5b0..f10d8b7 100644
+--- a/tests/test_target_contracts.sh
++++ b/tests/test_target_contracts.sh
+@@ -223,6 +223,35 @@ try:
+         manifest, "claude-code", adapter, contract, trusted_verifier
+     )
+ 
++    for response in (False, RuntimeError("synthetic verifier failure"), 1, "verified", {"verified": True}):
++        verifier_calls = []
++
++        def rejecting_verifier(value, policy):
++            assert value == receipt, "verifier must receive the same valid synthetic receipt"
++            assert policy == adapter["conformance_trust_policy"]
++            verifier_calls.append(value["receipt_id"])
++            if isinstance(response, Exception):
++                raise response
++            return response
++
++        try:
++            _validate_native_conformance_evidence(
++                manifest, "claude-code", adapter, contract, rejecting_verifier
++            )
++        except ManifestError as exc:
++            if isinstance(response, Exception):
++                assert "native trust verifier failed" in str(exc), exc
++                assert exc.__cause__ is response
++            else:
++                assert "native receipt was not verified" in str(exc), exc
++        else:
++            raise AssertionError("non-True verifier response was trusted: {!r}".format(response))
++        assert verifier_calls == [receipt["receipt_id"]], verifier_calls
++
++    _validate_native_conformance_evidence(
++        manifest, "claude-code", adapter, contract, trusted_verifier
++    )
++
+     missing = copy.deepcopy(adapter)
+     missing["conformance"]["evidence"][0]["path"] = "tests/fixtures/missing-native.json"
+     try:
+diff --git a/tests/test_task_evidence.py b/tests/test_task_evidence.py
+index 29c7e26..6fe1fa7 100644
+--- a/tests/test_task_evidence.py
++++ b/tests/test_task_evidence.py
+@@ -18,7 +18,7 @@ from agent_dev_kit.agent_value_contracts import load_contract
+ from agent_dev_kit.effect_trials import compare_effect_trials
+ from agent_dev_kit.model import Manifest, ManifestError, sha256_bytes
+ from agent_dev_kit.run_evidence import validate_run_evidence
+-from agent_dev_kit.task_evidence import import_task_evidence
++from agent_dev_kit.task_evidence import _Package, import_task_evidence, read_task_evidence
+ 
+ from test_effect_trials import document, rebind
+ 
+@@ -108,6 +108,10 @@ class TaskEvidenceTest(unittest.TestCase):
+         self.persist()
+         return import_task_evidence(self.path, MANIFEST)
+ 
++    def diagnose_data(self):
++        self.persist()
++        return import_task_evidence(self.path, MANIFEST, diagnostics=True)
++
+     def process_observations(self, statuses):
+         template = next(item for item in self.events["events"] if item["kind"] == "guardrail")
+         self.events["events"] = [item for item in self.events["events"] if item["kind"] != "guardrail"]
+@@ -150,6 +154,229 @@ class TaskEvidenceTest(unittest.TestCase):
+         self.assertNotIn("copy the expected", json.dumps(result))
+         self.assertNotIn(str(self.root), json.dumps(result))
+ 
++    def test_diagnostics_are_opt_in_and_reuse_exactly_the_same_verified_reads(self):
++        self.persist()
++        reads = []
++        original_read = _Package.read
++
++        def observed_read(package, path):
++            reads.append(path)
++            return original_read(package, path)
++
++        with patch.object(_Package, "read", observed_read):
++            plain = read_task_evidence(self.path, MANIFEST)
++            plain_reads = tuple(reads)
++            reads.clear()
++            diagnosed = read_task_evidence(self.path, MANIFEST, diagnostics=True)
++        self.assertEqual(tuple(reads), plain_reads)
++        self.assertEqual(diagnosed.inputs, plain.inputs)
++        self.assertEqual(diagnosed.bytes_read, plain.bytes_read)
++        self.assertNotIn("diagnostics", plain.report)
++        diagnostic = diagnosed.report.pop("diagnostics")
++        self.assertEqual(diagnosed.report, plain.report)
++        self.assertEqual(diagnostic, self.diagnose_data()["diagnostics"])
++        self.assertEqual(diagnostic["facts"]["attempt_count"], 1)
++        self.assertEqual(diagnostic["facts"]["recorded_model_call_count"], 1)
++        self.assertEqual(diagnostic["evidence_refs"], {
++            "trace_ref": plain.report["run_evidence"]["trace_ref"],
++            "events_ref": plain.report["bindings"]["events_ref"],
++        })
++        self.assertEqual(plain.report["run_evidence"]["receipts"], [])
++        self.assertIsNone(plain.report["run_evidence"]["measurement"])
++        self.assertFalse(plain.report["quality_evidence_eligible"])
++        self.assertFalse(plain.report["release_authorized"])
++        self.assertNotIn(str(self.root), json.dumps(diagnostic))
++
++    def test_diagnostics_fifty_successful_calls_are_counts_without_waste_judgment(self):
++        for index in range(2, 51):
++            self.events["events"].append({
++                "event_id": f"tool-{index}", "kind": "tool-call", "attempt_id": "attempt-1",
++                "tool": "read-artifact", "outcome": "succeeded",
++            })
++        diagnostic = self.diagnose_data()["diagnostics"]
++        self.assertEqual(diagnostic["facts"]["tool_calls"], 50)
++        self.assertEqual(diagnostic["facts"]["tool_outcome_counts"], {"read-artifact": {
++            "succeeded": 50, "failed": 0, "partial": 0, "blocked": 0, "cancelled": 0, "not-available": 0,
++        }})
++        self.assertEqual(diagnostic["findings"], [])
++        self.assertNotIn("waste", json.dumps(diagnostic))
++
++    def test_diagnostics_mixed_terminal_counts_and_successful_attempts_are_not_inferred(self):
++        self.events["events"].append({"event_id": "attempt-2", "kind": "attempt", "attempt_id": "attempt-2"})
++        outcomes = ("failed", "failed", "succeeded", "blocked", "cancelled", "partial", "not-available")
++        for index, outcome in enumerate(outcomes, 2):
++            self.events["events"].append({
++                "event_id": f"tool-{index}", "kind": "tool-call", "attempt_id": "attempt-2",
++                "tool": "read-artifact", "outcome": outcome,
++            })
++        self.events["events"].append({"event_id": "attempt-3", "kind": "attempt", "attempt_id": "attempt-3"})
++        retry = copy.deepcopy(self.events["events"][3])
++        retry.update(event_id="model-2", call_id="model-2", attempt_id="attempt-3")
++        self.events["events"].append(retry)
++        result = self.diagnose_data()
++        diagnostic = result["diagnostics"]
++        facts = diagnostic["facts"]
++        self.assertEqual(facts["outcome"], {"status": "succeeded", "category": "completed"})
++        self.assertFalse(facts["first_pass_success"])
++        self.assertEqual(facts["attempt_count"], 3)
++        self.assertEqual(facts["recorded_model_call_count"], 2)
++        self.assertEqual(facts["tool_calls"], 8)
++        self.assertEqual(facts["tools_used"], [{"name": "read-artifact", "call_count": 8, "outcome": "partial"}])
++        self.assertEqual(facts["tool_outcome_counts"], {"read-artifact": {
++            "succeeded": 2, "failed": 2, "partial": 1, "blocked": 1, "cancelled": 1, "not-available": 1,
++        }})
++        self.assertEqual(diagnostic["findings"], [{
++            "code": "tool-outcome", "location": "/tools_used/0", "fact": facts["tools_used"][0],
++        }])
++        for unsupported in ("waste", "blind-retry", "savings"):
++            self.assertNotIn(unsupported, json.dumps(diagnostic))
++
++    def test_diagnostics_keep_process_failures_even_when_later_checks_and_artifact_pass(self):
++        references = self.process_observations(("failed", "passed"))
++        self.events["events"].append({
++            "event_id": "guardrail-other", "kind": "guardrail", "name": "other-boundary",
++            "status": "failed", "evidence": references[0],
++        })
++        result = self.diagnose_data()
++        self.assertEqual(result["acceptance_status"], "passed")
++        facts = result["diagnostics"]["facts"]
++        self.assertEqual(facts["outcome"]["status"], "failed")
++        self.assertEqual(facts["failure_pattern"], "process-guardrail-failed")
++        failures = [item for item in result["diagnostics"]["findings"] if item["code"] == "verification-status"]
++        self.assertEqual({item["fact"]["name"] for item in failures},
++                         {"process/permission-boundary", "process/other-boundary"})
++        self.assertTrue(all(item["fact"]["status"] == "failed" for item in failures))
++        self.assertTrue(all(item["fact"]["evidence_ref"] == "ref:" + references[0]["sha256"] for item in failures))
++        self.assertEqual(facts["verification"], result["run_evidence"]["trace_summary"]["verification"])
++
++    def test_diagnostics_unrun_acceptance_stays_unknown_until_observed_timeout(self):
++        self.acceptance["status"] = "not-run"
++        self.acceptance["checks"][0]["status"] = "not-run"
++        self.acceptance["checks"].append({**self.acceptance["checks"][0], "name": "second-check"})
++        result = self.diagnose_data()
++        self.assertEqual(result["diagnostics"]["facts"]["outcome"], {
++            "status": "not-available", "reason": "artifact-acceptance-not-observed",
++        })
++        self.events["events"].append({
++            "event_id": "timeout", "kind": "termination", "status": "failed", "category": "timeout",
++            "evidence": self.events["events"][-1]["evidence"],
++        })
++        diagnosed = self.diagnose_data()["diagnostics"]
++        self.assertEqual(diagnosed["facts"]["outcome"], {"status": "failed", "category": "runtime-failure"})
++        self.assertEqual(diagnosed["facts"]["failure_pattern"], "runtime-timeout")
++        for report in (result["diagnostics"], diagnosed):
++            unrun = [item["fact"]["name"] for item in report["findings"]
++                     if item["code"] == "verification-status" and item["fact"]["status"] == "not-run"]
++            self.assertEqual(unrun, ["acceptance/expected-result", "acceptance/second-check"])
++        self.assertTrue(any(item["fact"].get("name") == "runtime-termination"
++                            for item in diagnosed["findings"] if isinstance(item["fact"], dict)))
++
++    def test_diagnostics_preserve_missing_and_estimated_metric_reasons(self):
++        original = copy.deepcopy(self.events)
++        for change in ("coverage", "usage", "cost", "estimated-usage", "estimated-cost", "no-model-calls"):
++            with self.subTest(change=change):
++                self.events = copy.deepcopy(original)
++                model = self.events["events"][3]
++                if change == "coverage":
++                    self.events["coverage"]["model_calls"] = False
++                elif change == "no-model-calls":
++                    self.events["events"] = [item for item in self.events["events"] if item["kind"] != "model-call"]
++                elif change.startswith("estimated-"):
++                    model["usage_source" if change.endswith("usage") else "cost_source"] = "estimated"
++                else:
++                    model[change] = None
++                result = self.diagnose_data()
++                trace = result["run_evidence"]["trace_summary"]
++                facts = result["diagnostics"]["facts"]
++                self.assertEqual(facts["recorded_model_call_count"], 0 if change == "no-model-calls" else 1)
++                for metric in ("token_usage", "cost"):
++                    self.assertEqual(facts[metric], trace[metric])
++                    if trace[metric].get("status") == "not-available":
++                        self.assertTrue(any(item["code"] == "metric-unavailable" and item["fact"] == trace[metric]
++                                            for item in result["diagnostics"]["findings"]))
++
++    def test_diagnostics_observed_zero_and_handoff_walltime_have_no_efficiency_inference(self):
++        model = self.events["events"][3]
++        model["usage"] = {"input": 0, "cached_input": 0, "output": 0}
++        model["cost"]["amount"] = 0
++        self.events["events"] = [item for item in self.events["events"] if item["kind"] != "tool-call"]
++        start = datetime.fromisoformat(self.data["run"]["started_at"])
++        self.data["run"]["finished_at"] = (start + timedelta(milliseconds=1000)).isoformat()
++        for index in range(3):
++            self.events["events"].append({
++                "event_id": f"handoff-{index}", "kind": "handoff", "target": "child", "outcome": "succeeded",
++            })
++        diagnostic = self.diagnose_data()["diagnostics"]
++        self.assertEqual(diagnostic["facts"]["tool_calls"], 0)
++        self.assertEqual(diagnostic["facts"]["tool_outcome_counts"], {})
++        self.assertEqual(diagnostic["facts"]["token_usage"], {"input": 0, "cached_input": 0, "output": 0})
++        self.assertEqual(diagnostic["facts"]["cost"], {"status": "available", "amount": 0, "currency": "USD"})
++        self.assertEqual(diagnostic["facts"]["elapsed_ms"], 1000)
++        self.assertEqual(len(diagnostic["facts"]["handoffs"]), 3)
++        self.assertEqual(diagnostic["findings"], [])
++        for unsupported in ("parallel_wait", "savings"):
++            self.assertNotIn(unsupported, json.dumps(diagnostic))
++
++    def test_diagnostics_cli_preserves_failed_task_import_and_sanitized_invalid_output(self):
++        self.acceptance["status"] = self.acceptance["checks"][0]["status"] = "failed"
++        self.persist()
++        plain = self.cli("import-task", "--input", self.path, "--summary-json")
++        self.assertEqual(plain.returncode, 0, plain.stdout + plain.stderr)
++        self.assertNotIn("diagnostics", json.loads(plain.stdout))
++        output = self.root.parent / "diagnosed.json"
++        completed = self.cli("import-task", "--input", self.path, "--diagnostics", "--output", output,
++                             "--summary-json")
++        self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
++        result = json.loads(completed.stdout)
++        self.assertEqual(result, json.loads(output.read_text()))
++        self.assertEqual(result["diagnostics"]["facts"]["outcome"]["status"], "failed")
++        result.pop("diagnostics")
++        self.assertEqual(result, json.loads(plain.stdout))
++        previous = output.read_bytes()
++        self.path.write_text('{"raw_secret":"do-not-echo-this-secret"}', encoding="utf-8")
++        completed = self.cli("import-task", "--input", self.path, "--diagnostics", "--output", output,
++                             "--summary-json")
++        self.assertEqual(completed.returncode, 2)
++        self.assertEqual(json.loads(completed.stdout)["status"], "invalid")
++        self.assertNotIn("diagnostics", json.loads(completed.stdout))
++        self.assertNotIn("do-not-echo", completed.stdout + completed.stderr)
++        self.assertEqual(output.read_bytes(), previous)
++
++    def test_diagnostics_cannot_overwrite_inputs_or_any_output_alias(self):
++        original_process = self.events["events"][-1]["evidence"]
++        self.process_observations(("failed", "passed"))
++        self.events["events"].append({
++            "event_id": "guardrail-extra", "kind": "guardrail", "name": "another-boundary",
++            "status": "passed", "evidence": original_process,
++        })
++        self.persist()
++        originals = {path: path.read_bytes() for path in self.root.iterdir() if path.is_file()}
++        hardlink = self.root / "hardlink.json"
++        os.link(self.path, hardlink)
++        symbolic = self.root / "symlink.json"
++        symbolic.symlink_to(self.path)
++        directory_alias = self.root.parent / "linked-output"
++        directory_alias.symlink_to(self.root, target_is_directory=True)
++        for output in (*originals, hardlink, symbolic, directory_alias / "new.json"):
++            with self.subTest(output=output), self.assertRaises(ManifestError):
++                import_task_evidence(self.path, MANIFEST, output_path=output, diagnostics=True)
++        for path, content in originals.items():
++            self.assertEqual(path.read_bytes(), content)
++        self.assertFalse((self.root / "new.json").exists())
++
++    def test_diagnostics_keep_digest_and_no_follow_input_checks(self):
++        self.persist()
++        source = self.root / "input.json"
++        original = source.read_bytes()
++        source.write_bytes(original + b" ")
++        with self.assertRaisesRegex(ManifestError, "digest mismatch"):
++            import_task_evidence(self.path, MANIFEST, diagnostics=True)
++        source.write_bytes(original)
++        source.rename(self.root / "original.json")
++        source.symlink_to("original.json")
++        with self.assertRaises(OSError):
++            import_task_evidence(self.path, MANIFEST, diagnostics=True)
++
+     def test_failed_retry_and_handoff_costs_are_retained(self):
+         self.events["events"][2]["outcome"] = "failed"
+         retry = copy.deepcopy(self.events["events"][3])
+@@ -492,13 +719,14 @@ class TaskEvidenceTest(unittest.TestCase):
+             "synthetic": True, "command": f"touch {sentinel}",
+             "instructions": "import arbitrary.module; access https://invalid.example",
+         })
+-        with patch("subprocess.run", side_effect=AssertionError("execution forbidden")), \
+-                patch("os.system", side_effect=AssertionError("execution forbidden")), \
+-                patch("socket.socket", side_effect=AssertionError("network forbidden")):
+-            result = self.import_data()
+-        self.assertEqual(result["status"], "imported")
+-        self.assertFalse(sentinel.exists())
+-        self.assertNotIn("arbitrary.module", json.dumps(result))
++        for importer in (self.import_data, self.diagnose_data):
++            with patch("subprocess.run", side_effect=AssertionError("execution forbidden")), \
++                    patch("os.system", side_effect=AssertionError("execution forbidden")), \
++                    patch("socket.socket", side_effect=AssertionError("network forbidden")):
++                result = importer()
++            self.assertEqual(result["status"], "imported")
++            self.assertFalse(sentinel.exists())
++            self.assertNotIn("arbitrary.module", json.dumps(result))
+ 
+     def test_real_cli_sanitizes_errors_and_outputs_imported_evidence(self):
+         self.persist()
+diff --git a/tests/test_trace_summary.py b/tests/test_trace_summary.py
+index ef57e5b..e9f516c 100644
+--- a/tests/test_trace_summary.py
++++ b/tests/test_trace_summary.py
+@@ -7,6 +7,7 @@ from pathlib import Path
+ 
+ from jsonschema import Draft202012Validator
+ 
++from agent_dev_kit import trace_summary
+ from agent_dev_kit.model import ManifestError
+ from agent_dev_kit.trace_summary import (
+     CostFact,
+@@ -222,6 +223,101 @@ class TraceSummaryTest(unittest.TestCase):
+         value["elapsed_ms"] = 0
+         self.assertEqual(value, validate_trace_summary(value, self.schema))
+ 
++    def test_diagnostics_are_repeatable_and_keep_every_failed_or_unrun_fact(self) -> None:
++        value = summary()
++        value.update(outcome={"status": "failed", "category": "runtime-failure"},
++                     first_pass_success=False, failure_pattern="runtime-timeout",
++                     blockers=["permission-pending", "external-unavailable"])
++        value["tools_used"][0]["outcome"] = "partial"
++        value["handoffs"] = [{"target": "child", "outcome": status}
++                             for status in ("failed", "blocked", "cancelled", "succeeded")]
++        value["guardrails"] = [{"name": "same-check", "status": status} for status in ("failed", "passed")]
++        value["verification"] = [
++            {"name": "same-check", "status": status, "evidence_ref": reference}
++            for status, reference in (("failed", "ref:" + "2" * 64), ("failed", "ref:" + "3" * 64),
++                                      ("not-run", None), ("passed", "ref:" + "4" * 64))
++        ]
++        original = copy.deepcopy(value)
++        diagnosed = trace_summary.diagnose_trace_summary(value)
++        self.assertEqual(diagnosed, trace_summary.diagnose_trace_summary(value))
++        self.assertEqual(value, original)
++        for name in ("outcome", "failure_pattern", "first_pass_success", "tools_used", "handoffs",
++                     "guardrails", "verification", "blockers"):
++            self.assertEqual(diagnosed["facts"][name], value[name])
++        findings = {(item["code"], item["location"]): item["fact"] for item in diagnosed["findings"]}
++        for index in range(3):
++            self.assertEqual(findings[("verification-status", f"/verification/{index}")],
++                             value["verification"][index])
++            self.assertEqual(findings[("handoff-outcome", f"/handoffs/{index}")], value["handoffs"][index])
++        self.assertEqual(findings[("guardrail-failed", "/guardrails/0")], value["guardrails"][0])
++        self.assertEqual(findings[("tool-outcome", "/tools_used/0")], value["tools_used"][0])
++        self.assertEqual(findings[("failure-pattern", "/failure_pattern")], "runtime-timeout")
++        self.assertEqual(findings[("blocker", "/blockers/1")], "external-unavailable")
++        diagnosed["facts"]["verification"][0]["status"] = "passed"
++        next(item for item in diagnosed["findings"] if item["location"] == "/outcome")["fact"]["status"] = "succeeded"
++        self.assertEqual(value, original)
++
++    def test_diagnostics_do_not_infer_waste_retries_or_parallel_savings(self) -> None:
++        value = summary()
++        value.update(tool_calls=50, first_pass_success=False, elapsed_ms=1000)
++        value["tools_used"][0]["call_count"] = 50
++        value["handoffs"] *= 4
++        diagnosed = trace_summary.diagnose_trace_summary(value)
++        self.assertEqual(diagnosed["facts"]["tool_calls"], 50)
++        self.assertEqual(diagnosed["facts"]["elapsed_ms"], 1000)
++        self.assertFalse(diagnosed["facts"]["first_pass_success"])
++        for name in ("attempt_count", "recorded_model_call_count", "tool_outcome_counts"):
++            self.assertEqual(diagnosed["facts"][name], {
++                "status": "not-available", "reason": "not-recorded-in-trace-summary",
++            })
++        self.assertEqual(diagnosed["findings"], [])
++        for unsupported in ("waste", "blind-retry", "parallel_wait", "savings"):
++            self.assertNotIn(unsupported, json.dumps(diagnosed))
++
++    def test_partial_tool_summary_cannot_supply_exact_terminal_counts(self) -> None:
++        value = summary()
++        value["tools_used"][0]["outcome"] = "partial"
++        diagnosed = trace_summary.diagnose_trace_summary(value)
++        self.assertEqual(diagnosed["facts"]["tool_outcome_counts"]["status"], "not-available")
++        self.assertEqual(diagnosed["findings"], [{
++            "code": "tool-outcome", "location": "/tools_used/0", "fact": value["tools_used"][0],
++        }])
++
++    def test_diagnostics_preserve_unavailable_reasons_and_real_zero_values(self) -> None:
++        value = summary()
++        value.update(first_pass_success=False, tool_calls=0, tools_used=[], elapsed_ms=0)
++        for name, reason in (("token_usage", "provider-token-metrics-disabled"),
++                             ("cost", "provider-pricing-evidence-disabled"),
++                             ("outcome", "artifact-acceptance-not-observed")):
++            value[name] = {"status": "not-available", "reason": reason}
++        value["verification"][0]["status"] = "not-run"
++        diagnosed = trace_summary.diagnose_trace_summary(value)
++        for name in ("token_usage", "cost", "outcome"):
++            self.assertEqual(diagnosed["facts"][name], value[name])
++            self.assertTrue(any(item["location"] == "/" + name and item["fact"] == value[name]
++                                for item in diagnosed["findings"]))
++        self.assertTrue(any(item["fact"] == value["verification"][0] for item in diagnosed["findings"]))
++        value["token_usage"] = {"input": 0, "cached_input": 0, "output": 0}
++        value["cost"] = {"status": "available", "amount": 0, "currency": "USD"}
++        diagnosed = trace_summary.diagnose_trace_summary(value)
++        for name in ("token_usage", "cost", "tool_calls", "elapsed_ms"):
++            self.assertEqual(diagnosed["facts"][name], value[name])
++        self.assertFalse(any(item["code"] == "metric-unavailable" for item in diagnosed["findings"]))
++
++    def test_diagnostics_use_existing_schema_privacy_and_relationship_validation(self) -> None:
++        cases = [None, {"raw_prompt": "must-not-copy"}]
++        for field, replacement in (("tool_calls", 3), ("runtime_version", "sk-abcdefghijklmnop"),
++                                   ("unknown-field", "untrusted")):
++            value = summary()
++            value[field] = replacement
++            cases.append(value)
++        value = summary()
++        value["guardrails"][0]["status"] = "failed"
++        cases.append(value)
++        for value in cases:
++            with self.subTest(value=value), self.assertRaises(ManifestError):
++                trace_summary.diagnose_trace_summary(value)
++
+     def test_token_latency_hash_and_numeric_boundaries_fail_closed(self) -> None:
+         cases = []
+         negative_input = summary()

@@ -1,0 +1,347 @@
+{
+  "captured_at": "2026-11-17T15:12:48.626606Z",
+  "base_commit": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d",
+  "head_commit": "d01d1bcb7c2f322c342656a95e523fba8b55505e",
+  "tree": "4fe0cfa656ad7feeabf1a25daa9012dcfd673ce0",
+  "original_patch_sha256": "52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe",
+  "original_patch_bytes": 85582,
+  "product_sources": {
+    ".version-lock": {
+      "sha256": "4f258117ad824a39f8bde24851e3ad229b1944be39c14cbdd43dffa7796129b4",
+      "bytes": 65
+    },
+    "CHANGELOG.md": {
+      "sha256": "80f772c1cd1153cdb5aa229d8870efc47fae20bf2bbbedccbb46fc9c9bf568ab",
+      "bytes": 111087
+    },
+    "CONTEXT.md": {
+      "sha256": "80f246a91bea754effb4c0e9842f28979283e02cb1faf4560d23975c6b8361b5",
+      "bytes": 8643
+    },
+    "README.md": {
+      "sha256": "341e8a2254eda295d4f25e386390506c86132e5f988810eeed4bf2c64e740e64",
+      "bytes": 13086
+    },
+    "docs/runbooks/task-evidence.md": {
+      "sha256": "bb9403525800f5c86b4eeba43d46642d0fc81e8d948a9963b318482e5bec96f6",
+      "bytes": 15246
+    },
+    "docs/runbooks/trace-summary-emitter.md": {
+      "sha256": "4d8dbe1f2823f48324a057426ee2d8ff7d13956991272b61170e749ea38719f6",
+      "bytes": 4708
+    },
+    "manifest.json": {
+      "sha256": "74840f26c805604efd2fb6852a4013b57a18c6acd1e3abde86b742589f463315",
+      "bytes": 91240
+    },
+    "manifests/software_m5_eval_contract.json": {
+      "sha256": "80f1c1cc05eb43a29669226a71b50a5a4b59de43b892b3d29e0805e48a7f6083",
+      "bytes": 705
+    },
+    "pyproject.toml": {
+      "sha256": "fd17408ebbba530f4d1a1a3179db881b1afc8199b6f10239021207c4a77c5b9b",
+      "bytes": 1309
+    },
+    "skills/adk-after-action-review/SKILL.md": {
+      "sha256": "e803543b0a432df849c494f8e6e845dd9a0798e6df665555a19f50b1f4cb3017",
+      "bytes": 3783
+    },
+    "skills/adk-after-action-review/references/after-action-review.md": {
+      "sha256": "4309116aed223b77218b8ad69ab3ba2623e434bea9e23f651bc635c4c0d62ccf",
+      "bytes": 819
+    },
+    "src/agent_dev_kit/__init__.py": {
+      "sha256": "ae00d797c5281511ca7e2797466ac27c352547818b0a6374eb20edb251ee3137",
+      "bytes": 70
+    },
+    "src/agent_dev_kit/evaluation_cli.py": {
+      "sha256": "66878c047c92041e877114f79b302d7d1cb194c9b67ac4fe2e09bd6d73767628",
+      "bytes": 17732
+    },
+    "src/agent_dev_kit/execution_policy/reducer.py": {
+      "sha256": "810f9aa92da2304cdb4455c5b52ffe54ef780e8bdc6987c1640d402d7eccd213",
+      "bytes": 20395
+    },
+    "src/agent_dev_kit/task_evidence.py": {
+      "sha256": "74e15cf2aed1f97caebbcfd0efb104d1bc1442e2e3c34509e2fdd4e340071cc5",
+      "bytes": 29290
+    },
+    "src/agent_dev_kit/trace_summary.py": {
+      "sha256": "c161e03f85d131f71f6fa9572adde864d2eee86e039bd7a11c2c74dede2a3ced",
+      "bytes": 16232
+    },
+    "templates/memory/after-action-review.md": {
+      "sha256": "4309116aed223b77218b8ad69ab3ba2623e434bea9e23f651bc635c4c0d62ccf",
+      "bytes": 819
+    },
+    "tests/fixtures/skill_method_ab_prereg.json": {
+      "sha256": "a1baefc49f467368d5460b4353605a2f0873d2407dd314501698f9de4d9c8631",
+      "bytes": 7876
+    },
+    "tests/test_execution_policy.py": {
+      "sha256": "2ce7da625e933c1999be52e2a7e02cd8ebb0801df6f7e56e70c041f6cd714af2",
+      "bytes": 37916
+    },
+    "tests/test_target_contracts.sh": {
+      "sha256": "22fb2eaeb14e5611186c7277fad938f95446181b89a094391e0f984fe84de5aa",
+      "bytes": 23940
+    },
+    "tests/test_task_evidence.py": {
+      "sha256": "6ae8defff93a2541d8584cf6086ba1c6aeec95838acba9b0cfc9ec853da72ca2",
+      "bytes": 48753
+    },
+    "tests/test_trace_summary.py": {
+      "sha256": "9d58a497b023299d7dc0e6a836795deb0845e71ec7a673294e449b09075d9bae",
+      "bytes": 21984
+    }
+  },
+  "tracked_overlay": [
+    "docs/changes/20261117-goal-replan-replay/checklist.md",
+    "docs/changes/20261117-goal-replan-replay/negative-results.md",
+    "docs/changes/20261117-goal-replan-replay/requirements.md",
+    "docs/changes/20261117-goal-replan-replay/state.yaml",
+    "docs/changes/20261117-goal-replan-replay/tasks.md",
+    "docs/changes/20261117-task-diagnostics/checklist.md",
+    "docs/changes/20261117-task-diagnostics/negative-results.md",
+    "docs/changes/20261117-task-diagnostics/state.yaml",
+    "docs/changes/20261117-task-diagnostics/tasks.md"
+  ],
+  "boundary": "Product source equals the tested commit. Later change evidence packaging is a separately reviewed overlay; no external CI or release is pre-certified.",
+  "current_change_inputs": [
+    {
+      "path": "docs/changes/20261117-task-diagnostics/checklist.md",
+      "sha256": "085750c6d55425e7e9b7ceef43e4ec1c76cddd3d9b74dd5d31f4f911c602d794",
+      "bytes": 1068
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/design.md",
+      "sha256": "21dc38c7355d545707c26cd5f4e5508d3126e4ceecb07565c20363db446960e3",
+      "bytes": 2443
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/final/full-timing.json",
+      "sha256": "1e542a10994a03601bbe78ce26905dedab0a6b7598db89d81142a62dce04a953",
+      "bytes": 8282
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/final/raw-command-output.json",
+      "sha256": "d68ed399894f73a72cda4a1fbad1d31bb0281e48a5f3c5b43587290323b1e57d",
+      "bytes": 8820
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/final/results.json",
+      "sha256": "3aeb4f5e6507ce19fc169724bd44832a1945367fb82d05609eed0eb2919e8323",
+      "bytes": 4962
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/final/run_checks.py",
+      "sha256": "d76c9f833b709e0a28afbb4ff9a45b93b5f6298f8f3d6bfecfbacfa18cf58eb5",
+      "bytes": 4953
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/final/source-after.json",
+      "sha256": "5d6722c689a3e279b4390799898d9e4bcf5327adf08d31f8d5756683ce456556",
+      "bytes": 177830
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/final/source-before.json",
+      "sha256": "5d6722c689a3e279b4390799898d9e4bcf5327adf08d31f8d5756683ce456556",
+      "bytes": 177830
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/final/summary.json",
+      "sha256": "604d5eed3d1a2548006f4cd4bebf440596ae9d138fb92483f1c4ee3a010061ef",
+      "bytes": 5553
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/footprint-fix-observations.json",
+      "sha256": "785d2f5f81d5514c167d30f6d522fff3f7b4ad927d1089cb2cfc9a6426d41a87",
+      "bytes": 50754
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/full-attempt1/full-timing.json",
+      "sha256": "ce0d08e7b9f1a392116fa3a68d7db1fe849fa0162f81f15bfa485968429f678d",
+      "bytes": 8224
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/full-attempt1/raw-command-output.json",
+      "sha256": "97370dc880a50208216e9b63e6c1c9fed25fcb9ce114bf226113183bf17f0616",
+      "bytes": 11325
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/full-attempt1/results.json",
+      "sha256": "4fed88d04724549ea4923178923ffde6974dd8a00ceedd4c42b6224660dcbaee",
+      "bytes": 4941
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/full-attempt1/run_checks.py",
+      "sha256": "d76c9f833b709e0a28afbb4ff9a45b93b5f6298f8f3d6bfecfbacfa18cf58eb5",
+      "bytes": 4953
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/full-attempt1/source-after.json",
+      "sha256": "0ef48c673e5a73c2773ef246b3641b7c71a39f37862e24a8dfecd6d85d81458e",
+      "bytes": 177832
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/full-attempt1/source-before.json",
+      "sha256": "0ef48c673e5a73c2773ef246b3641b7c71a39f37862e24a8dfecd6d85d81458e",
+      "bytes": 177832
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/full-attempt1/summary.json",
+      "sha256": "25cb5cee99f9f9e366f6053c8c1e55a6eb4e3dfd498c6ec5d9135d28faef2544",
+      "bytes": 5677
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/implementation-observations.json",
+      "sha256": "d1c1e0d3cde8253abf05433e368bec3a6e0bb840aafb03cce9cf313f66a0de35",
+      "bytes": 135945
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/original.patch",
+      "sha256": "52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe",
+      "bytes": 85582
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/evidence/workflow-verify-attempt1.md",
+      "sha256": "fe25a55ee1c869b9f8da2959c7379693eef715ce91a43b49073ad4744c8b7ff5",
+      "bytes": 709
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/history.log",
+      "sha256": "bc094f31cd30e2164f73cfeec354ebe059738cc42b415d6724b2ae1d3b9c2d61",
+      "bytes": 174
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/negative-results.md",
+      "sha256": "cd3a636f33fd0c1a0bc7cf6622685a140da2b0e9297f339c53dcaedd34626c73",
+      "bytes": 3833
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/proposal.md",
+      "sha256": "602f15ecc32499302814764cc7f0c78934b963025f400cb267d8b8ca8e6d76da",
+      "bytes": 4009
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/requirements.md",
+      "sha256": "bf30e631322e40ed767a2caf95ce9a7b95c425bab30eafe9c53a42e63ff62915",
+      "bytes": 2581
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/state.yaml",
+      "sha256": "9eed918720b8c7750b343661e69fbdc09038475b05077d13f2f5fc1d3c32d5f4",
+      "bytes": 73
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/tasks.md",
+      "sha256": "e2b7be121c8ccc97311b741a9874f2c39e80915cdc10322c81881eb68eb3071a",
+      "bytes": 2089
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/verification.md",
+      "sha256": "73b3dfe548495b682b3ac4c30f072c8e67192a7e5f36dc7ab10e76c26894f5a3",
+      "bytes": 3955
+    },
+    {
+      "path": "docs/changes/20261117-task-diagnostics/verify-report.md",
+      "sha256": "3044d492d3452d37190ea1e3ee582f40ef5f5ccc75627ec15a422c880497f24b",
+      "bytes": 3044
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/checklist.md",
+      "sha256": "833d8aa1694f67fba5a78cb72ce7031704a46b380c88e2b93663ab2da132ef34",
+      "bytes": 1186
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/design.md",
+      "sha256": "62b25073ba89f46dcafa5cfb8029d5a9f8ed57819d507931df0aa3a81022ba34",
+      "bytes": 1574
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/implementation-observations.json",
+      "sha256": "16279b6eb2a2e9ec6d4f0b1dede23a191dd316996c5a5a89e0ceacc3fda1ab62",
+      "bytes": 39949
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original-counterexample/README.md",
+      "sha256": "645002d3278b6c59bb198974ed0c4c02c31e0e27588639838a3cb9b45d7cd336",
+      "bytes": 3301
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original-counterexample/frozen-before.json",
+      "sha256": "8c591659eaf44ba34ec233a26db75bb1b76a0b0a839d2c4cea76c482b8275c76",
+      "bytes": 1744
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original-counterexample/frozen-inputs.json",
+      "sha256": "1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60",
+      "bytes": 33511
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original-counterexample/original-before.jsonl",
+      "sha256": "0b9e6f42b4fb530929523ed838318352e5aa6859c8742b72aa65528ef39c60d5",
+      "bytes": 741
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original-counterexample/original_probe.py",
+      "sha256": "26c7e0347f013ad30ba7376291b6f1f0612c3fc0007a43ee5e37696b7e48c168",
+      "bytes": 1649
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original-counterexample/replay_frozen_probe.py",
+      "sha256": "b6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d",
+      "bytes": 3084
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original-counterexample/source-index.json",
+      "sha256": "7e0a62d4a2ed13514ff6aac4f97de8e30de44b08cf7170cda26cd6069ad930dc",
+      "bytes": 1190
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/evidence/original.patch",
+      "sha256": "52fd79f40d5a6592d646c7897d5af605c32d88e6a3ade2c11e2ad41090affafe",
+      "bytes": 85582
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/history.log",
+      "sha256": "3ffbfad9e1f899fbd96aa484a246804e0515b9604b09bc653689e8579eb3a003",
+      "bytes": 122
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/negative-results.md",
+      "sha256": "335cffae0c552117d30c6b6dde7c2a393fd58a9840776bdf66486ff19bc7a156",
+      "bytes": 1478
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/proposal.md",
+      "sha256": "1cb65ab80dd7c6944cc01106f1915629abbc50dd550f091fbb17a099bbce7d45",
+      "bytes": 3468
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/requirements.md",
+      "sha256": "076764b5b503d84fb6ff22950d46f42bd7543f33fce82b9f901a89132e6b1414",
+      "bytes": 2165
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/state.yaml",
+      "sha256": "1b4ab8cdf7d0d67c7ed5df2723144d45ede72fc7b02b478decbf3acf1fdaca28",
+      "bytes": 73
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/tasks.md",
+      "sha256": "047bc42a4416d67930e70687f7ec40e647a016ef5a12bac16a676df10592df4e",
+      "bytes": 1597
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/verification.md",
+      "sha256": "78211479e5e57d92d1874c62d88ff9357a525d23a2ef762fa74534ef5015c85e",
+      "bytes": 1749
+    },
+    {
+      "path": "docs/changes/20261117-goal-replan-replay/verify-report.md",
+      "sha256": "2d6010692f4a4cc436fbbe8a0bc6e6a39684092cb6b66ba6ca196b16bc2d36dc",
+      "bytes": 2990
+    }
+  ]
+}

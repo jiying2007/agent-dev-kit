@@ -1,0 +1,39 @@
+{
+  "baseline_sha": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d",
+  "recorded_at_utc": "2026-11-17T14:40:14.189600+00:00",
+  "scope": "independent frozen probes, no product edit, synthetic verifier only",
+  "original_probe_exit": 0,
+  "frozen_probe_exit": 1,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3301,
+      "sha256": "645002d3278b6c59bb198974ed0c4c02c31e0e27588639838a3cb9b45d7cd336"
+    },
+    {
+      "path": "original_probe.py",
+      "bytes": 1649,
+      "sha256": "26c7e0347f013ad30ba7376291b6f1f0612c3fc0007a43ee5e37696b7e48c168"
+    },
+    {
+      "path": "frozen-inputs.json",
+      "bytes": 33511,
+      "sha256": "1bddace1b0edebc3475f8e51f1cd0d9a4878c5e9f0c4b17d6d2bf001a2779d60"
+    },
+    {
+      "path": "replay_frozen_probe.py",
+      "bytes": 3084,
+      "sha256": "b6f5a02415a3310e12fc554f8d166767bf585709b1469c5bd1ecbe10f8ebfa7d"
+    },
+    {
+      "path": "original-before.jsonl",
+      "bytes": 741,
+      "sha256": "0b9e6f42b4fb530929523ed838318352e5aa6859c8742b72aa65528ef39c60d5"
+    },
+    {
+      "path": "frozen-before.json",
+      "bytes": 1744,
+      "sha256": "8c591659eaf44ba34ec233a26db75bb1b76a0b0a839d2c4cea76c482b8275c76"
+    }
+  ]
+}

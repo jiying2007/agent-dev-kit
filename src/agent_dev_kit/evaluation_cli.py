@@ -57,6 +57,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     trials.add_argument("--output")
     trials.add_argument("--summary-json", action="store_true")
     task_import = sub.add_parser("import-task", help="Import bounded local task observations without execution")
+    task_import.add_argument("--diagnostics", action="store_true", help="Include a verified-fact diagnostic view")
     task_import.add_argument("--input", required=True)
     task_import.add_argument("--output")
     task_import.add_argument("--summary-json", action="store_true")
@@ -145,7 +146,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         try:
             if args.action == "import-task":
                 value = import_task_evidence(Path(args.input), _manifest(),
-                                             output_path=Path(args.output) if args.output else None)
+                                             output_path=Path(args.output) if args.output else None,
+                                             diagnostics=args.diagnostics)
             elif args.action == "compare-task-trials":
                 value = compare_task_trials(Path(args.input), _manifest(),
                                             output_path=Path(args.output) if args.output else None)

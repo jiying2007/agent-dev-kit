@@ -1,0 +1,3 @@
+{"case": "latest_implementation", "intake_revision": 3, "task_mode": "implementation", "effective_artifact_mode": "implementation", "missing_artifacts": ["build", "repo"], "gate_allowed": false, "completion_allowed": false, "managed_verifier": true}
+{"case": "replayed_older_readonly_new_event_id", "intake_revision": 4, "task_mode": "readonly", "effective_artifact_mode": "readonly", "missing_artifacts": [], "gate_allowed": true, "completion_allowed": true, "managed_verifier": true}
+{"case": "replay_without_trusted_verifier", "intake_revision": 4, "task_mode": "readonly", "effective_artifact_mode": "implementation", "missing_artifacts": ["build", "repo"], "gate_allowed": false, "completion_allowed": false, "managed_verifier": false}

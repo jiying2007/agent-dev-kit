@@ -1,0 +1,19 @@
+{
+  "status": "pass",
+  "observed_at": "2026-11-17T15:24:09.480553Z",
+  "decoded_probe_bytes": 1649,
+  "decoded_probe_sha256": "26c7e0347f013ad30ba7376291b6f1f0612c3fc0007a43ee5e37696b7e48c168",
+  "scratch_original_equal": true,
+  "historical_canonical_byte_equal": true,
+  "historical_review_archive_outputs_unchanged": true,
+  "c1_record_unchanged": true,
+  "product_sources_unchanged": 22,
+  "product_tests_rerun": false,
+  "actual_format_gate_after": {
+    "chunk_id": "355f2f",
+    "wall_time_seconds": 0.00003399,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  }
+}

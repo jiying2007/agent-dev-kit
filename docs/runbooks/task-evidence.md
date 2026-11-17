@@ -129,6 +129,39 @@ bash scripts/devkit.sh eval import-task \
 直接把两个 run 拼进通用 `compare-trials`，不能证明它们具有相同初始工作区或干预条件。
 任务比较应走下一步的专用前置核查。
 
+### 按需查看诊断
+
+需要复盘已有任务包时，显式增加 `--diagnostics`：
+
+```bash
+bash scripts/devkit.sh eval import-task \
+  --input /absolute/path/to/recorded-run/observation.json \
+  --output /absolute/path/to/reports/run-1-diagnostics.json \
+  --diagnostics --summary-json
+```
+
+仅外层报告增加 `diagnostics`；无参数时报告保持原样。`run_evidence`、身份绑定、receipt、measurement
+及所有资格字段不变。有效失败任务仍返回 `status=imported`、exit 0；无效包仍脱敏拒绝、exit 2。
+诊断复用同次核验的 Trace 和事件账本，不读取其他文件；所有已读输入及其输出别名继续受保护。
+
+- `facts` 保留结果、失败模式、全部检查/工具/handoff 状态、计量和原始缺测原因。
+  `attempt_count` 是已核验的实际 attempt 数；`recorded_model_call_count` 仅表示账本已记录的模型调用数，
+  不证明采集完整，也不能把0次记录解释为零用量。`tool_outcome_counts` 按工具列出各原始终态的准确计数，
+  包括 `partial`、`not-available` 和合法零值；其含义是事件终态计数，不是失败根因统计。
+- `findings` 用固定 code、Trace 内 `location` 和原始 `fact` 定位非成功状态、全部失败/未运行检查、
+  blocker 及缺测，不裁决根因或效果。`evidence_refs` 绑定同一 `trace_ref` 与 `events_ref`；
+  检查自身的 opaque evidence ref 保留在事实中，不复制日志正文。
+- 同一 guardrail 先失败后通过时，既有汇总仍保留失败及其实际证据；所有重复观测由 `events_ref` 绑定。
+  最终产物通过不能覆盖过程失败。没有终止事实的 `not-run` 验收保持 outcome unavailable；明确 timeout
+  才保留 failed / runtime-timeout。缺失或估算计量仍是原来的 unavailable，不用实测零值替代。
+- 50次同工具成功调用不等于浪费；多次 attempt 最终成功不等于盲重试；多个 handoff 和1000 ms墙钟
+  不证明并行等待或节省。仅有 Trace 时也不能从 `first_pass_success=false` 猜测 attempt 数，或从
+  `partial` 猜测精确失败次数。纯投影 API 与 finding code 见 [Trace 说明](trace-summary-emitter.md#按需诊断纯投影)。
+
+诊断用于既有 AAR 的按需证据阅读，不改变 repository certification 的过程字段，不提供新的运行态、
+权限、模型评判或认证能力。静态测试与方法文档通过后，真实模型效果仍为 `not-measured`；
+需要效果结论时使用下节已冻结的完整配对流程和真实观测。
+
 ## 5. 冻结并比较完整分组
 
 `schema_version=adk-task-trials/v1` 复用已有 `effect-trials-v1` 的 `plan`，另包含以下字段：

@@ -1,0 +1,29 @@
+{
+  "captured_at": "2026-11-17 14:58:22 UTC",
+  "base_commit": "5f113b8f5ae6f83662d41d99d0907026f4e44c9d",
+  "head_commit": "d0d2b2dc7cac3e7e7bb853bc372d4afc9975f6bd",
+  "tree": "a643aed639bc871ad3b30f7d9dec14d55dbd8ed0",
+  "original_patch_bytes": 89608,
+  "original_patch_sha256": "7dfafbe77bebdc4628b5833a7dd2944ce3f5b8ec17ba0a184f4551a507460913",
+  "identity_observation": {
+    "chunk_id": "df525e",
+    "wall_time_seconds": 0.000027519,
+    "exit_code": 0,
+    "original_token_count": 31,
+    "output": "d0d2b2dc7cac3e7e7bb853bc372d4afc9975f6bd\na643aed639bc871ad3b30f7d9dec14d55dbd8ed0\naf1fc74a04f4f726afaf72ac0816a1ee66e13c4f\n"
+  },
+  "patch_observation": {
+    "chunk_id": "376a91",
+    "wall_time_seconds": 0.000036781,
+    "exit_code": 0,
+    "original_token_count": 28,
+    "output": "{'equal': True, 'bytes': 89608, 'sha256': '7dfafbe77bebdc4628b5833a7dd2944ce3f5b8ec17ba0a184f4551a507460913'}\n"
+  },
+  "source_status": {
+    "chunk_id": "a94d72",
+    "wall_time_seconds": 0.280575782,
+    "exit_code": 0,
+    "original_token_count": 0,
+    "output": ""
+  }
+}
