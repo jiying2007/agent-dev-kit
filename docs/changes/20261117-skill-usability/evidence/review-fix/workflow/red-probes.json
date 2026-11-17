@@ -1,0 +1,208 @@
+{
+  "phase": "red",
+  "timestamp_utc": "2026-11-17T06:42:26.872266+00:00",
+  "head": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "manifest_version": "11.3.14",
+  "frontmatter_context": [
+    "量产/产测/产线/生产现场/烧录/OTA升级/OTA回滚/OTA验收/RMA/现场维护/现场诊断/设备交付/设备健康检查/production-field/field readiness"
+  ],
+  "rows": [
+    {
+      "prompt": "评估嵌入式设备 OTA 的断电恢复、回滚和上线 readiness",
+      "route": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "candidate_domain_eligible": false,
+      "with_bare_ota_domain_eligible": true,
+      "global_local_polarity_unchanged": [
+        [
+          "OTA",
+          7,
+          3
+        ]
+      ]
+    },
+    {
+      "prompt": "请只读检查 OTA 签名和回滚验证证据",
+      "route": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "artifact_mode": "readonly",
+        "negated_intents": []
+      },
+      "candidate_domain_eligible": false,
+      "with_bare_ota_domain_eligible": true,
+      "global_local_polarity_unchanged": [
+        [
+          "OTA",
+          5,
+          3
+        ]
+      ]
+    },
+    {
+      "prompt": "Review OTA firmware rollback readiness",
+      "route": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "candidate_domain_eligible": false,
+      "with_bare_ota_domain_eligible": true,
+      "global_local_polarity_unchanged": [
+        [
+          "OTA",
+          6,
+          3
+        ]
+      ]
+    },
+    {
+      "prompt": "帮我设计设备状态机，不涉及量产或OTA",
+      "route": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "candidate_domain_eligible": false,
+      "with_bare_ota_domain_eligible": true,
+      "global_local_polarity_unchanged": [
+        [
+          "OTA",
+          16,
+          3
+        ]
+      ]
+    },
+    {
+      "prompt": "不涉及量产、OTA和RMA；请检查数据库回滚方案",
+      "route": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      },
+      "candidate_domain_eligible": true,
+      "with_bare_ota_domain_eligible": true,
+      "global_local_polarity_unchanged": [
+        [
+          "OTA",
+          6,
+          3
+        ],
+        [
+          "RMA",
+          10,
+          3
+        ]
+      ]
+    },
+    {
+      "prompt": "不涉及量产，只读评估 OTA 回滚",
+      "route": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "artifact_mode": "readonly",
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E0",
+        "effort_basis": "explicit-readonly"
+      },
+      "candidate_domain_eligible": true,
+      "with_bare_ota_domain_eligible": true,
+      "global_local_polarity_unchanged": [
+        [
+          "OTA",
+          10,
+          3
+        ]
+      ]
+    },
+    {
+      "prompt": "文档示例：`OTA`；请检查数据库回滚方案",
+      "route": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "candidate_domain_eligible": false,
+      "with_bare_ota_domain_eligible": false,
+      "global_local_polarity_unchanged": [
+        [
+          "OTA",
+          6,
+          3
+        ]
+      ]
+    }
+  ],
+  "boundary": "Source routing and eligibility only; no live runtime or device evidence"
+}

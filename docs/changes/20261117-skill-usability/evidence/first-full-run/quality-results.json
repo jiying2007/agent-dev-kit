@@ -1,0 +1,154 @@
+[
+  {
+    "name": "strict",
+    "command": [
+      "bash",
+      "scripts/devkit.sh",
+      "validate",
+      "--strict"
+    ],
+    "started_at": "2026-11-17T06:46:16.116256+00:00",
+    "completed_at": "2026-11-17T06:46:18.414318+00:00",
+    "duration_seconds": 2.298,
+    "exit_code": 0,
+    "log_sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848"
+  },
+  {
+    "name": "format",
+    "command": [
+      "bash",
+      "scripts/check-format.sh"
+    ],
+    "started_at": "2026-11-17T06:46:18.414784+00:00",
+    "completed_at": "2026-11-17T06:46:18.714077+00:00",
+    "duration_seconds": 0.299,
+    "exit_code": 0,
+    "log_sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1"
+  },
+  {
+    "name": "module-size",
+    "command": [
+      "bash",
+      "tests/test_module_size_budget.sh"
+    ],
+    "started_at": "2026-11-17T06:46:18.717305+00:00",
+    "completed_at": "2026-11-17T06:46:21.666305+00:00",
+    "duration_seconds": 2.949,
+    "exit_code": 0,
+    "log_sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd"
+  },
+  {
+    "name": "ruff",
+    "command": [
+      "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/ruff",
+      "check",
+      "src",
+      "tools",
+      "tests/fixtures/fake_target_runtime.py"
+    ],
+    "started_at": "2026-11-17T06:46:21.666716+00:00",
+    "completed_at": "2026-11-17T06:46:21.675591+00:00",
+    "duration_seconds": 0.009,
+    "exit_code": 0,
+    "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+  },
+  {
+    "name": "focused-ruff",
+    "command": [
+      "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/ruff",
+      "check",
+      "src/agent_dev_kit/contracts",
+      "src/agent_dev_kit/evidence",
+      "src/agent_dev_kit/target_adapters",
+      "src/agent_dev_kit/distribution",
+      "src/agent_dev_kit/versioning.py",
+      "src/agent_dev_kit/native_campaign_diagnostics.py",
+      "src/agent_dev_kit/review_evidence.py",
+      "src/agent_dev_kit/execution_policy",
+      "--select",
+      "E4,E7,E9,F,B,UP,SIM,I"
+    ],
+    "started_at": "2026-11-17T06:46:21.675839+00:00",
+    "completed_at": "2026-11-17T06:46:21.683931+00:00",
+    "duration_seconds": 0.008,
+    "exit_code": 0,
+    "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+  },
+  {
+    "name": "mypy",
+    "command": [
+      "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/mypy",
+      "src/agent_dev_kit/contracts",
+      "src/agent_dev_kit/evidence",
+      "src/agent_dev_kit/target_adapters",
+      "src/agent_dev_kit/distribution",
+      "src/agent_dev_kit/versioning.py",
+      "src/agent_dev_kit/native_campaign_diagnostics.py",
+      "src/agent_dev_kit/review_evidence.py",
+      "src/agent_dev_kit/execution_policy",
+      "src/agent_dev_kit/installation_inventory.py",
+      "src/agent_dev_kit/installation_plan.py",
+      "src/agent_dev_kit/installation_transaction.py",
+      "src/agent_dev_kit/targets.py",
+      "src/agent_dev_kit/target_contracts.py",
+      "src/agent_dev_kit/delivery_cli.py",
+      "src/agent_dev_kit/release.py",
+      "src/agent_dev_kit/task_evidence.py",
+      "src/agent_dev_kit/task_trials.py",
+      "src/agent_dev_kit/task_acceptance.py"
+    ],
+    "started_at": "2026-11-17T06:46:21.684287+00:00",
+    "completed_at": "2026-11-17T06:46:21.990812+00:00",
+    "duration_seconds": 0.307,
+    "exit_code": 0,
+    "log_sha256": "103f10fdbb5ad2b6ee08833a3e2b634aa94d13009cb96f89236e9d80e79aac15"
+  },
+  {
+    "name": "pip-audit",
+    "command": [
+      "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/pip-audit",
+      "--strict",
+      "--progress-spinner",
+      "off",
+      "."
+    ],
+    "started_at": "2026-11-17T06:46:21.991215+00:00",
+    "completed_at": "2026-11-17T06:46:34.079975+00:00",
+    "duration_seconds": 12.089,
+    "exit_code": 0,
+    "log_sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+  },
+  {
+    "name": "release-check",
+    "command": [
+      "bash",
+      "scripts/devkit.sh",
+      "release",
+      "check",
+      "--summary-json"
+    ],
+    "started_at": "2026-11-17T06:46:34.080479+00:00",
+    "completed_at": "2026-11-17T06:46:34.330645+00:00",
+    "duration_seconds": 0.25,
+    "exit_code": 0,
+    "log_sha256": "757033095aa7507e1a48571a71cf5a8b565b2c1f2470469bc8b88eda0bdfe4ea"
+  },
+  {
+    "name": "target-static",
+    "command": [
+      "bash",
+      "scripts/devkit.sh",
+      "target",
+      "check",
+      "--all",
+      "--level",
+      "static",
+      "--summary-json"
+    ],
+    "started_at": "2026-11-17T06:46:34.331071+00:00",
+    "completed_at": "2026-11-17T06:46:34.894104+00:00",
+    "duration_seconds": 0.563,
+    "exit_code": 0,
+    "log_sha256": "4ff56721bd6efefc0ab15e08be7e50ec14ede0e6e9f45a369ed5ab5d2f1d1439"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "test_skill_contract_methods.SchemaClosureExampleTests",
+    "test_external_core_methods",
+    "test_document_authoring_skills",
+    "test_skill_method_efficiency",
+    "test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers",
+    "test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets",
+    "test_skill_command_examples.ReleaseHistoryExampleTests",
+    "test_skill_command_examples.InterfaceVersionExampleTests",
+    "test_skill_bisect_methods",
+    "test_review_raw_diff",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_review_commands_run_without_optional_wrapper",
+    "test_skill_content_contract.SkillContentContractTests.test_exported_review_snapshot_captures_selected_target_without_staging",
+    "test_skill_content_contract.SkillContentContractTests.test_feedback_snapshot_uses_readonly_canonical_commands",
+    "test_skill_content_contract.SkillContentContractTests.test_aar_templates_follow_standalone_skill_and_references_are_balanced",
+    "test_skill_trigger_matrix.SkillTriggerMatrixTests.test_all_cases_match_once_loaded_manifest",
+    "test_skill_trigger_matrix.SkillTriggerMatrixTests.test_portable_description_discovery_boundaries",
+    "test_skill_trigger_matrix.SkillTriggerMatrixTests.test_interactive_discovery_modes_and_routing",
+    "test_external_domain_methods.PublishedDomainExamplesTests.test_public_ubsan_example_observes_diagnostics_despite_zero_exit",
+    "-v"
+  ],
+  "exit_code": 0,
+  "duration_seconds": 5.341,
+  "log": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/existing-tests.txt",
+  "evidence_layer": "source-tests-and-isolated-fixtures",
+  "model_behavior": "not-measured"
+}

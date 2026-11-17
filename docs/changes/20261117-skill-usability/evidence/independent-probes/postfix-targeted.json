@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "bypass",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "tests.test_task_package_delivery",
+    "tests.test_skill_consumer_usability",
+    "tests.test_skill_rtos_methods",
+    "tests.test_skill_trigger_matrix",
+    "-v"
+  ],
+  "returncode": 0,
+  "duration_seconds": 2.9399666829995112,
+  "log": "/workspace/scratch/fe8de3b42084/skill-usability-review/postfix-targeted.log"
+}

@@ -1,0 +1,90 @@
+{
+  "timestamp_utc": "2026-11-17T06:34:08.455307+00:00",
+  "head": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "branch": "feat/skill-usability-20261117",
+  "files": [
+    {
+      "path": "manifest.json",
+      "baseline_bytes": 90988,
+      "current_bytes": 90969,
+      "delta": -19,
+      "sha256": "f5703ddff0c58822e5e452092d4497eb9ab19d36033108b0fcdaac78ecee906c"
+    },
+    {
+      "path": "src/agent_dev_kit/intent_boundary.py",
+      "baseline_bytes": 7395,
+      "current_bytes": 7650,
+      "delta": 255,
+      "sha256": "d4a8631aadf33fc43b9802bd086c0130db282ef5df048c5e99d6e08dc83a6850"
+    },
+    {
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "baseline_bytes": 3659,
+      "current_bytes": 2877,
+      "delta": -782,
+      "sha256": "72c0c4a1c88ee1122075dba482252dfbab7f6dde0ee4d07f670c9224f7d65488"
+    },
+    {
+      "path": "skills/adk-task-breakdown/references/task-packaging.md",
+      "baseline_bytes": 1534,
+      "current_bytes": 2284,
+      "delta": 750,
+      "sha256": "1c10d654b9015f356333e515009224a630d102e039db2731c58c1191cab5a34e"
+    },
+    {
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "baseline_bytes": 6235,
+      "current_bytes": 6254,
+      "delta": 19,
+      "sha256": "34a4b3b683200dfe13be96db626d9f2874a85d235df394e01a9c06eaf1a9f90c"
+    },
+    {
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "baseline_bytes": 3821,
+      "current_bytes": 3802,
+      "delta": -19,
+      "sha256": "7037682c48973fa258f1fe0774cdc83b59c668f90fb1e7242830b36f4c0586fe"
+    },
+    {
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "baseline_bytes": 5013,
+      "current_bytes": 5185,
+      "delta": 172,
+      "sha256": "56e329468ecc2af51a4b34865eb655ec0f805a795f69616ea416910eaa50f6dd"
+    },
+    {
+      "path": "tests/test_skill_trigger_matrix.py",
+      "baseline_bytes": 36989,
+      "current_bytes": 41980,
+      "delta": 4991,
+      "sha256": "0f6a415c9116ebbab30c78b94315b801e2bb2b365dd10c81d627fc588ecf16c9"
+    },
+    {
+      "path": "tests/test_task_package_delivery.py",
+      "baseline_bytes": 0,
+      "current_bytes": 8690,
+      "delta": 8690,
+      "sha256": "db637f6330c9c6e9112971622c55e808c3698b9c4e09d160e75fc8edcd5b4b74"
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "baseline_bytes": 1213,
+      "current_bytes": 1249,
+      "delta": 36,
+      "sha256": "50cf40b01a0694894953fb83d669ef372c0943566facd0d6fe764910ef85f8a0"
+    },
+    {
+      "path": "tests/test_intent_boundary_governance.sh",
+      "baseline_bytes": 9113,
+      "current_bytes": 9324,
+      "delta": 211,
+      "sha256": "51cc7f6ab900a8664a648e26cb99ce69544c0273c1498c0e388139d7bd42786c"
+    }
+  ],
+  "skill_asset_delta": 140,
+  "boundaries": [
+    "Self-verification, not independent final review",
+    "manifest routing released to coordinator for version packaging",
+    "No commits, pushes, live runtime or device operations"
+  ]
+}

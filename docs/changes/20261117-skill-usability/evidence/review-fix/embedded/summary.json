@@ -1,0 +1,80 @@
+{
+  "skill_sha256": "67658d3a4f029dcbd86c6a6eba76870d588bbfc61275152b0e72b233edb8e803",
+  "before_sha256": "d087ee87d5b513e82319045ccbf1952f2f62764831e1ad6681263df730713f7a",
+  "bytes_added": 8,
+  "ratchet_file_unchanged": true,
+  "profiles": [
+    {
+      "profile": "core",
+      "status": "pass",
+      "entry_actual": 97035,
+      "entry_limit": 133940,
+      "full_actual": 173124,
+      "full_limit": 184133,
+      "full_margin": 11009
+    },
+    {
+      "profile": "embedded-fullstack",
+      "status": "pass",
+      "entry_actual": 209305,
+      "entry_limit": 245296,
+      "full_actual": 316424,
+      "full_limit": 316854,
+      "full_margin": 430
+    },
+    {
+      "profile": "incident-response",
+      "status": "pass",
+      "entry_actual": 30415,
+      "entry_limit": 37797,
+      "full_actual": 46515,
+      "full_limit": 46612,
+      "full_margin": 97
+    },
+    {
+      "profile": "large-refactor",
+      "status": "pass",
+      "entry_actual": 212330,
+      "entry_limit": 248328,
+      "full_actual": 323306,
+      "full_limit": 323328,
+      "full_margin": 22
+    },
+    {
+      "profile": "personal-core",
+      "status": "pass",
+      "entry_actual": 112467,
+      "entry_limit": 152918,
+      "full_actual": 192293,
+      "full_limit": 204293,
+      "full_margin": 12000
+    },
+    {
+      "profile": "release-hardening",
+      "status": "pass",
+      "entry_actual": 81591,
+      "entry_limit": 112256,
+      "full_actual": 156211,
+      "full_limit": 159576,
+      "full_margin": 3365
+    },
+    {
+      "profile": "research-intake",
+      "status": "pass",
+      "entry_actual": 64960,
+      "entry_limit": 86571,
+      "full_actual": 117370,
+      "full_limit": 124543,
+      "full_margin": 7173
+    },
+    {
+      "profile": "team-core",
+      "status": "pass",
+      "entry_actual": 123001,
+      "entry_limit": 166442,
+      "full_actual": 211218,
+      "full_limit": 223333,
+      "full_margin": 12115
+    }
+  ]
+}

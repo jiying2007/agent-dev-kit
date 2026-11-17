@@ -1,0 +1,195 @@
+{
+  "timestamp_utc": "2026-11-17T06:45:16.190816+00:00",
+  "head": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "manifest_version": "11.3.14",
+  "files": [
+    {
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "previous_t3b_bytes": 28210,
+      "current_bytes": 29269,
+      "delta": 1059,
+      "sha256": "3b4364f90f7f0858e66f937a7e1b3c00c5afe19da3dd9a2c1ab542b6d420ca60"
+    },
+    {
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "previous_t3b_bytes": 5185,
+      "current_bytes": 5159,
+      "delta": -26,
+      "sha256": "eb401873f401d125ea007d13e6760fc4b840190fef979ea02f94ebc4840efbb8"
+    },
+    {
+      "path": "tests/test_skill_trigger_matrix.py",
+      "previous_t3b_bytes": 41980,
+      "current_bytes": 44328,
+      "delta": 2348,
+      "sha256": "19371a665bedd7ed77de97cf3ad26ce61c96c63b11e19b0efc26ceaa947ad4fd"
+    }
+  ],
+  "unchanged_global_helpers": {
+    "_phrase_matches": true,
+    "_all_phrase_matches": true,
+    "_is_locally_negated": true,
+    "_active_phrase_matches": true,
+    "_skill_identity_declined": true,
+    "_classify_task_mode": true,
+    "_matching_negated_intent": true,
+    "_strictest_permission": true,
+    "_resolved_policy": true
+  },
+  "ratchet_source_unchanged": true,
+  "profiles": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 97035,
+        "potential_full_source_bytes": 173124
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 81591,
+        "potential_full_source_bytes": 156211
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 112467,
+        "potential_full_source_bytes": 192293
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 209279,
+        "potential_full_source_bytes": 316398
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123001,
+        "potential_full_source_bytes": 211218
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 212304,
+        "potential_full_source_bytes": 323280
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30415,
+        "potential_full_source_bytes": 46515
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 64960,
+        "potential_full_source_bytes": 117370
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "authority": "Only implicit-context eligibility changed; no runtime, device, commit or publish action"
+}

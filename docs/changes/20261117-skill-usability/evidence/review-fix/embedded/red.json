@@ -1,0 +1,244 @@
+{
+  "phase": "red",
+  "observed_at": "2026-11-17T06:41:27.640615+00:00",
+  "skill_path": "/workspace/scratch/fe8de3b42084/adk-skill-usability/skills/adk-rtos-task-design/SKILL.md",
+  "skill_sha256": "d087ee87d5b513e82319045ccbf1952f2f62764831e1ad6681263df730713f7a",
+  "skill_bytes": 5796,
+  "implicit_context_line": "implicit_context: [\"RTOS/Zephyr/ThreadX/RT-Thread\"]",
+  "routes": [
+    {
+      "id": "vxworks-existing-positive",
+      "prompt": "请为 VxWorks 做任务设计",
+      "expect_selected": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "passed": false
+    },
+    {
+      "id": "freertos-existing-positive",
+      "prompt": "请为 FreeRTOS 做实时任务设计。",
+      "expect_selected": true,
+      "actual": {
+        "match": true,
+        "source": "skill_trigger",
+        "skill": "adk-rtos-task-design",
+        "trigger": "任务设计",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      },
+      "passed": true
+    },
+    {
+      "id": "sales-negative",
+      "prompt": "请做一个季度销售团队任务设计。",
+      "expect_selected": false,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "passed": true
+    },
+    {
+      "id": "no-rtos-negative",
+      "prompt": "项目没有 RTOS；请评估裸机主循环任务设计。",
+      "expect_selected": false,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "adk-rtos-task-design"
+        ]
+      },
+      "passed": true
+    }
+  ],
+  "route_passed": 3,
+  "ratchet_sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff",
+  "ratchets": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 97035,
+        "potential_full_source_bytes": 173124
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 209297,
+        "potential_full_source_bytes": 316416
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30415,
+        "potential_full_source_bytes": 46515
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 212322,
+        "potential_full_source_bytes": 323298
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 112467,
+        "potential_full_source_bytes": 192293
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 81591,
+        "potential_full_source_bytes": 156211
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 64960,
+        "potential_full_source_bytes": 117370
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 123001,
+        "potential_full_source_bytes": 211218
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ],
+  "native_runtime_evidence": "not-run",
+  "live_device_evidence": "not-run"
+}

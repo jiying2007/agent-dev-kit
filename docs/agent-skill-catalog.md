@@ -51,7 +51,7 @@
 | 20 | 40 | `intake` | primary | reviewer | `adk-skill-deep-analysis` | 用于只读发现并对标公开优质 Skills，或分析指定 Skill 的真实方法、来源风险及对 ADK 的可迁移价值；不用于自动安装外部 Skill、执行外部脚本或授权源码写入。 | 深度拆解 skill | `skills/adk-skill-deep-analysis/SKILL.md` |
 | 30 | 10 | `planning` | primary | playbook | `adk-lightweight-planning` | 用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。 | 给我一个计划 | `skills/adk-lightweight-planning/SKILL.md` |
 | 30 | 15 | `planning` | primary | generator | `adk-goal-authoring` | 用于新建或实质修订 Goal 合同、原验收映射和可关闭交付批次；不用于已有 Goal 的日常执行、CI 状态查询或只读计划。 | 生成Goal | `skills/adk-goal-authoring/SKILL.md` |
-| 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 用于复杂需求拆解、公共契约迁移拆分及并行边界；单点小修无需拆包，也不替代已批准计划的持续执行。 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
+| 30 | 20 | `planning` | primary | playbook | `adk-task-breakdown` | 用于复杂任务拆解、公共契约迁移及并行边界；单点小修无需拆包，不替代已批准计划的执行。 | 拆解任务 | `skills/adk-task-breakdown/SKILL.md` |
 | 30 | 25 | `planning` | primary | pipeline | `adk-planning-execution-loop` | 用于按已批准多阶段计划实际执行、定向验证、断点恢复与目标收敛；不用于只读计划审查、CI 等待查询或生成 Goal 合同。 | 执行计划 | `skills/adk-planning-execution-loop/SKILL.md` |
 | 30 | 30 | `planning` | primary | governance | `adk-parallel-agent-governance` | 用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。 | 并行 agent | `skills/adk-parallel-agent-governance/SKILL.md` |
 | 30 | 40 | `planning` | primary | governance | `adk-worktree-governance` | 用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。 | worktree | `skills/adk-worktree-governance/SKILL.md` |
@@ -60,7 +60,7 @@
 | 40 | 20 | `design` | primary | generator | `adk-adr-writer` | 用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。 | 写ADR | `skills/adk-adr-writer/SKILL.md` |
 | 40 | 30 | `design` | primary | reviewer | `adk-component-api-stability` | 用于组件 API 演进时检查调用方、兼容边界、迁移与回滚证据；不用于未经设计直接大范围改签名或纯格式修改。 | API稳定性 | `skills/adk-component-api-stability/SKILL.md` |
 | 40 | 40 | `design` | primary | generator | `adk-register-map-design` | 用于芯片寄存器映射、位域权限和驱动接口文档设计；不用于直接对真实寄存器写入或代替外设时序调试。 | 设计寄存器 | `skills/adk-register-map-design/SKILL.md` |
-| 40 | 50 | `design` | primary | playbook | `adk-bsp-analysis` | 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。 | BSP 分析 | `skills/adk-bsp-analysis/SKILL.md` |
+| 40 | 50 | `design` | primary | playbook | `adk-bsp-analysis` | 用于梳理嵌入式 BSP 源码、启动/探测与资源依赖，对照硬件依据、patch/workaround 历史及 SoC/board 差异，交付证据化架构和迁移风险；不用于直接实现驱动或 live 板级故障隔离。 | BSP 分析/BSP 梳理/分析 BSP/梳理 BSP/梳理这个 BSP/梳理现有 BSP | `skills/adk-bsp-analysis/SKILL.md` |
 | 50 | 10 | `implementation` | primary | playbook | `adk-driver-implementation` | 用于 Linux、RTOS 或裸机驱动代码实现、资源生命周期与定向回归；不用于仅做首板调试清单或未经授权的真实设备刷写。 | 驱动开发 | `skills/adk-driver-implementation/SKILL.md` |
 | 50 | 20 | `implementation` | primary | playbook | `adk-driver-bringup-checklist` | 用于首板 bring-up 联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动代码或未经授权执行设备寄存器写操作。 | 驱动调试 | `skills/adk-driver-bringup-checklist/SKILL.md` |
 | 50 | 30 | `implementation` | primary | playbook | `adk-bsp-porting-playbook` | 用于 BSP 移植涉及启动链、驱动依赖、构建环境和迁移风险时规划与验证；不用于未授权的设备刷写或纯源码阅读。 | BSP移植 | `skills/adk-bsp-porting-playbook/SKILL.md` |
@@ -95,7 +95,7 @@
 | 90 | 60 | `release_closure` | primary | governance | `adk-branch-closeout` | 用于代码与验证完成后的分支收口、PR 选择和保留或清理决策；不用于未验证时直接合并、删除用户工作树或替代评审。 | 分支收尾 | `skills/adk-branch-closeout/SKILL.md` |
 | 90 | 70 | `release_closure` | primary | reviewer | `adk-after-action-review` | 用于任务交付后复盘问题、修复成本与可复用经验并形成候选记录；不用于替代交付前验证或直接发布未经审核的长期记忆。 | 任务复盘 | `skills/adk-after-action-review/SKILL.md` |
 | 100 | 10 | `governance` | primary | governance | `adk-memory-curator` | 用于已授权的历史记录、项目知识和决策证据整理，生成可审查的 memory candidate；不用于静默写入长期记忆或传播无关敏感上下文。 | 记忆整理 | `skills/adk-memory-curator/SKILL.md` |
-| 100 | 20 | `governance` | primary | governance | `adk-archive-governance` | 用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。 | 归档治理 | `skills/adk-archive-governance/SKILL.md` |
+| 100 | 20 | `governance` | primary | governance | `adk-archive-governance` | 用于只读检查现有归档的元数据、topic、hash 与安全问题，提出修复计划并交接既有实施者；不负责新建知识笔记或代替知识候选的正式审核。 | 归档治理 | `skills/adk-archive-governance/SKILL.md` |
 | 100 | 30 | `governance` | primary | generator | `adk-knowledge-archive` | 用于新建脱敏的研究、排障与决策归档候选并登记证据指针；不处理已有归档的元数据修复，也不替代发布审核。 | 知识归档 | `skills/adk-knowledge-archive/SKILL.md` |
 | 100 | 50 | `governance` | primary | reviewer | `adk-engineering-growth-review` | 用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。 | 开发者成长复盘 | `skills/adk-engineering-growth-review/SKILL.md` |
 

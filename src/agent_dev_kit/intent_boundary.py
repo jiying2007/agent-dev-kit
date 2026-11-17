@@ -110,7 +110,7 @@ def validate_task_package(value: Any) -> Tuple[str, ...]:
         if not _non_empty_string_list(value[field]):
             errors.append("{} must be a non-empty array of non-empty strings".format(field))
     kind = value["work_item_kind"]
-    if kind not in WORK_ITEM_RULES:
+    if not isinstance(kind, str) or kind not in WORK_ITEM_RULES:
         errors.append("work_item_kind is invalid")
     else:
         expected_permission, expected_gate = WORK_ITEM_RULES[kind]
@@ -118,14 +118,12 @@ def validate_task_package(value: Any) -> Tuple[str, ...]:
             errors.append("{} requires implementation_permission={}".format(kind, expected_permission))
         if value["exit_gate"] != expected_gate:
             errors.append("{} requires exit_gate={}".format(kind, expected_gate))
-        prototype_refs = [
-            item.partition(":")[2]
+        if kind == "prototype" and _non_empty_string_list(value["artifacts"]) and not any(
+            item.startswith("prototype_evidence:") and _non_empty_string(item.partition(":")[2])
             for item in value["artifacts"]
-            if item.startswith("prototype_evidence:")
-        ]
-        if kind == "prototype" and not any(_non_empty_string(item) for item in prototype_refs):
+        ):
             errors.append("prototype requires a prototype_evidence artifact")
-    if value["retention_decision"] not in RETENTION_DECISIONS:
+    if not isinstance(value["retention_decision"], str) or value["retention_decision"] not in RETENTION_DECISIONS:
         errors.append("retention_decision is invalid")
     return tuple(errors)
 
@@ -179,15 +177,19 @@ def validate_prototype_evidence(value: Any, as_of: Optional[date] = None) -> Tup
     if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
         errors.append("artifact_sha256 must be 64 lowercase hex characters")
     retention = value["retention_decision"]
-    if retention not in RETENTION_DECISIONS:
+    if not isinstance(retention, str) or retention not in RETENTION_DECISIONS:
         errors.append("retention_decision is invalid")
     elif retention == "delete-orphan" and value["active_references_absent"] is not True:
         errors.append("delete-orphan requires active_references_absent=true")
-    try:
-        expires_at = date.fromisoformat(str(value["expires_at"]))
-    except ValueError:
+    expiry_value = value["expires_at"]
+    if not isinstance(expiry_value, str):
         errors.append("expires_at must be an ISO date")
     else:
-        if retention == "expire" and as_of is not None and expires_at <= as_of:
-            errors.append("expire requires a future expires_at")
+        try:
+            expires_at = date.fromisoformat(expiry_value)
+        except ValueError:
+            errors.append("expires_at must be an ISO date")
+        else:
+            if retention == "expire" and as_of is not None and expires_at <= as_of:
+                errors.append("expire requires a future expires_at")
     return tuple(errors)

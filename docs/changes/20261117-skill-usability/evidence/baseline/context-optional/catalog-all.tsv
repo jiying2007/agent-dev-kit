@@ -1,0 +1,75 @@
+type	name	description	path
+skill	adk-runtime-router	用于任务开始前在可信 Skills 清单中选定唯一 primary、supporting 和回退路径；不用于已有明确任务包时重复路由或隐式授予执行权限。	skills/adk-runtime-router/SKILL.md
+skill	adk-context-engineering	用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。	skills/adk-context-engineering/SKILL.md
+skill	adk-token-context-governance	用于日志与上下文过长时设置 Token 预算、分层读取和原文回退门禁；不用于压缩掉高风险证据或放宽验证要求。	skills/adk-token-context-governance/SKILL.md
+skill	adk-requirements-triage	用于需求不清时澄清目标、范围边界和可验证验收标准；已明确的开发任务无需重复访谈，也不用于代替实际实现。	skills/adk-requirements-triage/SKILL.md
+skill	adk-structured-requirements-questioning	用于头脑风暴、brainstorming、Grill Me、方案拷问、苏格拉底式追问；以 Explore/Challenge 多轮探索意图、方案和决策依赖。不用于已有明确方案的直接实现、普通验收整理或文档润色。	skills/adk-structured-requirements-questioning/SKILL.md
+skill	adk-repo-prompt-analysis	用于逆向审查参考仓 Agent Prompt 的约束、结构与上下文工程方法；不用于直接复制不可信指令或运行外部仓脚本。	skills/adk-repo-prompt-analysis/SKILL.md
+skill	adk-skill-deep-analysis	用于只读发现并对标公开优质 Skills，或分析指定 Skill 的真实方法、来源风险及对 ADK 的可迁移价值；不用于自动安装外部 Skill、执行外部脚本或授权源码写入。	skills/adk-skill-deep-analysis/SKILL.md
+skill	adk-lightweight-planning	用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。	skills/adk-lightweight-planning/SKILL.md
+skill	adk-task-breakdown	用于复杂需求拆解、公共契约迁移拆分及并行边界；单点小修无需拆包，也不替代已批准计划的持续执行。	skills/adk-task-breakdown/SKILL.md
+skill	adk-parallel-agent-governance	用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。	skills/adk-parallel-agent-governance/SKILL.md
+skill	adk-worktree-governance	用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。	skills/adk-worktree-governance/SKILL.md
+skill	adk-context-compress-handoff	用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。	skills/adk-context-compress-handoff/SKILL.md
+skill	adk-interface-contract-design	用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。	skills/adk-interface-contract-design/SKILL.md
+skill	adk-adr-writer	用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。	skills/adk-adr-writer/SKILL.md
+skill	adk-component-api-stability	用于组件 API 演进时检查调用方、兼容边界、迁移与回滚证据；不用于未经设计直接大范围改签名或纯格式修改。	skills/adk-component-api-stability/SKILL.md
+skill	adk-register-map-design	用于芯片寄存器映射、位域权限和驱动接口文档设计；不用于直接对真实寄存器写入或代替外设时序调试。	skills/adk-register-map-design/SKILL.md
+skill	adk-bsp-analysis	分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。	skills/adk-bsp-analysis/SKILL.md
+skill	adk-goal-authoring	用于新建或实质修订 Goal 合同、原验收映射和可关闭交付批次；不用于已有 Goal 的日常执行、CI 状态查询或只读计划。	skills/adk-goal-authoring/SKILL.md
+skill	adk-planning-execution-loop	用于按已批准多阶段计划实际执行、定向验证、断点恢复与目标收敛；不用于只读计划审查、CI 等待查询或生成 Goal 合同。	skills/adk-planning-execution-loop/SKILL.md
+skill	adk-driver-implementation	用于 Linux、RTOS 或裸机驱动代码实现、资源生命周期与定向回归；不用于仅做首板调试清单或未经授权的真实设备刷写。	skills/adk-driver-implementation/SKILL.md
+skill	adk-driver-bringup-checklist	用于首板 bring-up 联调时核对驱动时钟、复位、probe、中断和外设依赖；不用于直接编写驱动代码或未经授权执行设备寄存器写操作。	skills/adk-driver-bringup-checklist/SKILL.md
+skill	adk-bsp-porting-playbook	用于 BSP 移植涉及启动链、驱动依赖、构建环境和迁移风险时规划与验证；不用于未授权的设备刷写或纯源码阅读。	skills/adk-bsp-porting-playbook/SKILL.md
+skill	adk-rtos-task-design	用于 RTOS 任务优先级、周期唤醒、同步资源与调度风险设计；不用于裸机单循环或未经测量声称实时性达标。	skills/adk-rtos-task-design/SKILL.md
+skill	adk-interrupt-dma-patterns	用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。	skills/adk-interrupt-dma-patterns/SKILL.md
+skill	adk-protocol-stack-integration	用于通信协议栈适配、连接状态机和跨层错误处理的集成设计与回归；不用于纯寄存器布局设计或仅修复孤立格式问题。	skills/adk-protocol-stack-integration/SKILL.md
+skill	adk-cmake-cross-build	用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。	skills/adk-cmake-cross-build/SKILL.md
+skill	adk-code-simplification	用于代码结构冗长且行为已被测试约束时做等价代码简化；不用于未建立行为基线的功能修改、性能调优或根因不明的错误。	skills/adk-code-simplification/SKILL.md
+skill	adk-systematic-debugging	用于根因不明问题的复现、单变量实验、sanitizer 取证与回归；不用于跳过取证猜修复或替代性能基准。	skills/adk-systematic-debugging/SKILL.md
+skill	adk-embedded-debug-transport	用于管理串口、SSH、ADB、远程 GDB 等调试通道的连接与权限证据；不用于隐式远程部署、修改设备配置或替代故障根因分析。	skills/adk-embedded-debug-transport/SKILL.md
+skill	adk-embedded-remote-debug-log-triage	用于远程设备 SSH、ADB、串口与启动日志取证和分层连通性定位；不用于未授权远程写入、替代离线 core dump 解析或新驱动实现。	skills/adk-embedded-remote-debug-log-triage/SKILL.md
+skill	adk-offline-core-dump-triage	用于离线分析嵌入式 Linux core dump，并对 binary、BuildID、符号与 GDB 匹配留证；不用于无符号时编造可信 backtrace 或操作在线设备。	skills/adk-offline-core-dump-triage/SKILL.md
+skill	adk-hardware-debugging	用于板级电源、时钟、复位和硬件异常的假设验证与证据定位；不用于把 Linux oops 直接归咎硬件或未经许可执行带风险的硬件操作。	skills/adk-hardware-debugging/SKILL.md
+skill	adk-performance-profiling-embedded	用于有指标的嵌入式性能分析、栈上界判读和真实负载 A/B；不用于无指标猜测或推断收益。	skills/adk-performance-profiling-embedded/SKILL.md
+skill	adk-test-strategy	用于跨模块测试策略、独立期望值、检查器校准、风险与行为覆盖；不用于只生成嵌入式局部替身代码或代替真实执行结果。	skills/adk-test-strategy/SKILL.md
+skill	adk-unit-test-embedded	用于 MCU/RTOS 及其 host 模型的单元测试断言、性质/状态序列测试与外设替身；非跨模块策略，不用于证明真实 HIL 性能。	skills/adk-unit-test-embedded/SKILL.md
+skill	adk-integration-hil-sil	用于软件在环与硬件在环的集成测试、场景配置与结果证据编排；不用于仅做单元测试或绕过真实设备操作授权。	skills/adk-integration-hil-sil/SKILL.md
+skill	adk-embedded-diagnostic-harness	用于诊断 CLI、prog_tool、strict 套件及 HIL/SIL 证据的返回码和行为验证；不用于无许可的现场产测写入或直接放行量产。	skills/adk-embedded-diagnostic-harness/SKILL.md
+skill	adk-fault-injection-recovery	用于已授权的故障注入、失败路径与恢复能力验证，并记录可重放的回滚证据；不用于未经隔离的生产设备破坏性实验。	skills/adk-fault-injection-recovery/SKILL.md
+skill	adk-artifact-gating	用于跨仓交付物需要标签、状态与验收交接协议时定义 Artifact 门禁；不用于单仓常规测试、直接上传制品或发布批准。	skills/adk-artifact-gating/SKILL.md
+skill	adk-pilot-framework	用于跨仓新能力的有界 Pilot 试跑、证据采集、失败门禁和回退判定；不用于替代正式产品资格认证或自动将试验结果发布。	skills/adk-pilot-framework/SKILL.md
+skill	adk-verification-before-completion	用于完成前核对测试、审查和真实证据；不用于把自述、静态检查或过期收据当作完成证明。	skills/adk-verification-before-completion/SKILL.md
+skill	adk-code-review-loop	用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。	skills/adk-code-review-loop/SKILL.md
+skill	adk-repo-drift-remediation	用于全仓漂移、兼容残留、冗余目录和文档代码不一致的取证与修复计划；不用于跳过基线验证或清除用户未授权的改动。	skills/adk-repo-drift-remediation/SKILL.md
+skill	adk-static-analysis-c-cpp	用于 C/C++ 静态分析告警分级、根因追踪与误报确认，并补最小复现；不用于把单次扫描当作完整功能或动态安全验收。	skills/adk-static-analysis-c-cpp/SKILL.md
+skill	adk-commit-pr-quality-gate	用于提交 PR 前核对测试证据、差异范围与质量门禁；不能替代独立代码审查，也不用于未授权的合并或发布。	skills/adk-commit-pr-quality-gate/SKILL.md
+skill	adk-release-versioning	用于规划版本号、Changelog 和发布基线并检查历史版本一致性；不执行真实发布，也不用于替代固件包验证或设备更新。	skills/adk-release-versioning/SKILL.md
+skill	adk-production-field-readiness	用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。	skills/adk-production-field-readiness/SKILL.md
+skill	adk-embedded-release-orchestration	用于嵌入式固件 OTA 制品的发布准备、签名证据和回滚编排；不用于未经单独授权的真实 publish、设备 flash 或发布批准。	skills/adk-embedded-release-orchestration/SKILL.md
+skill	adk-embedded-storage-layout-migration	用于 MTD、UBI、分区及文件系统布局迁移的 host 端检查、演练和回退设计；不用于未授权的设备存储写入或纯日志检索。	skills/adk-embedded-storage-layout-migration/SKILL.md
+skill	adk-cross-team-handoff	用于产品、研发、测试等多团队交接时明确责任、接口和验收证据；不用于替代需求变更批准或直接操作外部系统。	skills/adk-cross-team-handoff/SKILL.md
+skill	adk-branch-closeout	用于代码与验证完成后的分支收口、PR 选择和保留或清理决策；不用于未验证时直接合并、删除用户工作树或替代评审。	skills/adk-branch-closeout/SKILL.md
+skill	adk-after-action-review	用于任务交付后复盘问题、修复成本与可复用经验并形成候选记录；不用于替代交付前验证或直接发布未经审核的长期记忆。	skills/adk-after-action-review/SKILL.md
+skill	adk-memory-curator	用于已授权的历史记录、项目知识和决策证据整理，生成可审查的 memory candidate；不用于静默写入长期记忆或传播无关敏感上下文。	skills/adk-memory-curator/SKILL.md
+skill	adk-archive-governance	用于检查和修复现有归档的元数据、topic、hash 与安全问题；不负责新建知识笔记或代替知识候选的正式审核。	skills/adk-archive-governance/SKILL.md
+skill	adk-knowledge-archive	用于新建脱敏的研究、排障与决策归档候选并登记证据指针；不处理已有归档的元数据修复，也不替代发布审核。	skills/adk-knowledge-archive/SKILL.md
+skill	adk-engineering-growth-review	用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。	skills/adk-engineering-growth-review/SKILL.md
+optional-skill	adk-external-practice-absorption	统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。	optional-skills/adk-external-practice-absorption/SKILL.md
+optional-skill	adk-data-fetch	用于按 URL 或 IMAP 类型选择**已显式安装**的数据获取子 Skill 并检查访问权限；不自动安装子 Skill，不用于数据库操作或未授权的邮件读取。	optional-skills/adk-data-fetch/SKILL.md
+optional-skill	adk-email-imap-fetch	用于已授权邮箱的只读 IMAP 邮件列表及正文提取，并限制凭据与输出范围；不用于邮件发送、归档写入或扫描无关邮箱。	optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md
+optional-skill	adk-fetch-url-content	用于对明确的公开 HTTP(S) URL 做正文提取与结构化 Markdown 转换；不用于网页搜索、绕过登录、内网探测或抓取受限资源。	optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md
+optional-skill	adk-test-flakiness-triage	用于非确定性测试故障的复现、波动归因和消除不稳定方案验证；不用于把失败盲目重跑到绿或降低测试门禁。	optional-skills/adk-test-flakiness-triage/SKILL.md
+optional-skill	adk-security-supply-chain	用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。	optional-skills/adk-security-supply-chain/SKILL.md
+optional-skill	adk-prose-revision	用于对已完成的中文或英文文章、报告、说明文稿定位表达问题并做最小范围润色，保留事实、术语与原有风格；不用于代码审查、ADR 决策、事实核验或判断作者是否为 AI。	optional-skills/adk-prose-revision/SKILL.md
+optional-skill	adk-incident-rca-report	用于生产事故稳定后整理时间线、根因、恢复和防复发证据；不用于事故正在处置时替代现场响应或虚构不存在的取证材料。	optional-skills/adk-incident-rca-report/SKILL.md
+optional-skill	adk-skill-composition-governance	用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。	optional-skills/adk-skill-composition-governance/SKILL.md
+workflow	feature-delivery	新功能从需求收敛到验证评审的交付工作流	workflows/feature-delivery/WORKFLOW.md
+workflow	bugfix-delivery	缺陷复现、根因定位、回归验证和审查闭环工作流	workflows/bugfix-delivery/WORKFLOW.md
+workflow	release-hardening	发布前安全、性能、版本、回滚和放行证据收口工作流	workflows/release-hardening/WORKFLOW.md
+workflow	external-practice-absorption	多来源外部实践从 report-only candidate 到独立决策、ADK change、验证、pilot、发布复审和退役的治理工作流	workflows/external-practice-absorption/WORKFLOW.md
+workflow	skill-curation-delivery	技能候选筛选、core/optional 归属和触发质量验证工作流	workflows/skill-curation-delivery/WORKFLOW.md
+workflow	adk-delivery-gate	agent-dev-kit 通用资产生产交付门禁	workflows/adk-delivery-gate/WORKFLOW.md
+workflow	runtime-routing	运行时技能路由、fallback 边界和 profile 闭包验证工作流	workflows/runtime-routing/WORKFLOW.md
+profile	core	通用 ADK 核心配置（需求、架构、实现、验证与评审）	manifest.json
+profile	personal-core	个人通用 ADK 资产配置（核心功能 + 发布检查）	manifest.json

@@ -1,0 +1,457 @@
+{
+  "source": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "observed_at": "2026-11-17T06:20:34.607833+00:00",
+  "action": "exports",
+  "result": [
+    {
+      "target": "claude-code",
+      "status": "pass",
+      "group_skill_count": 20,
+      "skills": [
+        {
+          "name": "adk-bsp-analysis",
+          "destination": "skills/adk-bsp-analysis/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 3373,
+          "sha256": "7d4a8344dbd46cd0986fe39675d4993a848cacdb4f49f276ed8fe1e74020813d"
+        },
+        {
+          "name": "adk-bsp-porting-playbook",
+          "destination": "skills/adk-bsp-porting-playbook/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4874,
+          "sha256": "203b9a8719ebfb29eb2b53c72b45c09e960952c04a489182dc8c9c9f5a39b454"
+        },
+        {
+          "name": "adk-cmake-cross-build",
+          "destination": "skills/adk-cmake-cross-build/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 5055,
+          "sha256": "577203afa95214888203c5d418c211bd46db5bafbecb0b361c462b432638472c"
+        },
+        {
+          "name": "adk-driver-bringup-checklist",
+          "destination": "skills/adk-driver-bringup-checklist/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4954,
+          "sha256": "612f816672449d87d27b5016265cf06c96144e8e96b67a74c0fbc9af66539be3"
+        },
+        {
+          "name": "adk-driver-implementation",
+          "destination": "skills/adk-driver-implementation/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4571,
+          "sha256": "b941024389859386e239c5042a49ecc18557563c57cba7a5b9c8872dae529cef"
+        },
+        {
+          "name": "adk-embedded-debug-transport",
+          "destination": "skills/adk-embedded-debug-transport/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4911,
+          "sha256": "0fc09c209b459562bb4f88b430cf75ef82b9cb8ac3fe79d710f50c7e441bc6e3"
+        },
+        {
+          "name": "adk-embedded-diagnostic-harness",
+          "destination": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 2557,
+          "sha256": "68fe05c06a1b0a5aaaaeb56095755743afb2764d0cae5bb50781b272a320aa10"
+        },
+        {
+          "name": "adk-embedded-release-orchestration",
+          "destination": "skills/adk-embedded-release-orchestration/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 4536,
+          "sha256": "4c84848a45ca3c0093b90be127e16fec622dab8c472090a7d69c1f24cd88b292"
+        },
+        {
+          "name": "adk-embedded-remote-debug-log-triage",
+          "destination": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 5559,
+          "sha256": "6ac984fa90431016548f6bbed3da4fce94a89055d8ede9f5519ba10fc96f9fad"
+        },
+        {
+          "name": "adk-embedded-storage-layout-migration",
+          "destination": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4724,
+          "sha256": "5a484e9388578b410dcf4c6ac9d5b2c4a424aa64614f97fa3e413f8196dd440d"
+        },
+        {
+          "name": "adk-fault-injection-recovery",
+          "destination": "skills/adk-fault-injection-recovery/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3374,
+          "sha256": "690519f51fd90e167b0053dc7cb0d98689acdf3a5393384360714be1f0e351be"
+        },
+        {
+          "name": "adk-hardware-debugging",
+          "destination": "skills/adk-hardware-debugging/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2356,
+          "sha256": "c1eaf0ccaf90b2f8107d0c45ddf9e3de97bc64950104b8ba8c7986628ca7adb8"
+        },
+        {
+          "name": "adk-integration-hil-sil",
+          "destination": "skills/adk-integration-hil-sil/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3741,
+          "sha256": "bd5995afff4eca39b172d6f1b3999752f05032c96893361915a3356b0542593b"
+        },
+        {
+          "name": "adk-interrupt-dma-patterns",
+          "destination": "skills/adk-interrupt-dma-patterns/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+              "exists": true,
+              "exact_copy": true
+            },
+            {
+              "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 4802,
+          "sha256": "add3170a965cb36aff980adc7b40aadaf9ae9b0c93c69480be614c4a8411da21"
+        },
+        {
+          "name": "adk-performance-profiling-embedded",
+          "destination": "skills/adk-performance-profiling-embedded/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2845,
+          "sha256": "79fed7acd66034b6900110b81f7e23ed8ee555bfa82a95b9669f9780088bef1b"
+        },
+        {
+          "name": "adk-protocol-stack-integration",
+          "destination": "skills/adk-protocol-stack-integration/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2977,
+          "sha256": "daad16d0cfa7d8bfef0c8bef6c258977ab118963866ce95fa544968e009d04ac"
+        },
+        {
+          "name": "adk-register-map-design",
+          "destination": "skills/adk-register-map-design/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3714,
+          "sha256": "02ab2ce4d81ea4affb89b15b9367708752a9cc594ee015e290db57c4f8876251"
+        },
+        {
+          "name": "adk-rtos-task-design",
+          "destination": "skills/adk-rtos-task-design/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 5286,
+          "sha256": "77510adb0e0699dbfea95c8bc44ccbd62f2f1039bb5a9b697bd129745e2b955a"
+        },
+        {
+          "name": "adk-static-analysis-c-cpp",
+          "destination": "skills/adk-static-analysis-c-cpp/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3283,
+          "sha256": "7660faf491572ed69e50c45ef1da29f192a76448c5c839842919e8b491fd9e93"
+        },
+        {
+          "name": "adk-unit-test-embedded",
+          "destination": "skills/adk-unit-test-embedded/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+              "exists": true,
+              "exact_copy": true
+            },
+            {
+              "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2590,
+          "sha256": "63db78e83dc71fc61fbfeb5e8e41e2b9c323df60e0513627740eeb2827d42ab7"
+        }
+      ]
+    },
+    {
+      "target": "opencode",
+      "status": "pass",
+      "group_skill_count": 20,
+      "skills": [
+        {
+          "name": "adk-bsp-analysis",
+          "destination": "skills/adk-bsp-analysis/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 3370,
+          "sha256": "3c4ec6a7648ef58874d9a0cf504179793698b0a7ca2d24f15429e882656f4ce2"
+        },
+        {
+          "name": "adk-bsp-porting-playbook",
+          "destination": "skills/adk-bsp-porting-playbook/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4871,
+          "sha256": "efa47e6e5431ad253df159f5e5da0f0911ea38dd2f0be720ebd57e9ef3d75620"
+        },
+        {
+          "name": "adk-cmake-cross-build",
+          "destination": "skills/adk-cmake-cross-build/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 5052,
+          "sha256": "61ee9111aa9f8f61aab11a5c6213319520a8ab30ce033a297ca9ed070d0e75a7"
+        },
+        {
+          "name": "adk-driver-bringup-checklist",
+          "destination": "skills/adk-driver-bringup-checklist/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4951,
+          "sha256": "2e3e9dd385f3657b2723ea4c58c0ca0db922e0c43c76e3c37801beed8612c1a0"
+        },
+        {
+          "name": "adk-driver-implementation",
+          "destination": "skills/adk-driver-implementation/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4568,
+          "sha256": "96d1de22bec1894fe989b73a62308dd3b51f359f99b03c1cdfe761e2b0ef780b"
+        },
+        {
+          "name": "adk-embedded-debug-transport",
+          "destination": "skills/adk-embedded-debug-transport/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4908,
+          "sha256": "424d790ccc8d7a6eecf43c479f43b89001686a4da4c865d358bfc6d7c70a0d58"
+        },
+        {
+          "name": "adk-embedded-diagnostic-harness",
+          "destination": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 2554,
+          "sha256": "23c551499019f9e65b82a21e3306756ddf7fc38b87545c4d6f342675937891b2"
+        },
+        {
+          "name": "adk-embedded-release-orchestration",
+          "destination": "skills/adk-embedded-release-orchestration/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 4533,
+          "sha256": "212523fb4b3bfa4d77f9683ce1481c78d964713eb93d642660d4cc5a62018795"
+        },
+        {
+          "name": "adk-embedded-remote-debug-log-triage",
+          "destination": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 5556,
+          "sha256": "1ec1edb5d63d7aa06e155cc8399f15c97994e629a81f68af3155bb11f19a1792"
+        },
+        {
+          "name": "adk-embedded-storage-layout-migration",
+          "destination": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 4721,
+          "sha256": "8f41ccc2190f2b755c3dd000b2f6e8333cda42c53883412a55f84edb205798c9"
+        },
+        {
+          "name": "adk-fault-injection-recovery",
+          "destination": "skills/adk-fault-injection-recovery/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3371,
+          "sha256": "86387f15e27fd32980731e373d4e192e400c49dfbe44761f62966a6ca0ae09e8"
+        },
+        {
+          "name": "adk-hardware-debugging",
+          "destination": "skills/adk-hardware-debugging/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2353,
+          "sha256": "091e635ff6aeaf46212938b8b6bd1c0f44a9d244b9113647e5532b678ee6d19f"
+        },
+        {
+          "name": "adk-integration-hil-sil",
+          "destination": "skills/adk-integration-hil-sil/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3738,
+          "sha256": "d89f5a71ef02e5693a311ddac4cd31a229afea5a8aec62afd93e56d5ec220054"
+        },
+        {
+          "name": "adk-interrupt-dma-patterns",
+          "destination": "skills/adk-interrupt-dma-patterns/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+              "exists": true,
+              "exact_copy": true
+            },
+            {
+              "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 4799,
+          "sha256": "a7395f756a42039fd0d09810cd392568c3c17c0d366b31c82bf79526d1b2195d"
+        },
+        {
+          "name": "adk-performance-profiling-embedded",
+          "destination": "skills/adk-performance-profiling-embedded/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2842,
+          "sha256": "50a57aa704d0a37c566bdf790b374f2aeda2f3bd74812b24c47462e4f9cb40e0"
+        },
+        {
+          "name": "adk-protocol-stack-integration",
+          "destination": "skills/adk-protocol-stack-integration/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2974,
+          "sha256": "1614d88d308d109d46c0cf357824ef15e4c2261d1e221527f0f83c8e849b6929"
+        },
+        {
+          "name": "adk-register-map-design",
+          "destination": "skills/adk-register-map-design/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3711,
+          "sha256": "3444d9c073457bb78a62c6f937f8fdf6852f025bf1195890017825d04b93c979"
+        },
+        {
+          "name": "adk-rtos-task-design",
+          "destination": "skills/adk-rtos-task-design/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 5283,
+          "sha256": "d559c200d1b42dd87155706821575048ef4ef19d880e77aad010d9c695830276"
+        },
+        {
+          "name": "adk-static-analysis-c-cpp",
+          "destination": "skills/adk-static-analysis-c-cpp/SKILL.md",
+          "body_preserved": true,
+          "references": [],
+          "bytes": 3280,
+          "sha256": "deb04851442639d3e4a405d701fd79e231b332580d9f0606a5a3ce4d08e190af"
+        },
+        {
+          "name": "adk-unit-test-embedded",
+          "destination": "skills/adk-unit-test-embedded/SKILL.md",
+          "body_preserved": true,
+          "references": [
+            {
+              "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+              "exists": true,
+              "exact_copy": true
+            },
+            {
+              "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+              "exists": true,
+              "exact_copy": true
+            }
+          ],
+          "bytes": 2587,
+          "sha256": "93ee12fed5309c50b101b1d91be81d38868b0c6f82ef908e921d824e4787592a"
+        }
+      ]
+    }
+  ]
+}

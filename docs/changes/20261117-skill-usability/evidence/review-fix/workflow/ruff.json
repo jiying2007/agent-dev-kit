@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "bypass",
+    "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/ruff",
+    "check",
+    "src/agent_dev_kit/_matcher_kernel.py",
+    "tests/test_skill_trigger_matrix.py"
+  ],
+  "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+  "exit_code": 0,
+  "timestamp_utc": "2026-11-17T06:44:45.522286+00:00",
+  "output": "All checks passed!\n"
+}

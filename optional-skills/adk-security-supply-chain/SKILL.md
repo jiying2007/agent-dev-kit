@@ -1,8 +1,8 @@
 ---
 name: adk-security-supply-chain
 description: "用于第三方 Skill、脚本、依赖和参考资产引入前的来源、权限与供应链审查；不用于自动安装不可信包或把静态扫描当安全认证。"
-version: 1.1.6
-last_updated: 2026-11-16
+version: 1.1.7
+last_updated: 2026-11-17
 triggers:
   - "供应链审查"
   - "第三方引入"
@@ -68,7 +68,7 @@ constraints:
 - 缺少 deny-path guard test、隐藏工具或运行态清单漂移时，结论为 `needs-fix`。
 
 ## Commands
-以下 `rg` 仅列候选路径；后续限定范围，内容先脱敏再输出，路径本身仍需检查。逐条保留退出码：0 有候选、1 无匹配、2 扫描错误。
+`devkit.sh` 仅在已核 ADK 源码根且 helper 可读、确需维护 ADK 资产时运行。纯 Skill 消费使用目标项目已有验证入口；缺失记 `not-run` 与限制，不安装扫描器、不伪报通过。以下工具仅在适用且已授权时运行；`rg` 仅列路径，后续内容/路径先脱敏。保留退出码：0 有候选、1 无匹配、2 扫描错误。
 
 ```bash
 rg --hidden --no-ignore -l --glob "!**/.git/**" "api[_-]?key|token|secret|password|PRIVATE KEY" <candidate_path>

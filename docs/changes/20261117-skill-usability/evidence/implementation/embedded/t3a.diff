@@ -1,0 +1,144 @@
+diff --git a/skills/adk-bsp-analysis/SKILL.md b/skills/adk-bsp-analysis/SKILL.md
+index 929e9ba..1c9eac0 100644
+--- a/skills/adk-bsp-analysis/SKILL.md
++++ b/skills/adk-bsp-analysis/SKILL.md
+@@ -1,14 +1,15 @@
+ ---
+ name: adk-bsp-analysis
+-description: 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。
+-version: 2.0.1
+-last_updated: 2026-09-15
++description: 用于梳理嵌入式 BSP 源码、启动/探测与资源依赖，对照硬件依据、patch/workaround 历史及 SoC/board 差异，交付证据化架构和迁移风险；不用于直接实现驱动或 live 板级故障隔离。
++version: 2.0.2
++last_updated: 2026-11-17
+ triggers:
+-  - BSP 分析
++  - BSP 分析/BSP 梳理/分析 BSP/梳理 BSP/梳理这个 BSP/梳理现有 BSP
+   - BSP 代码梳理
+   - BSP 架构分析
+   - BSP patch 历史
+   - SoC board 迁移分析
++implicit_context: ["BSP/SoC"]
+ non_triggers:
+   - 直接驱动开发
+   - live 硬件调试
+@@ -32,7 +33,7 @@ constraints:
+ # adk-bsp-analysis
+ 
+ ## Goal
+-建立可验证的 BSP architecture model：从源码入口追到平台资源与硬件依据，并说明哪些是事实、推断、未知以及迁移风险。
++追踪 BSP 源码、资源与硬件依据，区分事实/推断/未知和迁移风险。
+ 
+ ## Prerequisites
+ - 明确 BSP root、SoC、board、kernel/RTOS 版本与目标问题。
+diff --git a/skills/adk-interrupt-dma-patterns/SKILL.md b/skills/adk-interrupt-dma-patterns/SKILL.md
+index eb6d6b7..f367659 100644
+--- a/skills/adk-interrupt-dma-patterns/SKILL.md
++++ b/skills/adk-interrupt-dma-patterns/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-interrupt-dma-patterns
+ description: "用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。"
+-version: 2.0.2
+-last_updated: 2026-11-10
++version: 2.0.3
++last_updated: 2026-11-17
+ triggers:
+   - "中断处理"
+   - "DMA处理"
+@@ -13,7 +13,7 @@ triggers:
+   - "FromISR断言"
+   - "DMA cache coherency"
+ non_triggers:
+-  - 轮询已经满足已量化 latency/CPU budget 的场景
++  - 无中断且无 DMA 的纯轮询任务
+ inputs:
+   - 外设速率与 burst、latency/jitter budget、buffer ownership、DMA/cache 特性、错误恢复约束
+ outputs:
+diff --git a/skills/adk-rtos-task-design/SKILL.md b/skills/adk-rtos-task-design/SKILL.md
+index c447d64..64cfd75 100644
+--- a/skills/adk-rtos-task-design/SKILL.md
++++ b/skills/adk-rtos-task-design/SKILL.md
+@@ -1,15 +1,16 @@
+ ---
+ name: adk-rtos-task-design
+ description: "用于 RTOS 任务优先级、周期唤醒、同步资源与调度风险设计；不用于裸机单循环或未经测量声称实时性达标。"
+-version: 2.0.3
+-last_updated: 2026-11-16
++version: 2.0.4
++last_updated: 2026-11-17
+ triggers:
+   - "RTOS任务"
+   - "任务设计"
+   - "实时任务"
+   - "调度分析"
++implicit_context: ["RTOS/Zephyr/ThreadX/RT-Thread"]
+ non_triggers:
+-  - 无 RTOS 的裸机项目
++  - 无 RTOS/没有 RTOS
+   - 普通线程划分且无实时约束
+ inputs:
+   - 任务周期、deadline、WCET/样本、中断负载、共享资源、栈与队列约束
+@@ -30,12 +31,12 @@ constraints:
+ 5. 用目标 trace 记录 release/start/finish、response-time、jitter、deadline miss、队列/栈 high-water、CPU load。trace 超模型上界先查漏项；低于上界不证明可降低 WCET。缺板端证据 `needs-runtime-evidence`。
+ 
+ ## 固定优先级计算（仅适用时）
+-单核、抢占式、固定优先级、独立周期/有界 sporadic 任务、deadline 不大于 period、无未建模 release jitter 或自挂起时，使用同一时间单位：
++单核、抢占式、任务优先级固定且互异、独立周期/有界 sporadic 任务、deadline 不大于 period、无未建模 release jitter 或自挂起时，使用同一时间单位：
+ ```text
+ R0 = Ci + Bi
+ Rnext = Ci + Bi + sum(ceil(R / Tj) * Cj, j in higher-priority tasks) + Ii(R)
+ ```
+-`C` 为有依据的 WCET 上界，`B` 为一次作业最坏阻塞，`T` 为周期/最小到达间隔，`Ii(R)` 为窗口内 IRQ 干扰。中断与调度开销不重复计数。收敛且 `R <= deadline` 只证明该模型/上界下可调度；超过 deadline 停止，缺上界/不收敛记未知。SMP、jitter、自挂起、任意 deadline 或动态优先级另选模型；RMA 指 Rate Monotonic Analysis。
++`C` 为有依据的 WCET 上界，`B` 为一次作业最坏阻塞，`T` 为周期/最小到达间隔，`Ii(R)` 为窗口内 IRQ 干扰。中断与调度开销不重复计数。收敛且 `R <= deadline` 只证明该模型/上界下可调度；超过 deadline 停止，缺上界/不收敛记未知。同优先级、SMP、jitter、自挂起、任意 deadline 或动态优先级另选模型；RMA 指 Rate Monotonic Analysis。
+ 
+ 例：`Ci=2, Bi=1, Di=5`、高优先级 `Cj=1,Tj=4`：`3→4→4`；加 `Cirq=0.5,Tirq=3` 得 `3→4.5→6`，超 deadline。这是计算示例，非板测。背景：https://www.cs.york.ac.uk/rts/publications/Davis2008a.html 。
+ 
+diff --git a/tests/test_skill_rtos_methods.py b/tests/test_skill_rtos_methods.py
+index fbd372f..f513f2c 100644
+--- a/tests/test_skill_rtos_methods.py
++++ b/tests/test_skill_rtos_methods.py
+@@ -1,6 +1,7 @@
+ """Execute the published host tick-range example; no RTOS/HIL qualification."""
+ from __future__ import annotations
+ 
++import math
+ import os
+ from pathlib import Path
+ import re
+@@ -104,5 +105,35 @@ class RtosPeriodMethodTests(unittest.TestCase):
+         self.assertIn("case 13:", result.stderr)
+ 
+ 
++class RtosResponseTimeModelTests(unittest.TestCase):
++    """Model eligibility plus independent arithmetic controls, not an RTOS run."""
++
++    def test_hp_only_formula_requires_distinct_task_priorities(self):
++        text = (ROOT / "skills/adk-rtos-task-design/SKILL.md").read_text(encoding="utf-8")
++        model = text.split("## 固定优先级计算", 1)[1].split("## 周期与回调执行", 1)[0]
++        assumptions = model.split("```text", 1)[0]
++        self.assertIn("优先级固定且互异", assumptions)
++        self.assertIn("j in higher-priority tasks", model)
++        alternative, = [line for line in model.splitlines() if "同优先级" in line]
++        self.assertIn("另选模型", alternative)
++
++    def test_distinct_priority_control_and_equal_priority_capacity_counterexample(self):
++        # Existing valid example: C_i=2, B_i=1, D_i=5; higher task C_j=1, T_j=4.
++        # Its first two substitutions converge. These are independent literal
++        # controls, not a new response-time calculator or scheduling simulator.
++        self.assertEqual([3, 3 + math.ceil(3 / 4), 3 + math.ceil(4 / 4)], [3, 4, 4])
++        self.assertLessEqual(4, 5)
++
++        # Both tasks have the same priority and release at t=0: C=6, T=D=10.
++        # The published hp-only sum is empty for each, so R=6 would appear to
++        # pass. The independent single-core demand bound proves this impossible.
++        hp_only_response, deadline = 6, 10
++        self.assertLessEqual(hp_only_response, deadline)
++        self.assertGreater(sum((6, 6)), deadline)
++        # Equal priority is not itself an infeasibility proof: a smaller demand
++        # also needs the matching FIFO/time-slicing analysis, rather than rejection.
++        self.assertLess(sum((2, 3)), deadline)
++
++
+ if __name__ == "__main__":
+     unittest.main()

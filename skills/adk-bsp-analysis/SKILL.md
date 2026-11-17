@@ -1,14 +1,15 @@
 ---
 name: adk-bsp-analysis
-description: 分析现有嵌入式 BSP 源码、启动/探测路径、clock/reset/pinctrl/IRQ/DMA 依赖、硬件参考和 patch 历史，形成证据化架构理解与迁移风险。用于 BSP 代码梳理、厂商实现追踪、SoC/board 差异和历史 workaround 分析；不用于直接实现新驱动或 live 板级故障隔离。
-version: 2.0.1
-last_updated: 2026-09-15
+description: 用于梳理嵌入式 BSP 源码、启动/探测与资源依赖，对照硬件依据、patch/workaround 历史及 SoC/board 差异，交付证据化架构和迁移风险；不用于直接实现驱动或 live 板级故障隔离。
+version: 2.0.2
+last_updated: 2026-11-17
 triggers:
-  - BSP 分析
+  - BSP 分析/BSP 梳理/分析 BSP/梳理 BSP/梳理这个 BSP/梳理现有 BSP
   - BSP 代码梳理
   - BSP 架构分析
   - BSP patch 历史
   - SoC board 迁移分析
+implicit_context: ["BSP/SoC"]
 non_triggers:
   - 直接驱动开发
   - live 硬件调试
@@ -32,7 +33,7 @@ constraints:
 # adk-bsp-analysis
 
 ## Goal
-建立可验证的 BSP architecture model：从源码入口追到平台资源与硬件依据，并说明哪些是事实、推断、未知以及迁移风险。
+追踪 BSP 源码、资源与硬件依据，区分事实/推断/未知和迁移风险。
 
 ## Prerequisites
 - 明确 BSP root、SoC、board、kernel/RTOS 版本与目标问题。

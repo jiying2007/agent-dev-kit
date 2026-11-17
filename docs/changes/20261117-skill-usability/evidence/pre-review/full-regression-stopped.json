@@ -1,0 +1,14 @@
+{
+  "status": "interrupted",
+  "exit_code": 130,
+  "reason": "Stop obsolete pre-review source test after independently reproduced OTA regression; not a full-suite PASS. New final-source run required.",
+  "recorded_at": "2026-11-17T06:40:11.843890+00:00",
+  "completed_pass_lines": 42,
+  "last_lines": [
+    "[PASS] test_runtime_comparison_contract",
+    "[PASS] test_product_maturity",
+    "[PASS] test_runtime_bundle"
+  ],
+  "log_sha256": "1c299cb50ff8ea63f5188ec1794c8d62e67ddbba4c196bf19ad2ee01d049a019",
+  "process_stop_probe": "Exact process-name lookup from a separate exec returned no visible runner and assertion error; no process signal was sent by that attempt. Ctrl-C on the original owned session subsequently returned exit 130."
+}

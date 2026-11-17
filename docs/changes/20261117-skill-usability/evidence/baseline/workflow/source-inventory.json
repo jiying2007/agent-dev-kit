@@ -1,0 +1,1004 @@
+[
+  {
+    "name": "adk-requirements-triage",
+    "path": "skills/adk-requirements-triage/SKILL.md",
+    "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
+    "line_count": 64,
+    "byte_count": 3400,
+    "isolated_positive": {
+      "prompt": "需求不清楚",
+      "result": {
+        "match": true,
+        "skill": "adk-requirements-triage",
+        "reason": "matched_trigger",
+        "phrase": "需求不清楚",
+        "runtime_role": "primary",
+        "selection_group": "requirements-intake",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "头脑风暴",
+      "result": {
+        "match": false,
+        "skill": "adk-requirements-triage",
+        "reason": "matched_non_trigger",
+        "phrase": "头脑风暴"
+      }
+    },
+    "support_read": [
+      "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+      "skills/adk-requirements-triage/references/exploratory-requirements-brief.md"
+    ]
+  },
+  {
+    "name": "adk-structured-requirements-questioning",
+    "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+    "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
+    "line_count": 55,
+    "byte_count": 3458,
+    "isolated_positive": {
+      "prompt": "头脑风暴",
+      "result": {
+        "match": true,
+        "skill": "adk-structured-requirements-questioning",
+        "reason": "matched_trigger",
+        "phrase": "头脑风暴",
+        "runtime_role": "primary",
+        "selection_group": "interactive-discovery",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "已有完整方案按计划直接执行",
+      "result": {
+        "match": false,
+        "skill": "adk-structured-requirements-questioning",
+        "reason": "matched_non_trigger",
+        "phrase": "已有完整方案按计划直接执行"
+      }
+    },
+    "support_read": [
+      "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md"
+    ]
+  },
+  {
+    "name": "adk-repo-prompt-analysis",
+    "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+    "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
+    "line_count": 53,
+    "byte_count": 3300,
+    "isolated_positive": {
+      "prompt": "分析子仓 prompt",
+      "result": {
+        "match": true,
+        "skill": "adk-repo-prompt-analysis",
+        "reason": "matched_trigger",
+        "phrase": "分析子仓 prompt",
+        "runtime_role": "primary",
+        "selection_group": "intake",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "编写新 prompt",
+      "result": {
+        "match": false,
+        "skill": "adk-repo-prompt-analysis",
+        "reason": "matched_non_trigger",
+        "phrase": "编写新 prompt"
+      }
+    },
+    "support_read": []
+  },
+  {
+    "name": "adk-skill-deep-analysis",
+    "path": "skills/adk-skill-deep-analysis/SKILL.md",
+    "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
+    "line_count": 59,
+    "byte_count": 5613,
+    "isolated_positive": {
+      "prompt": "深度拆解 skill",
+      "result": {
+        "match": true,
+        "skill": "adk-skill-deep-analysis",
+        "reason": "matched_trigger",
+        "phrase": "深度拆解 skill",
+        "runtime_role": "primary",
+        "selection_group": "intake",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "编写新 skill",
+      "result": {
+        "match": false,
+        "skill": "adk-skill-deep-analysis",
+        "reason": "matched_non_trigger",
+        "phrase": "编写新 skill"
+      }
+    },
+    "support_read": [
+      "skills/adk-skill-deep-analysis/references/details.md"
+    ]
+  },
+  {
+    "name": "adk-lightweight-planning",
+    "path": "skills/adk-lightweight-planning/SKILL.md",
+    "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
+    "line_count": 48,
+    "byte_count": 2158,
+    "isolated_positive": {
+      "prompt": "给我一个计划",
+      "result": {
+        "match": true,
+        "skill": "adk-lightweight-planning",
+        "reason": "matched_trigger",
+        "phrase": "给我一个计划",
+        "runtime_role": "primary",
+        "selection_group": "planning",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "执行计划",
+      "result": {
+        "match": false,
+        "skill": "adk-lightweight-planning",
+        "reason": "matched_non_trigger",
+        "phrase": "执行计划"
+      }
+    },
+    "support_read": [
+      "skills/adk-lightweight-planning/README.md"
+    ]
+  },
+  {
+    "name": "adk-task-breakdown",
+    "path": "skills/adk-task-breakdown/SKILL.md",
+    "sha256": "3d25e72fadcf2f74f4936223065097de9b7f26c41d4982ac0eb58ab4161c9f20",
+    "line_count": 48,
+    "byte_count": 3659,
+    "isolated_positive": {
+      "prompt": "拆解任务",
+      "result": {
+        "match": true,
+        "skill": "adk-task-breakdown",
+        "reason": "matched_trigger",
+        "phrase": "拆解任务",
+        "runtime_role": "primary",
+        "selection_group": "planning",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "单点微调任务",
+      "result": {
+        "match": false,
+        "skill": "adk-task-breakdown",
+        "reason": "matched_non_trigger",
+        "phrase": "单点微调任务"
+      }
+    },
+    "support_read": [
+      "skills/adk-task-breakdown/references/task-packaging.md",
+      "skills/adk-task-breakdown/references/vertical-slice-planning.md"
+    ]
+  },
+  {
+    "name": "adk-interface-contract-design",
+    "path": "skills/adk-interface-contract-design/SKILL.md",
+    "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+    "line_count": 75,
+    "byte_count": 4317,
+    "isolated_positive": {
+      "prompt": "设计接口",
+      "result": {
+        "match": true,
+        "skill": "adk-interface-contract-design",
+        "reason": "matched_trigger",
+        "phrase": "设计接口",
+        "runtime_role": "primary",
+        "selection_group": "design",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "纯内部重命名",
+      "result": {
+        "match": false,
+        "skill": "adk-interface-contract-design",
+        "reason": "matched_non_trigger",
+        "phrase": "纯内部重命名"
+      }
+    },
+    "support_read": [
+      "skills/adk-interface-contract-design/references/design-quality-methods.md",
+      "skills/adk-interface-contract-design/references/details.md",
+      "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+      "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+      "skills/adk-interface-contract-design/references/tool-effect-contract.md"
+    ]
+  },
+  {
+    "name": "adk-adr-writer",
+    "path": "skills/adk-adr-writer/SKILL.md",
+    "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
+    "line_count": 58,
+    "byte_count": 3680,
+    "isolated_positive": {
+      "prompt": "写ADR",
+      "result": {
+        "match": true,
+        "skill": "adk-adr-writer",
+        "reason": "matched_trigger",
+        "phrase": "写ADR",
+        "runtime_role": "primary",
+        "selection_group": "architecture-documentation",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "临时性小修补",
+      "result": {
+        "match": false,
+        "skill": "adk-adr-writer",
+        "reason": "matched_non_trigger",
+        "phrase": "临时性小修补"
+      }
+    },
+    "support_read": []
+  },
+  {
+    "name": "adk-component-api-stability",
+    "path": "skills/adk-component-api-stability/SKILL.md",
+    "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
+    "line_count": 92,
+    "byte_count": 5451,
+    "isolated_positive": {
+      "prompt": "API稳定性",
+      "result": {
+        "match": true,
+        "skill": "adk-component-api-stability",
+        "reason": "matched_trigger",
+        "phrase": "API稳定性",
+        "runtime_role": "primary",
+        "selection_group": "api-stability",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "私有一次性脚本",
+      "result": {
+        "match": false,
+        "skill": "adk-component-api-stability",
+        "reason": "matched_non_trigger",
+        "phrase": "私有一次性脚本"
+      }
+    },
+    "support_read": []
+  },
+  {
+    "name": "adk-code-simplification",
+    "path": "skills/adk-code-simplification/SKILL.md",
+    "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
+    "line_count": 74,
+    "byte_count": 3025,
+    "isolated_positive": {
+      "prompt": "代码太复杂",
+      "result": {
+        "match": true,
+        "skill": "adk-code-simplification",
+        "reason": "matched_trigger",
+        "phrase": "代码太复杂",
+        "runtime_role": "primary",
+        "selection_group": "refactor",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "添加新功能",
+      "result": {
+        "match": false,
+        "skill": "adk-code-simplification",
+        "reason": "matched_non_trigger",
+        "phrase": "添加新功能"
+      }
+    },
+    "support_read": [
+      "skills/adk-code-simplification/references/deep-module-design.md",
+      "skills/adk-code-simplification/references/details.md"
+    ]
+  },
+  {
+    "name": "adk-systematic-debugging",
+    "path": "skills/adk-systematic-debugging/SKILL.md",
+    "sha256": "b3756b60fb0e07b591d06ca8957878b2ccb2c4835169b350c79daac6f2ea5edc",
+    "line_count": 54,
+    "byte_count": 2801,
+    "isolated_positive": {
+      "prompt": "调试",
+      "result": {
+        "match": true,
+        "skill": "adk-systematic-debugging",
+        "reason": "matched_trigger",
+        "phrase": "调试",
+        "runtime_role": "primary",
+        "selection_group": "debugging",
+        "effect_ceiling": "diagnostic-execution",
+        "effect_scope": "host-system",
+        "effect_operation": "diagnostic",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "已有明确根因且只需执行已确认修复",
+      "result": {
+        "match": false,
+        "skill": "adk-systematic-debugging",
+        "reason": "matched_non_trigger",
+        "phrase": "已有明确根因且只需执行已确认修复"
+      }
+    },
+    "support_read": [
+      "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+      "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+      "skills/adk-systematic-debugging/references/tight-feedback-loop.md"
+    ]
+  },
+  {
+    "name": "adk-offline-core-dump-triage",
+    "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+    "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+    "line_count": 75,
+    "byte_count": 3562,
+    "isolated_positive": {
+      "prompt": "core dump",
+      "result": {
+        "match": true,
+        "skill": "adk-offline-core-dump-triage",
+        "reason": "matched_trigger",
+        "phrase": "core dump",
+        "runtime_role": "primary",
+        "selection_group": "debugging",
+        "effect_ceiling": "diagnostic-execution",
+        "effect_scope": "host-system",
+        "effect_operation": "diagnostic",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "在线调试通道联调",
+      "result": {
+        "match": false,
+        "skill": "adk-offline-core-dump-triage",
+        "reason": "matched_non_trigger",
+        "phrase": "在线调试通道联调"
+      }
+    },
+    "support_read": []
+  },
+  {
+    "name": "adk-test-strategy",
+    "path": "skills/adk-test-strategy/SKILL.md",
+    "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
+    "line_count": 53,
+    "byte_count": 3612,
+    "isolated_positive": {
+      "prompt": "测试策略",
+      "result": {
+        "match": true,
+        "skill": "adk-test-strategy",
+        "reason": "matched_trigger",
+        "phrase": "测试策略",
+        "runtime_role": "primary",
+        "selection_group": "test-strategy",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "纯文档修改且无行为变化",
+      "result": {
+        "match": false,
+        "skill": "adk-test-strategy",
+        "reason": "matched_non_trigger",
+        "phrase": "纯文档修改且无行为变化"
+      }
+    },
+    "support_read": [
+      "skills/adk-test-strategy/references/high-value-tdd.md"
+    ]
+  },
+  {
+    "name": "adk-artifact-gating",
+    "path": "skills/adk-artifact-gating/SKILL.md",
+    "sha256": "17f658a180bb848f98a0ffa91831e82fc980d7fcdae78782c103fb4862f5fa4e",
+    "line_count": 62,
+    "byte_count": 2061,
+    "isolated_positive": {
+      "prompt": "artifact 门禁",
+      "result": {
+        "match": true,
+        "skill": "adk-artifact-gating",
+        "reason": "matched_trigger",
+        "phrase": "artifact 门禁",
+        "runtime_role": "governance",
+        "selection_group": "artifact-gating",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "explicit-only",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "单文件低风险修复且无需跨角色交接",
+      "result": {
+        "match": false,
+        "skill": "adk-artifact-gating",
+        "reason": "matched_non_trigger",
+        "phrase": "单文件低风险修复且无需跨角色交接"
+      }
+    },
+    "support_read": [
+      "skills/adk-artifact-gating/references/details.md"
+    ]
+  },
+  {
+    "name": "adk-pilot-framework",
+    "path": "skills/adk-pilot-framework/SKILL.md",
+    "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
+    "line_count": 72,
+    "byte_count": 3765,
+    "isolated_positive": {
+      "prompt": "试跑",
+      "result": {
+        "match": true,
+        "skill": "adk-pilot-framework",
+        "reason": "matched_trigger",
+        "phrase": "试跑",
+        "runtime_role": "primary",
+        "selection_group": "verification",
+        "effect_ceiling": "diagnostic-execution",
+        "effect_scope": "host-system",
+        "effect_operation": "diagnostic",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "纯本地单元测试（无需运行目录验证）",
+      "result": {
+        "match": false,
+        "skill": "adk-pilot-framework",
+        "reason": "matched_non_trigger",
+        "phrase": "纯本地单元测试（无需运行目录验证）"
+      }
+    },
+    "support_read": [
+      "skills/adk-pilot-framework/references/details.md"
+    ]
+  },
+  {
+    "name": "adk-verification-before-completion",
+    "path": "skills/adk-verification-before-completion/SKILL.md",
+    "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
+    "line_count": 59,
+    "byte_count": 4508,
+    "isolated_positive": {
+      "prompt": "准备完成",
+      "result": {
+        "match": true,
+        "skill": "adk-verification-before-completion",
+        "reason": "matched_trigger",
+        "phrase": "准备完成",
+        "runtime_role": "primary",
+        "selection_group": "completion-verification",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "仅做方案讨论且尚未产生实现改动",
+      "result": {
+        "match": false,
+        "skill": "adk-verification-before-completion",
+        "reason": "matched_non_trigger",
+        "phrase": "仅做方案讨论且尚未产生实现改动"
+      }
+    },
+    "support_read": [
+      "skills/adk-verification-before-completion/references/verification-governance-details.md"
+    ]
+  },
+  {
+    "name": "adk-code-review-loop",
+    "path": "skills/adk-code-review-loop/SKILL.md",
+    "sha256": "c9f9a8149babf7f51786a8b1d86f38f10b629051efcb355a0965b1ad8b1aa9fd",
+    "line_count": 92,
+    "byte_count": 6235,
+    "isolated_positive": {
+      "prompt": "独立代码审查",
+      "result": {
+        "match": true,
+        "skill": "adk-code-review-loop",
+        "reason": "matched_trigger",
+        "phrase": "独立代码审查",
+        "runtime_role": "primary",
+        "selection_group": "code-review",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "纯格式化且已有自动格式检查",
+      "result": {
+        "match": false,
+        "skill": "adk-code-review-loop",
+        "reason": "matched_non_trigger",
+        "phrase": "纯格式化且已有自动格式检查"
+      }
+    },
+    "support_read": [
+      "skills/adk-code-review-loop/references/review-communication-guidance.md",
+      "skills/adk-code-review-loop/references/review-evidence-template.md",
+      "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+      "skills/adk-code-review-loop/references/review-governance-details.md"
+    ]
+  },
+  {
+    "name": "adk-repo-drift-remediation",
+    "path": "skills/adk-repo-drift-remediation/SKILL.md",
+    "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
+    "line_count": 76,
+    "byte_count": 3021,
+    "isolated_positive": {
+      "prompt": "仓库漂移",
+      "result": {
+        "match": true,
+        "skill": "adk-repo-drift-remediation",
+        "reason": "matched_trigger",
+        "phrase": "仓库漂移",
+        "runtime_role": "primary",
+        "selection_group": "review_quality",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "单点 bug 修复",
+      "result": {
+        "match": false,
+        "skill": "adk-repo-drift-remediation",
+        "reason": "matched_non_trigger",
+        "phrase": "单点 bug 修复"
+      }
+    },
+    "support_read": [
+      "skills/adk-repo-drift-remediation/README.md"
+    ]
+  },
+  {
+    "name": "adk-commit-pr-quality-gate",
+    "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+    "sha256": "ac2559e3a0320be3aa3f83336ce0f3fa7359408625447eabcb00103b360abfc6",
+    "line_count": 51,
+    "byte_count": 3821,
+    "isolated_positive": {
+      "prompt": "提交代码",
+      "result": {
+        "match": true,
+        "skill": "adk-commit-pr-quality-gate",
+        "reason": "matched_trigger",
+        "phrase": "提交代码",
+        "runtime_role": "primary",
+        "selection_group": "commit-quality",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "纯探索性代码阅读",
+      "result": {
+        "match": false,
+        "skill": "adk-commit-pr-quality-gate",
+        "reason": "matched_non_trigger",
+        "phrase": "纯探索性代码阅读"
+      }
+    },
+    "support_read": [
+      "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md"
+    ]
+  },
+  {
+    "name": "adk-release-versioning",
+    "path": "skills/adk-release-versioning/SKILL.md",
+    "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+    "line_count": 60,
+    "byte_count": 2776,
+    "isolated_positive": {
+      "prompt": "版本发布",
+      "result": {
+        "match": true,
+        "skill": "adk-release-versioning",
+        "reason": "matched_trigger",
+        "phrase": "版本发布",
+        "runtime_role": "primary",
+        "selection_group": "release_closure",
+        "effect_ceiling": "release-preparation",
+        "effect_scope": "release-target",
+        "effect_operation": "prepare",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "开发中临时调试",
+      "result": {
+        "match": false,
+        "skill": "adk-release-versioning",
+        "reason": "matched_non_trigger",
+        "phrase": "开发中临时调试"
+      }
+    },
+    "support_read": [
+      "skills/adk-release-versioning/references/details.md"
+    ]
+  },
+  {
+    "name": "adk-production-field-readiness",
+    "path": "skills/adk-production-field-readiness/SKILL.md",
+    "sha256": "b661f56a96309870e2895423ee3646bd9e50a5f35da9286cd070a45ac75a60e6",
+    "line_count": 110,
+    "byte_count": 5013,
+    "isolated_positive": {
+      "prompt": "量产",
+      "result": {
+        "match": true,
+        "skill": "adk-production-field-readiness",
+        "reason": "matched_trigger",
+        "phrase": "量产",
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "通用 Web 发布",
+      "result": {
+        "match": false,
+        "skill": "adk-production-field-readiness",
+        "reason": "matched_non_trigger",
+        "phrase": "通用 Web 发布"
+      }
+    },
+    "support_read": [
+      "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md"
+    ]
+  },
+  {
+    "name": "adk-cross-team-handoff",
+    "path": "skills/adk-cross-team-handoff/SKILL.md",
+    "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
+    "line_count": 56,
+    "byte_count": 3069,
+    "isolated_positive": {
+      "prompt": "团队交接",
+      "result": {
+        "match": true,
+        "skill": "adk-cross-team-handoff",
+        "reason": "matched_trigger",
+        "phrase": "团队交接",
+        "runtime_role": "supporting",
+        "selection_group": "handoff",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "explicit-only",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "同团队内小范围任务流转",
+      "result": {
+        "match": false,
+        "skill": "adk-cross-team-handoff",
+        "reason": "matched_non_trigger",
+        "phrase": "同团队内小范围任务流转"
+      }
+    },
+    "support_read": []
+  },
+  {
+    "name": "adk-branch-closeout",
+    "path": "skills/adk-branch-closeout/SKILL.md",
+    "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
+    "line_count": 51,
+    "byte_count": 3095,
+    "isolated_positive": {
+      "prompt": "分支收尾",
+      "result": {
+        "match": true,
+        "skill": "adk-branch-closeout",
+        "reason": "matched_trigger",
+        "phrase": "分支收尾",
+        "runtime_role": "primary",
+        "selection_group": "branch-closeout",
+        "effect_ceiling": "release-preparation",
+        "effect_scope": "release-target",
+        "effect_operation": "prepare",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "仍有测试失败且未定位根因",
+      "result": {
+        "match": false,
+        "skill": "adk-branch-closeout",
+        "reason": "matched_non_trigger",
+        "phrase": "仍有测试失败且未定位根因"
+      }
+    },
+    "support_read": [
+      "skills/adk-branch-closeout/references/closeout-options.md"
+    ]
+  },
+  {
+    "name": "adk-after-action-review",
+    "path": "skills/adk-after-action-review/SKILL.md",
+    "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
+    "line_count": 54,
+    "byte_count": 3785,
+    "isolated_positive": {
+      "prompt": "任务复盘",
+      "result": {
+        "match": true,
+        "skill": "adk-after-action-review",
+        "reason": "matched_trigger",
+        "phrase": "任务复盘",
+        "runtime_role": "primary",
+        "selection_group": "after-action-review",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "线上事故需要做根因分析复盘",
+      "result": {
+        "match": false,
+        "skill": "adk-after-action-review",
+        "reason": "matched_non_trigger",
+        "phrase": "线上事故需要做根因分析复盘"
+      }
+    },
+    "support_read": [
+      "skills/adk-after-action-review/references/after-action-review.md",
+      "skills/adk-after-action-review/references/codify-decision.md",
+      "skills/adk-after-action-review/references/memory-candidate.md"
+    ]
+  },
+  {
+    "name": "adk-engineering-growth-review",
+    "path": "skills/adk-engineering-growth-review/SKILL.md",
+    "sha256": "551c03d625fb6d884f03e112d49d9d39eee8d50a628009a93b5cf67ab051b5b8",
+    "line_count": 57,
+    "byte_count": 3805,
+    "isolated_positive": {
+      "prompt": "开发者成长复盘",
+      "result": {
+        "match": true,
+        "skill": "adk-engineering-growth-review",
+        "reason": "matched_trigger",
+        "phrase": "开发者成长复盘",
+        "runtime_role": "primary",
+        "selection_group": "engineering-review",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "mutation_permission": "deny",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    "isolated_negative": {
+      "prompt": "只总结当前会话",
+      "result": {
+        "match": false,
+        "skill": "adk-engineering-growth-review",
+        "reason": "matched_non_trigger",
+        "phrase": "只总结当前会话"
+      }
+    },
+    "support_read": [
+      "skills/adk-engineering-growth-review/README.md",
+      "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md"
+    ]
+  }
+]

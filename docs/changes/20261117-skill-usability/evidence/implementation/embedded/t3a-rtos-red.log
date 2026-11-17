@@ -1,0 +1,18 @@
+test_oracle_rejects_accepting_a_quantized_zero_period (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_accepting_a_quantized_zero_period) ... ok
+test_oracle_rejects_narrowing_before_range_validation (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_narrowing_before_range_validation) ... ok
+test_published_example_rejects_zero_overflow_and_preserves_output (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_published_example_rejects_zero_overflow_and_preserves_output) ... ok
+test_distinct_priority_control_and_equal_priority_capacity_counterexample (tests.test_skill_rtos_methods.RtosResponseTimeModelTests.test_distinct_priority_control_and_equal_priority_capacity_counterexample) ... ok
+test_hp_only_formula_requires_distinct_task_priorities (tests.test_skill_rtos_methods.RtosResponseTimeModelTests.test_hp_only_formula_requires_distinct_task_priorities) ... FAIL
+
+======================================================================
+FAIL: test_hp_only_formula_requires_distinct_task_priorities (tests.test_skill_rtos_methods.RtosResponseTimeModelTests.test_hp_only_formula_requires_distinct_task_priorities)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_rtos_methods.py", line 115, in test_hp_only_formula_requires_distinct_task_priorities
+    self.assertIn("优先级固定且互异", assumptions)
+AssertionError: '优先级固定且互异' not found in '（仅适用时）\n单核、抢占式、固定优先级、独立周期/有界 sporadic 任务、deadline 不大于 period、无未建模 release jitter 或自挂起时，使用同一时间单位：\n'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.160s
+
+FAILED (failures=1)

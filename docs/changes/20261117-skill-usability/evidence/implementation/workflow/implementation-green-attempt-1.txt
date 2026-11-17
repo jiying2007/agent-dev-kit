@@ -1,0 +1,69 @@
+test_shipped_example_is_complete_and_preserves_scope_without_extra_fields (tests.test_task_package_delivery.ExportedTaskPackageTests.test_shipped_example_is_complete_and_preserves_scope_without_extra_fields) ... ok
+test_all_work_kinds_preserve_their_permission_and_exit_gate (tests.test_task_package_delivery.TaskPackageTypeTests.test_all_work_kinds_preserve_their_permission_and_exit_gate) ... ok
+test_prototype_malformed_types_and_expiry_are_not_coerced (tests.test_task_package_delivery.TaskPackageTypeTests.test_prototype_malformed_types_and_expiry_are_not_coerced) ... ok
+test_task_malformed_json_types_return_errors_without_exceptions (tests.test_task_package_delivery.TaskPackageTypeTests.test_task_malformed_json_types_return_errors_without_exceptions) ... ok
+test_all_cases_match_once_loaded_manifest (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_all_cases_match_once_loaded_manifest) ... ok
+test_catalog_auto_selection_and_abstention (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_catalog_auto_selection_and_abstention) ... ok
+test_chinese_review_alias_keeps_review_and_commit_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_chinese_review_alias_keeps_review_and_commit_owners) ... ok
+test_cli_optional_install_requirement_and_negation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_cli_optional_install_requirement_and_negation) ... ok
+test_cli_smoke_uses_same_contract (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_cli_smoke_uses_same_contract) ... ok
+test_embedded_analysis_intent_boundaries_preserve_existing_neighbors (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_analysis_intent_boundaries_preserve_existing_neighbors) ... ok
+test_embedded_audit_method_and_reference_boundaries (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_audit_method_and_reference_boundaries)
+Source-only policy checks, not claimed board or native-runtime evidence. ... ok
+test_embedded_domain_routing_uses_intent_not_bare_nouns (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_domain_routing_uses_intent_not_bare_nouns)
+Source-only regression: specialist noun must not grant migration/build action. ... ok
+test_embedded_unit_explicit_diagnostic_preserves_non_triggers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_explicit_diagnostic_preserves_non_triggers) ... ok
+test_embedded_unit_formatted_scope_preserves_task_context (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_formatted_scope_preserves_task_context) ... ok
+test_embedded_unit_implicit_scope_and_host_controls (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_embedded_unit_implicit_scope_and_host_controls) ... ok
+test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) ... 
+  test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='帮我设计设备状态机，不涉及量产或OTA') ... FAIL
+test_full_inventory_description_and_isolated_trigger_contract (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_full_inventory_description_and_isolated_trigger_contract)
+All declared Skills have both discovery boundaries and executable isolated match cases. ... ok
+test_goal_skill_route_positive_negative_and_no_generic_hijack (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_goal_skill_route_positive_negative_and_no_generic_hijack) ... ok
+test_implicit_context_applies_to_same_group_promotion (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_applies_to_same_group_promotion) ... ok
+test_implicit_context_applies_to_secondary_primary_candidates (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_applies_to_secondary_primary_candidates) ... ok
+test_implicit_context_keeps_existing_native_export_contract (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_keeps_existing_native_export_contract) ... ok
+test_implicit_context_metadata_fails_closed_and_absence_is_compatible (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_implicit_context_metadata_fails_closed_and_absence_is_compatible) ... ok
+test_interactive_discovery_modes_and_routing (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_interactive_discovery_modes_and_routing)
+Source-only routing/contract checks, not native E2/E4 evidence. ... ok
+test_negation_scope_and_paraphrase_regressions (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_negation_scope_and_paraphrase_regressions)
+Source-only routing checks: negated actions are not selected as primary. ... ok
+test_optional_skill_is_not_implicitly_installed_by_a_catalog_hit (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_optional_skill_is_not_implicitly_installed_by_a_catalog_hit)
+Production matcher: routed and lexical Optional matches both need installation. ... ok
+test_portable_description_discovery_boundaries (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_portable_description_discovery_boundaries)
+Only source metadata preflight; never native host routing evidence. ... ok
+test_repo_drift_local_commands_refer_to_real_scripts (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_repo_drift_local_commands_refer_to_real_scripts)
+Reject stale in-repository script references without guessing target project paths. ... ok
+test_source_only_routing_inventory_has_minimum_case_coverage (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_source_only_routing_inventory_has_minimum_case_coverage) ... ok
+test_existing_assets_require_context_only_and_low_attention (tests.test_superagent_method_contract.SuperagentMethodContractTests.test_existing_assets_require_context_only_and_low_attention) ... ok
+test_explicit_implementation_and_valid_prototype_baselines (tests.test_superagent_method_contract.SuperagentMethodContractTests.test_explicit_implementation_and_valid_prototype_baselines) ... ok
+test_external_research_does_not_gain_implementation_authority (tests.test_superagent_method_contract.SuperagentMethodContractTests.test_external_research_does_not_gain_implementation_authority) ... ok
+test_prototype_and_decision_reject_only_the_wrong_boundary (tests.test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_and_decision_reject_only_the_wrong_boundary) ... ok
+test_prototype_artifact_does_not_hide_permission_failures (tests.test_superagent_method_contract.SuperagentMethodContractTests.test_prototype_artifact_does_not_hide_permission_failures) ... ok
+test_authority_coverage_survives_compaction (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_authority_coverage_survives_compaction) ... ok
+test_design_cases_not_model_success (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_design_cases_not_model_success) ... ok
+test_feedback_triage_remains_read_only_and_non_final (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_feedback_triage_remains_read_only_and_non_final) ... ok
+test_no_new_global_skill_or_injected_lifecycle (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_no_new_global_skill_or_injected_lifecycle) ... ok
+test_small_work_does_not_force_heavy_plan_or_parallel (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_small_work_does_not_force_heavy_plan_or_parallel) ... ok
+test_task_timeout_is_failure_not_discarded_as_incomplete (tests.test_skill_method_efficiency.SkillMethodEfficiencyTests.test_task_timeout_is_failure_not_discarded_as_incomplete) ... ok
+test_checker_does_not_turn_invalid_or_incomplete_reports_into_pass (tests.test_external_core_methods.ExternalCoreMethodsTests.test_checker_does_not_turn_invalid_or_incomplete_reports_into_pass) ... ok
+test_checker_preserves_clean_and_threshold_permitted_results (tests.test_external_core_methods.ExternalCoreMethodsTests.test_checker_preserves_clean_and_threshold_permitted_results) ... ok
+test_checker_rejects_violation_even_when_scanner_exits_zero (tests.test_external_core_methods.ExternalCoreMethodsTests.test_checker_rejects_violation_even_when_scanner_exits_zero) ... ok
+test_direct_and_early_contract_fail_actual_old_consumers (tests.test_external_core_methods.ExternalCoreMethodsTests.test_direct_and_early_contract_fail_actual_old_consumers) ... ok
+test_independent_oracle_rejects_bug_mirrored_helper_misses (tests.test_external_core_methods.ExternalCoreMethodsTests.test_independent_oracle_rejects_bug_mirrored_helper_misses) ... ok
+test_methods_and_examples_survive_native_frontmatter_rebuild (tests.test_external_core_methods.ExternalCoreMethodsTests.test_methods_and_examples_survive_native_frontmatter_rebuild) ... ok
+test_migration_runs_both_real_consumers_at_each_safe_stage (tests.test_external_core_methods.ExternalCoreMethodsTests.test_migration_runs_both_real_consumers_at_each_safe_stage) ... ok
+test_new_discovery_uses_production_matcher_without_granting_writes (tests.test_external_core_methods.ExternalCoreMethodsTests.test_new_discovery_uses_production_matcher_without_granting_writes) ... ok
+
+======================================================================
+FAIL: test_field_readiness_does_not_capture_generic_diagnosis_or_rollback (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_field_readiness_does_not_capture_generic_diagnosis_or_rollback) (outside_field='帮我设计设备状态机，不涉及量产或OTA')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 106, in test_field_readiness_does_not_capture_generic_diagnosis_or_rollback
+    self.assertNotEqual(field, result.get("skill"), result)
+AssertionError: 'adk-production-field-readiness' == 'adk-production-field-readiness' : {'match': True, 'source': 'routing', 'skill': 'adk-production-field-readiness', 'intent': 'production_field_readiness', 'intent_zh': '量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness', 'supporting_skills': ['adk-release-versioning', 'adk-integration-hil-sil', 'adk-verification-before-completion'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'field-readiness', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+----------------------------------------------------------------------
+Ran 47 tests in 4.544s
+
+FAILED (failures=1)

@@ -1,0 +1,324 @@
+{
+  "base_commit": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "semantics": "Frozen implementation self-tests and appended corrections; not independent final review.",
+  "files": [
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/implementation-status.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/implementation-status.md",
+      "bytes": 3110,
+      "sha256": "abdaa15b3d86fe6ff498cfb83095efb8f97510acec6f34ce3de856e80b371607"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/negative-results.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/negative-results.md",
+      "bytes": 1416,
+      "sha256": "4034e4e6d019342646be0c376a0eaf6c6876aec5b4d6afd70400c1760d1414a1"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-exports.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-exports.json",
+      "bytes": 2029,
+      "sha256": "d9e9b93070bf4bd6c5fc7dd7f9add5fae63f2800707d6c171c08b7916b8700a5"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-routes-green.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-routes-green.json",
+      "bytes": 11919,
+      "sha256": "b2f5b2102146d37bdfb83025125d29d2d16de94b87f0e3f273a670206fc5288e"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-routes-red.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-routes-red.json",
+      "bytes": 9731,
+      "sha256": "7975208954209854880c7132005e034a874ba56a1bf9e358308baf17f3d5cef3"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-rtos-green.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-rtos-green.log",
+      "bytes": 1019,
+      "sha256": "8f987ab2a14279821b8db6f44dc67d12a6994a670fbd439bd741e3e09566cc94"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-rtos-red.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-rtos-red.log",
+      "bytes": 1872,
+      "sha256": "edbac806928d3b347837081e2bf9e89566c323e7f28ca7cce4803e054bed31b2"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-soc-control-red.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-soc-control-red.json",
+      "bytes": 11331,
+      "sha256": "65ca803a80b81178455f9b6f895e15bf95d850e2d8d215c30f1200a4764d8a9d"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-source-delta.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a-source-delta.json",
+      "bytes": 797,
+      "sha256": "6bf8de1f4b36f09f13ed199bc4b9d5f4845d7c70eabaf3904c690cb65451a922"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a.diff",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a.diff",
+      "bytes": 7613,
+      "sha256": "98b8268982434db98c470d9931b93cf2c76e14f9f754fb696e6b9038b9c61faf"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a_checks.py",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/embedded/t3a_checks.py",
+      "bytes": 2241,
+      "sha256": "aef3cc5885e76b9b6627b2e9b8c5008434f27c8b4797cc9120abf3093188bb47"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green-attempt-1.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-green-attempt-1.json",
+      "bytes": 480,
+      "sha256": "4874e4c8e8892a52c4bf64cd0c00aed667a6faebe2d3fe34345f098347b74c5a"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green-attempt-1.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-green-attempt-1.txt",
+      "bytes": 11268,
+      "sha256": "38c518b323d2478e7424beeed600efa1c5c88ffc543ed19677689730b0bb7897"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-green.json",
+      "bytes": 470,
+      "sha256": "924e3f144c0799a80d4049eb7adc80837ea5e1e0c461b515599ff18fd7ec6126"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-green.txt",
+      "bytes": 9207,
+      "sha256": "76a6e3091f52de7ffd261a4a54e601d221cc59edd54f24ff855cd678ade48c07"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-red.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-red.json",
+      "bytes": 1273,
+      "sha256": "bcdc04ef7eccf5f26a3163de47755c415788cd5ffe01cf972d9e7cbbb17463c5"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-red.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-red.txt",
+      "bytes": 50279,
+      "sha256": "09f6b980f469331bd38eb66fed26e36a825e2ad61cef5423c103d93a7504d49f"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-status.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/implementation-status.md",
+      "bytes": 6691,
+      "sha256": "405eb00c39d36dd9a45d9bca5a7a546e0ad5695a991cb58370606975501ac3c9"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/intent-boundary-gate.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/intent-boundary-gate.json",
+      "bytes": 2256,
+      "sha256": "1c7fe086d3ba24718082da62fe99b9e92b3ebd3fdbc640ca1d8b05b4d3e8ffdd"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/intent-boundary-gate.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/intent-boundary-gate.txt",
+      "bytes": 1925,
+      "sha256": "7f30b987f7db3397fc30ba8fec179ce6d3b569a04f1420a58928977617e5582f"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/skill-content-gate.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/skill-content-gate.json",
+      "bytes": 45792,
+      "sha256": "68993b117b5fea416cf32f1047a20d4ae7b1649bc1e8b2a2854bc68f6ce2bb64"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/skill-content-gate.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/skill-content-gate.txt",
+      "bytes": 44738,
+      "sha256": "b55ce0ca9f6e76b403eddac77a29ad4dc1439a0dd1598ea49950ed8997ff059a"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff-unavailable.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/t3b-ruff-unavailable.json",
+      "bytes": 603,
+      "sha256": "afab3093f3cdf1e76d93d945555b02c0ee7fdf2adfe5583d6023fafb269b141e"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff-unavailable.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/t3b-ruff-unavailable.txt",
+      "bytes": 96,
+      "sha256": "4b121d715eaef49e82746adcb0a5a04c3ab6c33ac12a2130411416f98ae9cadd"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/t3b-ruff.json",
+      "bytes": 497,
+      "sha256": "f4f72bc789f0df862003fedb2c3ab3584c3b2aab499656a30db4c5b8eaeff7be"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/t3b-ruff.txt",
+      "bytes": 19,
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-source-delta.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/t3b-source-delta.json",
+      "bytes": 2932,
+      "sha256": "cbc030976660f698fa13a752cb1de23f1392b4d1c2ef7561df909943b8c2f3f5"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b.diff",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/t3b.diff",
+      "bytes": 37154,
+      "sha256": "6364883b28fb4741c16fbbdc1b05822ae9138a25bca9918a1656c2c7d50751d3"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/trigger-matrix.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/trigger-matrix.json",
+      "bytes": 5386,
+      "sha256": "5a68512fd4a374e2d0178eb87222a262890eda65e5400f24d6f6525a4e8bcc54"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/trigger-matrix.txt",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/trigger-matrix.txt",
+      "bytes": 4932,
+      "sha256": "c42836eb8170048a63b4e9c51c2ac3701ce798ec4d440d44e065442b4d22ef13"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/verify_implementation.py",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/workflow/verify_implementation.py",
+      "bytes": 2209,
+      "sha256": "13ed6ce7d1417e36ab494e61e245206709bcfd8b107e5e7b01d3fe589ca6fe75"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/final-consumer-tests.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/final-consumer-tests.log",
+      "bytes": 1063,
+      "sha256": "17c4e3883005b44b747d5bd045a8add1345a8369d478d1075997f944794e478d"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/final-strict.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/final-strict.log",
+      "bytes": 36,
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/green-final-targeted-tests.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/green-final-targeted-tests.log",
+      "bytes": 3539,
+      "sha256": "7824ffd724c69e055cbcf15887044c32e348c21b6448ac76a3429595c9365624"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/green-targeted-tests.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/green-targeted-tests.log",
+      "bytes": 7196,
+      "sha256": "42e79df31a0ea6ba49fbeb9f5b8d510c7aaa024eb43c3eef989de39269dbf1c5"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/handoff.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/handoff.md",
+      "bytes": 3578,
+      "sha256": "8fdd99943aa3b36be2d0e0c2c0b523b41f0a90bd1b4d409f12b5f99c75b61480"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/negative-results.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/negative-results.md",
+      "bytes": 2051,
+      "sha256": "18739dce9b527bd034a0e7788de28d53f3ed4a8b7fc37b46c3c62834c0be7944"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-final.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/ratchets-final.json",
+      "bytes": 4380,
+      "sha256": "0c3bbe4fee0165fca9bdc2778bae73437910d46a35e15dd1481987db76f3b48d"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-green.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/ratchets-green.json",
+      "bytes": 4456,
+      "sha256": "c0075f15b369f8c3bebb4d0ef5c15d2fdfcdc98f2511f0122da7116e4f1555f6"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-intermediate.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/ratchets-intermediate.json",
+      "bytes": 4456,
+      "sha256": "c0075f15b369f8c3bebb4d0ef5c15d2fdfcdc98f2511f0122da7116e4f1555f6"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-red.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/ratchets-red.json",
+      "bytes": 4456,
+      "sha256": "3306ae075bf9df1a5871b26f0f83c50b7a64de7e66577587c66e5eb104355be9"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/ratchets.json",
+      "bytes": 4456,
+      "sha256": "3306ae075bf9df1a5871b26f0f83c50b7a64de7e66577587c66e5eb104355be9"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/red-tests-valid-profile.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/red-tests-valid-profile.log",
+      "bytes": 13626,
+      "sha256": "c96b1ca12008704f1109b9aff1dbb8e0854d011287bc623e790bc92d99455367"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/red-tests.log",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/red-tests.log",
+      "bytes": 14173,
+      "sha256": "520036826872486376957fcca8f803decab6a30102beb038e8b5b76f9f8c0b08"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/source-files.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/implementation/source-files.json",
+      "bytes": 1085,
+      "sha256": "5e52b7132a27d76212d0abfa567e7116407ba8199a4a3fe5f76256f8117c645b"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/audit-correction.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/audit-correction.md",
+      "bytes": 2574,
+      "sha256": "078e6b81dd3cee1785b5a3f6f756176441edea71aba3e5678ccc5a3199dd54b4"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/report.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/report.md",
+      "bytes": 20138,
+      "sha256": "ef458acadceb034c8afa8586263aded1669d2e9d1282fcfdd6a143a21dcd655a"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/coverage.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/coverage.json",
+      "bytes": 12115,
+      "sha256": "ef0723032a6ebce1d81e29156a4467b07e0b8ea3de14941e1eb024e583c30520"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/export-coverage-control.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/export-coverage-control.json",
+      "bytes": 521,
+      "sha256": "15135c022d114d031e3922a464d7deb1d8865cacb3cfb9466b8b1b5610148bfb"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/verify_team_export.py",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/verify_team_export.py",
+      "bytes": 1407,
+      "sha256": "ec6f177d98264955caf11312e29cab21721b27209d254b32d30c11ff8c7bdb47"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/negative-results.md",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/negative-results.md",
+      "bytes": 3012,
+      "sha256": "0d9afe4c740081795011ab7d7606399f21ecbe33f9628d5af906cdf558af680a"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/claude-code-export-manifest.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/fixtures/team-exports/claude-code/adk-export-manifest.json",
+      "bytes": 26411,
+      "sha256": "04f8be2c3cf7f8dd8bcb289948dee86e8457bea8a28b525214595aa0cb2b61d2"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/opencode-export-manifest.json",
+      "origin": "/workspace/scratch/fe8de3b42084/skill-usability-audit/context-optional/fixtures/team-exports/opencode/adk-export-manifest.json",
+      "bytes": 26408,
+      "sha256": "2ff5543b0686cd22a291d86fbf9ea9a2cfb2c3f76b762d51b1a8514e00847ba0"
+    }
+  ]
+}

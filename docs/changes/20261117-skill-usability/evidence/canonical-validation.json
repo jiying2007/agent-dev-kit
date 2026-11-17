@@ -1,0 +1,16 @@
+{
+  "status": "pass",
+  "record_sha256": "d58c843e46815796ba282e89d3517c56cc060e8b7f0b5012614d0a0e39959f85",
+  "review_policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "review_scope": "source-change",
+  "human_review_performed": false,
+  "field_evidence_verified": false,
+  "provider_execution_performed": false,
+  "product_release_authorized": false,
+  "validation_environment": "Faithful 63-reference mirror under reviewer-only directory, actual production validator and actual repository policy_root; original repository copy must still be validated.",
+  "files": {
+    "independent-review.md": "0572929833bc89a39b712361c05f994552fab3c8a4991501cc69f2cf1b02fe32",
+    "independent-review.json": "599f9709c132dfb9c32743568c36eb545882d4f1cb64cadfbe4854929b8e10d6",
+    "review-evidence.json": "d58c843e46815796ba282e89d3517c56cc060e8b7f0b5012614d0a0e39959f85"
+  }
+}

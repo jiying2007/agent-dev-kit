@@ -1,0 +1,288 @@
+{
+  "cases": [
+    {
+      "id": "rtos-valid",
+      "prompt": "请设计 RTOS 任务优先级、周期和共享资源。",
+      "skill": "adk-rtos-task-design",
+      "should_select": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-rtos-task-design",
+        "intent": "rtos_task_design",
+        "intent_zh": "RTOS任务设计/任务优先级/RTOS调度",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      },
+      "pass_case": true
+    },
+    {
+      "id": "rtos-freertos",
+      "prompt": "请为 FreeRTOS 做实时任务设计。",
+      "skill": "adk-rtos-task-design",
+      "should_select": true,
+      "actual": {
+        "match": true,
+        "source": "skill_trigger",
+        "skill": "adk-rtos-task-design",
+        "trigger": "任务设计",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      },
+      "pass_case": true
+    },
+    {
+      "id": "rtos-sales",
+      "prompt": "请做一个季度销售团队任务设计。",
+      "skill": "adk-rtos-task-design",
+      "should_select": false,
+      "actual": {
+        "match": true,
+        "source": "skill_trigger",
+        "skill": "adk-rtos-task-design",
+        "trigger": "任务设计",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      },
+      "pass_case": false
+    },
+    {
+      "id": "rtos-absent",
+      "prompt": "项目没有 RTOS；请评估裸机主循环任务设计。",
+      "skill": "adk-rtos-task-design",
+      "should_select": false,
+      "actual": {
+        "match": true,
+        "source": "skill_trigger",
+        "skill": "adk-rtos-task-design",
+        "trigger": "任务设计",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      },
+      "pass_case": false
+    },
+    {
+      "id": "bsp-fixture",
+      "prompt": "梳理这个 BSP 的启动、probe、clock/reset 依赖和历史 patch，不修改代码",
+      "skill": "adk-bsp-analysis",
+      "should_select": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "artifact_mode": "readonly",
+        "negated_intents": []
+      },
+      "pass_case": false
+    },
+    {
+      "id": "bsp-generic",
+      "prompt": "梳理这个季度的销售目标和人员安排。",
+      "skill": "adk-bsp-analysis",
+      "should_select": false,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "pass_case": true
+    },
+    {
+      "id": "bsp-porting",
+      "prompt": "请规划 BSP 移植和启动链迁移。",
+      "skill": "adk-bsp-analysis",
+      "should_select": false,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-bsp-porting-playbook",
+        "intent": "bsp_porting",
+        "intent_zh": "BSP移植/BSP适配/板级移植/启动链/BootROM/SPL/U-Boot/Bootloader/rootfs/最小启动/secure boot",
+        "supporting_skills": [
+          "adk-driver-bringup-checklist"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "bsp-porting",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [
+          "live-device:flash",
+          "live-device:storage-write"
+        ],
+        "live_device_authorization": "explicit-required",
+        "live_device_authorization_requirements": "target-identity,explicit-authorization,rollback-or-recovery,post-write-verification",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E3",
+        "effort_basis": "high-risk-or-escalation"
+      },
+      "pass_case": true
+    },
+    {
+      "id": "bsp-driver",
+      "prompt": "BSP 的接口已明确，请直接实现驱动。",
+      "skill": "adk-bsp-analysis",
+      "should_select": false,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-driver-implementation",
+        "intent": "driver_implementation",
+        "intent_zh": "驱动开发/写驱动/编写驱动/实现驱动",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "implementation",
+        "mutation_permission": "workspace-write",
+        "artifact_mode": "implementation",
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "driver-implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      },
+      "pass_case": true
+    },
+    {
+      "id": "dma-budget",
+      "prompt": "请检查 DMA 缓存一致性，这是受 CPU budget 的场景限制的系统。",
+      "skill": "adk-interrupt-dma-patterns",
+      "should_select": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "interrupt_dma_patterns"
+        ]
+      },
+      "pass_case": false
+    },
+    {
+      "id": "dma-polling",
+      "prompt": "SPI DMA 轮询已经满足已量化 latency/CPU budget 的场景，仍需检查 DMA cache coherency。",
+      "skill": "adk-interrupt-dma-patterns",
+      "should_select": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "interrupt_dma_patterns"
+        ]
+      },
+      "pass_case": false
+    },
+    {
+      "id": "dma-none",
+      "prompt": "无中断且无 DMA 的纯轮询任务，只需评估普通循环。",
+      "skill": "adk-interrupt-dma-patterns",
+      "should_select": false,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      },
+      "pass_case": true
+    }
+  ],
+  "passed": 6,
+  "total": 11
+}

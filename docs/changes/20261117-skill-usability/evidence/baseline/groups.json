@@ -1,0 +1,271 @@
+{
+  "source": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "groups": {
+    "embedded": [
+      {
+        "name": "adk-register-map-design",
+        "path": "skills/adk-register-map-design/SKILL.md"
+      },
+      {
+        "name": "adk-bsp-analysis",
+        "path": "skills/adk-bsp-analysis/SKILL.md"
+      },
+      {
+        "name": "adk-driver-implementation",
+        "path": "skills/adk-driver-implementation/SKILL.md"
+      },
+      {
+        "name": "adk-driver-bringup-checklist",
+        "path": "skills/adk-driver-bringup-checklist/SKILL.md"
+      },
+      {
+        "name": "adk-bsp-porting-playbook",
+        "path": "skills/adk-bsp-porting-playbook/SKILL.md"
+      },
+      {
+        "name": "adk-rtos-task-design",
+        "path": "skills/adk-rtos-task-design/SKILL.md"
+      },
+      {
+        "name": "adk-interrupt-dma-patterns",
+        "path": "skills/adk-interrupt-dma-patterns/SKILL.md"
+      },
+      {
+        "name": "adk-protocol-stack-integration",
+        "path": "skills/adk-protocol-stack-integration/SKILL.md"
+      },
+      {
+        "name": "adk-cmake-cross-build",
+        "path": "skills/adk-cmake-cross-build/SKILL.md"
+      },
+      {
+        "name": "adk-embedded-debug-transport",
+        "path": "skills/adk-embedded-debug-transport/SKILL.md"
+      },
+      {
+        "name": "adk-embedded-remote-debug-log-triage",
+        "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md"
+      },
+      {
+        "name": "adk-hardware-debugging",
+        "path": "skills/adk-hardware-debugging/SKILL.md"
+      },
+      {
+        "name": "adk-performance-profiling-embedded",
+        "path": "skills/adk-performance-profiling-embedded/SKILL.md"
+      },
+      {
+        "name": "adk-unit-test-embedded",
+        "path": "skills/adk-unit-test-embedded/SKILL.md"
+      },
+      {
+        "name": "adk-integration-hil-sil",
+        "path": "skills/adk-integration-hil-sil/SKILL.md"
+      },
+      {
+        "name": "adk-embedded-diagnostic-harness",
+        "path": "skills/adk-embedded-diagnostic-harness/SKILL.md"
+      },
+      {
+        "name": "adk-fault-injection-recovery",
+        "path": "skills/adk-fault-injection-recovery/SKILL.md"
+      },
+      {
+        "name": "adk-static-analysis-c-cpp",
+        "path": "skills/adk-static-analysis-c-cpp/SKILL.md"
+      },
+      {
+        "name": "adk-embedded-release-orchestration",
+        "path": "skills/adk-embedded-release-orchestration/SKILL.md"
+      },
+      {
+        "name": "adk-embedded-storage-layout-migration",
+        "path": "skills/adk-embedded-storage-layout-migration/SKILL.md"
+      }
+    ],
+    "workflow": [
+      {
+        "name": "adk-requirements-triage",
+        "path": "skills/adk-requirements-triage/SKILL.md"
+      },
+      {
+        "name": "adk-structured-requirements-questioning",
+        "path": "skills/adk-structured-requirements-questioning/SKILL.md"
+      },
+      {
+        "name": "adk-repo-prompt-analysis",
+        "path": "skills/adk-repo-prompt-analysis/SKILL.md"
+      },
+      {
+        "name": "adk-skill-deep-analysis",
+        "path": "skills/adk-skill-deep-analysis/SKILL.md"
+      },
+      {
+        "name": "adk-lightweight-planning",
+        "path": "skills/adk-lightweight-planning/SKILL.md"
+      },
+      {
+        "name": "adk-task-breakdown",
+        "path": "skills/adk-task-breakdown/SKILL.md"
+      },
+      {
+        "name": "adk-interface-contract-design",
+        "path": "skills/adk-interface-contract-design/SKILL.md"
+      },
+      {
+        "name": "adk-adr-writer",
+        "path": "skills/adk-adr-writer/SKILL.md"
+      },
+      {
+        "name": "adk-component-api-stability",
+        "path": "skills/adk-component-api-stability/SKILL.md"
+      },
+      {
+        "name": "adk-code-simplification",
+        "path": "skills/adk-code-simplification/SKILL.md"
+      },
+      {
+        "name": "adk-systematic-debugging",
+        "path": "skills/adk-systematic-debugging/SKILL.md"
+      },
+      {
+        "name": "adk-offline-core-dump-triage",
+        "path": "skills/adk-offline-core-dump-triage/SKILL.md"
+      },
+      {
+        "name": "adk-test-strategy",
+        "path": "skills/adk-test-strategy/SKILL.md"
+      },
+      {
+        "name": "adk-artifact-gating",
+        "path": "skills/adk-artifact-gating/SKILL.md"
+      },
+      {
+        "name": "adk-pilot-framework",
+        "path": "skills/adk-pilot-framework/SKILL.md"
+      },
+      {
+        "name": "adk-verification-before-completion",
+        "path": "skills/adk-verification-before-completion/SKILL.md"
+      },
+      {
+        "name": "adk-code-review-loop",
+        "path": "skills/adk-code-review-loop/SKILL.md"
+      },
+      {
+        "name": "adk-repo-drift-remediation",
+        "path": "skills/adk-repo-drift-remediation/SKILL.md"
+      },
+      {
+        "name": "adk-commit-pr-quality-gate",
+        "path": "skills/adk-commit-pr-quality-gate/SKILL.md"
+      },
+      {
+        "name": "adk-release-versioning",
+        "path": "skills/adk-release-versioning/SKILL.md"
+      },
+      {
+        "name": "adk-production-field-readiness",
+        "path": "skills/adk-production-field-readiness/SKILL.md"
+      },
+      {
+        "name": "adk-cross-team-handoff",
+        "path": "skills/adk-cross-team-handoff/SKILL.md"
+      },
+      {
+        "name": "adk-branch-closeout",
+        "path": "skills/adk-branch-closeout/SKILL.md"
+      },
+      {
+        "name": "adk-after-action-review",
+        "path": "skills/adk-after-action-review/SKILL.md"
+      },
+      {
+        "name": "adk-engineering-growth-review",
+        "path": "skills/adk-engineering-growth-review/SKILL.md"
+      }
+    ],
+    "context_optional": [
+      {
+        "name": "adk-runtime-router",
+        "path": "skills/adk-runtime-router/SKILL.md"
+      },
+      {
+        "name": "adk-context-engineering",
+        "path": "skills/adk-context-engineering/SKILL.md"
+      },
+      {
+        "name": "adk-token-context-governance",
+        "path": "skills/adk-token-context-governance/SKILL.md"
+      },
+      {
+        "name": "adk-parallel-agent-governance",
+        "path": "skills/adk-parallel-agent-governance/SKILL.md"
+      },
+      {
+        "name": "adk-worktree-governance",
+        "path": "skills/adk-worktree-governance/SKILL.md"
+      },
+      {
+        "name": "adk-context-compress-handoff",
+        "path": "skills/adk-context-compress-handoff/SKILL.md"
+      },
+      {
+        "name": "adk-goal-authoring",
+        "path": "skills/adk-goal-authoring/SKILL.md"
+      },
+      {
+        "name": "adk-planning-execution-loop",
+        "path": "skills/adk-planning-execution-loop/SKILL.md"
+      },
+      {
+        "name": "adk-memory-curator",
+        "path": "skills/adk-memory-curator/SKILL.md"
+      },
+      {
+        "name": "adk-archive-governance",
+        "path": "skills/adk-archive-governance/SKILL.md"
+      },
+      {
+        "name": "adk-knowledge-archive",
+        "path": "skills/adk-knowledge-archive/SKILL.md"
+      },
+      {
+        "name": "adk-external-practice-absorption",
+        "path": "optional-skills/adk-external-practice-absorption/SKILL.md"
+      },
+      {
+        "name": "adk-data-fetch",
+        "path": "optional-skills/adk-data-fetch/SKILL.md"
+      },
+      {
+        "name": "adk-email-imap-fetch",
+        "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md"
+      },
+      {
+        "name": "adk-fetch-url-content",
+        "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md"
+      },
+      {
+        "name": "adk-test-flakiness-triage",
+        "path": "optional-skills/adk-test-flakiness-triage/SKILL.md"
+      },
+      {
+        "name": "adk-security-supply-chain",
+        "path": "optional-skills/adk-security-supply-chain/SKILL.md"
+      },
+      {
+        "name": "adk-prose-revision",
+        "path": "optional-skills/adk-prose-revision/SKILL.md"
+      },
+      {
+        "name": "adk-incident-rca-report",
+        "path": "optional-skills/adk-incident-rca-report/SKILL.md"
+      },
+      {
+        "name": "adk-skill-composition-governance",
+        "path": "optional-skills/adk-skill-composition-governance/SKILL.md"
+      }
+    ]
+  }
+}

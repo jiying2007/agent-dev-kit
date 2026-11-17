@@ -1,0 +1,114 @@
+{
+  "changed_since_previous": [
+    "manifest.json",
+    "skills/adk-systematic-debugging/SKILL.md",
+    "tests/test_skill_trigger_matrix.py"
+  ],
+  "previous_snapshot_sha256": "112247824afa94fba5a9a0ccf49dae33916f97d08dedb14956eb98db92acd57c",
+  "current_snapshot_sha256": "e3819593e8e8b4b1eacd0e396ab0fc32d007b3d4083f70da531155ada7cdb4e6",
+  "reused": [
+    {
+      "name": "module-size",
+      "command": [
+        "bash",
+        "tests/test_module_size_budget.sh"
+      ],
+      "started_at": "2026-11-17T06:46:18.717305+00:00",
+      "completed_at": "2026-11-17T06:46:21.666305+00:00",
+      "duration_seconds": 2.949,
+      "exit_code": 0,
+      "log_sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd",
+      "evidence_origin": "reused-unchanged-inputs",
+      "reuse_reason": "Only manifest routing, systematic Skill metadata, trigger tests and catalog changed; audited dependency declarations and Python analysis/module-size input bytes are identical."
+    },
+    {
+      "name": "ruff",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/ruff",
+        "check",
+        "src",
+        "tools",
+        "tests/fixtures/fake_target_runtime.py"
+      ],
+      "started_at": "2026-11-17T06:46:21.666716+00:00",
+      "completed_at": "2026-11-17T06:46:21.675591+00:00",
+      "duration_seconds": 0.009,
+      "exit_code": 0,
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "evidence_origin": "reused-unchanged-inputs",
+      "reuse_reason": "Only manifest routing, systematic Skill metadata, trigger tests and catalog changed; audited dependency declarations and Python analysis/module-size input bytes are identical."
+    },
+    {
+      "name": "focused-ruff",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/ruff",
+        "check",
+        "src/agent_dev_kit/contracts",
+        "src/agent_dev_kit/evidence",
+        "src/agent_dev_kit/target_adapters",
+        "src/agent_dev_kit/distribution",
+        "src/agent_dev_kit/versioning.py",
+        "src/agent_dev_kit/native_campaign_diagnostics.py",
+        "src/agent_dev_kit/review_evidence.py",
+        "src/agent_dev_kit/execution_policy",
+        "--select",
+        "E4,E7,E9,F,B,UP,SIM,I"
+      ],
+      "started_at": "2026-11-17T06:46:21.675839+00:00",
+      "completed_at": "2026-11-17T06:46:21.683931+00:00",
+      "duration_seconds": 0.008,
+      "exit_code": 0,
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "evidence_origin": "reused-unchanged-inputs",
+      "reuse_reason": "Only manifest routing, systematic Skill metadata, trigger tests and catalog changed; audited dependency declarations and Python analysis/module-size input bytes are identical."
+    },
+    {
+      "name": "mypy",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/mypy",
+        "src/agent_dev_kit/contracts",
+        "src/agent_dev_kit/evidence",
+        "src/agent_dev_kit/target_adapters",
+        "src/agent_dev_kit/distribution",
+        "src/agent_dev_kit/versioning.py",
+        "src/agent_dev_kit/native_campaign_diagnostics.py",
+        "src/agent_dev_kit/review_evidence.py",
+        "src/agent_dev_kit/execution_policy",
+        "src/agent_dev_kit/installation_inventory.py",
+        "src/agent_dev_kit/installation_plan.py",
+        "src/agent_dev_kit/installation_transaction.py",
+        "src/agent_dev_kit/targets.py",
+        "src/agent_dev_kit/target_contracts.py",
+        "src/agent_dev_kit/delivery_cli.py",
+        "src/agent_dev_kit/release.py",
+        "src/agent_dev_kit/task_evidence.py",
+        "src/agent_dev_kit/task_trials.py",
+        "src/agent_dev_kit/task_acceptance.py"
+      ],
+      "started_at": "2026-11-17T06:46:21.684287+00:00",
+      "completed_at": "2026-11-17T06:46:21.990812+00:00",
+      "duration_seconds": 0.307,
+      "exit_code": 0,
+      "log_sha256": "103f10fdbb5ad2b6ee08833a3e2b634aa94d13009cb96f89236e9d80e79aac15",
+      "evidence_origin": "reused-unchanged-inputs",
+      "reuse_reason": "Only manifest routing, systematic Skill metadata, trigger tests and catalog changed; audited dependency declarations and Python analysis/module-size input bytes are identical."
+    },
+    {
+      "name": "pip-audit",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/adk-quality-venv/bin/pip-audit",
+        "--strict",
+        "--progress-spinner",
+        "off",
+        "."
+      ],
+      "started_at": "2026-11-17T06:46:21.991215+00:00",
+      "completed_at": "2026-11-17T06:46:34.079975+00:00",
+      "duration_seconds": 12.089,
+      "exit_code": 0,
+      "log_sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955",
+      "evidence_origin": "reused-unchanged-inputs",
+      "reuse_reason": "Only manifest routing, systematic Skill metadata, trigger tests and catalog changed; audited dependency declarations and Python analysis/module-size input bytes are identical."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "bash",
+    "tests/run_all.sh",
+    "--timing-json",
+    "/workspace/scratch/fe8de3b42084/skill-usability-validation-release/full-regression-timing.json"
+  ],
+  "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+  "started_at": "2026-11-17T06:57:04.173019+00:00",
+  "completed_at": "2026-11-17T07:02:47.745648+00:00",
+  "duration_seconds": 343.573,
+  "exit_code": 0,
+  "source_files_sha256": "e3819593e8e8b4b1eacd0e396ab0fc32d007b3d4083f70da531155ada7cdb4e6",
+  "log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+}

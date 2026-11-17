@@ -1,0 +1,10 @@
+{
+  "head": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "version": "11.3.13",
+  "initial_status": "?? docs/changes/20261117-skill-usability/design.md\n?? docs/changes/20261117-skill-usability/negative-results.md\n?? docs/changes/20261117-skill-usability/requirements.md\n?? docs/changes/20261117-skill-usability/tasks.md",
+  "final_status": "?? docs/changes/20261117-skill-usability/design.md\n?? docs/changes/20261117-skill-usability/negative-results.md\n?? docs/changes/20261117-skill-usability/requirements.md\n?? docs/changes/20261117-skill-usability/tasks.md",
+  "source_unchanged": true,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "model_behavior": "not-measured",
+  "live_runtime": "not-run"
+}

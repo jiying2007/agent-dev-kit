@@ -1,13 +1,13 @@
 ---
 name: adk-production-field-readiness
 description: "用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。"
-version: 1.0.4
+version: 1.0.5
 last_updated: 2026-11-17
 triggers:
   - "量产"
   - "产测"
   - "烧录"
-  - "诊断"
+  - "现场诊断"
   - "现场维护"
   - "OTA"
   - "回滚"
@@ -16,9 +16,7 @@ triggers:
   - "production-field"
   - "field readiness"
   - "embedded-production-field-readiness"
-  - "simulate-device"
-  - "模拟设备"
-  - "设备状态机"
+implicit_context: ["量产/产测/产线/生产现场/烧录/OTA/RMA/现场维护/现场诊断/设备交付/设备健康检查/production-field/field readiness"]
 non_triggers:
   - 通用 Web 发布
   - 纯版本号整理且不涉及设备交付
@@ -35,8 +33,8 @@ constraints:
 # adk-production-field-readiness
 
 ## Goal
-- 覆盖量产、产测、烧录、诊断、OTA、RMA 与现场维护。
-- 版本策略归 `adk-release-versioning`，设备交付 readiness 归本 Skill。
+- 审查设备交付 readiness；普通诊断、回滚或状态机设计不因用词相同进入量产流程。
+- 版本策略交 `adk-release-versioning`；本 Skill 不提供设备写入授权。
 
 ## Prerequisites
 - 确认目标设备、硬件版本、BOM/板级差异、固件/镜像版本和生产批次约束。

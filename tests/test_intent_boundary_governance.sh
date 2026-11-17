@@ -28,6 +28,10 @@ rg -q "adk-prototype-evidence-schema-v1" "$ROOT_DIR/templates/artifacts/prototyp
 PYTHONPATH="$ROOT_DIR/src" python3 -m unittest discover \
   -s "$ROOT_DIR/tests" -p 'test_superagent_method_contract.py' -v
 
+# Validate consumer-delivered task examples and malformed JSON at the same boundary owner.
+PYTHONPATH="$ROOT_DIR/src" python3 -m unittest discover \
+  -s "$ROOT_DIR/tests" -p 'test_task_package_delivery.py' -v
+
 PYTHONPATH="$ROOT_DIR/src" python3 - "$ROOT_DIR" <<'PY'
 import copy
 import json

@@ -161,6 +161,32 @@ def _phrases(frontmatter: Mapping[str, Any], key: str) -> Iterable[str]:
             yield item
 
 
+def _has_affirmative_context(text: str, contexts: Sequence[str], markers: Sequence[str]) -> bool:
+    """Extend domain negation only across adjacent, declared domain names.
+
+    Punctuation and intervening actions break the compact list. This does not
+    change the action/mode/permission polarity used by the routing IR.
+    """
+    normalized = _normalized(text)
+    matches = sorted(
+        (match for phrase in contexts for match in _all_phrase_matches(text, phrase)),
+        key=lambda item: item[1],
+    )
+    negated_ends: set[int] = set()
+    conjunctions = {"或", "和", "与", "及", "、", "and", "or", "nor"}
+    for match in matches:
+        phrase, position, _ = match
+        inherited = any(
+            position - len(conjunction) in negated_ends
+            and normalized[position - len(conjunction):position] == conjunction
+            for conjunction in conjunctions
+        )
+        if not inherited and not _is_locally_negated(text, match, markers):
+            return True
+        negated_ends.add(position + len(_normalized(phrase)))
+    return False
+
+
 def _implicit_context_matches(
     frontmatter: Mapping[str, Any],
     text: str,
@@ -191,7 +217,7 @@ def _implicit_context_matches(
     )
     context_text = re.sub(inline, lambda match: match.group(0)[1:-1], context_text)
     context_markers = (*markers, "非", "不涉及", "not", "non-")
-    return any(_active_phrase_matches(context_text, phrase, context_markers) for phrase in contexts)
+    return _has_affirmative_context(context_text, contexts, context_markers)
 
 
 def _managed_skill_entries(manifest: Manifest, section: str) -> Iterable[Tuple[str, Path]]:

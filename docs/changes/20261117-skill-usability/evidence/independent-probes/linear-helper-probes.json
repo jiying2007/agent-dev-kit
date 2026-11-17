@@ -1,0 +1,485 @@
+{
+  "kernel_sha256": "3b4364f90f7f0858e66f937a7e1b3c00c5afe19da3dd9a2c1ab542b6d420ca60",
+  "changed_since_postfix": [
+    {
+      "path": ".gitattributes",
+      "postfix_sha256": "340de46dfa9c7225da1804dec149e700963421c2aeb14f176eb7e04e4f6e1f63",
+      "current_sha256": "7262c50dd62526f41c77e63f4cbf0f6f2f6ab20691a76d9ac83d4dc6a29bc30c"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "postfix_sha256": "2a89f37be4f8e1f5c628f6ddea9509522417a5740b898f6880055fc3eb608a62",
+      "current_sha256": "849715a1fb35551a792989b3581602711bc80c905c1746d84d577ec9111ffbec"
+    },
+    {
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "postfix_sha256": "c8d719b486cf15bc0474cd394cb5ed167594a034c186f760d682dc7ca9b18ba1",
+      "current_sha256": "3b4364f90f7f0858e66f937a7e1b3c00c5afe19da3dd9a2c1ab542b6d420ca60"
+    }
+  ],
+  "regression_cases": [
+    {
+      "prompt": "不涉及量产或 OTA；请检查数据库回滚方案",
+      "expected_skill": null,
+      "excluded_skill": "adk-production-field-readiness",
+      "passed": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      }
+    },
+    {
+      "prompt": "不涉及量产、OTA 或 RMA；请检查数据库回滚方案",
+      "expected_skill": null,
+      "excluded_skill": "adk-production-field-readiness",
+      "passed": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      }
+    },
+    {
+      "prompt": "不涉及量产和 OTA，只检查数据库回滚方案",
+      "expected_skill": null,
+      "excluded_skill": "adk-production-field-readiness",
+      "passed": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      }
+    },
+    {
+      "prompt": "不涉及量产或 OTA，但请检查 OTA 签名和回滚证据",
+      "expected_skill": "adk-production-field-readiness",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "不涉及量产，检查 OTA 签名和回滚证据",
+      "expected_skill": "adk-production-field-readiness",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "不涉及量产；检查 OTA 签名和回滚证据",
+      "expected_skill": "adk-production-field-readiness",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "不涉及量产而是 OTA，检查签名和回滚证据",
+      "expected_skill": "adk-production-field-readiness",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "不做量产或 OTA 发布，只检查数据库回滚方案",
+      "expected_skill": null,
+      "excluded_skill": "adk-production-field-readiness",
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-embedded-release-orchestration",
+        "intent": "embedded_release_orchestration",
+        "intent_zh": "嵌入式发布编排/固件发布/OTA发布/NAS发布/产线发布/release bundle/SD升级包/MCU固件包",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-production-field-readiness"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "embedded-release",
+        "effect_ceiling": "release-preparation",
+        "effect_scope": "release-target",
+        "effect_operation": "prepare",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [
+          "release-target:publish",
+          "live-device:flash"
+        ],
+        "live_device_authorization": "explicit-required",
+        "live_device_authorization_requirements": "target-identity,explicit-authorization,rollback-or-recovery,post-write-verification",
+        "release_target_authorization": "explicit-required",
+        "execution_effort": "E3",
+        "effort_basis": "high-risk-or-escalation"
+      }
+    },
+    {
+      "prompt": "不涉及量产或 OTA；核对 RMA 现场恢复证据",
+      "expected_skill": "adk-production-field-readiness",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "not production-field or OTA; check database rollback",
+      "expected_skill": null,
+      "excluded_skill": "adk-production-field-readiness",
+      "passed": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      }
+    },
+    {
+      "prompt": "without production-field or OTA; check database 回滚",
+      "expected_skill": null,
+      "excluded_skill": "adk-production-field-readiness",
+      "passed": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      }
+    },
+    {
+      "prompt": "文档示例：`OTA`；请检查数据库回滚方案",
+      "expected_skill": null,
+      "excluded_skill": "adk-production-field-readiness",
+      "passed": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      }
+    },
+    {
+      "prompt": "请只读检查 `OTA` 的签名和回滚证据",
+      "expected_skill": "adk-production-field-readiness",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "artifact_mode": "readonly",
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E0",
+        "effort_basis": "explicit-readonly"
+      }
+    },
+    {
+      "prompt": "评估嵌入式设备 OTA 的断电恢复、回滚和上线 readiness",
+      "expected_skill": "adk-production-field-readiness",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "请为 VxWorks 做任务设计",
+      "expected_skill": "adk-rtos-task-design",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "skill_trigger",
+        "skill": "adk-rtos-task-design",
+        "trigger": "任务设计",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "不涉及 RTOS 或 VxWorks；请做销售团队任务设计",
+      "expected_skill": null,
+      "excluded_skill": "adk-rtos-task-design",
+      "passed": true,
+      "actual": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": []
+      }
+    },
+    {
+      "prompt": "请为 Zephyr 做任务设计",
+      "expected_skill": "adk-rtos-task-design",
+      "excluded_skill": null,
+      "passed": true,
+      "actual": {
+        "match": true,
+        "source": "skill_trigger",
+        "skill": "adk-rtos-task-design",
+        "trigger": "任务设计",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    }
+  ],
+  "passed": true
+}

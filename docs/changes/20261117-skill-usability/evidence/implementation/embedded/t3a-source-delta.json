@@ -1,0 +1,30 @@
+[
+  {
+    "path": "skills/adk-rtos-task-design/SKILL.md",
+    "before": 5718,
+    "after": 5796,
+    "delta": 78,
+    "sha256": "d087ee87d5b513e82319045ccbf1952f2f62764831e1ad6681263df730713f7a"
+  },
+  {
+    "path": "skills/adk-bsp-analysis/SKILL.md",
+    "before": 3928,
+    "after": 3861,
+    "delta": -67,
+    "sha256": "a35cac1e4e20ceb519e027da15b448c712a94dab37fb594e7954ca21bd8aaa86"
+  },
+  {
+    "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+    "before": 5406,
+    "after": 5388,
+    "delta": -18,
+    "sha256": "f5fc8aa352b4767764b5f81f5f7ce3326c051382b9b2b72372ec43e1ad0e4c70"
+  },
+  {
+    "path": "tests/test_skill_rtos_methods.py",
+    "before": 4584,
+    "after": 6356,
+    "delta": 1772,
+    "sha256": "1107e967040f7c32c3be867a0af4556bfbd312d7eec3cd3746f4f7135b1edaff"
+  }
+]

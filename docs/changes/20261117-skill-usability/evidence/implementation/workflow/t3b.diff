@@ -1,0 +1,601 @@
+diff --git a/manifest.json b/manifest.json
+index 0de6020..0ce1ce0 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.13",
++  "version": "11.3.14",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+@@ -2509,7 +2509,7 @@
+       },
+       {
+         "intent": "systematic_debugging",
+-        "intent_zh": "调试/调试问题/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障/aclocal缺失/aclocal/automake缺失/Autoconf工具缺失",
++        "intent_zh": "调试/调试问题/诊断/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障/aclocal缺失/aclocal/automake缺失/Autoconf工具缺失",
+         "primary_skill": "adk-systematic-debugging",
+         "supporting_skills": [],
+         "mutually_exclusive": [
+@@ -2644,7 +2644,7 @@
+       },
+       {
+         "intent": "code_review_loop",
+-        "intent_zh": "独立代码审查/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查/只读审查代码/只读代码审查",
++        "intent_zh": "独立代码审查/代码评审/code review loop/review闭环/review反馈/review反馈核验/审查反馈/收到review/修复review/复审/代码审查/中文代码审查/英文代码审查/只读审查代码/只读代码审查",
+         "primary_skill": "adk-code-review-loop",
+         "supporting_skills": [
+           "adk-commit-pr-quality-gate"
+@@ -2775,7 +2775,7 @@
+       },
+       {
+         "intent": "production_field_readiness",
+-        "intent_zh": "量产/产测/烧录/诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness/simulate-device/模拟设备/设备状态机",
++        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+         "primary_skill": "adk-production-field-readiness",
+         "supporting_skills": [
+           "adk-release-versioning",
+diff --git a/skills/adk-code-review-loop/SKILL.md b/skills/adk-code-review-loop/SKILL.md
+index 68cdd62..39fcf61 100644
+--- a/skills/adk-code-review-loop/SKILL.md
++++ b/skills/adk-code-review-loop/SKILL.md
+@@ -1,10 +1,11 @@
+ ---
+ name: adk-code-review-loop
+ description: "用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。"
+-version: 1.7.10
+-last_updated: 2026-11-16
++version: 1.7.11
++last_updated: 2026-11-17
+ triggers:
+   - "独立代码审查"
++  - "代码评审"
+   - "code review loop"
+   - "review 闭环"
+   - "审查反馈"
+diff --git a/skills/adk-commit-pr-quality-gate/SKILL.md b/skills/adk-commit-pr-quality-gate/SKILL.md
+index 050cf95..98efa60 100644
+--- a/skills/adk-commit-pr-quality-gate/SKILL.md
++++ b/skills/adk-commit-pr-quality-gate/SKILL.md
+@@ -1,15 +1,14 @@
+ ---
+ name: adk-commit-pr-quality-gate
+ description: "用于提交 PR 前核对测试证据、差异范围与质量门禁；不能替代独立代码审查，也不用于未授权的合并或发布。"
+-version: 1.2.0
+-last_updated: 2026-11-13
++version: 1.2.1
++last_updated: 2026-11-17
+ triggers:
+   - "提交代码"
+   - "中文提交信息"
+   - "提交信息格式"
+   - "commit message"
+   - "发起PR"
+-  - "代码评审"
+ non_triggers:
+   - 纯探索性代码阅读
+ inputs:
+diff --git a/skills/adk-production-field-readiness/SKILL.md b/skills/adk-production-field-readiness/SKILL.md
+index 70499da..4c5f1e5 100644
+--- a/skills/adk-production-field-readiness/SKILL.md
++++ b/skills/adk-production-field-readiness/SKILL.md
+@@ -1,13 +1,13 @@
+ ---
+ name: adk-production-field-readiness
+ description: "用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。"
+-version: 1.0.4
++version: 1.0.5
+ last_updated: 2026-11-17
+ triggers:
+   - "量产"
+   - "产测"
+   - "烧录"
+-  - "诊断"
++  - "现场诊断"
+   - "现场维护"
+   - "OTA"
+   - "回滚"
+@@ -16,9 +16,7 @@ triggers:
+   - "production-field"
+   - "field readiness"
+   - "embedded-production-field-readiness"
+-  - "simulate-device"
+-  - "模拟设备"
+-  - "设备状态机"
++implicit_context: ["量产/产测/产线/生产现场/烧录/OTA升级/OTA回滚/OTA验收/RMA/现场维护/现场诊断/设备交付/设备健康检查/production-field/field readiness"]
+ non_triggers:
+   - 通用 Web 发布
+   - 纯版本号整理且不涉及设备交付
+@@ -35,8 +33,8 @@ constraints:
+ # adk-production-field-readiness
+ 
+ ## Goal
+-- 覆盖量产、产测、烧录、诊断、OTA、RMA 与现场维护。
+-- 版本策略归 `adk-release-versioning`，设备交付 readiness 归本 Skill。
++- 审查设备交付 readiness；普通诊断、回滚或状态机设计不因用词相同进入量产流程。
++- 版本策略交 `adk-release-versioning`；本 Skill 不提供设备写入授权。
+ 
+ ## Prerequisites
+ - 确认目标设备、硬件版本、BOM/板级差异、固件/镜像版本和生产批次约束。
+diff --git a/skills/adk-task-breakdown/SKILL.md b/skills/adk-task-breakdown/SKILL.md
+index 67edcf4..7d627ee 100644
+--- a/skills/adk-task-breakdown/SKILL.md
++++ b/skills/adk-task-breakdown/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-task-breakdown
+-description: "用于复杂需求拆解、公共契约迁移拆分及并行边界；单点小修无需拆包，也不替代已批准计划的持续执行。"
+-version: 1.5.0
+-last_updated: 2026-11-13
++description: "用于复杂任务拆解、公共契约迁移及并行边界；单点小修无需拆包，不替代已批准计划的执行。"
++version: 1.5.1
++last_updated: 2026-11-17
+ triggers:
+   - "拆解任务"
+   - "任务拆分"
+@@ -14,35 +14,32 @@ non_triggers:
+ inputs:
+   - 需求范围、里程碑、模块边界与依赖关系
+ outputs:
+-  - 任务清单、依赖图、优先级、ownership 与冲突矩阵
++  - 任务、依赖、owner、冲突与验证
+ constraints:
+-  - 每个任务须有可执行验证，批次结果不等于最终集成通过
+-  - 默认禁止两个任务并行修改同一 shared contract/schema
+-  - 机器消费的任务包必须声明 structured_output_schema 和 strict_schema_decision
+-  - 任务包只接受 adk-task-package-schema-v2，work_item_kind 与 implementation_permission 必须满足跨字段规则
++  - 每项有可执行验证，批次不代表最终集成通过
++  - 同一 shared contract/schema 不并行写
++  - 机器包仅 adk-task-package-schema-v2；structured_output_schema、strict_schema_decision 及跨字段规则须校验
+ ---
+ 
+ # adk-task-breakdown
+ 
+ ## Goal
+-仅为复杂任务生成可执行、可验收的边界；小修或已有可用任务包时直接退出。
++为复杂任务划清交付边界；小修或已有任务包直接退出。
+ 
+ ## Choose the smallest useful plan
+-- **single-slice**：目标明确且无跨模块资源冲突时给可观测的纵向切片；小任务不强制拆包、估时或并行。
+-- **multi-slice**：确有多个独立交付，按依赖拆分，每项有真实产物与验证；共享 schema/root config/接口由唯一 owner 负责。
+-- **machine-dispatched**：只有要交接给执行器/并行子代理时使用完整 `adk-task-package-schema-v2`；需要 `structured_output_schema`、`strict_schema_decision`、`refusal_handling` 与 v2 跨字段检查。
+-- 风险升高不能降低验证、授权和整合边界。计划已批准且只需执行时退出，交 `adk-planning-execution-loop`。
++- **single-slice**：最小可观察纵向交付，不强制拆包、估时或并行。
++- **multi-slice**：按真实依赖拆分，每项有产物、owner 和验证；共享 schema/root config/接口只设一个 writer。
++- **machine-dispatched**：交执行器时按随包 `references/task-packaging.md` 的完整 v2 示例、类型及 `refusal_handling` 校验；不依赖未分发的源仓 schema。
++- 已批准计划交 `adk-planning-execution-loop`；不得降低风险对应的验证和授权。
+ 
+ ## Workflow
+-1. 对照原验收和计划，只修真实阻塞；普通功能优先 tracer-bullet 纵向切片。跨公共契约重构无法独立落地时，按 `references/vertical-slice-planning.md` 的 expand → migrate → contract 明确临时兼容、退出任务和最终集成，不能把中间批次当整体通过。
+-2. 划清 `scope_read`、`scope_write`、`global_constraints`、`interfaces`、共享文件和数据/权限边界；同文件及 shared contract 不允许并行写入。
+-3. 多项任务形成无环依赖图，只有**前置证据已通过、写冲突已解除且权限足够**的项才进入 Ready Frontier；阻塞项记录原因，不反复派发。
+-4. 人工阅读计划只需任务、依赖、真实验收、风险及下一步，不强制填写 v2 机器字段；机器交接的 `work_item_kind`、`question_to_resolve`、`evidence_required`、`implementation_permission`、`exit_gate`、`handoff_target`、`retention_decision` 必须按 schema 严格约束。
+-5. `decision/research/prototype` 不能凭任务包擅自执行产品代码；只有受批准的 `implementation` 才可写。prototype 要有 `prototype_evidence`，授权不能由模型推断或后补。
+-6. 估时用历史观测或不确定范围，**不硬套 0.5–8h 粒度和逐项三点估时**；只在排期/资源决策需要时细化，未知标 `not-estimated`。
+-7. 仅独立且值得并行时给并行建议，否则单线程。复杂交接/估时按需读 `references/task-packaging.md`。
++1. 对照原验收；普通功能先做 tracer-bullet。公共契约无法独立落地时读 `references/vertical-slice-planning.md`，按 expand → migrate → contract 保留临时兼容、退出任务和最终集成，中间批次不代表整体通过。
++2. 明确 `scope_read/scope_write/global_constraints/interfaces`、共享文件及权限。v2 将这些约束写入 `constraints` 字符串条目；worker 信封另存，同文件/shared contract 不并行写。
++3. 依赖图无环；前置证据通过、写冲突解除、权限足够才进 Ready Frontier。`ready_to_handoff` 是调度判定，不是 v2 顶层字段；阻塞项不反复派发。
++4. `work_item_kind` 与 `implementation_permission/exit_gate` 按 reference 校验；decision/research/prototype 禁止产品写入，prototype 附 `prototype_evidence`；只有已批准 implementation 可写，模型不能补造授权。
++5. 人工计划只需任务、依赖、验收、风险和下一步。估时用历史或不确定范围，**不硬套 0.5–8h**，未知 `not-estimated`；仅资源决策需要时细化，只有独立且收益明确时建议并行。
+ 
+ ## Quality Gate
+-- 每个拆出的交付须有可验证完成条件和 owner；不编造未经核实的路径或命令。
+-- 任务状态、权限和接口约束源于真实计划；v2 输出、冲突规则、`ready_to_handoff` 与最终整合验证在机器调度时不可省略。
+-- 任务数量、工时或填表不证明成功；小任务不为复盘/估时/并行新增无效模型调用。
++- 每项有 owner、可执行 verify；未知路径/命令标待查。状态、权限和接口来自实际计划。
++- 机器包拒绝缺字段、未知字段及错误类型/权限；未实际校验标未验证，不冒充 ready。
++- 最终整合须验证；任务数量、估时或填表不证明成功。
+diff --git a/skills/adk-task-breakdown/references/task-packaging.md b/skills/adk-task-breakdown/references/task-packaging.md
+index c8dd41e..048aa85 100644
+--- a/skills/adk-task-breakdown/references/task-packaging.md
++++ b/skills/adk-task-breakdown/references/task-packaging.md
+@@ -1,15 +1,47 @@
+-# Task packaging and estimates (on demand)
++# Machine task package（按需）
+ 
+-Only load for multi-slice scheduling, machine-dispatched task packages or genuinely decision-relevant time estimates.
++v2 仅允许下例19个顶层字段；按真实任务替换值，不构成授权或执行证据。
+ 
+-## Evidence-oriented decomposition
+-- For human plans: goal, owner, dependencies, independently observable done-when, real validation evidence and risk.
+-- For machine-dispatched work: `adk-task-package-schema-v2` with `structured_output_schema`, `strict_schema_decision`, `refusal_handling`, `work_item_kind`, `question_to_resolve`, `evidence_required`, `implementation_permission`, `exit_gate`, `handoff_target`, `retention_decision`, `global_constraints`, `interfaces`, `scope_read`, `scope_write`, `ready_to_handoff`.
+-- `decision/research/prototype` are non-implementation; prototype carries `prototype_evidence`. Owner/authority is immutable across worker attempts, never inferred from report text.
+-- Build a DAG only for actual blocking dependencies. Ready Frontier is recomputed after genuine evidence change, not on repeated unmodified summaries.
+-- Shared schema, test fixture, migration, or root config should have one writer; otherwise serialize.
++<!-- adk-example: task-package-v2 -->
++```json
++{
++  "structured_output_schema": "adk-task-package-schema-v2",
++  "strict_schema_decision": true,
++  "refusal_handling": "blocked or replan",
++  "goal": "Check the retry deadline",
++  "context": "Frozen source and authorized read scope",
++  "constraints": ["scope_read: src/retry.py", "scope_write: []", "global_constraints: read-only", "interfaces: retry deadline"],
++  "done_when": ["Boundary evidence reviewed"],
++  "primary_action": "inspect",
++  "action_mode": "read-only",
++  "verification": ["Read the boundary assertion"],
++  "artifacts": ["review.md"],
++  "blockers": [],
++  "work_item_kind": "research",
++  "question_to_resolve": "Is equality at the deadline allowed?",
++  "evidence_required": ["Condition and boundary test"],
++  "implementation_permission": "forbidden",
++  "exit_gate": "evidence-reviewed",
++  "handoff_target": "task-owner",
++  "retention_decision": "keep-final"
++}
++```
+ 
+-## Estimating only when useful
+-- Historical observed elapsed time is preferable; if unknown use explicit range or `not-estimated`.
+-- T-shirt / three-point estimates can support real staffing or critical-path decisions, but do **not** imply fixed 0.5–8h task-size validity.
+-- Record critical path only if dependencies/schedule matter; cost from extra agent orchestration and integration may exceed parallel gains.
++## Types / rejection
++
++`strict_schema_decision` 为 boolean true；其余如例为非空字符串或字符串数组。`constraints/blockers` 可空，其余数组非空，元素均非空。`retention_decision` 仅 `keep-final/archive-negative-result/delete-orphan/expire`。
++
++| work_item_kind | implementation_permission | exit_gate |
++|---|---|---|
++| decision | forbidden | owner-decision |
++| research | forbidden | evidence-reviewed |
++| prototype | forbidden | prototype-reviewed |
++| implementation | approved | implementation-verified |
++
++prototype 的 `artifacts` 另须 `prototype_evidence:<非空路径>`；非 implementation 不写产品代码。缺/多字段、错误类型或上述组合失败须 blocked/replan，不强转、不放宽 schema。使用接收方真实 validator；不可用时标未验证。
++
++## Scope / scheduling
++
++`scope_read/scope_write/global_constraints/interfaces` 在 v2 映射为 `constraints` 字符串条目，不丢弃边界。owner、DAG、`ready_to_handoff` 和 worker/report 设置属于外层派工信封，不加进 v2。信封有独立接收合同，不能替代 v2 校验或成为授权来源。
++
++Worker attempt 不改 owner/授权；仅证据或冲突变化重算 Ready Frontier。
+diff --git a/src/agent_dev_kit/intent_boundary.py b/src/agent_dev_kit/intent_boundary.py
+index 0bf16ce..5aa3457 100644
+--- a/src/agent_dev_kit/intent_boundary.py
++++ b/src/agent_dev_kit/intent_boundary.py
+@@ -110,7 +110,7 @@ def validate_task_package(value: Any) -> Tuple[str, ...]:
+         if not _non_empty_string_list(value[field]):
+             errors.append("{} must be a non-empty array of non-empty strings".format(field))
+     kind = value["work_item_kind"]
+-    if kind not in WORK_ITEM_RULES:
++    if not isinstance(kind, str) or kind not in WORK_ITEM_RULES:
+         errors.append("work_item_kind is invalid")
+     else:
+         expected_permission, expected_gate = WORK_ITEM_RULES[kind]
+@@ -118,14 +118,12 @@ def validate_task_package(value: Any) -> Tuple[str, ...]:
+             errors.append("{} requires implementation_permission={}".format(kind, expected_permission))
+         if value["exit_gate"] != expected_gate:
+             errors.append("{} requires exit_gate={}".format(kind, expected_gate))
+-        prototype_refs = [
+-            item.partition(":")[2]
++        if kind == "prototype" and _non_empty_string_list(value["artifacts"]) and not any(
++            item.startswith("prototype_evidence:") and _non_empty_string(item.partition(":")[2])
+             for item in value["artifacts"]
+-            if item.startswith("prototype_evidence:")
+-        ]
+-        if kind == "prototype" and not any(_non_empty_string(item) for item in prototype_refs):
++        ):
+             errors.append("prototype requires a prototype_evidence artifact")
+-    if value["retention_decision"] not in RETENTION_DECISIONS:
++    if not isinstance(value["retention_decision"], str) or value["retention_decision"] not in RETENTION_DECISIONS:
+         errors.append("retention_decision is invalid")
+     return tuple(errors)
+ 
+@@ -179,15 +177,19 @@ def validate_prototype_evidence(value: Any, as_of: Optional[date] = None) -> Tup
+     if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+         errors.append("artifact_sha256 must be 64 lowercase hex characters")
+     retention = value["retention_decision"]
+-    if retention not in RETENTION_DECISIONS:
++    if not isinstance(retention, str) or retention not in RETENTION_DECISIONS:
+         errors.append("retention_decision is invalid")
+     elif retention == "delete-orphan" and value["active_references_absent"] is not True:
+         errors.append("delete-orphan requires active_references_absent=true")
+-    try:
+-        expires_at = date.fromisoformat(str(value["expires_at"]))
+-    except ValueError:
++    expiry_value = value["expires_at"]
++    if not isinstance(expiry_value, str):
+         errors.append("expires_at must be an ISO date")
+     else:
+-        if retention == "expire" and as_of is not None and expires_at <= as_of:
+-            errors.append("expire requires a future expires_at")
++        try:
++            expires_at = date.fromisoformat(expiry_value)
++        except ValueError:
++            errors.append("expires_at must be an ISO date")
++        else:
++            if retention == "expire" and as_of is not None and expires_at <= as_of:
++                errors.append("expire requires a future expires_at")
+     return tuple(errors)
+diff --git a/tests/test_intent_boundary_governance.sh b/tests/test_intent_boundary_governance.sh
+index 5334dcf..ba89af9 100755
+--- a/tests/test_intent_boundary_governance.sh
++++ b/tests/test_intent_boundary_governance.sh
+@@ -28,6 +28,10 @@ rg -q "adk-prototype-evidence-schema-v1" "$ROOT_DIR/templates/artifacts/prototyp
+ PYTHONPATH="$ROOT_DIR/src" python3 -m unittest discover \
+   -s "$ROOT_DIR/tests" -p 'test_superagent_method_contract.py' -v
+ 
++# Validate consumer-delivered task examples and malformed JSON at the same boundary owner.
++PYTHONPATH="$ROOT_DIR/src" python3 -m unittest discover \
++  -s "$ROOT_DIR/tests" -p 'test_task_package_delivery.py' -v
++
+ PYTHONPATH="$ROOT_DIR/src" python3 - "$ROOT_DIR" <<'PY'
+ import copy
+ import json
+diff --git a/tests/test_skill_content.sh b/tests/test_skill_content.sh
+index 85aab52..18ea40d 100644
+--- a/tests/test_skill_content.sh
++++ b/tests/test_skill_content.sh
+@@ -4,5 +4,5 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ export PYTHONPATH="$ROOT_DIR/src"
+ cd "$ROOT_DIR"
+ # Content v2 has no universal SOP headings or minimum line count.
+-python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_skill_fault_activation tests.test_skill_imap_time_methods tests.test_skill_imap_sender_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_bisect_methods tests.test_skill_rtos_methods tests.test_skill_contract_methods tests.test_skill_cmake_methods tests.test_optional_incident_lifecycle tests.test_skill_serialization_methods tests.test_skill_scope_methods tests.test_skill_openai_metadata tests.test_commit_message_policy -v
++python3 -m unittest tests.test_skill_content_contract tests.test_document_authoring_skills tests.test_skill_method_efficiency tests.test_skill_quality_methods tests.test_verification_stage_economy tests.test_skill_portfolio_quality tests.test_external_method_intake tests.test_external_core_methods tests.test_external_domain_methods tests.test_skill_fault_activation tests.test_skill_imap_time_methods tests.test_skill_imap_sender_methods tests.test_repository_workflow_efficiency tests.test_skill_execution_tasks tests.test_skill_command_examples tests.test_review_raw_diff tests.test_skill_domain_execution tests.test_skill_runtime_methods tests.test_skill_bisect_methods tests.test_skill_rtos_methods tests.test_skill_contract_methods tests.test_skill_cmake_methods tests.test_optional_incident_lifecycle tests.test_skill_serialization_methods tests.test_skill_scope_methods tests.test_skill_openai_metadata tests.test_commit_message_policy tests.test_skill_consumer_usability -v
+ echo "[PASS] Skills content v2, OpenAI metadata and Commit Policy"
+diff --git a/tests/test_skill_trigger_matrix.py b/tests/test_skill_trigger_matrix.py
+index 87e5505..a6ae7df 100644
+--- a/tests/test_skill_trigger_matrix.py
++++ b/tests/test_skill_trigger_matrix.py
+@@ -69,6 +69,84 @@ def _catalog_cases() -> list[tuple[int, str, str, str, str, str]]:
+ 
+ 
+ class SkillTriggerMatrixTests(unittest.TestCase):
++    def test_chinese_review_alias_keeps_review_and_commit_owners(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt, expected in (
++            ("请帮我做代码评审", "adk-code-review-loop"),
++            ("请核实这条代码评审意见，不修改代码", "adk-code-review-loop"),
++            ("只核实这条代码评审反馈", "adk-code-review-loop"),
++            ("请进行独立代码审查", "adk-code-review-loop"),
++            ("请校验 commit message", "adk-commit-pr-quality-gate"),
++            ("提交前检查", "adk-commit-pr-quality-gate"),
++            ("不要做代码评审，只校验 commit message", "adk-commit-pr-quality-gate"),
++        ):
++            with self.subTest(prompt=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(expected, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++
++    def test_field_readiness_does_not_capture_generic_diagnosis_or_rollback(self) -> None:
++        manifest = Manifest.load(ROOT)
++        field = "adk-production-field-readiness"
++        for prompt in (
++            "诊断这个 Python 脚本的异常", "先诊断 Web API 超时的根因",
++            "请诊断这个普通命令的失败，先不修改代码",
++        ):
++            with self.subTest(diagnosis=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual("adk-systematic-debugging", result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++        for prompt in (
++            "请检查数据库回滚方案", "帮我设计设备状态机，不涉及量产或OTA",
++            "用模拟设备学习状态机", "文档示例：`OTA`；请检查数据库回滚方案",
++            "不做量产；只分析普通服务的回滚方案",
++        ):
++            with self.subTest(outside_field=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(field, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++        for prompt in (
++            "检查嵌入式量产产测和现场维护 readiness",
++            "量产产测和OTA回滚 readiness",
++            "只读评估现场 OTA 回滚，不执行刷写",
++            "不涉及量产，只读评估 OTA 回滚",
++            "核对现场诊断和设备交付准备",
++            "评估候选版本是否具备生产现场就绪证据，检查可观测性、回滚、SLO 和长期运维闭环。",
++        ):
++            with self.subTest(field=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(field, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++                self.assertEqual("read-only", result.get("effect_ceiling"), result)
++
++    def test_embedded_analysis_intent_boundaries_preserve_existing_neighbors(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt, expected in (
++            ("请设计 RTOS 任务优先级、周期和共享资源。", "adk-rtos-task-design"),
++            ("梳理这个 BSP 的启动、probe、clock/reset 依赖和历史 patch，不修改代码", "adk-bsp-analysis"),
++            ("SoC board 迁移分析", "adk-bsp-analysis"),
++            ("BSP移植", "adk-bsp-porting-playbook"),
++            ("实现驱动", "adk-driver-implementation"),
++            ("请检查 DMA 缓存一致性，这是受 CPU budget 的场景限制的系统。", "adk-interrupt-dma-patterns"),
++            ("SPI DMA 轮询已经满足已量化 latency/CPU budget 的场景，仍需检查 DMA cache coherency。", "adk-interrupt-dma-patterns"),
++        ):
++            with self.subTest(prompt=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(expected, result.get("skill"), result)
++                if expected not in ("adk-driver-implementation", "adk-bsp-porting-playbook"):
++                    self.assertEqual("deny", result.get("mutation_permission"), result)
++        for prompt, excluded in (
++            ("请做一个季度销售团队任务设计。", "adk-rtos-task-design"),
++            ("项目没有 RTOS；请评估裸机主循环任务设计。", "adk-rtos-task-design"),
++            ("请梳理季度销售材料", "adk-bsp-analysis"),
++            ("不涉及 BSP；请梳理脚本入口", "adk-bsp-analysis"),
++            ("只检查无中断且无 DMA 的纯轮询任务", "adk-interrupt-dma-patterns"),
++        ):
++            with self.subTest(prompt=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(excluded, result.get("skill"), result)
++                self.assertEqual("deny", result.get("mutation_permission"), result)
++
+     def test_embedded_unit_implicit_scope_and_host_controls(self) -> None:
+         manifest = Manifest.load(ROOT)
+         unit = "adk-unit-test-embedded"
+diff --git a/tests/test_task_package_delivery.py b/tests/test_task_package_delivery.py
+new file mode 100644
+index 0000000..3efd784
+--- /dev/null
++++ b/tests/test_task_package_delivery.py
+@@ -0,0 +1,169 @@
++"""Validate actual shipped task examples and malformed JSON at the typed boundary.
++
++These tests exercise source contracts and compiler outputs, not a live dispatcher.
++"""
++from __future__ import annotations
++
++import copy
++from datetime import date
++import json
++from pathlib import Path
++import re
++import tempfile
++import unittest
++
++from agent_dev_kit.compiler import export_assets
++from agent_dev_kit.intent_boundary import validate_prototype_evidence, validate_task_package
++from agent_dev_kit.model import Manifest
++
++
++ROOT = Path(__file__).resolve().parents[1]
++
++
++def research_package() -> dict[str, object]:
++    return {
++        "structured_output_schema": "adk-task-package-schema-v2",
++        "strict_schema_decision": True,
++        "refusal_handling": "blocked or replan",
++        "goal": "Check the retry deadline",
++        "context": "Frozen source and authorized read scope",
++        "constraints": ["read-only"],
++        "done_when": ["Boundary evidence reviewed"],
++        "primary_action": "inspect",
++        "action_mode": "read-only",
++        "verification": ["Read the boundary assertion"],
++        "artifacts": ["review.md"],
++        "blockers": [],
++        "work_item_kind": "research",
++        "question_to_resolve": "Is equality at the deadline allowed?",
++        "evidence_required": ["Condition and boundary test"],
++        "implementation_permission": "forbidden",
++        "exit_gate": "evidence-reviewed",
++        "handoff_target": "task-owner",
++        "retention_decision": "keep-final",
++    }
++
++
++def prototype_evidence() -> dict[str, object]:
++    return {
++        "structured_output_schema": "adk-prototype-evidence-schema-v1",
++        "question": "Does cancellation preserve the state invariant?",
++        "base_commit": "a" * 40,
++        "scope": "isolated state fixture",
++        "artifact_path": "evidence/prototype.json",
++        "artifact_sha256": "b" * 64,
++        "runtime_assumptions": "host simulation only",
++        "observed_result": "late completion ignored",
++        "decision_supported": True,
++        "verification_command": "python3 state_fixture.py",
++        "verification_exit_code": 0,
++        "retention_decision": "expire",
++        "expires_at": "2026-12-01",
++        "cleanup_owner": "fixture-owner",
++        "rollback_anchor": "remove the isolated fixture",
++        "active_references_absent": True,
++    }
++
++
++class TaskPackageTypeTests(unittest.TestCase):
++    def test_all_work_kinds_preserve_their_permission_and_exit_gate(self):
++        for kind, permission, gate in (
++            ("decision", "forbidden", "owner-decision"),
++            ("research", "forbidden", "evidence-reviewed"),
++            ("prototype", "forbidden", "prototype-reviewed"),
++            ("implementation", "approved", "implementation-verified"),
++        ):
++            with self.subTest(kind=kind):
++                task = dict(research_package(), work_item_kind=kind,
++                            implementation_permission=permission, exit_gate=gate)
++                if kind == "prototype":
++                    task["artifacts"] = ["prototype_evidence:evidence/prototype.json"]
++                self.assertEqual((), validate_task_package(task))
++                wrong_permission = "forbidden" if permission == "approved" else "approved"
++                self.assertTrue(validate_task_package(dict(task, implementation_permission=wrong_permission)))
++                self.assertTrue(validate_task_package(dict(task, exit_gate="wrong-gate")))
++        self.assertTrue(validate_task_package(dict(research_package(),
++                        work_item_kind="prototype", exit_gate="prototype-reviewed")))
++
++    def test_task_malformed_json_types_return_errors_without_exceptions(self):
++        for kind in ("research", "prototype"):
++            task = research_package()
++            if kind == "prototype":
++                task.update(work_item_kind=kind, exit_gate="prototype-reviewed",
++                            artifacts=["prototype_evidence:evidence/prototype.json"])
++            for field, values in {
++                "artifacts": (None, 1, True, {}, [1], [None], [], "review.md"),
++                "work_item_kind": (None, 1, True, {}, [], ["research"], ""),
++                "retention_decision": (None, 1, True, {}, [], ["keep-final"], ""),
++            }.items():
++                for value in values:
++                    with self.subTest(kind=kind, field=field, value=value):
++                        errors = validate_task_package(dict(task, **{field: value}))
++                        self.assertIsInstance(errors, tuple)
++                        self.assertTrue(errors)
++
++    def test_prototype_malformed_types_and_expiry_are_not_coerced(self):
++        valid = prototype_evidence()
++        self.assertEqual((), validate_prototype_evidence(valid, as_of=date(2026, 11, 17)))
++        for field, values in {
++            "retention_decision": (None, 1, True, {}, [], ["expire"]),
++            "expires_at": (None, 20261201, True, {}, [], ["2026-12-01"]),
++        }.items():
++            for value in values:
++                with self.subTest(field=field, value=value):
++                    errors = validate_prototype_evidence(dict(valid, **{field: value}),
++                                                         as_of=date(2026, 11, 17))
++                    self.assertIsInstance(errors, tuple)
++                    self.assertTrue(errors)
++        self.assertTrue(validate_prototype_evidence(
++            dict(valid, expires_at="2026-11-16"), as_of=date(2026, 11, 17)))
++        self.assertTrue(validate_prototype_evidence(
++            dict(valid, retention_decision="delete-orphan", active_references_absent=False)))
++
++
++class ExportedTaskPackageTests(unittest.TestCase):
++    def test_shipped_example_is_complete_and_preserves_scope_without_extra_fields(self):
++        manifest = Manifest.load(ROOT)
++        with tempfile.TemporaryDirectory(prefix="adk-task-package-consumer-") as directory:
++            for target in ("claude-code", "opencode"):
++                with self.subTest(target=target):
++                    result = export_assets(manifest, target, Path(directory), ["core"])
++                    consumer = Path(result["output"])
++                    reference = consumer / "skills/adk-task-breakdown/references/task-packaging.md"
++                    text = reference.read_text(encoding="utf-8")
++                    blocks = re.findall(
++                        r"<!-- adk-example: task-package-v2 -->\n```json\n(.*?)\n```",
++                        text, re.DOTALL,
++                    )
++                    self.assertEqual(1, len(blocks), "consumer needs one complete executable v2 example")
++                    package = json.loads(blocks[0])
++                    self.assertEqual(set(research_package()), set(package))
++                    self.assertEqual((), validate_task_package(package))
++                    self.assertEqual("research", package["work_item_kind"])
++                    self.assertEqual("forbidden", package["implementation_permission"])
++                    for expected in (
++                        "scope_read: src/retry.py", "scope_write: []",
++                        "global_constraints: read-only", "interfaces: retry deadline",
++                    ):
++                        self.assertIn(expected, package["constraints"])
++                    self.assertFalse((consumer / "manifests/structured_output_contracts.json").exists())
++                    self.assertIn("ready_to_handoff", text)
++                    for field in ("scope_read", "scope_write", "global_constraints", "interfaces",
++                                  "ready_to_handoff", "owner"):
++                        rejected = dict(package, **{field: True})
++                        self.assertTrue(validate_task_package(rejected), field)
++                    # The shipped payload supports the existing kind transitions,
++                    # but cannot declare research approved or omit prototype evidence.
++                    self.assertTrue(validate_task_package(dict(package, implementation_permission="approved")))
++                    prototype = dict(package, work_item_kind="prototype", exit_gate="prototype-reviewed")
++                    self.assertTrue(validate_task_package(prototype))
++                    prototype["artifacts"] = ["prototype_evidence:evidence/prototype.json"]
++                    self.assertEqual((), validate_task_package(prototype))
++                    missing = copy.deepcopy(package)
++                    missing.pop("evidence_required")
++                    self.assertTrue(validate_task_package(missing))
++                    self.assertTrue(validate_task_package(dict(package, structured_output_schema="retired-v1")))
++
++
++if __name__ == "__main__":
++    unittest.main()
