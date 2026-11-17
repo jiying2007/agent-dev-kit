@@ -1,0 +1,44 @@
+name: adc-wait-diagnostic-20261118
+
+on:
+  push:
+    branches:
+      - diagnose/adc-archive-wait-20261118
+
+permissions:
+  contents: read
+
+jobs:
+  observe-once:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/diagnose/adc-archive-wait-20261118' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Reject repeated diagnostic attempts
+        run: test "$GITHUB_RUN_ATTEMPT" = 1
+      - name: Checkout diagnostic tree
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Install existing test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep shellcheck
+          python -m pip install '.[quality]'
+      - name: Observe the original skill-content suite once
+        env:
+          PYTHONPATH: src
+        run: python tools/diagnostics/adc_wait_20261118.py --out "$RUNNER_TEMP/adc-wait-diagnostic-20261118"
+      - name: Preserve diagnostic evidence without qualification
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: adc-wait-diagnostic-20261118
+          path: ${{ runner.temp }}/adc-wait-diagnostic-20261118
+          if-no-files-found: error
+          retention-days: 30
