@@ -82,10 +82,18 @@ class RoutingIrContractTest(unittest.TestCase):
         phrase_classes = self.manifest.data["routing"]["phrase_classes"]
         self.assertEqual(
             set(phrase_classes),
-            {"readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action"},
+            {"readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action", "requested_action"},
         )
         self.assertIn("只分析", phrase_classes["readonly_scope"])
         self.assertTrue({"执行", "实施", "推进", "落地"} <= set(phrase_classes["generic_execution"]))
+
+    def test_requested_action_class_is_optional_and_typed(self):
+        legacy = copy.deepcopy(self.manifest.data)
+        legacy["routing"]["phrase_classes"].pop("requested_action")
+        self.assertEqual(self.schema_failures(legacy), [])
+        invalid = copy.deepcopy(self.manifest.data)
+        invalid["routing"]["phrase_classes"]["requested_action"] = [True]
+        self.assert_schema_failure(invalid, "schema routing/phrase_classes/requested_action/0")
 
     def test_catalog_matrix_is_a_routing_ir_projection(self):
         expected = {

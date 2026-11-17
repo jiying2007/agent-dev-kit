@@ -1,0 +1,1177 @@
+{
+  "schema": "adk-source-skill-audit/v1",
+  "baseline_commit": "6d902f721f560f02883516e809fbd93a326405b6",
+  "baseline_version": "11.3.14",
+  "recorded_at": "2026-11-17T12:03:24.145589+00:00",
+  "coverage": {
+    "skill_bodies": 65,
+    "core": 56,
+    "optional": 9,
+    "direct_references": 54
+  },
+  "limits": [
+    "All body/reference text reviewed; not every behavioral scenario executed",
+    "Local deterministic matcher evidence only; no model, native-runtime, paid invocation, hardware or HIL evidence",
+    "Retain means no substantiated issue found in this bounded review, not proof of absence",
+    "Source bytes are inventory, not observed model tokens or cost"
+  ],
+  "skills": [
+    {
+      "skill_id": "adk-runtime-router",
+      "scope": "skills",
+      "path": "skills/adk-runtime-router/SKILL.md",
+      "sha256": "d77f73c6eaee5c9eea2bbe349eb12cc535b6c5628ddd106b95e4b0afd2dc14a3",
+      "bytes": 5443,
+      "body_review": "full-text",
+      "decision": "fix",
+      "findings": [
+        "SK-01",
+        "SK-02",
+        "SK-03"
+      ],
+      "rationale": "唯一 primary、按需加载与权限上限保留；canonical matcher 的否定、动作/主题和驱动修饰语有可复现反例。",
+      "direct_references": [
+        {
+          "path": "skills/adk-runtime-router/references/runtime-routing-details.md",
+          "sha256": "7d4207293a5a99bc48434e34128841df290af30dc6794a923a9086fc4171bbe1",
+          "bytes": 7296,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-context-engineering",
+      "scope": "skills",
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "sha256": "86dbb451b888eee79923388025f71c1cb92437d3d948ee628b10f24b50807ef5",
+      "bytes": 3927,
+      "body_review": "full-text",
+      "decision": "retain-with-method-gap",
+      "findings": [
+        "SK-04"
+      ],
+      "rationale": "稳定/任务/证据/按需层与 raw fallback 已清楚；压缩后 active Skill 正文有效性恢复未明确，属于方法缺口，未证明模型失败。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-token-context-governance",
+      "scope": "skills",
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "sha256": "e426f29fa1f3a519c8932ade7caed1d43cf71728f902f781b0d9d24adcc25f1d",
+      "bytes": 7699,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "区分 source bytes、真实 Token 与成本；预算、例外、原始证据回取齐全。正文较长本身不足以证明压缩收益。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-requirements-triage",
+      "scope": "skills",
+      "path": "skills/adk-requirements-triage/SKILL.md",
+      "sha256": "ea58deea04468736cda73a3231dfd58854e088f243987063962597d44d35a56a",
+      "bytes": 3400,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "brief 与执行交接按风险区分，明确复用既有授权和事实，不强制重复问询。",
+      "direct_references": [
+        {
+          "path": "skills/adk-requirements-triage/references/embedded-discovery-brief.md",
+          "sha256": "7e288b51e2512b725f14eb52285fc4391faae7b568d300c7538179038d9156da",
+          "bytes": 1558,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-requirements-triage/references/exploratory-requirements-brief.md",
+          "sha256": "9c115653d3de2c5c31a984588082ba495198d9a51439a5e107066ff0046430fb",
+          "bytes": 579,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-structured-requirements-questioning",
+      "scope": "skills",
+      "path": "skills/adk-structured-requirements-questioning/SKILL.md",
+      "sha256": "0cb2f777e209b234fdc016130c1d9f0cbc8e65ed8e1b547a761862892b397d4e",
+      "bytes": 3458,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "Explore 单问、Challenge 依赖前沿、稳定问题 ID 和失效传播完整；原型范围与收敛条件清楚。",
+      "direct_references": [
+        {
+          "path": "skills/adk-structured-requirements-questioning/references/prototype-as-experiment.md",
+          "sha256": "b76187a6d57e2b954688953af08df4c1e75dd4bb456f55108d7d25e847e27129",
+          "bytes": 967,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-repo-prompt-analysis",
+      "scope": "skills",
+      "path": "skills/adk-repo-prompt-analysis/SKILL.md",
+      "sha256": "202f2a15d8bed57f78d28308d388e0424df4f94783de9e472f38f692ea922dc3",
+      "bytes": 3300,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "追踪真实提示加载链和来源身份，不把外部内容当执行授权。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-skill-deep-analysis",
+      "scope": "skills",
+      "path": "skills/adk-skill-deep-analysis/SKILL.md",
+      "sha256": "69eaff562babdcc57464582632d7491b3bc2f64000e71d86ada8ab193ef47ded",
+      "bytes": 5613,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "有界发现、来源、权限和 holdout 评估齐备，实施交接与研究结论分开。",
+      "direct_references": [
+        {
+          "path": "skills/adk-skill-deep-analysis/references/details.md",
+          "sha256": "582bfc5374a7d80847f570b5a4fce2fc6558c5e43f70cd8261956eadccd6e8e6",
+          "bytes": 2096,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-lightweight-planning",
+      "scope": "skills",
+      "path": "skills/adk-lightweight-planning/SKILL.md",
+      "sha256": "43bc00ae93f65c5cabd61d61c455faa8cfa4382095e15b9f8d882739513c34bc",
+      "bytes": 2158,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "只要计划时保持只读；步骤按任务最小化，未强制固定步数或治理工件。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-task-breakdown",
+      "scope": "skills",
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "sha256": "72c0c4a1c88ee1122075dba482252dfbab7f6dde0ee4d07f670c9224f7d65488",
+      "bytes": 2877,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "任务包字段、scope 映射与外层信封一致；分阶段兼容迁移例可操作。",
+      "direct_references": [
+        {
+          "path": "skills/adk-task-breakdown/references/task-packaging.md",
+          "sha256": "1c10d654b9015f356333e515009224a630d102e039db2731c58c1191cab5a34e",
+          "bytes": 2284,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-task-breakdown/references/vertical-slice-planning.md",
+          "sha256": "f7267bb5a367369cbc40d0059d847f9e61d9d8f1d1cc23b17d5a3cf769de2260",
+          "bytes": 3796,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-parallel-agent-governance",
+      "scope": "skills",
+      "path": "skills/adk-parallel-agent-governance/SKILL.md",
+      "sha256": "446a4a08ffd2d4dfc89bc9752dfea7000fe05818f490892308b08be312386c68",
+      "bytes": 4292,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "并发依据收益、资源与依赖；唯一写者、独立复核和数据型交接明确。",
+      "direct_references": [
+        {
+          "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+          "sha256": "f126062fcddb2108447b8d5937aba8fb24e3b279dc0e2f76f3724f78753277ee",
+          "bytes": 2005,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-parallel-agent-governance/references/subagent-review-checklist.md",
+          "sha256": "9fc2748d504d975cd3550c4809f66c3e10fecd753650f8d649b2bda124072fa3",
+          "bytes": 738,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-worktree-governance",
+      "scope": "skills",
+      "path": "skills/adk-worktree-governance/SKILL.md",
+      "sha256": "68ce46730100ce4cedbb3438747bd134666561dca1c00790bb3e2329a3461242",
+      "bytes": 3746,
+      "body_review": "full-text",
+      "decision": "fix",
+      "findings": [
+        "SK-01"
+      ],
+      "rationale": "正文尊重不建 worktree、用户脏改和清理权限；内核仍会将被禁止创建的短别名选为 primary。",
+      "direct_references": [
+        {
+          "path": "skills/adk-worktree-governance/references/parallel-worktree-task-package.md",
+          "sha256": "f80471b63906ed9755a06b7b0c9f638509ff1a0951a1ccb79f8a566909f2d1f4",
+          "bytes": 654,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-worktree-governance/references/worktree-operation-boundaries.md",
+          "sha256": "2ab200477eab8f816df4c958623030337693f05b3c5ea0dd2d23e1a36fe1eaa2",
+          "bytes": 1789,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-context-compress-handoff",
+      "scope": "skills",
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "sha256": "f4d69f46f916f7bc2f5dd734875d3e6fbb5aae94c0ed0d2f95a1d7748b824d7c",
+      "bytes": 2578,
+      "body_review": "full-text",
+      "decision": "retain-with-method-gap",
+      "findings": [
+        "SK-04"
+      ],
+      "rationale": "最新目标/排除项/授权/raw pointer/下三步保留；缺 active Skill 正文已丢失时的来源核验与重载指导。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-interface-contract-design",
+      "scope": "skills",
+      "path": "skills/adk-interface-contract-design/SKILL.md",
+      "sha256": "72045b42abf0abdcd54bab935241db7723c10dde2432e1d5ddb6882be3963cfe",
+      "bytes": 4317,
+      "body_review": "full-text",
+      "decision": "fix",
+      "findings": [
+        "SK-02"
+      ],
+      "rationale": "生命周期、版本能力、schema 方言和副作用契约保留；API/接口主题在路由计分中压过明确写 ADR 动作。",
+      "direct_references": [
+        {
+          "path": "skills/adk-interface-contract-design/references/design-quality-methods.md",
+          "sha256": "4bfbfa3df2196616db1f491531b5bc5328afae24a2e54f4739c489d83ddcdd8b",
+          "bytes": 1598,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/details.md",
+          "sha256": "e182fd8bc0edd58556700a0b4ce6d435a705128c6bf37b6ec2b13c624826a593",
+          "bytes": 2611,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/lifecycle-operation-contract.md",
+          "sha256": "22532bfe0e89fac9596023f0a2b708d46b98722d4acf6adc90bf833e0f82db71",
+          "bytes": 2393,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/spec-code-bidirectional.md",
+          "sha256": "cfb70c950ca482ce2a4136aa26fe2a3a60c21349949188192a5f0f13450923ce",
+          "bytes": 2238,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-interface-contract-design/references/tool-effect-contract.md",
+          "sha256": "428be87b2acb671e01581ae83af46dfb0e87c8cdb1d24d11e18a231244b67ea4",
+          "bytes": 2845,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-adr-writer",
+      "scope": "skills",
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "sha256": "e013d6e67dc993a3c3a0cf589d6e1c1e3b4534c1a053422c8c1df0c04813dba2",
+      "bytes": 3680,
+      "body_review": "full-text",
+      "decision": "fix",
+      "findings": [
+        "SK-02"
+      ],
+      "rationale": "真实权衡、风险分级及冷读验收良好；裸 ADR 同时导致概念误选与主题争抢，需收紧动作边界。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-component-api-stability",
+      "scope": "skills",
+      "path": "skills/adk-component-api-stability/SKILL.md",
+      "sha256": "345654c2510a7a9cef27388bd21b2f9df6d4f2c5b81de58a6912d1eb00d6d243",
+      "bytes": 5451,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "API/ABI/行为兼容和旧二进制/重编译验证区分，未以符号表代替 ABI 证明。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-register-map-design",
+      "scope": "skills",
+      "path": "skills/adk-register-map-design/SKILL.md",
+      "sha256": "15c1afbe3a8c9da0c710e813d93f6b61bdd92aed48cd3966984472d74e3e2919",
+      "bytes": 3856,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "resetMask/未知位/read-safe/W1C 与读回顺序完整，避免有副作用的通用 RMW。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-bsp-analysis",
+      "scope": "skills",
+      "path": "skills/adk-bsp-analysis/SKILL.md",
+      "sha256": "a35cac1e4e20ceb519e027da15b448c712a94dab37fb594e7954ca21bd8aaa86",
+      "bytes": 3861,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "Linux/RTOS/裸机分支和硬件/源码版本身份明确；不跨域机械套方法。",
+      "direct_references": [
+        {
+          "path": "skills/adk-bsp-analysis/references/bsp-analysis-details.md",
+          "sha256": "e371db7e0af45f212a4f9fc75d0b8049d78c2ed42270ab160b99707b26990c9c",
+          "bytes": 1666,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-goal-authoring",
+      "scope": "skills",
+      "path": "skills/adk-goal-authoring/SKILL.md",
+      "sha256": "33ea3393563643e3e17a5615a10884834c87208ab3ea292ba4396ad7be7a702a",
+      "bytes": 3704,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "保留原目标与验收分母，活动前沿有界，不捏造预算或把恢复变成执行授权。",
+      "direct_references": [
+        {
+          "path": "skills/adk-goal-authoring/references/goal-plan.json",
+          "sha256": "e1a1facc23f826e4f65ec3b9a978a7c4feef889187d1d0302472215cd156a43b",
+          "bytes": 1844,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-planning-execution-loop",
+      "scope": "skills",
+      "path": "skills/adk-planning-execution-loop/SKILL.md",
+      "sha256": "4c9f80b8d5b7458b176b13869791dc17bd7047768745ae846f7e76067fc6c2ca",
+      "bytes": 4415,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [
+        "SK-05"
+      ],
+      "rationale": "既有授权、真实推进、操作对账与小状态恢复齐备；自然表达漏选作为词法覆盖限制记录，未纳入本次 T3。",
+      "direct_references": [
+        {
+          "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+          "sha256": "d8f9c172e4bd2353b0a4e1a74c81a4765baac90b203fa9bb37d7c3686ac025fd",
+          "bytes": 4887,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-driver-implementation",
+      "scope": "skills",
+      "path": "skills/adk-driver-implementation/SKILL.md",
+      "sha256": "c915a72b5373f98234a7bdf6eef5df71bb99a8bc2201cc96a6a145038b06a409",
+      "bytes": 5130,
+      "body_review": "full-text",
+      "decision": "fix",
+      "findings": [
+        "SK-03"
+      ],
+      "rationale": "多 runtime 生命周期/IRQ/DMA 与设备写分权良好；只识别相邻实现驱动，漏掉 RTOS SPI DMA 修饰的真实实现请求。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-driver-bringup-checklist",
+      "scope": "skills",
+      "path": "skills/adk-driver-bringup-checklist/SKILL.md",
+      "sha256": "80e53c502e62692275d5cddb3d1f21a23c8fdf02b477c205fa983ec1ef711441",
+      "bytes": 5457,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "被动/主动探测和 MMIO 效果分级，按 bring-up 阶段验证，无通用 24 小时硬门槛。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-bsp-porting-playbook",
+      "scope": "skills",
+      "path": "skills/adk-bsp-porting-playbook/SKILL.md",
+      "sha256": "401b353282ae3029a97ec6456f1da5d11fc575b512c6f5f3bda13541f468ac68",
+      "bytes": 5335,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "目标工具链、独立构建路径、CPU/RAM 并发及 last-good 恢复明确，不盲改 defconfig。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-rtos-task-design",
+      "scope": "skills",
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "sha256": "67658d3a4f029dcbd86c6a6eba76870d588bbfc61275152b0e72b233edb8e803",
+      "bytes": 5804,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "响应时间分析限定固定优先级/单核假设；tick 量化和 FreeRTOS callback/queue 行为说明到位。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-interrupt-dma-patterns",
+      "scope": "skills",
+      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "sha256": "f5fc8aa352b4767764b5f81f5f7ce3326c051382b9b2b72372ec43e1ad0e4c70",
+      "bytes": 5388,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "buffer ownership、cache 方向、终止/取消、ISR 优先级与目标预算齐全。",
+      "direct_references": [
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/details.md",
+          "sha256": "775bfc53ca049cfdb7c49b9ca8301019ac610e3fb3fa47785dbafe80a872d931",
+          "bytes": 1709,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-interrupt-dma-patterns/references/rtos-isr-dma-diagnostics.md",
+          "sha256": "a85ea19b6ae121f4da011d2c96d86270826f430d88bbfa93df3b19d040dc5a14",
+          "bytes": 1645,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-protocol-stack-integration",
+      "scope": "skills",
+      "path": "skills/adk-protocol-stack-integration/SKILL.md",
+      "sha256": "b3c358d1f53f7f79de1d1ea381edcc1d8d41bda55bcbb46c2973de24f0692f7b",
+      "bytes": 3084,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "stream/datagram/partial I/O 与总期限、重试责任明确；空抓包不冒充成功。",
+      "direct_references": [
+        {
+          "path": "skills/adk-protocol-stack-integration/references/transport-boundaries.md",
+          "sha256": "6006f23c5e1d8ae8b1ea185fb4f2613c13af55b92a33cdc881fd909c6a199b9c",
+          "bytes": 1135,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-cmake-cross-build",
+      "scope": "skills",
+      "path": "skills/adk-cmake-cross-build/SKILL.md",
+      "sha256": "543764125bfc4fd34be2b7b7a2ca6afc3468e7bdc0caf044d27c8d35107d4747",
+      "bytes": 5264,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "工具链/构建身份、fresh JUnit、skip/disabled/not-run 与零通过处理完整；未将历史 hosted 超时归因于正文。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-code-simplification",
+      "scope": "skills",
+      "path": "skills/adk-code-simplification/SKILL.md",
+      "sha256": "ca77fa395fbbc17469890ec9f2409f01c442b0678904c9ec34115e8926e281e3",
+      "bytes": 3025,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "保护行为与公共 seam，按问题简化而非任意行数门槛；避免清理触发语义变化。",
+      "direct_references": [
+        {
+          "path": "skills/adk-code-simplification/references/deep-module-design.md",
+          "sha256": "a5e463ebe150966c75e975feb6233914f1fa418d36abd1b588c5ae863e0ac797",
+          "bytes": 1275,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-code-simplification/references/details.md",
+          "sha256": "46fb6f895ed2d2a6affac689756ea41b61b16faf4dabaa7136436933783360c6",
+          "bytes": 2582,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-systematic-debugging",
+      "scope": "skills",
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "sha256": "1b14158259d16fa98b93212fd719ac92e1da37d03ae055faedb48d7b7a3c9c45",
+      "bytes": 2795,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "原始失败先保留、因果实验和 bisect 退出码齐全；sanitizer exit 0 仍检查诊断。",
+      "direct_references": [
+        {
+          "path": "skills/adk-systematic-debugging/references/embedded-diagnosis-branches.md",
+          "sha256": "b1f5e669d12c5923a60426aa7268f94ac0832072808f200a08d0a49be0ef6d89",
+          "bytes": 2793,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/sanitizer-validation.md",
+          "sha256": "2d708bd56c0147437a53fe568ae483d41be10dd3481d691485d9db48cdc89fdd",
+          "bytes": 2463,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-systematic-debugging/references/tight-feedback-loop.md",
+          "sha256": "2b26053578c2d5d0d60d5749c05c248ff75f90e6cd61684befb0efb6e79f5e85",
+          "bytes": 1524,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-embedded-debug-transport",
+      "scope": "skills",
+      "path": "skills/adk-embedded-debug-transport/SKILL.md",
+      "sha256": "ccb5656dc5580d5f6d70290928f9b45a9573f376bc30cab92b62fa901875d1d4",
+      "bytes": 5745,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "目标身份、只读/主动/状态变更分级，GDB attach/halt 效果有说明，设备授权不隐含。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-embedded-remote-debug-log-triage",
+      "scope": "skills",
+      "path": "skills/adk-embedded-remote-debug-log-triage/SKILL.md",
+      "sha256": "af339cd5cb7f9155eff3dae00f3b49ff1da16ed90fc0d1dfafd6700d4dc820ff",
+      "bytes": 6746,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "连接分层、ADB 语义状态、有界恢复和新身份核验完整；不可用工具不伪造实际验证。",
+      "direct_references": [
+        {
+          "path": "skills/adk-embedded-remote-debug-log-triage/references/remote-adb-hil-contract.md",
+          "sha256": "768139df1964829995b8fc0721638673079b3a488d4dabbd4f3516b981b5f7f8",
+          "bytes": 3301,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-offline-core-dump-triage",
+      "scope": "skills",
+      "path": "skills/adk-offline-core-dump-triage/SKILL.md",
+      "sha256": "6a30f8a9ae8a47766e8196c9a8c6396a38e9b74b0d981220e11fe81f1dd777a9",
+      "bytes": 3562,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "精确 ELF/库/Build ID 匹配，GDB 禁自动加载；未知 frame 保留部分验证状态。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-hardware-debugging",
+      "scope": "skills",
+      "path": "skills/adk-hardware-debugging/SKILL.md",
+      "sha256": "69f3eade6355e566e1c7a4d3a59a8233401e491e517e00b46959f67a001847ec",
+      "bytes": 2701,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "镜像/模块/ELF relocation 身份和 MCU 能力边界明确，不猜地址或寄存器可用性。",
+      "direct_references": [
+        {
+          "path": "skills/adk-hardware-debugging/references/mcu-fault-reset-wakeup.md",
+          "sha256": "8ce111266cca681154fd796de59efeb7319f4e6c2af9f6be2fdcb529531bcc04",
+          "bytes": 1919,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-performance-profiling-embedded",
+      "scope": "skills",
+      "path": "skills/adk-performance-profiling-embedded/SKILL.md",
+      "sha256": "429e8f4bdab43522b6deb89ad98cf20f30c7a8b8f80be2810e6511ca62149000",
+      "bytes": 3066,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "真实 workload、交替测量、混杂因素与 PMU 语义清楚；静态栈帧不当总上界，KWS 保留流式与泄漏边界。",
+      "direct_references": [
+        {
+          "path": "skills/adk-performance-profiling-embedded/references/mcu-memory-footprint.md",
+          "sha256": "4c4d25e04a7bfbb34e975d48c255199df709672f926dbc10ea99dcbd3e24be02",
+          "bytes": 4590,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-test-strategy",
+      "scope": "skills",
+      "path": "skills/adk-test-strategy/SKILL.md",
+      "sha256": "e7442473f760be5402a114b61378686816c8f35a3cde1ada59801a6d11cf7378",
+      "bytes": 3612,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "按风险选择最小有意义检查、独立 oracle/错误变体与检查器校准，文本编辑不强制全量测试。",
+      "direct_references": [
+        {
+          "path": "skills/adk-test-strategy/references/high-value-tdd.md",
+          "sha256": "256c691c86dfd8126412564435d19f33cdc37fe245ae5aa7fd34b1ca4f7e094f",
+          "bytes": 3247,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-unit-test-embedded",
+      "scope": "skills",
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "sha256": "a17d781e18dc5f72d6485f1ca8f5a9e6f6612ddeb761340110083b35181ffbe9",
+      "bytes": 3066,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "域条件和 host/compile-only/SIL/HIL 区分；FIFO 示例有状态探索且不受 PYTHONOPTIMIZE 关闭断言影响。",
+      "direct_references": [
+        {
+          "path": "skills/adk-unit-test-embedded/references/embedded-tdd-matrix.md",
+          "sha256": "f244f5966faf07639c7cd3e94d6edaafe4489754963bd0c09b0279ba4b91b642",
+          "bytes": 783,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-unit-test-embedded/references/property-stateful-tests.md",
+          "sha256": "393b50c821794982d2e482e99ece5f9a6753bfe7c36b37752f2b3af950fde1a4",
+          "bytes": 3315,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-integration-hil-sil",
+      "scope": "skills",
+      "path": "skills/adk-integration-hil-sil/SKILL.md",
+      "sha256": "8ae810e665542db4ca20c46a911bd98d859d70fa97caf5bd5615595ee75fb8f2",
+      "bytes": 3866,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "fresh JUnit、选择数/通过/跳过/未跑分开，硬件范围与 mutation 授权分离。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-embedded-diagnostic-harness",
+      "scope": "skills",
+      "path": "skills/adk-embedded-diagnostic-harness/SKILL.md",
+      "sha256": "afd31fb7ec8264948a400fa83ed630b46d966ba4861b716b5f97cc561332f526",
+      "bytes": 3079,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "expected nonzero 与执行错误、strict 与环境前置失败分开，未放宽初始化错误。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-fault-injection-recovery",
+      "scope": "skills",
+      "path": "skills/adk-fault-injection-recovery/SKILL.md",
+      "sha256": "cfffdf6b98594802f65acee8f0258ed44eff8d5bb5c2a02eca6f5df60567f209",
+      "bytes": 3558,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "实际激活命中与配置区分，缺恢复时间标未知；下一检查默认 host-safe，设备写需另授。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-artifact-gating",
+      "scope": "skills",
+      "path": "skills/adk-artifact-gating/SKILL.md",
+      "sha256": "17f658a180bb848f98a0ffa91831e82fc980d7fcdae78782c103fb4862f5fa4e",
+      "bytes": 2061,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "workflow 与真实状态区分，Root 专有脚本明确限定消费环境。",
+      "direct_references": [
+        {
+          "path": "skills/adk-artifact-gating/references/details.md",
+          "sha256": "c4f1f8675a02c8e3886417b48caa6c1ba2dad15fd5246dfb02e1ae6980b42f3f",
+          "bytes": 2343,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-pilot-framework",
+      "scope": "skills",
+      "path": "skills/adk-pilot-framework/SKILL.md",
+      "sha256": "5ed0041ab153c4b0514402ad548216055b38db469ab0d30b422ee09899cfe253",
+      "bytes": 3765,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "smoke/效果比较/连通性与实际任务分开，不强迫外部项目运行 ADK 私有脚本。",
+      "direct_references": [
+        {
+          "path": "skills/adk-pilot-framework/references/details.md",
+          "sha256": "08faff8c175aba7641da273bdcec4fac21b14baf270de3efc16ba7abc1400361",
+          "bytes": 3632,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-verification-before-completion",
+      "scope": "skills",
+      "path": "skills/adk-verification-before-completion/SKILL.md",
+      "sha256": "e9c8657959a756f91e05621267df953d293f7106a78e18e213a45b7100858b96",
+      "bytes": 4508,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "checkpoint/goal-final 与原分母、适用风险/fresh source 区分，25 项按需检查不是一律门禁。",
+      "direct_references": [
+        {
+          "path": "skills/adk-verification-before-completion/references/verification-governance-details.md",
+          "sha256": "7e7ef78d237519ab391bb897dcd33a051b60b10f6b6406b571aee43b2cbee5aa",
+          "bytes": 8933,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-code-review-loop",
+      "scope": "skills",
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "sha256": "34a4b3b683200dfe13be96db626d9f2874a85d235df394e01a9c06eaf1a9f90c",
+      "bytes": 6254,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "反馈核实与全量 diff/lifecycle 区分，精确快照含 dirty overlay，Spec/Quality 独立且评论不当权限。",
+      "direct_references": [
+        {
+          "path": "skills/adk-code-review-loop/references/review-communication-guidance.md",
+          "sha256": "0b68e9b0bbceceaf56458383137958c041ee7d75f343a12b5fd5a9cae71d8ddb",
+          "bytes": 1917,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-evidence-template.md",
+          "sha256": "a82255232e618f5fd00f4532aa884c6df54f2dd97806da633d092286bc9d0af6",
+          "bytes": 3907,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-feedback-fixtures.md",
+          "sha256": "731f4b0dd24c9c3baea0e7d76bbeef6eeeb746d23335cf96893c694b68e91fa4",
+          "bytes": 2229,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-code-review-loop/references/review-governance-details.md",
+          "sha256": "b82d16825e3a0ee15e4b6cd08f1f4e736e32d63c93fdf7381922ffab60c0a2ea",
+          "bytes": 8750,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-repo-drift-remediation",
+      "scope": "skills",
+      "path": "skills/adk-repo-drift-remediation/SKILL.md",
+      "sha256": "f41df2709a50aa3263df6b5224afafda9cb3a3d48e15b05efc9ce15970bbf6f2",
+      "bytes": 3021,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "先问题映射再改动，真实脚本路径与根目录核验，保护用户脏改。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-static-analysis-c-cpp",
+      "scope": "skills",
+      "path": "skills/adk-static-analysis-c-cpp/SKILL.md",
+      "sha256": "285a91f97eec057220e0f0e12f6070c1a2011e511523f8f2287190747a5e107a",
+      "bytes": 3405,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "真实编译数据库/翻译单元/header 依赖、扫描器退出码与 baseline 安全明确，零 TU 不当通过。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-commit-pr-quality-gate",
+      "scope": "skills",
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "sha256": "7037682c48973fa258f1fe0774cdc83b59c668f90fb1e7242830b36f4c0586fe",
+      "bytes": 3802,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "message-only 与 PR/high-risk readiness 区分，复用有效证据而不重造授权。",
+      "direct_references": [
+        {
+          "path": "skills/adk-commit-pr-quality-gate/references/pr-risk-gates.md",
+          "sha256": "dc5398ac9800eaeaaaac5800072b09801716be730d05d68a95b4c3400de67027",
+          "bytes": 1429,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-release-versioning",
+      "scope": "skills",
+      "path": "skills/adk-release-versioning/SKILL.md",
+      "sha256": "4a80611ceda62c35c558371d47238d3b5f2516a20efc067160abefc3ce686163",
+      "bytes": 2776,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "完整 commit body/revert、祖先/浅克隆核验与不可变 tag 边界，版本推断默认只读。",
+      "direct_references": [
+        {
+          "path": "skills/adk-release-versioning/references/details.md",
+          "sha256": "6da9f5f3ce85401938db084b0aa1df5e78683ad1f4132927c50ddbc55a4c1bed",
+          "bytes": 2471,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-production-field-readiness",
+      "scope": "skills",
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "sha256": "eb401873f401d125ea007d13e6760fc4b840190fef979ea02f94ebc4840efbb8",
+      "bytes": 5159,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "限定量产/现场领域，artifact/目标测试/OTA 证据真实分层；人分钟与墙钟区分。",
+      "direct_references": [
+        {
+          "path": "skills/adk-production-field-readiness/references/pilot-measurement-evidence.md",
+          "sha256": "33e1ecdae9f7baed2e7a050bc718e716200d76934489419f2d7be5c4b3776a62",
+          "bytes": 1911,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-embedded-release-orchestration",
+      "scope": "skills",
+      "path": "skills/adk-embedded-release-orchestration/SKILL.md",
+      "sha256": "32581c98888f97028cf36a8fc326143944055c53405a95b397d498f07cd56fc5",
+      "bytes": 5245,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "prepare/publish/flash 分权，多 MCU 部分失败需真实设备回执。",
+      "direct_references": [
+        {
+          "path": "skills/adk-embedded-release-orchestration/references/multi-mcu-ota-recovery.md",
+          "sha256": "8e67f41286a6d36c70aa2090ee9f3a8bd62ce1244a3ffd608a47f0a68aeb175e",
+          "bytes": 1698,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-embedded-storage-layout-migration",
+      "scope": "skills",
+      "path": "skills/adk-embedded-storage-layout-migration/SKILL.md",
+      "sha256": "60689906562d9146431960b421c1d2731090f5377c1cd5923adb13ab589b7c27",
+      "bytes": 5597,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "日志分析不当迁移；PEB/LEB/容量几何核验、数据卷保留与写前 host dry-run 明确。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-cross-team-handoff",
+      "scope": "skills",
+      "path": "skills/adk-cross-team-handoff/SKILL.md",
+      "sha256": "c02d4289a267bf655f0c22b9fdfac3638ee21067ad61aab60917fbdcc3334323",
+      "bytes": 3069,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "lite/formal 依风险，冷读条件具体，不伪造接收方验收。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-branch-closeout",
+      "scope": "skills",
+      "path": "skills/adk-branch-closeout/SKILL.md",
+      "sha256": "141e64b1cbd2a8216e0ed40cf6a28573cfda831897f8a858f036f1c76e43f0e2",
+      "bytes": 3095,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "精确 HEAD/checks/授权复用、实际 main 后验齐备；清理破坏性不隐式获批。",
+      "direct_references": [
+        {
+          "path": "skills/adk-branch-closeout/references/closeout-options.md",
+          "sha256": "2b4c0b4b065c9d1260418cba15aaee03893f06a022f499e140cdfc498d0d3d9e",
+          "bytes": 908,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-after-action-review",
+      "scope": "skills",
+      "path": "skills/adk-after-action-review/SKILL.md",
+      "sha256": "ae6e24987988e0d095ae4db176f0d180814c723337f0ced9038d989f3f042462",
+      "bytes": 3785,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "轻量复盘和升格分开，来源/脱敏/候选状态保留，不凭总结捏造收益。",
+      "direct_references": [
+        {
+          "path": "skills/adk-after-action-review/references/after-action-review.md",
+          "sha256": "7cdb7dcf86c40457a9c4a008086c8dfb467b8c52fc9d1bd52b9f514edc24fab5",
+          "bytes": 436,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/codify-decision.md",
+          "sha256": "bfa0e7b547453341f266799786286a30dc3af47bc23db020968c0e4c0fe94a90",
+          "bytes": 651,
+          "review": "full-text"
+        },
+        {
+          "path": "skills/adk-after-action-review/references/memory-candidate.md",
+          "sha256": "3125b4c2cb0b38ecf8d542ff75b7db48feecb473742325abd05ee5a687888a3a",
+          "bytes": 1707,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-memory-curator",
+      "scope": "skills",
+      "path": "skills/adk-memory-curator/SKILL.md",
+      "sha256": "63673dfb7af45429772275b713093ead76275d39187ddae22b75477abe21ddf5",
+      "bytes": 3530,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "默认报告、来源冲突和文件名式 secret scan，禁止无授权持续保存。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-archive-governance",
+      "scope": "skills",
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "sha256": "3720551d6cc04f428adf472c3887e0e09ba95c31318bc4d4d7655d17ef68fe4e",
+      "bytes": 3085,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "区分旧/新 hash 与来源变化，不盲认补 hash；既有 owner/授权可复用。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-knowledge-archive",
+      "scope": "skills",
+      "path": "skills/adk-knowledge-archive/SKILL.md",
+      "sha256": "fb31246a4016f866dbcffefeb324595d5cc6569f5c331ab2b8f5c399c407baa7",
+      "bytes": 2236,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "归档要有可复用价值和可达路径，不将敏感 raw 或候选自动升格。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-engineering-growth-review",
+      "scope": "skills",
+      "path": "skills/adk-engineering-growth-review/SKILL.md",
+      "sha256": "551c03d625fb6d884f03e112d49d9d39eee8d50a628009a93b5cf67ab051b5b8",
+      "bytes": 3805,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "范围有界、重复证据与归因分开，额外评测只在能力升格时要求。",
+      "direct_references": [
+        {
+          "path": "skills/adk-engineering-growth-review/references/growth-evidence-boundaries.md",
+          "sha256": "0b3f9a93d9cd77346dacb69840ec003c168d5885d9843842a3f22ac18c810653",
+          "bytes": 1266,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-external-practice-absorption",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-external-practice-absorption/SKILL.md",
+      "sha256": "444ae0b685759d1ce27929d8597c7790fd065b4373e103edd980cd6e09703b9b",
+      "bytes": 8664,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "source/decision/implementation 边界清楚，已批准代码任务不重复 intake；长正文不等于已证实成本缺陷。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-data-fetch",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-data-fetch/SKILL.md",
+      "sha256": "93f99ba41694cd8bc4931d67a7fcbaf4f62540c17811b2db41a14062430ab011",
+      "bytes": 4088,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "可选子技能单独安装和权限，pass/partial/not-verified 保真。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-email-imap-fetch",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-data-fetch/adk-email-imap-fetch/SKILL.md",
+      "sha256": "2bc927093f8a44a855b7b03d837e33b6d3b160e1e6a15db5f401ec0545cc3a80",
+      "bytes": 4527,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "EXAMINE/UIDVALIDITY/UID/BODY.PEEK 与日期时区过滤、精确地址核验到位，不标已读或发送。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-fetch-url-content",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-data-fetch/adk-fetch-url-content/SKILL.md",
+      "sha256": "21e9223a92ec6f50b336fc9bb8cd041f7db533cbfc216350c64a0b748ce2328a",
+      "bytes": 3024,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "IP 校验绑定真实连接、重定向/Host/SNI 与预算/robots/type/partial 语义完整。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-test-flakiness-triage",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-test-flakiness-triage/SKILL.md",
+      "sha256": "6d37c99701d7be57c837be6854484a263cc75b6a12e01db9969dd2cec2571a54",
+      "bytes": 2427,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "实际 case 数与进程退出区分，有界复跑和零失败置信界正确，不以反复绿色抹平失败。",
+      "direct_references": [
+        {
+          "path": "optional-skills/adk-test-flakiness-triage/references/details.md",
+          "sha256": "68522e43db6194ff02d275d65c3078ff363aab4329fc18f17f6e3594b30924e1",
+          "bytes": 4957,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-security-supply-chain",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "sha256": "d9c4038697f3a8f2b2208d016b06b1684dee09e366543c8539ef6f232230df60",
+      "bytes": 8736,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "source-only/安装/runtime 范围分层，覆盖清单及 source-sink/隐式序列化泄漏检查完整，扫描不当认证。",
+      "direct_references": [
+        {
+          "path": "optional-skills/adk-security-supply-chain/references/skill-scan-coverage.md",
+          "sha256": "7ec6f5e8647af1a59fd7dfb249965df257f414c40d4076871688f48b612aaa3f",
+          "bytes": 4724,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-prose-revision",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-prose-revision/SKILL.md",
+      "sha256": "5c0dbe215745f6d3aa09676a88f550248579e71a79dd3703ab82ec2c62ec0360",
+      "bytes": 4503,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "局部修改保全事实/限定语，不使用 AI detector；无问题不硬造 3–5 处修改。",
+      "direct_references": [
+        {
+          "path": "optional-skills/adk-prose-revision/references/review-cases.md",
+          "sha256": "fb82979ca071f05be5c533370e05340d08bf705e5b78392c0facc263df03cfa5",
+          "bytes": 1851,
+          "review": "full-text"
+        }
+      ]
+    },
+    {
+      "skill_id": "adk-incident-rca-report",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-incident-rca-report/SKILL.md",
+      "sha256": "79a7b453da0a2edc5b98eaa595c36ef32032acdb2910655d741a25cd7519d405",
+      "bytes": 2416,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "事实/原因/假设、发生/观察时间及钟差区分；5 why 可选，不捏造负责人。",
+      "direct_references": []
+    },
+    {
+      "skill_id": "adk-skill-composition-governance",
+      "scope": "optional_skills",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "dea7c5247a20a86ac5c9430296340a5b6b0cce72583bc99ad844eb4624bb4db3",
+      "bytes": 7011,
+      "body_review": "full-text",
+      "decision": "retain",
+      "findings": [],
+      "rationale": "collision-only 与全组合审查区分，复用 canonical matcher；真实行为/holdout/负效果与 source-byte 边界保留。",
+      "direct_references": [
+        {
+          "path": "optional-skills/adk-skill-composition-governance/references/adk-skill-lifecycle.md",
+          "sha256": "f9b1a39f39f334f22ffc1ee878b02e00efe2400b0d7482a1d1ffb85153b11be0",
+          "bytes": 7050,
+          "review": "full-text"
+        },
+        {
+          "path": "optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md",
+          "sha256": "e54daf26764853d5fe8bb8b0b134442e3d500b12fcf5d33254ef8bab242eee82",
+          "bytes": 8108,
+          "review": "full-text"
+        }
+      ]
+    }
+  ]
+}

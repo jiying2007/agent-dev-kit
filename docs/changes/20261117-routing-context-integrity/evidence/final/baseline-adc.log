@@ -1,0 +1,6 @@
+test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default (tests.test_skill_command_examples.CmakeBuildExampleTests.test_adc_cmake_target_builds_and_runs_with_a_strict_c90_default) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.405s
+
+OK

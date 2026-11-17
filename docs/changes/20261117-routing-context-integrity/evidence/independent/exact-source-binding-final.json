@@ -1,0 +1,215 @@
+{
+  "observed_at": "2026-11-17T12:24:33.739285+00:00",
+  "base_commit": "6d902f721f560f02883516e809fbd93a326405b6",
+  "head_commit": "713d0d3a85c74bd9fe4b27a23c8dc8b2a066565a",
+  "patch_command": [
+    "git",
+    "diff",
+    "--full-index",
+    "--binary",
+    "--no-ext-diff",
+    "6d902f721f560f02883516e809fbd93a326405b6",
+    "713d0d3a85c74bd9fe4b27a23c8dc8b2a066565a"
+  ],
+  "expected_tree": "1f9c586dadb20d6195263cd305efa9e5080291e2",
+  "actual_tree": "1f9c586dadb20d6195263cd305efa9e5080291e2",
+  "current_head_matches": true,
+  "remote_branch_identity": "713d0d3a85c74bd9fe4b27a23c8dc8b2a066565a\trefs/heads/fix/routing-context-integrity-20261117",
+  "remote_branch_head_matches": true,
+  "tree_matches": true,
+  "original_patch_sha256": "1b1b1c4d33ed504a36e7796c41421fff7939270a3e8f0b2dc2fbce5f752ace57",
+  "retained_patch_sha256": "1b1b1c4d33ed504a36e7796c41421fff7939270a3e8f0b2dc2fbce5f752ace57",
+  "retained_patch_is_exact_cumulative_git_diff": true,
+  "patch_matches_expected_identity": true,
+  "changed_source_files": [
+    {
+      "path": ".version-lock",
+      "sha256": "eea78636e686610211edf0823d3eb21bb313706df87e6477d1817a78e2deb1d2",
+      "bytes": 94,
+      "matches_commit": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "8c70cc22dc385890a9673ffb5f45ba3617879392aee3075ed64d65463e698d9c",
+      "bytes": 110062,
+      "matches_commit": true
+    },
+    {
+      "path": "CONTEXT.md",
+      "sha256": "f9871ecb3748bc9d9af0093820092efcb798ab11a469f5d2c88e63309971dc80",
+      "bytes": 8644,
+      "matches_commit": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "008a0b7e28d9e207840adb5040cf5c676b85d7425c0926ab5573c46117ed7e7f",
+      "bytes": 13087,
+      "matches_commit": true
+    },
+    {
+      "path": "docs/agent-skill-catalog.md",
+      "sha256": "7031513443aff7e547c035aa59a0cb94ec5cc18e98b5b1c7ba065a0b7283c7ea",
+      "bytes": 38579,
+      "matches_commit": true
+    },
+    {
+      "path": "docs/changes/20261117-routing-context-integrity/design.md",
+      "sha256": "cea673d2ea8c46f53130a7dd3812003473b138bf109bae935ff09a59b45f09d0",
+      "bytes": 4133,
+      "matches_commit": true
+    },
+    {
+      "path": "docs/changes/20261117-routing-context-integrity/negative-results.md",
+      "sha256": "f46a4be55468dbcdb81420099f6a6371fdddb31ca84d2c0ea91921febc80539d",
+      "bytes": 5406,
+      "matches_commit": true
+    },
+    {
+      "path": "docs/changes/20261117-routing-context-integrity/requirements.md",
+      "sha256": "6fed992c23b21abf5f5ee838d36be469c41f18fbd5d16186bd4424b9dea3e5c3",
+      "bytes": 2652,
+      "matches_commit": true
+    },
+    {
+      "path": "docs/changes/20261117-routing-context-integrity/source-review.md",
+      "sha256": "f903b17187d31a201eed6ca216038b3366c30d316056e80d196ddeccd99374df",
+      "bytes": 4474,
+      "matches_commit": true
+    },
+    {
+      "path": "docs/changes/20261117-routing-context-integrity/tasks.md",
+      "sha256": "da753592bfedcf7a843c80775aaea9dea12ee0558284312957b40dbec9e0c786",
+      "bytes": 1344,
+      "matches_commit": true
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "8025c83d9d01c52a3b338e8c82bdf27ebdf303b097e4928c89a7acc7101d98b6",
+      "bytes": 91241,
+      "matches_commit": true
+    },
+    {
+      "path": "manifests/manifest.schema.json",
+      "sha256": "9def6391b627cc239462a118c0cb680d2334e31a88a36f4710f7983d621613f4",
+      "bytes": 37514,
+      "matches_commit": true
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "05d2c15ef223515ae3dc292a00fb7601d2bc98a3d866b7b371fcad1d623cc214",
+      "bytes": 706,
+      "matches_commit": true
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "c8154bb3bd76f83d40cc9594a09bf39bbafa5ffd1a84c052f4b520606c2e62e8",
+      "bytes": 1310,
+      "matches_commit": true
+    },
+    {
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "sha256": "acb3994d39aeac513980c6b0736094365a694ed83740cdbc9f9a8bf9a316ad5f",
+      "bytes": 3663,
+      "matches_commit": true
+    },
+    {
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "sha256": "caa8bea66bffba468f5033a1a8f841ac14f8c9f7bb4dd922d5a1e911d854649e",
+      "bytes": 2705,
+      "matches_commit": true
+    },
+    {
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "sha256": "053f499a34f9a48d3bb1b2b768599ea8951331ef942a03b3e0c50388705313f5",
+      "bytes": 3745,
+      "matches_commit": true
+    },
+    {
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "sha256": "61bed052ff15e2cba597dafe22b72fb486aa8eb3b2901f640eedce460dc200a1",
+      "bytes": 7354,
+      "matches_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "90de3a3488413bb6ebe2d8832083c450b6e6be10331af7e7984ff503eba70e40",
+      "bytes": 71,
+      "matches_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "sha256": "002bcaa17fd0c70b8554a42c53ace5551c1f0b02fe8d8b4f518224a2357dd423",
+      "bytes": 28930,
+      "matches_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/campaign_analysis.py",
+      "sha256": "eb06b726566c14fcd62918cd18771aa20cd39dd5a2b758afbecab25f53ffadca",
+      "bytes": 9050,
+      "matches_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/matcher.py",
+      "sha256": "72ad18ce45f8ecfa9d3ef8d016a26f55454bb7cf54be7387bc396cead405f064",
+      "bytes": 20779,
+      "matches_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/phase_context.py",
+      "sha256": "fde668f24ff49a951dfae7f6ba549277f7cdbbaa159aa351113012f30db77c6a",
+      "bytes": 11899,
+      "matches_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/skill_relationships.py",
+      "sha256": "bfcc165995d495806a970ff37a824c675e23a25251d3dfa0ae8d665c926811f7",
+      "bytes": 12794,
+      "matches_commit": true
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "7497bdd1f3243c68006eabbc5cb79bb686f6abf04c563060630500b7f127b4be",
+      "bytes": 7877,
+      "matches_commit": true
+    },
+    {
+      "path": "tests/test_effect_campaign_materializer.py",
+      "sha256": "9b2e2ca03311db467220af0ccad30d73835e4f897320e6ae9cd13460947e7bb6",
+      "bytes": 19121,
+      "matches_commit": true
+    },
+    {
+      "path": "tests/test_phase_context.py",
+      "sha256": "9c0aac378457385cddde14139bbc3b6901fd4e8e9b3686f4ad2e98f1be2919fa",
+      "bytes": 14010,
+      "matches_commit": true
+    },
+    {
+      "path": "tests/test_routing_ir_contract.py",
+      "sha256": "66d055a0157f0d341cfe6bee948344ce9e61d3288ccb534041950a70b223dca3",
+      "bytes": 6002,
+      "matches_commit": true
+    },
+    {
+      "path": "tests/test_runtime_comparison_contract.py",
+      "sha256": "33a53a7147554ee321c394fa225429cef1bac53c91e1aebcfb5cab2ae241cf95",
+      "bytes": 18075,
+      "matches_commit": true
+    },
+    {
+      "path": "tests/test_skill_relationships.py",
+      "sha256": "8acb2f4d2597bc6d5f01c4b4dc3b412a51f091a0e64c1cd253354e042376d464",
+      "bytes": 6608,
+      "matches_commit": true
+    },
+    {
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "b7b44a4aea86451080c1c513a444a496af11f9955e339ccc6858cb92a2ebf965",
+      "bytes": 55537,
+      "matches_commit": true
+    }
+  ],
+  "changed_source_count": 31,
+  "all_changed_source_matches_commit": true,
+  "tracked_changes": ""
+}

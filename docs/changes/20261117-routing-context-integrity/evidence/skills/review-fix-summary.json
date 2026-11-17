@@ -1,0 +1,69 @@
+{
+  "schema": "adk-review-routing-fix-summary/v1",
+  "recorded_at": "2026-11-17T12:18:45.136363+00:00",
+  "findings": [
+    "IR-2",
+    "IR-3"
+  ],
+  "product_files_changed_in_followup": [
+    "src/agent_dev_kit/_matcher_kernel.py",
+    "tests/test_skill_trigger_matrix.py"
+  ],
+  "source_sha256": {
+    "src/agent_dev_kit/_matcher_kernel.py": "d3802deab5117713918f9cfcfa157c0fcc724d36d0c5538c11f2310db68ae894",
+    "src/agent_dev_kit/matcher.py": "72ad18ce45f8ecfa9d3ef8d016a26f55454bb7cf54be7387bc396cead405f064",
+    "tests/test_skill_trigger_matrix.py": "f6239b2314ca0ad2c55001e0988b0f4567c40d1fd293e2d92dc34802701a5b38",
+    "manifest.json": "8025c83d9d01c52a3b338e8c82bdf27ebdf303b097e4928c89a7acc7101d98b6",
+    "manifests/manifest.schema.json": "9def6391b627cc239462a118c0cb680d2334e31a88a36f4710f7983d621613f4"
+  },
+  "independent_inputs": {
+    "script_sha256": "4f447b56e982cc23dd42e67bc3210984486fc63eb232ddbb143e55fbe1473276",
+    "cases": 30,
+    "before_satisfied": 20,
+    "after_satisfied": 30,
+    "input_script_unchanged": true
+  },
+  "new_regressions": {
+    "red_methods": 2,
+    "red_failed_subcases": 12,
+    "red_log": "/workspace/scratch/d417066aafa8/audit-skills/review-regressions-red.log",
+    "green_suite_methods": 58,
+    "green_log": "/workspace/scratch/d417066aafa8/audit-skills/review-routing-tests.log"
+  },
+  "fixed_evaluation": {
+    "status": "pass",
+    "total": 60,
+    "passed": 60,
+    "task_set_sha256": "3e492759c53b0241091a6a663a6cbcf5042c64a77b0a2e6551f3aeab2a1a71a1",
+    "evaluation_scope": [
+      "skill-routing"
+    ],
+    "safety_evaluated": false
+  },
+  "profile_ratchets": {
+    "core": "pass",
+    "release-hardening": "pass",
+    "personal-core": "pass",
+    "embedded-fullstack": "pass",
+    "team-core": "pass",
+    "large-refactor": "pass",
+    "incident-response": "pass",
+    "research-intake": "pass"
+  },
+  "module_budget": {
+    "exit_code": 0,
+    "kernel_bytes": 28515,
+    "log": "/workspace/scratch/d417066aafa8/audit-skills/review-module-budget.log"
+  },
+  "fixes": [
+    "Creation prohibitions parse a verb plus optional determiner, newness and Git qualifier rather than full-sentence aliases",
+    "A shared local mentioned-action filter applies to route triggers and task-mode classification; explicit later action clauses stay eligible",
+    "All matching and polarity paths use the existing all-occurrences helper; unused first-occurrence helper and wrappers removed, formatter/public API unchanged"
+  ],
+  "retained_limitation": "SK-05: 继续执行已有计划，不要重新拆解任务 remains the separately recorded lexical-coverage limitation; not rerun or repaired here",
+  "limits": [
+    "No fixed evaluation input/expectation, authorization IR definition, Profile/module threshold or Skill identity changed in this followup",
+    "Determinstic source checks only; no model, runtime-effectiveness or hardware evidence",
+    "The earlier audit-coverage-check.json remains an immutable observation; this followup changed no Skill body/reference or Profile threshold file"
+  ]
+}

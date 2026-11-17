@@ -1,0 +1,28 @@
+[
+  {
+    "name": "routing-tests",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_skill_trigger_matrix",
+      "tests.test_skill_governance",
+      "tests.test_routing_ir_contract"
+    ],
+    "exit_code": 0,
+    "seconds": 2.81,
+    "log": "/workspace/scratch/d417066aafa8/audit-skills/routing-tests.log",
+    "tail": "........................................................\n----------------------------------------------------------------------\nRan 56 tests in 2.624s\n\nOK\n"
+  },
+  {
+    "name": "module-budget",
+    "command": [
+      "bash",
+      "tests/test_module_size_budget.sh"
+    ],
+    "exit_code": 0,
+    "seconds": 2.968,
+    "log": "/workspace/scratch/d417066aafa8/audit-skills/module-budget.log",
+    "tail": "{\"default_max_bytes\": 30000, \"import_fan_out_hotspot\": \"src/agent_dev_kit/cli.py\", \"largest_baseline_bytes\": 0, \"legacy_exception_count\": 0, \"max_import_fan_out\": 28, \"observed_max_import_fan_out\": 28, \"preferred_execution_namespace\": \"execution_policy\", \"schema\": \"adk-module-size-budget/v1\", \"status\": \"pass\", \"support_module_count\": 0, \"transitional_support_debt_count\": 0}\n[PASS] module size and bounded-context architecture policy pass\n"
+  }
+]

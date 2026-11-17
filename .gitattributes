@@ -15,3 +15,8 @@ docs/changes/20261117-skill-usability/evidence/review-fix/workflow/cumulative-ow
 docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-tests.txt -whitespace
 docs/changes/20261117-skill-usability/evidence/full-regression-fix/cumulative-owned.diff -whitespace
 docs/changes/20261117-skill-usability/evidence/full-regression-fix/red-tests.txt -whitespace
+# Preserve exact raw failures and the superseded source patch for this review.
+docs/changes/20261117-routing-context-integrity/evidence/core/tests-numeric-boundary-red.log -whitespace
+docs/changes/20261117-routing-context-integrity/evidence/core/tests-red.log -whitespace
+docs/changes/20261117-routing-context-integrity/evidence/first-incomplete-run/full-regression.log -whitespace
+docs/changes/20261117-routing-context-integrity/evidence/first-incomplete-run/original.patch -whitespace

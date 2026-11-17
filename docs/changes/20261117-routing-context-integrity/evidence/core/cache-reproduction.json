@@ -1,0 +1,473 @@
+{
+  "baseline_commit": "6d902f721f560f02883516e809fbd93a326405b6",
+  "cases": [
+    {
+      "consumer": "agent_dev_kit.phase_context",
+      "path": "phase_context_contract_v2.json",
+      "same_mtime_and_size": true,
+      "mutation": "schema_version v2 -> v9",
+      "warm_cache_accepted": true,
+      "warm_contract_digest_matches_changed_bytes": true,
+      "cold_cache": {
+        "rejected": true,
+        "error": "Phase context contract schema validation failed: schema_version: 'adk-phase-context-contract/v2' was expected"
+      },
+      "warm_result": {
+        "schema": "adk-phase-context-resolution/v2",
+        "status": "pass",
+        "domain": "general",
+        "phase": "route",
+        "contract_path": "manifests/phase_context_contract_v2.json",
+        "contract_sha256": "4ff234d9bcf73c98e3e03fe14d5ef6f760936d749605d637c153a77d42c2767b",
+        "identity_source": "manifest.json",
+        "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
+        "skills": [
+          {
+            "name": "adk-runtime-router",
+            "path": "skills/adk-runtime-router/SKILL.md",
+            "runtime_role": "primary",
+            "selection_group": "runtime-routing",
+            "effect_ceiling": "read-only",
+            "effect_scope": "none",
+            "effect_operation": "read"
+          }
+        ],
+        "resources": []
+      }
+    },
+    {
+      "consumer": "agent_dev_kit.skill_relationships",
+      "path": "skill_relationship_contracts_v2.json",
+      "same_mtime_and_size": true,
+      "mutation": "schema_version v2 -> v9",
+      "warm_cache_accepted": true,
+      "warm_contract_digest_matches_changed_bytes": true,
+      "cold_cache": {
+        "rejected": true,
+        "error": "Skill relationship contract schema validation failed: schema_version: 'adk-skill-relationship-contract/v2' was expected"
+      },
+      "warm_result": {
+        "schema": "adk-skill-relationship-resolution/v2",
+        "status": "pass",
+        "contract_path": "manifests/skill_relationship_contracts_v2.json",
+        "contract_sha256": "f72088e4053e81b85bca3112c619d08d00222e64c6ed1f34eeb0264d06c99d52",
+        "identity_source": "manifest.json",
+        "skill_semantics_source": "manifests/skill_content_contracts_v2.json",
+        "relationship_count": 48,
+        "typed_relationships": [
+          {
+            "from": "adk-goal-authoring",
+            "to": "adk-planning-execution-loop",
+            "type": "handoff",
+            "requirement": "when-applicable",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-verification-before-completion",
+            "to": "adk-after-action-review",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-verification-before-completion",
+            "to": "adk-archive-governance",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-verification-before-completion",
+            "to": "adk-branch-closeout",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-driver-bringup-checklist",
+            "to": "adk-bsp-porting-playbook",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-verification-before-completion",
+            "to": "adk-commit-pr-quality-gate",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-interface-contract-design",
+            "to": "adk-component-api-stability",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-token-context-governance",
+            "to": "adk-context-compress-handoff",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-register-map-design",
+            "to": "adk-driver-bringup-checklist",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-systematic-debugging",
+            "to": "adk-embedded-debug-transport",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-integration-hil-sil",
+            "to": "adk-embedded-diagnostic-harness",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-test-strategy",
+            "to": "adk-embedded-diagnostic-harness",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-production-field-readiness",
+            "to": "adk-embedded-release-orchestration",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-release-versioning",
+            "to": "adk-embedded-release-orchestration",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-systematic-debugging",
+            "to": "adk-embedded-remote-debug-log-triage",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-token-context-governance",
+            "to": "adk-embedded-remote-debug-log-triage",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-embedded-release-orchestration",
+            "to": "adk-embedded-storage-layout-migration",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-production-field-readiness",
+            "to": "adk-embedded-storage-layout-migration",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-after-action-review",
+            "to": "adk-engineering-growth-review",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-token-context-governance",
+            "to": "adk-engineering-growth-review",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-integration-hil-sil",
+            "to": "adk-fault-injection-recovery",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-unit-test-embedded",
+            "to": "adk-integration-hil-sil",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-requirements-triage",
+            "to": "adk-interface-contract-design",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-archive-governance",
+            "to": "adk-knowledge-archive",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-after-action-review",
+            "to": "adk-memory-curator",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-token-context-governance",
+            "to": "adk-memory-curator",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-systematic-debugging",
+            "to": "adk-offline-core-dump-triage",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-task-breakdown",
+            "to": "adk-parallel-agent-governance",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-systematic-debugging",
+            "to": "adk-performance-profiling-embedded",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-task-breakdown",
+            "to": "adk-planning-execution-loop",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-integration-hil-sil",
+            "to": "adk-production-field-readiness",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-release-versioning",
+            "to": "adk-production-field-readiness",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-interface-contract-design",
+            "to": "adk-protocol-stack-integration",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-interface-contract-design",
+            "to": "adk-register-map-design",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-commit-pr-quality-gate",
+            "to": "adk-release-versioning",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-verification-before-completion",
+            "to": "adk-repo-drift-remediation",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-requirements-triage",
+            "to": "adk-task-breakdown",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-runtime-router",
+            "to": "adk-test-strategy",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-context-engineering",
+            "to": "adk-token-context-governance",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-task-breakdown",
+            "to": "adk-worktree-governance",
+            "type": "context-prerequisite",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-commit-pr-quality-gate",
+            "to": "adk-branch-closeout",
+            "type": "delivery-precedence",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-verification-before-completion",
+            "to": "adk-commit-pr-quality-gate",
+            "type": "delivery-precedence",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-code-review-loop",
+            "to": "adk-verification-before-completion",
+            "type": "delivery-precedence",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-artifact-gating",
+            "to": "adk-code-review-loop",
+            "type": "evidence-prerequisite",
+            "requirement": "when-applicable",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-test-strategy",
+            "to": "adk-code-review-loop",
+            "type": "evidence-prerequisite",
+            "requirement": "when-applicable",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-commit-pr-quality-gate",
+            "to": "adk-branch-closeout",
+            "type": "handoff",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-verification-before-completion",
+            "to": "adk-commit-pr-quality-gate",
+            "type": "handoff",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          },
+          {
+            "from": "adk-code-review-loop",
+            "to": "adk-verification-before-completion",
+            "type": "handoff",
+            "requirement": "required",
+            "source": "manifests/skill_relationship_contracts_v2.json"
+          }
+        ],
+        "delivery_lifecycle": {
+          "schema": "adk-delivery-lifecycle-resolution/v2",
+          "status": "pass",
+          "pre_review_requirements": [
+            "verification-evidence"
+          ],
+          "relationship_semantics_source": "manifests/skill_relationship_contracts_v2.json",
+          "steps": [
+            {
+              "order": 10,
+              "stage": "review",
+              "name": "adk-code-review-loop",
+              "path": "skills/adk-code-review-loop/SKILL.md",
+              "runtime_role": "primary",
+              "selection_group": "code-review"
+            },
+            {
+              "order": 20,
+              "stage": "completion",
+              "name": "adk-verification-before-completion",
+              "path": "skills/adk-verification-before-completion/SKILL.md",
+              "runtime_role": "primary",
+              "selection_group": "completion-verification"
+            },
+            {
+              "order": 30,
+              "stage": "commit-pr",
+              "name": "adk-commit-pr-quality-gate",
+              "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+              "runtime_role": "primary",
+              "selection_group": "commit-quality"
+            },
+            {
+              "order": 40,
+              "stage": "closeout",
+              "name": "adk-branch-closeout",
+              "path": "skills/adk-branch-closeout/SKILL.md",
+              "runtime_role": "primary",
+              "selection_group": "branch-closeout"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "consumer": "agent_dev_kit.matcher",
+      "path": "skill_content_contracts_v2.json",
+      "same_mtime_and_size": true,
+      "mutation": "schema_version v2 -> v9",
+      "warm_cache_accepted": true,
+      "warm_contract_digest_matches_changed_bytes": false,
+      "cold_cache": {
+        "rejected": true,
+        "error": "Skill v2 content contract has unsupported schema"
+      },
+      "warm_result": {
+        "scope": "core",
+        "capability_class": "meta",
+        "runtime_role": "primary",
+        "selection_group": "runtime-routing",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": []
+      }
+    },
+    {
+      "consumer": "_matcher_kernel._frontmatter",
+      "same_mtime_and_size": true,
+      "mutation": "opening frontmatter delimiter invalidated",
+      "warm_cache_accepted": true,
+      "cold_cache": {
+        "rejected": true,
+        "error": "skill frontmatter is missing: /tmp/adk-frontmatter-cache-_k0qknsz/SKILL.md"
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+[
+  {
+    "prompt": "先说明方案再实现 RTOS SPI DMA 驱动",
+    "result": {
+      "match": false,
+      "decision": "abstain",
+      "reason": "needs-triage",
+      "task_mode": "needs-triage",
+      "mutation_permission": "deny",
+      "artifact_mode": null,
+      "negated_intents": [
+        "driver_implementation"
+      ]
+    }
+  },
+  {
+    "prompt": "先说明方案再实现驱动",
+    "result": {
+      "match": false,
+      "decision": "abstain",
+      "reason": "needs-triage",
+      "task_mode": "needs-triage",
+      "mutation_permission": "deny",
+      "artifact_mode": null,
+      "negated_intents": [
+        "driver_implementation"
+      ]
+    }
+  },
+  {
+    "prompt": "先解释隔离价值再创建 worktree",
+    "result": {
+      "match": false,
+      "decision": "abstain",
+      "reason": "needs-triage",
+      "task_mode": "needs-triage",
+      "mutation_permission": "deny",
+      "artifact_mode": null,
+      "negated_intents": [
+        "worktree_governance"
+      ]
+    }
+  },
+  {
+    "prompt": "请先解释取舍然后更新 ADR",
+    "result": {
+      "match": true,
+      "source": "routing",
+      "skill": "adk-adr-writer",
+      "intent": "adr_writer",
+      "intent_zh": "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录",
+      "supporting_skills": [],
+      "fallback_skills": [],
+      "mutually_exclusive": [],
+      "task_mode": "needs-triage",
+      "mutation_permission": "deny",
+      "artifact_mode": null,
+      "risk": "unknown",
+      "profile_availability": "fallback-profile",
+      "required_evidence": [],
+      "runtime_role": "primary",
+      "selection_group": "architecture-documentation",
+      "effect_ceiling": "read-only",
+      "effect_scope": "none",
+      "effect_operation": "read",
+      "implicit_trigger_policy": "eligible",
+      "escalation_effects": [],
+      "live_device_authorization": "not-required",
+      "release_target_authorization": "not-required",
+      "execution_effort": "E2",
+      "effort_basis": "conservative-default"
+    }
+  },
+  {
+    "prompt": "请先解释取舍再更新 ADR",
+    "result": {
+      "match": false,
+      "decision": "abstain",
+      "reason": "needs-triage",
+      "task_mode": "needs-triage",
+      "mutation_permission": "deny",
+      "artifact_mode": null,
+      "negated_intents": [
+        "adr_writer"
+      ]
+    }
+  }
+]

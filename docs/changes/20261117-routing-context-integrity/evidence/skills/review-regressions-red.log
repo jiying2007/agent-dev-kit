@@ -1,0 +1,101 @@
+FFFFFFFFFFFF
+======================================================================
+FAIL: test_creation_negation_accepts_composed_target_modifiers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_creation_negation_accepts_composed_target_modifiers) (prohibited='不要创建新的 Git worktree，直接修复当前分支的代码')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 679, in test_creation_negation_accepts_composed_target_modifiers
+    self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+AssertionError: 'adk-worktree-governance' == 'adk-worktree-governance' : {'match': True, 'source': 'routing', 'skill': 'adk-worktree-governance', 'intent': 'worktree_governance', 'intent_zh': 'worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree', 'supporting_skills': ['adk-task-breakdown'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'workspace-governance', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_creation_negation_accepts_composed_target_modifiers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_creation_negation_accepts_composed_target_modifiers) (prohibited='不创建新工作树，直接修复当前分支的代码')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 679, in test_creation_negation_accepts_composed_target_modifiers
+    self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+AssertionError: 'adk-worktree-governance' == 'adk-worktree-governance' : {'match': True, 'source': 'routing', 'skill': 'adk-worktree-governance', 'intent': 'worktree_governance', 'intent_zh': 'worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree', 'supporting_skills': ['adk-task-breakdown'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'workspace-governance', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_creation_negation_accepts_composed_target_modifiers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_creation_negation_accepts_composed_target_modifiers) (prohibited="Don't create a git worktree; 直接修复当前分支")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 679, in test_creation_negation_accepts_composed_target_modifiers
+    self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+AssertionError: 'adk-worktree-governance' == 'adk-worktree-governance' : {'match': True, 'source': 'routing', 'skill': 'adk-worktree-governance', 'intent': 'worktree_governance', 'intent_zh': 'worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree', 'supporting_skills': ['adk-task-breakdown'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'workspace-governance', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_creation_negation_accepts_composed_target_modifiers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_creation_negation_accepts_composed_target_modifiers) (prohibited='Do not create any worktree; 直接修复当前分支')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 679, in test_creation_negation_accepts_composed_target_modifiers
+    self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+AssertionError: 'adk-worktree-governance' == 'adk-worktree-governance' : {'match': True, 'source': 'routing', 'skill': 'adk-worktree-governance', 'intent': 'worktree_governance', 'intent_zh': 'worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree', 'supporting_skills': ['adk-task-breakdown'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'workspace-governance', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_creation_negation_accepts_composed_target_modifiers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_creation_negation_accepts_composed_target_modifiers) (prohibited='请勿新建一个新的 Git 工作树，直接修复当前分支')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 679, in test_creation_negation_accepts_composed_target_modifiers
+    self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+AssertionError: 'adk-worktree-governance' == 'adk-worktree-governance' : {'match': True, 'source': 'routing', 'skill': 'adk-worktree-governance', 'intent': 'worktree_governance', 'intent_zh': 'worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree', 'supporting_skills': ['adk-task-breakdown'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'workspace-governance', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_creation_negation_accepts_composed_target_modifiers (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_creation_negation_accepts_composed_target_modifiers) (prohibited='Never create another new git worktree; 直接修复当前分支')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 679, in test_creation_negation_accepts_composed_target_modifiers
+    self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
+AssertionError: 'adk-worktree-governance' == 'adk-worktree-governance' : {'match': True, 'source': 'routing', 'skill': 'adk-worktree-governance', 'intent': 'worktree_governance', 'intent_zh': 'worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree', 'supporting_skills': ['adk-task-breakdown'], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'workspace-governance', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_explained_actions_do_not_become_authoring_or_implementation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_explained_actions_do_not_become_authoring_or_implementation) (mentioned_action='请解释编写 ADR 的方法')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 703, in test_explained_actions_do_not_become_authoring_or_implementation
+    self.assertNotEqual(result.get("skill"), prohibited, result)
+AssertionError: 'adk-adr-writer' == 'adk-adr-writer' : {'match': True, 'source': 'routing', 'skill': 'adk-adr-writer', 'intent': 'adr_writer', 'intent_zh': '写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'architecture-documentation', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_explained_actions_do_not_become_authoring_or_implementation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_explained_actions_do_not_become_authoring_or_implementation) (mentioned_action='只读解释“更新 ADR”这个术语与接口契约的关系')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 703, in test_explained_actions_do_not_become_authoring_or_implementation
+    self.assertNotEqual(result.get("skill"), prohibited, result)
+AssertionError: 'adk-adr-writer' == 'adk-adr-writer' : {'match': True, 'source': 'routing', 'skill': 'adk-adr-writer', 'intent': 'adr_writer', 'intent_zh': '写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'readonly', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'architecture-documentation', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E0', 'effort_basis': 'explicit-readonly'}
+
+======================================================================
+FAIL: test_explained_actions_do_not_become_authoring_or_implementation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_explained_actions_do_not_become_authoring_or_implementation) (mentioned_action='请解释为什么更新 ADR 有助于接口契约追溯')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 703, in test_explained_actions_do_not_become_authoring_or_implementation
+    self.assertNotEqual(result.get("skill"), prohibited, result)
+AssertionError: 'adk-adr-writer' == 'adk-adr-writer' : {'match': True, 'source': 'routing', 'skill': 'adk-adr-writer', 'intent': 'adr_writer', 'intent_zh': '写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'architecture-documentation', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_explained_actions_do_not_become_authoring_or_implementation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_explained_actions_do_not_become_authoring_or_implementation) (mentioned_action='只读审查代码中的更新 ADR 实现')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 703, in test_explained_actions_do_not_become_authoring_or_implementation
+    self.assertNotEqual(result.get("skill"), prohibited, result)
+AssertionError: 'adk-adr-writer' == 'adk-adr-writer' : {'match': True, 'source': 'routing', 'skill': 'adk-adr-writer', 'intent': 'adr_writer', 'intent_zh': '写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'readonly', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'architecture-documentation', 'effect_ceiling': 'read-only', 'effect_scope': 'none', 'effect_operation': 'read', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E0', 'effort_basis': 'explicit-readonly'}
+
+======================================================================
+FAIL: test_explained_actions_do_not_become_authoring_or_implementation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_explained_actions_do_not_become_authoring_or_implementation) (mentioned_action='请解释如何实现 RTOS SPI DMA 驱动')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 703, in test_explained_actions_do_not_become_authoring_or_implementation
+    self.assertNotEqual(result.get("skill"), prohibited, result)
+AssertionError: 'adk-driver-implementation' == 'adk-driver-implementation' : {'match': True, 'source': 'routing', 'skill': 'adk-driver-implementation', 'intent': 'driver_implementation', 'intent_zh': '驱动开发/写驱动/编写驱动/实现驱动', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'driver-implementation', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_explained_actions_do_not_become_authoring_or_implementation (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_explained_actions_do_not_become_authoring_or_implementation) (mentioned_action='请说明怎样实现一个 RTOS SPI 驱动')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 703, in test_explained_actions_do_not_become_authoring_or_implementation
+    self.assertNotEqual(result.get("skill"), prohibited, result)
+AssertionError: 'adk-driver-implementation' == 'adk-driver-implementation' : {'match': True, 'source': 'routing', 'skill': 'adk-driver-implementation', 'intent': 'driver_implementation', 'intent_zh': '驱动开发/写驱动/编写驱动/实现驱动', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': [], 'task_mode': 'implementation', 'mutation_permission': 'workspace-write', 'artifact_mode': 'implementation', 'risk': 'unknown', 'profile_availability': 'fallback-profile', 'required_evidence': [], 'runtime_role': 'primary', 'selection_group': 'driver-implementation', 'effect_ceiling': 'workspace-write', 'effect_scope': 'workspace', 'effect_operation': 'write', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.128s
+
+FAILED (failures=12)

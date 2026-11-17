@@ -1,0 +1,31 @@
+{
+  "evidence_kind": "actual_skill_reads",
+  "task_scope": "A/B/C read-only diagnostic handoff consumer exercise",
+  "tool_chunk_id": "095cea",
+  "tool_exit_code": 0,
+  "read_method": "Python pathlib.Path.read_bytes; SHA256 computed from same bytes; UTC timestamp captured immediately after each read",
+  "reads": [
+    {
+      "path": "/workspace/scratch/d417066aafa8/agent-dev-kit/skills/adk-context-engineering/SKILL.md",
+      "document_version": "2.0.3",
+      "read_at_utc": "2026-11-17T12:03:29.326614+00:00",
+      "bytes": 3745,
+      "sha256": "053f499a34f9a48d3bb1b2b768599ea8951331ef942a03b3e0c50388705313f5"
+    },
+    {
+      "path": "/workspace/scratch/d417066aafa8/agent-dev-kit/skills/adk-context-compress-handoff/SKILL.md",
+      "document_version": "1.0.3",
+      "read_at_utc": "2026-11-17T12:03:29.326749+00:00",
+      "bytes": 2705,
+      "sha256": "caa8bea66bffba468f5033a1a8f841ac14f8c9f7bb4dd922d5a1e911d854649e"
+    }
+  ],
+  "limitations": [
+    "Scenario diagnostic Skill, reference, and log files were not accessed.",
+    "Scenario file identities and contents were treated as stipulated facts or explicit placeholders, not actual observations.",
+    "No other repository review, design, or implementation records were read.",
+    "No product source files were modified; no devices were accessed; no model CLI was run.",
+    "No optional schema or continuity-attestation template was read or validated.",
+    "Evidence directory is temporary and final retention is delegated to the coordinator."
+  ]
+}

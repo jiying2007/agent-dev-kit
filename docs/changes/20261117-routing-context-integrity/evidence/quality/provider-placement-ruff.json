@@ -1,0 +1,18 @@
+{
+  "name": "provider-placement-ruff",
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "proxy",
+    "ruff",
+    "check",
+    "tests/test_effect_campaign_materializer.py",
+    "tests/test_runtime_comparison_contract.py"
+  ],
+  "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+  "started_at": "2026-11-17T12:12:30.699488+00:00",
+  "finished_at": "2026-11-17T12:12:30.713887+00:00",
+  "elapsed_seconds": 0.014414350000151899,
+  "exit_code": 0,
+  "log": "/workspace/scratch/d417066aafa8/verification/quality/provider-placement-ruff.log",
+  "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+}

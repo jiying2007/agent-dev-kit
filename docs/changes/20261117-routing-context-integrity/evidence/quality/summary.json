@@ -1,0 +1,116 @@
+{
+  "completed_at": "2026-11-17T12:10:46.623650+00:00",
+  "versions": {
+    "name": "versions",
+    "command": [
+      "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+      "proxy",
+      "bash",
+      "-c",
+      "python --version; ruff --version; mypy --version; shellcheck --version; pip-audit --version; git --version; bash --version; /workspace/scratch/fe8de3b42084/verification-tools/rtk --version"
+    ],
+    "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+    "started_at": "2026-11-17T12:10:25.479807+00:00",
+    "finished_at": "2026-11-17T12:10:26.757622+00:00",
+    "elapsed_seconds": 1.2778248920003534,
+    "exit_code": 0,
+    "log": "/workspace/scratch/d417066aafa8/verification/quality/versions.log",
+    "log_sha256": "fe9ead44317a2401b375a9c810ad4e33ca16038d56b2a1b6a8c1c26e44461991"
+  },
+  "gates": [
+    {
+      "name": "format",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+        "proxy",
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+      "started_at": "2026-11-17T12:10:26.760225+00:00",
+      "finished_at": "2026-11-17T12:10:27.110076+00:00",
+      "elapsed_seconds": 0.34986720600136323,
+      "exit_code": 0,
+      "log": "/workspace/scratch/d417066aafa8/verification/quality/format.log",
+      "log_sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1"
+    },
+    {
+      "name": "mypy",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+        "proxy",
+        "mypy",
+        "src/agent_dev_kit/contracts",
+        "src/agent_dev_kit/evidence",
+        "src/agent_dev_kit/target_adapters",
+        "src/agent_dev_kit/distribution",
+        "src/agent_dev_kit/execution_policy",
+        "src/agent_dev_kit/versioning.py"
+      ],
+      "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+      "started_at": "2026-11-17T12:10:26.758799+00:00",
+      "finished_at": "2026-11-17T12:10:28.379741+00:00",
+      "elapsed_seconds": 1.6209637509964523,
+      "exit_code": 0,
+      "log": "/workspace/scratch/d417066aafa8/verification/quality/mypy.log",
+      "log_sha256": "2d6b2fd3da664bcd3c10a511fd2cb9bf5f7517722cb0753d911d03540bfa3cbf"
+    },
+    {
+      "name": "pip-audit",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+        "proxy",
+        "pip-audit",
+        "--strict",
+        "--progress-spinner",
+        "off",
+        "."
+      ],
+      "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+      "started_at": "2026-11-17T12:10:26.759933+00:00",
+      "finished_at": "2026-11-17T12:10:46.621515+00:00",
+      "elapsed_seconds": 19.86159566000424,
+      "exit_code": 0,
+      "log": "/workspace/scratch/d417066aafa8/verification/quality/pip-audit.log",
+      "log_sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+    },
+    {
+      "name": "ruff",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+        "proxy",
+        "ruff",
+        "check",
+        "src",
+        "tools",
+        "tests/fixtures/fake_target_runtime.py"
+      ],
+      "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+      "started_at": "2026-11-17T12:10:26.758325+00:00",
+      "finished_at": "2026-11-17T12:10:26.804081+00:00",
+      "elapsed_seconds": 0.04576621200249065,
+      "exit_code": 0,
+      "log": "/workspace/scratch/d417066aafa8/verification/quality/ruff.log",
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "name": "shellcheck",
+      "command": [
+        "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+        "proxy",
+        "bash",
+        "-c",
+        "shellcheck -S error -x -P scripts scripts/*.sh tests/*.sh"
+      ],
+      "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+      "started_at": "2026-11-17T12:10:26.759306+00:00",
+      "finished_at": "2026-11-17T12:10:33.214537+00:00",
+      "elapsed_seconds": 6.455236984998919,
+      "exit_code": 0,
+      "log": "/workspace/scratch/d417066aafa8/verification/quality/shellcheck.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "all_passed": true,
+  "scope": "read-only quality gates; no runtime, model, device or product qualification"
+}

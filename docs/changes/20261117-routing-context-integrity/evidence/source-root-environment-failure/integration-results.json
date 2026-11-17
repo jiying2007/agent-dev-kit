@@ -1,0 +1,74 @@
+[
+  {
+    "name": "final-ruff",
+    "command": [
+      "ruff",
+      "check",
+      "src",
+      "tools",
+      "tests/fixtures/fake_target_runtime.py"
+    ],
+    "started_at": "2026-11-17T12:22:40.706044+00:00",
+    "completed_at": "2026-11-17T12:22:40.723975+00:00",
+    "elapsed_seconds": 0.01793179800006328,
+    "exit_code": 0,
+    "log": "final-ruff.log"
+  },
+  {
+    "name": "final-format",
+    "command": [
+      "bash",
+      "scripts/check-format.sh"
+    ],
+    "started_at": "2026-11-17T12:22:40.724359+00:00",
+    "completed_at": "2026-11-17T12:22:41.033089+00:00",
+    "elapsed_seconds": 0.3087460429960629,
+    "exit_code": 0,
+    "log": "final-format.log"
+  },
+  {
+    "name": "strict",
+    "command": [
+      "bash",
+      "scripts/devkit.sh",
+      "validate",
+      "--strict"
+    ],
+    "started_at": "2026-11-17T12:22:41.033592+00:00",
+    "completed_at": "2026-11-17T12:22:43.369545+00:00",
+    "elapsed_seconds": 2.335981062002247,
+    "exit_code": 0,
+    "log": "strict.log"
+  },
+  {
+    "name": "release-check",
+    "command": [
+      "bash",
+      "scripts/devkit.sh",
+      "release",
+      "check",
+      "--summary-json"
+    ],
+    "started_at": "2026-11-17T12:22:43.370220+00:00",
+    "completed_at": "2026-11-17T12:22:43.668935+00:00",
+    "elapsed_seconds": 0.29873060000682017,
+    "exit_code": 0,
+    "log": "release-check.log"
+  },
+  {
+    "name": "benchmark",
+    "command": [
+      "/workspace/scratch/d417066aafa8/agent-dev-kit/.venv/bin/python",
+      "/workspace/scratch/d417066aafa8/verification/benchmark_fixed.py",
+      "/workspace/scratch/d417066aafa8/agent-dev-kit",
+      "/workspace/scratch/d417066aafa8/verification/benchmark-candidate60.json",
+      "--tasks",
+      "tests/fixtures/software_m5_eval_tasks.jsonl"
+    ],
+    "started_at": "2026-11-17T12:22:43.669367+00:00",
+    "completed_at": "2026-11-17T12:22:44.119696+00:00",
+    "elapsed_seconds": 0.4503465439993306,
+    "exit_code": 0,
+    "log": "benchmark.log"
+  }
+]

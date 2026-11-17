@@ -1,0 +1,18 @@
+{
+  "name": "provider-placement-strict",
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "proxy",
+    "bash",
+    "scripts/devkit.sh",
+    "validate",
+    "--strict"
+  ],
+  "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+  "started_at": "2026-11-17T12:12:28.150509+00:00",
+  "finished_at": "2026-11-17T12:12:30.400323+00:00",
+  "elapsed_seconds": 2.249833091002074,
+  "exit_code": 0,
+  "log": "/workspace/scratch/d417066aafa8/verification/quality/provider-placement-strict.log",
+  "log_sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848"
+}

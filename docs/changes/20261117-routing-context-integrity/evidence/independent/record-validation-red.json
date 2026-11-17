@@ -1,0 +1,14 @@
+{
+  "observed_at": "2026-11-17T12:41:19.452327+00:00",
+  "status": "rejected",
+  "record_sha256": "372ee241e5725580f88cffda3f02116b9167556215b52bb71706ae572d6a3df3",
+  "finding_ids": [
+    "IR-1",
+    "IR-2",
+    "IR-3",
+    "SK-05"
+  ],
+  "error": "review finding identity is invalid or repeated",
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 8, in <module>\n  File \"/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/review_evidence.py\", line 256, in validate_review\n    _findings(record[\"findings\"])\n  File \"/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/review_evidence.py\", line 156, in _findings\n    _require(isinstance(finding, dict) and set(finding) == {\"id\", \"severity\", \"disposition\", \"reason\"}\n  File \"/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/review_evidence.py\", line 46, in _require\n    raise ReviewEvidenceError(message)\nagent_dev_kit.review_evidence.ReviewEvidenceError: review finding identity is invalid or repeated\n",
+  "cause": "Reviewer-authored uppercase finding IDs violate the existing lowercase identity grammar; no product or validator changes"
+}

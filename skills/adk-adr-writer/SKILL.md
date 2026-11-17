@@ -1,10 +1,10 @@
 ---
 name: adk-adr-writer
-description: "用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。"
-version: 1.2.1
-last_updated: 2026-11-13
+description: "已有架构权衡、需编写或更新 ADR 时记录真实决定、依据与后果；不用于概念介绍、需求未明或代码实现。"
+version: 1.2.2
+last_updated: 2026-11-17
 triggers:
-  - "写ADR"
+  - "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR"
   - "架构决策"
   - "决策记录"
 non_triggers:
@@ -21,7 +21,7 @@ constraints:
 # adk-adr-writer
 
 ## Goal
-记录实际架构选择及其理由，而不是填满模板。保持 Context、Decision、Alternatives、Consequences 可追溯，未经确认的建议不得冒充已批准决策。
+记录真实选择与理由；Context、Decision、Alternatives、Consequences 可追溯，建议不得冒充已批准决策。
 
 ## Risk-based authoring
 - **lite（默认）**：局部可逆决策。简述背景、选择、理由、后果及验证；确无其他可行路径时写明约束，不编造第二方案。
@@ -32,7 +32,7 @@ constraints:
 ## Workflow
 1. 检查已知目标、约束、用户实际选择、现有 ADR；不重问已确认事实。
 2. 固定核心决定与取舍，只有一个可行方案时解释排除其他路径的原因，不虚构备选。
-3. 记录后果与可验证证据，缺失的成本、性能或决策状态标为待核。
+3. 记录后果与证据；缺失成本、性能或决策状态标待核。
 4. 需要写入仓库时，按目标项目的 ADR 编号规则查找已有编号（例如 `ADR-NNN`），不覆盖旧决策；仅要求草稿则不写文件。
 5. 自检事实、术语、数值、限制词和引用关系；删无必要的复述。定向修订只改授权段落/字段，逐字保留其余约束、状态、数字、单位与引用；发现冲突先标明，不扩大成整篇改写或升级决策状态。
 
