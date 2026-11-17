@@ -1,0 +1,292 @@
+{
+  "schema": "adk-independent-source-review/v1",
+  "review_id": "skill-scope-methods-20261117-platform-portability-increment",
+  "reviewer": "/root/independent_source_review",
+  "delegated_design_reviewer": "/root/independent_source_review/packaging_review",
+  "review_role": "independent-read-only-spec-and-quality",
+  "reviewer_authored_production_changes": false,
+  "reviewer_wrote_worktree_index_or_refs": false,
+  "reviewed_at": "2026-11-17T03:01:28.174051+00:00",
+  "evidence_completed_at": "2026-11-17T03:01:28.174043+00:00",
+  "target": {
+    "repository": "/workspace/scratch/fe8de3b42084/adk-optimization",
+    "base_commit": "da34b8bed95d164eaab8982b0e13de508054ecfc",
+    "head_commit": "3568327a9877e2e789e079c6251cdf26af3c10c0",
+    "local_equivalent_commit": "da32fcea0249120fa9828f22bf0add7bdf4f744b",
+    "tree": "0f248f25597d33165b775e05ece5f8f6813a8103",
+    "scope": "source-change",
+    "original_diff_sha256": "76ccd29706ce6bd7f6a577ab450791dda37858dd172d4b2128c3968344b4c27c",
+    "local_and_canonical_tree_and_diff_identical": true
+  },
+  "spec_verdict": "PASS",
+  "quality_verdict": "PASS",
+  "verdict_scope": "Exactly the platform internal-field registration and its existing-suite regression additions; two changed files.",
+  "overall_delivery_status": "pending-final-exact-head-required-ci-release-and-root-integration",
+  "findings": [
+    {
+      "id": "R-02",
+      "severity": "Medium",
+      "priority": "P2",
+      "category": "cross-contract-registration-omission",
+      "title": "Portable-skill audit did not recognize the newly introduced ADK internal implicit_context field",
+      "initial_disposition": "reported-by-exact-head-platform-CI-and-locally-reproduced",
+      "final_disposition": "fixed-and-independently-verified",
+      "resolution": "Register implicit_context only in portable_skill.internal_extension_fields; preserve standard fields and exact unknown-key rejection.",
+      "verification": "Independent original-contract FAIL/current-contract 65-skill PASS; unknown-key refusal and known-field positive control; complete platform suite exit 0; two actual native-target static exports omit implicit_context."
+    }
+  ],
+  "open_findings": [],
+  "sources": [
+    {
+      "path": "manifests/agent_platform_contracts.json",
+      "sha256": "6c06ba6024ac53abaa82bff9fbf38e50cff38345f648db30fa216b4d083cef1b",
+      "bytes": 6261,
+      "matches_target_blob": true,
+      "changed_in_increment": true
+    },
+    {
+      "path": "tests/test_agent_platform.sh",
+      "sha256": "4aad6a274453c669e12dab66d11ac53818542dd2806f8dd16e0fb5a60ccc0a44",
+      "bytes": 7906,
+      "matches_target_blob": true,
+      "changed_in_increment": true
+    }
+  ],
+  "supporting_sources": [
+    {
+      "path": "src/agent_dev_kit/agent_platform.py",
+      "sha256": "78228e706d6ddab1846b87596a62753c515dd826ebb61ab9a1f22e4c401848af",
+      "bytes": 20181,
+      "read_scope": "load_contract, _frontmatter, portable_skill_audit",
+      "equals_pinned_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/targets.py",
+      "sha256": "582fdc2cc6695cc8dd862196b8e6fa66f8a3c56bccf751076af50c2cf41ef87c",
+      "bytes": 22011,
+      "read_scope": "_split_frontmatter, _provenance, _render_main",
+      "equals_pinned_commit": true
+    },
+    {
+      "path": "manifests/target-contracts/claude-code.json",
+      "sha256": "6e984dd2deaaedce4a57e2128e2d78d2440aae223bbe676879b048fafa6cbff7",
+      "bytes": 2677,
+      "read_scope": "Full target contract",
+      "equals_pinned_commit": true
+    },
+    {
+      "path": "manifests/target-contracts/opencode.json",
+      "sha256": "16934043e882325f6fdbeb673ca9ba0b62c2ac27ce091c281a56645057179cde",
+      "bytes": 2704,
+      "read_scope": "Full target contract",
+      "equals_pinned_commit": true
+    },
+    {
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "2b6d67cc774b25a817141b370cdadd6c3661d13e3ef35500e8a5767ce3131d64",
+      "bytes": 36989,
+      "read_scope": "test_implicit_context_keeps_existing_native_export_contract and adjacent tests",
+      "equals_pinned_commit": true
+    },
+    {
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "sha256": "a17d781e18dc5f72d6485f1ca8f5a9e6f6612ddeb761340110083b35181ffbe9",
+      "bytes": 3066,
+      "read_scope": "Full Skill including real fixture injection anchor and implicit_context",
+      "equals_pinned_commit": true
+    },
+    {
+      "path": "src/agent_dev_kit/agent_platform_cli.py",
+      "sha256": "200df6f5acc7541db95290850f2f691f1202cea1decc225a5013c84540f6ee12",
+      "bytes": 5534,
+      "matches_target_blob": true,
+      "changed_in_increment": false
+    }
+  ],
+  "spec_findings": {
+    "only_contract_change": "one existing ADK metadata name added to internal_extension_fields",
+    "standard_portable_fields": "unchanged",
+    "all_other_contract_structure": "byte-derived JSON structure unchanged after removing that one list member",
+    "unknown_field_rejection": "preserved",
+    "export_projection": "unchanged independent target-specific construction; no new internal-field export",
+    "permissions_and_runtime_qualification": "unchanged"
+  },
+  "quality_reasoning": [
+    "The sole contract addition registers implicit_context as an internal extension. The standard top-level field set is unchanged.",
+    "portable_skill_audit still rejects keys outside the exact union of standard and registered internal fields.",
+    "The new test checks membership in the internal set and absence from the standard set, exercises the real full catalog success path, and injects an unregistered key into a real unit Skill. It requires fail status and the exact sole unknown-key diagnostic.",
+    "The injection anchor is present in the read Skill. Losing the anchor would cause the negative assertion to fail rather than silently pass.",
+    "The export renderer reconstructs frontmatter from target contracts; their preserve lists remain license/compatibility. The platform internal allowlist does not become an export allowlist.",
+    "The existing export test covers claude-code and opencode, requires successful real exports with retained scoped description, and asserts implicit_context is absent from exported frontmatter. Together with the unchanged renderer and target contracts this is adequate for this narrowly scoped registry repair."
+  ],
+  "verification": {
+    "independent_full_platform_suite": {
+      "command": [
+        "/workspace/scratch/fe5385ca063a/verification-tools/rtk",
+        "bypass",
+        "bash",
+        "tests/test_agent_platform.sh"
+      ],
+      "started_at": "2026-11-17T02:56:49.319985+00:00",
+      "completed_at": "2026-11-17T02:56:53.170424+00:00",
+      "exit_code": 0
+    },
+    "independent_old_contract_control": {
+      "schema": "adk-portable-skill-audit/v1",
+      "status": "fail",
+      "checked_skills": 65,
+      "internal_extension_fields_seen": 455,
+      "portable_projection_policy": "portable output keeps only standard top-level fields; ADK-only metadata remains internal or namespaced under metadata",
+      "failures": [
+        "adk-unit-test-embedded: unknown internal frontmatter ['implicit_context']"
+      ]
+    },
+    "independent_fixed_contract_control": {
+      "schema": "adk-portable-skill-audit/v1",
+      "status": "pass",
+      "checked_skills": 65,
+      "internal_extension_fields_seen": 456,
+      "portable_projection_policy": "portable output keeps only standard top-level fields; ADK-only metadata remains internal or namespaced under metadata",
+      "failures": []
+    },
+    "independent_unknown_field_control": {
+      "schema": "adk-portable-skill-audit/v1",
+      "status": "fail",
+      "checked_skills": 1,
+      "internal_extension_fields_seen": 8,
+      "portable_projection_policy": "portable output keeps only standard top-level fields; ADK-only metadata remains internal or namespaced under metadata",
+      "failures": [
+        "adk-unit-test-embedded: unknown internal frontmatter ['review_unknown_context_key']"
+      ]
+    },
+    "independent_known_field_control": {
+      "schema": "adk-portable-skill-audit/v1",
+      "status": "pass",
+      "checked_skills": 1,
+      "internal_extension_fields_seen": 8,
+      "portable_projection_policy": "portable output keeps only standard top-level fields; ADK-only metadata remains internal or namespaced under metadata",
+      "failures": []
+    },
+    "independent_real_exports": [
+      {
+        "target": "claude-code",
+        "status": "pass",
+        "unit_skill_sha256": "63db78e83dc71fc61fbfeb5e8e41e2b9c323df60e0513627740eeb2827d42ab7",
+        "metadata_keys": [
+          "description",
+          "metadata",
+          "name"
+        ],
+        "implicit_context_top_level_present": false,
+        "description_preserves_embedded_host_scope": true
+      },
+      {
+        "target": "opencode",
+        "status": "pass",
+        "unit_skill_sha256": "93ee12fed5309c50b101b1d91be81d38868b0c6f82ef908e921d824e4787592a",
+        "metadata_keys": [
+          "description",
+          "metadata",
+          "name"
+        ],
+        "implicit_context_top_level_present": false,
+        "description_preserves_embedded_host_scope": true
+      }
+    ],
+    "source_status_before_and_after": "clean",
+    "original_ci_log": {
+      "path": "raw/platform-original-ci-job.txt",
+      "sha256": "665dd9ec3fdf61f6ec531242f8a4abd29c4ec2274b60c2170ae84f36bdb8d69d",
+      "bytes": 27272,
+      "observed": "test_agent_platform.sh phase exits 1; detailed unknown-field reason independently reproduced locally"
+    },
+    "final_exact_head_ci": "not-evaluated-in-this-source-review",
+    "new_full_102_suite_run_by_reviewer": false
+  },
+  "evidence": [
+    {
+      "base": "review-directory",
+      "path": "raw/platform-portability-controls.result.json",
+      "sha256": "e28f354dd43a67ef19e76e3350ed5876c3d2466400e9683b3671b27e47450e81",
+      "bytes": 5291
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-portability-controls.json",
+      "sha256": "4c837acfa70448b698549832cce5057eddf9c7af1d3442c8e05e13e7a602276e",
+      "bytes": 806
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-portability.patch",
+      "sha256": "76ccd29706ce6bd7f6a577ab450791dda37858dd172d4b2128c3968344b4c27c",
+      "bytes": 2112
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-frozen-suite.json",
+      "sha256": "537716657ed7b007e655f067d71832fe0fc204e4ff591cc05bfc9310f8e67e30",
+      "bytes": 745
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-frozen-suite.stdout.txt",
+      "sha256": "14293be0c2c2ffc96f97c098aefe327c601667586f6d3c622b1083ab3825c21a",
+      "bytes": 75
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-frozen-suite.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-original-ci-job.txt",
+      "sha256": "665dd9ec3fdf61f6ec531242f8a4abd29c4ec2274b60c2170ae84f36bdb8d69d",
+      "bytes": 27272
+    },
+    {
+      "base": "review-directory",
+      "path": "packaging/platform-portability-read/review-result.json",
+      "sha256": "53df198eff37444ef827afd39d4faca2e053a3bd94cbc374dd354a7a22f4c5e6",
+      "bytes": 8588
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-frozen-diff.json",
+      "sha256": "0755427386a4287a2f96085911bcd8885971e3e877736e8efe67db17d94697bc",
+      "bytes": 1041
+    },
+    {
+      "base": "review-directory",
+      "path": "raw/platform-frozen-identity.json",
+      "sha256": "4355e30985fc43b4965df22d408e0a4b1221bb13d82804650abffc3bee3c564a",
+      "bytes": 943
+    }
+  ],
+  "history": {
+    "original_source_review_target": "66df0ce7092aabbbd05411ef2950cc9ee59a3592",
+    "original_source_review_json_sha256": "8a98d938f775728d426888a7d7d6dfa013c99cb6627e5c2b4bceb39b32bad6a7",
+    "original_canonical_review_sha256": "36b722287468397036087e15573520b952c620c0ef28f2e55df711e2ffe27f00",
+    "packaging_review_target": "da34b8bed95d164eaab8982b0e13de508054ecfc",
+    "prior_reports_and_failures_rewritten": false
+  },
+  "limitations": [
+    "This is a new two-file source-change increment, not a replacement or retroactive rewrite of the original source or packaging review.",
+    "Original hosted log proves the test_agent_platform.sh step exited 1; the exact unknown-field diagnostic is independently reproduced through the local public audit function, not quoted as visible in that hosted log.",
+    "The prior-contract control uses the prior Git contract with identical Skill sources and an unchanged audit consumer; it is not falsely described as a new checkout/full-suite baseline run.",
+    "Actual exports establish static rendered metadata only, not native host discovery, execution, model behavior, or runtime/product qualification.",
+    "The final exact-head required CI, immutable release and Root source-only integration remain separate gates; no full local 102-suite rerun or all-gates success is claimed here.",
+    "No network/device/paid-model side effects, repository writes, global Harness approval, or approval of later unread changes were performed.",
+    "Read-only search initially included a nonexistent guessed test .py path (exit 2), then the actual .sh path was located and read; this was not a product test failure. Original command logs are retained."
+  ],
+  "permissions": {
+    "merge_authorized_by_this_report": false,
+    "release_authorized": false,
+    "root_integration_authorized": false,
+    "runtime_qualified": false,
+    "product_qualified": false,
+    "new_global_harness_approval": false
+  }
+}

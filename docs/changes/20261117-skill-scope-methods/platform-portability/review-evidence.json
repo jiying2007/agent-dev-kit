@@ -1,0 +1,135 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261117-skill-scope-methods-platform-portability",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-skill-scope-methods",
+  "reviewer": {
+    "id": "ai/root/independent_source_review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-17T03:01:28.174051Z",
+  "evidence_completed_at": "2026-11-17T03:01:28.174043Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "r-02",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "Portable-skill audit did not recognize the newly introduced ADK internal implicit_context field. Register implicit_context only in portable_skill.internal_extension_fields; preserve standard fields and exact unknown-key rejection. Independent original-contract FAIL/current-contract 65-skill PASS; unknown-key refusal and known-field positive control; complete platform suite exit 0; two actual native-target static exports omit implicit_context."
+    }
+  ],
+  "limitations": [
+    "This is a new two-file source-change increment, not a replacement or retroactive rewrite of the original source or packaging review.",
+    "Original hosted log proves the test_agent_platform.sh step exited 1; the exact unknown-field diagnostic is independently reproduced through the local public audit function, not quoted as visible in that hosted log.",
+    "The prior-contract control uses the prior Git contract with identical Skill sources and an unchanged audit consumer; it is not falsely described as a new checkout/full-suite baseline run.",
+    "Actual exports establish static rendered metadata only, not native host discovery, execution, model behavior, or runtime/product qualification.",
+    "The final exact-head required CI, immutable release and Root source-only integration remain separate gates; no full local 102-suite rerun or all-gates success is claimed here.",
+    "No network/device/paid-model side effects, repository writes, global Harness approval, or approval of later unread changes were performed.",
+    "Read-only search initially included a nonexistent guessed test .py path (exit 2), then the actual .sh path was located and read; this was not a product test failure. Original command logs are retained."
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "da34b8bed95d164eaab8982b0e13de508054ecfc",
+    "head_commit": "3568327a9877e2e789e079c6251cdf26af3c10c0",
+    "original_patch_sha256": "76ccd29706ce6bd7f6a577ab450791dda37858dd172d4b2128c3968344b4c27c"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": "manifests/agent_platform_contracts.json",
+      "sha256": "6c06ba6024ac53abaa82bff9fbf38e50cff38345f648db30fa216b4d083cef1b"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_agent_platform.sh",
+      "sha256": "4aad6a274453c669e12dab66d11ac53818542dd2806f8dd16e0fb5a60ccc0a44"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/agent_platform.py",
+      "sha256": "78228e706d6ddab1846b87596a62753c515dd826ebb61ab9a1f22e4c401848af"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/targets.py",
+      "sha256": "582fdc2cc6695cc8dd862196b8e6fa66f8a3c56bccf751076af50c2cf41ef87c"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/target-contracts/claude-code.json",
+      "sha256": "6e984dd2deaaedce4a57e2128e2d78d2440aae223bbe676879b048fafa6cbff7"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/target-contracts/opencode.json",
+      "sha256": "16934043e882325f6fdbeb673ca9ba0b62c2ac27ce091c281a56645057179cde"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "2b6d67cc774b25a817141b370cdadd6c3661d13e3ef35500e8a5767ce3131d64"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-unit-test-embedded/SKILL.md",
+      "sha256": "a17d781e18dc5f72d6485f1ca8f5a9e6f6612ddeb761340110083b35181ffbe9"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/agent_platform_cli.py",
+      "sha256": "200df6f5acc7541db95290850f2f691f1202cea1decc225a5013c84540f6ee12"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "76ccd29706ce6bd7f6a577ab450791dda37858dd172d4b2128c3968344b4c27c"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/platform-portability-review.json",
+      "sha256": "c7a0efcb9614e55e3606f0f575defb61277ffab302c2b8f6627363971e29e6c3"
+    },
+    {
+      "base": "record",
+      "path": "evidence/platform-portability-review.md",
+      "sha256": "9a2e4c900ef6ad9c2dadfdc3204e0d7134e095a9a08bc492c9ebe30df58ba722"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-evidence-bundle.json",
+      "sha256": "796b078793b9a1231da72cb11c188deb367f069b1030cd15026b336179f0ae95"
+    },
+    {
+      "base": "record",
+      "path": "evidence/implementation-evidence.json",
+      "sha256": "e8ee96ace37fd2843f4bbb7f264699aa407065335e69f8d8775e5e0aaf869209"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-equivalence.json",
+      "sha256": "6d266b4e64673f2b19edd1c844a28b720a64c204793c3ab4c1d353f6d795b0b4"
+    },
+    {
+      "base": "record",
+      "path": "evidence/packaging-increment-review.json",
+      "sha256": "01f6f042e0ad746fddc65782a54c263425f328b5a407a6412b42ac7317b47d5b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/packaging-increment-review.md",
+      "sha256": "5dcfa7bc824989b3c3d6db4a2cda48c6d8112237592a0fa61804d766163ccb83"
+    }
+  ]
+}

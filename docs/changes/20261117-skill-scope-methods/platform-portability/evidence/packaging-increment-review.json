@@ -1,0 +1,172 @@
+{
+  "schema": "adk-independent-packaging-increment-review/v1",
+  "reviewer": "/root/independent_source_review",
+  "delegated_reviewer": "/root/independent_source_review/packaging_review",
+  "reviewed_at": "2026-11-17T02:55:09.452272+00:00",
+  "evidence_completed_at": "2026-11-17T02:55:09.452272+00:00",
+  "actual_check_windows": {
+    "primary": [
+      "2026-11-17T02:50:52.508172+00:00",
+      "2026-11-17T02:50:53.167223+00:00"
+    ],
+    "bundle_verified_at": "2026-11-17T02:53:04.252989+00:00"
+  },
+  "scope": "evidence/task/verification packaging increment only",
+  "base_commit": "66df0ce7092aabbbd05411ef2950cc9ee59a3592",
+  "head_commit": "da34b8bed95d164eaab8982b0e13de508054ecfc",
+  "local_equivalent_commit": "364515193669d33998f6f33660a756bd5af3d33d",
+  "tree": "244034f7dd12265706842def554d9179ac7ce4a6",
+  "packaging_diff_sha256": "8837f6b084d9e38eb46a89181867292cb19c60765c5f8b639991bff2c30f7991",
+  "spec_verdict": "PASS",
+  "quality_verdict": "PASS",
+  "open_packaging_findings": [],
+  "changed_file_count": 13,
+  "sources": [
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/independent-evidence-bundle.json",
+      "sha256": "f74152496716ccb79f9655ff4e1a2abb0f4de4cc8a4a871b58b75fb61ad57e51",
+      "bytes": 627811,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/independent-source-review.json",
+      "sha256": "8a98d938f775728d426888a7d7d6dfa013c99cb6627e5c2b4bceb39b32bad6a7",
+      "bytes": 40619,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/independent-source-review.md",
+      "sha256": "3f9e920dba86b3c59bec7277e81f71b97f4973681fe63d9ad04f9c37ec84409b",
+      "bytes": 14727,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/original.patch",
+      "sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a",
+      "bytes": 321621,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/regression-bundle.json",
+      "sha256": "5a5c09d2de43d8aec8d4eba293ca5288326acd4b98271dee84950462d610d060",
+      "bytes": 32677,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/repaired-suite.json",
+      "sha256": "a6858c46c1d732b79f1244a3b600784101d86c380fd8b81f84f6cd1ba211603c",
+      "bytes": 43169,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/review-validation.json",
+      "sha256": "4f7afe0539be589a69db0f172ce71c10eeccd4acdf018b084228a6ac496a29ed",
+      "bytes": 350,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/source-bindings.json",
+      "sha256": "1f1849cd27ab51ce38e06a7df54be75084aa73ffd22e63a07695b54ff6314554",
+      "bytes": 16137,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/source-footprint.json",
+      "sha256": "3b4aecb6c1ecd366ab627ed446bcdd9e0e9aa74751fdfd7be0d4c15f42c464aa",
+      "bytes": 6480,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/evidence/transport-identity.json",
+      "sha256": "55583b2f96d0366d50c797032a886680d11118e3f9fb95a8d09cf77dce0a7591",
+      "bytes": 1163,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/review-evidence.json",
+      "sha256": "36b722287468397036087e15573520b952c620c0ef28f2e55df711e2ffe27f00",
+      "bytes": 11468,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/tasks.md",
+      "sha256": "73ef8357b59cbed14b1d603881bbab45361bf475b078eb09a8778a2a8c632b20",
+      "bytes": 3225,
+      "matches_local_and_remote_blobs": true
+    },
+    {
+      "path": "docs/changes/20261117-skill-scope-methods/verification.md",
+      "sha256": "49e3362ea7d18bf1dc44f13c950f94db2afd96856cb3b2d2e1c9488ca93625c9",
+      "bytes": 3949,
+      "matches_local_and_remote_blobs": true
+    }
+  ],
+  "original_source_review_target": "66df0ce7092aabbbd05411ef2950cc9ee59a3592",
+  "original_source_report_json_sha256": "8a98d938f775728d426888a7d7d6dfa013c99cb6627e5c2b4bceb39b32bad6a7",
+  "original_source_report_md_sha256": "3f9e920dba86b3c59bec7277e81f71b97f4973681fe63d9ad04f9c37ec84409b",
+  "original_source_diff_sha256": "7ce4b25c24f399c92998b405acd57f25fb192282173bd436bab57e52bea0030a",
+  "canonical_review_sha256": "36b722287468397036087e15573520b952c620c0ef28f2e55df711e2ffe27f00",
+  "canonical_validator_result": "PASS-independently-executed",
+  "embedded_evidence_count": 35,
+  "embedded_evidence_integrity": "PASS-all-original-bytes-hashes-sizes-and-paths",
+  "source_binding_entries_verified_against_source_commit": 80,
+  "production_test_version_files_changed": false,
+  "source_reports_modified": false,
+  "last_local_full_run": "FAIL-101-of-102-preserved",
+  "repaired_full_failed_suite": "PASS-204-of-204-preserved",
+  "task_state_semantics": "packaging-time snapshot; packaging approval is recorded in this appendix without editing the signed source record",
+  "subsequent_source_issue": {
+    "id": "R-02",
+    "reported_by": "/root",
+    "status": "reported-CI-failure-awaiting-separate-source-increment-review",
+    "description": "platform portability audit reports unknown internal frontmatter ['implicit_context']",
+    "run_id": "44005719346",
+    "job_id": "133780475196",
+    "included_in_packaging_pass": false
+  },
+  "evidence": [
+    {
+      "path": "raw/packaging-increment-checks.result.json",
+      "sha256": "ee9d76b36f1176454df0bc0b049ba029cbf5b3ecdc3c9b3063e62eaeb95d3256",
+      "bytes": 5849
+    },
+    {
+      "path": "raw/packaging-increment-checks.json",
+      "sha256": "ec2ce91f2cd1fe2945266767b3918664713c050debc33226666385fb4509effd",
+      "bytes": 805
+    },
+    {
+      "path": "raw/packaging-increment.patch",
+      "sha256": "8837f6b084d9e38eb46a89181867292cb19c60765c5f8b639991bff2c30f7991",
+      "bytes": 1135951
+    },
+    {
+      "path": "raw/packaging-canonical-validation.json",
+      "sha256": "1135a1408958d780e84b0afd9fd944db471dbc557688f573d1544e9a643c86ee",
+      "bytes": 1266
+    },
+    {
+      "path": "raw/packaging-canonical-validation.stdout.txt",
+      "sha256": "9b113ff3da71ed23661fd4388f4e1ab17119467825d3418a01693cdde64c5c4d",
+      "bytes": 296
+    },
+    {
+      "path": "packaging/final-increment/integrity-result.json",
+      "sha256": "fd7efca4a9c86bd32b1b199bd21ffaa5b8f8234aa4e0093499dcdf55f25f2a0b",
+      "bytes": 27822
+    },
+    {
+      "path": "packaging-increment-negative-results.md",
+      "sha256": "71baa87ac9f2b75c25b1947e1253e10426724ef0dab0c3f450736b39ba4a8cad",
+      "bytes": 876
+    }
+  ],
+  "limitations": [
+    "PASS qualifies the exact 13-file documentation/evidence increment, not overall source readiness or CI completion.",
+    "The source opinion at 66df0ce and its original evidence are preserved as historical records, without retroactive rewriting.",
+    "The coordinator subsequently reported a distinct platform portability CI failure. Its manifest repair needs a separate exact-commit source review.",
+    "CI, immutable publication and Root source-only integration remain unsatisfied by this appendix; no release or runtime/product qualification is granted.",
+    "Remote identity is checked through fetched local Git objects. This reviewer did not query live GitHub/CI, merge, publish or modify repository state.",
+    "Existing historical global Harness records are unchanged. No new Harness approval or approval of future unread changes is issued."
+  ]
+}
