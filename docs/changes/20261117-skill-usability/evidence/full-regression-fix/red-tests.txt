@@ -1,0 +1,30 @@
+test_generic_diagnosis_keeps_specific_transport_and_log_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_generic_diagnosis_keeps_specific_transport_and_log_owners) ... 
+  test_generic_diagnosis_keeps_specific_transport_and_log_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_generic_diagnosis_keeps_specific_transport_and_log_owners) (prompt='立即进行 SSH调试：登录生产设备，抓取日志并执行诊断命令。') ... FAIL
+  test_generic_diagnosis_keeps_specific_transport_and_log_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_generic_diagnosis_keeps_specific_transport_and_log_owners) (prompt='立即进行 ADB调试：连接设备，抓取日志并执行诊断命令。') ... FAIL
+
+======================================================================
+FAIL: test_generic_diagnosis_keeps_specific_transport_and_log_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_generic_diagnosis_keeps_specific_transport_and_log_owners) (prompt='立即进行 SSH调试：登录生产设备，抓取日志并执行诊断命令。')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 141, in test_generic_diagnosis_keeps_specific_transport_and_log_owners
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-embedded-debug-transport' != 'adk-systematic-debugging'
+- adk-embedded-debug-transport
++ adk-systematic-debugging
+ : {'match': True, 'source': 'routing', 'skill': 'adk-systematic-debugging', 'intent': 'systematic_debugging', 'intent_zh': '调试/调试问题/诊断/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障/aclocal缺失/aclocal/automake缺失/Autoconf工具缺失', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': ['adk-lightweight-planning'], 'task_mode': 'debugging', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'risk': 'medium', 'profile_availability': 'fallback-profile', 'required_evidence': ['reproduction evidence before root-cause claim'], 'runtime_role': 'primary', 'selection_group': 'debugging', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+======================================================================
+FAIL: test_generic_diagnosis_keeps_specific_transport_and_log_owners (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_generic_diagnosis_keeps_specific_transport_and_log_owners) (prompt='立即进行 ADB调试：连接设备，抓取日志并执行诊断命令。')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/fe8de3b42084/adk-skill-usability/tests/test_skill_trigger_matrix.py", line 141, in test_generic_diagnosis_keeps_specific_transport_and_log_owners
+    self.assertEqual(expected, result.get("skill"), result)
+AssertionError: 'adk-embedded-debug-transport' != 'adk-systematic-debugging'
+- adk-embedded-debug-transport
++ adk-systematic-debugging
+ : {'match': True, 'source': 'routing', 'skill': 'adk-systematic-debugging', 'intent': 'systematic_debugging', 'intent_zh': '调试/调试问题/诊断/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障/aclocal缺失/aclocal/automake缺失/Autoconf工具缺失', 'supporting_skills': [], 'fallback_skills': [], 'mutually_exclusive': ['adk-lightweight-planning'], 'task_mode': 'debugging', 'mutation_permission': 'deny', 'artifact_mode': 'readonly', 'risk': 'medium', 'profile_availability': 'fallback-profile', 'required_evidence': ['reproduction evidence before root-cause claim'], 'runtime_role': 'primary', 'selection_group': 'debugging', 'effect_ceiling': 'diagnostic-execution', 'effect_scope': 'host-system', 'effect_operation': 'diagnostic', 'implicit_trigger_policy': 'eligible', 'escalation_effects': [], 'live_device_authorization': 'not-required', 'release_target_authorization': 'not-required', 'execution_effort': 'E2', 'effort_basis': 'conservative-default'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.105s
+
+FAILED (failures=2)

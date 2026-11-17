@@ -1,0 +1,122 @@
+{
+  "source_commit": "a2b90b64d3ba83ac0c856ddb6a541450ead1bd36",
+  "full_regression": {
+    "tests": 102,
+    "pass": 102,
+    "fail": 0
+  },
+  "files": [
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/cumulative-owned.diff",
+      "sha256": "0281dd2a700453aa16f80fc20bd28429b5a9fdf773f184c9a87d2e8646a3955f"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/green-probes.json",
+      "sha256": "892c25fdb031bfe6bef970f9875e458269c612b9ba2291606cd82d722547a3e4"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/green-tests.json",
+      "sha256": "c0b41baff119040f401adf3eec95bfaf45a5710aac3f697bd9786f52bf823b48"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/green-tests.txt",
+      "sha256": "8a19e99f85cbdafda8b9e2f9cf25920f40821c0b9598c5b2a91bb24ad1025281"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/probe.py",
+      "sha256": "4bfe1b2371ecd1cb06f10712f7471d063dd8b6f9069215b650884eb001f4692b"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/red-probes.json",
+      "sha256": "966acd411e2d92ef1480451aaa64ccff192a190fbedb521023d9075144c81d10"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/red-tests.json",
+      "sha256": "ff6073c2200009aec5e32a8e10e46707e28a4a16bf0ce394c5865683b5ce3501"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/red-tests.txt",
+      "sha256": "6a5e9a3dc2da8c40b69221a326348c7ab6605691eb0955d44206bb62b5814e1e"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/snapshot.json",
+      "sha256": "ec9bb92671fe0f969d8704b703d8f926f6afe4027d0dc81e0cadc3bde5d7d4d1"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/full-regression-fix/status.md",
+      "sha256": "2eca2ecf8e34275ea09cc4b61e266d623d8e52d641455c65e29c5faa1c5317d2"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/all-skill-verification.json",
+      "sha256": "276feeba3c41de5b5a504e06148b276e08a12b4be8eeb23d8353d64d29945e58"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/claude-code-export-inventory.json",
+      "sha256": "84f4fd3474576492e00ebe45e98e5418347c21e143c48dd00a24abbeb23c6902"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/focused-ruff.log",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/format.log",
+      "sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/full-regression-result.json",
+      "sha256": "58a4a3c2e38b8ea264723e77f5cf73286ad53e8189da1a9db59ae26a2cb79cc8"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/full-regression-timing.json",
+      "sha256": "740de3c20a8135aeec1250a2ee39b4b9aae692132ac784e79a6917f351747dde"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/full-regression.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/module-size.log",
+      "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/mypy.log",
+      "sha256": "103f10fdbb5ad2b6ee08833a3e2b634aa94d13009cb96f89236e9d80e79aac15"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/opencode-export-inventory.json",
+      "sha256": "819ff88c80d9a67adba8bfcc24e637a6461843a88fb46bbff2728f0d76507d7a"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/pip-audit.log",
+      "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/quality-results.json",
+      "sha256": "7746cf9a80e0b16e62bbf7a386032e86d1bc84a4e007affcea02b34a0d746e5a"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/quality-reuse.json",
+      "sha256": "f4a4b494c5a0762dede1c3d4fdbc31fc7fff7b895d1743633d1e92a0d6b79354"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/release-check.log",
+      "sha256": "757033095aa7507e1a48571a71cf5a8b565b2c1f2470469bc8b88eda0bdfe4ea"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/ruff.log",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/strict.log",
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/target-static.log",
+      "sha256": "4ff56721bd6efefc0ab15e08be7e50ec14ede0e6e9f45a369ed5ab5d2f1d1439"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/final/tested-source-files.json",
+      "sha256": "e3819593e8e8b4b1eacd0e396ab0fc32d007b3d4083f70da531155ada7cdb4e6"
+    }
+  ]
+}

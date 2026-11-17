@@ -1,0 +1,379 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261117-skill-usability",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-skill-usability",
+  "reviewer": {
+    "id": "ai/root/usability_independent_review",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-17T07:09:18Z",
+  "evidence_completed_at": "2026-11-17T07:09:07.492172Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "f-01",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "F-01 / P2. 新增领域门槛拒绝原适用 OTA 正例。恢复肯定 OTA，并将紧凑并列否定严格限定于 implicit_context 的已声明域词；原三条输入恢复 owner，17 条独立边界通过，权限仍 deny。"
+    },
+    {
+      "id": "f-02",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "F-02 / P2. 新增 RTOS 领域列表遗漏已复现的 VxWorks。仅补入该域词，正例恢复，域外/否定边界保留，authority 元数据未变。"
+    },
+    {
+      "id": "f-03",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "F-03 / P2. 第一次完整回归 101/102 暴露泛诊断全局路由抢占 SSH。撤回该全局新词，使用既有 skill_trigger fallback；原 fixture 不改，13 条独立 owner/权限对照和最终 102 suite 通过。"
+    }
+  ],
+  "limitations": [
+    "范围是 a2b90b64d3ba83ac0c856ddb6a541450ead1bd36 的 source-change；后续 tasks.md 状态、.gitattributes 精确原始证据路径与证据包装需独立增量核验。",
+    "完整 102 suite 由协调者执行；审查人独立核对输入/提交/日志/终态，并执行定向路由、validator、身份、权限和 ratchet 检查，没有冒称自己再次运行全套。",
+    "五项质量检查复用上轮结果，四项在最终源码上重跑。650 文件快照不含 tools/；tools/ 没有本轮 diff，但未对其作前后快照哈希比较。pip-audit 复用不代表新的漏洞数据库查询。",
+    "39 个独立定向 tests 属于 F-01/F-02 修复阶段；最终 helper 的 17 条和 F-03 的 13 条输入绑定最终文件字节，不把较早全部测试说成最终提交重跑。",
+    "65 项逐项记录、覆盖集合和原始证据摘要已核实；没有冒称重新全文阅读所有 65 个 Skill，也未逐行重读全部历史日志。",
+    "1410 个 JSON 值扰动验证已解析值进入 validator 的异常边界；不证明任意 JSON 文本解析、任意语义输入或任意自然语言分类器完备。",
+    "两目标实际导出 65 entries + 54 support files 各自通过，只涵盖未改 target support_directories；不证明原生宿主 discovery/load 或 dispatcher 权限 enforcement。",
+    "开发消费观察的新包通过 schema 且保留权限/scope/blockers；不是注册配对 A/B、因果效果或 native runtime 资格，没有新付费模型运行或 provider Token/时延/费用测量。",
+    "没有验证 live SSH/设备/RTOS/HIL/现场结果、生产续行/去重、实际 main CI、不可变组件 Release、Root 两路径消费或产品/设备资格；这些后续义务仍需实际证据。"
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+    "head_commit": "a2b90b64d3ba83ac0c856ddb6a541450ead1bd36",
+    "original_patch_sha256": "21dcecb8567e84e0bf3818185f3281827812d8d65dcf73a213e394578aeac414"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "df0b67f0d9831fc5e7d10c8a7225d89d7c52fae213f8642f36ac74bf7ba60f95"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "849715a1fb35551a792989b3581602711bc80c905c1746d84d577ec9111ffbec"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "d2680cbf98088c0a625c46d73a3268e04a5a4526298dd11fcf8d8006d239abda"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "5ad8a2ad82963019ab05981bfd1e03b6e2d269da3ae0e9f7837f8178544ab7b3"
+    },
+    {
+      "base": "repository",
+      "path": "docs/agent-skill-catalog.md",
+      "sha256": "d4fbca3d6583183132806699e0d379b5086fbad1d0fe16297397c8f5750d3efb"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-usability/design.md",
+      "sha256": "3428c6c9ef98a419cf0f3e2c29054099fa58b7e0e722508ad0737b5238ebef63"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-usability/negative-results.md",
+      "sha256": "1b74958aacc7217db6ee95422415697beef4e79ce6774dc6b330071269887c5e"
+    },
+    {
+      "base": "repository",
+      "path": "docs/changes/20261117-skill-usability/requirements.md",
+      "sha256": "711a00dc5c438d2c2d49ec5b83e0ead3d052119114ba38849259989a347e3b0b"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "90d87a3e4aef91b649d053b18b4ac87f65ed28ded61ae51fdc021eea5a8ca77b"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "f3bdefbe7c394ce895c5ed73a9c1dc3b7179ea58fbe26b3a8d8f68d643e0f2c7"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "sha256": "d9c4038697f3a8f2b2208d016b06b1684dee09e366543c8539ef6f232230df60"
+    },
+    {
+      "base": "repository",
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "sha256": "dea7c5247a20a86ac5c9430296340a5b6b0cce72583bc99ad844eb4624bb4db3"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "cb55f47620b44f2b3154bf654fc50c8eaec83d0e1c7b27bf53f4828ced3bbfa2"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "sha256": "3720551d6cc04f428adf472c3887e0e09ba95c31318bc4d4d7655d17ef68fe4e"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-bsp-analysis/SKILL.md",
+      "sha256": "a35cac1e4e20ceb519e027da15b448c712a94dab37fb594e7954ca21bd8aaa86"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "sha256": "34a4b3b683200dfe13be96db626d9f2874a85d235df394e01a9c06eaf1a9f90c"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "sha256": "7037682c48973fa258f1fe0774cdc83b59c668f90fb1e7242830b36f4c0586fe"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "sha256": "f5fc8aa352b4767764b5f81f5f7ce3326c051382b9b2b72372ec43e1ad0e4c70"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "sha256": "f126062fcddb2108447b8d5937aba8fb24e3b279dc0e2f76f3724f78753277ee"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "sha256": "d8f9c172e4bd2353b0a4e1a74c81a4765baac90b203fa9bb37d7c3686ac025fd"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "sha256": "eb401873f401d125ea007d13e6760fc4b840190fef979ea02f94ebc4840efbb8"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "sha256": "67658d3a4f029dcbd86c6a6eba76870d588bbfc61275152b0e72b233edb8e803"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "sha256": "1b14158259d16fa98b93212fd719ac92e1da37d03ae055faedb48d7b7a3c9c45"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "sha256": "72c0c4a1c88ee1122075dba482252dfbab7f6dde0ee4d07f670c9224f7d65488"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-task-breakdown/references/task-packaging.md",
+      "sha256": "1c10d654b9015f356333e515009224a630d102e039db2731c58c1191cab5a34e"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "10bc3573261894bc5dd9eba7e93a98cbe565e43d86eb959d2dcf0f98b5e44507"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "sha256": "3b4364f90f7f0858e66f937a7e1b3c00c5afe19da3dd9a2c1ab542b6d420ca60"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/intent_boundary.py",
+      "sha256": "d4a8631aadf33fc43b9802bd086c0130db282ef5df048c5e99d6e08dc83a6850"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "dc290b66ac21b7611698cc9c2e3b4565e2a199a8da31930d53a83b243b18ab9d"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_intent_boundary_governance.sh",
+      "sha256": "51cc7f6ab900a8664a648e26cb99ce69544c0273c1498c0e388139d7bd42786c"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_consumer_usability.py",
+      "sha256": "fd5e7ef8ffdec9a644c6623e3fb27b8ffa7b93e00f6e212b808164c14450ac91"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_content.sh",
+      "sha256": "50cf40b01a0694894953fb83d669ef372c0943566facd0d6fe764910ef85f8a0"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_rtos_methods.py",
+      "sha256": "1107e967040f7c32c3be867a0af4556bfbd312d7eec3cd3746f4f7135b1edaff"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "6ccb81d7bfddcf30f6412f12f8ed3388c42fa04cfa89dc80435b86805b85a5e8"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_task_package_delivery.py",
+      "sha256": "db637f6330c9c6e9112971622c55e808c3698b9c4e09d160e75fc8edcd5b4b74"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/structured_output_contracts.json",
+      "sha256": "f98c4475f513eea3e24b154f97d4cc8c46ce838e5c3615240fee18753cd5267c"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/profile_context_ratchets.json",
+      "sha256": "f283524ecff14179cad628735bef9e20580da00c2505687ecca9530da3737bff"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/skill_content_contracts_v2.json",
+      "sha256": "8064a319d76ccfc473709dcd75d224b7fb8775e28a8763f026d9c3d7dfc66514"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "21dcecb8567e84e0bf3818185f3281827812d8d65dcf73a213e394578aeac414"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "evidence/independent-review.md",
+      "sha256": "0572929833bc89a39b712361c05f994552fab3c8a4991501cc69f2cf1b02fe32"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-review.json",
+      "sha256": "599f9709c132dfb9c32743568c36eb545882d4f1cb64cadfbe4854929b8e10d6"
+    },
+    {
+      "base": "record",
+      "path": "evidence/source-bindings.json",
+      "sha256": "e58ed8dc7dde89c0a46e4661fbcfcb36f1771d3c1d6edde4687acf12fa34deee"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final-evidence-index.json",
+      "sha256": "9b174923d7ab037ac99aaee891a4dfc92c946b001da190331ee5a003344b0a4b"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/full-regression-result.json",
+      "sha256": "58a4a3c2e38b8ea264723e77f5cf73286ad53e8189da1a9db59ae26a2cb79cc8"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/full-regression-timing.json",
+      "sha256": "740de3c20a8135aeec1250a2ee39b4b9aae692132ac784e79a6917f351747dde"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/full-regression.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/tested-source-files.json",
+      "sha256": "e3819593e8e8b4b1eacd0e396ab0fc32d007b3d4083f70da531155ada7cdb4e6"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/quality-results.json",
+      "sha256": "7746cf9a80e0b16e62bbf7a386032e86d1bc84a4e007affcea02b34a0d746e5a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/quality-reuse.json",
+      "sha256": "f4a4b494c5a0762dede1c3d4fdbc31fc7fff7b895d1743633d1e92a0d6b79354"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/all-skill-verification.json",
+      "sha256": "276feeba3c41de5b5a504e06148b276e08a12b4be8eeb23d8353d64d29945e58"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/claude-code-export-inventory.json",
+      "sha256": "84f4fd3474576492e00ebe45e98e5418347c21e143c48dd00a24abbeb23c6902"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/opencode-export-inventory.json",
+      "sha256": "819ff88c80d9a67adba8bfcc24e637a6461843a88fb46bbff2728f0d76507d7a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-probes/index.json",
+      "sha256": "cddc8528490da9a3364658497a0441a7d45d3c9867815d682ba0ada056bce04f"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-probes/review-probes.json",
+      "sha256": "3f2c9405f3f2b3bdd6602e2a4c95545c236d5ed5896ac2250526b89368474895"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-probes/linear-helper-probes.json",
+      "sha256": "20b448bde9f514a1343db05e4c1027588e0a349c38294d1371e21dd85acb3b08"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent-probes/ssh-regression-after.json",
+      "sha256": "c0f5bdb5bcc8c927634d0bf7b975c07bf51562b48c29e3e262ca935a1a622a77"
+    },
+    {
+      "base": "record",
+      "path": "evidence/first-full-run/full-regression-result.json",
+      "sha256": "e53a7517feef99ac5cedd001fcb329ad8f614e486c92c4b6463e64582c4654e0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/first-full-run/full-regression.log",
+      "sha256": "cd235c737f138d433cc0f95fadbd78eafa354d222ae75b8c430e554acdf26b0c"
+    },
+    {
+      "base": "record",
+      "path": "evidence/consumer-observation/observation.json",
+      "sha256": "01047a175d91bfc8c14f10f95219f473794adff9e668181d4c6b5b3b9a54920a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/baseline/audit-index.json",
+      "sha256": "c26ae7b10052076c9d9e0543d639c4618fa3f807588f302049a1a91bb44e39b2"
+    },
+    {
+      "base": "record",
+      "path": "evidence/baseline/groups.json",
+      "sha256": "656c8c821b27f26e6786e4fb13fb53595d7f6ba9fa8551f5072158185c83c726"
+    },
+    {
+      "base": "record",
+      "path": "evidence/consumer-observation/README.md",
+      "sha256": "ee9367bb12c8fe6ddbb32c0044724693556ca8f708b7287bc3dc2c2f27a218d2"
+    },
+    {
+      "base": "record",
+      "path": "evidence/audit-correction/context-optional/audit-correction.md",
+      "sha256": "078e6b81dd3cee1785b5a3f6f756176441edea71aba3e5678ccc5a3199dd54b4"
+    }
+  ]
+}

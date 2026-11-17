@@ -1,0 +1,244 @@
+{
+  "timestamp_utc": "2026-11-17T06:55:51.241514+00:00",
+  "manifest_version": "11.3.14",
+  "files": [
+    {
+      "path": "manifest.json",
+      "before_red_bytes": 90969,
+      "current_bytes": 90962,
+      "delta_after_red_test_added": -7,
+      "sha256": "90d87a3e4aef91b649d053b18b4ac87f65ed28ded61ae51fdc021eea5a8ca77b"
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "before_red_bytes": 2801,
+      "current_bytes": 2795,
+      "delta_after_red_test_added": -6,
+      "sha256": "1b14158259d16fa98b93212fd719ac92e1da37d03ae055faedb48d7b7a3c9c45"
+    },
+    {
+      "path": "tests/test_skill_trigger_matrix.py",
+      "before_red_bytes": 45781,
+      "current_bytes": 45781,
+      "delta_after_red_test_added": 0,
+      "sha256": "6ccb81d7bfddcf30f6412f12f8ed3388c42fa04cfa89dc80435b86805b85a5e8"
+    }
+  ],
+  "owner_controls": [
+    {
+      "prompt": "只读 SSH调试：检查连接并诊断设备日志。",
+      "result": {
+        "skill": "adk-embedded-remote-debug-log-triage",
+        "source": "routing",
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "effect_ceiling": "diagnostic-execution"
+      }
+    },
+    {
+      "prompt": "诊断这个 Python 脚本的异常",
+      "result": {
+        "skill": "adk-systematic-debugging",
+        "source": "skill_trigger",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "effect_ceiling": "diagnostic-execution"
+      }
+    },
+    {
+      "prompt": "先诊断 Web API 超时的根因",
+      "result": {
+        "skill": "adk-systematic-debugging",
+        "source": "skill_trigger",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "effect_ceiling": "diagnostic-execution"
+      }
+    },
+    {
+      "prompt": "请只读诊断这个 Python 脚本的异常",
+      "result": {
+        "skill": "adk-systematic-debugging",
+        "source": "skill_trigger",
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "effect_ceiling": "diagnostic-execution"
+      }
+    },
+    {
+      "prompt": "诊断循环",
+      "result": {
+        "skill": "adk-systematic-debugging",
+        "source": "skill_trigger",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "effect_ceiling": "diagnostic-execution"
+      }
+    },
+    {
+      "prompt": "不要诊断，只校验 commit message",
+      "result": {
+        "skill": "adk-commit-pr-quality-gate",
+        "source": "routing",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "effect_ceiling": "read-only"
+      }
+    }
+  ],
+  "ratchet_unchanged": true,
+  "profiles": [
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "core",
+      "actual": {
+        "entry_file_bytes": 97029,
+        "potential_full_source_bytes": 173118
+      },
+      "ratchet": {
+        "entry_file_bytes": 133940,
+        "potential_full_source_bytes": 184133
+      },
+      "asset_count": 27,
+      "asset_count_baseline": 27,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "release-hardening",
+      "actual": {
+        "entry_file_bytes": 81585,
+        "potential_full_source_bytes": 156205
+      },
+      "ratchet": {
+        "entry_file_bytes": 112256,
+        "potential_full_source_bytes": 159576
+      },
+      "asset_count": 23,
+      "asset_count_baseline": 23,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "personal-core",
+      "actual": {
+        "entry_file_bytes": 112461,
+        "potential_full_source_bytes": 192287
+      },
+      "ratchet": {
+        "entry_file_bytes": 152918,
+        "potential_full_source_bytes": 204293
+      },
+      "asset_count": 32,
+      "asset_count_baseline": 32,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "embedded-fullstack",
+      "actual": {
+        "entry_file_bytes": 209273,
+        "potential_full_source_bytes": 316392
+      },
+      "ratchet": {
+        "entry_file_bytes": 245296,
+        "potential_full_source_bytes": 316854
+      },
+      "asset_count": 55,
+      "asset_count_baseline": 55,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "team-core",
+      "actual": {
+        "entry_file_bytes": 122995,
+        "potential_full_source_bytes": 211212
+      },
+      "ratchet": {
+        "entry_file_bytes": 166442,
+        "potential_full_source_bytes": 223333
+      },
+      "asset_count": 35,
+      "asset_count_baseline": 35,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "large-refactor",
+      "actual": {
+        "entry_file_bytes": 212298,
+        "potential_full_source_bytes": 323274
+      },
+      "ratchet": {
+        "entry_file_bytes": 248328,
+        "potential_full_source_bytes": 323328
+      },
+      "asset_count": 56,
+      "asset_count_baseline": 56,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "incident-response",
+      "actual": {
+        "entry_file_bytes": 30409,
+        "potential_full_source_bytes": 46509
+      },
+      "ratchet": {
+        "entry_file_bytes": 37797,
+        "potential_full_source_bytes": 46612
+      },
+      "asset_count": 9,
+      "asset_count_baseline": 9,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    },
+    {
+      "schema": "adk-profile-context-ratchet-result/v1",
+      "status": "pass",
+      "profile": "research-intake",
+      "actual": {
+        "entry_file_bytes": 64960,
+        "potential_full_source_bytes": 117370
+      },
+      "ratchet": {
+        "entry_file_bytes": 86571,
+        "potential_full_source_bytes": 124543
+      },
+      "asset_count": 20,
+      "asset_count_baseline": 20,
+      "failures": [],
+      "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
+      "runtime_initial_context_claim": false,
+      "release_authorized": false
+    }
+  ]
+}

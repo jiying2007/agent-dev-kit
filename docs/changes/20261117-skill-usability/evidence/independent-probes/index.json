@@ -1,0 +1,45 @@
+{
+  "reviewer": "ai/root/usability_independent_review",
+  "files": [
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/review-probes.py",
+      "sha256": "ef0b589b0a9f146cc3877611aa3e42ebd0c237a76b12d6fc9f55bc7444612ffb"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/review-probes.json",
+      "sha256": "3f2c9405f3f2b3bdd6602e2a4c95545c236d5ed5896ac2250526b89368474895"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/postfix-targeted.json",
+      "sha256": "7ea0d0b5a51ef4c8fca7e611a1b63bb100b4f3dde887ddbfbefa77e2b900467e"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/postfix-targeted.log",
+      "sha256": "91de0c1adf46106f5a1ee5015222071075fefc7425ddb648e613de54c71cda4a"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/postfix-probes.json",
+      "sha256": "3b2b9bb46b671ea3b9a8dd1294718796f02f5b1fa0e626fe9642310eabe5c1e8"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/run-targeted.py",
+      "sha256": "6176287ea8871c22e420097b8fc6b6d82851a775f5c71c8f956aee00c965a5aa"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/followup-routing.py",
+      "sha256": "819dd6d5d25a7ba8f355c2c942526fab23ce4c0cd61009ee0832617bf7247fa3"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/linear-helper-probes.json",
+      "sha256": "20b448bde9f514a1343db05e4c1027588e0a349c38294d1371e21dd85acb3b08"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/ssh-regression-before.json",
+      "sha256": "0702f4b3d1e224c7125871a8a5bc80399dca70adab694795c6317cfe426eb336"
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/independent-probes/ssh-regression-after.json",
+      "sha256": "c0f5bdb5bcc8c927634d0bf7b975c07bf51562b48c29e3e262ca935a1a622a77"
+    }
+  ]
+}

@@ -13,3 +13,5 @@ docs/changes/20261117-skill-usability/evidence/implementation/context-optional/r
 docs/changes/20261117-skill-usability/evidence/implementation/context-optional/red-tests-valid-profile.log -whitespace
 docs/changes/20261117-skill-usability/evidence/review-fix/workflow/cumulative-owned.diff -whitespace
 docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-tests.txt -whitespace
+docs/changes/20261117-skill-usability/evidence/full-regression-fix/cumulative-owned.diff -whitespace
+docs/changes/20261117-skill-usability/evidence/full-regression-fix/red-tests.txt -whitespace

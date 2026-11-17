@@ -1,0 +1,144 @@
+{
+  "manifest_raw_sha256": "f5703ddff0c58822e5e452092d4497eb9ab19d36033108b0fcdaac78ecee906c",
+  "cases": [
+    {
+      "prompt": "立即进行 SSH调试：登录生产设备，抓取日志并执行诊断命令。",
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-systematic-debugging",
+        "intent": "systematic_debugging",
+        "intent_zh": "调试/调试问题/诊断/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障/aclocal缺失/aclocal/automake缺失/Autoconf工具缺失",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [
+          "adk-lightweight-planning"
+        ],
+        "task_mode": "debugging",
+        "mutation_permission": "deny",
+        "artifact_mode": "readonly",
+        "risk": "medium",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [
+          "reproduction evidence before root-cause claim"
+        ],
+        "runtime_role": "primary",
+        "selection_group": "debugging",
+        "effect_ceiling": "diagnostic-execution",
+        "effect_scope": "host-system",
+        "effect_operation": "diagnostic",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "只读 SSH调试：检查连接并诊断设备日志。",
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-embedded-remote-debug-log-triage",
+        "intent": "embedded_remote_debug_log_triage",
+        "intent_zh": "远程调试/设备端调试/嵌入式日志分析/串口日志/boot log/dmesg/设备日志/GDB远程/带日志远程GDB/现场日志/core和日志/OTA日志/prog日志",
+        "supporting_skills": [
+          "adk-systematic-debugging",
+          "adk-offline-core-dump-triage",
+          "adk-embedded-diagnostic-harness",
+          "adk-token-context-governance"
+        ],
+        "fallback_skills": [
+          "adk-systematic-debugging"
+        ],
+        "mutually_exclusive": [],
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "artifact_mode": "readonly",
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "debugging",
+        "effect_ceiling": "diagnostic-execution",
+        "effect_scope": "host-system",
+        "effect_operation": "diagnostic",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E0",
+        "effort_basis": "explicit-readonly"
+      }
+    },
+    {
+      "prompt": "诊断这个 Python 脚本的异常",
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-systematic-debugging",
+        "intent": "systematic_debugging",
+        "intent_zh": "调试/调试问题/诊断/排查根因/问题排查/定位根因/真实问题排查/根因未明/排查偶发死锁/排查死锁/UBIFS只读故障/UBIFS并发写/UBIFS变只读/SquashFS只读异常/df显示100%/文件系统只读故障/MQTTDNSresolutionfailed/DNS解析失败/Buildroot构建失败/Autotools缺少aclocal/Autotools构建失败/Yocto构建失败/电机过流故障/aclocal缺失/aclocal/automake缺失/Autoconf工具缺失",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [
+          "adk-lightweight-planning"
+        ],
+        "task_mode": "debugging",
+        "mutation_permission": "deny",
+        "artifact_mode": "readonly",
+        "risk": "medium",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [
+          "reproduction evidence before root-cause claim"
+        ],
+        "runtime_role": "primary",
+        "selection_group": "debugging",
+        "effect_ceiling": "diagnostic-execution",
+        "effect_scope": "host-system",
+        "effect_operation": "diagnostic",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "核对现场诊断和设备交付准备",
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-production-field-readiness",
+        "intent": "production_field_readiness",
+        "intent_zh": "量产/产测/烧录/现场诊断/现场维护/OTA升级/回滚/RMA/设备健康检查/production-field/field readiness/embedded-production-field-readiness",
+        "supporting_skills": [
+          "adk-release-versioning",
+          "adk-integration-hil-sil",
+          "adk-verification-before-completion"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "field-readiness",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    }
+  ]
+}

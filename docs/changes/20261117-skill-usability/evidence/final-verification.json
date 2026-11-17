@@ -1,0 +1,104 @@
+{
+  "verified_at": "2026-11-17T07:06:01.106886+00:00",
+  "source": {
+    "base_commit": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+    "head_commit": "a2b90b64d3ba83ac0c856ddb6a541450ead1bd36",
+    "tree": "53534d897a42e816525e310aa28134751ca5783f",
+    "changed_files_verified": 191,
+    "tested_source_files_verified": 650,
+    "original_patch_sha256": "21dcecb8567e84e0bf3818185f3281827812d8d65dcf73a213e394578aeac414",
+    "original_patch_bytes": 1892765,
+    "regenerated_patch_identical": true,
+    "post_source_snapshot_changes": [
+      ".gitattributes"
+    ]
+  },
+  "final_evidence_index_files_verified": 28,
+  "full_regression": {
+    "command": [
+      "bash",
+      "tests/run_all.sh",
+      "--timing-json",
+      "/workspace/scratch/fe8de3b42084/skill-usability-validation-release/full-regression-timing.json"
+    ],
+    "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+    "started_at": "2026-11-17T06:57:04.173019+00:00",
+    "completed_at": "2026-11-17T07:02:47.745648+00:00",
+    "duration_seconds": 343.573,
+    "exit_code": 0,
+    "source_files_sha256": "e3819593e8e8b4b1eacd0e396ab0fc32d007b3d4083f70da531155ada7cdb4e6",
+    "log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+    "suites": 102,
+    "passed": 102,
+    "failed": 0,
+    "independently_counted_log_records": 102
+  },
+  "quality": {
+    "fresh": [
+      "strict",
+      "format",
+      "release-check",
+      "target-static"
+    ],
+    "reused": [
+      "module-size",
+      "ruff",
+      "focused-ruff",
+      "mypy",
+      "pip-audit"
+    ],
+    "all_log_hashes_verified": true,
+    "changed_snapshot_inputs_since_previous": [
+      "manifest.json",
+      "skills/adk-systematic-debugging/SKILL.md",
+      "tests/test_skill_trigger_matrix.py"
+    ],
+    "dependency_declaration_unchanged": true,
+    "reused_logs_identical": true
+  },
+  "exports": [
+    {
+      "target": "claude-code",
+      "entries": 65,
+      "support_files": 54,
+      "files": 119,
+      "inventory_sha256": "84f4fd3474576492e00ebe45e98e5418347c21e143c48dd00a24abbeb23c6902",
+      "actual_export_and_support_bytes_match": true
+    },
+    {
+      "target": "opencode",
+      "entries": 65,
+      "support_files": 54,
+      "files": 119,
+      "inventory_sha256": "819ff88c80d9a67adba8bfcc24e637a6461843a88fb46bbff2728f0d76507d7a",
+      "actual_export_and_support_bytes_match": true
+    }
+  ],
+  "ratchets": {
+    "passed": 8,
+    "tightest_profile": "large-refactor",
+    "potential_full_source_bytes": 323274,
+    "potential_full_source_ceiling": 323328
+  },
+  "independent_final_routing": {
+    "implicit_context_cases": 17,
+    "specific_vs_generic_owner_cases": 13,
+    "final_file_hashes_match": true
+  },
+  "consumer_payload_revalidation": [
+    {
+      "consumer": 1,
+      "errors": [
+        "missing fields: context,constraints,done_when,primary_action,action_mode,verification,artifacts,blockers,work_item_kind,question_to_resolve,evidence_required,implementation_permission,exit_gate,handoff_target,retention_decision",
+        "unexpected fields: cross_field_checks,global_constraints,handoff_blockers,interfaces,owner,package_id,ready_to_handoff,schema_version,scope_read,scope_write,tasks"
+      ],
+      "valid_v2_payload": false
+    },
+    {
+      "consumer": 2,
+      "errors": [],
+      "valid_v2_payload": true
+    }
+  ],
+  "mismatches": []
+}

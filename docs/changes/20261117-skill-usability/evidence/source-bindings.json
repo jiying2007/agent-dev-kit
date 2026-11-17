@@ -1,0 +1,1348 @@
+{
+  "base_commit": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+  "head_commit": "a2b90b64d3ba83ac0c856ddb6a541450ead1bd36",
+  "head_tree": "53534d897a42e816525e310aa28134751ca5783f",
+  "verified_at": "2026-11-17T07:00:12.502774+00:00",
+  "transport": "authorized GitHub Git Data; local temporary-index tree equals fetched remote tree",
+  "original_patch_sha256": "21dcecb8567e84e0bf3818185f3281827812d8d65dcf73a213e394578aeac414",
+  "tested_source_files": 650,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "git_blob": "f2c3a5e3fd403a9c7a743ac1b8fd46295192569b",
+      "sha256": "7262c50dd62526f41c77e63f4cbf0f6f2f6ab20691a76d9ac83d4dc6a29bc30c",
+      "bytes": 1448
+    },
+    {
+      "path": ".version-lock",
+      "mode": "100644",
+      "git_blob": "431247b5301308cd1a1855eeb70d3531a7482f79",
+      "sha256": "df0b67f0d9831fc5e7d10c8a7225d89d7c52fae213f8642f36ac74bf7ba60f95",
+      "bytes": 84
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "git_blob": "0ec1abb1bdad41323daf9844a5e03c713e443299",
+      "sha256": "849715a1fb35551a792989b3581602711bc80c905c1746d84d577ec9111ffbec",
+      "bytes": 108958
+    },
+    {
+      "path": "CONTEXT.md",
+      "mode": "100644",
+      "git_blob": "41c8312453f84482f4bd5582c612879a3e0cc9ff",
+      "sha256": "d2680cbf98088c0a625c46d73a3268e04a5a4526298dd11fcf8d8006d239abda",
+      "bytes": 8644
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "git_blob": "0511e3fecef0a473d25a3356c93dbec6c5f57ddc",
+      "sha256": "5ad8a2ad82963019ab05981bfd1e03b6e2d269da3ae0e9f7837f8178544ab7b3",
+      "bytes": 13087
+    },
+    {
+      "path": "docs/agent-skill-catalog.md",
+      "mode": "100644",
+      "git_blob": "7737d6093f69aaa326592231148f6a13e7edc0df",
+      "sha256": "d4fbca3d6583183132806699e0d379b5086fbad1d0fe16297397c8f5750d3efb",
+      "bytes": 38526
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/design.md",
+      "mode": "100644",
+      "git_blob": "4490483e8f0d0acf464da2db8353f2e84df8d6b6",
+      "sha256": "3428c6c9ef98a419cf0f3e2c29054099fa58b7e0e722508ad0737b5238ebef63",
+      "bytes": 4324
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/audit-correction.md",
+      "mode": "100644",
+      "git_blob": "74f47628519a2188b9ecd8171774c990c99d5498",
+      "sha256": "078e6b81dd3cee1785b5a3f6f756176441edea71aba3e5678ccc5a3199dd54b4",
+      "bytes": 2574
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/claude-code-export-manifest.json",
+      "mode": "100644",
+      "git_blob": "3fb521573badf1b6598e20a3395aead1db0f6040",
+      "sha256": "04f8be2c3cf7f8dd8bcb289948dee86e8457bea8a28b525214595aa0cb2b61d2",
+      "bytes": 26411
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/coverage.json",
+      "mode": "100644",
+      "git_blob": "d79f71f370f68177ce803b110410bac5ac522d53",
+      "sha256": "ef0723032a6ebce1d81e29156a4467b07e0b8ea3de14941e1eb024e583c30520",
+      "bytes": 12115
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/export-coverage-control.json",
+      "mode": "100644",
+      "git_blob": "d80507005d72b111c271132f6ad57a4fbeab296b",
+      "sha256": "15135c022d114d031e3922a464d7deb1d8865cacb3cfb9466b8b1b5610148bfb",
+      "bytes": 521
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/negative-results.md",
+      "mode": "100644",
+      "git_blob": "52090dbfc195d3b155b36153b6f6e61248119dd4",
+      "sha256": "0d9afe4c740081795011ab7d7606399f21ecbe33f9628d5af906cdf558af680a",
+      "bytes": 3012
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/opencode-export-manifest.json",
+      "mode": "100644",
+      "git_blob": "64a20278b5a4bc0e95fed8f3bb8319cf87ba0b60",
+      "sha256": "2ff5543b0686cd22a291d86fbf9ea9a2cfb2c3f76b762d51b1a8514e00847ba0",
+      "bytes": 26408
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/report.md",
+      "mode": "100644",
+      "git_blob": "47e355b9054bf66fdd179c949fa1969630560d61",
+      "sha256": "ef458acadceb034c8afa8586263aded1669d2e9d1282fcfdd6a143a21dcd655a",
+      "bytes": 20138
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/audit-correction/context-optional/verify_team_export.py",
+      "mode": "100644",
+      "git_blob": "f8d0fa28daf6a31af0e6b7488318a107e9350c66",
+      "sha256": "ec6f177d98264955caf11312e29cab21721b27209d254b32d30c11ff8c7bdb47",
+      "bytes": 1407
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/audit-index.json",
+      "mode": "100644",
+      "git_blob": "13ad7f2865f6efa3614b5bd3c7c76ed0f4a547b0",
+      "sha256": "c26ae7b10052076c9d9e0543d639c4618fa3f807588f302049a1a91bb44e39b2",
+      "bytes": 5918
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/baseline-footprint.json",
+      "mode": "100644",
+      "git_blob": "c4f21d8f4952455b0c48485659c50f111f595276",
+      "sha256": "04ea7284cdbda680068bc7cc9d9445265d9058833f614b195f7103085342e43f",
+      "bytes": 4380
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/catalog-all.tsv",
+      "mode": "100644",
+      "git_blob": "600729e15a2aea36efab36bc8eaf927404b09fa5",
+      "sha256": "d6f681f761a9cc3c3478da2157d8cef2ef35f95fb1f250cd42c0d0c237d66a13",
+      "bytes": 17142
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/catalog-optional-skill.tsv",
+      "mode": "100644",
+      "git_blob": "ca2941855d4e0061100741c6de42305d166f2ba5",
+      "sha256": "1da0e10d9b84b7baaa256f62139aed0f57c281a32c95148bceee658b5fbcaac3",
+      "bytes": 2730
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/catalog-skill.tsv",
+      "mode": "100644",
+      "git_blob": "138090553a474a262c9416bb7932428ec18949f8",
+      "sha256": "775131a00beb884c9edfd5f6adfcb8fbf43b6a804ff7247c0fd247e16e2d5317",
+      "bytes": 13225
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/contract-edge-results.json",
+      "mode": "100644",
+      "git_blob": "e4282851b7825bba1b1ed14bfe92435edb7b4bb0",
+      "sha256": "71d22167648413649fb9ec2a0ee92c1cef1e4bb36bb2eec5199c9a74cb1c0d73",
+      "bytes": 4082
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/coverage.json",
+      "mode": "100644",
+      "git_blob": "f3e31f1c4e086056b4ece7458f796ed60bb9521d",
+      "sha256": "0e887725fc53afd9b79b0688b2f70a15a6e2cd4befb3b457ce7e180c45e0ea02",
+      "bytes": 11871
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/negative-results.md",
+      "mode": "100644",
+      "git_blob": "52090dbfc195d3b155b36153b6f6e61248119dd4",
+      "sha256": "0d9afe4c740081795011ab7d7606399f21ecbe33f9628d5af906cdf558af680a",
+      "bytes": 3012
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/probe-results.json",
+      "mode": "100644",
+      "git_blob": "d8c3e549872949065d906826a83806f73aa7a309",
+      "sha256": "119424d0969b8e69984d5c3252e02a84b357bbda5ebcdab26813463f07b81020",
+      "bytes": 304420
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/probe_context_optional.py",
+      "mode": "100644",
+      "git_blob": "a7956e4ab76536e019239abd64460453ca3e5476",
+      "sha256": "8b7d0514096d07dc76bcac2b6e9d478e60c8b906bfc839a27ac972919336b1ff",
+      "bytes": 7910
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/probe_contract_edges.py",
+      "mode": "100644",
+      "git_blob": "d5545077806932f2ef9cb372fe9e3d6f49f33ca3",
+      "sha256": "becc319ac945559b5d38c544a27989b315a5528d83962eadeaacb410bc754590",
+      "bytes": 5043
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/report.md",
+      "mode": "100644",
+      "git_blob": "88a89827ddda59b511eae52faae537c268bac0fb",
+      "sha256": "38d148c1a6dc5437f44b37a06dfe3b235ea7fef35d54cff9d084bba946aa0371",
+      "bytes": 19596
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/tests-contracts.log",
+      "mode": "100644",
+      "git_blob": "23513f4077063bb6f0fb42de3a72086724d1e75f",
+      "sha256": "cab500bab7073957b4f6a504381e37f6a242b1834e4db0b27984288610b52f31",
+      "bytes": 14724
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/tests-export-context.log",
+      "mode": "100644",
+      "git_blob": "b608bd560351b63e2421212e8f13246acfcd42b7",
+      "sha256": "db91cdfd9fb10e9265835d5216235805b597a61af535731b7497a2792dcc8316",
+      "bytes": 1096
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/tests-goal-convergence.log",
+      "mode": "100644",
+      "git_blob": "f0b56d98303021eeee498980690bfd0ee42e4e37",
+      "sha256": "e0f59f46037feaba7d720e2230aae964ed3cff24e5132755bbdb3319eaebde6b",
+      "bytes": 1701
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/context-optional/tests-methods.log",
+      "mode": "100644",
+      "git_blob": "cbfa238e18054c7e8de60d5f481eb640035eb290",
+      "sha256": "07feb332e643974d720f3bf4a9f4844e3ddefe8467e0f72e7bfc7a901097de9b",
+      "bytes": 6682
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/audit_repro.py",
+      "mode": "100644",
+      "git_blob": "d94c7ae64effb8d698ad03e9c4ed09fb79fc1f30",
+      "sha256": "31f8049933fd02a5f1b930befcf2fa07eaa110d414126c2974397bf7601a21dd",
+      "bytes": 11793
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/coverage.json",
+      "mode": "100644",
+      "git_blob": "fb80e2d24fae34d34bbcc9aefa6aa65069a34300",
+      "sha256": "37571b8fa59e7dfcbf1f5612f699ff689f625445502b9c03bb0054c7aef07c2c",
+      "bytes": 14904
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/exports.json",
+      "mode": "100644",
+      "git_blob": "b674b9fe1d5d749281452fbf63dbabaa4beabedc",
+      "sha256": "214f4231521bceb949a824d60f1f2d31f97fefa8b48873e070b453cef90b7156",
+      "bytes": 16906
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/report.md",
+      "mode": "100644",
+      "git_blob": "d2e1fd66e22e88c846ff3f0d613079c3f804d139",
+      "sha256": "3871ccde15e12702b80bff03aa58c1fe5ce1dacd0f42f2496df713dc94cd9dff",
+      "bytes": 16867
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/routes.json",
+      "mode": "100644",
+      "git_blob": "f9f29dab26efda230d44fd622e8f8a8d86d2a1c1",
+      "sha256": "d9aaf7110b19c384d60fa2d48992a9582ca3ecaa8d82ecc727affa4481531a62",
+      "bytes": 64070
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/rta.json",
+      "mode": "100644",
+      "git_blob": "1324e169dbbaf9ca9f60ae95c0bc0f7b647b63e5",
+      "sha256": "d6235cc05fdf5c410c3de0b7c5afe9738d50944dd1e01b07debe485096a6b5f9",
+      "bytes": 1751
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/targeted-tests.log",
+      "mode": "100644",
+      "git_blob": "c91e390b9709aeb4e20d0e7db63564441c0bea12",
+      "sha256": "53250e932bed94b992873820433d01001ca667b0792c86229960d6d539417451",
+      "bytes": 10540
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/embedded/tests.json",
+      "mode": "100644",
+      "git_blob": "f67ae90d32b609052bafcf9c610d221793ee3bb8",
+      "sha256": "17dff83e21626ae264bf946789068443222b398ea585c936dbb85d150c42f6a3",
+      "bytes": 1125
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/groups.json",
+      "mode": "100644",
+      "git_blob": "f9dcbff622734e0566fc3eab2758f4dcee67c849",
+      "sha256": "656c8c821b27f26e6786e4fb13fb53595d7f6ba9fa8551f5072158185c83c726",
+      "bytes": 8148
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/existing-tests.json",
+      "mode": "100644",
+      "git_blob": "16ed2e7a2a4a2477a5fe7d6d3b55b91c91be446f",
+      "sha256": "791808d1c55a0c3fc40caca93957a4deaf1aae6fae10cc7a5fcabbeda885ed0c",
+      "bytes": 1913
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/existing-tests.txt",
+      "mode": "100644",
+      "git_blob": "c22a8b21b5b2efe2209015556c835620048200ec",
+      "sha256": "afa246d21f0196dd1376be9bbfd402ab99e20a4fcc5e1c90c565455d3668d02a",
+      "bytes": 9783
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/exports.json",
+      "mode": "100644",
+      "git_blob": "4b4e2e44bb4b5cdc720c82decc26af47188b48e0",
+      "sha256": "81ba1a76fec92d258b93c0d94b02d9da2a748b760a2206f049d250c5fa296f68",
+      "bytes": 42604
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/identity.json",
+      "mode": "100644",
+      "git_blob": "5b6bbbddfc7b6af0369122e01ed3e513a1262fe7",
+      "sha256": "4682acca14cf6e57dc85ba505a29ae1cbeea1b288f71adb5fb444003afcf9083",
+      "bytes": 731
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/report.md",
+      "mode": "100644",
+      "git_blob": "f8bb4bb06835b37d91e75a8cb17978669aac3687",
+      "sha256": "af1bd1194a6b9289e9092dba4cc5b1748b7b7ca085a9fdedf6441a859b4f4c60",
+      "bytes": 26519
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/reproduce.py",
+      "mode": "100644",
+      "git_blob": "bc98a7153ae05b250dea48fa7187bf18ffd816a4",
+      "sha256": "cfadc80020cab50833fddc92db0422946ab9fe3f67234b1de45a01b7807d7482",
+      "bytes": 11288
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/routing.json",
+      "mode": "100644",
+      "git_blob": "1d2367d337e3376ff4b1689d47bed4aae0e5778d",
+      "sha256": "7f1577cc342a22baacbc6fd93385d77b27f22043ca9c954225b37a7d3c803a03",
+      "bytes": 18292
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/source-inventory.json",
+      "mode": "100644",
+      "git_blob": "37509d4e312c4f01072680ab56b4c9f7d19c7778",
+      "sha256": "a29c46e6591a5baf172ae191a0fa87b88fe682f4e2319b01d61c16e2b8c7dbb7",
+      "bytes": 33934
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/task-package-malformed.json",
+      "mode": "100644",
+      "git_blob": "95e9d55b07bc94355124bfad7cc3c0c6e13155fe",
+      "sha256": "4d10dd3e235fb41be5aca81e0ce8075625509342dd4d48089e72362a7b0382b4",
+      "bytes": 882
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/baseline/workflow/task-package-validator.json",
+      "mode": "100644",
+      "git_blob": "53913e84a5c66f6eebb033fbd3163ca35b1f53b4",
+      "sha256": "186fca390cd141957665a2f10ad575eddb3573c7677ef1da628ef37bffd5936f",
+      "bytes": 4562
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/consumer-observation/1/notes.md",
+      "mode": "100644",
+      "git_blob": "f60c0d04cafd1071d0dbc8be9c61765e6b93756b",
+      "sha256": "ba5b52a8001f8e63fa72aa22243f0b1493fb01b224c31db3a581f447b3ff18d0",
+      "bytes": 2078
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/consumer-observation/1/task-package.json",
+      "mode": "100644",
+      "git_blob": "62b89d1a7b44cde17f2926486f3dae794c781eca",
+      "sha256": "f09731c26f0add2231d01021cffb89fe0ab86b83055521bd66c0b2ead13b84b4",
+      "bytes": 9412
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/consumer-observation/2/notes.md",
+      "mode": "100644",
+      "git_blob": "522eb9fc57856c21516fd20fc3978d90488a1938",
+      "sha256": "dfef9fcf92d407fb2b0f77b6d0f33361dcf4d90542bc976bf15e92315ef86fd1",
+      "bytes": 5696
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/consumer-observation/2/task-package.json",
+      "mode": "100644",
+      "git_blob": "73691373621a0c316679939b571fdf41b0af2fa6",
+      "sha256": "2bfd1f3f8996a7a33ecfd20f0b6083f56ce394b61d4dae7dd899a3c13b94a94a",
+      "bytes": 7750
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/consumer-observation/README.md",
+      "mode": "100644",
+      "git_blob": "3510bd1d67ae2c41c3b00d81fa9a6610dcf82bc0",
+      "sha256": "ee9367bb12c8fe6ddbb32c0044724693556ca8f708b7287bc3dc2c2f27a218d2",
+      "bytes": 1979
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/consumer-observation/observation.json",
+      "mode": "100644",
+      "git_blob": "3f6b6d842ebca280b41e1de5763892fb6fe654e6",
+      "sha256": "01047a175d91bfc8c14f10f95219f473794adff9e668181d4c6b5b3b9a54920a",
+      "bytes": 2718
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/all-skill-verification.json",
+      "mode": "100644",
+      "git_blob": "c63a3937776e88e34d2ead3138b120849e4542fc",
+      "sha256": "a20ca5cb9f9d8d66f0c5d6d559f00235cc2ca92e8595ab6e1e0aa0b09283a27d",
+      "bytes": 17983
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/claude-code-export-inventory.json",
+      "mode": "100644",
+      "git_blob": "31b7d0a69836b3c14ab9dd67de882fcc6821553d",
+      "sha256": "29a21b58282ff1564d5051ce2f41c64332651c6c2856d00e3f9bb834eb86fb52",
+      "bytes": 39868
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/export-verifier-negative.json",
+      "mode": "100644",
+      "git_blob": "511ff5e0b39d11363a687515e1efa3019206b37b",
+      "sha256": "9e653745e3d208571e1ebf2d3b1b1a03e2f2eb124102a2da698a4af18794512f",
+      "bytes": 2259
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/focused-ruff.log",
+      "mode": "100644",
+      "git_blob": "1f5f344d054fae10f39140fb7199c99321d9190a",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "bytes": 19
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/format.log",
+      "mode": "100644",
+      "git_blob": "d30740009e359394289c37ccd820eae5c116d24a",
+      "sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1",
+      "bytes": 2251
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/full-regression-result.json",
+      "mode": "100644",
+      "git_blob": "6d600770583eec5a0706c36e0c203705455b42ce",
+      "sha256": "e53a7517feef99ac5cedd001fcb329ad8f614e486c92c4b6463e64582c4654e0",
+      "bytes": 575
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/full-regression-timing.json",
+      "mode": "100644",
+      "git_blob": "b41c894aef0983fbc88cc2156163be6ff90cd769",
+      "sha256": "8ee71e205688cafc0dd23ea49caa40841466e2c6e1b0946d04ffac7a4cbee512",
+      "bytes": 8224
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/full-regression.log",
+      "mode": "100644",
+      "git_blob": "0187e5e9d3098f8611f77e100b52029f67bc8bab",
+      "sha256": "cd235c737f138d433cc0f95fadbd78eafa354d222ae75b8c430e554acdf26b0c",
+      "bytes": 19556
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/index.json",
+      "mode": "100644",
+      "git_blob": "e556df40289f237683b445b04feebdd582441de0",
+      "sha256": "1cb1825515eca100edecdd7aa2934a2126759a07f6af9be4787796cac1f9b8aa",
+      "bytes": 3705
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/module-size.log",
+      "mode": "100644",
+      "git_blob": "72a0d3665bc24f016820280cae7f9af8f648b084",
+      "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd",
+      "bytes": 441
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/mypy.log",
+      "mode": "100644",
+      "git_blob": "79e5546e0f5272ebb03c454476e0078dc5f91fb3",
+      "sha256": "103f10fdbb5ad2b6ee08833a3e2b634aa94d13009cb96f89236e9d80e79aac15",
+      "bytes": 44
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/opencode-export-inventory.json",
+      "mode": "100644",
+      "git_blob": "dc7be27ae5c1bb9ac0d8fa31a9b8a3ee568c6f1b",
+      "sha256": "c9ff47982e2710b3456c52f04433302a48d32384079a2dee30f9dfa4e4395751",
+      "bytes": 39865
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/pip-audit.log",
+      "mode": "100644",
+      "git_blob": "5c418afc9a53c075fb2b41bfa8ed0b56fcfef5dd",
+      "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955",
+      "bytes": 31
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/quality-results.json",
+      "mode": "100644",
+      "git_blob": "b9c9beb7bd858c950296a780086dcf07ff78f887",
+      "sha256": "33331f19b34221729a0bf85594b07de6e6f7cd26094566c4cece8bdd25d4dba3",
+      "bytes": 4865
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/release-check.log",
+      "mode": "100644",
+      "git_blob": "7adaf4eaa04a8d36dbedbef9c8b3a7c25e2ecbd6",
+      "sha256": "757033095aa7507e1a48571a71cf5a8b565b2c1f2470469bc8b88eda0bdfe4ea",
+      "bytes": 433
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/ruff.log",
+      "mode": "100644",
+      "git_blob": "1f5f344d054fae10f39140fb7199c99321d9190a",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "bytes": 19
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/strict.log",
+      "mode": "100644",
+      "git_blob": "33db74f51be7501d48dcae34b6d1c43384cf526b",
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848",
+      "bytes": 36
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/target-static.log",
+      "mode": "100644",
+      "git_blob": "2debe108974cbb44ffb6dcf6aae112b0a4c56740",
+      "sha256": "4ff56721bd6efefc0ab15e08be7e50ec14ede0e6e9f45a369ed5ab5d2f1d1439",
+      "bytes": 3160
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/first-full-run/tested-source-files.json",
+      "mode": "100644",
+      "git_blob": "0008e5c7112bf16c685d492f22eb1f08eb11353b",
+      "sha256": "112247824afa94fba5a9a0ccf49dae33916f97d08dedb14956eb98db92acd57c",
+      "bytes": 75589
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation-index.json",
+      "mode": "100644",
+      "git_blob": "b36681dce719335bca6bca103d24b1741fe3cbba",
+      "sha256": "3cded272462858082f345a54b1fc68451e01036bc5a561b7dd8688ad14ec0130",
+      "bytes": 18312
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/final-consumer-tests.log",
+      "mode": "100644",
+      "git_blob": "49f836ea6deb0a0fe1a3787b3a7f0c62c5758bbd",
+      "sha256": "17c4e3883005b44b747d5bd045a8add1345a8369d478d1075997f944794e478d",
+      "bytes": 1063
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/final-strict.log",
+      "mode": "100644",
+      "git_blob": "33db74f51be7501d48dcae34b6d1c43384cf526b",
+      "sha256": "217441b0093d06aee8580867f6b676d59324c8118079d0f1be5a8ccf88043848",
+      "bytes": 36
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/green-final-targeted-tests.log",
+      "mode": "100644",
+      "git_blob": "f61f7d0672c10c30aca25bea16c6d2fa20a9562a",
+      "sha256": "7824ffd724c69e055cbcf15887044c32e348c21b6448ac76a3429595c9365624",
+      "bytes": 3539
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/green-targeted-tests.log",
+      "mode": "100644",
+      "git_blob": "72c6ded677a18a2837d1f16252cfb9e5e40fd9f6",
+      "sha256": "42e79df31a0ea6ba49fbeb9f5b8d510c7aaa024eb43c3eef989de39269dbf1c5",
+      "bytes": 7196
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/handoff.md",
+      "mode": "100644",
+      "git_blob": "8ecc5e23bd46e3586b5cfb19dd3d1983fe77e3e6",
+      "sha256": "8fdd99943aa3b36be2d0e0c2c0b523b41f0a90bd1b4d409f12b5f99c75b61480",
+      "bytes": 3578
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/negative-results.md",
+      "mode": "100644",
+      "git_blob": "dc98aad7186b564637557121545408e1df4a0bdc",
+      "sha256": "18739dce9b527bd034a0e7788de28d53f3ed4a8b7fc37b46c3c62834c0be7944",
+      "bytes": 2051
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-final.json",
+      "mode": "100644",
+      "git_blob": "c608f2fc963ac394c7efadbdbb2f282355513352",
+      "sha256": "0c3bbe4fee0165fca9bdc2778bae73437910d46a35e15dd1481987db76f3b48d",
+      "bytes": 4380
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-green.json",
+      "mode": "100644",
+      "git_blob": "874bfedb4c513097eeede53df987b381b409f16c",
+      "sha256": "c0075f15b369f8c3bebb4d0ef5c15d2fdfcdc98f2511f0122da7116e4f1555f6",
+      "bytes": 4456
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-intermediate.json",
+      "mode": "100644",
+      "git_blob": "874bfedb4c513097eeede53df987b381b409f16c",
+      "sha256": "c0075f15b369f8c3bebb4d0ef5c15d2fdfcdc98f2511f0122da7116e4f1555f6",
+      "bytes": 4456
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets-red.json",
+      "mode": "100644",
+      "git_blob": "e5a1c1216e09a3aa8e3f3b6216e27361e804a8c8",
+      "sha256": "3306ae075bf9df1a5871b26f0f83c50b7a64de7e66577587c66e5eb104355be9",
+      "bytes": 4456
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/ratchets.json",
+      "mode": "100644",
+      "git_blob": "e5a1c1216e09a3aa8e3f3b6216e27361e804a8c8",
+      "sha256": "3306ae075bf9df1a5871b26f0f83c50b7a64de7e66577587c66e5eb104355be9",
+      "bytes": 4456
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/red-tests-valid-profile.log",
+      "mode": "100644",
+      "git_blob": "b8399fac88bb64b03ddd827f3525daae12aeba97",
+      "sha256": "c96b1ca12008704f1109b9aff1dbb8e0854d011287bc623e790bc92d99455367",
+      "bytes": 13626
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/red-tests.log",
+      "mode": "100644",
+      "git_blob": "4e2764a0b5de08a0e4976aa6988632d620929c91",
+      "sha256": "520036826872486376957fcca8f803decab6a30102beb038e8b5b76f9f8c0b08",
+      "bytes": 14173
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/context-optional/source-files.json",
+      "mode": "100644",
+      "git_blob": "a8cdee5389ac803c6f9b8973c80a7c34e85facea",
+      "sha256": "5e52b7132a27d76212d0abfa567e7116407ba8199a4a3fe5f76256f8117c645b",
+      "bytes": 1085
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/implementation-status.md",
+      "mode": "100644",
+      "git_blob": "e5fe99dee3bf4db1940a079d68274a62602ef806",
+      "sha256": "abdaa15b3d86fe6ff498cfb83095efb8f97510acec6f34ce3de856e80b371607",
+      "bytes": 3110
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/negative-results.md",
+      "mode": "100644",
+      "git_blob": "fb40ed78960f0e3de14041469319402a243abb3f",
+      "sha256": "4034e4e6d019342646be0c376a0eaf6c6876aec5b4d6afd70400c1760d1414a1",
+      "bytes": 1416
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-exports.json",
+      "mode": "100644",
+      "git_blob": "d31a92f6dcf16978ad9a9745437a04071c33f7ad",
+      "sha256": "d9e9b93070bf4bd6c5fc7dd7f9add5fae63f2800707d6c171c08b7916b8700a5",
+      "bytes": 2029
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-routes-green.json",
+      "mode": "100644",
+      "git_blob": "9b72d4198838b21a64ccc36e0426109f800adf4f",
+      "sha256": "b2f5b2102146d37bdfb83025125d29d2d16de94b87f0e3f273a670206fc5288e",
+      "bytes": 11919
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-routes-red.json",
+      "mode": "100644",
+      "git_blob": "cd44e9ff11744611beed9ccd86473ca5a0c56a48",
+      "sha256": "7975208954209854880c7132005e034a874ba56a1bf9e358308baf17f3d5cef3",
+      "bytes": 9731
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-rtos-green.log",
+      "mode": "100644",
+      "git_blob": "ab1c53a18f68084ac64ad948e1dbae4186263fb1",
+      "sha256": "8f987ab2a14279821b8db6f44dc67d12a6994a670fbd439bd741e3e09566cc94",
+      "bytes": 1019
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-rtos-red.log",
+      "mode": "100644",
+      "git_blob": "5bb1895ffe870c866d57055d1fcddcf701054ac5",
+      "sha256": "edbac806928d3b347837081e2bf9e89566c323e7f28ca7cce4803e054bed31b2",
+      "bytes": 1872
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-soc-control-red.json",
+      "mode": "100644",
+      "git_blob": "e58ad78480a55d7b46a7852c8e90833edf71ccac",
+      "sha256": "65ca803a80b81178455f9b6f895e15bf95d850e2d8d215c30f1200a4764d8a9d",
+      "bytes": 11331
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a-source-delta.json",
+      "mode": "100644",
+      "git_blob": "4650486022e812f1c69b90da2c71e06eec985afe",
+      "sha256": "6bf8de1f4b36f09f13ed199bc4b9d5f4845d7c70eabaf3904c690cb65451a922",
+      "bytes": 797
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a.diff",
+      "mode": "100644",
+      "git_blob": "42a5d355b36f2d7d37f204708667e7ede65549e6",
+      "sha256": "98b8268982434db98c470d9931b93cf2c76e14f9f754fb696e6b9038b9c61faf",
+      "bytes": 7613
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/embedded/t3a_checks.py",
+      "mode": "100644",
+      "git_blob": "baf83716d8bff6bc55602e4fc2cad2d5915c358b",
+      "sha256": "aef3cc5885e76b9b6627b2e9b8c5008434f27c8b4797cc9120abf3093188bb47",
+      "bytes": 2241
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green-attempt-1.json",
+      "mode": "100644",
+      "git_blob": "f0d4f7e8d2beee92b9f0b8083a55c519b37951a2",
+      "sha256": "4874e4c8e8892a52c4bf64cd0c00aed667a6faebe2d3fe34345f098347b74c5a",
+      "bytes": 480
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green-attempt-1.txt",
+      "mode": "100644",
+      "git_blob": "c96f3b96bdbcdc17e6976dc5b9c3e68062d92920",
+      "sha256": "38c518b323d2478e7424beeed600efa1c5c88ffc543ed19677689730b0bb7897",
+      "bytes": 11268
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green.json",
+      "mode": "100644",
+      "git_blob": "c45a68e1fe962fbcbe892941ccc0771afa321f03",
+      "sha256": "924e3f144c0799a80d4049eb7adc80837ea5e1e0c461b515599ff18fd7ec6126",
+      "bytes": 470
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-green.txt",
+      "mode": "100644",
+      "git_blob": "e48179c544a5f459ba4bf26e9cf52d72051ac66a",
+      "sha256": "76a6e3091f52de7ffd261a4a54e601d221cc59edd54f24ff855cd678ade48c07",
+      "bytes": 9207
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-red.json",
+      "mode": "100644",
+      "git_blob": "8aaadbae4fb401a175e465456d8e8ee35348dc71",
+      "sha256": "bcdc04ef7eccf5f26a3163de47755c415788cd5ffe01cf972d9e7cbbb17463c5",
+      "bytes": 1273
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-red.txt",
+      "mode": "100644",
+      "git_blob": "78aae22b4e11fc1c56f25be17e0db8ae79dacaed",
+      "sha256": "09f6b980f469331bd38eb66fed26e36a825e2ad61cef5423c103d93a7504d49f",
+      "bytes": 50279
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/implementation-status.md",
+      "mode": "100644",
+      "git_blob": "1eac514c70a8fbe4994d0966ba34123245304593",
+      "sha256": "405eb00c39d36dd9a45d9bca5a7a546e0ad5695a991cb58370606975501ac3c9",
+      "bytes": 6691
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/intent-boundary-gate.json",
+      "mode": "100644",
+      "git_blob": "a447e77b3455163a7f08c3d7f3a5c8cf32e6bf72",
+      "sha256": "1c7fe086d3ba24718082da62fe99b9e92b3ebd3fdbc640ca1d8b05b4d3e8ffdd",
+      "bytes": 2256
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/intent-boundary-gate.txt",
+      "mode": "100644",
+      "git_blob": "a123f4e10245d7772b54bf4906a53e9d7b4681c4",
+      "sha256": "7f30b987f7db3397fc30ba8fec179ce6d3b569a04f1420a58928977617e5582f",
+      "bytes": 1925
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/skill-content-gate.json",
+      "mode": "100644",
+      "git_blob": "821f457d78cad085a68867d8777cc4efa86582e9",
+      "sha256": "68993b117b5fea416cf32f1047a20d4ae7b1649bc1e8b2a2854bc68f6ce2bb64",
+      "bytes": 45792
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/skill-content-gate.txt",
+      "mode": "100644",
+      "git_blob": "f0ab669e4e2cefacff3fd1bd97273cddddd50618",
+      "sha256": "b55ce0ca9f6e76b403eddac77a29ad4dc1439a0dd1598ea49950ed8997ff059a",
+      "bytes": 44738
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff-unavailable.json",
+      "mode": "100644",
+      "git_blob": "c300b9bcc3e3675933b319af09ebaed3df4a1a12",
+      "sha256": "afab3093f3cdf1e76d93d945555b02c0ee7fdf2adfe5583d6023fafb269b141e",
+      "bytes": 603
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff-unavailable.txt",
+      "mode": "100644",
+      "git_blob": "faaef8c18409b300a916ac3fdda80dddbd384ba3",
+      "sha256": "4b121d715eaef49e82746adcb0a5a04c3ab6c33ac12a2130411416f98ae9cadd",
+      "bytes": 96
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff.json",
+      "mode": "100644",
+      "git_blob": "b395e5e6d87cec96479c1fd6314f7cd252e8f9c2",
+      "sha256": "f4f72bc789f0df862003fedb2c3ab3584c3b2aab499656a30db4c5b8eaeff7be",
+      "bytes": 497
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-ruff.txt",
+      "mode": "100644",
+      "git_blob": "1f5f344d054fae10f39140fb7199c99321d9190a",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "bytes": 19
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b-source-delta.json",
+      "mode": "100644",
+      "git_blob": "fb6536dd9a2d7d2bbe49dfcd9a2834d3038cac97",
+      "sha256": "cbc030976660f698fa13a752cb1de23f1392b4d1c2ef7561df909943b8c2f3f5",
+      "bytes": 2932
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/t3b.diff",
+      "mode": "100644",
+      "git_blob": "304b06490e062d1becad676fc0b01dab49039d6d",
+      "sha256": "6364883b28fb4741c16fbbdc1b05822ae9138a25bca9918a1656c2c7d50751d3",
+      "bytes": 37154
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/trigger-matrix.json",
+      "mode": "100644",
+      "git_blob": "8132fa3d85ec5b65b7cab78ef60a044909ef3eb9",
+      "sha256": "5a68512fd4a374e2d0178eb87222a262890eda65e5400f24d6f6525a4e8bcc54",
+      "bytes": 5386
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/trigger-matrix.txt",
+      "mode": "100644",
+      "git_blob": "ee4f74d961a4f195e82aff636464d35deadf5e24",
+      "sha256": "c42836eb8170048a63b4e9c51c2ac3701ce798ec4d440d44e065442b4d22ef13",
+      "bytes": 4932
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/implementation/workflow/verify_implementation.py",
+      "mode": "100644",
+      "git_blob": "c679b7f7488ab094eb2bcc242f844af89f2ca28e",
+      "sha256": "13ed6ce7d1417e36ab494e61e245206709bcfd8b107e5e7b01d3fe589ca6fe75",
+      "bytes": 2209
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/all-skill-verification.json",
+      "mode": "100644",
+      "git_blob": "276fe34ff795a0463483b71c765d68e5882c277c",
+      "sha256": "9f72d9a71c2429ce5ea056791b1b14ee55a68355384cfc6b68cf0b49af285a11",
+      "bytes": 17020
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/full-regression-stopped.json",
+      "mode": "100644",
+      "git_blob": "992fb35d1e1754355551824b5acbdbda1b9738d4",
+      "sha256": "a0d14047fd868c690a660163f5bf5f67b677c41a8d975bb0bb479107a063eeef",
+      "bytes": 744
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/full-regression.log",
+      "mode": "100644",
+      "git_blob": "cc1d65a5f37f983f5edd4d9da55a4c6f9d0917c5",
+      "sha256": "1c299cb50ff8ea63f5188ec1794c8d62e67ddbba4c196bf19ad2ee01d049a019",
+      "bytes": 1259
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/quality-results.json",
+      "mode": "100644",
+      "git_blob": "09c61908416d89a03602b724b0744aee95786b2a",
+      "sha256": "75e706765dc2ce3b587bf4d1de0e690ac2d194a9d359c0097a20e7ed76ce8455",
+      "bytes": 4010
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/pre-review/tested-source-files.json",
+      "mode": "100644",
+      "git_blob": "4a6bf3fa3e0d8066e4d19f7508e6bfad3923c873",
+      "sha256": "9cbd841ce2a8b148e9a7b49b0709c8196c4cba3cbc466cdea05dd097857802b5",
+      "bytes": 75400
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix-final/index.json",
+      "mode": "100644",
+      "git_blob": "b40664e4edfd3c9c5b8060f566cbe62e92498e6e",
+      "sha256": "4c597ee152bfab8792f15fd44f8a7e56791fd412304cbda86e0d8185b6366434",
+      "bytes": 5336
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix-final/workflow/green-probes.json",
+      "mode": "100644",
+      "git_blob": "69617f2244370a0d7d778502e2a10cf455dfbf93",
+      "sha256": "db51e1b0e5cd8adb9601f18c22f5bc404da0e3edf8c9d02124bad1d5d45044bc",
+      "bytes": 7882
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix-final/workflow/status.md",
+      "mode": "100644",
+      "git_blob": "1abd738a8a3192ccd77b231f9bfed4d2775b9956",
+      "sha256": "f0d8bbf0e844636128070b21c091650d86697bb40f40b2696b120975c96391c0",
+      "bytes": 4565
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix-index.json",
+      "mode": "100644",
+      "git_blob": "3a0e2c9fd143e5de2dd7b6506ddcda4eaddcd408",
+      "sha256": "9eefbe578b18454f67ba554aaedf842d5ee41bf55c668200c850ef90536e7d8c",
+      "bytes": 7208
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/change.diff",
+      "mode": "100644",
+      "git_blob": "c8b0651837e2096ad33c7fc3ac743f61c9112147",
+      "sha256": "1d9042859a8b806054f14586ce0d196d3e0b869cdcee737bdb553fa9a66e8bac",
+      "bytes": 368
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/fix-note.md",
+      "mode": "100644",
+      "git_blob": "802390e6d0937f3d8e58038723e4a154ddf4323f",
+      "sha256": "016bc843f80bb376f91440420a0e9467592ac26d0a47364d7a17cdab1de9a19c",
+      "bytes": 2364
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/green.json",
+      "mode": "100644",
+      "git_blob": "4997fd56eff44cdef4bc5e53a95d369d5c7edc40",
+      "sha256": "158ce2a9bd296b3b815abb93376568523bb7d7666b0dd6b6b4244b25cc5549ef",
+      "bytes": 8199
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/red.json",
+      "mode": "100644",
+      "git_blob": "0c78c682d9b6a0c36473bbe40744abd2cc39b083",
+      "sha256": "73c4d729761e82967f0348633bd1c33977dfa591e5a394aced219250332d1891",
+      "bytes": 7593
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/summary.json",
+      "mode": "100644",
+      "git_blob": "634285c1fedff969f761980a9b0f6152dd5d18a7",
+      "sha256": "60ef9a152bd6b63da005a2c5f2d6124c8d1031bc1f999c105b2c537aa1e0e5dc",
+      "bytes": 1947
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/embedded/verify_vxworks.py",
+      "mode": "100644",
+      "git_blob": "22d0ddb4b745bd5e5b262100516b44122cc973cb",
+      "sha256": "b2138d026a4500b62f011b233f817804d059d21c58b72c6043c4ddb20c76f665",
+      "bytes": 2726
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/cumulative-owned.diff",
+      "mode": "100644",
+      "git_blob": "e1c111594d5cb0f642d5eb73354d91985289e995",
+      "sha256": "82376f9b6d62f634f69e89d8b2d7f1533a01a8aff3e605a78a4773d8cc8e9569",
+      "bytes": 11622
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/green-probes.json",
+      "mode": "100644",
+      "git_blob": "2927dee87237c69b0d444555b943f7a7f2be2296",
+      "sha256": "4a8b5891051099d0bac4397a5db58ba40171ca234f6c7172a1127351de70d473",
+      "bytes": 7882
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/green-tests.json",
+      "mode": "100644",
+      "git_blob": "4a9b503d50ea06dcc59709b6e43ab9bf948cd03a",
+      "sha256": "661ffbcb686abf24d79ea4be82f486cbabe568cb6e3ec6afd5ed06b651be1f6e",
+      "bytes": 5532
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/green-tests.txt",
+      "mode": "100644",
+      "git_blob": "2041d673c1b8d71d0050fa4e65d0787a20a5b8f5",
+      "sha256": "9319a9e0fce41f204602669d04e907c18f4e9c4d85bf2b491f1849fdb618fec3",
+      "bytes": 5141
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-boundary.json",
+      "mode": "100644",
+      "git_blob": "d44272e95ebecdb47c29084d2873eee8d36b5756",
+      "sha256": "89717375a7aaccf63889e7a060fa49f06296e36888b5da03f3fc19b953338ef1",
+      "bytes": 3352
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-boundary.txt",
+      "mode": "100644",
+      "git_blob": "485ea8019064d6f1dc284d6a7e866f3fb366ee2e",
+      "sha256": "d31f128a2c2f4ea29688e46fdf620be8cbd361aa0d1deb4b58b61dd87b93d116",
+      "bytes": 2598
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-effectiveness.json",
+      "mode": "100644",
+      "git_blob": "bac73dd30f8fadab1563b81ef81c822b002f1127",
+      "sha256": "97b6f48cf4da1076d4df597debe423b926ca0d9d6e0f9d46f177a19bd5654418",
+      "bytes": 4115
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/match-effectiveness.txt",
+      "mode": "100644",
+      "git_blob": "a5ffd9799a2e97843f107f3b81f2e011b5718968",
+      "sha256": "ed63274218786e390b7cec8a2481465f6061b5c0e2688f6c7240d4a526306120",
+      "bytes": 3335
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/module-budget.json",
+      "mode": "100644",
+      "git_blob": "a5cd622e46cd7453f80234ced3439ec07d321861",
+      "sha256": "abc22d7c12ac203f84e13d8ab4fe96cfcfd9b47e7676635fc014f87c2e6a0d37",
+      "bytes": 776
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/module-budget.txt",
+      "mode": "100644",
+      "git_blob": "72a0d3665bc24f016820280cae7f9af8f648b084",
+      "sha256": "6c6b313dcfabe67bf7fa40bd9e9e9770042fa81711595bd093055aff9608bfbd",
+      "bytes": 441
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/mypy.json",
+      "mode": "100644",
+      "git_blob": "aea14cafb1e5323a5d5f7ffd2455b01be242999d",
+      "sha256": "6c44f7d22584093f157499239b2f7a6fd24d92388296a26d7489490f17e4622b",
+      "bytes": 446
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/mypy.txt",
+      "mode": "100644",
+      "git_blob": "8539cd2ed98cd05e81db9dc93832e897c1d2a470",
+      "sha256": "5d4b6d285b77932e3d08212c3b4974d0a803f98ec60408ac6ccf6a063fa6c19e",
+      "bytes": 42
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/probe.py",
+      "mode": "100644",
+      "git_blob": "87824393da7d92249f915276f5bb8ecfe2fdd42b",
+      "sha256": "97088bbd0520be49642e8be817a1eb35292f348856d0d81eeafb34b7b60dc256",
+      "bytes": 2872
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-probes.json",
+      "mode": "100644",
+      "git_blob": "f8a643bbfd9812d5d6b8d80dd9a5f52045a5aca4",
+      "sha256": "70d027e8fb14535bc8ecd79dc051fa3879e28d47b7dc18a0dba31f106f4dac25",
+      "bytes": 6312
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-tests.json",
+      "mode": "100644",
+      "git_blob": "d4760331a643d1bb44c9ca3118f8c9302be608ee",
+      "sha256": "04af74b55a8dec9d2b0e97b1758e6c935369522a36c6337481fc6b1560dc3839",
+      "bytes": 22079
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/red-tests.txt",
+      "mode": "100644",
+      "git_blob": "ddd9215a4b40a5bdc40180ed82717e75b9dd12c6",
+      "sha256": "b071ba5bce605f313283a5ecc896c07718b1afb1230b1cfaf7b4792d7c60ffde",
+      "bytes": 21177
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/routing-ir.json",
+      "mode": "100644",
+      "git_blob": "9e0247e6c88e0b20113867f47f8dd144259656bb",
+      "sha256": "df5b8d2c81947e4e4ee623beb59420e15408d591b03b050bec8cafcc0a62a107",
+      "bytes": 1189
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/routing-ir.txt",
+      "mode": "100644",
+      "git_blob": "f9a8a58714e74b908a716ebc8a0cc67b84027896",
+      "sha256": "073253226bec96b20dafb41a56d0ba85c68e63bf748b87114c9e996494aa4519",
+      "bytes": 764
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/ruff.json",
+      "mode": "100644",
+      "git_blob": "4ce4a12c55778ca8a459f3bd1a0de9e16a9a2fde",
+      "sha256": "2234440a97c9913aab5350e8ba2dbfd965068ba2d55cab25b39013706a2e0837",
+      "bytes": 454
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/ruff.txt",
+      "mode": "100644",
+      "git_blob": "1f5f344d054fae10f39140fb7199c99321d9190a",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "bytes": 19
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/snapshot.json",
+      "mode": "100644",
+      "git_blob": "35b1714cf679666174fe85ace2f647db2753ae9b",
+      "sha256": "e039b2e88cd46c298ef4850067096b9a6b029938d7cb84fc00ecad0830ef1d8f",
+      "bytes": 6059
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/snapshot.py",
+      "mode": "100644",
+      "git_blob": "adbc536f01043c32d06d2117a1a1dd02fa58d38d",
+      "sha256": "996661cb797dc4c04179542a02c5dacd55231758951562519babd381f2e873bd",
+      "bytes": 3534
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/trigger-matrix.json",
+      "mode": "100644",
+      "git_blob": "2bb0c2c95bb966202c88b30f94b6c843d75dae62",
+      "sha256": "e1f0ef49c561bcc1617471df5d2085e267c7dc247ca40d6ab3256dca29e0e938",
+      "bytes": 5596
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/trigger-matrix.txt",
+      "mode": "100644",
+      "git_blob": "c466a77d50c411233a912194aae761fd52411d68",
+      "sha256": "58f00d4da2700a7590c80417de33c41176af821435878a6ee180dfe7537ade67",
+      "bytes": 5141
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/evidence/review-fix/workflow/verify.py",
+      "mode": "100644",
+      "git_blob": "fd2b779234a0ac7ae94bdceff30648e7ac88fa35",
+      "sha256": "232295685df5aa82c406b7a55eff1f4c1e193d79b885131ce2c7e5dedd13e70c",
+      "bytes": 2438
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/negative-results.md",
+      "mode": "100644",
+      "git_blob": "214cc29a0296194b40b7f43c9c916b5cd504d7c0",
+      "sha256": "1b74958aacc7217db6ee95422415697beef4e79ce6774dc6b330071269887c5e",
+      "bytes": 4925
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/requirements.md",
+      "mode": "100644",
+      "git_blob": "b51e0c3ba898e2a8fdd9ca9180edd6daa257f59f",
+      "sha256": "711a00dc5c438d2c2d49ec5b83e0ead3d052119114ba38849259989a347e3b0b",
+      "bytes": 4350
+    },
+    {
+      "path": "docs/changes/20261117-skill-usability/tasks.md",
+      "mode": "100644",
+      "git_blob": "b72f121f34e625f92aac43e59cb153ba5a7f9fd4",
+      "sha256": "bcd037e52f79abc2d167ed20b495770cf443cc07c8613be8713e6f520a1119c4",
+      "bytes": 1891
+    },
+    {
+      "path": "manifest.json",
+      "mode": "100644",
+      "git_blob": "573dcc22ec26d11bb28265cc6b4914c210a4e613",
+      "sha256": "90d87a3e4aef91b649d053b18b4ac87f65ed28ded61ae51fdc021eea5a8ca77b",
+      "bytes": 90962
+    },
+    {
+      "path": "manifests/software_m5_eval_contract.json",
+      "mode": "100644",
+      "git_blob": "f42eb575332064f348406683d5c89d16e2275e63",
+      "sha256": "f3bdefbe7c394ce895c5ed73a9c1dc3b7179ea58fbe26b3a8d8f68d643e0f2c7",
+      "bytes": 706
+    },
+    {
+      "path": "optional-skills/adk-security-supply-chain/SKILL.md",
+      "mode": "100644",
+      "git_blob": "429925ca58b71984e4f1a3cde0e3e2077e27cdbc",
+      "sha256": "d9c4038697f3a8f2b2208d016b06b1684dee09e366543c8539ef6f232230df60",
+      "bytes": 8736
+    },
+    {
+      "path": "optional-skills/adk-skill-composition-governance/SKILL.md",
+      "mode": "100644",
+      "git_blob": "e5306aae74c90c0ad87b4958cbd17efc0d033a50",
+      "sha256": "dea7c5247a20a86ac5c9430296340a5b6b0cce72583bc99ad844eb4624bb4db3",
+      "bytes": 7011
+    },
+    {
+      "path": "pyproject.toml",
+      "mode": "100644",
+      "git_blob": "690a7f4d6017695e30c9e44bd3f900e39a29a7ae",
+      "sha256": "cb55f47620b44f2b3154bf654fc50c8eaec83d0e1c7b27bf53f4828ced3bbfa2",
+      "bytes": 1310
+    },
+    {
+      "path": "skills/adk-archive-governance/SKILL.md",
+      "mode": "100644",
+      "git_blob": "938c5272be7c4254cf801326c4777b8f1cdbaf12",
+      "sha256": "3720551d6cc04f428adf472c3887e0e09ba95c31318bc4d4d7655d17ef68fe4e",
+      "bytes": 3085
+    },
+    {
+      "path": "skills/adk-bsp-analysis/SKILL.md",
+      "mode": "100644",
+      "git_blob": "1c9eac09c6761399b83fcf1bc3dc91ae69028760",
+      "sha256": "a35cac1e4e20ceb519e027da15b448c712a94dab37fb594e7954ca21bd8aaa86",
+      "bytes": 3861
+    },
+    {
+      "path": "skills/adk-code-review-loop/SKILL.md",
+      "mode": "100644",
+      "git_blob": "39fcf610c995c62006f8cf53b82400ae935506f0",
+      "sha256": "34a4b3b683200dfe13be96db626d9f2874a85d235df394e01a9c06eaf1a9f90c",
+      "bytes": 6254
+    },
+    {
+      "path": "skills/adk-commit-pr-quality-gate/SKILL.md",
+      "mode": "100644",
+      "git_blob": "98efa607a12c0d3765a09d3a648a36287446d08c",
+      "sha256": "7037682c48973fa258f1fe0774cdc83b59c668f90fb1e7242830b36f4c0586fe",
+      "bytes": 3802
+    },
+    {
+      "path": "skills/adk-interrupt-dma-patterns/SKILL.md",
+      "mode": "100644",
+      "git_blob": "f36765978896176c48a0dc59f368f7cd17da0b28",
+      "sha256": "f5fc8aa352b4767764b5f81f5f7ce3326c051382b9b2b72372ec43e1ad0e4c70",
+      "bytes": 5388
+    },
+    {
+      "path": "skills/adk-parallel-agent-governance/references/parallel-worktree-task-package.md",
+      "mode": "100644",
+      "git_blob": "23a0cdd096c6d6e85b51d5bbe6e0362fd2244555",
+      "sha256": "f126062fcddb2108447b8d5937aba8fb24e3b279dc0e2f76f3724f78753277ee",
+      "bytes": 2005
+    },
+    {
+      "path": "skills/adk-planning-execution-loop/references/long-task-recovery.md",
+      "mode": "100644",
+      "git_blob": "6b049e78595726b66853cd88f2e7ef0be87ecdfb",
+      "sha256": "d8f9c172e4bd2353b0a4e1a74c81a4765baac90b203fa9bb37d7c3686ac025fd",
+      "bytes": 4887
+    },
+    {
+      "path": "skills/adk-production-field-readiness/SKILL.md",
+      "mode": "100644",
+      "git_blob": "3e8afb4be13ffdceac6ff3e823e4bb746bb8239a",
+      "sha256": "eb401873f401d125ea007d13e6760fc4b840190fef979ea02f94ebc4840efbb8",
+      "bytes": 5159
+    },
+    {
+      "path": "skills/adk-rtos-task-design/SKILL.md",
+      "mode": "100644",
+      "git_blob": "420c7e39f3aaafa213aa83460ba14ffcdb9f225c",
+      "sha256": "67658d3a4f029dcbd86c6a6eba76870d588bbfc61275152b0e72b233edb8e803",
+      "bytes": 5804
+    },
+    {
+      "path": "skills/adk-systematic-debugging/SKILL.md",
+      "mode": "100644",
+      "git_blob": "88581f5ed1292c6b3cb3cc49e76f7ade2eaf638e",
+      "sha256": "1b14158259d16fa98b93212fd719ac92e1da37d03ae055faedb48d7b7a3c9c45",
+      "bytes": 2795
+    },
+    {
+      "path": "skills/adk-task-breakdown/SKILL.md",
+      "mode": "100644",
+      "git_blob": "7d627ee19516748799c01a8fcb43ebc73fdf1dbb",
+      "sha256": "72c0c4a1c88ee1122075dba482252dfbab7f6dde0ee4d07f670c9224f7d65488",
+      "bytes": 2877
+    },
+    {
+      "path": "skills/adk-task-breakdown/references/task-packaging.md",
+      "mode": "100644",
+      "git_blob": "048aa854b8d385fa906950c9f978c80d52759ac8",
+      "sha256": "1c10d654b9015f356333e515009224a630d102e039db2731c58c1191cab5a34e",
+      "bytes": 2284
+    },
+    {
+      "path": "src/agent_dev_kit/__init__.py",
+      "mode": "100644",
+      "git_blob": "0acea6b14b148ad566623da035f662789e0b1773",
+      "sha256": "10bc3573261894bc5dd9eba7e93a98cbe565e43d86eb959d2dcf0f98b5e44507",
+      "bytes": 71
+    },
+    {
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "mode": "100644",
+      "git_blob": "4c0e2fe2bdc7543503252ae0a0c3dbd27572d3f9",
+      "sha256": "3b4364f90f7f0858e66f937a7e1b3c00c5afe19da3dd9a2c1ab542b6d420ca60",
+      "bytes": 29269
+    },
+    {
+      "path": "src/agent_dev_kit/intent_boundary.py",
+      "mode": "100644",
+      "git_blob": "5aa3457ef1652edd476c3c94737cad0754376e82",
+      "sha256": "d4a8631aadf33fc43b9802bd086c0130db282ef5df048c5e99d6e08dc83a6850",
+      "bytes": 7650
+    },
+    {
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "mode": "100644",
+      "git_blob": "3130a16dc645dd1c73e4a901f6d95914ffde7cb0",
+      "sha256": "dc290b66ac21b7611698cc9c2e3b4565e2a199a8da31930d53a83b243b18ab9d",
+      "bytes": 7877
+    },
+    {
+      "path": "tests/test_intent_boundary_governance.sh",
+      "mode": "100755",
+      "git_blob": "ba89af93303dc5750e990caf9fb54a2cd9f3477e",
+      "sha256": "51cc7f6ab900a8664a648e26cb99ce69544c0273c1498c0e388139d7bd42786c",
+      "bytes": 9324
+    },
+    {
+      "path": "tests/test_skill_consumer_usability.py",
+      "mode": "100644",
+      "git_blob": "fcf5e241685efe64b7cef68f3c2a4aaeffcf5769",
+      "sha256": "fd5e7ef8ffdec9a644c6623e3fb27b8ffa7b93e00f6e212b808164c14450ac91",
+      "bytes": 10734
+    },
+    {
+      "path": "tests/test_skill_content.sh",
+      "mode": "100644",
+      "git_blob": "18ea40dc6b266538e81ab41163e70145435b6356",
+      "sha256": "50cf40b01a0694894953fb83d669ef372c0943566facd0d6fe764910ef85f8a0",
+      "bytes": 1249
+    },
+    {
+      "path": "tests/test_skill_rtos_methods.py",
+      "mode": "100644",
+      "git_blob": "f513f2c6aa3a0ba738b405697f0793af33ce71d6",
+      "sha256": "1107e967040f7c32c3be867a0af4556bfbd312d7eec3cd3746f4f7135b1edaff",
+      "bytes": 6356
+    },
+    {
+      "path": "tests/test_skill_trigger_matrix.py",
+      "mode": "100644",
+      "git_blob": "53325bd2ea204a71f3304895b5222ea57033feaa",
+      "sha256": "6ccb81d7bfddcf30f6412f12f8ed3388c42fa04cfa89dc80435b86805b85a5e8",
+      "bytes": 45781
+    },
+    {
+      "path": "tests/test_task_package_delivery.py",
+      "mode": "100644",
+      "git_blob": "3efd784b7b626e571e39449d37a35783a2d244ed",
+      "sha256": "db637f6330c9c6e9112971622c55e808c3698b9c4e09d160e75fc8edcd5b4b74",
+      "bytes": 8690
+    }
+  ]
+}

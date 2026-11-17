@@ -1,0 +1,269 @@
+{
+  "schema": "adk-independent-source-review-summary/v1",
+  "subject_id": "20261117-skill-usability",
+  "scope": "source-change",
+  "reviewer": {
+    "id": "ai/root/usability_independent_review",
+    "kind": "ai",
+    "independence": "independent",
+    "implementation_participation": false
+  },
+  "author_id": "ai/root-skill-usability",
+  "reviewed_at": "2026-11-17T07:07:38.181908+00:00",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "target": {
+    "base_commit": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+    "head_commit": "a2b90b64d3ba83ac0c856ddb6a541450ead1bd36",
+    "head_tree": "53534d897a42e816525e310aa28134751ca5783f",
+    "original_patch_sha256": "21dcecb8567e84e0bf3818185f3281827812d8d65dcf73a213e394578aeac414"
+  },
+  "findings": [
+    {
+      "id": "F-01",
+      "severity": "major",
+      "priority": "P2",
+      "disposition": "fixed",
+      "location": "skills/adk-production-field-readiness/SKILL.md; src/agent_dev_kit/_matcher_kernel.py",
+      "reproducer": "评估嵌入式设备 OTA 的断电恢复、回滚和上线 readiness",
+      "reason": "新增领域门槛拒绝原适用 OTA 正例。恢复肯定 OTA，并将紧凑并列否定严格限定于 implicit_context 的已声明域词；原三条输入恢复 owner，17 条独立边界通过，权限仍 deny。"
+    },
+    {
+      "id": "F-02",
+      "severity": "major",
+      "priority": "P2",
+      "disposition": "fixed",
+      "location": "skills/adk-rtos-task-design/SKILL.md",
+      "reproducer": "请为 VxWorks 做任务设计",
+      "reason": "新增 RTOS 领域列表遗漏已复现的 VxWorks。仅补入该域词，正例恢复，域外/否定边界保留，authority 元数据未变。"
+    },
+    {
+      "id": "F-03",
+      "severity": "major",
+      "priority": "P2",
+      "disposition": "fixed",
+      "location": "manifest.json; skills/adk-systematic-debugging/SKILL.md; tests/fixtures/software_m5_eval_tasks.jsonl route-054",
+      "reproducer": "立即进行 SSH调试：登录生产设备，抓取日志并执行诊断命令。",
+      "reason": "第一次完整回归 101/102 暴露泛诊断全局路由抢占 SSH。撤回该全局新词，使用既有 skill_trigger fallback；原 fixture 不改，13 条独立 owner/权限对照和最终 102 suite 通过。"
+    }
+  ],
+  "coverage": {
+    "spec": "U01–U10 source behavior, exact 65 identities, unchanged authority/schema/eight ratchets, exported task-package and optional helper self-containment, parallel/planning/archive scope handoff.",
+    "quality": "All changed diffs, real baseline/candidate negative paths, bounded implicit_context helper, production validator error handling, specific-versus-generic routing owners, valuable tool-level regressions, exact source/evidence integrity.",
+    "read_scope": [
+      "AGENTS.md and docs/agent-operating-rules.md",
+      "requirements/design/tasks/negative-results and all tracked source diffs",
+      "all changed Skill entries/references and related full scope/handoff content",
+      "intent_boundary.py, public matcher and relevant kernel branches, footprint and ratchet implementation",
+      "new consumer/task-package tests, RTOS/trigger tests and unchanged route-054 fixture",
+      "three baseline group reports, 65 coverage and 34 artifact index",
+      "review authorization/policy and canonical review validator",
+      "consumer-observation README, observation.json and new task-package.json",
+      "final full-regression, quality/reuse, all-skill inventories and source-binding evidence"
+    ],
+    "independent_checks": {
+      "baseline_candidate_routes": 16,
+      "original_validator_exception_controls": 4,
+      "parsed_json_perturbations": 1410,
+      "identity_and_authority_count": 65,
+      "profile_ratchets": 8,
+      "baseline_evidence_artifacts": 34,
+      "post_F01_F02_targeted_tests": 39,
+      "final_implicit_context_cases": 17,
+      "final_specific_vs_generic_cases": 13
+    },
+    "consumer_interpretation": "Actual retained development consumer outputs were revalidated: old missing 15/extra 11; new valid 19-field research payload with no write/runtime/dispatch grant. No registered A/B conclusion."
+  },
+  "final_verification": {
+    "verified_at": "2026-11-17T07:06:01.106886+00:00",
+    "source": {
+      "base_commit": "78c3be7f6f9b5ee2e557de54156532fb3169198d",
+      "head_commit": "a2b90b64d3ba83ac0c856ddb6a541450ead1bd36",
+      "tree": "53534d897a42e816525e310aa28134751ca5783f",
+      "changed_files_verified": 191,
+      "tested_source_files_verified": 650,
+      "original_patch_sha256": "21dcecb8567e84e0bf3818185f3281827812d8d65dcf73a213e394578aeac414",
+      "original_patch_bytes": 1892765,
+      "regenerated_patch_identical": true,
+      "post_source_snapshot_changes": [
+        ".gitattributes"
+      ]
+    },
+    "final_evidence_index_files_verified": 28,
+    "full_regression": {
+      "command": [
+        "bash",
+        "tests/run_all.sh",
+        "--timing-json",
+        "/workspace/scratch/fe8de3b42084/skill-usability-validation-release/full-regression-timing.json"
+      ],
+      "cwd": "/workspace/scratch/fe8de3b42084/adk-skill-usability",
+      "started_at": "2026-11-17T06:57:04.173019+00:00",
+      "completed_at": "2026-11-17T07:02:47.745648+00:00",
+      "duration_seconds": 343.573,
+      "exit_code": 0,
+      "source_files_sha256": "e3819593e8e8b4b1eacd0e396ab0fc32d007b3d4083f70da531155ada7cdb4e6",
+      "log_sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e",
+      "suites": 102,
+      "passed": 102,
+      "failed": 0,
+      "independently_counted_log_records": 102
+    },
+    "quality": {
+      "fresh": [
+        "strict",
+        "format",
+        "release-check",
+        "target-static"
+      ],
+      "reused": [
+        "module-size",
+        "ruff",
+        "focused-ruff",
+        "mypy",
+        "pip-audit"
+      ],
+      "all_log_hashes_verified": true,
+      "changed_snapshot_inputs_since_previous": [
+        "manifest.json",
+        "skills/adk-systematic-debugging/SKILL.md",
+        "tests/test_skill_trigger_matrix.py"
+      ],
+      "dependency_declaration_unchanged": true,
+      "reused_logs_identical": true
+    },
+    "exports": [
+      {
+        "target": "claude-code",
+        "entries": 65,
+        "support_files": 54,
+        "files": 119,
+        "inventory_sha256": "84f4fd3474576492e00ebe45e98e5418347c21e143c48dd00a24abbeb23c6902",
+        "actual_export_and_support_bytes_match": true
+      },
+      {
+        "target": "opencode",
+        "entries": 65,
+        "support_files": 54,
+        "files": 119,
+        "inventory_sha256": "819ff88c80d9a67adba8bfcc24e637a6461843a88fb46bbff2728f0d76507d7a",
+        "actual_export_and_support_bytes_match": true
+      }
+    ],
+    "ratchets": {
+      "passed": 8,
+      "tightest_profile": "large-refactor",
+      "potential_full_source_bytes": 323274,
+      "potential_full_source_ceiling": 323328
+    },
+    "independent_final_routing": {
+      "implicit_context_cases": 17,
+      "specific_vs_generic_owner_cases": 13,
+      "final_file_hashes_match": true
+    },
+    "consumer_payload_revalidation": [
+      {
+        "consumer": 1,
+        "errors": [
+          "missing fields: context,constraints,done_when,primary_action,action_mode,verification,artifacts,blockers,work_item_kind,question_to_resolve,evidence_required,implementation_permission,exit_gate,handoff_target,retention_decision",
+          "unexpected fields: cross_field_checks,global_constraints,handoff_blockers,interfaces,owner,package_id,ready_to_handoff,schema_version,scope_read,scope_write,tasks"
+        ],
+        "valid_v2_payload": false
+      },
+      {
+        "consumer": 2,
+        "errors": [],
+        "valid_v2_payload": true
+      }
+    ],
+    "mismatches": []
+  },
+  "raw_review_artifacts": [
+    {
+      "path": "evidence/independent-probes/review-probes.py",
+      "sha256": "ef0b589b0a9f146cc3877611aa3e42ebd0c237a76b12d6fc9f55bc7444612ffb",
+      "bytes": 13769
+    },
+    {
+      "path": "evidence/independent-probes/review-probes.json",
+      "sha256": "3f2c9405f3f2b3bdd6602e2a4c95545c236d5ed5896ac2250526b89368474895",
+      "bytes": 15532
+    },
+    {
+      "path": "evidence/independent-probes/postfix-probes.json",
+      "sha256": "3b2b9bb46b671ea3b9a8dd1294718796f02f5b1fa0e626fe9642310eabe5c1e8",
+      "bytes": 27025
+    },
+    {
+      "path": "evidence/independent-probes/postfix-targeted.json",
+      "sha256": "7ea0d0b5a51ef4c8fca7e611a1b63bb100b4f3dde887ddbfbefa77e2b900467e",
+      "bytes": 520
+    },
+    {
+      "path": "evidence/independent-probes/postfix-targeted.log",
+      "sha256": "91de0c1adf46106f5a1ee5015222071075fefc7425ddb648e613de54c71cda4a",
+      "bytes": 7795
+    },
+    {
+      "path": "evidence/independent-probes/run-targeted.py",
+      "sha256": "6176287ea8871c22e420097b8fc6b6d82851a775f5c71c8f956aee00c965a5aa",
+      "bytes": 1237
+    },
+    {
+      "path": "evidence/independent-probes/linear-helper-probes.json",
+      "sha256": "20b448bde9f514a1343db05e4c1027588e0a349c38294d1371e21dd85acb3b08",
+      "bytes": 17894
+    },
+    {
+      "path": "evidence/independent-probes/ssh-regression-before.json",
+      "sha256": "0702f4b3d1e224c7125871a8a5bc80399dca70adab694795c6317cfe426eb336",
+      "bytes": 6188
+    },
+    {
+      "path": "evidence/independent-probes/ssh-regression-after.json",
+      "sha256": "c0f5bdb5bcc8c927634d0bf7b975c07bf51562b48c29e3e262ca935a1a622a77",
+      "bytes": 16868
+    },
+    {
+      "path": "evidence/independent-probes/followup-routing.py",
+      "sha256": "819dd6d5d25a7ba8f355c2c942526fab23ce4c0cd61009ee0832617bf7247fa3",
+      "bytes": 2876
+    }
+  ],
+  "retained_negative_history": [
+    {
+      "path": "evidence/independent-probes/review-probes.json",
+      "result": "Original independent F-01/F-02 positive routing regressions retained."
+    },
+    {
+      "path": "evidence/independent-probes/ssh-regression-before.json",
+      "result": "Independent F-03 original SSH failure retained."
+    },
+    {
+      "path": "evidence/first-full-run/full-regression-result.json",
+      "result": "101 PASS / 1 FAIL, exit 1, preserved as failure."
+    },
+    {
+      "path": "evidence/pre-review/full-regression-stopped.json",
+      "result": "Earlier deliberately stopped run, exit 130; not counted as complete pass."
+    }
+  ],
+  "limitations": [
+    "范围是 a2b90b64d3ba83ac0c856ddb6a541450ead1bd36 的 source-change；后续 tasks.md 状态、.gitattributes 精确原始证据路径与证据包装需独立增量核验。",
+    "完整 102 suite 由协调者执行；审查人独立核对输入/提交/日志/终态，并执行定向路由、validator、身份、权限和 ratchet 检查，没有冒称自己再次运行全套。",
+    "五项质量检查复用上轮结果，四项在最终源码上重跑。650 文件快照不含 tools/；tools/ 没有本轮 diff，但未对其作前后快照哈希比较。pip-audit 复用不代表新的漏洞数据库查询。",
+    "39 个独立定向 tests 属于 F-01/F-02 修复阶段；最终 helper 的 17 条和 F-03 的 13 条输入绑定最终文件字节，不把较早全部测试说成最终提交重跑。",
+    "65 项逐项记录、覆盖集合和原始证据摘要已核实；没有冒称重新全文阅读所有 65 个 Skill，也未逐行重读全部历史日志。",
+    "1410 个 JSON 值扰动验证已解析值进入 validator 的异常边界；不证明任意 JSON 文本解析、任意语义输入或任意自然语言分类器完备。",
+    "两目标实际导出 65 entries + 54 support files 各自通过，只涵盖未改 target support_directories；不证明原生宿主 discovery/load 或 dispatcher 权限 enforcement。",
+    "开发消费观察的新包通过 schema 且保留权限/scope/blockers；不是注册配对 A/B、因果效果或 native runtime 资格，没有新付费模型运行或 provider Token/时延/费用测量。",
+    "没有验证 live SSH/设备/RTOS/HIL/现场结果、生产续行/去重、实际 main CI、不可变组件 Release、Root 两路径消费或产品/设备资格；这些后续义务仍需实际证据。"
+  ],
+  "release_or_root_completion_claimed": false,
+  "native_runtime_qualified": false,
+  "device_qualified": false,
+  "human_review_performed": false,
+  "provider_usage_measured": false
+}
