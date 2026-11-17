@@ -1,0 +1,19 @@
+{
+  "name": "pip-audit",
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "proxy",
+    "pip-audit",
+    "--strict",
+    "--progress-spinner",
+    "off",
+    "."
+  ],
+  "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+  "started_at": "2026-11-17T12:10:26.759933+00:00",
+  "finished_at": "2026-11-17T12:10:46.621515+00:00",
+  "elapsed_seconds": 19.86159566000424,
+  "exit_code": 0,
+  "log": "/workspace/scratch/d417066aafa8/verification/quality/pip-audit.log",
+  "log_sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+}

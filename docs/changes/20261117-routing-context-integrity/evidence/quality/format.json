@@ -1,0 +1,16 @@
+{
+  "name": "format",
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "proxy",
+    "bash",
+    "scripts/check-format.sh"
+  ],
+  "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+  "started_at": "2026-11-17T12:10:26.760225+00:00",
+  "finished_at": "2026-11-17T12:10:27.110076+00:00",
+  "elapsed_seconds": 0.34986720600136323,
+  "exit_code": 0,
+  "log": "/workspace/scratch/d417066aafa8/verification/quality/format.log",
+  "log_sha256": "9c9dfb250d298b5253df5037a69cb01dc2f04e718711e487b6fb130b56f4d0e1"
+}

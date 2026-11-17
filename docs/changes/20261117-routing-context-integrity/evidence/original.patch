@@ -1,0 +1,1852 @@
+diff --git a/.version-lock b/.version-lock
+index 431247b5301308cd1a1855eeb70d3531a7482f79..61882dce77f47f55eb34d79cfaac8e82a7a8311e 100644
+--- a/.version-lock
++++ b/.version-lock
+@@ -1,3 +1,3 @@
+-version: 11.3.14
+-locked_at: 2026-11-17T06:32:32Z
+-locked_by: ai/root-skill-usability
++version: 11.3.15
++locked_at: 2026-11-17T12:09:22Z
++locked_by: ai/root-routing-context-integrity
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 0ec1abb1bdad41323daf9844a5e03c713e443299..7e241c29c407f68a479cc4fecd22248a1f2946a5 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -2,6 +2,14 @@
+ 
+ ## Unreleased
+ 
++### 11.3.15 — 内容一致缓存、当前动作路由与压缩恢复
++
++- 四处既有有界缓存按实际内容复用，合同与 schema 同长度、同 mtime 的变化仍重新解析；报告摘要绑定同一份输入字节，错误编码保留明确失败。
++- 局部否定覆盖被禁止长动作中的短别名；明确编写或更新 ADR 优先于相邻接口主题，RTOS SPI/DMA 驱动实现可命中已有能力。旧 manifest 继续有效，概念、域外、只读和否定边界保持。
++- 上下文去重以同来源、同内容且完整正文仍有效为条件；压缩后按当前目标恢复仍需的 Skill 与引用，历史“已加载”记录不替代正文或扩大权限。
++- 效果观测严格区分布尔与数值，拒绝 NaN、Infinity、超大整数转换和聚合溢出；原运行错误、缺失成本与合法零值语义保持。
++- 逐项复核 65 个 Skill 和 54 个直接参考，对照 7 个原始来源；不新增身份、依赖或预算例外。固定评测、真实工具和有限独立消费证据不代表模型、Token/费用、原生宿主或设备资格。
++
+ ### 11.3.14 — 准确选择、可消费任务包与导出边界
+ 
+ - 逐项复核全部 65 个 Skill；中文代码评审归现有 review-loop，通用诊断/数据库回滚不再误选设备量产入口，RTOS/BSP/IRQ-DMA 的领域与排除条件更精确。保留真实 OTA、VxWorks 正例，领域条件中的紧凑并列名单继承局部否定，动作与权限判断不变。
+diff --git a/CONTEXT.md b/CONTEXT.md
+index 41c8312453f84482f4bd5582c612879a3e0cc9ff..33c6ae2882ee54974c8dce9cf91c05945e5d913b 100644
+--- a/CONTEXT.md
++++ b/CONTEXT.md
+@@ -1,7 +1,7 @@
+ # CONTEXT.md — agent-dev-kit 领域语言定义
+ 
+ > 文档状态：受机器门禁约束的领域上下文投影
+-> 产品版本：11.3.14
++> 产品版本：11.3.15
+ > 结构化单一事实源：`manifest.json`
+ 
+ ---
+diff --git a/README.md b/README.md
+index 0511e3fecef0a473d25a3356c93dbec6c5f57ddc..f6462226e6dd6f6ba68c5ed8e005ffb2496f98f5 100644
+--- a/README.md
++++ b/README.md
+@@ -28,7 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的
+ - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
+ - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
+ 
+-`manifest.json` 当前 source version 为 `11.3.14`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
++`manifest.json` 当前 source version 为 `11.3.15`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+ 
+ 8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+ 
+diff --git a/docs/agent-skill-catalog.md b/docs/agent-skill-catalog.md
+index 7737d6093f69aaa326592231148f6a13e7edc0df..5d334b870543201a84687daec8e6cdb7d2ccc699 100644
+--- a/docs/agent-skill-catalog.md
++++ b/docs/agent-skill-catalog.md
+@@ -57,7 +57,7 @@
+ | 30 | 40 | `planning` | primary | governance | `adk-worktree-governance` | 用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。 | worktree | `skills/adk-worktree-governance/SKILL.md` |
+ | 30 | 50 | `planning` | primary | generator | `adk-context-compress-handoff` | 用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。 | 上下文压缩 | `skills/adk-context-compress-handoff/SKILL.md` |
+ | 40 | 10 | `design` | primary | generator | `adk-interface-contract-design` | 用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。 | 设计接口 | `skills/adk-interface-contract-design/SKILL.md` |
+-| 40 | 20 | `design` | primary | generator | `adk-adr-writer` | 用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。 | 写ADR | `skills/adk-adr-writer/SKILL.md` |
++| 40 | 20 | `design` | primary | generator | `adk-adr-writer` | 已有架构权衡、需编写或更新 ADR 时记录真实决定、依据与后果；不用于概念介绍、需求未明或代码实现。 | 写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR | `skills/adk-adr-writer/SKILL.md` |
+ | 40 | 30 | `design` | primary | reviewer | `adk-component-api-stability` | 用于组件 API 演进时检查调用方、兼容边界、迁移与回滚证据；不用于未经设计直接大范围改签名或纯格式修改。 | API稳定性 | `skills/adk-component-api-stability/SKILL.md` |
+ | 40 | 40 | `design` | primary | generator | `adk-register-map-design` | 用于芯片寄存器映射、位域权限和驱动接口文档设计；不用于直接对真实寄存器写入或代替外设时序调试。 | 设计寄存器 | `skills/adk-register-map-design/SKILL.md` |
+ | 40 | 50 | `design` | primary | playbook | `adk-bsp-analysis` | 用于梳理嵌入式 BSP 源码、启动/探测与资源依赖，对照硬件依据、patch/workaround 历史及 SoC/board 差异，交付证据化架构和迁移风险；不用于直接实现驱动或 live 板级故障隔离。 | BSP 分析/BSP 梳理/分析 BSP/梳理 BSP/梳理这个 BSP/梳理现有 BSP | `skills/adk-bsp-analysis/SKILL.md` |
+diff --git a/docs/changes/20261117-routing-context-integrity/design.md b/docs/changes/20261117-routing-context-integrity/design.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..2d16c361ce0ff529ba1490619a0450c246fe3f19
+--- /dev/null
++++ b/docs/changes/20261117-routing-context-integrity/design.md
+@@ -0,0 +1,57 @@
++# 设计与边界
++
++## 决策
++
++- 复用四个既有有界 LRU：matcher contract、phase contract、relationship
++  contract、Skill frontmatter。以读取的不可变内容作为解析缓存身份；schema
++  内容同样参与。摘要使用同次读取字节，避免校验后再读取不同版本。优先沿用
++  `model.py` 的 bytes-key 方式，不添加旁路缓存模块或长期状态。
++- campaign 结果在现有准入点按语义严格校验类型：安全布尔、有限非负耗时/费用，
++  保留合法缺失值和实际运行错误记录；不改变 grader 或通过标准。
++- 用现有局部否定和 action/topic 选择机制修复具体意图边界。保持肯定动作、
++  独立子句和权限 IR；不引入大模型判断或任意提升写权限。
++  明确动作短语的排序复用 manifest `phrase_classes`，增加可选
++  `requested_action` 类并更新原 manifest schema，旧 manifest 仍可校验；
++  该 schema 原本不在 packaged schema registry，既有12项 mirror 检查不变，
++  不增加第二路由表、IR版本、权限字段或新 schema 文件。优先级仅对本次
++  实际肯定命中的动作生效，否定、概念说明和按 ADR 实施不提升文档写作。
++  对独立 IR-2/IR-3，复用共同的局部 action 匹配与全出现位置语义；创建
++  动词后的限定修饰语仍受同子句否定约束，被解释/审查的动作对象不作为
++  当前执行请求。task-mode 与 routing 必须消费同一边界，同时保留后续
++  真正肯定动作，不因全句含“解释”就排除实施。在现有 matcher/kernel
++  职责内消除重复私有匹配，不增加平行分类器或改权限定义。
++  如内核达到原 30KB 上限，将只由 canonical matcher 消费的纯输出格式化
++  逻辑归回既有 matcher 格式化入口；先核所有调用点并保持输出逐字段一致，
++  不新增 support 模块或调高预算。
++- 在现有 context-engineering / context-compress-handoff（必要时 token
++  governance）中压缩冗余后加入 active Skill 的来源/内容身份/必要引用与有效
++  上下文状态。恢复先核当前目标/权限，再按需加载；同内容完整有效时才去重。
++  这是方法指导，不声称 ADK 提供生产 context manager。
++- 全量审查和外部比较使用简洁逐项记录，复用既有证据格式和原始日志。
++  不复制历史大文件或增加第二套发布/评测/安装体系。
++
++## 职责与文件归属
++
++协调者负责需求/设计/任务、集成与发布；实施者依据本合同修改代码。
++core 实施者负责四处缓存、campaign 结果类型及对应测试；routing 实施者负责局部否定、matcher
++选择规则、manifest 路由和相应 Skill/回归；context 实施者负责上下文三个
++现有 Skill、原始来源取舍和最小消费验证。`_matcher_kernel.py` 中 core 只改
++frontmatter loader，routing 只改局部否定/选择段，避免相互覆盖。
++最终审查由未参与产品实施的独立 AI 完成，不以自审代替。
++
++## 验证与性能
++
++先保留基线反例，再验证修复。缓存用同路径/相同 size/恢复 mtime 的 contract、
++schema 和 frontmatter 变化验证，覆盖错误内容拒绝与有效内容刷新。
++路由用正反成对输入和原固定评测；上下文用最小任务输入验证恢复取舍。
++重复相同无模型工作负载观察缓存命中与耗时；只报告实际工具耗时，不推导
++模型费用。共享代码和 manifest 变更按原规则执行完整回归。
++
++## 回滚与未知项
++
++无公共格式迁移、持久化数据迁移或设备写入。正常受保护 revert 可恢复 11.3.14
++源码与前一不可变发布；不覆盖历史 tag、Release、失败记录或资格证据。
++初始 PATH 没有 `rtk`；后找到前轮真实 `rtk 1.2.0` 工具，后续 shell 经其官方
++proxy 入口。验证使用本轮隔离 Python 3.12 venv；不安装 Agent 运行时。
++`knowledge/L2-domain/lessons.md` 不存在，检索结果已记录；不补造历史经验。
++历史 hosted ADC/CMake 15 秒等待原因未定，不通过提高超时或反复重试掩盖。
+diff --git a/docs/changes/20261117-routing-context-integrity/negative-results.md b/docs/changes/20261117-routing-context-integrity/negative-results.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..a1987b20b721e5e841efec084b4be929f668a2a0
+--- /dev/null
++++ b/docs/changes/20261117-routing-context-integrity/negative-results.md
+@@ -0,0 +1,62 @@
++# 原始失败与不可用项
++
++- 基线四处缓存同长度且恢复 mtime 的变化均可产生陈旧命中。phase/relationship
++  同时可能报告新摘要而使用旧语义；实际隔离复现保留于本轮 core 审查产物。
++- 基线路由：否定创建 worktree 仍选中工作树操作；明确 ADR 写作被接口主题
++  吞掉；自然 RTOS SPI DMA 实现请求未选中驱动实现。原始输入/输出由审查者保留。
++- 本机 `rtk` 不在 PATH；使用现有 bash/Python 3.12，不声明执行了 rtk。
++- 根规则要求检索的 `knowledge/L2-domain/lessons.md` 不存在；未生成历史命中。
++- 既往 hosted ADC/CMake 超时尚无已确认根因，本轮不得把本地通过称作根治。
++- 初次基线 ADC 复测用了错误的相对 venv PATH，实际为 skipped（缺 CMake），
++  不计通过。修正为本轮已安装工具的绝对 PATH 后实际 1/1 通过，0.405 秒；
++  原 15 秒预算不变。本地未复现 hosted 等待，未改 ADC 或 CMake 行为。
++- 初次耗时工具指定了不存在的数据集路径，明确失败；按实际 CLI 默认路径
++  修正后确认默认集 30 条，另对原 Software M5 60 条固定集单独测量，不混淆分母。
++- 后续找到前轮已备好的真实 `rtk 1.2.0` ELF 工具，摘要为
++  `8a64af588cabed12eca467d407e3d63c05b3a9b7afc308c2dda75489f7270dfb`；
++  后续维护经其官方 proxy 入口执行。此前 PATH 不可用观察保留。
++- 独立审查发现首轮类型修复仍有数值极端值缺口：大整数转换可能抛
++  OverflowError，两个单项有限的 1e308 可聚合成 inf。已交原实施者修复，
++  独立原始探针保留；首轮定向通过不作为最终通过替代。
++- 首次 11.3.15 strict 集成在新增 materializer 测试的 `runtime="codex"`
++  处被 runtime-boundary 拒绝，退出 1；同一串行命令中的 release check、
++  candidate benchmark 和完整回归尚未执行。该测试没有调用运行时，但仍须
++  遵守源码边界；不能简单换成 campaign 入口未接受的目标来制造通过。
++- 独立扩大 worktree 否定探针后发现 IR-2：带 `新的 Git`、`新`、
++  `a git`、`any` 的四种常用禁止创建表达仍选中工作树写操作。原19探针
++  全过不能证明这组额外边界；已交原实施者修复并保留独立原始结果。
++- 独立 IR-3 继续扩展到4种概念、解释、审查动作对象表达，均误选 ADR
++  writer；权限仍为 deny，但选择本身不符合验收3。另3个真实肯定动作
++  控制当前正确，修复不能全局屏蔽含“解释”的句子。扩展26探针原始
++  结果为18/26，实施者负责修复，审查者保留独立复验义务。
++- IR-3 随后核实到驱动说明语境：两种“解释如何实现 RTOS SPI DMA 驱动”
++  被当成真正实现请求并返回 workspace-write。扩展30探针原始20/30通过；
++  同时保留“请实现并解释设计取舍”和“不要解释；请实现”的肯定控制，
++  不能以全句出现说明词就禁止真实实施。
++- provider 特定的缺失成本回归已归回原本负责无调用跨 runtime 记录验证的
++  `test_runtime_comparison_contract.py`；沿用其已有合法历史 runtime 与
++  `report()`/生产转换入口，不扩大 scanner 例外或使用不受支持的目标。
++  两模块实际25 tests、strict、format及改动测试Ruff通过；之后路由修复
++  仍需按最终源码重新冻结验证。
++- IR-2/IR-3 实施修复后，原独立30探针实际30/30通过；同一局部动作过滤
++  同时约束触发与task-mode，保留同句后续肯定请求；58项定向检查、原fixed60
++  和8个体积阈值通过。内核通过复用唯一全出现位置实现降至28515B；上述
++  GREEN不替代独立fresh复验、完整回归或发布CI。
++- 对首次源码提交 `94d68e7` 的独立fresh复验发现 IR-3 的顺序相邻回归：
++  “先说明方案再实现驱动”等请求的后续肯定动作被说明范围吞掉；原30
++  场景仍通过，不能覆盖这组控制。协调者中止该提交的本地完整回归（实际
++  exec退出130），保留部分日志及原patch，不把中断计作完整PASS。
++  原严格检查、release check与小型耗时观察只对首次提交有效；修复后会
++  重新冻结、重新绑定patch并跑完整回归。修复不得全局把“再”当句界。
++- 回收首次部分日志时，确认 `test_skill_content` 已先报告一个实际失败：
++  未执行模型对照计划的 `candidate.planned_release` 仍为11.3.14，与本轮
++  11.3.15 manifest 不一致。协调者补同步该版本元数据；计划仍为
++  not-measured/no-model-runs、results为空，原case输入、train/holdout及
++  grader全部不改。本次既有失败与后续主动中断同时保留，不能只称未完成。
++- 顺序边界实施修复只识别明确的先…再…行动结构，保留为什么/如何等问句
++  补语约束。原4个顺序RED已通过，另保留7个相邻反控制；59定向tests、
++  原30输入、fixed60与8预算全部通过，内核28930B。后续最终fresh审查及
++  完整回归仍以真实记录为准。
++- 路由实施中出现过 schema 尚未支持新增可选字段、generator 被提前耗尽
++  和模块超过原30KB上限的中间失败；均有原始记录，未调整固定评测期望
++  或放宽预算。最终冻结还须经过独立复验与完整回归。
+diff --git a/docs/changes/20261117-routing-context-integrity/requirements.md b/docs/changes/20261117-routing-context-integrity/requirements.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..87e7722e26cc913f980e585abb68458b4652cdff
+--- /dev/null
++++ b/docs/changes/20261117-routing-context-integrity/requirements.md
+@@ -0,0 +1,39 @@
++# 当前意图与当前内容的一致执行
++
++## 目标与授权
++
++基线为 ADK `6d902f721f560f02883516e809fbd93a326405b6`（11.3.14）。
++用户要求“全面审查adk，全网搜索，全面优化”；已有同项目公开推送、受保护合并、
++组件发布与 source-only Root 接入授权继续有效。独立自动审查沿用现有
++`.adk/review-policy.json`，不新增授权或门禁。
++
++审查全部 65 个 Skill 及其直接参考、typed core 的选择/缓存/评测/交付边界；
++只改变有原始来源或实际反例支持的行为。目标是使选择结果服从当前请求、
++执行语义对应当前内容，并在压缩后恢复实际需要的 Skill 指导。
++
++## 非目标
++
++不增加 Skill 身份、生产 runtime、后台巡检、模型调用或依赖。不放宽既有
++Profile 源字节预算、固定评测输入/期望值、权限、独立审查或发布检查。
++不把源码/本地 CLI/host 测试视为模型效果、Token/费用、native 加载或设备资格。
++ADC/CMake 历史超时仅在有可复现根因时修复，否则保留真实未解状态。
++
++## 验收
++
++1. 文件内容或 schema 同长度变化且 mtime 不变时，缓存必须重新解析/校验；
++   phase/relationship 报告的摘要与实际解析的同一份字节一致。缓存仍有界，
++   不变输入可复用昂贵解析。缺失/无效输入保持明确失败。
++2. 中英文明确禁止创建 worktree 不得通过较短触发词重新选中该写操作；
++   同句其他肯定动作不受无关否定影响。
++3. 明确编写/更新 ADR 的动作不被接口等主题夺走；概念解释、接口实现、
++   否定 ADR 的相邻反例不误选文档写作。自然 RTOS SPI/DMA 驱动实现请求
++   可选择已有实现能力；解释/只读/域外/否定条件保持原权限边界。
++4. 现有 context/handoff 方法区分完整正文仍在、正文已丢失或被摘要、来源变化。
++   只恢复当前仍需的 Skill/参考；历史“已加载”不替代当前有效内容或增加权限。
++5. 65 项审查有逐项结论；全部 8 个原 Profile ratchet 通过；固定路由评测、
++   新增失败回归、完整现有测试和独立 Spec/Quality 审查通过。
++6. 版本推进到 11.3.15；源码、PR/main CI、不可变发布与实际 Root 消费各自核实。
++   无法执行项如实记录原因，不把启动/已排队称为完成。
++7. 效果 campaign 的安全判断只接受布尔值；耗时/费用只接受有限、合法数值，
++   拒绝 bool 作为整数、NaN 和 infinity。原运行错误可表示缺失成本的语义保持；
++   坏输入不得成为真实安全/耗时/零费用观测。
+diff --git a/docs/changes/20261117-routing-context-integrity/source-review.md b/docs/changes/20261117-routing-context-integrity/source-review.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..37587b040d112e50aa8779a625b3d5976a1887ca
+--- /dev/null
++++ b/docs/changes/20261117-routing-context-integrity/source-review.md
+@@ -0,0 +1,30 @@
++# 外部来源与取舍
++
++2026-11-17 检索并只读核验 7 个一手仓库/规范的具体文件，对照 ADK
++`6d902f721f560f02883516e809fbd93a326405b6`。这是有界研究，不声称穷尽全网。
++源码按下列 commit 经 GitHub 接口回读；网页搜索只用于发现与交叉核实。
++未安装外部 Skill、执行其脚本、复制大段源码或调用模型 CLI。
++
++| 来源（固定 revision / path） | 已核方法与 ADK 决定 |
++| --- | --- |
++| [Agent Skills 客户端指南](https://github.com/agentskills/agentskills/blob/83021e2be457a9b6679148719c1f6074f0ad975e/docs/client-implementation/adding-skills-support.mdx) | **ENHANCE**：Step 5 保护压缩中的 Skill 正文，仅对仍在上下文中的重复激活去重。现有 context/handoff 已记录目标和证据，尚未明确“曾加载”与“当前正文有效”的差别。本次补来源、内容身份、必要引用和恢复取舍；不新增 runtime context manager。 |
++| [Anthropic 触发评测](https://github.com/anthropics/skills/blob/e4bb5d960d87126ff3b3a8af1a104b7db67560ba/skills/skill-creator/scripts/run_eval.py) | **RETAIN / 不复制 harness**：重复观测可用；但 `run_eval` 将 worker 异常计作 False，负例可能因此通过。此为静态源码推论，未运行其 CLI。保留 ADK 的 error-free 校验与 runtime-errors gate，不把工具失败计成安全成功。 |
++| [Sentry Prompt Optimizer](https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/prompt-optimizer/SKILL.md)及 [优化循环](https://github.com/getsentry/skills/blob/a582c51ee29d0f35e6ac321340796f77d43da733/skills/prompt-optimizer/references/meta-optimization-loop.md) | **RETAIN**：同切片比较、最小改动候选、失败聚类、留出集与停止条件。ADK 已有相关效果/任务评测边界；不重建评测系统，不以措辞变化宣称效果提升。 |
++| [Matt Pocock：为 Agent 写作](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/productivity/writing-for-agents/SKILL.md)及 [任务切分](https://github.com/mattpocock/skills/blob/5863806dd4e15c63174bee4e7515a4256792ecfa/skills/engineering/to-tickets/SKILL.md) | **RETAIN / 局部 ENHANCE**：引用同时说明目标与触发条件；按分支下沉细节，同一意义只保留一处。本次 token Skill 将重复字段清单归到原模板；保留条件与字段。现有任务拆分和 expand-contract 方法不重写。 |
++| [Superpowers 审查交接](https://github.com/obra/superpowers/blob/22f0b463e7a5e579904dd6211a520321035526f7/skills/requesting-code-review/SKILL.md) | **RETAIN**：固定 base/head、分支 merge-base、只交任务所需上下文。ADK review-evidence-template 已覆盖，并明确 working-tree overlay；不重复添加审查层。 |
++| [Addy Osmani 约束方法](https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/skills/constraint-driven-development/SKILL.md)及 [安装边界](https://github.com/addyosmani/agent-skills/blob/39b723ceebf81474d0557c1fecd01eddab585563/README.md) | **RETAIN**：检查按成本分层、基线 ratchet、违规反例检验 checker；ADK 已有。该仓也说明单 Skill 安装缺仓库级共享 references；继续保持 ADK 单项导出可消费，不照搬整包。 |
++| [Vercel 分发实现](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/scripts/build-discovery-index.mjs) | **OBSERVE**：固定 Git 树、确定性归档、逐 Skill 摘要与独立制品可参考；当前无新增 discovery 服务需求，沿用 ADK 已有导出/发布链。 |
++
++## 许可证与边界
++
++已回读固定 revision 的根 LICENSE：Agent Skills、Sentry 为 Apache-2.0；
++Matt、Superpowers、Addy 为 MIT。Anthropic、Vercel 的根 LICENSE 路径返回
++404，本轮未确定对应路径的许可证，不复制其代码。只将已核通用方法写入现有
++ADK 方法指导；外部来源不扩大授权、不替代独立审核。
++
++## 本轮采用的可验证边界
++
++当前有效正文可去重；正文丢失/被摘要或来源变化须按当前目标和权限按需重读，
++必要内容不可读则明确缺证。不再适用的 Skill 留在 excluded。来源或版本未知
++不得伪造内容身份。三个恢复情境供独立消费检查，不能当作模型 A/B、原生宿主
++自动恢复或 Token/费用改善的证明。其余已覆盖方法保留，避免重复增加规则。
+diff --git a/docs/changes/20261117-routing-context-integrity/tasks.md b/docs/changes/20261117-routing-context-integrity/tasks.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..c1944023046c48c9840898f460cd9ecf6313f055
+--- /dev/null
++++ b/docs/changes/20261117-routing-context-integrity/tasks.md
+@@ -0,0 +1,15 @@
++# 当前执行状态
++
++当前职责：产品代码已冻结；协调集成验证与真实独立审查。
++
++| 任务 | 负责 | 状态 | verify |
++| --- | --- | --- | --- |
++| T1 全量 Skill 与外部原始实现审查 | skills / research | verified | 65 个唯一身份与54个直接参考全文审查；7个来源固定版本及取舍 |
++| T2 内容缓存与结果类型正确性 | core | in-review | IR-1已独立复验；provider回归归原专用模块，两模块25 tests与strict通过，待最终源码裁决 |
++| T3 当前动作与否定路由 | routing | in-review | 顺序边界已修；59定向、原30/30与fixed60/60、8预算通过；内核28930B，待最终fresh审查 |
++| T4 压缩后的有效 Skill 恢复 | context | verified | 三种独立消费情境完成，43项既有检查及8预算通过；真实runtime未测 |
++| T5 集成与独立审查 | coordinator / independent reviewer | in-progress | 版本已同步11.3.15；strict、质量、全量回归、8个预算与独立裁决待完成 |
++| T6 发布与现有消费者更新 | coordinator | planned | 精确 PR/main CI、不可变 11.3.15、Root source-only 消费及实际主线后验 |
++
++恢复入口：本目录 requirements/design；基线 `6d902f7`；各实施者保留原始
++复现与实际结果。失败追加 negative-results.md。未执行项不能标成已完成。
+diff --git a/manifest.json b/manifest.json
+index 573dcc22ec26d11bb28265cc6b4914c210a4e613..f86197aa34ec83220d0698bc0ccb4b822d90a249 100644
+--- a/manifest.json
++++ b/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "version": "11.3.14",
++  "version": "11.3.15",
+   "locale": "zh-CN",
+   "platforms": [
+     "linux-embedded",
+@@ -2207,6 +2207,16 @@
+       "required_evidence": []
+     },
+     "phrase_classes": {
++      "requested_action": [
++        "写ADR",
++        "编写ADR",
++        "撰写ADR",
++        "更新ADR",
++        "修订ADR",
++        "写成ADR",
++        "记录为ADR",
++        "整理成ADR"
++      ],
+       "readonly_scope": [
+         "只读分析",
+         "只读评估",
+@@ -2660,7 +2670,7 @@
+       },
+       {
+         "intent": "adr_writer",
+-        "intent_zh": "写ADR/架构决策记录/ADR",
++        "intent_zh": "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录",
+         "primary_skill": "adk-adr-writer",
+         "supporting_skills": []
+       },
+diff --git a/manifests/manifest.schema.json b/manifests/manifest.schema.json
+index 222fec378d0161750383e2c0e06cd87ae63d22d3..274338d7aea7f0d513a3fe576805a3f0e168cc67 100644
+--- a/manifests/manifest.schema.json
++++ b/manifests/manifest.schema.json
+@@ -973,6 +973,9 @@
+         "release_action"
+       ],
+       "properties": {
++        "requested_action": {
++          "$ref": "#/$defs/stringArray"
++        },
+         "readonly_scope": {
+           "$ref": "#/$defs/stringArray"
+         },
+diff --git a/manifests/software_m5_eval_contract.json b/manifests/software_m5_eval_contract.json
+index f42eb575332064f348406683d5c89d16e2275e63..0da1e8be604b0fc288f5189e6cf499a4026dca28 100644
+--- a/manifests/software_m5_eval_contract.json
++++ b/manifests/software_m5_eval_contract.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "adk-runtime-eval-campaign/v1",
+-  "campaign_id": "software-m5-11.3.14",
++  "campaign_id": "software-m5-11.3.15",
+   "tasks": "tests/fixtures/software_m5_eval_tasks.jsonl",
+   "minimum_tasks": 60,
+   "runtimes": [
+diff --git a/pyproject.toml b/pyproject.toml
+index 690a7f4d6017695e30c9e44bd3f900e39a29a7ae..a4687302de512b9f3aae7de669be8243572e8171 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
+ 
+ [project]
+ name = "agent-dev-kit"
+-version = "11.3.14"
++version = "11.3.15"
+ description = "Platform-neutral agent asset compiler, distributor, and evaluator"
+ readme = "README.md"
+ requires-python = ">=3.12,<3.13"
+diff --git a/skills/adk-adr-writer/SKILL.md b/skills/adk-adr-writer/SKILL.md
+index ae3a98b5a0e1999d43ee9a36a2cce07fc427d382..63f90ef9fb03bf3a7f9e2144b4da1601b65fdf68 100644
+--- a/skills/adk-adr-writer/SKILL.md
++++ b/skills/adk-adr-writer/SKILL.md
+@@ -1,10 +1,10 @@
+ ---
+ name: adk-adr-writer
+-description: "用于架构方案已有明确权衡、需要记录决定与替代方案时生成 ADR；不用于在需求不明时直接替代需求澄清或执行代码修改。"
+-version: 1.2.1
+-last_updated: 2026-11-13
++description: "已有架构权衡、需编写或更新 ADR 时记录真实决定、依据与后果；不用于概念介绍、需求未明或代码实现。"
++version: 1.2.2
++last_updated: 2026-11-17
+ triggers:
+-  - "写ADR"
++  - "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR"
+   - "架构决策"
+   - "决策记录"
+ non_triggers:
+@@ -21,7 +21,7 @@ constraints:
+ # adk-adr-writer
+ 
+ ## Goal
+-记录实际架构选择及其理由，而不是填满模板。保持 Context、Decision、Alternatives、Consequences 可追溯，未经确认的建议不得冒充已批准决策。
++记录真实选择与理由；Context、Decision、Alternatives、Consequences 可追溯，建议不得冒充已批准决策。
+ 
+ ## Risk-based authoring
+ - **lite（默认）**：局部可逆决策。简述背景、选择、理由、后果及验证；确无其他可行路径时写明约束，不编造第二方案。
+@@ -32,7 +32,7 @@ constraints:
+ ## Workflow
+ 1. 检查已知目标、约束、用户实际选择、现有 ADR；不重问已确认事实。
+ 2. 固定核心决定与取舍，只有一个可行方案时解释排除其他路径的原因，不虚构备选。
+-3. 记录后果与可验证证据，缺失的成本、性能或决策状态标为待核。
++3. 记录后果与证据；缺失成本、性能或决策状态标待核。
+ 4. 需要写入仓库时，按目标项目的 ADR 编号规则查找已有编号（例如 `ADR-NNN`），不覆盖旧决策；仅要求草稿则不写文件。
+ 5. 自检事实、术语、数值、限制词和引用关系；删无必要的复述。定向修订只改授权段落/字段，逐字保留其余约束、状态、数字、单位与引用；发现冲突先标明，不扩大成整篇改写或升级决策状态。
+ 
+diff --git a/skills/adk-context-compress-handoff/SKILL.md b/skills/adk-context-compress-handoff/SKILL.md
+index 7596082ede5c535c724324fc2099c17968fc4c78..e419bfe0a19a4cfd1309f5b7d51bcdf54ef94ee1 100644
+--- a/skills/adk-context-compress-handoff/SKILL.md
++++ b/skills/adk-context-compress-handoff/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-context-compress-handoff
+ description: "用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。"
+-version: 1.0.2
+-last_updated: 2026-11-16
++version: 1.0.3
++last_updated: 2026-11-17
+ triggers:
+   - "上下文压缩"
+   - "会话接力"
+@@ -28,21 +28,18 @@ constraints:
+ # adk-context-compress-handoff
+ 
+ ## Goal
+-生成可恢复、可审计的 handoff，排除过期目标、失败假设和敏感原文。
++生成可恢复、可审计的 handoff。
+ 
+ ## Prerequisites
+-- 已知最新目标、验证状态、下一步及可回读证据。
+-- 已识别需排除的旧计划、错误事实与敏感内容。
++确认最新目标、验证状态与可回读证据；排除过期计划、错误事实、失败假设及敏感原文。
+ 
+ ## Workflow
+-1. 确认最新目标：记录 latest goal，列出 invalidated goals。
+-2. 分层压缩：stable、dynamic、evidence、excluded 分开写。
+-3. 连续性证明：默认使用下方模板记录 active plan/findings/progress/attestation；仅在 ADK 源码根已确认且文件可读时，可选根下 `templates/context/continuity-attestation.md`。
+-4. 证据索引：命令、路径、结果摘要和回退条件必须可追溯。
+-5. 风险与阻塞：列出 unresolved blockers、residual risks、manual approval points；handoff 不扩大权限。
+-6. 下一步：给出最多 3 个优先动作和第一条建议命令。
+-7. 记忆边界：长期规则只输出 candidate，不直接写 memory 或 AGENTS。
+-8. 恢复提示：生成新会话可直接粘贴的 resume prompt。
++1. 写 latest goal / invalidated goals，分开 stable、dynamic、evidence、excluded。
++2. 默认使用下方模板记录 active plan/findings/progress/attestation；仅在 ADK 源码根已确认且文件可读时，可选 `templates/context/continuity-attestation.md`。
++3. 证据含命令、路径、结果与回退条件；保留 blockers、residual risks、manual approval points，不扩大权限。
++4. 列仍需 Skill 的来源、内容身份（可核版本/hash；未知注明）、必要 refs、正文状态。恢复先核目标/权限；仅同来源同内容且正文完整仍在当前上下文才去重；正文被摘要/丢失或来源/内容变化则按需重读，缺必要内容记 `needs-fix`。历史“已加载”不证明有效。
++5. 给出最多 3 个优先动作、第一条建议命令及可粘贴的 resume prompt；不再适用的 Skill 留在 excluded。
++6. 长期规则只作 candidate，交 memory/archive 治理；不写 memory/AGENTS。
+ 
+ ## Evidence Template
+ ```md
+@@ -52,6 +49,7 @@ constraints:
+ - Confirmed Facts:
+ - State / Blockers:
+ - Scope / Permission:
++- Active Skills: source / content identity / required refs / intact|summarized|missing|changed
+ - Evidence / Fallback:
+ - Continuity Attestation:
+ - Excluded Context:
+@@ -63,7 +61,5 @@ constraints:
+ ```
+ 
+ ## Quality Gate
+-- 必须包含 latest goal、next actions、raw evidence 和 fallback condition。
+-- excluded context 不得重新进入 active instructions。
+-- 不能把压缩摘要当成完成证据；必须保留原始路径或命令。
+-- 涉及长期提升时必须转交 memory/archive 治理。
++- latest goal、next actions、raw evidence、fallback condition 可追溯；摘要不证明完成。
++- excluded context 不进入 active instructions；只恢复当前仍需的正文和 refs。
+diff --git a/skills/adk-context-engineering/SKILL.md b/skills/adk-context-engineering/SKILL.md
+index 1b53fcbe94688c5970e130017f6f1ab433be6522..c2668d3de0593edd92b44bf7a8ed5905a493b7c8 100644
+--- a/skills/adk-context-engineering/SKILL.md
++++ b/skills/adk-context-engineering/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-context-engineering
+ description: "用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。"
+-version: 2.0.2
+-last_updated: 2026-11-16
++version: 2.0.3
++last_updated: 2026-11-17
+ triggers:
+   - 上下文工程
+   - 上下文膨胀
+@@ -32,44 +32,35 @@ constraints:
+ # adk-context-engineering
+ 
+ ## Goal
+-生成最小充分、可恢复、可追溯的 context policy。
+-
+-## Use When
+-- 长任务需 checkpoint / resume / handoff，或并行 Agent 需共享 contract 与上下文隔离。
+-- 上下文膨胀、冲突、缺证、错误 reference 或过度压缩导致误解。
+-
+-没有 context 边界问题时仅作 supporting capability，不替代计划、编码或测试。
++生成最小充分、可恢复、可追溯的 context policy。无上下文边界问题时仅作 supporting capability，不替代计划、编码或测试。
+ 
+ ## Prerequisites
+-- 明确当前 objective、phase、risk level 与候选 primary Skill。
+-- 知道哪些输入是 authoritative facts，哪些只是假设、历史摘要或按需 reference。
++明确 objective、phase、risk 与候选 primary；区分权威事实、假设、历史摘要和按需 reference。
+ 
+ ## Context Policy
+-1. **Stable core**：只保留长期稳定的 role/rules/contract；优先 cache-friendly 内容。
+-2. **Task state**：目标、当前阶段、done/open/blocker、candidate identity。
+-3. **Evidence**：先摘要与 evidence ref；高风险/争议结论保留 L3/raw pointer，不默认复制全文。
+-4. **On-demand capability**：只有触发后才加载 Skill body、reference、tool schema。
+-5. **Handoff isolation**：子任务只接收 objective、必要 facts/contract、scope、evidence refs；不默认继承完整聊天历史。
++1. **Stable core**：稳定 role/rules/contract，优先 cache-friendly。
++2. **Task state**：目标、phase、done/open/blocker、candidate identity。
++3. **Evidence**：摘要与 refs；高风险/争议保留 L3/raw pointer。
++4. **On-demand capability**：命中后加载 Skill、reference、tool schema。
++5. **Handoff isolation**：只交 objective、必要 facts/contract、scope、refs，不复制完整历史。
+ 
+ ## Workflow
+-1. 识别当前决策真正需要的事实、contract 和 evidence。
+-2. 将信息标记为 `always | phase | on-demand | raw-pointer | exclude`。
+-3. 删除重复、过期、低价值动态输出；冲突信息保留来源与 freshness，不静默覆盖。
+-4. 为长任务写 summary-first checkpoint；raw output 仅保留 opaque/path pointer 和 retention decision。
+-5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选根下 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
+-6. 验证恢复能力：新执行者只读取摘要和 refs 应能知道目标、已确认事实、未决问题和下一步；若不能，补缺失信息而不是扩大所有上下文。
++1. 按当前决策将事实/contract/evidence 标为 `always | phase | on-demand | raw-pointer | exclude`；去重、去过期输出，冲突保留来源与 freshness。
++2. 长任务写 summary-first checkpoint；raw output 留 pointer 与 retention decision。
++3. 记录仍需 Skill 的来源、内容身份（可核版本/hash；未知注明）、必要 refs、正文状态 `intact | summarized | missing | changed`。
++4. 恢复先核目标/权限；仅同来源同内容且正文完整仍在当前上下文时去重。正文被摘要/丢失或来源/内容变化则按需重读；历史“已加载”不证明有效。排除不再适用的 Skill；必要内容不可读记 `needs-evidence`。
++5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
++6. 新执行者据摘要和 refs 核对目标、事实、未决问题与下一步；只补缺项，不全量重载。
+ 
+ ## Failure / Abstain
+-- 权威来源不明确：输出 `needs-evidence`，不要用历史摘要替代事实。
+-- 压缩会让 blocker、permission、candidate identity 或原始证据不可追溯：保留 pointer 并拒绝继续压缩。
+-- 问题实质是 routing/token-policy：分别交给 `adk-runtime-router` / `adk-token-context-governance`。
++- 来源不明记 `needs-evidence`；历史摘要不替代事实。
++- 压缩丢失 blocker、permission、candidate identity 或原始证据指针时停止。
++- routing/token-policy 交 `adk-runtime-router` / `adk-token-context-governance`。
+ 
+ ## Quality Gate
+-- 关键信息均有 provenance 或明确 assumption 标记。
+-- dynamic/raw 内容不进入 always-loaded core。
+-- handoff 不扩大权限，不复制无关完整历史。
+-- 恢复摘要包含 objective、state、blockers、evidence refs、next action。
+-- “质量提升”必须由具体误解/缺失样例或 eval 证明，不接受主观描述。
++- 事实有 provenance，假设明示；dynamic/raw 不进入 always-loaded core。
++- 恢复摘要覆盖目标、状态、阻塞、证据与下一步；Skill 有效性按当前内容核验，不扩大权限。
++- 质量提升须由误解/缺失样例或 eval 证明；本方法不证明宿主已实现自动恢复。
+ 
+ ## Evidence Template
+ ```md
+@@ -77,6 +68,7 @@ constraints:
+ - Confirmed Facts:
+ - State / Blockers:
+ - Scope / Permission:
++- Active Skills: source / content identity / required refs / content state
+ - Evidence / Fallback:
+ - Next Actions:
+ - Context decisions: always / phase / on-demand / raw-pointer / excluded
+diff --git a/skills/adk-token-context-governance/SKILL.md b/skills/adk-token-context-governance/SKILL.md
+index 03a735d7faae07fa35db8491e9944ebe11c0f367..cd4388c3c697553f5067fbb70b03b70c19c73e71 100644
+--- a/skills/adk-token-context-governance/SKILL.md
++++ b/skills/adk-token-context-governance/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: adk-token-context-governance
+ description: "用于日志与上下文过长时设置 Token 预算、分层读取和原文回退门禁；不用于压缩掉高风险证据或放宽验证要求。"
+-version: 1.3.3
+-last_updated: 2026-11-15
++version: 1.3.4
++last_updated: 2026-11-17
+ triggers:
+   - "省 token"
+   - "上下文太大"
+@@ -40,9 +40,7 @@ constraints:
+ # 保真省 Token 上下文治理
+ 
+ ## Goal
+-- 全 profile/workflow 默认用最小充分上下文，减少输入、工具和证据噪音。
+-- 保留 `raw_fallback`，避免压缩导致根因误判、审计漏判或交付证据缺失。
+-- 机器策略以 `manifests/token_context_policy.json` 为准。
++全 profile/workflow 使用最小充分上下文并保留 `raw_fallback`，防止压缩丢证；机器策略以 `manifests/token_context_policy.json` 为准。
+ 
+ ## Global Invariants
+ - 默认 `balanced`；显式 Low Token 仅切到 `fast` runtime overlay，不新增资产 profile/skill。
+@@ -53,8 +51,7 @@ constraints:
+ - low confidence、缺 raw evidence、契约冲突或安全例外立即恢复更完整上下文；省 token 不得降低验证、review、回滚或证据强度。
+ 
+ ## Prerequisites
+-- 确认任务风险、原始证据入口与可用预算信息。
+-- 高风险或缺 raw evidence 时先进入 `audit/L3`，不先压缩再猜测。
++核任务风险、原始证据与可用预算；高风险或缺 raw evidence 时先进入 `audit/L3`。
+ 
+ ## Workflow
+ 1. 定风险：普通开发 low；跨模块 debug/接口变更 medium；安全、权限、支付、迁移、生产事故、协议兼容、签名逻辑 high。
+@@ -64,12 +61,12 @@ constraints:
+ 5. 摘要记录 `raw_evidence/confidence/fallback_condition/budget_profile/read_tier`；关键条件缺失时回退 L2/L3。
+ 6. `HOT`、`CTX_PRESSURE`、阶段/目标切换时输出 handoff，只携带下一阶段必要证据。
+ 7. 长期项目用 `PROJECT_MAP.md` 保存入口、测试、禁读目录、高风险区域和验证时间，不保存一次性日志。
+-8. code intelligence 仅缩小阅读面；记录 `code_intelligence_provider_contract`：provider、query、provider_answered、fallback_used、confidence、returned_files、raw_evidence、omitted_reasons、source_reread_required；高风险完成前回读 source。
+-9. 大型 tool/skill 目录按 `tool_search_context_contract` 延迟加载：记录 namespace_summary、initial_surface、deferred_surface、loaded_tools、trusted_inventory、schema_review、omitted_reasons；不得把 deferred loading 当成权限审批。
++8. code intelligence 仅缩小阅读面，按下方模板记录 `code_intelligence_provider_contract`；高风险完成前回读 source。
++9. 大型 tool/skill 目录按下方 `tool_search_context_contract` 延迟加载；deferred loading 不提供权限审批。
+ 10. 完成前核对摘要能否支持当前决定、关键事实和阻塞是否保留、raw pointer 是否可用，并声明是否发生 `raw_fallback`。只有修改 ADK Skill/上下文策略资产且位于已核实源码工作区时才运行 token budget 与 strict asset validation；普通日志压缩不依赖 ADK Python 或内部测试。
+ 
+ ## Impact-first Selection（有真实用量时）
+-- 先按可观测的 `task_success / safety / latency / input_tokens / output_tokens / cached_tokens / tool_calls` 分清浪费来源：无新增事实的重复调用、串行外部检索瀑布、重复加载整段 reference、已知相同状态重复验证。能以缓存/确定性工具解决的，不触发额外模型轮次。
++- 按 `task_success / safety / latency / input_tokens / output_tokens / cached_tokens / tool_calls` 定位浪费：无新事实的重复调用、串行外部检索瀑布、重复 reference、同状态重复验证。仅同内容完整仍在当前上下文时复用已加载 Skill/引用；压缩丢失或来源/内容变化先重读。缓存/确定性工具可解决时不加模型轮次。
+ - 仅在同模型、同任务、同权限和可比较的真实 trace 下决定先优化哪个瓶颈；证据不足标 `not-measured`，不以源码字节变小推定真实 Token/费用下降。先守住安全与任务成功率，再谈性能。
+ - 修改高风险证据读取、审批、回滚或独立 Review 的步骤不属于“省 Token”范围；`audit/L3` 和原文回退机制优先。
+ 
+diff --git a/src/agent_dev_kit/__init__.py b/src/agent_dev_kit/__init__.py
+index 0acea6b14b148ad566623da035f662789e0b1773..cf0524fa5c0f143b06c5f0b851049160b3912be3 100644
+--- a/src/agent_dev_kit/__init__.py
++++ b/src/agent_dev_kit/__init__.py
+@@ -1,3 +1,3 @@
+ """agent-dev-kit structured control plane."""
+ 
+-__version__ = "11.3.14"
++__version__ = "11.3.15"
+diff --git a/src/agent_dev_kit/_matcher_kernel.py b/src/agent_dev_kit/_matcher_kernel.py
+index 4c0e2fe2bdc7543503252ae0a0c3dbd27572d3f9..202fd19283c83771530d3cf478ab3c8061c54442 100644
+--- a/src/agent_dev_kit/_matcher_kernel.py
++++ b/src/agent_dev_kit/_matcher_kernel.py
+@@ -2,7 +2,6 @@
+ 
+ from __future__ import annotations
+ 
+-import json
+ import os
+ import re
+ from functools import lru_cache
+@@ -15,31 +14,31 @@ from .model import Manifest, ManifestError
+ from .safe_yaml import safe_load
+ 
+ 
+-def _phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int, int]]:
+-    normalized = "".join(text.casefold().split())
+-    matches = []
+-    seen = set()
+-    for phrase in phrase_set.split("/"):
+-        phrase = phrase.strip()
+-        normalized_phrase = "".join(phrase.casefold().split())
+-        if not normalized_phrase or normalized_phrase in seen:
+-            continue
+-        seen.add(normalized_phrase)
+-        position = normalized.find(normalized_phrase) if normalized_phrase else -1
+-        if position >= 0:
+-            specificity = sum(2 if ord(character) > 127 else 1 for character in normalized_phrase)
+-            matches.append((phrase, position, specificity))
+-    return matches
++def _phrase_occurrences(text: str, phrase: str) -> Iterable[Tuple[str, int]]:
++    """Find a literal phrase, allowing bounded embedded-driver target modifiers.
+ 
++    Existing action phrases remain the trigger: a bare bus/runtime/driver noun
++    cannot match, and modifiers cannot cross a clause or arbitrary prose. The
++    matched span retains the action's start for the canonical negation check.
++    """
++    if phrase in ("实现驱动", "编写驱动", "写驱动"):
++        modifier = (
++            r"(?:linux(?:kernel)?|freertos|rtos|zephyr|裸机|bare-?metal|"
++            r"spi|i2c|uart|usart|dma|gpio|usb|can|sdio|ethernet|"
++            r"外设|设备|一个|新的|的|上|中|[-/])"
++        )
++        pattern = re.escape(phrase[:-2]) + modifier + r"{0,8}驱动"
++        for match in re.finditer(pattern, text):
++            yield match.group(0), match.start()
++        return
++    position = text.find(phrase)
++    while position >= 0:
++        yield phrase, position
++        position = text.find(phrase, position + len(phrase))
+ 
+-def _all_phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int, int]]:
+-    """Return every occurrence for polarity checks without changing route scoring.
+ 
+-    Route scoring intentionally keeps the historic first-occurrence behavior in
+-    ``_phrase_matches``.  Negation polarity must inspect later occurrences too:
+-    ``准备发布……不执行发布`` contains an active and a negated occurrence of the
+-    same action phrase.
+-    """
++def _all_phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int, int]]:
++    """Keep every occurrence: a later affirmative action may survive a denial."""
+ 
+     normalized = _normalized(text)
+     matches = []
+@@ -51,26 +50,11 @@ def _all_phrase_matches(text: str, phrase_set: str) -> Sequence[Tuple[str, int,
+             continue
+         seen.add(normalized_phrase)
+         specificity = sum(2 if ord(character) > 127 else 1 for character in normalized_phrase)
+-        position = normalized.find(normalized_phrase)
+-        while position >= 0:
+-            matches.append((phrase, position, specificity))
+-            position = normalized.find(normalized_phrase, position + len(normalized_phrase))
++        for matched, position in _phrase_occurrences(normalized, normalized_phrase):
++            matches.append((phrase if matched == normalized_phrase else matched, position, specificity))
+     return matches
+ 
+ 
+-def _phrase_match(text: str, phrase_set: str) -> Optional[Tuple[str, int]]:
+-    matches = _phrase_matches(text, phrase_set)
+-    if not matches:
+-        return None
+-    phrase, position, _ = min(matches, key=lambda item: (-item[2], item[1]))
+-    return phrase, position
+-
+-
+-def _contains_phrase(text: str, phrase_set: str) -> Optional[str]:
+-    match = _phrase_match(text, phrase_set)
+-    return match[0] if match is not None else None
+-
+-
+ def _normalized(value: str) -> str:
+     return "".join(value.casefold().split())
+ 
+@@ -97,7 +81,30 @@ def _is_locally_negated(
+     candidates = tuple(_normalized(marker) for marker in markers if _normalized(marker)) + (
+         "donot", "don't", "dont", "never", "avoid", "without",
+     )
+-    return any(local.endswith(marker + filler) for marker in candidates for filler in fillers)
++    # Creation is a verb + optional determiner + newness + tool qualifier.
++    # No arbitrary prose or intervening action may connect a denial to a noun.
++    creation = r"(?:创建|新建|create)(?:一个|一棵|任何|任意|another|any|the|an|a)?(?:新(?:的)?|new)?(?:git)?$"
++    return any(local.endswith(marker + filler) for marker in candidates for filler in fillers) or any(
++        re.search(re.escape(marker) + creation, local) is not None for marker in candidates
++    )
++
++
++def _is_mentioned_action(text: str, match: Tuple[str, int, int]) -> bool:
++    """An action under explanation/review is an object, not an execution request.
++
++    Scope ends at a clause or a new coordinated action. Request prefixes keep
++    nouns such as compatibility explanations from acting as global exclusions.
++    """
++    prefix = _normalized(text)[:match[1]]
++    local = re.split(r"[，,。.!！?？；;]|然后|接着|而是|但是|但|并且|(?<!合)并(?!发|行|列)", prefix)[-1]
++    request = r"(?:^|请|只读|先|仅|只|帮我|需要|希望|不要|不用|无需|别)"
++    operators = r"(?:解释|说明|介绍|讲解|审查|评审)"
++    sequence = re.match(r"^(?:请)?先" + operators + r"(.+)再(.*)$", local)
++    # Only a declared first/then sequence ends the first explanation's scope.
++    # Question complements retain their object: explain why/how to do it again.
++    if sequence and not re.search(r"为什么|为何|如何|怎样|怎么|是否|能否", "".join(sequence.groups())):
++        local = sequence.group(2)
++    return re.search(request + operators, local) is not None
+ 
+ 
+ def _active_phrase_matches(
+@@ -105,8 +112,16 @@ def _active_phrase_matches(
+     phrase_set: str,
+     markers: Sequence[str],
+ ) -> Sequence[Tuple[str, int, int]]:
++    matches = _all_phrase_matches(text, phrase_set)
++    inactive_spans = tuple(
++        (item[1], item[1] + len(_normalized(item[0])))
++        for item in matches
++        if _is_locally_negated(text, item, markers) or _is_mentioned_action(text, item)
++    )
+     return tuple(
+-        item for item in _all_phrase_matches(text, phrase_set) if not _is_locally_negated(text, item, markers)
++        item for item in matches
++        if not any(start <= item[1] and item[1] + len(_normalized(item[0])) <= end
++                   for start, end in inactive_spans)
+     )
+ 
+ 
+@@ -128,28 +143,30 @@ def _skill_identity_declined(text: str, skill: str, markers: Sequence[str]) -> b
+ 
+ 
+ @lru_cache(maxsize=512)
+-def _frontmatter_cached(path_value: str, mtime_ns: int, size: int) -> Mapping[str, Any]:
+-    del mtime_ns, size
+-    path = Path(path_value)
+-    lines = path.read_text(encoding="utf-8").splitlines()
++def _frontmatter_cached(raw: bytes) -> Mapping[str, Any]:
++    lines = raw.decode("utf-8").splitlines()
+     if not lines or lines[0] != "---":
+-        raise ManifestError("skill frontmatter is missing: {}".format(path))
++        raise ManifestError("skill frontmatter is missing")
+     try:
+         end = lines.index("---", 1)
+     except ValueError as exc:
+-        raise ManifestError("skill frontmatter is not terminated: {}".format(path)) from exc
++        raise ManifestError("skill frontmatter is not terminated") from exc
+     try:
+         value = safe_load("\n".join(lines[1:end]))
+     except yaml.YAMLError as exc:
+-        raise ManifestError("skill frontmatter is invalid: {}".format(path)) from exc
++        raise ManifestError("skill frontmatter is invalid") from exc
+     if not isinstance(value, dict):
+-        raise ManifestError("skill frontmatter must be a mapping: {}".format(path))
++        raise ManifestError("skill frontmatter must be a mapping")
+     return value
+ 
+ 
+ def _frontmatter(path: Path) -> Mapping[str, Any]:
+-    stat = path.stat()
+-    return _frontmatter_cached(str(path.resolve()), stat.st_mtime_ns, stat.st_size)
++    try:
++        return _frontmatter_cached(path.read_bytes())
++    except (OSError, UnicodeError) as exc:
++        raise ManifestError("skill frontmatter is unreadable: {}".format(path)) from exc
++    except ManifestError as exc:
++        raise ManifestError("{}: {}".format(exc, path)) from exc
+ 
+ 
+ def _phrases(frontmatter: Mapping[str, Any], key: str) -> Iterable[str]:
+@@ -300,7 +317,7 @@ def _phrase_class_condition_matches(
+     phrase_set = "/".join(phrase_classes[class_name])
+     matches = _all_phrase_matches(text, phrase_set)
+     if polarity == "positive":
+-        return any(not _is_locally_negated(text, match, markers) for match in matches)
++        return bool(_active_phrase_matches(text, phrase_set, markers))
+     return any(_is_locally_negated(text, match, markers) for match in matches)
+ 
+ 
+@@ -427,10 +444,10 @@ def _promotion_exclusion(
+         if not isinstance(phrase_set, str):
+             continue
+         phrases.append(phrase_set)
+-        if _phrase_matches(text, phrase_set) and _matching_negated_intent(text, entry, classes, markers):
++        if _all_phrase_matches(text, phrase_set) and _matching_negated_intent(text, entry, classes, markers):
+             return "negated_intent"
+     matching = any(_all_phrase_matches(text, phrase_set) for phrase_set in phrases)
+-    active = any(_active_phrase_matches(text, phrase_set, markers) for phrase_set in phrases)
++    active = bool(_active_phrase_matches(text, "/".join(phrases), markers))
+     return "negated_trigger" if matching and not active else None
+ 
+ 
+@@ -545,16 +562,15 @@ def match_text(
+                     "reason": "matched_non_trigger",
+                     "phrase": phrase,
+                 }
+-        for phrase_set in _phrases(frontmatter, "triggers"):
+-            active = _active_phrase_matches(text, phrase_set, markers)
+-            if active:
+-                phrase = min(active, key=lambda item: (-item[2], item[1]))[0]
+-                return {
+-                    "match": True,
+-                    "skill": skill,
+-                    "reason": "matched_trigger",
+-                    "phrase": phrase,
+-                }
++        active = _active_phrase_matches(text, "/".join(_phrases(frontmatter, "triggers")), markers)
++        if active:
++            phrase = min(active, key=lambda item: (-item[2], item[1]))[0]
++            return {
++                "match": True,
++                "skill": skill,
++                "reason": "matched_trigger",
++                "phrase": phrase,
++            }
+         return {"match": False, "skill": skill, "reason": "no_trigger_matched"}
+ 
+     classified = _classify_task_mode(routing, text, markers) if routing else {
+@@ -563,6 +579,14 @@ def match_text(
+         "explicit": False,
+     }
+     intents = routing.get("intents", []) if isinstance(routing, dict) and routing.get("enabled") else []
++    # The existing phrase-class IR may identify explicit requested actions.
++    # Prefer an affirmative action over incidental topics; this affects only
++    # selection, never task-mode or permission classification.
++    requested_actions = {
++        _normalized(phrase)
++        for phrase_set in phrase_classes.get("requested_action", ())
++        for phrase in phrase_set.split("/") if phrase.strip()
++    }
+     route_matches = []
+     negated_intents = []
+     negated_skills = set()
+@@ -574,7 +598,7 @@ def match_text(
+             primary = entry.get("primary_skill")
+             if not isinstance(intent_zh, str) or not isinstance(primary, str):
+                 continue
+-            matched_phrases = _phrase_matches(text, intent_zh)
++            matched_phrases = _all_phrase_matches(text, intent_zh)
+             if matched_phrases:
+                 path = _specific_skill_path(manifest, primary, "auto")
+                 if path is not None and not _implicit_context_matches(_frontmatter(path), text, markers):
+@@ -595,11 +619,12 @@ def match_text(
+                 total_specificity = sum(item[2] for item in active_phrases)
+                 best_specificity = max(item[2] for item in active_phrases)
+                 first_position = min(item[1] for item in active_phrases)
++                requested_action = any(_normalized(item[0]) in requested_actions for item in active_phrases)
+                 route_matches.append(
+-                    (-total_specificity, -best_specificity, first_position, order, entry)
++                    (-int(requested_action), -total_specificity, -best_specificity, first_position, order, entry)
+                 )
+     if route_matches:
+-        entry = min(route_matches, key=lambda item: item[:4])[4]
++        entry = min(route_matches, key=lambda item: item[:5])[5]
+         supporting = entry.get("supporting_skills", [])
+         result = {
+             "match": True,
+@@ -626,9 +651,12 @@ def match_text(
+             if non_trigger is not None:
+                 negated_intents.append(name)
+                 continue
+-            for phrase_set in _phrases(frontmatter, "triggers"):
+-                matches = _phrase_matches(text, phrase_set)
+-                active = _active_phrase_matches(text, phrase_set, markers)
++            trigger_sets = tuple(_phrases(frontmatter, "triggers"))
++            active_triggers = set(_active_phrase_matches(text, "/".join(trigger_sets), markers))
++            for phrase_set in trigger_sets:
++                matches = _all_phrase_matches(text, phrase_set)
++                active = tuple(item for item in _active_phrase_matches(text, phrase_set, markers)
++                               if item in active_triggers)
+                 if active:
+                     phrase, _, _ = min(active, key=lambda item: (-item[2], item[1]))
+                     result = {
+@@ -644,53 +672,6 @@ def match_text(
+     return _abstain_result(routing, classified, negated_intents)
+ 
+ 
+-def format_result(result: Mapping[str, Any]) -> str:
+-    if result.get("match") is True and result.get("source") == "routing":
+-        supporting = result.get("supporting_skills", [])
+-        suffix = ""
+-        if isinstance(supporting, list) and supporting:
+-            suffix = " supporting_skills=" + ",".join(str(item) for item in supporting)
+-        return "match=true source=routing skill={} intent_zh={}{} task_mode={} mutation_permission={} artifact_mode={}".format(
+-            result["skill"],
+-            json.dumps(result["intent_zh"], ensure_ascii=False),
+-            suffix,
+-            result.get("task_mode", "needs-triage"),
+-            result.get("mutation_permission", "deny"),
+-            result.get("artifact_mode") or "not-applicable",
+-        )
+-    if result.get("match") is True and result.get("source") in ("skill_trigger", "optional_skill_trigger"):
+-        return "match=true source={} skill={} trigger={} task_mode={} mutation_permission={} artifact_mode={}".format(
+-            result["source"],
+-            result["skill"],
+-            json.dumps(result["trigger"], ensure_ascii=False),
+-            result.get("task_mode", "needs-triage"),
+-            result.get("mutation_permission", "deny"),
+-            result.get("artifact_mode") or "not-applicable",
+-        )
+-    if result.get("match") is True:
+-        return "match=true skill={} reason=matched_trigger phrase={}".format(
+-            result["skill"], result["phrase"]
+-        )
+-    if result.get("decision") == "abstain":
+-        negated = result.get("negated_intents", [])
+-        suffix = ""
+-        if isinstance(negated, list) and negated:
+-            suffix = " negated_intents=" + ",".join(str(item) for item in negated)
+-        return "match=false decision=abstain reason={} task_mode={} mutation_permission={} artifact_mode={}{}".format(
+-            result.get("reason", "needs-triage"),
+-            result.get("task_mode", "needs-triage"),
+-            result.get("mutation_permission", "deny"),
+-            result.get("artifact_mode") or "not-applicable",
+-            suffix,
+-        )
+-    if result.get("skill"):
+-        suffix = ""
+-        if result.get("phrase"):
+-            suffix = " phrase=" + str(result["phrase"])
+-        return "match=false skill={} reason={}{}".format(result["skill"], result["reason"], suffix)
+-    return "match=false reason={}".format(result["reason"])
+-
+-
+ def _discover_root() -> Path:
+     configured = os.environ.get("ADK_ROOT")
+     if configured:
+diff --git a/src/agent_dev_kit/campaign_analysis.py b/src/agent_dev_kit/campaign_analysis.py
+index 7b1db9030e61c618cd0522c7b53bd47c14bda213..21b4768e7f45b54d55abddb4f29d7e5271cbd0ea 100644
+--- a/src/agent_dev_kit/campaign_analysis.py
++++ b/src/agent_dev_kit/campaign_analysis.py
+@@ -55,6 +55,18 @@ def _paired_bootstrap_lower(
+     return round(samples[max(0, math.ceil(len(samples) * 0.025) - 1)], 4)
+ 
+ 
++def _finite_nonnegative(value: Any, label: str) -> float:
++    if type(value) not in (int, float):
++        raise ManifestError(f"{label} is invalid")
++    try:
++        number = float(value)
++    except (OverflowError, ValueError) as exc:
++        raise ManifestError(f"{label} is invalid") from exc
++    if number < 0 or not math.isfinite(number):
++        raise ManifestError(f"{label} is invalid")
++    return number
++
++
+ def _validate_result(
+     record: Mapping[str, Any],
+     plan: Mapping[str, Any],
+@@ -95,6 +107,8 @@ def _validate_result(
+     attempts = record.get("attempts")
+     if not isinstance(attempts, list) or not attempts or len(attempts) > retry_limit + 1:
+         raise ManifestError("campaign result attempts are invalid")
++    elapsed_values: List[float] = []
++    cost_values: List[float] = []
+     for index, attempt in enumerate(attempts, start=1):
+         if not isinstance(attempt, dict) or attempt.get("attempt") != index:
+             raise ManifestError("campaign result attempt order is invalid")
+@@ -107,9 +121,10 @@ def _validate_result(
+             isinstance(model, str) and model for model in reported_models
+         ):
+             raise ManifestError("campaign attempt reported_models are invalid")
+-        elapsed = attempt.get("elapsed_ms")
+-        if not isinstance(elapsed, (int, float)) or elapsed < 0:
+-            raise ManifestError("campaign attempt elapsed_ms is invalid")
++        elapsed_values.append(_finite_nonnegative(attempt.get("elapsed_ms"), "campaign attempt elapsed_ms"))
++        actual_safe = attempt.get("actual_safe")
++        if type(actual_safe) is not bool and not (actual_safe is None and attempt.get("error") is not None):
++            raise ManifestError("campaign attempt actual_safe must be boolean unless the runtime failed")
+         usage = attempt.get("usage")
+         if not isinstance(usage, dict):
+             raise ManifestError("campaign attempt usage is invalid")
+@@ -122,21 +137,22 @@ def _validate_result(
+         ):
+             raise ManifestError("campaign attempt usage values must be non-negative integers")
+         if runtime == "claude":
+-            cost = attempt.get("cost_usd")
+-            if not isinstance(cost, (int, float)) or cost < 0 or cost > max_claude_call_usd:
++            cost = _finite_nonnegative(attempt.get("cost_usd"), "Claude campaign attempt cost")
++            if cost > max_claude_call_usd:
+                 raise ManifestError("Claude campaign attempt cost is invalid")
++            cost_values.append(cost)
+             if attempt.get("cost_evidence") not in ("runtime-reported", "upper-bound-estimate"):
+                 raise ManifestError("Claude campaign attempt cost evidence is invalid")
+         elif attempt.get("cost_usd") is not None or attempt.get("cost_evidence") != "not-applicable":
+             raise ManifestError("non-Claude campaign attempt has invalid cost evidence")
+     final = record.get("final")
+-    if not isinstance(final, dict) or final != attempts[-1]:
++    if not isinstance(final, dict) or _digest(final) != _digest(attempts[-1]):
+         raise ManifestError("campaign final result does not match last attempt")
+     actual_skill = final.get("actual_skill")
+     actual_safe = final.get("actual_safe")
+     error = final.get("error")
+     route_ok = error is None and actual_skill == expected["expected_route"]
+-    safe_ok = error is None and actual_safe == expected["expected_safe"]
++    safe_ok = error is None and actual_safe is expected["expected_safe"]
+     status = "pass" if route_ok and safe_ok else "fail"
+     if final.get("route_ok") is not route_ok or final.get("safe_ok") is not safe_ok or final.get("status") != status:
+         raise ManifestError("campaign final summary was not derived from raw fields")
+@@ -146,17 +162,14 @@ def _validate_result(
+     usage_complete = all(
+         isinstance(attempt.get("usage", {}).get("total_tokens"), int) for attempt in attempts
+     )
+-    latency_complete = all(float(attempt.get("elapsed_ms", 0.0)) > 0 for attempt in attempts)
++    latency_complete = all(elapsed > 0 for elapsed in elapsed_values)
+     total_tokens = sum(
+         int(attempt["usage"]["total_tokens"])
+         for attempt in attempts
+         if isinstance(attempt.get("usage", {}).get("total_tokens"), int)
+     )
+-    total_cost_usd = sum(
+-        float(attempt["cost_usd"])
+-        for attempt in attempts
+-        if isinstance(attempt.get("cost_usd"), (int, float))
+-    )
++    total_elapsed = _finite_nonnegative(sum(elapsed_values), "campaign result elapsed_ms total")
++    total_cost_usd = _finite_nonnegative(sum(cost_values), "campaign result cost total")
+     return {
+         "runtime": runtime,
+         "condition": condition,
+@@ -166,7 +179,7 @@ def _validate_result(
+         "passed": status == "pass",
+         "route_ok": route_ok,
+         "safe_ok": safe_ok,
+-        "elapsed_ms": sum(float(attempt["elapsed_ms"]) for attempt in attempts),
++        "elapsed_ms": total_elapsed,
+         "total_tokens": total_tokens,
+         "total_cost_usd": round(total_cost_usd, 6),
+         "usage_complete": usage_complete,
+diff --git a/src/agent_dev_kit/matcher.py b/src/agent_dev_kit/matcher.py
+index d0fb30572f0ae5165c2c25d5afcad1d7f7579a1f..2569c32b0da18f9e33644ff1201dd39511d1e262 100644
+--- a/src/agent_dev_kit/matcher.py
++++ b/src/agent_dev_kit/matcher.py
+@@ -13,7 +13,6 @@ import argparse
+ import json
+ import sys
+ from functools import lru_cache
+-from pathlib import Path
+ from typing import Any, Dict, Mapping, Optional, Sequence
+ 
+ from ._matcher_kernel import (
+@@ -25,7 +24,6 @@ from ._matcher_kernel import (
+     _resolved_policy,
+     _routing_ir,
+     _routing_markers,
+-    format_result as kernel_format_result,
+     match_text as kernel_match_text,
+ )
+ from .model import Manifest, ManifestError
+@@ -64,9 +62,56 @@ _ALLOWED_IMPLICIT_POLICIES = {"eligible", "promote-same-group", "explicit-only"}
+ 
+ 
+ 
++def _kernel_format_result(result: Mapping[str, Any]) -> str:
++    if result.get("match") is True and result.get("source") == "routing":
++        supporting = result.get("supporting_skills", [])
++        suffix = ""
++        if isinstance(supporting, list) and supporting:
++            suffix = " supporting_skills=" + ",".join(str(item) for item in supporting)
++        return "match=true source=routing skill={} intent_zh={}{} task_mode={} mutation_permission={} artifact_mode={}".format(
++            result["skill"],
++            json.dumps(result["intent_zh"], ensure_ascii=False),
++            suffix,
++            result.get("task_mode", "needs-triage"),
++            result.get("mutation_permission", "deny"),
++            result.get("artifact_mode") or "not-applicable",
++        )
++    if result.get("match") is True and result.get("source") in ("skill_trigger", "optional_skill_trigger"):
++        return "match=true source={} skill={} trigger={} task_mode={} mutation_permission={} artifact_mode={}".format(
++            result["source"],
++            result["skill"],
++            json.dumps(result["trigger"], ensure_ascii=False),
++            result.get("task_mode", "needs-triage"),
++            result.get("mutation_permission", "deny"),
++            result.get("artifact_mode") or "not-applicable",
++        )
++    if result.get("match") is True:
++        return "match=true skill={} reason=matched_trigger phrase={}".format(
++            result["skill"], result["phrase"]
++        )
++    if result.get("decision") == "abstain":
++        negated = result.get("negated_intents", [])
++        suffix = ""
++        if isinstance(negated, list) and negated:
++            suffix = " negated_intents=" + ",".join(str(item) for item in negated)
++        return "match=false decision=abstain reason={} task_mode={} mutation_permission={} artifact_mode={}{}".format(
++            result.get("reason", "needs-triage"),
++            result.get("task_mode", "needs-triage"),
++            result.get("mutation_permission", "deny"),
++            result.get("artifact_mode") or "not-applicable",
++            suffix,
++        )
++    if result.get("skill"):
++        suffix = ""
++        if result.get("phrase"):
++            suffix = " phrase=" + str(result["phrase"])
++        return "match=false skill={} reason={}{}".format(result["skill"], result["reason"], suffix)
++    return "match=false reason={}".format(result["reason"])
++
++
+ def format_result(result: Mapping[str, Any]) -> str:
+     """Render the stable matcher line plus canonical Skill Content v2 semantics."""
+-    base = kernel_format_result(result)
++    base = _kernel_format_result(result)
+     if result.get("match") is not True:
+         return base
+     extras = []
+@@ -91,12 +136,10 @@ def format_result(result: Mapping[str, Any]) -> str:
+ 
+ 
+ @lru_cache(maxsize=8)
+-def _load_contract(path_value: str, mtime_ns: int, size: int) -> Mapping[str, Any]:
+-    del mtime_ns, size
+-    path = Path(path_value)
++def _load_contract(raw: bytes) -> Mapping[str, Any]:
+     try:
+-        value = json.loads(path.read_text(encoding="utf-8"))
+-    except (OSError, json.JSONDecodeError) as exc:
++        value = json.loads(raw.decode("utf-8"))
++    except (UnicodeError, json.JSONDecodeError) as exc:
+         raise ManifestError("Skill v2 content contract is invalid: {}".format(exc)) from exc
+     if not isinstance(value, dict) or value.get("schema_version") != "adk-skill-content-contract/v2":
+         raise ManifestError("Skill v2 content contract has unsupported schema")
+@@ -109,8 +152,11 @@ def _contract(manifest: Manifest) -> Mapping[str, Any]:
+     path = manifest.root / _CONTRACT
+     if not path.is_file():
+         raise ManifestError("Skill v2 content contract is missing: {}".format(_CONTRACT))
+-    stat = path.stat()
+-    return _load_contract(str(path.resolve()), stat.st_mtime_ns, stat.st_size)
++    try:
++        raw = path.read_bytes()
++    except OSError as exc:
++        raise ManifestError("Skill v2 content contract is invalid: {}".format(exc)) from exc
++    return _load_contract(raw)
+ 
+ 
+ def _skill_entry(manifest: Manifest, skill_id: str) -> tuple[str, Mapping[str, Any]]:
+diff --git a/src/agent_dev_kit/phase_context.py b/src/agent_dev_kit/phase_context.py
+index e6a6453b269af742a016ddc1332473ce455f98c8..b670686f0787030d4ff207caecf82901c94e1886 100644
+--- a/src/agent_dev_kit/phase_context.py
++++ b/src/agent_dev_kit/phase_context.py
+@@ -31,20 +31,14 @@ _ROLE_ORDER = {"primary": 0, "supporting": 1, "governance": 2, "fallback": 3}
+ 
+ @lru_cache(maxsize=8)
+ def _load_contract(
+-    path_value: str,
+-    path_mtime_ns: int,
+-    path_size: int,
+-    schema_value: str,
+-    schema_mtime_ns: int,
+-    schema_size: int,
++    raw: bytes,
++    schema_raw: bytes,
+ ) -> Mapping[str, Any]:
+-    del path_mtime_ns, path_size, schema_mtime_ns, schema_size
+-    path = Path(path_value)
+-    schema_path = Path(schema_value)
++    """Reuse parsing only for the exact contract and schema bytes validated."""
+     try:
+-        value = json.loads(path.read_text(encoding="utf-8"))
+-        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+-    except (OSError, json.JSONDecodeError) as exc:
++        value = json.loads(raw.decode("utf-8"))
++        schema = json.loads(schema_raw.decode("utf-8"))
++    except (UnicodeError, json.JSONDecodeError) as exc:
+         raise ManifestError(f"Phase context contract or schema is invalid: {exc}") from exc
+     if not isinstance(value, dict) or not isinstance(schema, dict):
+         raise ManifestError("Phase context contract and schema must be JSON objects")
+@@ -80,17 +74,12 @@ def _contract(manifest: Manifest) -> tuple[Mapping[str, Any], str]:
+         raise ManifestError(f"Phase context contract is missing: {_CONTRACT}")
+     if not schema_path.is_file():
+         raise ManifestError(f"Phase context schema is missing: {_CONTRACT_SCHEMA}")
+-    stat = path.stat()
+-    schema_stat = schema_path.stat()
+-    value = _load_contract(
+-        str(path.resolve()),
+-        stat.st_mtime_ns,
+-        stat.st_size,
+-        str(schema_path.resolve()),
+-        schema_stat.st_mtime_ns,
+-        schema_stat.st_size,
+-    )
+-    digest = hashlib.sha256(path.read_bytes()).hexdigest()
++    try:
++        raw, schema_raw = path.read_bytes(), schema_path.read_bytes()
++    except OSError as exc:
++        raise ManifestError(f"Phase context contract or schema is invalid: {exc}") from exc
++    value = _load_contract(raw, schema_raw)
++    digest = hashlib.sha256(raw).hexdigest()
+     return value, digest
+ 
+ 
+diff --git a/src/agent_dev_kit/skill_relationships.py b/src/agent_dev_kit/skill_relationships.py
+index 2726116e30d533c2b9dcaeee8d4f4b5c57866c73..e6c26f7fe7a7b4d4a82b7e2d157457d3f7e2ce52 100644
+--- a/src/agent_dev_kit/skill_relationships.py
++++ b/src/agent_dev_kit/skill_relationships.py
+@@ -36,20 +36,14 @@ _ALLOWED_TYPES = {
+ 
+ @lru_cache(maxsize=8)
+ def _load_contract(
+-    path_value: str,
+-    path_mtime_ns: int,
+-    path_size: int,
+-    schema_value: str,
+-    schema_mtime_ns: int,
+-    schema_size: int,
++    raw: bytes,
++    schema_raw: bytes,
+ ) -> Mapping[str, Any]:
+-    del path_mtime_ns, path_size, schema_mtime_ns, schema_size
+-    path = Path(path_value)
+-    schema_path = Path(schema_value)
++    """Reuse parsing only for the exact contract and schema bytes validated."""
+     try:
+-        value = json.loads(path.read_text(encoding="utf-8"))
+-        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+-    except (OSError, json.JSONDecodeError) as exc:
++        value = json.loads(raw.decode("utf-8"))
++        schema = json.loads(schema_raw.decode("utf-8"))
++    except (UnicodeError, json.JSONDecodeError) as exc:
+         raise ManifestError(f"Skill relationship contract or schema is invalid: {exc}") from exc
+     if not isinstance(value, dict) or not isinstance(schema, dict):
+         raise ManifestError("Skill relationship contract and schema must be JSON objects")
+@@ -98,17 +92,12 @@ def _contract(manifest: Manifest) -> tuple[Mapping[str, Any], str]:
+         raise ManifestError(f"Skill relationship contract is missing: {_CONTRACT}")
+     if not schema_path.is_file():
+         raise ManifestError(f"Skill relationship schema is missing: {_CONTRACT_SCHEMA}")
+-    stat = path.stat()
+-    schema_stat = schema_path.stat()
+-    value = _load_contract(
+-        str(path.resolve()),
+-        stat.st_mtime_ns,
+-        stat.st_size,
+-        str(schema_path.resolve()),
+-        schema_stat.st_mtime_ns,
+-        schema_stat.st_size,
+-    )
+-    return value, hashlib.sha256(path.read_bytes()).hexdigest()
++    try:
++        raw, schema_raw = path.read_bytes(), schema_path.read_bytes()
++    except OSError as exc:
++        raise ManifestError(f"Skill relationship contract or schema is invalid: {exc}") from exc
++    value = _load_contract(raw, schema_raw)
++    return value, hashlib.sha256(raw).hexdigest()
+ 
+ 
+ def _entries(manifest: Manifest) -> Dict[str, Mapping[str, Any]]:
+diff --git a/tests/fixtures/skill_method_ab_prereg.json b/tests/fixtures/skill_method_ab_prereg.json
+index 3130a16dc645dd1c73e4a901f6d95914ffde7cb0..cc3b6a807d2ebae0163e7a4e9f99cdc889a16112 100644
+--- a/tests/fixtures/skill_method_ab_prereg.json
++++ b/tests/fixtures/skill_method_ab_prereg.json
+@@ -9,7 +9,7 @@
+     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
+   },
+   "candidate": {
+-    "planned_release": "v11.3.14",
++    "planned_release": "v11.3.15",
+     "source_sha": null
+   },
+   "case_groups": {
+diff --git a/tests/test_effect_campaign_materializer.py b/tests/test_effect_campaign_materializer.py
+index 646a9875372658fa12a05a8cfaf872d2c03ab5a2..6bfd56bdc48d7ce290888ab406c60ee2b92bdffb 100644
+--- a/tests/test_effect_campaign_materializer.py
++++ b/tests/test_effect_campaign_materializer.py
+@@ -1,6 +1,5 @@
+ from __future__ import annotations
+ 
+-import copy
+ import json
+ import subprocess
+ import sys
+@@ -9,6 +8,7 @@ import unittest
+ from pathlib import Path
+ 
+ from agent_dev_kit import campaign_model
++from agent_dev_kit.campaign_analysis import _validate_result
+ from agent_dev_kit.effect_campaign_materializer import materialize_effect_campaign
+ from agent_dev_kit.model import Manifest, ManifestError
+ 
+@@ -347,6 +347,91 @@ class EffectCampaignMaterializerTest(unittest.TestCase):
+                 campaign_root=self.root,
+             )
+ 
++    def _record_and_plan(self):
++        path = campaign_model._result_path(self.state, "claude", "adk", 1, "task-a")
++        return path, json.loads(path.read_text()), json.loads((self.state / "campaign-plan.json").read_text())
++
++    def _validate_record(self, record, plan, runtime="claude", retry_limit=0, max_cost=0.01):
++        record.pop("record_sha256", None)
++        record["record_sha256"] = campaign_model._digest(record)
++        return _validate_result(record, plan, self.tasks[0], runtime, "adk", 1, retry_limit, max_cost)
++
++    def test_materializer_rejects_integer_safety_and_boolean_metrics(self) -> None:
++        for field, value in (("actual_safe", 1), ("elapsed_ms", True), ("cost_usd", False)):
++            with self.subTest(field=field):
++                self._write_state()
++                path, record, _ = self._record_and_plan()
++                record["attempts"][0][field] = record["final"][field] = value
++                record.pop("record_sha256")
++                record["record_sha256"] = campaign_model._digest(record)
++                write_json(path, record)
++                with self.assertRaises(ManifestError):
++                    materialize_effect_campaign(MANIFEST, self.contract_path, self.state,
++                                                self.effect_plan_path, "claude", campaign_root=self.root)
++
++    def test_result_validator_rejects_invalid_safety_and_nonfinite_numbers(self) -> None:
++        invalid = {
++            "actual_safe": (0, 1, "true", None),
++            "elapsed_ms": (False, True, float("nan"), float("inf"), -float("inf"), -1, "1", None),
++            "cost_usd": (False, True, float("nan"), float("inf"), -float("inf"), -1, "0", None),
++        }
++        for field, values in invalid.items():
++            for value in values:
++                with self.subTest(field=field, value=value):
++                    _, record, plan = self._record_and_plan()
++                    record["attempts"][0][field] = record["final"][field] = value
++                    with self.assertRaises(ManifestError):
++                        self._validate_record(record, plan)
++
++    def test_zero_numeric_measurements_and_false_safety_remain_valid(self) -> None:
++        _, record, plan = self._record_and_plan()
++        for attempt in (record["attempts"][0], record["final"]):
++            attempt.update(elapsed_ms=0, cost_usd=0.0, actual_safe=False, safe_ok=False, status="fail")
++        result = self._validate_record(record, plan)
++        self.assertEqual(result["elapsed_ms"], 0.0)
++        self.assertEqual(result["total_cost_usd"], 0.0)
++        self.assertFalse(result["safe_ok"])
++        self.assertFalse(result["passed"])
++
++    def test_final_snapshot_cannot_alias_boolean_and_integer_values(self) -> None:
++        _, record, plan = self._record_and_plan()
++        for attempt in (record["attempts"][0], record["final"]):
++            attempt.update(actual_safe=False, safe_ok=False, status="fail")
++        record["final"]["actual_safe"] = 0
++        with self.assertRaisesRegex(ManifestError, "final result does not match"):
++            self._validate_record(record, plan)
++
++    def test_unrepresentable_integer_measurements_fail_as_manifest_errors(self) -> None:
++        for field in ("elapsed_ms", "cost_usd"):
++            with self.subTest(field=field):
++                _, record, plan = self._record_and_plan()
++                record["attempts"][0][field] = record["final"][field] = 10 ** 400
++                with self.assertRaisesRegex(ManifestError, "is invalid"):
++                    self._validate_record(record, plan)
++
++    def test_finite_attempts_cannot_overflow_aggregated_measurements(self) -> None:
++        for field in ("elapsed_ms", "cost_usd"):
++            with self.subTest(field=field):
++                _, record, plan = self._record_and_plan()
++                record["attempts"][0][field] = 1e308
++                repeated = dict(record["attempts"][0], attempt=2)
++                record["attempts"].append(repeated)
++                record["final"] = dict(repeated)
++                with self.assertRaisesRegex(ManifestError, "total.*is invalid"):
++                    self._validate_record(record, plan, retry_limit=1, max_cost=1e308)
++
++    def test_finite_large_total_and_zero_measurements_remain_valid(self) -> None:
++        _, record, plan = self._record_and_plan()
++        record["attempts"][0].update(elapsed_ms=0.0, cost_usd=0.0)
++        repeated = dict(record["attempts"][0], attempt=2, elapsed_ms=1e308, cost_usd=0.001)
++        record["attempts"].append(repeated)
++        record["final"] = dict(repeated)
++        result = self._validate_record(record, plan, retry_limit=1)
++        self.assertEqual(result["elapsed_ms"], 1e308)
++        self.assertEqual(result["total_cost_usd"], 0.001)
++        self.assertFalse(result["latency_complete"])
++        self.assertTrue(result["passed"])
++
+ 
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/tests/test_phase_context.py b/tests/test_phase_context.py
+index a24133602e6dea1ebe359c57018ad01642084a72..5bb386302d877235b20a79e3076a23503e888e7a 100644
+--- a/tests/test_phase_context.py
++++ b/tests/test_phase_context.py
+@@ -1,12 +1,16 @@
+ from __future__ import annotations
+ 
+ import json
++import hashlib
++import os
++import shutil
+ import tempfile
+ import unittest
+ from pathlib import Path
+ from unittest.mock import patch
+ 
+ from agent_dev_kit.model import Manifest, ManifestError
++from agent_dev_kit import matcher, phase_context, skill_relationships, _matcher_kernel
+ from agent_dev_kit.phase_context import (
+     _contract,
+     _load_contract,
+@@ -135,14 +139,144 @@ class PhaseContextContractTests(unittest.TestCase):
+             local_schema.write_bytes(schema_path.read_bytes())
+             with self.assertRaisesRegex(ManifestError, "schema validation failed"):
+                 _load_contract(
+-                    str(bad_contract),
+-                    bad_contract.stat().st_mtime_ns,
+-                    bad_contract.stat().st_size,
+-                    str(local_schema),
+-                    local_schema.stat().st_mtime_ns,
+-                    local_schema.stat().st_size,
++                    bad_contract.read_bytes(),
++                    local_schema.read_bytes(),
+                 )
+ 
+ 
++class ContentCacheIdentityTests(unittest.TestCase):
++    """A saved timestamp cannot stand in for the bytes a consumer is using."""
++
++    def setUp(self) -> None:
++        self.temp = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temp.cleanup)
++        self.root = Path(self.temp.name)
++        self.manifest = Manifest(self.root, Manifest.load(ROOT).data, self.root / "manifest.json")
++        for relative in (
++            phase_context._CONTRACT, phase_context._CONTRACT_SCHEMA,
++            skill_relationships._CONTRACT, skill_relationships._CONTRACT_SCHEMA,
++            matcher._CONTRACT,
++        ):
++            destination = self.root / relative
++            destination.parent.mkdir(parents=True, exist_ok=True)
++            shutil.copy2(ROOT / relative, destination)
++        for section in ("skills", "optional_skills"):
++            for entry in self.manifest.data[section]:
++                destination = self.root / entry["path"]
++                destination.parent.mkdir(parents=True, exist_ok=True)
++                shutil.copy2(ROOT / entry["path"], destination)
++        for loader in (phase_context._load_contract, skill_relationships._load_contract,
++                       matcher._load_contract, _matcher_kernel._frontmatter_cached):
++            loader.cache_clear()
++            self.addCleanup(loader.cache_clear)
++
++    def replace_preserving_stat(self, path: Path, old: bytes, new: bytes) -> bytes:
++        raw, before = path.read_bytes(), path.stat()
++        self.assertEqual(len(old), len(new))
++        self.assertIn(old, raw)
++        changed = raw.replace(old, new, 1)
++        path.write_bytes(changed)
++        os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
++        after = path.stat()
++        self.assertEqual((before.st_size, before.st_mtime_ns), (after.st_size, after.st_mtime_ns))
++        return changed
++
++    def test_phase_valid_replacement_refreshes_semantics_and_matching_digest(self) -> None:
++        before = resolve_phase_context(self.manifest, "general", "route")
++        self.assertEqual(before["skills"][0]["name"], "adk-runtime-router")
++        raw = self.replace_preserving_stat(self.root / phase_context._CONTRACT,
++                                          b'"runtime-routing"', b'"goal-authoring" ')
++        after = resolve_phase_context(self.manifest, "general", "route")
++        self.assertEqual(after["skills"][0]["name"], "adk-goal-authoring")
++        self.assertEqual(after["contract_sha256"], hashlib.sha256(raw).hexdigest())
++
++    def test_relationship_valid_replacement_refreshes_semantics_and_digest(self) -> None:
++        before = skill_relationships.resolve_skill_relationships(self.manifest)
++        self.assertEqual(before["typed_relationships"][0]["type"], "handoff")
++        raw = self.replace_preserving_stat(self.root / skill_relationships._CONTRACT,
++                                          b'"requirement": "when-applicable"',
++                                          b'"requirement": "required"       ')
++        after = skill_relationships.resolve_skill_relationships(self.manifest)
++        self.assertEqual(after["typed_relationships"][0]["requirement"], "required")
++        self.assertEqual(after["contract_sha256"], hashlib.sha256(raw).hexdigest())
++
++    def test_content_contract_valid_replacement_updates_selection_group(self) -> None:
++        self.assertEqual(matcher.resolve_skill_content(self.manifest, "adk-runtime-router")["selection_group"],
++                         "runtime-routing")
++        self.replace_preserving_stat(self.root / matcher._CONTRACT,
++                                     b'"runtime-routing"', b'"updated-routing"')
++        self.assertEqual(matcher.resolve_skill_content(self.manifest, "adk-runtime-router")["selection_group"],
++                         "updated-routing")
++
++    def test_frontmatter_valid_and_invalid_replacements_are_read(self) -> None:
++        path = self.root / "skills/adk-runtime-router/SKILL.md"
++        self.assertEqual(_matcher_kernel._frontmatter(path)["name"], "adk-runtime-router")
++        self.replace_preserving_stat(path, b"name: adk-runtime-router", b"name: adk-updated-router")
++        self.assertEqual(_matcher_kernel._frontmatter(path)["name"], "adk-updated-router")
++        self.replace_preserving_stat(path, b"---", b"xxx")
++        with self.assertRaisesRegex(ManifestError, "frontmatter is missing"):
++            _matcher_kernel._frontmatter(path)
++
++    def test_changed_invalid_contracts_cannot_reuse_previous_success(self) -> None:
++        for module in (phase_context, skill_relationships, matcher):
++            with self.subTest(module=module.__name__):
++                module._contract(self.manifest)
++                self.replace_preserving_stat(self.root / module._CONTRACT, b'/v2"', b'/v9"')
++                with self.assertRaises(ManifestError):
++                    module._contract(self.manifest)
++
++    def test_changed_schema_cannot_reuse_previous_validation(self) -> None:
++        for module in (phase_context, skill_relationships):
++            with self.subTest(module=module.__name__):
++                module._contract(self.manifest)
++                self.replace_preserving_stat(self.root / module._CONTRACT_SCHEMA,
++                                             b'"type": "object"', b'"type": "string"')
++                with self.assertRaisesRegex(ManifestError, "schema validation failed"):
++                    module._contract(self.manifest)
++
++    def test_unchanged_input_reuses_bounded_parsing_cache(self) -> None:
++        for module in (phase_context, skill_relationships, matcher):
++            with self.subTest(module=module.__name__):
++                first = module._contract(self.manifest)
++                stats = module._load_contract.cache_info()
++                self.assertEqual(module._contract(self.manifest), first)
++                after = module._load_contract.cache_info()
++                self.assertEqual(after.misses, stats.misses)
++                self.assertEqual(after.hits, stats.hits + 1)
++                self.assertEqual(after.maxsize, 8)
++        path = self.root / "skills/adk-runtime-router/SKILL.md"
++        first = _matcher_kernel._frontmatter(path)
++        stats = _matcher_kernel._frontmatter_cached.cache_info()
++        self.assertEqual(_matcher_kernel._frontmatter(path), first)
++        after = _matcher_kernel._frontmatter_cached.cache_info()
++        self.assertEqual(after.misses, stats.misses)
++        self.assertEqual(after.hits, stats.hits + 1)
++        self.assertEqual(after.maxsize, 512)
++
++    def test_removed_and_non_utf8_inputs_fail_after_warming(self) -> None:
++        for module in (phase_context, skill_relationships, matcher):
++            with self.subTest(module=module.__name__):
++                module._contract(self.manifest)
++                path = self.root / module._CONTRACT
++                raw = path.read_bytes()
++                path.unlink()
++                with self.assertRaisesRegex(ManifestError, "missing"):
++                    module._contract(self.manifest)
++                path.write_bytes(b"\xff" + raw[1:])
++                with self.assertRaises(ManifestError):
++                    module._contract(self.manifest)
++
++    def test_frontmatter_read_errors_and_invalid_utf8_are_manifest_errors(self) -> None:
++        path = self.root / "skills/adk-runtime-router/SKILL.md"
++        _matcher_kernel._frontmatter(path)
++        original = path.read_bytes()
++        self.replace_preserving_stat(path, original[:1], b"\xff")
++        with self.assertRaisesRegex(ManifestError, "frontmatter is unreadable"):
++            _matcher_kernel._frontmatter(path)
++        path.unlink()
++        with self.assertRaisesRegex(ManifestError, "frontmatter is unreadable"):
++            _matcher_kernel._frontmatter(path)
++
++
+ if __name__ == "__main__":
+     unittest.main()
+diff --git a/tests/test_routing_ir_contract.py b/tests/test_routing_ir_contract.py
+index 9c37491d050993c8bb93f73c5059c99af6f94c99..549374956b062163257ac33ba4619549e8bfb017 100644
+--- a/tests/test_routing_ir_contract.py
++++ b/tests/test_routing_ir_contract.py
+@@ -82,11 +82,19 @@ class RoutingIrContractTest(unittest.TestCase):
+         phrase_classes = self.manifest.data["routing"]["phrase_classes"]
+         self.assertEqual(
+             set(phrase_classes),
+-            {"readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action"},
++            {"readonly_scope", "generic_execution", "planning_action", "debugging_action", "release_action", "requested_action"},
+         )
+         self.assertIn("只分析", phrase_classes["readonly_scope"])
+         self.assertTrue({"执行", "实施", "推进", "落地"} <= set(phrase_classes["generic_execution"]))
+ 
++    def test_requested_action_class_is_optional_and_typed(self):
++        legacy = copy.deepcopy(self.manifest.data)
++        legacy["routing"]["phrase_classes"].pop("requested_action")
++        self.assertEqual(self.schema_failures(legacy), [])
++        invalid = copy.deepcopy(self.manifest.data)
++        invalid["routing"]["phrase_classes"]["requested_action"] = [True]
++        self.assert_schema_failure(invalid, "schema routing/phrase_classes/requested_action/0")
++
+     def test_catalog_matrix_is_a_routing_ir_projection(self):
+         expected = {
+             "runtime_routing": "runtime_router",
+diff --git a/tests/test_runtime_comparison_contract.py b/tests/test_runtime_comparison_contract.py
+index 75403d6e7fd842e2c84f44cd0ff33c9e7b753976..f614e9c8cf78b110808fa4e8a67372248f3765a7 100644
+--- a/tests/test_runtime_comparison_contract.py
++++ b/tests/test_runtime_comparison_contract.py
+@@ -12,7 +12,8 @@ import unittest
+ from pathlib import Path
+ from unittest.mock import patch
+ 
+-from agent_dev_kit import evaluation, evaluation_cli, evaluation_runtime
++from agent_dev_kit import campaign_model, evaluation, evaluation_cli, evaluation_runtime
++from agent_dev_kit.campaign_analysis import _validate_result
+ from agent_dev_kit.model import Manifest, ManifestError
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+@@ -85,6 +86,40 @@ def report(condition: str, failed: set[int]) -> dict:
+ 
+ 
+ class RuntimeComparisonContractTests(unittest.TestCase):
++    def test_recorded_provider_failure_preserves_missing_safety_and_cost(self) -> None:
++        # Validate a synthetic recorded failure only; no provider/runtime call.
++        observed = report("adk", set())
++        observed["runtime"] = "codex"
++        observed["results"] = [observed["results"][0]]
++        observed["results"][0].update(
++            actual_safe=None, actual_skill=None, error="runtime-evaluation-error",
++            status="fail", route_ok=False, safe_ok=False, elapsed_ms=0.0,
++            usage={"total_tokens": 0}, cost_usd=None,
++        )
++        attempt = campaign_model._attempt_from_report(observed, 1)
++        attempt["cost_evidence"] = "not-applicable"
++        plan = {
++            "campaign_id": "recorded-failure-fixture", "manifest_version": "test-version",
++            "manifest_sha256": observed["manifest_sha256"], "plan_sha256": "1" * 64,
++            "contract_sha256": "2" * 64, "tasks_sha256": observed["task_set_sha256"],
++            "runtimes": [{key: observed[key] for key in ("runtime", "runtime_version", "requested_model")}],
++        }
++        record = {
++            **{key: value for key, value in plan.items() if key != "runtimes"},
++            "schema": campaign_model.RESULT_SCHEMA,
++            **{key: observed[key] for key in ("runtime", "runtime_version", "requested_model")},
++            "condition": "adk", "trial": 1, "task_id": TASKS[0]["id"],
++            "task_sha256": campaign_model._digest(TASKS[0]),
++            "expected_route": TASKS[0]["expected_skill"], "expected_safe": True,
++            "attempts": [attempt], "final": dict(attempt),
++        }
++        record["record_sha256"] = campaign_model._digest(record)
++        result = _validate_result(record, plan, TASKS[0], observed["runtime"], "adk", 1, 0, 0.01)
++        self.assertFalse(result["passed"])
++        self.assertIsNone(result["cost_usd"])
++        self.assertEqual(result["total_cost_usd"], 0.0)
++        self.assertEqual(result["error"], "runtime-evaluation-error")
++
+     def test_direct_runtime_cli_requires_count_and_cost_acknowledgment(self) -> None:
+         common = ["run", "--suite", "runtime", "--limit", "1", "--execute", "--model", "test-model"]
+         for arguments in (
+diff --git a/tests/test_skill_relationships.py b/tests/test_skill_relationships.py
+index c8642ecf9126db4426149c8069a428b6c65668d6..aa6c9dfbff1e5d0db5eb988a6ac4aa6e53312a7d 100644
+--- a/tests/test_skill_relationships.py
++++ b/tests/test_skill_relationships.py
+@@ -160,12 +160,8 @@ class SkillRelationshipContractTests(unittest.TestCase):
+             local_schema.write_bytes(schema_path.read_bytes())
+             with self.assertRaisesRegex(ManifestError, "Only delivery-precedence"):
+                 _load_contract(
+-                    str(bad_contract),
+-                    bad_contract.stat().st_mtime_ns,
+-                    bad_contract.stat().st_size,
+-                    str(local_schema),
+-                    local_schema.stat().st_mtime_ns,
+-                    local_schema.stat().st_size,
++                    bad_contract.read_bytes(),
++                    local_schema.read_bytes(),
+                 )
+ 
+ 
+diff --git a/tests/test_skill_trigger_matrix.py b/tests/test_skill_trigger_matrix.py
+index 53325bd2ea204a71f3304895b5222ea57033feaa..f5dc441b959d70b7d950e061f3e597dfe8fbeb28 100644
+--- a/tests/test_skill_trigger_matrix.py
++++ b/tests/test_skill_trigger_matrix.py
+@@ -643,6 +643,162 @@ class SkillTriggerMatrixTests(unittest.TestCase):
+                 if "不要修改" in prompt:
+                     self.assertEqual(result.get("mutation_permission"), "deny", result)
+ 
++    def test_worktree_creation_prohibition_does_not_revive_a_short_alias(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt in (
++            "不要创建 worktree，在当前分支直接实现该修复",
++            "Do not create a worktree. Implement the fix in the current branch.",
++            "Never create a new worktree; use the current branch.",
++            "请勿新建工作树，只读审查代码",
++        ):
++            with self.subTest(prohibited=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
++        for prompt in (
++            "创建 worktree 隔离这次修复",
++            "不要头脑风暴，请创建 worktree 实现修复",
++            "不要创建 worktree；之后需要 worktree 隔离实现",
++        ):
++            with self.subTest(affirmative=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(result.get("skill"), "adk-worktree-governance", result)
++                self.assertEqual(result.get("mutation_permission"), "workspace-write", result)
++
++    def test_creation_negation_accepts_composed_target_modifiers(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt in (
++            "不要创建新的 Git worktree，直接修复当前分支的代码",
++            "不创建新工作树，直接修复当前分支的代码",
++            "Don't create a git worktree; 直接修复当前分支",
++            "Do not create any worktree; 直接修复当前分支",
++            "请勿新建一个新的 Git 工作树，直接修复当前分支",
++            "Never create another new git worktree; 直接修复当前分支",
++        ):
++            with self.subTest(prohibited=prompt):
++                result = match_text(manifest, prompt)
++                self.assertNotEqual(result.get("skill"), "adk-worktree-governance", result)
++                self.assertEqual(result.get("mutation_permission"), "deny", result)
++        for prompt in (
++            "不要更新 ADR，请创建新的 Git worktree 修复驱动",
++            "不要创建 worktree 做文档；创建新的 Git worktree 修复驱动",
++            "不要创建 worktree，然后请创建新的 Git worktree 实现修复",
++        ):
++            with self.subTest(affirmative=prompt):
++                result = match_text(manifest, prompt)
++                self.assertEqual(result.get("skill"), "adk-worktree-governance", result)
++                self.assertEqual(result.get("mutation_permission"), "workspace-write", result)
++
++    def test_explained_actions_do_not_become_authoring_or_implementation(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt, prohibited in (
++            ("请解释编写 ADR 的方法", "adk-adr-writer"),
++            ("只读解释“更新 ADR”这个术语与接口契约的关系", "adk-adr-writer"),
++            ("请解释为什么更新 ADR 有助于接口契约追溯", "adk-adr-writer"),
++            ("只读审查代码中的更新 ADR 实现", "adk-adr-writer"),
++            ("请解释如何实现 RTOS SPI DMA 驱动", "adk-driver-implementation"),
++            ("请说明怎样实现一个 RTOS SPI 驱动", "adk-driver-implementation"),
++        ):
++            with self.subTest(mentioned_action=prompt):
++                result = match_text(manifest, prompt)
++                self.assertNotEqual(result.get("skill"), prohibited, result)
++                self.assertEqual(result.get("mutation_permission"), "deny", result)
++                explicit = match_text(manifest, prompt, skill=prohibited, scope="skill")
++                self.assertIs(explicit.get("match"), False, explicit)
++        for prompt, expected, permission in (
++            ("请编写 ADR，解释接口契约的取舍", "adk-adr-writer", "deny"),
++            ("解释 API设计 的风险，然后请更新 ADR", "adk-adr-writer", "deny"),
++            ("不要解释如何编写 ADR，请直接编写 ADR", "adk-adr-writer", "deny"),
++            ("请实现 RTOS SPI DMA 驱动，并解释设计取舍", "adk-driver-implementation", "workspace-write"),
++            ("不要解释驱动原理；请实现 RTOS SPI DMA 驱动", "adk-driver-implementation", "workspace-write"),
++        ):
++            with self.subTest(requested_action=prompt):
++                result = match_text(manifest, prompt)
++                self.assertEqual(result.get("skill"), expected, result)
++                self.assertEqual(result.get("mutation_permission"), permission, result)
++
++    def test_first_explain_then_act_preserves_question_objects(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt, expected, permission in (
++            ("先说明方案再实现驱动", "adk-driver-implementation", "workspace-write"),
++            ("先说明方案再实现 RTOS SPI DMA 驱动", "adk-driver-implementation", "workspace-write"),
++            ("先解释隔离价值再创建 worktree", "adk-worktree-governance", "deny"),
++            ("请先解释取舍再更新 ADR", "adk-adr-writer", "deny"),
++            ("请先解释取舍然后更新 ADR", "adk-adr-writer", "deny"),
++        ):
++            with self.subTest(sequence=prompt):
++                result = match_text(manifest, prompt)
++                self.assertEqual(result.get("skill"), expected, result)
++                self.assertEqual(result.get("mutation_permission"), permission, result)
++        for prompt, prohibited in (
++            ("解释为什么再实现 RTOS SPI DMA 驱动", "adk-driver-implementation"),
++            ("解释为何再更新 ADR", "adk-adr-writer"),
++            ("请先解释为什么再实现 RTOS SPI DMA 驱动", "adk-driver-implementation"),
++            ("请先说明怎样先分析再实现驱动", "adk-driver-implementation"),
++            ("请先解释是否再创建 worktree", "adk-worktree-governance"),
++            ("先说明方案再不要实现驱动", "adk-driver-implementation"),
++            ("先说明方案再解释如何实现驱动", "adk-driver-implementation"),
++        ):
++            with self.subTest(question_or_denial=prompt):
++                result = match_text(manifest, prompt)
++                self.assertNotEqual(result.get("skill"), prohibited, result)
++                self.assertEqual(result.get("mutation_permission"), "deny", result)
++
++    def test_adr_authoring_action_owns_the_interface_topic(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt in (
++            "请写ADR，记录接口契约的设计取舍",
++            "把这个 API 设计决定写成 ADR，不修改代码",
++            "请更新 ADR，记录 API设计 的兼容取舍",
++            "请将设计接口时确定的错误码方案记录为 ADR",
++        ):
++            with self.subTest(authoring=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(result.get("skill"), "adk-adr-writer", result)
++                self.assertEqual(result.get("mutation_permission"), "deny", result)
++        for prompt, expected in (
++            ("只读解释 ADR 概念", None),
++            ("什么是 ADR？", None),
++            ("按 ADR 实现接口契约", "adk-interface-contract-design"),
++            ("不要写 ADR，请设计接口并验证兼容性", "adk-interface-contract-design"),
++            ("不用更新 ADR，只读审查代码", "adk-code-review-loop"),
++            ("请审查代码里生成 ADR 文档的实现", None),
++        ):
++            with self.subTest(near_miss=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(result.get("skill"), "adk-adr-writer", result)
++                if expected is not None:
++                    self.assertEqual(result.get("skill"), expected, result)
++
++    def test_driver_implementation_accepts_bounded_target_modifiers(self) -> None:
++        manifest = Manifest.load(ROOT)
++        for prompt, permission in (
++            ("请实现 RTOS SPI DMA 驱动，补超时和恢复测试", "workspace-write"),
++            ("请为 Linux 实现 I2C 驱动", "workspace-write"),
++            ("在 FreeRTOS 上编写 SPI DMA 驱动，不执行设备刷写", "deny"),
++            ("请写裸机 UART 驱动", "deny"),
++            ("只读评估实现 RTOS SPI DMA 驱动的方案", "deny"),
++        ):
++            with self.subTest(implementation=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertEqual(result.get("skill"), "adk-driver-implementation", result)
++                self.assertEqual(result.get("mutation_permission"), permission, result)
++                self.assertEqual(result.get("effect_scope"), "workspace", result)
++                self.assertEqual(result.get("escalation_effects"), [], result)
++        for prompt in (
++            "解释 RTOS SPI DMA 驱动的原理",
++            "不要实现 RTOS SPI DMA 驱动，只做代码审查",
++            "请实现 Selenium 浏览器驱动",
++            "请实现接口；文档介绍 RTOS SPI DMA 驱动",
++        ):
++            with self.subTest(near_miss=prompt):
++                result = match_text(manifest, prompt, scope="auto")
++                self.assertNotEqual(result.get("skill"), "adk-driver-implementation", result)
++                self.assertEqual(result.get("mutation_permission"), "deny", result)
++        for prompt in ("不要编写 RTOS SPI DMA 驱动", "不要编写驱动"):
++            with self.subTest(explicit_negation=prompt):
++                result = match_text(manifest, prompt, skill="adk-driver-implementation", scope="skill")
++                self.assertIs(result.get("match"), False, result)
++
+     def test_embedded_domain_routing_uses_intent_not_bare_nouns(self) -> None:
+         """Source-only regression: specialist noun must not grant migration/build action."""
+         manifest = Manifest.load(ROOT)

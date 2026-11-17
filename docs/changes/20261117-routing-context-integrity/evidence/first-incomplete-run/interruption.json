@@ -1,0 +1,8 @@
+{
+  "source_commit": "94d68e7501427fc518a0804b6b8f258e4b12f134",
+  "status": "interrupted-incomplete",
+  "exec_exit_code": 130,
+  "full_regression_pass_claimed": false,
+  "reason": "Independent sequential-action regression discovered; coordinator interrupted stale-source test run before implementation update",
+  "recorded_at": "2026-11-17T12:20:11.322184+00:00"
+}

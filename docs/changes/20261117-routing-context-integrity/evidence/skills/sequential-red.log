@@ -1,0 +1,37 @@
+FFFF
+======================================================================
+FAIL: test_first_explain_then_act_preserves_question_objects (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_first_explain_then_act_preserves_question_objects) (sequence='先说明方案再实现驱动')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 730, in test_first_explain_then_act_preserves_question_objects
+    self.assertEqual(result.get("skill"), expected, result)
+AssertionError: None != 'adk-driver-implementation' : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': ['driver_implementation']}
+
+======================================================================
+FAIL: test_first_explain_then_act_preserves_question_objects (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_first_explain_then_act_preserves_question_objects) (sequence='先说明方案再实现 RTOS SPI DMA 驱动')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 730, in test_first_explain_then_act_preserves_question_objects
+    self.assertEqual(result.get("skill"), expected, result)
+AssertionError: None != 'adk-driver-implementation' : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': ['driver_implementation']}
+
+======================================================================
+FAIL: test_first_explain_then_act_preserves_question_objects (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_first_explain_then_act_preserves_question_objects) (sequence='先解释隔离价值再创建 worktree')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 730, in test_first_explain_then_act_preserves_question_objects
+    self.assertEqual(result.get("skill"), expected, result)
+AssertionError: None != 'adk-worktree-governance' : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': ['worktree_governance']}
+
+======================================================================
+FAIL: test_first_explain_then_act_preserves_question_objects (tests.test_skill_trigger_matrix.SkillTriggerMatrixTests.test_first_explain_then_act_preserves_question_objects) (sequence='请先解释取舍再更新 ADR')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_trigger_matrix.py", line 730, in test_first_explain_then_act_preserves_question_objects
+    self.assertEqual(result.get("skill"), expected, result)
+AssertionError: None != 'adk-adr-writer' : {'match': False, 'decision': 'abstain', 'reason': 'needs-triage', 'task_mode': 'needs-triage', 'mutation_permission': 'deny', 'artifact_mode': None, 'negated_intents': ['adr_writer']}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.191s
+
+FAILED (failures=4)

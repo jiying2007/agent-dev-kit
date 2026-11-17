@@ -1,0 +1,272 @@
+test_changed_invalid_contracts_cannot_reuse_previous_success (tests.test_phase_context.ContentCacheIdentityTests.test_changed_invalid_contracts_cannot_reuse_previous_success) ... 
+  test_changed_invalid_contracts_cannot_reuse_previous_success (tests.test_phase_context.ContentCacheIdentityTests.test_changed_invalid_contracts_cannot_reuse_previous_success) (module='agent_dev_kit.phase_context') ... FAIL
+  test_changed_invalid_contracts_cannot_reuse_previous_success (tests.test_phase_context.ContentCacheIdentityTests.test_changed_invalid_contracts_cannot_reuse_previous_success) (module='agent_dev_kit.skill_relationships') ... FAIL
+  test_changed_invalid_contracts_cannot_reuse_previous_success (tests.test_phase_context.ContentCacheIdentityTests.test_changed_invalid_contracts_cannot_reuse_previous_success) (module='agent_dev_kit.matcher') ... FAIL
+test_changed_schema_cannot_reuse_previous_validation (tests.test_phase_context.ContentCacheIdentityTests.test_changed_schema_cannot_reuse_previous_validation) ... 
+  test_changed_schema_cannot_reuse_previous_validation (tests.test_phase_context.ContentCacheIdentityTests.test_changed_schema_cannot_reuse_previous_validation) (module='agent_dev_kit.phase_context') ... FAIL
+  test_changed_schema_cannot_reuse_previous_validation (tests.test_phase_context.ContentCacheIdentityTests.test_changed_schema_cannot_reuse_previous_validation) (module='agent_dev_kit.skill_relationships') ... FAIL
+test_content_contract_valid_replacement_updates_selection_group (tests.test_phase_context.ContentCacheIdentityTests.test_content_contract_valid_replacement_updates_selection_group) ... FAIL
+test_frontmatter_valid_and_invalid_replacements_are_read (tests.test_phase_context.ContentCacheIdentityTests.test_frontmatter_valid_and_invalid_replacements_are_read) ... FAIL
+test_phase_valid_replacement_refreshes_semantics_and_matching_digest (tests.test_phase_context.ContentCacheIdentityTests.test_phase_valid_replacement_refreshes_semantics_and_matching_digest) ... FAIL
+test_relationship_valid_replacement_refreshes_semantics_and_digest (tests.test_phase_context.ContentCacheIdentityTests.test_relationship_valid_replacement_refreshes_semantics_and_digest) ... FAIL
+test_removed_and_non_utf8_inputs_fail_after_warming (tests.test_phase_context.ContentCacheIdentityTests.test_removed_and_non_utf8_inputs_fail_after_warming) ... 
+  test_removed_and_non_utf8_inputs_fail_after_warming (tests.test_phase_context.ContentCacheIdentityTests.test_removed_and_non_utf8_inputs_fail_after_warming) (module='agent_dev_kit.phase_context') ... ERROR
+  test_removed_and_non_utf8_inputs_fail_after_warming (tests.test_phase_context.ContentCacheIdentityTests.test_removed_and_non_utf8_inputs_fail_after_warming) (module='agent_dev_kit.skill_relationships') ... ERROR
+  test_removed_and_non_utf8_inputs_fail_after_warming (tests.test_phase_context.ContentCacheIdentityTests.test_removed_and_non_utf8_inputs_fail_after_warming) (module='agent_dev_kit.matcher') ... ERROR
+test_unchanged_input_reuses_bounded_parsing_cache (tests.test_phase_context.ContentCacheIdentityTests.test_unchanged_input_reuses_bounded_parsing_cache) ... ok
+test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) ... 
+  test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) (field='actual_safe') ... FAIL
+  test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) (field='elapsed_ms') ... FAIL
+  test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) (field='cost_usd') ... FAIL
+test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) ... 
+  test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='actual_safe', value=1) ... FAIL
+  test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=False) ... FAIL
+  test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=True) ... FAIL
+  test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=nan) ... FAIL
+  test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=inf) ... FAIL
+  test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='cost_usd', value=False) ... FAIL
+  test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='cost_usd', value=nan) ... FAIL
+test_zero_numeric_measurements_and_false_safety_remain_valid (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_zero_numeric_measurements_and_false_safety_remain_valid) ... ok
+test_runtime_error_none_safety_and_nonclaude_missing_cost_remain_valid (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_runtime_error_none_safety_and_nonclaude_missing_cost_remain_valid) ... ok
+
+======================================================================
+ERROR: test_removed_and_non_utf8_inputs_fail_after_warming (tests.test_phase_context.ContentCacheIdentityTests.test_removed_and_non_utf8_inputs_fail_after_warming) (module='agent_dev_kit.phase_context')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 271, in test_removed_and_non_utf8_inputs_fail_after_warming
+    module._contract(self.manifest)
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/phase_context.py", line 85, in _contract
+    value = _load_contract(
+            ^^^^^^^^^^^^^^^
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/phase_context.py", line 45, in _load_contract
+    value = json.loads(path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1028, in read_text
+    return f.read()
+           ^^^^^^^^
+  File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+
+======================================================================
+ERROR: test_removed_and_non_utf8_inputs_fail_after_warming (tests.test_phase_context.ContentCacheIdentityTests.test_removed_and_non_utf8_inputs_fail_after_warming) (module='agent_dev_kit.skill_relationships')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 271, in test_removed_and_non_utf8_inputs_fail_after_warming
+    module._contract(self.manifest)
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/skill_relationships.py", line 103, in _contract
+    value = _load_contract(
+            ^^^^^^^^^^^^^^^
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/skill_relationships.py", line 50, in _load_contract
+    value = json.loads(path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1028, in read_text
+    return f.read()
+           ^^^^^^^^
+  File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+
+======================================================================
+ERROR: test_removed_and_non_utf8_inputs_fail_after_warming (tests.test_phase_context.ContentCacheIdentityTests.test_removed_and_non_utf8_inputs_fail_after_warming) (module='agent_dev_kit.matcher')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 271, in test_removed_and_non_utf8_inputs_fail_after_warming
+    module._contract(self.manifest)
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/matcher.py", line 113, in _contract
+    return _load_contract(str(path.resolve()), stat.st_mtime_ns, stat.st_size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/matcher.py", line 98, in _load_contract
+    value = json.loads(path.read_text(encoding="utf-8"))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1028, in read_text
+    return f.read()
+           ^^^^^^^^
+  File "<frozen codecs>", line 322, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte
+
+======================================================================
+FAIL: test_changed_invalid_contracts_cannot_reuse_previous_success (tests.test_phase_context.ContentCacheIdentityTests.test_changed_invalid_contracts_cannot_reuse_previous_success) (module='agent_dev_kit.phase_context')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 229, in test_changed_invalid_contracts_cannot_reuse_previous_success
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_changed_invalid_contracts_cannot_reuse_previous_success (tests.test_phase_context.ContentCacheIdentityTests.test_changed_invalid_contracts_cannot_reuse_previous_success) (module='agent_dev_kit.skill_relationships')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 229, in test_changed_invalid_contracts_cannot_reuse_previous_success
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_changed_invalid_contracts_cannot_reuse_previous_success (tests.test_phase_context.ContentCacheIdentityTests.test_changed_invalid_contracts_cannot_reuse_previous_success) (module='agent_dev_kit.matcher')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 229, in test_changed_invalid_contracts_cannot_reuse_previous_success
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_changed_schema_cannot_reuse_previous_validation (tests.test_phase_context.ContentCacheIdentityTests.test_changed_schema_cannot_reuse_previous_validation) (module='agent_dev_kit.phase_context')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 238, in test_changed_schema_cannot_reuse_previous_validation
+    with self.assertRaisesRegex(ManifestError, "schema validation failed"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_changed_schema_cannot_reuse_previous_validation (tests.test_phase_context.ContentCacheIdentityTests.test_changed_schema_cannot_reuse_previous_validation) (module='agent_dev_kit.skill_relationships')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 238, in test_changed_schema_cannot_reuse_previous_validation
+    with self.assertRaisesRegex(ManifestError, "schema validation failed"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_content_contract_valid_replacement_updates_selection_group (tests.test_phase_context.ContentCacheIdentityTests.test_content_contract_valid_replacement_updates_selection_group)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 212, in test_content_contract_valid_replacement_updates_selection_group
+    self.assertEqual(matcher.resolve_skill_content(self.manifest, "adk-runtime-router")["selection_group"],
+AssertionError: 'runtime-routing' != 'updated-routing'
+- runtime-routing
+? - ^ --
++ updated-routing
+?  ^^^  +
+
+
+======================================================================
+FAIL: test_frontmatter_valid_and_invalid_replacements_are_read (tests.test_phase_context.ContentCacheIdentityTests.test_frontmatter_valid_and_invalid_replacements_are_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 219, in test_frontmatter_valid_and_invalid_replacements_are_read
+    self.assertEqual(_matcher_kernel._frontmatter(path)["name"], "adk-updated-router")
+AssertionError: 'adk-runtime-router' != 'adk-updated-router'
+- adk-runtime-router
+?     - ^ --
++ adk-updated-router
+?      ^^^  +
+
+
+======================================================================
+FAIL: test_phase_valid_replacement_refreshes_semantics_and_matching_digest (tests.test_phase_context.ContentCacheIdentityTests.test_phase_valid_replacement_refreshes_semantics_and_matching_digest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 194, in test_phase_valid_replacement_refreshes_semantics_and_matching_digest
+    self.assertEqual(after["skills"][0]["name"], "adk-goal-authoring")
+AssertionError: 'adk-runtime-router' != 'adk-goal-authoring'
+- adk-runtime-router
++ adk-goal-authoring
+
+
+======================================================================
+FAIL: test_relationship_valid_replacement_refreshes_semantics_and_digest (tests.test_phase_context.ContentCacheIdentityTests.test_relationship_valid_replacement_refreshes_semantics_and_digest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_phase_context.py", line 204, in test_relationship_valid_replacement_refreshes_semantics_and_digest
+    self.assertEqual(after["typed_relationships"][0]["requirement"], "required")
+AssertionError: 'when-applicable' != 'required'
+- when-applicable
++ required
+
+
+======================================================================
+FAIL: test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) (field='actual_safe')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 328, in test_materializer_rejects_integer_safety_and_boolean_metrics
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) (field='elapsed_ms')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 328, in test_materializer_rejects_integer_safety_and_boolean_metrics
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) (field='cost_usd')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 328, in test_materializer_rejects_integer_safety_and_boolean_metrics
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='actual_safe', value=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 343, in test_result_validator_rejects_invalid_safety_and_nonfinite_numbers
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 343, in test_result_validator_rejects_invalid_safety_and_nonfinite_numbers
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 343, in test_result_validator_rejects_invalid_safety_and_nonfinite_numbers
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=nan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 343, in test_result_validator_rejects_invalid_safety_and_nonfinite_numbers
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='elapsed_ms', value=inf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 343, in test_result_validator_rejects_invalid_safety_and_nonfinite_numbers
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='cost_usd', value=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 343, in test_result_validator_rejects_invalid_safety_and_nonfinite_numbers
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) (field='cost_usd', value=nan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 343, in test_result_validator_rejects_invalid_safety_and_nonfinite_numbers
+    with self.assertRaises(ManifestError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.444s
+
+FAILED (failures=19, errors=3)

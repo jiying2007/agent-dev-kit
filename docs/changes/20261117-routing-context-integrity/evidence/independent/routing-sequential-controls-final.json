@@ -1,0 +1,298 @@
+{
+  "observed_at": "2026-11-17T12:22:03.483887+00:00",
+  "cases": 12,
+  "satisfied": 12,
+  "observations": [
+    {
+      "prompt": "先说明方案再实现驱动",
+      "expected_skill": "adk-driver-implementation",
+      "expected_permission": "workspace-write",
+      "matches_expectation": true,
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-driver-implementation",
+        "intent": "driver_implementation",
+        "intent_zh": "驱动开发/写驱动/编写驱动/实现驱动",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "implementation",
+        "mutation_permission": "workspace-write",
+        "artifact_mode": "implementation",
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "driver-implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "先说明方案再实现 RTOS SPI DMA 驱动",
+      "expected_skill": "adk-driver-implementation",
+      "expected_permission": "workspace-write",
+      "matches_expectation": true,
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-driver-implementation",
+        "intent": "driver_implementation",
+        "intent_zh": "驱动开发/写驱动/编写驱动/实现驱动",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "implementation",
+        "mutation_permission": "workspace-write",
+        "artifact_mode": "implementation",
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "driver-implementation",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "先解释隔离价值再创建 worktree",
+      "expected_skill": "adk-worktree-governance",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-worktree-governance",
+        "intent": "worktree_governance",
+        "intent_zh": "worktree/工作树/隔离分支/多分支并行/外部并行规划/创建worktree",
+        "supporting_skills": [
+          "adk-task-breakdown"
+        ],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "workspace-governance",
+        "effect_ceiling": "workspace-write",
+        "effect_scope": "workspace",
+        "effect_operation": "write",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "请先解释取舍再更新 ADR",
+      "expected_skill": "adk-adr-writer",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-adr-writer",
+        "intent": "adr_writer",
+        "intent_zh": "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "architecture-documentation",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "请先解释取舍然后更新 ADR",
+      "expected_skill": "adk-adr-writer",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": true,
+        "source": "routing",
+        "skill": "adk-adr-writer",
+        "intent": "adr_writer",
+        "intent_zh": "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR/架构决策记录",
+        "supporting_skills": [],
+        "fallback_skills": [],
+        "mutually_exclusive": [],
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "risk": "unknown",
+        "profile_availability": "fallback-profile",
+        "required_evidence": [],
+        "runtime_role": "primary",
+        "selection_group": "architecture-documentation",
+        "effect_ceiling": "read-only",
+        "effect_scope": "none",
+        "effect_operation": "read",
+        "implicit_trigger_policy": "eligible",
+        "escalation_effects": [],
+        "live_device_authorization": "not-required",
+        "release_target_authorization": "not-required",
+        "execution_effort": "E2",
+        "effort_basis": "conservative-default"
+      }
+    },
+    {
+      "prompt": "解释为什么再实现 RTOS SPI DMA 驱动",
+      "prohibited_skill": "adk-driver-implementation",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "driver_implementation"
+        ]
+      }
+    },
+    {
+      "prompt": "解释为何再更新 ADR",
+      "prohibited_skill": "adk-adr-writer",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "adr_writer"
+        ]
+      }
+    },
+    {
+      "prompt": "请先解释为什么再实现 RTOS SPI DMA 驱动",
+      "prohibited_skill": "adk-driver-implementation",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "driver_implementation"
+        ]
+      }
+    },
+    {
+      "prompt": "请先说明怎样先分析再实现驱动",
+      "prohibited_skill": "adk-driver-implementation",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "driver_implementation"
+        ]
+      }
+    },
+    {
+      "prompt": "请先解释是否再创建 worktree",
+      "prohibited_skill": "adk-worktree-governance",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "worktree_governance"
+        ]
+      }
+    },
+    {
+      "prompt": "先说明方案再不要实现驱动",
+      "prohibited_skill": "adk-driver-implementation",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "driver_implementation"
+        ]
+      }
+    },
+    {
+      "prompt": "先说明方案再解释如何实现驱动",
+      "prohibited_skill": "adk-driver-implementation",
+      "expected_permission": "deny",
+      "matches_expectation": true,
+      "result": {
+        "match": false,
+        "decision": "abstain",
+        "reason": "needs-triage",
+        "task_mode": "needs-triage",
+        "mutation_permission": "deny",
+        "artifact_mode": null,
+        "negated_intents": [
+          "driver_implementation"
+        ]
+      }
+    }
+  ],
+  "source_sha256": {
+    "src/agent_dev_kit/_matcher_kernel.py": "002bcaa17fd0c70b8554a42c53ace5551c1f0b02fe8d8b4f518224a2357dd423",
+    "src/agent_dev_kit/matcher.py": "72ad18ce45f8ecfa9d3ef8d016a26f55454bb7cf54be7387bc396cead405f064",
+    "manifest.json": "8025c83d9d01c52a3b338e8c82bdf27ebdf303b097e4928c89a7acc7101d98b6"
+  }
+}

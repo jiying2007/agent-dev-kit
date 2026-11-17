@@ -1,0 +1,94 @@
+{
+  "status": "pass",
+  "stages": [
+    {
+      "name": "final-ruff",
+      "command": [
+        "ruff",
+        "check",
+        "src",
+        "tools",
+        "tests/fixtures/fake_target_runtime.py"
+      ],
+      "started_at": "2026-11-17T12:26:48.762802+00:00",
+      "completed_at": "2026-11-17T12:26:48.781504+00:00",
+      "elapsed_seconds": 0.01868912099598674,
+      "exit_code": 0,
+      "log": "final-ruff.log"
+    },
+    {
+      "name": "final-format",
+      "command": [
+        "bash",
+        "scripts/check-format.sh"
+      ],
+      "started_at": "2026-11-17T12:26:48.781888+00:00",
+      "completed_at": "2026-11-17T12:26:49.245040+00:00",
+      "elapsed_seconds": 0.4631699580058921,
+      "exit_code": 0,
+      "log": "final-format.log"
+    },
+    {
+      "name": "strict",
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "validate",
+        "--strict"
+      ],
+      "started_at": "2026-11-17T12:26:49.245386+00:00",
+      "completed_at": "2026-11-17T12:26:51.668699+00:00",
+      "elapsed_seconds": 2.423330597994209,
+      "exit_code": 0,
+      "log": "strict.log"
+    },
+    {
+      "name": "release-check",
+      "command": [
+        "bash",
+        "scripts/devkit.sh",
+        "release",
+        "check",
+        "--summary-json"
+      ],
+      "started_at": "2026-11-17T12:26:51.669161+00:00",
+      "completed_at": "2026-11-17T12:26:52.030398+00:00",
+      "elapsed_seconds": 0.36125302700384054,
+      "exit_code": 0,
+      "log": "release-check.log"
+    },
+    {
+      "name": "benchmark",
+      "command": [
+        "/workspace/scratch/d417066aafa8/agent-dev-kit/.venv/bin/python",
+        "/workspace/scratch/d417066aafa8/verification/benchmark_fixed.py",
+        "/workspace/scratch/d417066aafa8/adk-clean-verify",
+        "/workspace/scratch/d417066aafa8/verification/benchmark-candidate60.json",
+        "--tasks",
+        "tests/fixtures/software_m5_eval_tasks.jsonl"
+      ],
+      "started_at": "2026-11-17T12:26:52.030819+00:00",
+      "completed_at": "2026-11-17T12:26:52.670662+00:00",
+      "elapsed_seconds": 0.6398600120010087,
+      "exit_code": 0,
+      "log": "benchmark.log"
+    },
+    {
+      "name": "full-regression",
+      "command": [
+        "bash",
+        "tests/run_all.sh",
+        "--timing-json",
+        "/workspace/scratch/d417066aafa8/verification/full-timing.json"
+      ],
+      "started_at": "2026-11-17T12:26:52.673846+00:00",
+      "completed_at": "2026-11-17T12:32:52.311134+00:00",
+      "elapsed_seconds": 359.637311727005,
+      "exit_code": 0,
+      "log": "full-regression.log"
+    }
+  ],
+  "compared_source_files": 1082,
+  "changed_sources": [],
+  "evidence_completed_at": "2026-11-17T12:32:52.376768+00:00"
+}

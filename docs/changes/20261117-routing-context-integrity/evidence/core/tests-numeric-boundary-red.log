@@ -1,0 +1,43 @@
+test_unrepresentable_integer_measurements_fail_as_manifest_errors (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_unrepresentable_integer_measurements_fail_as_manifest_errors) ... 
+  test_unrepresentable_integer_measurements_fail_as_manifest_errors (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_unrepresentable_integer_measurements_fail_as_manifest_errors) (field='elapsed_ms') ... ERROR
+test_finite_attempts_cannot_overflow_aggregated_measurements (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_attempts_cannot_overflow_aggregated_measurements) ... 
+  test_finite_attempts_cannot_overflow_aggregated_measurements (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_attempts_cannot_overflow_aggregated_measurements) (field='elapsed_ms') ... FAIL
+  test_finite_attempts_cannot_overflow_aggregated_measurements (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_attempts_cannot_overflow_aggregated_measurements) (field='cost_usd') ... FAIL
+test_finite_large_total_and_zero_measurements_remain_valid (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_large_total_and_zero_measurements_remain_valid) ... ok
+
+======================================================================
+ERROR: test_unrepresentable_integer_measurements_fail_as_manifest_errors (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_unrepresentable_integer_measurements_fail_as_manifest_errors) (field='elapsed_ms')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 425, in test_unrepresentable_integer_measurements_fail_as_manifest_errors
+    self._validate_record(record, plan)
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 357, in _validate_record
+    return _validate_result(record, plan, self.tasks[0], runtime, "adk", 1, retry_limit, max_cost)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/src/agent_dev_kit/campaign_analysis.py", line 111, in _validate_result
+    if type(elapsed) not in (int, float) or elapsed < 0 or not math.isfinite(elapsed):
+                                                               ^^^^^^^^^^^^^^^^^^^^^^
+OverflowError: int too large to convert to float
+
+======================================================================
+FAIL: test_finite_attempts_cannot_overflow_aggregated_measurements (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_attempts_cannot_overflow_aggregated_measurements) (field='elapsed_ms')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 435, in test_finite_attempts_cannot_overflow_aggregated_measurements
+    with self.assertRaisesRegex(ManifestError, "total.*is invalid"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+======================================================================
+FAIL: test_finite_attempts_cannot_overflow_aggregated_measurements (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_attempts_cannot_overflow_aggregated_measurements) (field='cost_usd')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_effect_campaign_materializer.py", line 435, in test_finite_attempts_cannot_overflow_aggregated_measurements
+    with self.assertRaisesRegex(ManifestError, "total.*is invalid"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ManifestError not raised
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.027s
+
+FAILED (failures=2, errors=1)

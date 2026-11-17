@@ -1,0 +1,43 @@
+{
+  "observed_at": "2026-11-17T12:09:30.600976+00:00",
+  "probes": [
+    {
+      "case": "ordinary-finite",
+      "outcome": "accepted",
+      "elapsed_ms_repr": "1.0",
+      "elapsed_ms_finite": true,
+      "latency_complete": true,
+      "passed": true
+    },
+    {
+      "case": "boolean",
+      "outcome": "exception",
+      "type": "ManifestError",
+      "message": "campaign attempt elapsed_ms is invalid"
+    },
+    {
+      "case": "nan",
+      "outcome": "exception",
+      "type": "ManifestError",
+      "message": "campaign attempt elapsed_ms is invalid"
+    },
+    {
+      "case": "infinity",
+      "outcome": "exception",
+      "type": "ManifestError",
+      "message": "campaign attempt elapsed_ms is invalid"
+    },
+    {
+      "case": "large-json-integer",
+      "outcome": "exception",
+      "type": "ManifestError",
+      "message": "campaign attempt elapsed_ms is invalid"
+    },
+    {
+      "case": "finite-attempts-overflow-total",
+      "outcome": "exception",
+      "type": "ManifestError",
+      "message": "campaign result elapsed_ms total is invalid"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "source_commit": "713d0d3a85c74bd9fe4b27a23c8dc8b2a066565a",
+  "status": "interrupted-with-observed-environment-failure",
+  "exec_exit_code": 130,
+  "full_regression_pass_claimed": false,
+  "failed_group": "test_product_maturity",
+  "cause": "Original test intentionally disables Git inventory; root-local tool virtualenv is included in bounded filesystem fallback",
+  "replacement": "Same exact commit in clean detached worktree, same external existing Python toolchain; no scanner or test changes",
+  "recorded_at": "2026-11-17T12:27:04.344484+00:00"
+}

@@ -1,0 +1,51 @@
+{
+  "reviewer_id": "independent-reviewer-routing-context-20261117",
+  "observed_at": "2026-11-17T12:38:21.526493+00:00",
+  "base_commit": "6d902f721f560f02883516e809fbd93a326405b6",
+  "head_commit": "713d0d3a85c74bd9fe4b27a23c8dc8b2a066565a",
+  "source_tree": "1f9c586dadb20d6195263cd305efa9e5080291e2",
+  "original_patch_sha256": "1b1b1c4d33ed504a36e7796c41421fff7939270a3e8f0b2dc2fbce5f752ace57",
+  "observation_index_sha256": "da6836967f0275b8b3e8794ba4df1db238d8daf70c6a22ce130ea14bc181c2fe",
+  "indexed_observation_files": 136,
+  "indexed_observation_bytes": 2062950,
+  "operational_source_files": 1082,
+  "source_snapshot_excluded_prefixes": [
+    "docs/changes/",
+    "reports/",
+    "evals/results/"
+  ],
+  "invalid_index_entries": [],
+  "source_commit_mismatches": [],
+  "current_operational_differences": [
+    ".gitattributes"
+  ],
+  "full_regression": {
+    "started_at": "2026-11-17T12:26:52.673846+00:00",
+    "completed_at": "2026-11-17T12:32:52.311134+00:00",
+    "elapsed_seconds": 359.637311727005,
+    "exit_code": 0
+  },
+  "checks": {
+    "current_head_is_reviewed_source": true,
+    "source_tree_matches": true,
+    "review_input_identity_matches": true,
+    "observation_index_digest_matches": true,
+    "all_indexed_raw_observations_match": true,
+    "index_counts_match": true,
+    "index_bytes_match": true,
+    "original_patch_is_exact_cumulative_diff": true,
+    "source_inputs_unchanged_during_full_run": true,
+    "source_input_count_matches": true,
+    "snapshot_covers_all_operational_tracked_files": true,
+    "all_operational_inputs_match_reviewed_commit": true,
+    "current_operational_differences_are_only_reviewed_attributes": true,
+    "packaging_changes_are_bounded": true,
+    "all_six_final_stages_exited_zero": true,
+    "timing_has_102_unique_passing_groups": true,
+    "raw_full_log_has_actual_passing_summary": true,
+    "quality_gate_logs_match_recorded_digests": true,
+    "both_incomplete_executions_remain_explicit": true
+  },
+  "all_checks_passed": true,
+  "scope": "Read-only source, index, execution-log and packaging integrity audit; no new product/runtime/device execution"
+}

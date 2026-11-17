@@ -1,0 +1,49 @@
+[PASS] test_validate
+[PASS] test_manifest_contract
+[PASS] test_catalog
+[PASS] test_skill_content
+[PASS] test_skill_trigger_matrix
+[PASS] test_skill_sop_quality
+[PASS] test_token_context_governance
+[PASS] test_strict_json
+[PASS] test_contract_hardening
+[PASS] test_boundary_rehearsal
+[PASS] test_contract_registry
+[PASS] test_schema_resource_sync
+[PASS] test_manifest_consumer_boundary
+[PASS] test_manifest_composition_contract
+[PASS] test_manifest_composition_cli
+[PASS] test_test_registry
+[PASS] test_python_launcher
+[PASS] test_asset_content_quality
+[PASS] test_format
+[PASS] test_no_external_repo_refs
+[PASS] test_file_modes
+[PASS] test_install
+[PASS] test_profile_coherence
+[PASS] test_profile_context_footprint
+[PASS] test_optional_skills
+[PASS] test_convert
+[PASS] test_runtime_boundary
+[PASS] test_target_contracts
+[PASS] test_target_adapter_spi
+[PASS] test_native_trust
+[PASS] test_sigstore_blob
+[PASS] test_native_campaign
+[PASS] test_native_campaign_boundaries
+[PASS] test_native_campaign_diagnostics
+[PASS] test_target_source_probe
+[PASS] test_effect_eval
+[PASS] test_completion_coverage
+[PASS] test_eval_catalog
+[PASS] test_external_reference_binding
+[PASS] test_runtime_comparison_contract
+[FAIL] test_product_maturity
+  stderr (last 80 lines):
+    Traceback (most recent call last):
+      File "<stdin>", line 159, in <module>
+    AssertionError: {'schema_version': 1, 'status': 'fail', 'failures': ['world-writable tracked file: .venv/.lock', 'tracked symlink escapes repository: .venv/bin/python', 'tracked symlink escapes repository: .venv/bin/python3', 'tracked symlink escapes repository: .venv/bin/python3.12', 'credential-like content: .venv/lib/python3.12/site-packages/boolean/boolean.py', 'tracked sensitive filename: .venv/lib/python3.12/site-packages/certifi/cacert.pem', 'tracked sensitive filename: .venv/lib/python3.12/site-packages/cmake/data/share/cmake-3.28/Templates/Windows/Windows_TemporaryKey.pfx', 'credential-like content: .venv/lib/python3.12/site-packages/filelock/_api.py', 'credential-like content: .venv/lib/python3.12/site-packages/pip/_internal/network/auth.py', 'credential-like content: .venv/lib/python3.12/site-packages/pip/_internal/utils/deprecation.py', 'tracked sensitive filename: .venv/lib/python3.12/site-packages/pip/_vendor/certifi/cacert.pem', 'credential-like content: .venv/lib/python3.12/site-packages/pip/_vendor/requests/adapters.py', 'credential-like content: .venv/lib/python3.12/site-packages/pip/_vendor/requests/sessions.py', 'credential-like content: .venv/lib/python3.12/site-packages/requests/adapters.py', 'credential-like content: .venv/lib/python3.12/site-packages/requests/sessions.py'], 'warnings': [], 'inventory_source': 'bounded-filesystem-fallback', 'files_scanned': 9816, 'scan_limit': 50000}
+[PASS] test_runtime_bundle
+[PASS] test_release_manifest_contract
+[PASS] test_software_m5_ready
+[PASS] test_repository_runtime_evidence

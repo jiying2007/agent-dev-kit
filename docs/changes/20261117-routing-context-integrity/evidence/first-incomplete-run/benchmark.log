@@ -1,0 +1,5 @@
+{
+  "scope": "local-deterministic-tool-overhead-only",
+  "task_count": 60,
+  "median_seconds": 0.07399250700109405
+}

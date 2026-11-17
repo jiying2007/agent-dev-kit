@@ -1,0 +1,366 @@
+{
+  "schema": "adk-review-evidence/v1",
+  "subject_id": "20261117-routing-context-integrity",
+  "scope": "source-change",
+  "owner": "leiwenjun",
+  "author_id": "ai/root-routing-context-integrity",
+  "reviewer": {
+    "id": "independent-reviewer-routing-context-20261117",
+    "kind": "ai",
+    "independence": "independent"
+  },
+  "reviewed_at": "2026-11-17T12:40:41.105006Z",
+  "evidence_completed_at": "2026-11-17T12:38:21.526493Z",
+  "verdicts": {
+    "spec": "pass",
+    "quality": "pass"
+  },
+  "findings": [
+    {
+      "id": "IR-1",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "独立反例证实巨大整数转换可抛出原始 OverflowError、有限 attempt 合计可成为 infinity 并被标为通过。最终实现对转换和合计均做有限非负验证，六项原数值探针重新执行符合预期；合法有限值、零值和原错误/缺失成本语义保留。"
+    },
+    {
+      "id": "IR-2",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "独立反例证实中英文带普通限定词、newness 或 Git 修饰的禁止创建 worktree 仍可通过短别名选中写操作。有界语法与包含过滤已修复；最终原30项探针30/30，保留无关否定、后续肯定与权限控制。"
+    },
+    {
+      "id": "IR-3",
+      "severity": "major",
+      "disposition": "fixed",
+      "reason": "独立发现 ADR/driver 的被解释或审查对象误当当前写动作，并发现初次修复对先解释再执行的顺序回归。局部对象过滤和受问句补语约束的有界顺序处理均已复验；最终30项路由30/30、5正7反顺序12/12，原错误冻结与RED保留。"
+    },
+    {
+      "id": "SK-05",
+      "severity": "minor",
+      "disposition": "accepted-risk",
+      "reason": "继续执行已有计划，不要重新拆解任务在基线已 abstain，既有按现有计划继续执行可命中。本轮保留此词法覆盖限制，不声称任意自然语言完备；它不是当前修改引入的回归，当前验收所列动作、否定及相邻控制已解决。"
+    }
+  ],
+  "limitations": [
+    "裁决限定 source-change：精确 base/head 与完整累计 patch；另核对当前 change 证据包装和四个精确 raw 文件路径的 whitespace 属性。产品代码、测试、权限或预算变化须重新绑定和相应验证。",
+    "65 Skill/54直接参考的全量逐项审查来自实施审查记录；本审查者独立核对65唯一身份、119原始摘要和结论完整性，并细查全部实际变更及相关边界，不声称重新逐字评审全部119文件。",
+    "完整102组回归由协调者在同一提交的洁净worktree执行；本审查者独立核对原始日志、102唯一pass、退出0及1082运行输入与Git对象一致，未宣称自己另跑第二次完整回归。",
+    "数值/缓存探针在对应修复后实际运行，随后对应产品内容未变化；最终源码绑定和路由记录中的源码摘要连接到713d0d3。阶段记录保留原时间，不伪造全部在最终commit之后执行。",
+    "上下文仅有三个最小消费情境；没有模型A/B、provider Token/费用或实际native runtime加载结果，合成campaign记录不证明真实provider执行。",
+    "基线本地负载中位73.010ms、最终洁净87.462ms，较早同候选72.197ms。少量观测及checkout条件未隔离环境影响，不主张因果提速或回归；源字节减少不可换算provider Token收益。",
+    "SK-05已有计划表述的词法覆盖限制保留；历史hosted ADC/CMake超时根因仍未确认，本轮本地通过不证明根治。",
+    "mypy仅仓库指定20文件范围；mypy/ShellCheck/pip-audit记录早于最终路由修复，受检依赖/Shell/指定类型输入未改。最终路由由fresh Ruff/format/strict、定向及完整回归覆盖。",
+    "两次失败或中止执行、旧source patch和中间RED完整保留；洁净worktree恢复未修改scanner、原测试或忽略规则。136份封存观察摘要均已独立核对，较晚reviewer输出另行绑定。",
+    "独立AI审查并非人类审查；没有live runtime安装、模型调用、设备/SSH/HIL、Software M5或现场资格。本记录不提前声明main CI、不可变发布、Root消费完成或授权产品发布。"
+  ],
+  "policy_sha256": "f6c7571084b3f36e12e1fea1e71a46108a54835ba438b189f727a20ee88e0a24",
+  "validator_sha256": {
+    "src/agent_dev_kit/review_evidence.py": "be4892f464496a29dbbb41ebb56c48984bf103d8eabe2ee6117bd583d1032c47",
+    "src/agent_dev_kit/strict_json.py": "72f06f4dcaebfed83bd1ae9876e38d4f7d82d8a1473b40b66beffb6338ee94a5",
+    "src/agent_dev_kit/readiness_evidence.py": "6fdfd5bea3ee097ac21d2b2ab469378c8c84f78856061b680ebb0c5f9d726778"
+  },
+  "target": {
+    "base_commit": "6d902f721f560f02883516e809fbd93a326405b6",
+    "head_commit": "713d0d3a85c74bd9fe4b27a23c8dc8b2a066565a",
+    "original_patch_sha256": "1b1b1c4d33ed504a36e7796c41421fff7939270a3e8f0b2dc2fbce5f752ace57"
+  },
+  "sources": [
+    {
+      "base": "repository",
+      "path": ".version-lock",
+      "sha256": "eea78636e686610211edf0823d3eb21bb313706df87e6477d1817a78e2deb1d2"
+    },
+    {
+      "base": "repository",
+      "path": "CHANGELOG.md",
+      "sha256": "8c70cc22dc385890a9673ffb5f45ba3617879392aee3075ed64d65463e698d9c"
+    },
+    {
+      "base": "repository",
+      "path": "CONTEXT.md",
+      "sha256": "f9871ecb3748bc9d9af0093820092efcb798ab11a469f5d2c88e63309971dc80"
+    },
+    {
+      "base": "repository",
+      "path": "README.md",
+      "sha256": "008a0b7e28d9e207840adb5040cf5c676b85d7425c0926ab5573c46117ed7e7f"
+    },
+    {
+      "base": "repository",
+      "path": "docs/agent-skill-catalog.md",
+      "sha256": "7031513443aff7e547c035aa59a0cb94ec5cc18e98b5b1c7ba065a0b7283c7ea"
+    },
+    {
+      "base": "repository",
+      "path": "manifest.json",
+      "sha256": "8025c83d9d01c52a3b338e8c82bdf27ebdf303b097e4928c89a7acc7101d98b6"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/manifest.schema.json",
+      "sha256": "9def6391b627cc239462a118c0cb680d2334e31a88a36f4710f7983d621613f4"
+    },
+    {
+      "base": "repository",
+      "path": "manifests/software_m5_eval_contract.json",
+      "sha256": "05d2c15ef223515ae3dc292a00fb7601d2bc98a3d866b7b371fcad1d623cc214"
+    },
+    {
+      "base": "repository",
+      "path": "pyproject.toml",
+      "sha256": "c8154bb3bd76f83d40cc9594a09bf39bbafa5ffd1a84c052f4b520606c2e62e8"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-adr-writer/SKILL.md",
+      "sha256": "acb3994d39aeac513980c6b0736094365a694ed83740cdbc9f9a8bf9a316ad5f"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-context-compress-handoff/SKILL.md",
+      "sha256": "caa8bea66bffba468f5033a1a8f841ac14f8c9f7bb4dd922d5a1e911d854649e"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-context-engineering/SKILL.md",
+      "sha256": "053f499a34f9a48d3bb1b2b768599ea8951331ef942a03b3e0c50388705313f5"
+    },
+    {
+      "base": "repository",
+      "path": "skills/adk-token-context-governance/SKILL.md",
+      "sha256": "61bed052ff15e2cba597dafe22b72fb486aa8eb3b2901f640eedce460dc200a1"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/__init__.py",
+      "sha256": "90de3a3488413bb6ebe2d8832083c450b6e6be10331af7e7984ff503eba70e40"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/_matcher_kernel.py",
+      "sha256": "002bcaa17fd0c70b8554a42c53ace5551c1f0b02fe8d8b4f518224a2357dd423"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/campaign_analysis.py",
+      "sha256": "eb06b726566c14fcd62918cd18771aa20cd39dd5a2b758afbecab25f53ffadca"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/matcher.py",
+      "sha256": "72ad18ce45f8ecfa9d3ef8d016a26f55454bb7cf54be7387bc396cead405f064"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/phase_context.py",
+      "sha256": "fde668f24ff49a951dfae7f6ba549277f7cdbbaa159aa351113012f30db77c6a"
+    },
+    {
+      "base": "repository",
+      "path": "src/agent_dev_kit/skill_relationships.py",
+      "sha256": "bfcc165995d495806a970ff37a824c675e23a25251d3dfa0ae8d665c926811f7"
+    },
+    {
+      "base": "repository",
+      "path": "tests/fixtures/skill_method_ab_prereg.json",
+      "sha256": "7497bdd1f3243c68006eabbc5cb79bb686f6abf04c563060630500b7f127b4be"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_effect_campaign_materializer.py",
+      "sha256": "9b2e2ca03311db467220af0ccad30d73835e4f897320e6ae9cd13460947e7bb6"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_phase_context.py",
+      "sha256": "9c0aac378457385cddde14139bbc3b6901fd4e8e9b3686f4ad2e98f1be2919fa"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_routing_ir_contract.py",
+      "sha256": "66d055a0157f0d341cfe6bee948344ce9e61d3288ccb534041950a70b223dca3"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_runtime_comparison_contract.py",
+      "sha256": "33a53a7147554ee321c394fa225429cef1bac53c91e1aebcfb5cab2ae241cf95"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_relationships.py",
+      "sha256": "8acb2f4d2597bc6d5f01c4b4dc3b412a51f091a0e64c1cd253354e042376d464"
+    },
+    {
+      "base": "repository",
+      "path": "tests/test_skill_trigger_matrix.py",
+      "sha256": "b7b44a4aea86451080c1c513a444a496af11f9955e339ccc6858cb92a2ebf965"
+    },
+    {
+      "base": "repository",
+      "path": ".gitattributes",
+      "sha256": "da6aaca83ec77292683b28ee754422599bc0fc144f4fe0cd85b244187b7921fe"
+    },
+    {
+      "base": "record",
+      "path": "requirements.md",
+      "sha256": "6fed992c23b21abf5f5ee838d36be469c41f18fbd5d16186bd4424b9dea3e5c3"
+    },
+    {
+      "base": "record",
+      "path": "design.md",
+      "sha256": "cea673d2ea8c46f53130a7dd3812003473b138bf109bae935ff09a59b45f09d0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/original.patch",
+      "sha256": "1b1b1c4d33ed504a36e7796c41421fff7939270a3e8f0b2dc2fbce5f752ace57"
+    }
+  ],
+  "evidence": [
+    {
+      "base": "record",
+      "path": "verification.md",
+      "sha256": "c1db7f9063037d8cfb0fdfa60e95305f20efc0e78c631cb5bd3b20946a4f4f37"
+    },
+    {
+      "base": "record",
+      "path": "negative-results.md",
+      "sha256": "3ffb233c3cdc1d2a4100c3fc6c8ebb67255baedfcfb9aa6dff5c7c415cd21c27"
+    },
+    {
+      "base": "record",
+      "path": "tasks.md",
+      "sha256": "f042f4e85de987abece8998974b17c21fdd33aa3242f8bd8ee7b55668cd406e0"
+    },
+    {
+      "base": "record",
+      "path": "source-review.md",
+      "sha256": "f903b17187d31a201eed6ca216038b3366c30d316056e80d196ddeccd99374df"
+    },
+    {
+      "base": "record",
+      "path": "evidence/review-input-state.json",
+      "sha256": "d2a572a098bd30cc6558a1afe98358ccec30221d1bdc45fd759d25d64d327a61"
+    },
+    {
+      "base": "record",
+      "path": "evidence/observation-index.json",
+      "sha256": "da6836967f0275b8b3e8794ba4df1db238d8daf70c6a22ce130ea14bc181c2fe"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-review.zh-CN.md",
+      "sha256": "d1c9463b222eb7c293a9f44a785d480c54bb3d481e9b888ccd56f3f7f3d38eba"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/final-evidence-integrity.json",
+      "sha256": "9865f8603112ffef6931dbd02e73b56f1e734131f560d8f0ac33217db6483501"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/audit_final_evidence.py",
+      "sha256": "c42efd50b8ade4550066eb6833a2dd68a742232e8257b690fdb32a196e8904c1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/exact-source-binding-final.json",
+      "sha256": "8b11ba09fd622983b481a6f955b6c4347716bcf232967a5cc513146b15d92ce5"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/source-integrity-probes.json",
+      "sha256": "9003da512df6f76c1535ffecd9a57859713781f717169c7f92851b34f8e1e590"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/campaign-number-probes.json",
+      "sha256": "36c2ed7303744d9404ae77b6908de8c905148f11426543096b912ba8f9cc8896"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/campaign-number-probes-reverified.json",
+      "sha256": "4b426353b62cdd4dc54150007ba8a8ad4f2e4819e66c81d6e7c87433be575ec6"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/routing-boundary-probes-expanded-30.json",
+      "sha256": "e7d8a4a8e93358d9c0dc058b921369f42ebd3fcb03a37a28269ba5aa51f46cb0"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/routing-boundary-probes-final-30.json",
+      "sha256": "9a2b8685dc60b14a8972bfe5fc2d7626c572a2075b7910cc40c6714700366a03"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/routing-sequential-controls.json",
+      "sha256": "ea5cfd6d10767e0b147ac57b0e127f71942089c0ae7cb707627346a7eb83c9fe"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/routing-sequential-controls-final.json",
+      "sha256": "e91faf996edbf02411db2a4f8c19e553d902a03a30bea5cd3c65f5e1cb3b529a"
+    },
+    {
+      "base": "record",
+      "path": "evidence/independent/trigger-matrix-tests-final.txt",
+      "sha256": "6d4a73bd36b7ad4512324741d1e2d65ff62f1fe25177b20ef09f502db5a02f66"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/integration-summary.json",
+      "sha256": "d022fb8fc6705de1716fe1c04cfa54030f2f5163c3545ebd3da33ce545064b36"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/full-timing.json",
+      "sha256": "e926ecdb0500039a38be857185aeeb5793a1d8c9832ab59a35ed6a6ba0f3175e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/full-regression.log",
+      "sha256": "0d1bee4e82001511f12291d9c3be0867228a5a396f58b49d3acd176ef3eed61e"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/sources-final-before.json",
+      "sha256": "590e45ea86088aaaf28282281beddb70de7b2380a64fdd85058020df4de654e1"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/sources-final-after.json",
+      "sha256": "1876ca7be8e412987ccfeba59cbc2e17bf9c9a60e26dd7398e4017392b9096e8"
+    },
+    {
+      "base": "record",
+      "path": "evidence/final/benchmark-comparison.json",
+      "sha256": "de0cc2318680ea87589a03ea958ea866e13075bac65a6f233c1497d4e6bc6b85"
+    },
+    {
+      "base": "record",
+      "path": "evidence/quality/summary.json",
+      "sha256": "39430c7d10281778f2668812bbd52294210b6d07925fb499d0f6b7bf7b65fa59"
+    },
+    {
+      "base": "record",
+      "path": "evidence/skills/skills-audit.json",
+      "sha256": "882fc34d4f2903918c20a2c7d6061d12f9a42292e4376b921cd6178c905fbb57"
+    },
+    {
+      "base": "record",
+      "path": "evidence/skills/sequential-deterministic-60.json",
+      "sha256": "0d2d4b040f32e266b96f9b7e2d214fd4d1511a21b709ab78f7e09652814f8aca"
+    },
+    {
+      "base": "record",
+      "path": "evidence/skills/sequential-budgets.json",
+      "sha256": "b2fd182fe564ceab9986b80655d7f8873d57f276286193606c0882e9f7506bac"
+    },
+    {
+      "base": "record",
+      "path": "evidence/consumer/diagnostic-handoff-results.zh-CN.md",
+      "sha256": "8815299b6275fb0116b009af155b68c08428842aed9f459369d9a099b2c3785f"
+    }
+  ]
+}

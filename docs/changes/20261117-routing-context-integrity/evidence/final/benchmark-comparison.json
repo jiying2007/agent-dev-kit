@@ -1,0 +1,45 @@
+{
+  "schema": "adk-local-overhead-observation/v1",
+  "workload": {
+    "routing_tasks": 60,
+    "phase_resolutions_per_round": 20,
+    "lifecycle_resolutions_per_round": 10,
+    "rounds_per_execution": 3
+  },
+  "same_raw_task_bytes": true,
+  "same_python": true,
+  "baseline_median_ms": 73.00992599630263,
+  "final_clean_candidate_median_ms": 87.46179300214862,
+  "earlier_same_commit_candidate_median_ms": 72.19734800310107,
+  "final_vs_baseline_percent": 19.79438659693733,
+  "baseline_round_seconds": [
+    0.10810629399929894,
+    0.07239206899976125,
+    0.07300992599630263
+  ],
+  "final_clean_candidate_round_seconds": [
+    0.113449860997207,
+    0.08746179300214862,
+    0.08117261200095527
+  ],
+  "candidate_results": [
+    {
+      "status": "pass",
+      "total": 60,
+      "passed": 60
+    },
+    {
+      "status": "pass",
+      "total": 60,
+      "passed": 60
+    },
+    {
+      "status": "pass",
+      "total": 60,
+      "passed": 60
+    }
+  ],
+  "interpretation": "Final clean execution is slower than this baseline observation; the same candidate also produced a lower median in a prior source-root execution. Few local observations and changed checkout conditions do not establish causal speedup or regression.",
+  "provider_tokens_measured": false,
+  "provider_cost_measured": false
+}

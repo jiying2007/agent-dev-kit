@@ -1,0 +1,16 @@
+test_external_campaign_root_is_bounded_and_cli_visible (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_external_campaign_root_is_bounded_and_cli_visible) ... ok
+test_final_snapshot_cannot_alias_boolean_and_integer_values (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_final_snapshot_cannot_alias_boolean_and_integer_values) ... ok
+test_finite_attempts_cannot_overflow_aggregated_measurements (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_attempts_cannot_overflow_aggregated_measurements) ... ok
+test_finite_large_total_and_zero_measurements_remain_valid (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_finite_large_total_and_zero_measurements_remain_valid) ... ok
+test_materializer_rejects_integer_safety_and_boolean_metrics (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializer_rejects_integer_safety_and_boolean_metrics) ... ok
+test_materializes_single_runtime_state_to_trace_only_effect_trials (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_materializes_single_runtime_state_to_trace_only_effect_trials) ... ok
+test_result_validator_rejects_invalid_safety_and_nonfinite_numbers (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_result_validator_rejects_invalid_safety_and_nonfinite_numbers) ... ok
+test_runtime_error_none_safety_and_nonclaude_missing_cost_remain_valid (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_runtime_error_none_safety_and_nonclaude_missing_cost_remain_valid) ... ok
+test_tamper_alias_missing_result_and_window_drift_fail_closed (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_tamper_alias_missing_result_and_window_drift_fail_closed) ... ok
+test_unrepresentable_integer_measurements_fail_as_manifest_errors (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_unrepresentable_integer_measurements_fail_as_manifest_errors) ... ok
+test_zero_numeric_measurements_and_false_safety_remain_valid (tests.test_effect_campaign_materializer.EffectCampaignMaterializerTest.test_zero_numeric_measurements_and_false_safety_remain_valid) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 1.828s
+
+OK

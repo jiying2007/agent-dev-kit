@@ -1,0 +1,11 @@
+{
+  "source_commit": "713d0d3a85c74bd9fe4b27a23c8dc8b2a066565a",
+  "source_tree": "1f9c586dadb20d6195263cd305efa9e5080291e2",
+  "base_commit": "6d902f721f560f02883516e809fbd93a326405b6",
+  "author_id": "ai/root-routing-context-integrity",
+  "subject_id": "20261117-routing-context-integrity",
+  "scope": "source-change",
+  "evidence_completed_at": "2026-11-17T12:35:32.676924+00:00",
+  "original_patch_sha256": "1b1b1c4d33ed504a36e7796c41421fff7939270a3e8f0b2dc2fbce5f752ace57",
+  "observation_index_sha256": "da6836967f0275b8b3e8794ba4df1db238d8daf70c6a22ce130ea14bc181c2fe"
+}

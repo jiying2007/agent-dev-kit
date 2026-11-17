@@ -1,0 +1,17 @@
+{
+  "name": "shellcheck",
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "proxy",
+    "bash",
+    "-c",
+    "shellcheck -S error -x -P scripts scripts/*.sh tests/*.sh"
+  ],
+  "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+  "started_at": "2026-11-17T12:10:26.759306+00:00",
+  "finished_at": "2026-11-17T12:10:33.214537+00:00",
+  "elapsed_seconds": 6.455236984998919,
+  "exit_code": 0,
+  "log": "/workspace/scratch/d417066aafa8/verification/quality/shellcheck.log",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

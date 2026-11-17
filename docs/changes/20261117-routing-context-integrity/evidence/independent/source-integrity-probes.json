@@ -1,0 +1,42 @@
+{
+  "observed_at": "2026-11-17T12:12:23.782713+00:00",
+  "baseline": "6d902f721f560f02883516e809fbd93a326405b6",
+  "inventory": {
+    "skill_count": 65,
+    "row_count": 65,
+    "manifest_exact": true,
+    "direct_reference_count": 54,
+    "unique_direct_reference_count": 54,
+    "conclusions_complete": true,
+    "digests_verified": 119,
+    "all_digest_checks_pass": true,
+    "failed_checks": []
+  },
+  "formatter": {
+    "formatter_ast_unchanged_except_name": true
+  },
+  "cache_same_read": [
+    {
+      "module": "agent_dev_kit.phase_context",
+      "contract_reads": 1,
+      "parsed_schema": "adk-phase-context-contract/v2",
+      "digest_matches_parsed_bytes": true,
+      "disk_changed_after_read": true,
+      "size_and_mtime_preserved": true,
+      "next_read_rejects_new_invalid_content": true
+    },
+    {
+      "module": "agent_dev_kit.skill_relationships",
+      "contract_reads": 1,
+      "parsed_schema": "adk-skill-relationship-contract/v2",
+      "digest_matches_parsed_bytes": true,
+      "disk_changed_after_read": true,
+      "size_and_mtime_preserved": true,
+      "next_read_rejects_new_invalid_content": true
+    }
+  ],
+  "fixed_inputs_unchanged": {
+    "manifests/profile_context_ratchets.json": true,
+    "tests/fixtures/software_m5_eval_tasks.jsonl": true
+  }
+}

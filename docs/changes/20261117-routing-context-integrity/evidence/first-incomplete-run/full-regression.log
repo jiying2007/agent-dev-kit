@@ -1,0 +1,94 @@
+[PASS] test_validate
+[PASS] test_manifest_contract
+[PASS] test_catalog
+[FAIL] test_skill_content
+  stderr (last 80 lines):
+    test_verified_release_range_keeps_breaking_revert_and_unknown_types (tests.test_skill_command_examples.ReleaseHistoryExampleTests.test_verified_release_range_keeps_breaking_revert_and_unknown_types) ... ok
+    test_all_scans_keep_candidate_paths_without_printing_matching_contents (tests.test_skill_command_examples.SecurityScanExampleTests.test_all_scans_keep_candidate_paths_without_printing_matching_contents) ... ok
+    test_no_match_and_io_errors_keep_distinct_status_and_diagnostics (tests.test_skill_command_examples.SecurityScanExampleTests.test_no_match_and_io_errors_keep_distinct_status_and_diagnostics) ... ok
+    test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion (tests.test_skill_command_examples.SecurityScanExampleTests.test_secret_scan_preserves_hidden_ignored_coverage_and_git_exclusion) ... ok
+    test_configured_submodule_omission_does_not_hide_gitlink_update (tests.test_review_raw_diff.ReviewRawDiffTests.test_configured_submodule_omission_does_not_hide_gitlink_update) ... ok
+    test_fsmonitor_is_not_called_by_the_snapshot (tests.test_review_raw_diff.ReviewRawDiffTests.test_fsmonitor_is_not_called_by_the_snapshot) ... ok
+    test_relative_and_color_configuration_do_not_reduce_raw_scope (tests.test_review_raw_diff.ReviewRawDiffTests.test_relative_and_color_configuration_do_not_reduce_raw_scope) ... ok
+    test_shipped_status_preflights_preserve_index_and_do_not_run_fsmonitor (tests.test_review_raw_diff.ReviewRawDiffTests.test_shipped_status_preflights_preserve_index_and_do_not_run_fsmonitor) ... ok
+    test_textconv_and_external_diff_do_not_hide_selected_changes (tests.test_review_raw_diff.ReviewRawDiffTests.test_textconv_and_external_diff_do_not_hide_selected_changes) ... ok
+    test_published_reset_formula_distinguishes_defined_and_undefined_bits (tests.test_skill_domain_execution.RegisterResetExpressionTests.test_published_reset_formula_distinguishes_defined_and_undefined_bits) ... ok
+    test_old_completion_and_spurious_notification_cannot_complete_new_request (tests.test_skill_runtime_methods.OperationReadinessTests.test_old_completion_and_spurious_notification_cannot_complete_new_request) ... ok
+    test_pending_work_uses_notification_and_preserves_cancellation (tests.test_skill_runtime_methods.OperationReadinessTests.test_pending_work_uses_notification_and_preserves_cancellation) ... ok
+    test_timeout_and_completed_zero_value_are_distinct (tests.test_skill_runtime_methods.OperationReadinessTests.test_timeout_and_completed_zero_value_are_distinct) ... ok
+    test_deleted_and_absent_objects_do_not_become_verified_files (tests.test_skill_runtime_methods.RunningObjectEvidenceTests.test_deleted_and_absent_objects_do_not_become_verified_files) ... ok
+    test_same_executable_can_run_a_different_library (tests.test_skill_runtime_methods.RunningObjectEvidenceTests.test_same_executable_can_run_a_different_library) ... ok
+    test_ambiguity_evidence_accepts_observed_git_output_formats (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_ambiguity_evidence_accepts_observed_git_output_formats) ... ok
+    test_ambiguity_evidence_rejects_missing_or_partial_headings (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_ambiguity_evidence_rejects_missing_or_partial_headings) ... ok
+    test_no_first_bad_rejects_both_observed_verdict_formats (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_no_first_bad_rejects_both_observed_verdict_formats) ... ok
+    test_published_oracle_preserves_outcomes_and_aborts_unknown_results (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_published_oracle_preserves_outcomes_and_aborts_unknown_results) ... ok
+    test_real_bisect_aborts_instead_of_blames_infrastructure_error (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_aborts_instead_of_blames_infrastructure_error) ... ok
+    test_real_bisect_preserves_ambiguity_next_to_skipped_boundary (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_preserves_ambiguity_next_to_skipped_boundary) ... ok
+    test_real_bisect_skips_unrelated_unbuildable_revision (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_skips_unrelated_unbuildable_revision) ... ok
+    test_real_bisect_treats_build_failure_as_bad_for_build_regression (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_real_bisect_treats_build_failure_as_bad_for_build_regression) ... ok
+    test_unique_first_bad_accepts_observed_git_log_formats (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_unique_first_bad_accepts_observed_git_log_formats) ... ok
+    test_unique_first_bad_rejects_missing_duplicate_or_failed_evidence (tests.test_skill_bisect_methods.DiagnosticBisectTests.test_unique_first_bad_rejects_missing_duplicate_or_failed_evidence) ... ok
+    test_oracle_rejects_accepting_a_quantized_zero_period (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_accepting_a_quantized_zero_period) ... ok
+    test_oracle_rejects_narrowing_before_range_validation (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_oracle_rejects_narrowing_before_range_validation) ... ok
+    test_published_example_rejects_zero_overflow_and_preserves_output (tests.test_skill_rtos_methods.RtosPeriodMethodTests.test_published_example_rejects_zero_overflow_and_preserves_output) ... ok
+    test_distinct_priority_control_and_equal_priority_capacity_counterexample (tests.test_skill_rtos_methods.RtosResponseTimeModelTests.test_distinct_priority_control_and_equal_priority_capacity_counterexample) ... ok
+    test_hp_only_formula_requires_distinct_task_priorities (tests.test_skill_rtos_methods.RtosResponseTimeModelTests.test_hp_only_formula_requires_distinct_task_priorities) ... ok
+    test_blank_evidence_never_starts_with_a_pass (tests.test_skill_contract_methods.ExportedReviewChecklistTests.test_blank_evidence_never_starts_with_a_pass) ... ok
+    test_closed_subschema_control_rejects_legitimate_extension (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_closed_subschema_control_rejects_legitimate_extension) ... ok
+    test_old_dialect_ignores_composition_closure_control (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_old_dialect_ignores_composition_closure_control) ... ok
+    test_published_composed_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_composed_closure_accepts_only_contract_inputs) ... ok
+    test_published_legacy_flattening_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_published_legacy_flattening_accepts_only_contract_inputs) ... ok
+    test_same_level_closure_accepts_only_contract_inputs (tests.test_skill_contract_methods.SchemaClosureExampleTests.test_same_level_closure_accepts_only_contract_inputs) ... ok
+    test_matching_preset_selects_fresh_b_and_preserves_old_directory (tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_matching_preset_selects_fresh_b_and_preserves_old_directory) ... ok
+    test_new_manual_directory_builds_b_and_preserves_old_cache_and_logs (tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_new_manual_directory_builds_b_and_preserves_old_cache_and_logs) ... ok
+    test_old_directory_can_report_b_but_build_a_even_after_clean_first (tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_old_directory_can_report_b_but_build_a_even_after_clean_first) ... ok
+    test_same_identity_keeps_incremental_build (tests.test_skill_cmake_methods.CmakeBuildIdentityMethodsTests.test_same_identity_keeps_incremental_build) ... ok
+    test_clock_uncertainty_cannot_be_erased_by_timezone_conversion (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_clock_uncertainty_cannot_be_erased_by_timezone_conversion) ... ok
+    test_late_observation_reverses_event_order_across_timezones (tests.test_optional_incident_lifecycle.IncidentTimelineDesignCaseTests.test_late_observation_reverses_event_order_across_timezones) ... ok
+    test_blank_creation_gate_cannot_predeclare_success (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_blank_creation_gate_cannot_predeclare_success) ... ok
+    test_incident_output_preserves_distinct_clock_fields (tests.test_optional_incident_lifecycle.OptionalTemplateInvariantTests.test_incident_output_preserves_distinct_clock_fields) ... ok
+    test_actual_published_allowlist_preserves_changed_nested_public_fields (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_actual_published_allowlist_preserves_changed_nested_public_fields) ... ok
+    test_conditional_reference_survives_explicit_optional_export (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_conditional_reference_survives_explicit_optional_export) ... ok
+    test_published_example_exercises_paths_without_echoing_values (tests.test_skill_serialization_methods.SkillSerializationMethodTests.test_published_example_exercises_paths_without_echoing_values) ... ok
+    test_growth_metadata_limits_promotion_to_persistent_assets (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_growth_metadata_limits_promotion_to_persistent_assets) ... ok
+    test_perf_generic_event_has_no_universal_llc_label (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_perf_generic_event_has_no_universal_llc_label) ... ok
+    test_published_trigger_scan_covers_the_manifest_including_nested_skills (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_published_trigger_scan_covers_the_manifest_including_nested_skills) ... ok
+    test_real_team_exports_scope_nonbundled_root_helpers (tests.test_skill_scope_methods.PublishedSkillScopeMethodsTests.test_real_team_exports_scope_nonbundled_root_helpers) ... ok
+    test_all_present_openai_metadata_use_interface (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_all_present_openai_metadata_use_interface) ... ok
+    test_missing_interface_is_rejected (tests.test_skill_openai_metadata.SkillOpenAIMetadataTests.test_missing_interface_is_rejected) ... ok
+    test_breaking_and_invalid (tests.test_commit_message_policy.CommitMessagePolicyTests.test_breaking_and_invalid) ... ok
+    test_cli_is_read_only_and_returns_verdict (tests.test_commit_message_policy.CommitMessagePolicyTests.test_cli_is_read_only_and_returns_verdict) ... ok
+    test_issue_policy_is_opt_in (tests.test_commit_message_policy.CommitMessagePolicyTests.test_issue_policy_is_opt_in) ... ok
+    test_zh_and_en (tests.test_commit_message_policy.CommitMessagePolicyTests.test_zh_and_en) ... ok
+    test_archive_handoff_artifact_retains_readonly_authority (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_archive_handoff_artifact_retains_readonly_authority) ... ok
+    test_exported_human_worker_mapping_uses_existing_strict_v2 (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_human_worker_mapping_uses_existing_strict_v2) ... ok
+    test_exported_optional_source_helpers_have_scoped_fallback (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_optional_source_helpers_have_scoped_fallback) ... ok
+    test_exported_recovery_note_distinguishes_envelope_and_payload (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_exported_recovery_note_distinguishes_envelope_and_payload) ... ok
+    test_published_catalog_queries_cover_core_and_nested_optional (tests.test_skill_consumer_usability.SkillConsumerUsabilityTests.test_published_catalog_queries_cover_core_and_nested_optional) ... ok
+    
+    ======================================================================
+    FAIL: test_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs (tests.test_skill_quality_methods.SkillQualityMethodsTests.test_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "/workspace/scratch/d417066aafa8/agent-dev-kit/tests/test_skill_quality_methods.py", line 163, in test_preregistered_train_holdout_is_disjoint_and_has_no_claimed_runs
+        self.assertEqual(fixture["candidate"]["planned_release"], "v" + manifest["version"])
+    AssertionError: 'v11.3.14' != 'v11.3.15'
+    - v11.3.14
+    ?        ^
+    + v11.3.15
+    ?        ^
+    
+    
+    ----------------------------------------------------------------------
+    Ran 211 tests in 17.590s
+    
+    FAILED (failures=1)
+  stdout (last 80 lines):
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/correct", "0", "1"], "exit": 0, "stdout": "{\"configured_fail_at\":0,\"initial_calls\":2,\"initial_injected\":0,\"initial_result\":0,\"initial_output\":42,\"live_after_initial\":0,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":0}\n", "stderr": ""}}
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/correct", "3", "1"], "exit": 0, "stdout": "{\"configured_fail_at\":3,\"initial_calls\":2,\"initial_injected\":0,\"initial_result\":0,\"initial_output\":42,\"live_after_initial\":0,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":0}\n", "stderr": ""}}
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/broken", "0", "1"], "exit": 0, "stdout": "{\"configured_fail_at\":0,\"initial_calls\":2,\"initial_injected\":0,\"initial_result\":0,\"initial_output\":42,\"live_after_initial\":0,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":0}\n", "stderr": ""}}
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/broken", "2", "1"], "exit": 0, "stdout": "{\"configured_fail_at\":2,\"initial_calls\":2,\"initial_injected\":1,\"initial_result\":12,\"initial_output\":-1,\"live_after_initial\":1,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":1}\n", "stderr": ""}}
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/correct", "0", "1"], "exit": 0, "stdout": "{\"configured_fail_at\":0,\"initial_calls\":2,\"initial_injected\":0,\"initial_result\":0,\"initial_output\":42,\"live_after_initial\":0,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":0}\n", "stderr": ""}}
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/correct", "2", "1"], "exit": 0, "stdout": "{\"configured_fail_at\":2,\"initial_calls\":2,\"initial_injected\":1,\"initial_result\":12,\"initial_output\":-1,\"live_after_initial\":0,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":0}\n", "stderr": ""}}
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/correct", "0", "1"], "exit": 0, "stdout": "{\"configured_fail_at\":0,\"initial_calls\":2,\"initial_injected\":0,\"initial_result\":0,\"initial_output\":42,\"live_after_initial\":0,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":0}\n", "stderr": ""}}
+    {"host_fault_probe": {"argv": ["/tmp/adk-fault-method-76r072sa/correct", "2", "0"], "exit": 0, "stdout": "{\"configured_fail_at\":2,\"initial_calls\":2,\"initial_injected\":null,\"initial_result\":12,\"initial_output\":-1,\"live_after_initial\":0,\"follow_up_calls\":2,\"follow_up_injected\":0,\"follow_up_result\":0,\"follow_up_output\":42,\"live_after_follow_up\":0}\n", "stderr": ""}}

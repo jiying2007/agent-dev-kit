@@ -1,0 +1,21 @@
+{
+  "name": "mypy",
+  "command": [
+    "/workspace/scratch/fe8de3b42084/verification-tools/rtk",
+    "proxy",
+    "mypy",
+    "src/agent_dev_kit/contracts",
+    "src/agent_dev_kit/evidence",
+    "src/agent_dev_kit/target_adapters",
+    "src/agent_dev_kit/distribution",
+    "src/agent_dev_kit/execution_policy",
+    "src/agent_dev_kit/versioning.py"
+  ],
+  "cwd": "/workspace/scratch/d417066aafa8/agent-dev-kit",
+  "started_at": "2026-11-17T12:10:26.758799+00:00",
+  "finished_at": "2026-11-17T12:10:28.379741+00:00",
+  "elapsed_seconds": 1.6209637509964523,
+  "exit_code": 0,
+  "log": "/workspace/scratch/d417066aafa8/verification/quality/mypy.log",
+  "log_sha256": "2d6b2fd3da664bcd3c10a511fd2cb9bf5f7517722cb0753d911d03540bfa3cbf"
+}

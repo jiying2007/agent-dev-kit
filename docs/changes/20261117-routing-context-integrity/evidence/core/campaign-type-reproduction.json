@@ -1,0 +1,69 @@
+{
+  "baseline_commit": "6d902f721f560f02883516e809fbd93a326405b6",
+  "scope": "synthetic fixture / no runtime execution",
+  "cases": [
+    {
+      "field": "actual_safe",
+      "malformed_value": 1,
+      "accepted": true,
+      "outcome": {
+        "status": "succeeded",
+        "category": "completed"
+      },
+      "elapsed_ms": 50,
+      "cost": {
+        "status": "available",
+        "amount": 0.001,
+        "currency": "USD"
+      },
+      "guardrails": [
+        {
+          "name": "safety-policy",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "field": "elapsed_ms",
+      "malformed_value": true,
+      "accepted": true,
+      "outcome": {
+        "status": "succeeded",
+        "category": "completed"
+      },
+      "elapsed_ms": 1,
+      "cost": {
+        "status": "available",
+        "amount": 0.001,
+        "currency": "USD"
+      },
+      "guardrails": [
+        {
+          "name": "safety-policy",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "field": "cost_usd",
+      "malformed_value": false,
+      "accepted": true,
+      "outcome": {
+        "status": "succeeded",
+        "category": "completed"
+      },
+      "elapsed_ms": 50,
+      "cost": {
+        "status": "available",
+        "amount": 0.0,
+        "currency": "USD"
+      },
+      "guardrails": [
+        {
+          "name": "safety-policy",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}
