@@ -10,16 +10,18 @@
 
 ## Creation Gate
 
+Keep each decision pending until the existing gate has actual evidence and review; copying this template does not grant approval.
+
 | Gate | Decision | Evidence |
 |---|---|---|
-| Duplicate skill checked | pass |  |
-| Trigger overlap checked | pass |  |
-| Profile ownership decided | pass |  |
-| Pilot requirement declared | pass |  |
-| Fallback / replaced_by declared | pass |  |
-| Output contract declared | pass |  |
-| Deterministic guard declared | pass |  |
-| Plugin boundary checked | pass |  |
+| Duplicate skill checked | pending |  |
+| Trigger overlap checked | pending |  |
+| Profile ownership decided | pending |  |
+| Pilot requirement declared | pending |  |
+| Fallback / replaced_by declared | pending |  |
+| Output contract declared | pending |  |
+| Deterministic guard declared | pending |  |
+| Plugin boundary checked | pending |  |
 
 ## Pattern Classification
 
