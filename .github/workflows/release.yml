@@ -106,6 +106,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REQUESTED_MAIN_CI_RUN_ID: ${{ inputs.successful_main_ci_run_id || '' }}
           CALLED_RELEASE_COMMIT: ${{ inputs.release_commit || '' }}
+          TRIGGERING_MAIN_CI_RUN_ID: ${{ github.event.workflow_run.id }}
+          TRIGGERING_MAIN_CI_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           set -euo pipefail
           python - <<'PY'
@@ -113,16 +115,27 @@ jobs:
 
           import json
           import os
+          import re
           import urllib.request
           from pathlib import Path
 
           run_id = os.environ.get("REQUESTED_MAIN_CI_RUN_ID", "").strip()
           release_commit = os.environ.get("CALLED_RELEASE_COMMIT", "").strip()
+          triggering_run_id = os.environ.get("TRIGGERING_MAIN_CI_RUN_ID", "").strip()
+          triggering_commit = os.environ.get("TRIGGERING_MAIN_CI_HEAD_SHA", "").strip()
           output_path = Path(os.environ["GITHUB_OUTPUT"])
           verified = False
 
-          if not release_commit or len(release_commit) != 40:
+          if re.fullmatch(r"[0-9a-f]{40}", release_commit) is None:
               raise SystemExit("release_commit is required for CI release authority")
+          if (re.fullmatch(r"[1-9][0-9]*", triggering_run_id) is None
+                  or re.fullmatch(r"[0-9a-f]{40}", triggering_commit) is None):
+              raise SystemExit("trusted workflow_run identity is required for latest selection")
+          if run_id:
+              if run_id != triggering_run_id or release_commit != triggering_commit:
+                  raise SystemExit("current release must use the triggering exact-main CI identity")
+          elif release_commit == triggering_commit:
+              raise SystemExit("current release cannot omit its triggering main CI run id")
           repository = os.environ["GITHUB_REPOSITORY"]
           api_root = os.environ["GITHUB_API_URL"].rstrip("/")
           headers = {
@@ -175,8 +188,9 @@ jobs:
                   "component publishing requires successful exact-source protected-main CI; "
                   "orphan repair cannot borrow another commit's CI evidence"
               )
-          # Only a caller-supplied exact CI run permits quick-smoke reuse.
-          # An orphan repair without a supplied run id still runs full regression.
+          # The triggering exact CI run identifies the current release and permits
+          # quick-smoke reuse. Historical repairs run full regression and never
+          # replace the latest release, even when published after the current one.
           verified = bool(run_id)
 
           with output_path.open("a", encoding="utf-8") as handle:
@@ -258,8 +272,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.release_tag }}
+          RELEASE_IS_LATEST: ${{ steps.ci-reuse.outputs.verified_main_ci_reuse }}
         run: |
           set -euo pipefail
+          case "${RELEASE_IS_LATEST:-}" in
+            true|false) ;;
+            *) echo "::error::verified latest selection must be true or false" >&2; exit 1 ;;
+          esac
           shopt -s nullglob
           archives=(dist/*.tar.gz)
           checksums=(dist/*.tar.gz.sha256)
@@ -289,6 +308,7 @@ jobs:
           else
             gh release create "$RELEASE_TAG" "$archive" "$checksum" "$contract" \
               --verify-tag \
+              --latest="$RELEASE_IS_LATEST" \
               --title "$RELEASE_TAG" \
               --generate-notes
           fi
