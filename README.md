@@ -28,9 +28,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `11.4.4`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
-
-8.0.0 维护 CLI 迁移：`performance.sh optimize`、`auto-ops.sh cleanup/optimize` 仅输出有界只读计划，JSON 使用 `adk-maintenance-plan/v1` 与 `status=planned`；维护 `--apply` 返回 blocked、exit 2，不再自动删除文件或修改权限。调用方必须移除维护 `--apply` 并按 `applied=false` 处理报告；见 [维护迁移说明](docs/changes/20261006-comprehensive-contracts/design.md)。
+`manifest.json` 当前 source version 为 `11.4.5`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 ADK **源码管理、构建与发布控制面**仅支持 CPython **3.12.x**（`>=3.12,<3.13`），建议使用独立 `.venv` 和固定依赖 `PyYAML==6.0.3`、`jsonschema==4.26.0`；3.11 与未验证的 3.13+ 均不受支持。纯 Skill 消费端不需要 ADK Python。
 
@@ -42,8 +40,6 @@ ADK **源码管理、构建与发布控制面**仅支持 CPython **3.12.x**（`>
 | GitHub Actions / 本地 Docker 构建 | Python 3.12 | 精确 SHA 的原生检查 |
 | 已导出的纯 Codex/Claude/OpenCode Skills | **不要求 ADK Python** | Runtime Bundle 无 ADK Python/源码；实际消费仍需 runtime-native discovery/load/trigger 验证 |
 | 独立依赖 Python 的特定 Skill | 由 Skill 自己声明 | 逐 Skill 的受控工具与运行时证据 |
-
-提高源码最低版本是 **9.0.0** 的破坏性变更，不会改变原有 Skill 数据格式、隐式授权、已发布不可变版本或下游产品资格。
 
 ## 1. 定位边界
 
