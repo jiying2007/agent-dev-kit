@@ -21,7 +21,7 @@ adk_select_python() {
     done
     PYTHON_BIN="${PYTHON_BIN:-python3}"
   fi
-  
+
   if [[ "${PYTHON_BIN}" == */* ]]; then
     [[ -x "${PYTHON_BIN}" ]] || {
       echo "[FAIL] selected ADK Python (${PYTHON_SELECTION}) is not executable: ${PYTHON_BIN}" >&2
@@ -31,13 +31,13 @@ adk_select_python() {
     echo "[FAIL] ADK_PYTHON_BIN was not found on PATH: ${PYTHON_BIN}" >&2
     exit 2
   fi
-  
+
   PYTHON_PROBE="$("${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info[:2] == (3, 12)))')" || {
     echo "[FAIL] unable to inspect ADK Python interpreter: ${PYTHON_BIN}" >&2
     exit 2
   }
   read -r PYTHON_VERSION PYTHON_SUPPORTED <<< "${PYTHON_PROBE}"
-  
+
   if [[ "${PYTHON_SUPPORTED}" != "1" ]]; then
     echo "[FAIL] ADK requires CPython 3.12.x; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
     echo "[INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter" >&2
