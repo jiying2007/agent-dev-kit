@@ -107,10 +107,14 @@ main() {
     fi
     case "$command" in
         cleanup|optimize)
+            # This branch imports typed ADK Python; shell-only operations remain independent.
+            # shellcheck source=./lib-python-runtime.sh
+            source "$SCRIPT_DIR/lib-python-runtime.sh"
+            adk_select_python
             local -a args=(--root "$ROOT_DIR" --level basic)
             [[ "$summary" -eq 0 ]] || args+=(--summary-json)
             PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
-                python3 -m agent_dev_kit.maintenance_plan "${args[@]}"
+                "${PYTHON_BIN}" -m agent_dev_kit.maintenance_plan "${args[@]}"
             ;;
         daily|weekly|monthly|security)
             if [[ "$summary" -eq 1 ]]; then

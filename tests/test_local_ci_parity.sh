@@ -34,6 +34,32 @@ for token in \
   }
 done
 
+fake_bin="$TMP_DIR/fake-bin"
+mkdir -p "$fake_bin"
+cat >"$fake_bin/docker" <<'SH'
+#!/usr/bin/env bash
+echo "[FAIL] unexpected Docker execution" >&2
+exit 95
+SH
+cat >"$TMP_DIR/python-old" <<'SH'
+#!/usr/bin/env bash
+if [[ "${1:-}" == "-c" ]]; then echo "3.11.14 0"; exit 0; fi
+echo "[FAIL] unsupported Python reached module call" >&2
+exit 96
+SH
+chmod +x "$fake_bin/docker" "$TMP_DIR/python-old"
+if ADK_PYTHON_BIN="$TMP_DIR/python-old" PATH="$fake_bin:$PATH" \
+  bash "$RUNNER" --mode quick >"$TMP_DIR/host-old.out" 2>&1; then
+  echo "[FAIL] local parity accepted unsupported host Python" >&2
+  exit 1
+fi
+rg -Fq -- "ADK requires CPython 3.12.x" "$TMP_DIR/host-old.out"
+rg -Fq -- 'source "${SCRIPT_DIR}/lib-python-runtime.sh"' "$RUNNER"
+rg -Fq -- 'adk_select_python' "$RUNNER"
+if rg -q '(^|[[:space:]])python3[[:space:]]+-[cm]' "$RUNNER"; then
+  echo "[FAIL] local parity retained implicit python3 module calls" >&2
+  exit 1
+fi
 for unsupported in 3.8 3.10 3.11 all; do
   if bash "$RUNNER" --python "$unsupported" --dry-run >/dev/null 2>&1; then
     echo "[FAIL] local CI parity accepted retired Python $unsupported" >&2

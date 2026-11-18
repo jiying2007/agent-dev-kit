@@ -128,6 +128,9 @@ command -v docker >/dev/null 2>&1 || {
   echo "[FAIL] docker is required for local CI parity" >&2
   exit 2
 }
+# shellcheck source=./lib-python-runtime.sh
+source "${SCRIPT_DIR}/lib-python-runtime.sh"
+adk_select_python
 
 definition_sha256="$(
   sha256sum "$DOCKER_CONTEXT/Dockerfile" "$DOCKER_CONTEXT/entrypoint.sh" \
@@ -172,7 +175,7 @@ tar --directory "$SNAPSHOT_SOURCE" --no-same-owner --extract --file "$SNAPSHOT_T
 chmod -R u=rwX,go=rX "$SNAPSHOT_SOURCE"
 snapshot_archive_sha256="$(sha256sum "$SNAPSHOT_TAR" | awk '{print $1}')"
 snapshot_sha256="$(
-  PYTHONPATH="$ROOT_DIR/src" python3 -c \
+  PYTHONPATH="$ROOT_DIR/src" "${PYTHON_BIN}" -c \
     'from pathlib import Path; from agent_dev_kit.model import sha256_tree; import sys; print(sha256_tree(Path(sys.argv[1])))' \
     "$SNAPSHOT_SOURCE"
 )"
@@ -310,7 +313,7 @@ if [[ "$CHECK_RECEIPT" -eq 1 ]]; then
   for item in "${python_images[@]}"; do
     receipt_args+=(--python-image "$item")
   done
-  PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt "${receipt_args[@]}"
+  PYTHONPATH="$ROOT_DIR/src" "${PYTHON_BIN}" -m agent_dev_kit.local_ci_receipt "${receipt_args[@]}"
   echo "[PASS] local CI parity receipt matches current snapshot versions=${#versions[@]} mode=$MODE"
   exit 0
 fi
@@ -328,6 +331,6 @@ write_args=(
 for item in "${receipt_records[@]}"; do
   write_args+=(--record "$item")
 done
-PYTHONPATH="$ROOT_DIR/src" python3 -m agent_dev_kit.local_ci_receipt "${write_args[@]}"
+PYTHONPATH="$ROOT_DIR/src" "${PYTHON_BIN}" -m agent_dev_kit.local_ci_receipt "${write_args[@]}"
 
 echo "[PASS] local CI parity matrix versions=${#versions[@]} mode=$MODE"
