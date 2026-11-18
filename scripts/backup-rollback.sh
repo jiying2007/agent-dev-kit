@@ -83,7 +83,7 @@ restore_backup() {
     fi
     
     PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
-        python3 - "$backup_file" "$target" "$force" <<'PY'
+        "${PYTHON_BIN}" - "$backup_file" "$target" "$force" <<'PY'
 import sys
 from pathlib import Path
 from agent_dev_kit.installation_transaction import restore_archive
@@ -160,6 +160,15 @@ main() {
         esac
     done
     
+    # Fail before rollback creates a snapshot or changes a target.
+    case "$command" in
+        restore|rollback)
+            # shellcheck source=./lib-python-runtime.sh
+            source "${SCRIPT_DIR}/lib-python-runtime.sh"
+            adk_select_python
+            ;;
+    esac
+
     case "$command" in
         backup) [[ -z "$target" ]] && { log_error "缺少--target"; exit 1; }; create_backup "$target" "$backup_dir" "${version:-$(date +%Y%m%d)}" ;;
         restore) [[ -z "$target" || -z "$version" ]] && { log_error "缺少参数"; exit 1; }; restore_backup "$target" "$backup_dir" "$version" "$force" ;;
