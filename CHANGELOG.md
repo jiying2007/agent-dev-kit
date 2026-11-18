@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.4.10 — Manifest 查询严格拒绝歧义输入
+
+- 核心 Manifest 查询入口复用现有有界 strict JSON 读取器，拒绝重复键、NaN/Infinity、符号链接和超出 16 MiB 的异常文件；不再维护宽松的第二解析路径。
+- 增补大型流消费、歧义输入、符号链接与大小上限负例，保留既有名称查询与消费者协议，不引入兼容镜像。
+- 同批纳入已通过依赖安全检查的开发依赖更新：ruff 0.17.5、types-PyYAML 6.0.12.20261113；应用依赖和纯 Skill 运行时不变。
+- 本版本只证明源码和门禁，不冒充 Native、真实模型效果、Root 晋级或 Product M5 资格。
+
 ### 11.4.9 — 退役无实际消费者的 Digital Worker 集成
 
 - 删除已停用的 Digital Worker 专属 ADK 集成 JSON、消费合同检查器及其独立 GitHub Actions 工作流，不保留 active legacy alias。

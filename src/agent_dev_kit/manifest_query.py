@@ -1,16 +1,21 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 from typing import Any
 
+from .strict_json import read as read_strict_json
+
+
+# Large Manifest streaming fixtures exceed 8 MiB; production manifests are
+# smaller. Bound the complete input without a second parser or format.
+MAX_MANIFEST_BYTES = 16 * 1024 * 1024
+
 
 def _load(root: Path) -> dict[str, Any]:
     path = root.resolve() / "manifest.json"
-    with path.open(encoding="utf-8") as handle:
-        value = json.load(handle)
+    value = read_strict_json(path, max_bytes=MAX_MANIFEST_BYTES, regular_only=True)
     if not isinstance(value, dict):
         raise ValueError("manifest.json root must be an object")
     return value
@@ -168,7 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     ns = parser.parse_args(argv)
     try:
         run(_load(Path(ns.root)), ns.command, ns.args)
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError) as exc:
         print(f"[FAIL] {exc}", file=sys.stderr)
         return 2
     return 0

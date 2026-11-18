@@ -53,6 +53,7 @@ with tempfile.TemporaryDirectory(prefix="adk-handoff-stream-") as temporary:
         "scripts/check-runtime-boundary.sh",
         "src/agent_dev_kit/__init__.py",
         "src/agent_dev_kit/manifest_query.py",
+        "src/agent_dev_kit/strict_json.py",
         "README.md",
     ):
         shutil.copyfile(source / relative, root / relative)

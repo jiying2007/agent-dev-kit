@@ -160,7 +160,7 @@ for token in \
 done
 
 # Refuse drift between the canonical dependency pins and local Docker tools.
-python3 - "$ROOT_DIR/pyproject.toml" "$DOCKERFILE" <<'PY'
+python3 - "$ROOT_DIR/pyproject.toml" "$DOCKERFILE" "$RUNNER" <<'PY'
 import pathlib
 import re
 import sys
@@ -168,6 +168,12 @@ import tomllib
 
 project = tomllib.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))["project"]
 docker = pathlib.Path(sys.argv[2]).read_text(encoding="utf-8")
+runner = pathlib.Path(sys.argv[3]).read_text(encoding="utf-8")
+default_base = re.search(r"(?m)^ARG BASE_IMAGE=(\S+)$", docker)
+assert default_base is not None and default_base.group(1).startswith("python:3.12-slim@sha256:"), (
+    "local Docker default retained an unsupported Python runtime"
+)
+assert default_base.group(1) in runner, "local Docker default differs from canonical 3.12 image pin"
 build_pins = dict(re.findall(r"(?m)^ARG ([A-Z][A-Z_]+)_VERSION=([^\s#]+)$", docker))
 bindings = {
     "PyYAML": "PYYAML",
