@@ -1,8 +1,8 @@
 ---
 name: adk-code-review-loop
 description: "用于独立代码审查、问题复核与反馈闭环；不用于自动批准或代替提交前门禁。"
-version: 1.7.11
-last_updated: 2026-11-17
+version: 1.7.12
+last_updated: 2026-11-18
 triggers:
   - "独立代码审查"
   - "代码评审"
@@ -50,7 +50,7 @@ constraints:
 4. **设计变更分流与收敛**：按 blocker/major/minor/question/cannot-verify-from-diff 分类并附证据；owner/state/event/resource/termination 或取消/超时/恢复变更标 `design-change` 并 replan；记录 new/reopened/clean rounds，不顺带重构。
 5. **门禁交接**：最终 review 交 `adk-commit-pr-quality-gate` 或 `adk-verification-before-completion`；不自动批准；重复模式经 trace-feedback-eval-handoff/AAR 才成为 durable rule。
 
-E2/E3 对冻结合同的关键前提提出可复现证伪；优先减法，CI 绿不等于真实有效。
+执行投入 `execution_effort` E2/E3 对冻结合同的关键前提提出可复现证伪；不表示评测证据已达到 E2/E3。优先减法，CI 绿不等于真实有效。
 
 连续两轮出现新的 blocker 或 major finding class，任一 finding 为 `design-change`，或同一逻辑任务 `author-self-review` 超过两轮时，必须停止局部补丁循环并 `replan`。
 

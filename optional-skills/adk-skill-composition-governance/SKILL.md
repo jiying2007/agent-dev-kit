@@ -1,8 +1,8 @@
 ---
 name: adk-skill-composition-governance
 description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
-version: 1.1.9
-last_updated: 2026-11-17
+version: 1.1.10
+last_updated: 2026-11-18
 triggers:
   - "技能组合"
   - "触发冲突"
@@ -53,7 +53,7 @@ constraints:
 10. 弃用治理：旧 skill 必须给 `deprecated_by` 或 `replaced_by`。
 11. 回归样例：为 primary/supporting/fallback 各补代表输入。
 12. 更新治理矩阵：记录场景、主技能、辅助技能、fallback、互斥和优先级。
-13. **行为 TDD**：Skill 行为变更先冻结同模型/工具/上下文的 baseline/candidate 和训练/留出案例 ID，再做正反/near-miss、独立盲评与成本对照；禁止用 holdout 调参。未取得真实模型 trace 保持 `not-measured`，不得拿路由 CI 代替行为改善。详细控制见 `references/skill-behavior-evaluation.md`。
+13. **行为 TDD**：同模型/工具/上下文比较现行 baseline 与 candidate；首次价值或负收益调查才另设 no-skill。区分开发、选型与冻结留出案例，按影响执行正反/near-miss、独立盲评和成本对照；禁止用 holdout 调参。无真实 trace 保持 `not-measured`，路由 CI 不代表行为改善。七字段方法记录与详细控制见 `references/skill-behavior-evaluation.md`，复用既有证据，不增加台账。
 
 14. **失败反馈→回归候选**：仅针对已核实的重复失败，在现有测试/fixtures 补最小正例、反例和适用确定性检查；改动前保存失败证据，修复后核旧成功路径。真实模型未执行仍为 `not-measured`，不得靠 E0/E1 判定模型成功。按需见 `references/adk-skill-lifecycle.md`。
 

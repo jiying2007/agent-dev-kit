@@ -1,5 +1,7 @@
 # Skill 格式指南
 
+本指南用于 Skill/方法实质维护；普通 Skill 使用不加载本指南及来源治理或发布流程。
+
 ## 目标
 
 `SKILL.md` 是 Skill 被选中后的精简 capability instruction，不是 prompt 仓库、岗位百科或机器权限清单。稳定 discovery 信息放 frontmatter，复杂 routing/permission/eval policy 由 `manifest.json` 与 `manifests/skill_content_contracts_v2.json` 承担，长知识按需进入 references/scripts/assets。
@@ -150,7 +152,7 @@ skills/<skill-name>/
 
 ## 外部 Skill
 
-外部 Skill 先进入 method-only intake；审查 provenance、version、license、trigger quality、重复能力、side effects 与 rollback，再决定 ADOPT/MERGE/ENHANCE/OBSERVE/REJECT。第三方格式兼容不等于生产信任。
+外部 Skill 先进入 method-only intake；审查来源固定版本、许可证、触发边界、重复能力、副作用与回滚。Decision 沿用 Root typed contract 的 `ADOPT/MERGE/ENHANCE/OBSERVE/REJECT`，来源与七字段方法记录见 [Practice Source Governance](runbooks/practice-source-governance.md)。第三方格式兼容不等于生产信任；采纳决定不自动授权实现或发布。
 
 ## 模板负担与任务经济性
 
@@ -169,7 +171,7 @@ skills/<skill-name>/
 
 ## Eval minimum
 
-大改 Skill 先分离**结构/路由**与**真实行为**证据；方法类 Skill 改动应先记录无 Skill 失败基线，再与候选在相同模型、工具、上下文和预算下做真实任务对照。压力场景必须包含反例、跨轮纠错、用户拒绝/终止与已批准任务快路径；审查者不能只给自己作品评分。无模型执行环境时保留可复跑案例、明确 `not-measured`，不得由 source-test 伪推断 E2–E4。
+大改 Skill 先分离**结构/路由**与**真实行为**证据。常规改版比较现行 Skill（champion/baseline）与 candidate；首次证明价值或调查负收益时另设 no-skill 对照，不能每轮抛弃现行基线。固定任务、模型、工具、初始上下文和预算；开发、选型与冻结验收的样本用途见 [评测边界](runbooks/skill-source-eval-and-runtime-qualification.md)。压力场景覆盖反例、跨轮纠错、用户拒绝/终止与已批准任务快路径；审查者不能只给自己作品评分。缺真实执行则为 `not-measured`；评测证据 E2–E4 与执行投入 `execution_effort` 同号不同义，均不由 source-test 晋级。
 
 大改 Skill 至少证明：
 - should-trigger / positive
@@ -179,7 +181,7 @@ skills/<skill-name>/
 - behavior/evidence contract
 - authority/permission negative（有 side effect 时）
 
-Token 下降可记录为 efficiency observation，但不能替代 task success 与安全/authority evidence。源文件 Markdown 围栏必须闭合；解析错误会吞掉后续的质量门禁，纳入源测试。具体方法见 `optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md`。
+先确认任务质量与安全不退化，再比较真实 Token、工具调用、耗时和返工；未测成本不填零。源文件 Markdown 围栏必须闭合；解析错误会吞掉后续的质量门禁，纳入源测试。具体方法见 `optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md`。
 
 ## 运行时分层
 
