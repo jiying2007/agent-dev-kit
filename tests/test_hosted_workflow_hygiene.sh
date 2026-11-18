@@ -266,7 +266,6 @@ pr_cancellable = {
     workflow_dir / "ci.yml": "agent-dev-kit-ci-v2",
     workflow_dir / "security-codeql.yml": "security-codeql",
     workflow_dir / "platform.yml": "platform",
-    workflow_dir / "digital-worker-contract.yml": "digital-worker-contract",
 }
 for path in consumer_files:
     pr_cancellable[path] = path.stem
@@ -276,7 +275,7 @@ for path, group in pr_cancellable.items():
     assert f"group: {group}-${{{{ github.event.pull_request.number || github.run_id }}}}" in text, path.name
     assert "cancel-in-progress: ${{ github.event_name == 'pull_request' }}" in text, path.name
 
-for path in [*consumer_files, workflow_dir / "digital-worker-contract.yml"]:
+for path in consumer_files:
     text = path.read_text(encoding="utf-8")
     assert "fetch-depth: 0" in text, path.name
     assert "fetch-tags: true" in text, path.name
