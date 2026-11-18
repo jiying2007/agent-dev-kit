@@ -12,6 +12,13 @@ if ADK_PYTHON_BIN=python-that-does-not-exist \
 fi
 rg -q --fixed-strings -- "ADK_PYTHON_BIN was not found on PATH" "$TMP_DIR/missing.out"
 
+if ADK_PYTHON_BIN=python-that-does-not-exist \
+  bash "$ROOT_DIR/scripts/version-manager.sh" current >"$TMP_DIR/version-missing.out" 2>&1; then
+  echo "[FAIL] version manager accepted a missing explicit interpreter" >&2
+  exit 1
+fi
+rg -q --fixed-strings -- "ADK_PYTHON_BIN was not found on PATH" "$TMP_DIR/version-missing.out"
+
 # Retired interpreters must fail before loading any ADK Python package, even
 # for informational commands. No legacy environment bypass exists.
 for version in 3.8.20 3.10.22 3.11.14 3.13.0 3.14.0; do
@@ -32,6 +39,11 @@ SH
     exit 1
   fi
   rg -q --fixed-strings -- "ADK requires CPython 3.12.x" "$TMP_DIR/old.out"
+  if ADK_PYTHON_BIN="$old_python" bash "$ROOT_DIR/scripts/version-manager.sh" current >"$TMP_DIR/version-old.out" 2>&1; then
+    echo "[FAIL] version manager accepted Python $version" >&2
+    exit 1
+  fi
+  rg -q --fixed-strings -- "ADK requires CPython 3.12.x" "$TMP_DIR/version-old.out"
 done
 
 auto_bin="$TMP_DIR/auto-bin"
@@ -60,6 +72,9 @@ chmod +x "$auto_bin/python3.12" "$auto_bin/python3.11" "$auto_bin/python3"
 env -u ADK_PYTHON_BIN -u VIRTUAL_ENV PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/auto.out" 2>"$TMP_DIR/auto.err"
 rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/auto.out"
+env -u ADK_PYTHON_BIN -u VIRTUAL_ENV PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/version-manager.sh" current >"$TMP_DIR/version-auto.out" 2>&1
+rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/version-auto.out"
 
 # An activated venv must override the host's auto Python 3.12, and explicit
 # ADK_PYTHON_BIN must still override the activated venv.
@@ -77,10 +92,30 @@ chmod +x "$TMP_DIR/venv/bin/python"
 env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/venv" PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/venv.out" 2>"$TMP_DIR/venv.err"
 rg -q --fixed-strings -- "venv-selected-python3.12" "$TMP_DIR/venv.out"
+env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/venv" PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/version-manager.sh" current >"$TMP_DIR/version-venv.out" 2>&1
+rg -q --fixed-strings -- "venv-selected-python3.12" "$TMP_DIR/version-venv.out"
 
 ADK_PYTHON_BIN="$auto_bin/python3.12" VIRTUAL_ENV="$TMP_DIR/venv" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/override.out" 2>"$TMP_DIR/override.err"
 rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/override.out"
+
+# The probe's exit status is authoritative even if a broken interpreter prints
+# an apparently supported version before exiting unsuccessfully.
+cat >"$TMP_DIR/python-probe-error" <<'SH'
+#!/usr/bin/env bash
+echo "3.12.9 1"
+exit 7
+SH
+chmod +x "$TMP_DIR/python-probe-error"
+for entrypoint in devkit.sh version-manager.sh; do
+  if ADK_PYTHON_BIN="$TMP_DIR/python-probe-error" \
+    bash "$ROOT_DIR/scripts/$entrypoint" current >"$TMP_DIR/probe-error.out" 2>&1; then
+    echo "[FAIL] $entrypoint accepted a failing version probe" >&2
+    exit 1
+  fi
+  rg -q --fixed-strings -- "unable to inspect ADK Python interpreter" "$TMP_DIR/probe-error.out"
+done
 
 mkdir -p "$TMP_DIR/old-venv/bin"
 ln -s "$TMP_DIR/python-3.11.14" "$TMP_DIR/old-venv/bin/python"

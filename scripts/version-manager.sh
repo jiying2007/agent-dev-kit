@@ -3,6 +3,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# shellcheck source=./lib-python-runtime.sh
+source "${SCRIPT_DIR}/lib-python-runtime.sh"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -46,7 +48,7 @@ USAGE
 }
 
 get_current_version() {
-    python3 - "$ROOT_DIR" <<'PY'
+    "${PYTHON_BIN}" - "$ROOT_DIR" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -62,14 +64,14 @@ PY
 
 verify_version() {
     PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
-        python3 -m agent_dev_kit.versioning verify-identity --root "$ROOT_DIR"
+        "${PYTHON_BIN}" -m agent_dev_kit.versioning verify-identity --root "$ROOT_DIR"
 }
 
 sync_version() {
     local target_version="$1"
     local actor="${ADK_VERSION_LOCKED_BY:-$(whoami)}"
     PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
-        python3 -m agent_dev_kit.versioning sync-identity \
+        "${PYTHON_BIN}" -m agent_dev_kit.versioning sync-identity \
         --root "$ROOT_DIR" \
         --target "$target_version" \
         --actor "$actor"
@@ -125,7 +127,7 @@ compare_versions() {
     local version1="$1"
     local version2="$2"
     PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" \
-        python3 -m agent_dev_kit.versioning compare --previous "$version1" --candidate "$version2"
+        "${PYTHON_BIN}" -m agent_dev_kit.versioning compare --previous "$version1" --candidate "$version2"
 }
 
 format_recent_changes() {
@@ -214,6 +216,12 @@ main() {
                 ;;
         esac
     done
+
+    case "$command" in
+        current|verify|lock|upgrade|compare|changelog)
+            adk_select_python
+            ;;
+    esac
 
     case "$command" in
         current)
