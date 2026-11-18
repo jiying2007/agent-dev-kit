@@ -169,6 +169,7 @@ SH
   rg -q 'fixture-compatible-runtime' "$TMP_DIR/class.out"
 done
 
+rg -Fq -- 'sys.implementation.name == "cpython"' "$ROOT_DIR/scripts/lib-python-runtime.sh"
 [[ ! -e "$ROOT_DIR/src/agent_dev_kit/compat.py" ]] || {
   echo "[FAIL] retired Python 3.8 compatibility module has returned" >&2
   exit 1

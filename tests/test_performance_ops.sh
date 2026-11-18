@@ -51,6 +51,13 @@ assert_contains "$TMP_DIR/benchmark.json" '"quality_status":"skipped"' "benchmar
 
 printf 'keep\n' >"$ROOT_TMP_FILE"
 "$ROOT_DIR/scripts/auto-ops.sh" cleanup >"$TMP_DIR/cleanup.txt"
+if ADK_PYTHON_BIN=python-that-does-not-exist "$ROOT_DIR/scripts/auto-ops.sh" cleanup >"$TMP_DIR/no-python.out" 2>&1; then
+  echo "[FAIL] ops cleanup bypassed canonical interpreter selector" >&2
+  exit 1
+fi
+assert_contains "$TMP_DIR/no-python.out" "ADK_PYTHON_BIN was not found" "ops cleanup must reject missing Python"
+ADK_PYTHON_BIN=python-that-does-not-exist "$ROOT_DIR/scripts/auto-ops.sh" weekly --summary-json >"$TMP_DIR/weekly-shell.json"
+assert_contains "$TMP_DIR/weekly-shell.json" '"status":"pass"' "shell-only ops require no Python"
 [[ -f "$ROOT_TMP_FILE" ]] || {
   echo "[FAIL] ops cleanup without --apply deleted a file" >&2
   exit 1

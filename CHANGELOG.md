@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 11.4.7 — 构建 Python 消费入口继续收敛
+
+- 本地 CI parity 与只读维护计划的 Python 模块调用复用唯一 CPython 3.12 选择器，不再直接落入宿主 python3；dry-run、shell-only 和 --apply 阻断语义保留。
+- 解释器探测显式确认 CPython 实现，增补旧版解释器失败回归；不调整 Docker 镜像、Skill 运行时、模型预算和现场产品资格。
+
 ### 11.4.6 — Python 构建入口与版本管理选择器收敛
 
 - 将 `devkit.sh` 的 Python 3.12 选择、虚拟环境优先级和拒绝旧解释器契约提取为一个共享的只读 shell library；版本管理入口不再绕过该限制直接执行宿主 `python3`。

@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.4.6",
+    "planned_release": "v11.4.7",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.4.6",
+      "merged_main_sha": "5f45049226378ae7de1f2ffae40f0c2378e27095",
+      "model_runs": 0,
+      "reason": "11.4.6 unified core CLI/version-manager Python; source gates passed, but native Skill A/B, token, latency and cost trials were not performed."
+    },
     {
       "planned_release": "v11.4.5",
       "merged_main_sha": "97e4500a29e19ab6e1b35283e2e3d7f5f7eaf74a",

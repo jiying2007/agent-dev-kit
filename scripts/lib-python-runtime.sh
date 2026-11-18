@@ -32,7 +32,7 @@ adk_select_python() {
     exit 2
   fi
 
-  PYTHON_PROBE="$("${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info[:2] == (3, 12)))')" || {
+  PYTHON_PROBE="$("${PYTHON_BIN}" -c 'import sys; print(".".join(map(str, sys.version_info[:3])), int(sys.version_info[:2] == (3, 12) and sys.implementation.name == "cpython"))')" || {
     echo "[FAIL] unable to inspect ADK Python interpreter: ${PYTHON_BIN}" >&2
     exit 2
   }
