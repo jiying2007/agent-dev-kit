@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.4.9 — 退役无实际消费者的 Digital Worker 集成
+
+- 删除已停用的 Digital Worker 专属 ADK 集成 JSON、消费合同检查器及其独立 GitHub Actions 工作流，不保留 active legacy alias。
+- 保留 Codex/Claude 两条现役消费者、通用 Agent/Skill/Profile/Workflow 契约及历史 Git 审计证据；不删除外部仓库或替代现有运行时。
+- 将此前与 11.4.8 冲突的旧候选明确前移到 11.4.9，保留已验证 11.4.8 源码和预注册未测历史。发布、Root 消费、模型和运行资格分别验证。
+
+
 ### 11.4.8 — 退役无源解锁并统一档案恢复解释器
 
 - 退役直接删除 `.version-lock` 的旧 `version-manager.sh unlock`，版本身份仅通过受控 `upgrade --force` 事务更新，不保留兼容别名。

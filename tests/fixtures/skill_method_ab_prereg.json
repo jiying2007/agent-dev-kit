@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.4.8",
+    "planned_release": "v11.4.9",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.4.8",
+      "merged_main_sha": "831f62d869ec2ccd57fad00520b5320394133acd",
+      "model_runs": 0,
+      "reason": "11.4.8 removed the obsolete version unlock path and converged archive recovery; native Skill model A/B, tokens, latency and cost experiments were not performed. Historical source identity is preserved without claiming a passed native evaluation."
+    },
     {
       "planned_release": "v11.4.7",
       "merged_main_sha": "4e54caa7f8966b3c1c205759641e60bba3165368",
