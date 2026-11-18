@@ -35,6 +35,7 @@ class ManifestStreamConsumerTests(unittest.TestCase):
             "scripts/check-capability-health.sh",
             "src/agent_dev_kit/__init__.py",
             "src/agent_dev_kit/manifest_query.py",
+            "src/agent_dev_kit/strict_json.py",
             "manifests/adk_goal_contracts.json",
             "manifests/adk_capability_health_contracts.json",
         )
@@ -150,6 +151,41 @@ class ManifestStreamConsumerTests(unittest.TestCase):
                 self.assertNotEqual(0, result.returncode)
                 self.assertIn("[FAIL]", result.stderr)
                 self.assertEqual("", result.stdout)
+
+    def test_ambiguous_or_nonfinite_manifest_is_rejected_before_query(self):
+        ambiguous = (
+            '{"profiles": {}, "profiles": {"probe-match": {}}}',
+            '{"profiles": {"probe-match": {"extends": "core", "extends": "team-core"}}}',
+            '{"profiles": {"probe-match": {"budget": NaN}}}',
+            '{"profiles": {"probe-match": {"budget": Infinity}}}',
+        )
+        for raw in ambiguous:
+            with self.subTest(raw=raw):
+                (self.root / "manifest.json").write_text(raw, encoding="utf-8")
+                result = self.helper("adk_profile_exists", MATCH)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn("[FAIL]", result.stderr)
+                self.assertEqual("", result.stdout)
+
+    def test_manifest_query_rejects_symlink_and_oversized_file(self):
+        manifest = self.root / "manifest.json"
+        saved = self.root / "manifest-before-alias.json"
+        manifest.rename(saved)
+        try:
+            manifest.symlink_to(saved)
+            result = self.helper("adk_profile_exists", MATCH)
+            self.assertNotEqual(0, result.returncode)
+            self.assertIn("[FAIL]", result.stderr)
+            self.assertEqual("", result.stdout)
+        finally:
+            manifest.unlink()
+            saved.rename(manifest)
+
+        manifest.write_bytes(b" " * (16 * 1024 * 1024 + 1))
+        result = self.helper("adk_profile_exists", MATCH)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("[FAIL]", result.stderr)
+        self.assertEqual("", result.stdout)
 
     def test_matching_output_cannot_hide_producer_failure(self):
         for helper in HELPERS:
