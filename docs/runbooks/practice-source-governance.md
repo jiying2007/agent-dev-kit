@@ -66,4 +66,3 @@ bash scripts/devkit.sh runtime-capabilities --summary-json
 bash scripts/devkit.sh validate --strict
 bash tests/run_all.sh --quick
 ```
-

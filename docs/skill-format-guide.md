@@ -184,4 +184,3 @@ skills/<skill-name>/
 ## 运行时分层
 
 Skill 只定义能力方法；Agent 持有运行责任与 authority；Sub-agent 使用 typed handoff 接收范围受限任务；Workflow 管理 state；MCP/tool 只提供外部能力接口。完整模型见 `docs/skill-agent-runtime-model.md`。
-

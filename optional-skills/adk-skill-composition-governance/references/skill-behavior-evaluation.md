@@ -45,4 +45,3 @@
 - 真实 source/宿主权限缺失则中止并记 `not-measured`；未报告的用量记 unavailable，不填零。
 - 优化与 holdout 的 ID 重叠或环境漂移时标 `invalid-eval`，冻结原始 trace，不以静态 router pass 代替行为结论。
 - 复用既有 `agent_dev_kit.effect_trials.compare_effect_trial_file`、Run Evidence、Trace Summary；不自动运行付费模型，不创建平行评测引擎。
-

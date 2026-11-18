@@ -37,4 +37,3 @@ rtk tests/run_all.sh
 ```
 
 workflow 变更走 `propose -> apply -> verify -> review -> archive`。小改跑定向测试；共享逻辑、manifest、installer、release、安全、lifecycle 变更跑完整回归。PR/交付给出摘要、证据、风险、回滚和影响文件；提交格式 `<type>(scope): <中文动词摘要>`。
-

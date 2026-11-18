@@ -103,4 +103,3 @@ Do not embed one Skill inside another Skill as an implicit dependency. Use Agent
 - `bash tests/test_skill_trigger_matrix.sh`
 - `bash scripts/pilot-readiness.sh --summary-json`
 - `bash tests/run_all.sh`
-

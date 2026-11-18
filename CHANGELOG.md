@@ -1233,4 +1233,3 @@
 - 故障排除: docs/troubleshooting.md
 
 - Keep security-negative fixtures below production credential-pattern heuristics; source contract tests must not ship credential-like literals. Nested CLI assignments such as `--env=TOKEN=value` are checked independently, not swallowed by an outer option match.
-

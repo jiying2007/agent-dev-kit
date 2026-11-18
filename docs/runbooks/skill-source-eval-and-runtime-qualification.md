@@ -36,4 +36,3 @@ PYTHONPATH=src python3 -m unittest tests.test_skill_trigger_matrix tests.test_sk
 5. 只有具备经授权的无额外付费运行环境时才执行真实模型实验；缺条件保持 pending，不自动调用计费提供商。
 
 证据存入现有 change/effect 记录；七字段见 [方法记录](practice-source-governance.md)，执行细则见 [行为评测](../../optional-skills/adk-skill-composition-governance/references/skill-behavior-evaluation.md)。外部参考 URL 仅供查阅，采纳依据需记录确切版本或内容摘要：https://developers.openai.com/blog/eval-skills
-

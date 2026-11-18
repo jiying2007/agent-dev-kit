@@ -125,4 +125,3 @@ bash scripts/pilot-readiness.sh --summary-json
 - Generator/Reviewer/Pipeline/Inversion 的输出契约和硬门禁必须可验证。
 - 组合裁决必须保留 progressive disclosure 证据，证明未因全量上下文噪音导致 primary/supporting/fallback 误判。
 - Skill 发布前区分 source-contract PASS 与真实 host behavior `not-measured`；缺真实 trace 不得宣称达到上游产品体验。
-

@@ -33,4 +33,3 @@ Any permission or safety breach is a hard fail, never hidden in an average. Toke
 - E4: actual decision → triage → authorized implementation/verification trajectory, **not-measured** until genuine end-to-end artifacts exist.
 
 Adopt after blind evidence shows substantial behavioral improvement or parity with the preregistered comparator without fast-path/authorization regression. Otherwise refine the **same** Skill on development cases within the registered budget; stop when it is exhausted or no new evidence distinguishes the next attempt. Never tune against final holdout, duplicate Agent/Workflow authority, or imply qualification from an incomplete run.
-
