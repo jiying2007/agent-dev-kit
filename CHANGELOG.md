@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.4.3 — Skill 方法沉淀与两仓持续迭代规范
+
+- 来源吸收统一引用 Root 既有五项决策契约；七字段方法记录进入原变更与决策证据，明确规范、执行投入、评测证据与运行资格的不同边界。
+- 共享 authoring/evaluation 规则采用 champion/candidate、开发与冻结验收分离、质量先于成本、失败保留与缺测诚实记录；不新增方法台账、Skill 身份、协议枚举或预算例外。
+- 三类重点能力复用既有 goal-resume、intent-distinction、review-false-positive 开发任务及覆盖全部 65 个 Skill 的内容、触发和导出检查；开发样例不升级为真实模型试验或独立 holdout。
+- 小改可引用已有覆盖，运行与现场证据按原验收需要提供；原 required CI、独立审查、发布与消费验证保持。11.4.2 发布失败原件保留，本版本需自己的验证和不可变发行证据。
+
 ### 11.4.2 — 有界快照优先发现自有后代
 
 - 修复全局procfs前缀条目可能耗尽单批预算而遗漏本次会话的缺口；优先使用可用的各线程子进程线索，在原清理截止内续扫全局游标，不反复从头或把空有界批次当完成。
@@ -1226,3 +1233,4 @@
 - 故障排除: docs/troubleshooting.md
 
 - Keep security-negative fixtures below production credential-pattern heuristics; source contract tests must not ship credential-like literals. Nested CLI assignments such as `--env=TOKEN=value` are checked independently, not swallowed by an outer option match.
+

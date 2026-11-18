@@ -43,11 +43,11 @@ Pipeline and Inversion skills must not rely only on prose such as "do not procee
 - Second occurrence: draft a reusable checklist, template, or reference.
 - Third occurrence: consider a Skill only if the workflow has stable inputs, outputs, done criteria, and failure handling.
 
-Reject or keep as `REFERENCE_ONLY` when the candidate is a one-off tutorial, domain showcase, trend list, external marketplace entry, or requires unreviewed tools. Prefer enhancing an existing Skill over creating a parallel one.
+For a one-off tutorial, domain showcase, trend list, marketplace entry or unreviewed tool, retain only justified reference evidence. Root intake decisions remain `ADOPT/MERGE/ENHANCE/OBSERVE/REJECT`; reference-only retention is not another decision enum. Prefer enhancing an existing Skill over creating a parallel one.
 
 ## Evolution Evidence Gate
 
-Skill evolution must be evidence-driven and monotonic:
+Skill evolution must preserve verified behavior and use evidence:
 
 - Group evidence by existing Skill and repeated failure mode before changing the Skill.
 - Preserve success invariants from tasks that already pass; a fix that breaks verified paths is rejected.
@@ -58,13 +58,11 @@ Skill evolution must be evidence-driven and monotonic:
 
 ## Skill Behavior RED → GREEN → REFACTOR
 
-- **RED（无 Skill 基线）**：固定真实任务、模型/版本、温度、工具与上下文；让未加载该 Skill 的 Agent 执行压力案例，保留原始回答与明确失败模式。没有运行能力则记 `not-measured`，不得编造失败。
-- **GREEN（候选 Skill）**：只改一项可验证行为，用同样任务集重跑；记录失败是否消失、原有成功是否回退、额外问答与工具调用成本。
-- **REFACTOR**：对成功但有多余规则的修改做减法；加入易误触发、对抗诱导、用户拒绝、已批准快路径及中断恢复样例；保留被拒变更。
-- **独立性**：候选作者不担任唯一效果裁判；至少一次盲看不同变体的对照评价，重大用户决策仍归用户。测试数据和评分标准预注册，不能挑案例后补阈值。
-- **晋级**：静态路由、合同、授权负例由 CI 证实；原生 discovery/load、任务行为、端到端结果分别核真实 trace。没有 E2–E4 时标 `not-measured`，只可声明 source-ready。
+- **RED**：常规改版以现行 Skill（champion/baseline）为基线，复用可信失败；首次价值或负收益调查才另设 no-skill。没有运行证据则为 `not-measured`。
+- **GREEN / REFACTOR**：只改一个机制，复验失败与旧成功，删除无收益规则并保留否决原因；质量/权限不退化后才比较实际成本。
+- **验收**：开发与选型案例不作最终留出集；冻结候选、grader、样本和重复门槛，独立盲评后分别判断静态、真实行为、原生 discovery/load 与端到端结果。评测证据 E2–E4 不是执行投入 `execution_effort` 的编号，缺测只可声明已验证的源码范围。
 
-离线试验和评分见 `references/skill-behavior-evaluation.md`，不自动启用付费模型或后台调用。
+完整协议与七字段方法记录见 [skill-behavior-evaluation.md](skill-behavior-evaluation.md)；沿用现有 change/effect 证据，不复制新台账或启用付费/后台调用。
 
 ## Failure Feedback → Deterministic Regression (conditional)
 - First freeze an actual, redacted `failure_trace_ref`, `source_sha`, expected/observed, error class and affected Skill; if evidence is only a hypothetical example, label it `design-case`, not a reproduced failure.
@@ -74,6 +72,7 @@ Skill evolution must be evidence-driven and monotonic:
 - Avoid a universal "one correction = one new rule" policy: consolidate repeats by failure cause; retire ineffective instructions after observed regression and owner review.
 
 ## Lifecycle Review (report-only)
+- Stop a candidate at its registered budget or when another retry has no new evidence; retain the failed attempt and a specific resume condition. Missing runtime access is not a reason to create recurring inspection or claim success.
 - Review operational states as `active / deprecation-candidate / deprecated / retired` **only as analyst labels** unless the canonical ADK Manifest explicitly supports that value; never silently add unsupported lifecycle enums or a second state registry.
 - Consider verified use, true route overlap, actual task outcomes, target profile footprint, replacement availability, consumer compatibility and rollback evidence. Inactivity or directory age alone is not a reason to delete a Skill.
 - For proposed retirement, record `candidate / evidence / owner_decision / replacement / affected_profiles / fallback / required_and_forbidden_footprint / rollback`. Without consent, native evidence or verified replacement, leave the active asset unchanged.
@@ -104,3 +103,4 @@ Do not embed one Skill inside another Skill as an implicit dependency. Use Agent
 - `bash tests/test_skill_trigger_matrix.sh`
 - `bash scripts/pilot-readiness.sh --summary-json`
 - `bash tests/run_all.sh`
+
