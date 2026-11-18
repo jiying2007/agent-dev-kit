@@ -67,4 +67,21 @@ assert_contains "$TMP_DIR/force.err" '--force 必须与 --apply' "ops force fail
 assert_contains "$TMP_DIR/weekly.json" '"status":"pass"' "ops weekly json should pass"
 assert_contains "$TMP_DIR/weekly.json" '"apply":0' "ops weekly json should default to apply=0"
 
+"$ROOT_DIR/scripts/auto-ops.sh" weekly >"$TMP_DIR/weekly.txt"
+assert_contains "$TMP_DIR/weekly.txt" 'report-only' "weekly should remain observation-only"
+assert_contains "$TMP_DIR/weekly.txt" '--apply 会阻断' "weekly should not promise future unreviewed writes"
+
+if "$ROOT_DIR/scripts/auto-ops.sh" monthly --apply --summary-json >"$TMP_DIR/blocked.json" 2>"$TMP_DIR/blocked.err"; then
+  echo "[FAIL] ops --apply must remain blocked" >&2
+  exit 1
+else
+  rc=$?
+  [[ "$rc" -eq 2 ]] || { echo "[FAIL] ops --apply wrong exit code: $rc" >&2; exit 1; }
+fi
+assert_contains "$TMP_DIR/blocked.json" '"status":"blocked"' "apply JSON should be blocked"
+assert_contains "$TMP_DIR/blocked.json" '"applied":false' "apply JSON must not imply side effects"
+"$ROOT_DIR/scripts/auto-ops.sh" monthly --summary-json >"$TMP_DIR/monthly.json"
+assert_contains "$TMP_DIR/monthly.json" '"writes":"none"' "monthly should not advertise unreachable writes"
+[[ -f "$ROOT_TMP_FILE" ]] || { echo "[FAIL] ops touched test file" >&2; exit 1; }
+
 echo "[PASS] performance and ops tests passed"

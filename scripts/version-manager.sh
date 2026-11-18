@@ -40,8 +40,8 @@ Options:
 Examples:
   ./scripts/version-manager.sh current
   ./scripts/version-manager.sh verify
-  ./scripts/version-manager.sh lock --version 5.1.0
-  ./scripts/version-manager.sh upgrade --target 5.1.0 --force
+  # 目标版本须来自当前已审查的增量候选；不要直接复制旧版本号
+  ./scripts/version-manager.sh upgrade --target "$NEXT_VERSION" --force
 USAGE
 }
 
