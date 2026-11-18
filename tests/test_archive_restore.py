@@ -147,6 +147,28 @@ class ArchiveRestoreTests(unittest.TestCase):
         self.assertEqual((stage / "previous/sentinel").read_bytes(), b"original\x00bytes")
         self.assertEqual((stage / "payload/restored").read_bytes(), b"restored\x00bytes")
 
+    def test_restore_and_rollback_reject_missing_python_before_writes(self):
+        script = ROOT / "scripts/backup-rollback.sh"
+        backups = self.root / "backups"
+        backups.mkdir()
+        env = dict(os.environ, ADK_PYTHON_BIN="missing-python-312-for-test")
+        for command in ("restore", "rollback"):
+            with self.subTest(command=command):
+                result = subprocess.run(
+                    ["bash", str(script), command, "--target", str(self.target),
+                     "--backup-dir", str(backups), "--version", "test", "--force"],
+                    env=env, capture_output=True, text=True,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("ADK_PYTHON_BIN was not found", result.stdout + result.stderr)
+                self.assert_original()
+                self.assertEqual(list(backups.iterdir()), [])
+        listed = subprocess.run(
+            ["bash", str(script), "list", "--backup-dir", str(backups)],
+            env=env, capture_output=True, text=True,
+        )
+        self.assertEqual(listed.returncode, 0, listed.stdout + listed.stderr)
+
     def test_public_script_round_trip_and_wrong_basename_preserve_selected_target(self):
         script = ROOT / "scripts/backup-rollback.sh"
         backups = self.root / "backups"
