@@ -1,5 +1,7 @@
 # Skill 格式指南
 
+本指南用于 Skill/方法实质维护；普通 Skill 使用不加载本指南及来源治理或发布流程。
+
 ## 目标
 
 `SKILL.md` 是 Skill 被选中后的精简 capability instruction，不是 prompt 仓库、岗位百科或机器权限清单。稳定 discovery 信息放 frontmatter，复杂 routing/permission/eval policy 由 `manifest.json` 与 `manifests/skill_content_contracts_v2.json` 承担，长知识按需进入 references/scripts/assets。

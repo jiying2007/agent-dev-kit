@@ -15,7 +15,7 @@
 
 - `manifest.json` 是产品边界、target/profile/agent/skill/workflow/MCP 的 Manifest SSOT；`manifests/` 仅放受测治理 contract，不形成产品镜像。
 - `agents/`、`skills/` 是 core；`optional-skills/` 仅显式请求时安装/导出；`src/agent_dev_kit/` 是 typed core；`scripts/devkit.sh` 是稳定入口；`docs/changes/` 存证据；`tests/` 存回归。
-- Skill/方法实质变更先读 `docs/skill-format-guide.md` 与 `docs/runbooks/practice-source-governance.md`；普通 Skill 使用不加载维护/发布流程。
+- Skill/方法维护：`docs/skill-format-guide.md`。
 - ID/文件名用 kebab-case。`SKILL.md` 含 `name/description/triggers/non_triggers/inputs/outputs/constraints`；正文留触发、流程、输出契约，长背景放 `references/`。
 - 参考仓只作治理输入；生产资产由 manifest/handoff fragment 声明。能力明确属于 `core` 或 `optional-skills`，不得重复 skill/profile。
 
