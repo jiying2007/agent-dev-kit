@@ -1459,12 +1459,13 @@ class _CmakeExampleFixture:
             ADK_CONFIGURE_PRESET="unselected-configure", ADK_BUILD_PRESET="unselected-build",
             ADK_TEST_PRESET="unselected-test")
 
-    def published(self, marker, **overrides):
+    def published(self, marker, *, timeout=15, **overrides):
         environment = dict(self.environment, **overrides)
         # Fixture-only trace identifies the last configure/build/CTest command
         # if the aggregate example budget expires; the published block is intact.
         return run_example("PS4='+${EPOCHREALTIME} ${LINENO}: '\nset -x\n" + bash_example(CMAKE, marker), self.source,
-                           environment=environment, label=f"CMake/{environment['ADK_BUILD_MODE']}/{marker}")
+                           environment=environment, timeout=timeout,
+                           label=f"CMake/{environment['ADK_BUILD_MODE']}/{marker}")
 
     def assert_identity(self, identity, output, artifact):
         self.assertEqual(identity + "\n", (output / "ctest-identity.txt").read_text())
@@ -1539,7 +1540,12 @@ class CmakeBuildExampleTests(_CmakeExampleFixture, unittest.TestCase):
                                   + 'set(CMAKE_C_STANDARD 90)\n'
                                   + 'set(CMAKE_C_STANDARD_REQUIRED ON)\n'
                                   + 'set(CMAKE_C_EXTENSIONS OFF)\n')
-        result = self.published("# cmake-build:", ADK_SOURCE_DIR=str(ADC), CFLAGS="-pedantic-errors")
+        # The strict C90 consumer performs a cold Release build plus CTest.
+        # Two hosted runs used ~14s compiling and hit the generic 15s limit
+        # after starting CTest; retain real build/test verification with a
+        # bounded, test-specific 30s end-to-end budget.
+        result = self.published("# cmake-build:", timeout=30,
+                                ADK_SOURCE_DIR=str(ADC), CFLAGS="-pedantic-errors")
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assertIn("adc_scale_host_unit", result.stdout)
         executable = self.output / "test_adc_scale"

@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=python:3.11-slim@sha256:db3ff2e1800a8581e2c48a27c3995339d47bdf046da21c7627accd3d51053a93
+ARG BASE_IMAGE=python:3.12-slim@sha256:57cd7c3a7a273101a6485ba99423ee568157882804b1124b4dd04266317710de
 FROM ${BASE_IMAGE}
 
 LABEL org.opencontainers.image.title="agent-dev-kit-local-ci" \
