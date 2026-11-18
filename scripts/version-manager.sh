@@ -28,7 +28,6 @@ Commands:
   current                Show canonical manifest version
   verify                 Verify release version identity is synchronized
   lock                   Synchronize and lock a version
-  unlock                 Remove .version-lock
   upgrade                Upgrade synchronized version identity
   compare                Compare two versions
   changelog              Generate a standalone changelog draft
@@ -90,16 +89,6 @@ lock_version() {
     sync_version "$version"
     verify_version
     log_success "版本已锁定: $version"
-}
-
-unlock_version() {
-    log_info "解锁版本"
-    if [[ -f "$ROOT_DIR/.version-lock" ]]; then
-        rm -f "$ROOT_DIR/.version-lock"
-        log_success "版本已解锁"
-    else
-        log_warning "版本锁定文件不存在"
-    fi
 }
 
 upgrade_version() {
@@ -233,9 +222,6 @@ main() {
         lock)
             [[ -n "$version" ]] || { log_error "缺少 --version 参数"; exit 1; }
             lock_version "$version"
-            ;;
-        unlock)
-            unlock_version
             ;;
         upgrade)
             [[ -n "$target" ]] || { log_error "缺少 --target 参数"; exit 1; }

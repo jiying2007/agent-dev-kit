@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.4.8 — 退役无源解锁并统一档案恢复解释器
+
+- 退役直接删除 `.version-lock` 的旧 `version-manager.sh unlock`，版本身份仅通过受控 `upgrade --force` 事务更新，不保留兼容别名。
+- 安装档案 restore/rollback 复用 CPython 3.12 唯一选择器，解释器缺失时在任何目录或回滚快照写入之前拒绝；backup/list/verify 保持纯 shell。
+- 补充失效解锁拒绝且锁不变、恢复失败无副作用与只读列表可用的负例；不扩大 Root/live 写权限，不继承模型效果或产品资格。
+
+
 ### 11.4.7 — 构建 Python 消费入口继续收敛
 
 - 本地 CI parity 与只读维护计划的 Python 模块调用复用唯一 CPython 3.12 选择器，不再直接落入宿主 python3；dry-run、shell-only 和 --apply 阻断语义保留。

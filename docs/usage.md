@@ -187,6 +187,8 @@ bash scripts/devkit.sh release build --out dist
 bash scripts/version-manager.sh current
 ```
 
+版本身份以 Manifest、锁与 Git 为事实源；已退役 `version-manager.sh unlock`，受控更版继续走 `upgrade --target ... --force`。档案 restore/rollback 需使用 CPython 3.12 构建环境，backup/list/verify 不需要 Python。该脚本不得用作 Root 或 live 用户目录恢复。
+
 团队仓库接入或季度复核时，可先生成 Harness readiness 基线：
 
 ```bash

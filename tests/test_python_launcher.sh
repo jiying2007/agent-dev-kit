@@ -187,5 +187,21 @@ assert metadata["tool"]["ruff"]["target-version"] == "py312", metadata
 assert metadata["tool"]["mypy"]["python_version"] == "3.12", metadata
 assert "test" not in project.get("optional-dependencies", {}), "retired empty test extra remains"
 PY
+# Test the retired destructive entrypoint in an isolated copy only.
+mkdir -p "$TMP_DIR/retired-unlock/scripts"
+cp "$ROOT_DIR/scripts/version-manager.sh" "$TMP_DIR/retired-unlock/scripts/version-manager.sh"
+cp "$ROOT_DIR/scripts/lib-python-runtime.sh" "$TMP_DIR/retired-unlock/scripts/lib-python-runtime.sh"
+printf 'version: 11.4.8\nlocked_by: test\n' >"$TMP_DIR/retired-unlock/.version-lock"
+cp "$TMP_DIR/retired-unlock/.version-lock" "$TMP_DIR/retired-unlock/lock.original"
+if bash "$TMP_DIR/retired-unlock/scripts/version-manager.sh" unlock >"$TMP_DIR/retired-unlock.out" 2>&1; then
+  echo "[FAIL] retired unlock command remained executable" >&2
+  exit 1
+fi
+cmp -s "$TMP_DIR/retired-unlock/lock.original" "$TMP_DIR/retired-unlock/.version-lock" || {
+  echo "[FAIL] failed unlock modified source version lock" >&2
+  exit 1
+}
+rg -q --fixed-strings -- '未知命令: unlock' "$TMP_DIR/retired-unlock.out"
+
 PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}" python3 "$ROOT_DIR/tests/test_python_support.py"
 echo "[PASS] ADK Python 3.12-only launcher and build-runtime boundary hold"
