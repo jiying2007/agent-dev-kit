@@ -252,6 +252,10 @@ for page, banned in {
         if sentinel in active_text.get(page, ""):
             failures.append(f"obsolete documentation example: {page}: {sentinel}")
 
+for executable in ("scripts/quality-gate-check.sh", "tests/test_docs_cli_alignment.sh"):
+    if not (root / executable).stat().st_mode & 0o111:
+        failures.append(f"active quality shell check lost its executable mode: {executable}")
+
 quality_gate = (root / "scripts/quality-gate-check.sh").read_text(encoding="utf-8")
 for retired in ("docs/skill-composition-guide.md", "docs/skill-dependency-graph.md"):
     if retired in quality_gate:
