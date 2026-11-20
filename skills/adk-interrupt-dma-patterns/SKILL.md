@@ -1,8 +1,8 @@
 ---
 name: adk-interrupt-dma-patterns
 description: "用于中断、DMA、缓存一致性、共享缓冲所有权的实现模式与实时性检查；不用于无中断参与的普通应用逻辑或免证据修改寄存器。"
-version: 2.0.3
-last_updated: 2026-11-17
+version: 2.0.4
+last_updated: 2026-11-20
 triggers:
   - "中断处理"
   - "DMA处理"

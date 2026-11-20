@@ -1,8 +1,8 @@
 ---
 name: adk-component-api-stability
 description: "用于组件 API 演进时检查调用方、兼容边界、迁移与回滚证据；不用于未经设计直接大范围改签名或纯格式修改。"
-version: 1.0.2
-last_updated: 2026-11-15
+version: 1.0.3
+last_updated: 2026-11-20
 triggers:
   - "API稳定性"
   - "组件API"

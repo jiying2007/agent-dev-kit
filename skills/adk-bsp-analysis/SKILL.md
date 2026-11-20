@@ -1,8 +1,8 @@
 ---
 name: adk-bsp-analysis
 description: 用于梳理嵌入式 BSP 源码、启动/探测与资源依赖，对照硬件依据、patch/workaround 历史及 SoC/board 差异，交付证据化架构和迁移风险；不用于直接实现驱动或 live 板级故障隔离。
-version: 2.0.2
-last_updated: 2026-11-17
+version: 2.0.3
+last_updated: 2026-11-20
 triggers:
   - BSP 分析/BSP 梳理/分析 BSP/梳理 BSP/梳理这个 BSP/梳理现有 BSP
   - BSP 代码梳理
