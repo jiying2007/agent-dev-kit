@@ -215,6 +215,60 @@ assert v['native_runtime_certified'] is False
 assert len(v['results'])==13
 PY
 
+python3 - <<'PY'
+import os
+import sys
+import tempfile
+from pathlib import Path
+from agent_dev_kit import agent_platform
+from agent_dev_kit.model import ManifestError
+
+with tempfile.TemporaryDirectory() as temporary:
+    root = Path(temporary)
+    commands = root / "commands.json"
+    for raw in (
+        '{"commands":{"render":["/bin/true"]},"commands":{"render":["/bin/false"]}}',
+        '{"commands":{"render":["/bin/true"],"render":["/bin/false"]}}',
+        '{"commands":NaN}',
+    ):
+        commands.write_text(raw, encoding="utf-8")
+        try:
+            agent_platform.load_json(commands, "native fixture")
+        except ManifestError:
+            pass
+        else:
+            raise AssertionError("native command map accepted ambiguous JSON")
+    commands.write_bytes(b" " * (4 * 1024 * 1024 + 1))
+    try:
+        agent_platform.load_json(commands, "native fixture")
+    except ManifestError:
+        pass
+    else:
+        raise AssertionError("native command map accepted oversized JSON")
+
+def stage(code, timeout=5):
+    return agent_platform._run_stage(
+        [sys.executable, "-c", code], "local-test", os.environ, timeout,
+    )
+
+ok = stage("print('ok')")
+assert ok["status"] == "pass" and ok["output_complete"] is True, ok
+assert ok["stdout_bytes"] == 3, ok
+assert ok["error_code"] is None, ok
+
+overflow = stage("import sys;sys.stdout.write('x'*4500000)")
+assert overflow["status"] == "fail", overflow
+assert overflow["error_code"] == "native_stage_output_budget_exceeded", overflow
+assert overflow["output_complete"] is False and overflow["stdout_sha256"] is None, overflow
+
+timeout = stage("import time;time.sleep(20)", timeout=1)
+assert timeout["status"] == "fail" and timeout["timed_out"] is True, timeout
+assert timeout["output_complete"] is False and timeout["error_code"] == "native_stage_timeout", timeout
+
+invalid = agent_platform._run_stage(["definitely-nonexistent-adk-smoke-executable"], "invalid", os.environ, 2)
+assert invalid["status"] == "fail" and invalid["error_code"] == "native_stage_process_error", invalid
+PY
+
 [[ ! -e "$ROOT/scripts/platform-vnext.sh" ]] || { echo '[FAIL] retired platform-vnext.sh returned' >&2; exit 1; }
 
 echo '[PASS] stable Agent Platform primitives and fail-closed evidence semantics'

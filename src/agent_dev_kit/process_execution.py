@@ -16,7 +16,7 @@ import signal
 import time
 from contextlib import suppress
 from pathlib import Path
-from typing import Mapping, Sequence, TypedDict
+from typing import Mapping, Sequence, TypedDict, cast
 
 
 class OutputBudgetExceeded(ValueError):
@@ -90,10 +90,13 @@ async def execute_bounded_async(
     env: Mapping[str, str],
     timeout_seconds: int,
     output_limit: int,
+    input_bytes: bytes | None = None,
 ) -> ProcessResult:
     if (type(timeout_seconds) is not int or timeout_seconds < 1
             or type(output_limit) is not int or output_limit < 1):
         raise ValueError("invalid_process_budget")
+    if input_bytes is not None and (not isinstance(input_bytes, bytes) or len(input_bytes) > 2 * 1024 * 1024):
+        raise ValueError("invalid_process_input_budget")
     loop = asyncio.get_running_loop()
     protocol = _OutputProtocol(loop, output_limit)
     started = time.monotonic()
@@ -102,12 +105,21 @@ async def execute_bounded_async(
         *command,
         cwd=str(cwd),
         env=dict(env),
-        stdin=asyncio.subprocess.DEVNULL,
+        stdin=asyncio.subprocess.PIPE if input_bytes is not None else asyncio.subprocess.DEVNULL,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
         start_new_session=os.name == "posix",
     )
     try:
+        if input_bytes is not None:
+            # Feed bounded prompts over stdin, never process arguments or files.
+            # The transport owns the pipe and closes it after write_eof().
+            transport_pipe = transport.get_pipe_transport(0)
+            if transport_pipe is None:
+                raise RuntimeError("process_stdin_unavailable")
+            pipe = cast(asyncio.WriteTransport, transport_pipe)
+            pipe.write(input_bytes)
+            pipe.write_eof()
         # A successful direct exit is insufficient while descendants retain
         # stdout/stderr. The same deadline bounds exit AND both pipe drains.
         await asyncio.wait_for(
@@ -153,10 +165,12 @@ def execute_bounded(
     env: Mapping[str, str],
     timeout_seconds: int,
     output_limit: int,
+    input_bytes: bytes | None = None,
 ) -> ProcessResult:
     return asyncio.run(
         execute_bounded_async(
             command, cwd=cwd, env=env,
             timeout_seconds=timeout_seconds, output_limit=output_limit,
+            input_bytes=input_bytes,
         )
     )

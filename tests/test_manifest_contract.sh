@@ -63,6 +63,36 @@ errors=list(Draft202012Validator(schema).iter_errors(probe))
 assert errors, "manifest schema accepted retired phase trigger mirror"
 PY
 
+python3 - <<'PY'
+import tempfile
+from pathlib import Path
+from agent_dev_kit.domain.manifest import load_canonical_manifest
+
+# Alternative consumers must not silently accept ambiguous canonical data.
+with tempfile.TemporaryDirectory() as temporary:
+    root = Path(temporary)
+    document = root / "manifest.json"
+    for raw in (
+        '{"version":"11.4.11","version":"forged","schema_version":1,"product":{}}',
+        '{"version":"11.4.11","schema_version":1,"product":{"kind":"safe","kind":"forged"}}',
+        '{"version":"11.4.11","schema_version":NaN,"product":{}}',
+    ):
+        document.write_text(raw, encoding="utf-8")
+        try:
+            load_canonical_manifest(root)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("canonical manifest accepted unsafe ambiguous JSON")
+    document.write_bytes(b" " * (4 * 1024 * 1024 + 1))
+    try:
+        load_canonical_manifest(root)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("canonical manifest accepted an oversized JSON input")
+PY
+
 echo "[PASS] single Manifest SSOT contract"
 python3 -m unittest discover -s "$ROOT/tests" -p test_manifest_validation_reuse.py
 python3 -m unittest discover -s "$ROOT/tests" -p test_manifest_stream_consumers.py

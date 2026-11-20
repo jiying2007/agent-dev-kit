@@ -306,8 +306,8 @@ assert claude_usage["cache_creation_input_tokens"] == 30
 assert claude_usage["total_tokens"] == 100
 
 with mock.patch("agent_dev_kit.evaluation.shutil.which", return_value="/fixture/codex"), mock.patch(
-    "agent_dev_kit.evaluation.subprocess.run",
-    side_effect=subprocess.TimeoutExpired(["codex", "exec"], evaluation.RUNTIME_TIMEOUT_SECONDS),
+    "agent_dev_kit.evaluation.execute_bounded",
+    side_effect=TimeoutError("bounded runtime timeout fixture"),
 ):
     try:
         evaluation._run_codex(temp_root, "system", "prompt", temp_root / "schema.json")

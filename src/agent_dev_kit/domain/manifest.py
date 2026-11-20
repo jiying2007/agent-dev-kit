@@ -1,16 +1,20 @@
 from __future__ import annotations
 
 import hashlib
-import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from ..strict_json import StrictJSONError, read as read_strict_json
+
 
 def load_canonical_manifest(root: Path) -> dict[str, Any]:
     path = root.resolve() / "manifest.json"
-    with path.open(encoding="utf-8") as handle:
-        value = json.load(handle)
+    try:
+        value = read_strict_json(path, regular_only=os.name == "posix")
+    except StrictJSONError as exc:
+        raise ValueError("manifest.json must be valid bounded JSON") from exc
     if not isinstance(value, dict):
         raise ValueError("manifest.json root must be an object")
     return value

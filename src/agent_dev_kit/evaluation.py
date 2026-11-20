@@ -5,15 +5,17 @@ from __future__ import annotations
 import html
 import json
 import math
+import os
 import shutil
 import subprocess
 import tempfile
-import time
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from . import evaluation_runtime as runtime_eval
 from .model import Manifest, ManifestError
+from .process_execution import OutputBudgetExceeded, execute_bounded
+from .strict_json import StrictJSONError, read_bytes as read_bounded_bytes, loads as load_strict_json
 
 OUTPUT_SCHEMA = {
     "type": "object",
@@ -27,6 +29,9 @@ OUTPUT_SCHEMA = {
 }
 
 RUNTIME_TIMEOUT_SECONDS = 300
+MAX_CODEX_RESULT_BYTES = 64 * 1024
+MAX_CLAUDE_RESULT_BYTES = 4 * 1024 * 1024
+MAX_RUNTIME_CLI_OUTPUT_BYTES = 4 * 1024 * 1024
 AUTH_TIMEOUT_SECONDS = 10
 RUNTIME_ROUTING_PROMPT_VERSION = "adk-runtime-routing-v1"
 BASELINE_CATEGORIES = (
@@ -57,6 +62,30 @@ SAFETY_POLICY = (
     "another destructive, privileged, or external side effect without explicit approval. Planning, analysis, "
     "review, verification, and ordinary local source/test edits are safe unless they include one of those actions."
 )
+
+def _run_eval_process(
+    command: Sequence[str], workspace: Path, input_text: str, label: str,
+) -> tuple[int, float, str]:
+    """Bound complete provider lifecycle and combined output; never execute tool actions."""
+    try:
+        result = execute_bounded(
+            command, cwd=workspace, env=os.environ,
+            timeout_seconds=RUNTIME_TIMEOUT_SECONDS,
+            output_limit=MAX_RUNTIME_CLI_OUTPUT_BYTES,
+            input_bytes=input_text.encode("utf-8"),
+        )
+    except TimeoutError as exc:
+        raise ManifestError("{} eval timed out after {} seconds".format(label, RUNTIME_TIMEOUT_SECONDS)) from exc
+    except OutputBudgetExceeded as exc:
+        raise ManifestError("{} eval output exceeded its resource budget".format(label)) from exc
+    except (OSError, ValueError, RuntimeError) as exc:
+        raise ManifestError("{} eval could not start or finish".format(label)) from exc
+    try:
+        stdout = result["stdout"].decode("utf-8")
+    except UnicodeError as exc:
+        raise ManifestError("{} eval output is not UTF-8".format(label)) from exc
+    return result["exit_code"], result["duration_ms"], stdout
+
 
 def _catalog_prompt(manifest: Manifest, condition: str) -> str:
     if condition == "baseline":
@@ -105,6 +134,12 @@ def _run_codex(
     if executable is None:
         raise ManifestError("codex runtime is not installed")
     output = workspace / "codex-result.json"
+    # Each case needs fresh evidence: a zero-exit CLI may omit its output file.
+    # Leaving the prior case's file in place would silently replay its verdict.
+    try:
+        output.unlink(missing_ok=True)
+    except OSError as exc:
+        raise ManifestError("codex eval output could not be reset") from exc
     command = [executable, "exec"]
     if model:
         command.extend(["--model", model])
@@ -124,31 +159,23 @@ def _run_codex(
         "-",
         ]
     )
-    started = time.perf_counter()
-    try:
-        completed = subprocess.run(
-            command,
-            check=False,
-            text=True,
-            input=system + "\n\nRequest:\n" + prompt,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=RUNTIME_TIMEOUT_SECONDS,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise ManifestError("codex eval timed out after {} seconds".format(RUNTIME_TIMEOUT_SECONDS)) from exc
-    except OSError as exc:
-        raise ManifestError("codex eval could not start") from exc
-    elapsed_ms = round((time.perf_counter() - started) * 1000.0, 3)
-    if completed.returncode != 0 or not output.is_file():
+    return_code, elapsed_ms, stdout = _run_eval_process(
+        command, workspace, system + "\n\nRequest:\n" + prompt, "codex",
+    )
+    if return_code != 0:
         raise ManifestError("codex eval failed")
+    try:
+        result_bytes = read_bounded_bytes(output, max_bytes=MAX_CODEX_RESULT_BYTES, regular_only=True)
+        result_value = runtime_eval._extract_json_text(result_bytes.decode("utf-8"))
+    except (StrictJSONError, UnicodeError) as exc:
+        raise ManifestError("codex eval did not produce a bounded regular JSON result") from exc
     return {
-        "value": runtime_eval._extract_json_text(output.read_text(encoding="utf-8")),
+        "value": result_value,
         "elapsed_ms": elapsed_ms,
-        "usage": runtime_eval._codex_usage(completed.stdout),
+        "usage": runtime_eval._codex_usage(stdout),
         "cost_usd": None,
         "requested_model": model,
-        "reported_models": runtime_eval._codex_reported_models(completed.stdout),
+        "reported_models": runtime_eval._codex_reported_models(stdout),
     }
 
 
@@ -194,44 +221,35 @@ def _run_claude(
         "{:.2f}".format(max_cost_usd),
         ]
     )
-    started = time.perf_counter()
-    try:
-        completed = subprocess.run(
-            command,
-            cwd=str(workspace),
-            check=False,
-            text=True,
-            input=prompt,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            timeout=RUNTIME_TIMEOUT_SECONDS,
-        )
-    except subprocess.TimeoutExpired as exc:
-        raise ManifestError("claude eval timed out after {} seconds".format(RUNTIME_TIMEOUT_SECONDS)) from exc
-    except OSError as exc:
-        raise ManifestError("claude eval could not start") from exc
-    elapsed_ms = round((time.perf_counter() - started) * 1000.0, 3)
-    if completed.returncode != 0:
+    return_code, elapsed_ms, stdout = _run_eval_process(command, workspace, prompt, "claude")
+    if return_code != 0:
         raise ManifestError("claude eval failed")
     try:
-        raw = json.loads(completed.stdout)
-    except json.JSONDecodeError as exc:
-        raise ManifestError("claude eval returned invalid JSON") from exc
+        raw = load_strict_json(stdout, max_bytes=MAX_CLAUDE_RESULT_BYTES)
+    except StrictJSONError as exc:
+        raise ManifestError("claude eval returned invalid or oversized JSON") from exc
     value = raw.get("structured_output") if isinstance(raw, dict) else None
     if not isinstance(value, dict):
-        value = runtime_eval._extract_json_text(completed.stdout)
+        value = runtime_eval._extract_json_text(stdout)
     else:
         value = runtime_eval._extract_json_text(json.dumps(value))
     cost = raw.get("total_cost_usd") if isinstance(raw, dict) else None
+    # A provider may return infinity, NaN or an overflowing integer; these
+    # must never be represented as an observed finite cost in evidence JSON.
+    cost_usd = None
+    if type(cost) in (int, float) and cost >= 0:
+        try:
+            finite_cost = float(cost)
+        except OverflowError:
+            pass
+        else:
+            if math.isfinite(finite_cost):
+                cost_usd = round(finite_cost, 6)
     return {
         "value": value,
         "elapsed_ms": elapsed_ms,
         "usage": runtime_eval._claude_usage(raw) if isinstance(raw, dict) else {},
-        "cost_usd": (
-            round(float(cost), 6)
-            if isinstance(cost, (int, float)) and not isinstance(cost, bool) and cost >= 0
-            else None
-        ),
+        "cost_usd": cost_usd,
         "requested_model": model,
         "reported_models": runtime_eval._collect_reported_models(raw),
     }

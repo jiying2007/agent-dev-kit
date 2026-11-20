@@ -6,7 +6,8 @@ import copy
 import contextlib
 import io
 import json
-import subprocess
+import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -85,6 +86,15 @@ def report(condition: str, failed: set[int]) -> dict:
     }
 
 
+def fake_result(exit_code: int, *, stdout: str = "", stderr: str = "") -> dict:
+    return {
+        "exit_code": exit_code,
+        "duration_ms": 1.0,
+        "stdout": stdout.encode("utf-8"),
+        "stderr": stderr.encode("utf-8"),
+    }
+
+
 class RuntimeComparisonContractTests(unittest.TestCase):
     def test_recorded_provider_failure_preserves_missing_safety_and_cost(self) -> None:
         # Validate a synthetic recorded failure only; no provider/runtime call.
@@ -137,28 +147,28 @@ class RuntimeComparisonContractTests(unittest.TestCase):
     def test_provider_prompts_stay_out_of_command_arguments(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             workspace = Path(temporary)
-            def codex_call(command: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+            def codex_call(command: list[str], **kwargs: object) -> dict:
                 self.assertNotIn("SENTINEL_SECRET", repr(command))
-                self.assertIn("SENTINEL_SECRET", str(kwargs["input"]))
+                self.assertIn("SENTINEL_SECRET", str(kwargs["input_bytes"]))
                 (workspace / "codex-result.json").write_text(
                     json.dumps({"primary_skill": "test", "safe_to_execute": True, "reason": "ok"}),
                     encoding="utf-8",
                 )
-                return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+                return fake_result(0)
             with patch.object(evaluation.shutil, "which", return_value="/fixture/codex"):
-                with patch.object(evaluation.subprocess, "run", side_effect=codex_call):
+                with patch.object(evaluation, "execute_bounded", side_effect=codex_call):
                     evaluation._run_codex(workspace, "system", "SENTINEL_SECRET", workspace / "schema.json")
 
-            def claude_call(command: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+            def claude_call(command: list[str], **kwargs: object) -> dict:
                 self.assertNotIn("SENTINEL_SECRET", repr(command))
-                self.assertEqual(kwargs["input"], "SENTINEL_SECRET")
+                self.assertEqual(kwargs["input_bytes"], b"SENTINEL_SECRET")
                 self.assertIn("--system-prompt-file", command)
-                return subprocess.CompletedProcess(command, 0, stdout=json.dumps({
+                return fake_result(0, stdout=json.dumps({
                     "structured_output": {"primary_skill": "test", "safe_to_execute": True, "reason": "ok"},
                     "total_cost_usd": 0.01,
-                }), stderr="")
+                }))
             with patch.object(evaluation.shutil, "which", return_value="/fixture/claude"):
-                with patch.object(evaluation.subprocess, "run", side_effect=claude_call):
+                with patch.object(evaluation, "execute_bounded", side_effect=claude_call):
                     evaluation._run_claude(workspace, "system", "SENTINEL_SECRET")
 
     def test_provider_failure_does_not_echo_cli_output(self) -> None:
@@ -166,9 +176,9 @@ class RuntimeComparisonContractTests(unittest.TestCase):
             workspace = Path(temporary)
             for runtime, runner in (("codex", evaluation._run_codex), ("claude", evaluation._run_claude)):
                 with self.subTest(runtime=runtime):
-                    failed = subprocess.CompletedProcess([runtime], 1, stdout="SENTINEL_SECRET", stderr="SENTINEL_SECRET")
+                    failed = fake_result(1, stdout="SENTINEL_SECRET", stderr="SENTINEL_SECRET")
                     with patch.object(evaluation.shutil, "which", return_value="/fixture/" + runtime):
-                        with patch.object(evaluation.subprocess, "run", return_value=failed):
+                        with patch.object(evaluation, "execute_bounded", return_value=failed):
                             with self.assertRaises(ManifestError) as caught:
                                 if runtime == "codex":
                                     runner(workspace, "system", "prompt", workspace / "schema.json")
@@ -346,6 +356,150 @@ class RuntimeComparisonContractTests(unittest.TestCase):
         with self.assertRaises(ManifestError) as caught:
             evaluation_runtime._extract_json_text("SENTINEL_SECRET")
         self.assertNotIn("SENTINEL_SECRET", str(caught.exception))
+
+
+    def test_codex_success_cannot_replay_previous_case_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary)
+            output = workspace / "codex-result.json"
+            output.write_text(
+                json.dumps({"primary_skill": "old-case", "safe_to_execute": True, "reason": "stale"}),
+                encoding="utf-8",
+            )
+            # An old valid result plus exit code zero is NOT a new observation.
+            completed = fake_result(0)
+            with patch.object(evaluation.shutil, "which", return_value="/fixture/codex"):
+                with patch.object(evaluation, "execute_bounded", return_value=completed):
+                    with self.assertRaises(ManifestError):
+                        evaluation._run_codex(workspace, "system", "new-case", workspace / "schema.json")
+            self.assertFalse(output.exists())
+
+            def write_fresh(command: list[str], **kwargs: object) -> dict:
+                output.write_text(
+                    json.dumps({"primary_skill": "new-case", "safe_to_execute": True, "reason": "fresh"}),
+                    encoding="utf-8",
+                )
+                return completed
+
+            with patch.object(evaluation.shutil, "which", return_value="/fixture/codex"):
+                with patch.object(evaluation, "execute_bounded", side_effect=write_fresh):
+                    measured = evaluation._run_codex(workspace, "system", "new-case", workspace / "schema.json")
+            self.assertEqual(measured["value"]["primary_skill"], "new-case")
+
+    def test_codex_result_rejects_oversize_and_symlink_without_reading_content(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary)
+            output = workspace / "codex-result.json"
+            completed = fake_result(0)
+            def write_oversize(command: list[str], **kwargs: object) -> dict:
+                output.write_bytes(b"SENTINEL_SECRET" + b"x" * evaluation.MAX_CODEX_RESULT_BYTES)
+                return completed
+            with patch.object(evaluation.shutil, "which", return_value="/fixture/codex"):
+                with patch.object(evaluation, "execute_bounded", side_effect=write_oversize):
+                    with self.assertRaises(ManifestError) as rejected:
+                        evaluation._run_codex(workspace, "system", "prompt", workspace / "schema.json")
+            self.assertNotIn("SENTINEL_SECRET", str(rejected.exception))
+            if not hasattr(os, "O_NOFOLLOW"):
+                return
+            target = workspace / "untrusted.json"
+            target.write_text(
+                json.dumps({"primary_skill": "forged", "safe_to_execute": True, "reason": "external"}),
+                encoding="utf-8",
+            )
+            def write_symlink(command: list[str], **kwargs: object) -> dict:
+                output.unlink(missing_ok=True)
+                output.symlink_to(target)
+                return completed
+            with patch.object(evaluation.shutil, "which", return_value="/fixture/codex"):
+                with patch.object(evaluation, "execute_bounded", side_effect=write_symlink):
+                    with self.assertRaises(ManifestError):
+                        evaluation._run_codex(workspace, "system", "prompt", workspace / "schema.json")
+
+    def test_runtime_result_strict_json_prevents_overwritten_safety(self) -> None:
+        for provider_result in (
+            '{"primary_skill":"x","safe_to_execute":false,"safe_to_execute":true,"reason":"forged"}',
+            '{"result":"{\\"primary_skill\\":\\"x\\",\\"safe_to_execute\\":false,\\"safe_to_execute\\":true,\\"reason\\":\\"forged\\"}"}',
+        ):
+            with self.subTest(provider_result=provider_result):
+                with self.assertRaises(ManifestError):
+                    evaluation_runtime._extract_json_text(provider_result)
+
+    def test_runtime_latency_ignores_nonfinite_boolean_and_overflow(self) -> None:
+        observed = evaluation_runtime._latency_summary([
+            {"elapsed_ms": 2.5},
+            {"elapsed_ms": float("inf")},
+            {"elapsed_ms": float("nan")},
+            {"elapsed_ms": True},
+            {"elapsed_ms": -1},
+        ])
+        self.assertEqual(observed["sample_count"], 1)
+        self.assertEqual(observed["total_ms"], 2.5)
+        overflow = evaluation_runtime._latency_summary([
+            {"elapsed_ms": 1e308}, {"elapsed_ms": 1e308},
+        ])
+        self.assertEqual(overflow["sample_count"], 2)
+        self.assertIsNone(overflow["total_ms"])
+        self.assertEqual(overflow["median_ms"], 1e308)
+        self.assertEqual(overflow["p95_ms"], 1e308)
+
+    def test_claude_result_rejects_nonfinite_and_duplicate_cost(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary)
+            response = {
+                "structured_output": {
+                    "primary_skill": "test", "safe_to_execute": True, "reason": "ok",
+                },
+                "total_cost_usd": float("inf"),
+            }
+            for stdout in (
+                json.dumps(response),
+                '{"structured_output":{"primary_skill":"test","safe_to_execute":true,"reason":"ok"},'
+                '"total_cost_usd":0.01,"total_cost_usd":0.02}',
+            ):
+                with self.subTest(stdout=stdout[:60]):
+                    completed = fake_result(0, stdout=stdout)
+                    with patch.object(evaluation.shutil, "which", return_value="/fixture/claude"):
+                        with patch.object(evaluation, "execute_bounded", return_value=completed):
+                            with self.assertRaises(ManifestError):
+                                evaluation._run_claude(workspace, "system", "prompt")
+
+
+    def test_provider_process_is_bounded_and_stdin_only_without_real_model(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary)
+            command = [
+                sys.executable, "-c",
+                "import sys; sys.stdout.buffer.write(sys.stdin.buffer.read())",
+            ]
+            exit_code, duration_ms, stdout = evaluation._run_eval_process(
+                command, workspace, "SENTINEL_SECRET", "fixture",
+            )
+            self.assertEqual(exit_code, 0)
+            self.assertGreaterEqual(duration_ms, 0)
+            self.assertEqual(stdout, "SENTINEL_SECRET")
+            # Output limits apply to combined streams and terminate the process.
+            with patch.object(evaluation, "MAX_RUNTIME_CLI_OUTPUT_BYTES", 32):
+                with self.assertRaises(ManifestError) as caught:
+                    evaluation._run_eval_process(
+                        [sys.executable, "-c", "import sys;sys.stdout.write('x'*50000)"],
+                        workspace, "input", "fixture",
+                    )
+            self.assertNotIn("x"*50, str(caught.exception))
+            with patch.object(evaluation, "execute_bounded", side_effect=TimeoutError):
+                with self.assertRaises(ManifestError) as timed:
+                    evaluation._run_eval_process(command, workspace, "prompt", "fixture")
+            self.assertIn("timed out", str(timed.exception))
+
+    def test_process_stdin_budget_rejects_overlarge_prompt(self) -> None:
+        from agent_dev_kit.process_execution import execute_bounded
+        with tempfile.TemporaryDirectory() as temporary:
+            with self.assertRaises(ValueError):
+                execute_bounded(
+                    [sys.executable, "-c", "print('never-run')"],
+                    cwd=Path(temporary), env=os.environ,
+                    timeout_seconds=2, output_limit=1024,
+                    input_bytes=b"x" * (2 * 1024 * 1024 + 1),
+                )
 
 
 if __name__ == "__main__":
