@@ -1,8 +1,8 @@
 ---
 name: adk-skill-composition-governance
 description: "用于多个 Skill 的触发冲突、组合边界、fallback 和退役策略审查；不用于新增并行路由权威或直接提升工具写权限。"
-version: 1.1.10
-last_updated: 2026-11-18
+version: 1.1.11
+last_updated: 2026-11-20
 triggers:
   - "技能组合"
   - "触发冲突"
@@ -35,6 +35,11 @@ constraints:
 ## Prerequisites
 - 已列出涉及的 skill、optional skill 和目标 profile。
 - 已有至少一条代表性任务输入。
+
+## Skill 精简决策
+- **KEEP**：独立触发/产物/门禁可复核；**DEFER**：低频但有用则归已有专业 Profile。
+- **MERGE**：触发/产物/失败边界等价且迁移回归通过；**RETIRE**：无消费者且有受测替代。
+- 未观测调用≠无用，专业≠多余；权限及原始证据不降级，Token/效果须真实 A/B。
 
 ## Admission Modes
 - `collision-only`：一次触发冲突、无 Profile/依赖/权限变化时，仅冻结候选和 near-miss，运行现有 matcher/negative/collision case，提出最小修复；不强制 13 阶段和全量矩阵。

@@ -1,8 +1,8 @@
 ---
 name: adk-context-engineering
 description: "用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。"
-version: 2.0.3
-last_updated: 2026-11-17
+version: 2.0.4
+last_updated: 2026-11-20
 triggers:
   - 上下文工程
   - 上下文膨胀
@@ -32,7 +32,7 @@ constraints:
 # adk-context-engineering
 
 ## Goal
-生成最小充分、可恢复、可追溯的 context policy。无上下文边界问题时仅作 supporting capability，不替代计划、编码或测试。
+有上下文边界问题才生成可恢复 context policy；Token 预算和专门交接分别交 `adk-token-context-governance` 与 `adk-context-compress-handoff`，避免重复总结。
 
 ## Prerequisites
 明确 objective、phase、risk 与候选 primary；区分权威事实、假设、历史摘要和按需 reference。
@@ -48,9 +48,9 @@ constraints:
 1. 按当前决策将事实/contract/evidence 标为 `always | phase | on-demand | raw-pointer | exclude`；去重、去过期输出，冲突保留来源与 freshness。
 2. 长任务写 summary-first checkpoint；raw output 留 pointer 与 retention decision。
 3. 记录仍需 Skill 的来源、内容身份（可核版本/hash；未知注明）、必要 refs、正文状态 `intact | summarized | missing | changed`。
-4. 恢复先核目标/权限；仅同来源同内容且正文完整仍在当前上下文时去重。正文被摘要/丢失或来源/内容变化则按需重读；历史“已加载”不证明有效。排除不再适用的 Skill；必要内容不可读记 `needs-evidence`。
-5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
-6. 新执行者据摘要和 refs 核对目标、事实、未决问题与下一步；只补缺项，不全量重载。
+4. 恢复核目标/权限/内容身份；仅正文完整且身份一致才复用，summary/missing/changed 则重读；不可读记 `needs-evidence`。
+5. 交接默认使用下方模板，保留目标、状态、权限、证据和下一步，不扩大权限；仅在 ADK 源码根已确认且文件可读时可选 `schemas/agent-handoff-v1.schema.json`，未校验须标明。
+6. 接力核事实、未决项与 refs，只补缺项不重载历史。
 
 ## Failure / Abstain
 - 来源不明记 `needs-evidence`；历史摘要不替代事实。
