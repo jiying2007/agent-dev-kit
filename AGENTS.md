@@ -10,7 +10,7 @@
 - 行为变更需确定性、非交互测试；删除/API 变化先检索调用点并记录迁移、回滚。
 - 根因未明时 read-only-first、单变量实验；失败写 `negative-results.md`，无 fresh 验证不声明完成。
 - dirty 变更属于用户，不回退/覆盖/清理无关内容；不自动 commit/push/merge/rebase。
-- 上下文默认 `balanced` 分级加载，高风险须核对原文并保留证据指针；详见 `manifests/token_context_policy.json`。
+- 上下文默认 `balanced` 分级加载，高风险读原文并保留证据指针；Low Token 仅 runtime overlay，详见 `manifests/token_context_policy.json`。
 
 ## 2. 结构与 SSOT
 
