@@ -73,7 +73,7 @@ check_consistency() {
     return 1
   }
   local doc
-  for doc in docs/changes/README.md docs/specs/README.md docs/explorations/README.md docs/skill-composition-guide.md; do
+  for doc in docs/changes/README.md docs/specs/README.md docs/explorations/README.md docs/reference/skill-routing-matrix.md manifests/skill_relationship_contracts_v2.json; do
     [[ -f "$ROOT_DIR/$doc" ]] || {
       log_error "缺失文档: $doc"
       return 1

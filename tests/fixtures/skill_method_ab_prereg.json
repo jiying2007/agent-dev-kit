@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.4.14",
+    "planned_release": "v11.4.15",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.4.14",
+      "merged_main_sha": "fd436bc71700c499b17656b081fc5bd7ec6b8c14",
+      "model_runs": 0,
+      "reason": "The 11.4.14 source release completed and the development-only prereg remained unexecuted; do not inherit a native Skill A/B, provider-token, latency, or cost result from source and CI checks."
+    },
     {
       "planned_release": "v11.4.9",
       "merged_main_sha": "1b4a9a48d001358bc9d4c9b94f87db44e2f2bac3",

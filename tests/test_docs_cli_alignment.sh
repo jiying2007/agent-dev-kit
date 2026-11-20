@@ -102,6 +102,8 @@ retired_paths = (
     "scripts/check-fallback-sunset.sh",
     "bin/agent-dev-kit",
     "src/agent_dev_kit/runtime_control",
+    "docs/skill-composition-guide.md",
+    "docs/skill-dependency-graph.md",
     ".github/workflows/platform-vnext.yml",
     "tests/test_product_maturity_v5.sh",
     "tests/test_skill_governance_v3.sh",
@@ -249,6 +251,23 @@ for page, banned in {
     for sentinel in banned:
         if sentinel in active_text.get(page, ""):
             failures.append(f"obsolete documentation example: {page}: {sentinel}")
+
+for executable in ("scripts/quality-gate-check.sh", "tests/test_docs_cli_alignment.sh"):
+    if not (root / executable).stat().st_mode & 0o111:
+        failures.append(f"active quality shell check lost its executable mode: {executable}")
+
+quality_gate = (root / "scripts/quality-gate-check.sh").read_text(encoding="utf-8")
+for retired in ("docs/skill-composition-guide.md", "docs/skill-dependency-graph.md"):
+    if retired in quality_gate:
+        failures.append(f"quality gate references retired Skill doc: {retired}")
+for canonical in ("docs/reference/skill-routing-matrix.md", "manifests/skill_relationship_contracts_v2.json"):
+    if canonical not in quality_gate:
+        failures.append(f"quality gate missing canonical Skill routing source: {canonical}")
+
+nav = active_text.get("docs/NAVIGATION.md", "")
+for link in ("reference/skill-routing-matrix.md", "../manifests/skill_relationship_contracts_v2.json"):
+    if f"]({link})" not in nav:
+        failures.append(f"canonical Skill routing source missing from navigation: {link}")
 
 if failures:
     for failure in failures:
