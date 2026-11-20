@@ -30,7 +30,7 @@
 ## 4. 验证
 
 ```bash
-rtk tests/run_all.sh --quick
+rtk scripts/devkit.sh validate --quick
 rtk scripts/devkit.sh validate --strict
 rtk scripts/devkit.sh export --target claude-code --profile core --out dist --clean
 rtk scripts/devkit.sh release check
