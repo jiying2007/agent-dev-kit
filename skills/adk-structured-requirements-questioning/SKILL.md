@@ -35,10 +35,10 @@ constraints:
 发现真实需求、比较方案并证伪关键风险；使用本原生 Skill，不加载外部 Skill。
 
 ## Look before asking
-先读原请求、既有批准、源码和测试；事实自己查，区分事实、用户决定、AI 建议与未知。仅问能改变设计的问题；“直接做”且范围明确时退出，不重开访谈。
+先核已知约束、源码/测试、历史决定；标事实/用户确认/AI 建议/未知。仅问改变决策的问题；批准直接执行即退出。
 
 ## Explore protocol
-“头脑风暴 / brainstorm”或 Why 未明时，**每轮一个关键问题**：先开放询问目标/受益者，再依据回答追问，不先给诱导选项。意图明确后比较 2–3 个可行方向的收益、成本、失败条件与推荐；仅一路可行则说明。阶段性核对设计与未决项，接受纠正。
+Why 未明时每轮仅问一个关键开放问题；可查事实不再提问。明确意图后比较 2–3 个真正不同方案的收益/成本/失败条件，**反证优先**：给可证伪负例和最小验证；仅一路可行说明理由。
 
 ## Challenge protocol — decision tree
 “Grill Me / 拷问 / 挑战方案”时，为重要决策记录 id、依赖、备选、证据与状态 confirmed / proposed / unresolved / invalidated。**Frontier** 仅含依赖已解决的未决节点；每轮问独立 frontier（通常 2–4 题），列建议、依据和反例，回答后重算。关注性能、成本、安全、兼容、资源和恢复风险，不凑题、不先问下游。“都按建议”仅确认本轮明示选择。
@@ -49,7 +49,7 @@ constraints:
 状态机或交互可用性难以口头判断时，提出可证伪问题和最小原型，按需读 `references/prototype-as-experiment.md`。本 Skill 只读；写文件/外部工具仍走已有授权实施流程。
 
 ## Cross-mode convergence
-用户可切换或停止；连续两轮无新证据/决策则给推荐或最小实验。结束时交付设计、User-confirmed decisions、AI 建议、开放问题、反例与验证路径；仅确认内容交 `adk-requirements-triage`，实现仍遵守原授权和工程门禁。
+无新证据/决策连续两轮即退出，给推荐/最小实验。交付设计、User-confirmed decisions、AI 建议、反例与验证；仅确认项交 triage，实施遵守原授权。
 
 ## Quality Gate
 Explore 先 Why 后选项；Challenge 遵守依赖，不重复历史。真实多轮效果按源码评测协议 `docs/evals/interactive-discovery-evaluation.md` 独立盲测，静态路由通过不等于效果认证。

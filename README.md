@@ -9,6 +9,7 @@
 | 任务示例 | 现有能力入口 | 应交付什么 |
 | --- | --- | --- |
 | “帮我比较两个方案，先找最影响决定的问题” | 需求澄清 / 交互式设计探索 | 可行选项、取舍、推荐和关键未决项；已有明确方案时接着执行 |
+| “用 SDD 梳理需求，规格与代码双向验证” | 现有需求澄清 / 接口设计 / feature-delivery | [SDD 最小开发路径](docs/runbooks/spec-driven-delivery.md)，复用 Canonical Change Contract，不新增引擎 |
 | “按现有计划继续执行，复用已通过的结果” | 计划执行循环 / Goal 恢复 | 当前实际改动、验证结果、未关闭项及下一动作 |
 | “定位这个偶发超时，先建立可复现信号” | 系统化调试 | 最小复现、被证伪的假设、根因证据和修复路径 |
 | “实现这个 RTOS 驱动，并补超时和恢复测试” | 驱动实现 / IRQ-DMA / 嵌入式测试 | 目标代码、实际测试、构建结果及尚需上板的边界 |
@@ -28,7 +29,7 @@ ADK 不再在 README 中维护“候选 / 已发布 / live”之类可漂移的�
 - **Runtime conformance**：以 target/runtime receipt 与证据级别 `static / smoke / native / certified` 为权威。
 - **Product qualification**：由消费方/产品仓的 qualification 与 field evidence 独立决定，不由 ADK 组件版本继承。
 
-`manifest.json` 当前 source version 为 `11.4.10`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
+`manifest.json` 当前 source version 为 `11.4.11`。受保护 `main` 的每个合并变更必须先前移 SemVer；successful-main CI 会自动执行 exact-SHA tag promotion 和 GitHub Release，因此健康主线在 promotion 完成后应与 latest immutable release 对齐。CI/promotion 执行窗口内允许短暂差异，持续的 **current main != latest immutable release** 必须视为 release blocker。
 
 ADK **源码管理、构建与发布控制面**仅支持 CPython **3.12.x**（`>=3.12,<3.13`），建议使用独立 `.venv` 和固定依赖 `PyYAML==6.0.3`、`jsonschema==4.26.0`；3.11 与未验证的 3.13+ 均不受支持。纯 Skill 消费端不需要 ADK Python。
 

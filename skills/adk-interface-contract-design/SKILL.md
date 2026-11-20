@@ -43,9 +43,9 @@ constraints:
 5. **受控生命周期契约**：跨状态/独占资源操作明确下述矩阵、状态可见性/取消/超时/恢复/迟到完成及 generation/op-id 隔离；按需读 `references/lifecycle-operation-contract.md`。
 6. **副作用**：按参数/目标在写前授权；拒绝/未知结果/重放对账见 `references/tool-effect-contract.md`。
 7. **结构化输出**：固定消费者 dialect/validator/子集及 required fields/enum/refusal handling/parse-failure；拒绝未知字段，同层用 `additionalProperties=false`，组合闭合见 `references/details.md`。
-8. **契约用例**：至少正常/边界/异常断言及真实构建/测试入口；覆盖最低版本、缺必需能力、跨 major，禁虚构命令。
-9. **设计挑战**：高风险/长期公共接口比较两种边界的可见约束/演进成本/验证 seam；单路径说明限制。反例固定术语/状态/边界，变化才更新既有 glossary/ADR。深模块/原型见 `references/design-quality-methods.md`。
-10. **Spec-to-Code 双向核对**：有实现按 `references/spec-code-bidirectional.md` 核规格→实现、可观察行为→规格；未查/未知 `not-checked`，纯设计待验证。
+8. **契约用例**：含正常/边界/异常、最低版本及跨 major 的真实验证；跨端还查损坏帧、超时、重复/乱序；缺设备记 `not-tested`。
+9. **设计挑战**：高风险公共接口比两种边界的演进成本/验证 seam；单路径写理由。变化才更新既有 glossary/ADR；详见 `references/design-quality-methods.md`。
+10. **Spec-to-Code 双向核对**：跨仓共用 `protocol/spec@digest`；按 `references/spec-code-bidirectional.md` 核规格→实现及行为→规格，未知记 `not-checked`。
 
 ## Quality Gate
 - 上述契约/用例须完整，含兼容迁移及可恢复/不可恢复错误。

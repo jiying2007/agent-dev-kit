@@ -33,11 +33,11 @@ constraints:
 - 已批准计划交 `adk-planning-execution-loop`；不得降低风险对应的验证和授权。
 
 ## Workflow
-1. 对照原验收；普通功能先做 tracer-bullet。公共契约无法独立落地时读 `references/vertical-slice-planning.md`，按 expand → migrate → contract 保留临时兼容、退出任务和最终集成，中间批次不代表整体通过。
+1. **Spec-to-slice**：按原验收 `REQ-NNN/ACC-NNN`、行为 delta、`VERIFY-NNN` 切 tracer-bullet。公共契约迁移见 `references/vertical-slice-planning.md`，保留退出/集成证据；阶段不代表最终通过。
 2. 明确 `scope_read/scope_write/global_constraints/interfaces`、共享文件及权限。v2 将这些约束写入 `constraints` 字符串条目；worker 信封另存，同文件/shared contract 不并行写。
 3. 依赖图无环；前置证据通过、写冲突解除、权限足够才进 Ready Frontier。`ready_to_handoff` 是调度判定，不是 v2 顶层字段；阻塞项不反复派发。
 4. `work_item_kind` 与 `implementation_permission/exit_gate` 按 reference 校验；decision/research/prototype 禁止产品写入，prototype 附 `prototype_evidence`；只有已批准 implementation 可写，模型不能补造授权。
-5. 人工计划只需任务、依赖、验收、风险和下一步。估时用历史或不确定范围，**不硬套 0.5–8h**，未知 `not-estimated`；仅资源决策需要时细化，只有独立且收益明确时建议并行。
+5. 人工计划仅需任务、依赖、验收、风险、下一步；**不硬套 0.5–8h**，未知 `not-estimated`；收益明确才并行。
 
 ## Quality Gate
 - 每项有 owner、可执行 verify；未知路径/命令标待查。状态、权限和接口来自实际计划。
