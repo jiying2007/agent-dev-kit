@@ -16,7 +16,7 @@ import signal
 import time
 from contextlib import suppress
 from pathlib import Path
-from typing import Mapping, Sequence, TypedDict
+from typing import Mapping, Sequence, TypedDict, cast
 
 
 class OutputBudgetExceeded(ValueError):
@@ -114,9 +114,10 @@ async def execute_bounded_async(
         if input_bytes is not None:
             # Feed bounded prompts over stdin, never process arguments or files.
             # The transport owns the pipe and closes it after write_eof().
-            pipe = transport.get_pipe_transport(0)
-            if pipe is None:
+            transport_pipe = transport.get_pipe_transport(0)
+            if transport_pipe is None:
                 raise RuntimeError("process_stdin_unavailable")
+            pipe = cast(asyncio.WriteTransport, transport_pipe)
             pipe.write(input_bytes)
             pipe.write_eof()
         # A successful direct exit is insufficient while descendants retain
