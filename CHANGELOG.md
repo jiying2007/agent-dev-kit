@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### 11.4.15 — Skill 文档权威入口收敛
+
+- 删除 2026-05 的静态 Skill 依赖图及固定组合链示例；以 Manifest 派生的路由矩阵和 typed relationship contract 为准，不把建议次序误写成强制执行链。
+- 修正 README 中已不存在的 `contracts/` 目录映射，导航增加直接来源入口；扩展现有文档回归检查，阻止旧入口悄然重建。
+- 65 个 Skill、8 个 Profile、Matcher/Runtime、权限、预算和发布门禁保持不变；本次为源码及文档收敛，不声明模型、Token、真实 Runtime 或设备效果。
+
+### 11.4.14 — Skill 路由和上下文收敛
+
+- 保留现役 Core Workflow 与 Profile 能力，收敛条件式路由、Context 装载、导出引用和相关回归；见该版本 GitHub Release 和精确提交 `fd436bc71700`。
+
+### 11.4.13 — IMAP 测试与活跃文档精简
+
+- 关闭 IMAP 关闭读端的竞态回归，更新导航、上手、贡献与 Workflow 文档并加入失效链接门禁；见 `947adf9a0974`。
+
+### 11.4.12 — 评测证据和输入安全
+
+- 拒绝可重放、含歧义或无界 Runtime 输入；修复有界子进程、非有限数值与严格 Manifest 读取；见 `2aa49df24eeb`。
+
+### 11.4.11 — SDD 探索和规格交付连接
+
+- 贯通设计反证与现有 SDD 契约，增加路由/规格交付回归并保持 Workflow 身份；见 `999831266ba0`。
+
 ### 11.4.10 — Manifest 查询严格拒绝歧义输入
 
 - 核心 Manifest 查询入口复用现有有界 strict JSON 读取器，拒绝重复键、NaN/Infinity、符号链接和超出 16 MiB 的异常文件；不再维护宽松的第二解析路径。

@@ -15,6 +15,7 @@
 
 ## 按需深入
 
+- [Skill 路由与组合](reference/skill-routing-matrix.md)：按场景选择一个 primary，supporting/fallback 按需启用；关系类型以 [typed Skill relationship contract](../manifests/skill_relationship_contracts_v2.json) 为准，不再维护固定执行清单或手写依赖图
 - [SDD 最小路径](runbooks/spec-driven-delivery.md)：跨模块行为或接口变更；单点小修不强制规格文档
 - [嵌入式开发约束](embedded-constraints.md)：设备、SoC/MCU、Linux/RTOS 的执行边界
 - [运行时与模型边界](architecture/interoperability-boundaries.md)：source、安装、native evidence、认证的区别

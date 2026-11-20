@@ -102,6 +102,8 @@ retired_paths = (
     "scripts/check-fallback-sunset.sh",
     "bin/agent-dev-kit",
     "src/agent_dev_kit/runtime_control",
+    "docs/skill-composition-guide.md",
+    "docs/skill-dependency-graph.md",
     ".github/workflows/platform-vnext.yml",
     "tests/test_product_maturity_v5.sh",
     "tests/test_skill_governance_v3.sh",
@@ -249,6 +251,11 @@ for page, banned in {
     for sentinel in banned:
         if sentinel in active_text.get(page, ""):
             failures.append(f"obsolete documentation example: {page}: {sentinel}")
+
+nav = active_text.get("docs/NAVIGATION.md", "")
+for link in ("reference/skill-routing-matrix.md", "../manifests/skill_relationship_contracts_v2.json"):
+    if f"]({link})" not in nav:
+        failures.append(f"canonical Skill routing source missing from navigation: {link}")
 
 if failures:
     for failure in failures:
