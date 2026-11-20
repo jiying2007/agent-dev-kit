@@ -1,8 +1,8 @@
 ---
 name: adk-repo-drift-remediation
 description: "用于全仓漂移、兼容残留、冗余目录和文档代码不一致的取证与修复计划；不用于跳过基线验证或清除用户未授权的改动。"
-version: 1.1.4
-last_updated: 2026-11-16
+version: 1.1.5
+last_updated: 2026-11-20
 triggers:
   - "仓库漂移"
   - "全仓漂移"

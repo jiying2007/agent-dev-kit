@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-remote-debug-log-triage
 description: "用于远程设备 SSH、ADB、串口与启动日志取证和分层连通性定位；不用于未授权远程写入、替代离线 core dump 解析或新驱动实现。"
-version: 1.1.1
-last_updated: 2026-11-03
+version: 1.1.2
+last_updated: 2026-11-20
 triggers:
   - "远程调试"
   - "设备 IP"

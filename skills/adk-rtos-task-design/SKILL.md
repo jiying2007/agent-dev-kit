@@ -1,8 +1,8 @@
 ---
 name: adk-rtos-task-design
 description: "用于 RTOS 任务优先级、周期唤醒、同步资源与调度风险设计；不用于裸机单循环或未经测量声称实时性达标。"
-version: 2.0.4
-last_updated: 2026-11-17
+version: 2.0.5
+last_updated: 2026-11-20
 triggers:
   - "RTOS任务"
   - "任务设计"

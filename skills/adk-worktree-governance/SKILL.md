@@ -1,8 +1,8 @@
 ---
 name: adk-worktree-governance
 description: "用于 git worktree 并行开发前的隔离、基线锁定、同步与安全清理；不用于擅自删除脏工作树或替代多 Agent 任务拆分。"
-version: 1.3.1
-last_updated: 2026-11-16
+version: 1.3.2
+last_updated: 2026-11-20
 triggers:
   - "worktree"
   - "工作树"

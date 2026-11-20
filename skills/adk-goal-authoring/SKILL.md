@@ -1,8 +1,8 @@
 ---
 name: adk-goal-authoring
 description: "用于新建或实质修订 Goal 合同、原验收映射和可关闭交付批次；不用于已有 Goal 的日常执行、CI 状态查询或只读计划。"
-version: 0.1.4
-last_updated: 2026-11-16
+version: 0.1.5
+last_updated: 2026-11-20
 triggers:
   - "生成Goal"
   - "Goal怎么写"

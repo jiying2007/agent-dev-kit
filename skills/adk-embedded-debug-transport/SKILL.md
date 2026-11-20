@@ -1,8 +1,8 @@
 ---
 name: adk-embedded-debug-transport
 description: "用于管理串口、SSH、ADB、远程 GDB 等调试通道的连接与权限证据；不用于隐式远程部署、修改设备配置或替代故障根因分析。"
-version: 1.0.2
-last_updated: 2026-11-09
+version: 1.0.3
+last_updated: 2026-11-20
 triggers:
   - "调试通道"
   - "设备调试通道"

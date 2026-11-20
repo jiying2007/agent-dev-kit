@@ -1,8 +1,8 @@
 ---
 name: adk-register-map-design
 description: "用于芯片寄存器映射、位域权限和驱动接口文档设计；不用于直接对真实寄存器写入或代替外设时序调试。"
-version: 1.0.5
-last_updated: 2026-11-16
+version: 1.0.6
+last_updated: 2026-11-20
 triggers:
   - "设计寄存器"
   - "寄存器映射"

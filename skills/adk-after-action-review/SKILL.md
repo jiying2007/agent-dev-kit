@@ -1,8 +1,8 @@
 ---
 name: adk-after-action-review
 description: "用于任务交付后复盘问题、修复成本与可复用经验并形成候选记录；不用于替代交付前验证或直接发布未经审核的长期记忆。"
-version: 1.3.0
-last_updated: 2026-11-13
+version: 1.3.1
+last_updated: 2026-11-20
 triggers:
   - "任务复盘"
   - "经验沉淀"

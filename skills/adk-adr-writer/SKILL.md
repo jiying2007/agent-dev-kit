@@ -1,8 +1,8 @@
 ---
 name: adk-adr-writer
 description: "已有架构权衡、需编写或更新 ADR 时记录真实决定、依据与后果；不用于概念介绍、需求未明或代码实现。"
-version: 1.2.2
-last_updated: 2026-11-17
+version: 1.2.3
+last_updated: 2026-11-20
 triggers:
   - "写ADR/编写ADR/撰写ADR/更新ADR/修订ADR/写成ADR/记录为ADR/整理成ADR"
   - "架构决策"

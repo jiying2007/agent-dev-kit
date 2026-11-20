@@ -1,8 +1,8 @@
 ---
 name: adk-prose-revision
 description: "用于对已完成的中文或英文文章、报告、说明文稿定位表达问题并做最小范围润色，保留事实、术语与原有风格；不用于代码审查、ADR 决策、事实核验或判断作者是否为 AI。"
-version: 1.0.0
-last_updated: 2026-11-12
+version: 1.0.1
+last_updated: 2026-11-20
 triggers:
   - "成稿润色"
   - "语言润色"

@@ -1,8 +1,8 @@
 ---
 name: adk-memory-curator
 description: "用于已授权的历史记录、项目知识和决策证据整理，生成可审查的 memory candidate；不用于静默写入长期记忆或传播无关敏感上下文。"
-version: 1.0.3
-last_updated: 2026-11-16
+version: 1.0.4
+last_updated: 2026-11-20
 triggers:
   - "记忆整理"
   - "memory curator"

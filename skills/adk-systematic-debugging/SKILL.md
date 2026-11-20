@@ -1,8 +1,8 @@
 ---
 name: adk-systematic-debugging
 description: "用于根因不明问题的复现、单变量实验、sanitizer 取证与回归；不用于跳过取证猜修复或替代性能基准。"
-version: 1.2.6
-last_updated: 2026-11-17
+version: 1.2.7
+last_updated: 2026-11-20
 triggers:
   - "调试"
   - "排查问题"

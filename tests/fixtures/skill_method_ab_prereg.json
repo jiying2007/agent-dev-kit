@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.4.15",
+    "planned_release": "v11.4.16",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.4.15",
+      "merged_main_sha": "f8cf324ec15b2513773e5b3374dc53e126085a0b",
+      "model_runs": 0,
+      "reason": "11.4.15 was published with source and integration CI but without native Skill A/B or verified consumer UI localization evidence. Preserve historic source identity and unmeasured result."
+    },
     {
       "planned_release": "v11.4.14",
       "merged_main_sha": "fd436bc71700c499b17656b081fc5bd7ec6b8c14",

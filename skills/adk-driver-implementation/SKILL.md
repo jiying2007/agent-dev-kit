@@ -1,8 +1,8 @@
 ---
 name: adk-driver-implementation
 description: "用于 Linux、RTOS 或裸机驱动代码实现、资源生命周期与定向回归；不用于仅做首板调试清单或未经授权的真实设备刷写。"
-version: 2.0.2
-last_updated: 2026-11-03
+version: 2.0.3
+last_updated: 2026-11-20
 triggers:
   - 驱动开发
   - 编写驱动

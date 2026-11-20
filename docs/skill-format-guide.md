@@ -35,6 +35,14 @@ ADK authoring 可以继续使用：
 - 提交格式归目标仓库 Commit Policy；代码审查的行为和级别由统一审查 Skill 负责。
 - 不保留旧名 alias、兼容镜像或二次 authority；能力迁移后需更新 Profile/Manifest/安装和测试。
 
+## Codex / OpenAI 中文 UI 元数据
+
+- 每个 Manifest 登记的 Core/Optional Skill（包括 nested optional）提供同目录的 `agents/openai.yaml`，用于 Codex 中文显示。至少包含 `interface.display_name`（中文名）与 `interface.short_description`（25–64 字符的中文用途与适用边界）。
+- `SKILL.md:description` 仍是跨宿主语义和隐式发现的权威；`openai.yaml` 只承载 Codex UI 展示与已明确的运行时扩展，不能覆写 Manifest、授予工具权限或创建第二套路由/Skill 身份。
+- Codex 默认允许隐式调用；对于 Manifest 已分类为 supporting、governance、fallback 的非主入口，`agents/openai.yaml` 应显式设置 `policy.allow_implicit_invocation: false`，防止只读辅助/诊断被默认升级为 primary。主入口不复制默认的 `true` 声明。
+- 保留已明确的 `dependencies` 和 `default_prompt`，修改界面文案时不得擅自扩大调用权限。中文 UI 更新须通过受保护源发布、消费方精确来源同步及宿主验证；修改源码不等于用户端立即生效。
+- 中文显示不创建语言专属 Skill，用户或项目明确要求英文时仍以其语言要求为准；触发/权限测试分别核验，不以翻译代替行为测量。
+
 ## Description 触发质量
 
 `description` 是运行时 discovery 第一层，必须表达 **what + when + boundary**：

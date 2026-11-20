@@ -1,8 +1,8 @@
 ---
 name: adk-parallel-agent-governance
 description: "用于多个 Agent 并行时划分 scope、共享契约、冲突矩阵和最终集成验证；不用于单点小改或擅自委派有额外权限的任务。"
-version: 1.5.2
-last_updated: 2026-11-16
+version: 1.5.3
+last_updated: 2026-11-20
 triggers:
   - "并行 agent"
   - "多 agent"

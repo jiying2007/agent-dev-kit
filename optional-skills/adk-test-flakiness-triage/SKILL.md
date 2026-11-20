@@ -1,8 +1,8 @@
 ---
 name: adk-test-flakiness-triage
 description: "用于非确定性测试故障的复现、波动归因和消除不稳定方案验证；不用于把失败盲目重跑到绿或降低测试门禁。"
-version: 1.0.7
-last_updated: 2026-11-16
+version: 1.0.8
+last_updated: 2026-11-20
 triggers:
   - "测试波动"
   - "flaky test"

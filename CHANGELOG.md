@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### 11.4.16 — 全 Skill 中文展示与默认 Profile 收敛
+
+- 为全部 65 项 Skill 建立或规范 `agents/openai.yaml`：`interface.display_name` 和 `short_description` 统一中文、保留主技能身份及既有调用策略；新增静态覆盖、唯一性、长度和非目标负例。
+- `large-refactor` 改为继承平台中立 `core`，按需加入 `adk-planning-execution-loop` 与 `adk-code-simplification`；嵌入式重构需显式叠加 `embedded-fullstack`，避免通用语言无意装入板级专项。
+- `personal-core` 改为 `core` 加发布检查；记忆、归档、个人成长等低频能力保留在其他现役 Profile，按需获取，不因 Profile 名称全部默认装载。
+- 本轮保持 56 Core + 9 Optional Skill 身份，不虚报一次源级瘦身为生产 Token 节省；潜在身份合并需保留既有 E2–E4、权限、来源和消费者证据后独立实施。
+- 65 份变更的 Skill 元数据同步递增各自补丁版本，满足 Codex 受信导入器的变更版本规则；8 个 Profile 的源字节上限按精确候选 Git Tree 重新收紧，不将源码字节变化等同真实 Token。
+- 当前源码元数据不等于已安装 Codex CLI 显示；Codex 仓保有精确来源/签名分发合同，须在来源发行和消费者 promotion 后另外验收。
+
 ### 11.4.15 — Skill 文档权威入口收敛
 
 - 删除 2026-05 的静态 Skill 依赖图及固定组合链示例；以 Manifest 派生的路由矩阵和 typed relationship contract 为准，不把建议次序误写成强制执行链。

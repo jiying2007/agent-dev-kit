@@ -1,8 +1,8 @@
 ---
 name: adk-engineering-growth-review
 description: "用于基于已授权的工程历史和交付证据做长期开发习惯复盘、学习建议与趋势分析；不用于推断私人属性或无证据评判个人表现。"
-version: 1.1.2
-last_updated: 2026-11-17
+version: 1.1.3
+last_updated: 2026-11-20
 triggers:
   - "开发者成长复盘"
   - "成长分析"

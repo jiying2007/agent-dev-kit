@@ -1,8 +1,8 @@
 ---
 name: adk-cmake-cross-build
 description: "用于嵌入式 CMake 工程的交叉编译、工具链配置与多目标构建排障；不用于无 CMake 的构建系统或直接设备部署。"
-version: 1.0.7
-last_updated: 2026-11-16
+version: 1.0.8
+last_updated: 2026-11-20
 triggers:
   - "CMake"
   - "CMake交叉编译"

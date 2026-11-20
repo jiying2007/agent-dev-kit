@@ -1,8 +1,8 @@
 ---
 name: adk-token-context-governance
 description: "用于日志与上下文过长时设置 Token 预算、分层读取和原文回退门禁；不用于压缩掉高风险证据或放宽验证要求。"
-version: 1.3.4
-last_updated: 2026-11-17
+version: 1.3.5
+last_updated: 2026-11-20
 triggers:
   - "省 token"
   - "上下文太大"

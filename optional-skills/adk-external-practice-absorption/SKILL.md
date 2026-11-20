@@ -1,8 +1,8 @@
 ---
 name: adk-external-practice-absorption
 description: 统一评估 GitHub、GitLab、Gitee、OpenAI/Codex 官方、Anthropic/Claude 官方、微信公众号和人工证据中的外部 Agent、Skill、Workflow 与工程实践，并把批准项闭环到 ADK change、验证、pilot、发布复审和退役。用于“吸收外部实践”“评估参考实现”“从官方或社区沉淀 Agent/Skill/Workflow”“Gitee/GitLab/GitHub 实践研究”等请求；不用于普通功能开发、单纯浏览网页或未经 owner 决策的自动安装/复制。
-version: 1.0.2
-last_updated: 2026-11-16
+version: 1.0.3
+last_updated: 2026-11-20
 triggers:
   - "吸收外部实践"
   - "吸收外部成熟方法"

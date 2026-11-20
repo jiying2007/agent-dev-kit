@@ -1,8 +1,8 @@
 ---
 name: adk-fetch-url-content
 description: "用于对明确的公开 HTTP(S) URL 做正文提取与结构化 Markdown 转换；不用于网页搜索、绕过登录、内网探测或抓取受限资源。"
-version: 1.0.4
-last_updated: 2026-11-17
+version: 1.0.5
+last_updated: 2026-11-20
 triggers:
   - "获取网页内容"
   - "抓取链接正文"

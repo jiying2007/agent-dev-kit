@@ -1,8 +1,8 @@
 ---
 name: adk-bsp-porting-playbook
 description: "用于 BSP 移植涉及启动链、驱动依赖、构建环境和迁移风险时规划与验证；不用于未授权的设备刷写或纯源码阅读。"
-version: 2.0.2
-last_updated: 2026-11-16
+version: 2.0.3
+last_updated: 2026-11-20
 triggers:
   - "BSP移植"
   - "板级移植"

@@ -56,6 +56,25 @@ class ProfileContextFootprintTest(unittest.TestCase):
         self.assertFalse(profile_footprint(MANIFEST, "embedded-fullstack")["accounting"]
                          ["runtime_initial_context_measured"])
 
+    def test_generic_refactor_and_personal_profiles_are_bounded(self) -> None:
+        def skills(profile: str) -> set[str]:
+            return {asset.name for asset in MANIFEST.resolve_profiles([profile]).skills}
+
+        core = skills("core")
+        generic = skills("large-refactor")
+        embedded = skills("embedded-fullstack")
+        personal = skills("personal-core")
+        self.assertEqual(generic - core, {"adk-planning-execution-loop", "adk-code-simplification"})
+        self.assertNotIn("adk-bsp-porting-playbook", generic)
+        self.assertNotIn("adk-embedded-storage-layout-migration", generic)
+        self.assertIn("adk-bsp-porting-playbook", embedded)
+        self.assertEqual(personal - core, {"adk-release-versioning"})
+        self.assertNotIn("adk-engineering-growth-review", personal)
+        self.assertLess(profile_footprint(MANIFEST, "large-refactor")["assets"]["skills"],
+                        profile_footprint(MANIFEST, "embedded-fullstack")["assets"]["skills"])
+        self.assertFalse(profile_footprint(MANIFEST, "large-refactor")["accounting"]
+                         ["runtime_initial_context_measured"])
+
     def test_all_profile_source_growth_ratchets_hold(self) -> None:
         for name in sorted(MANIFEST.data["profiles"]):
             with self.subTest(profile=name):

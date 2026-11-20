@@ -1,8 +1,8 @@
 ---
 name: adk-cross-team-handoff
 description: "用于产品、研发、测试等多团队交接时明确责任、接口和验收证据；不用于替代需求变更批准或直接操作外部系统。"
-version: 1.1.1
-last_updated: 2026-11-13
+version: 1.1.2
+last_updated: 2026-11-20
 triggers:
   - "团队交接"
   - "模块移交"

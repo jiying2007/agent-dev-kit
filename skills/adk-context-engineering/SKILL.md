@@ -1,7 +1,7 @@
 ---
 name: adk-context-engineering
 description: "用于上下文膨胀、跨会话恢复或并行 Agent 隔离时规划稳定规则、按需引用及证据指针；不用于直接替代任务计划、代码实现或 Token 配额门禁。"
-version: 2.0.4
+version: 2.0.5
 last_updated: 2026-11-20
 triggers:
   - 上下文工程

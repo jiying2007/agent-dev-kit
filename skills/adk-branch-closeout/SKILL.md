@@ -1,8 +1,8 @@
 ---
 name: adk-branch-closeout
 description: "用于代码与验证完成后的分支收口、PR 选择和保留或清理决策；不用于未验证时直接合并、删除用户工作树或替代评审。"
-version: 1.1.2
-last_updated: 2026-11-16
+version: 1.1.3
+last_updated: 2026-11-20
 triggers:
   - "分支收尾"
   - "开发完成"

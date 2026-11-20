@@ -1,8 +1,8 @@
 ---
 name: adk-offline-core-dump-triage
 description: "用于离线分析嵌入式 Linux core dump，并对 binary、BuildID、符号与 GDB 匹配留证；不用于无符号时编造可信 backtrace 或操作在线设备。"
-version: 1.0.2
-last_updated: 2026-11-15
+version: 1.0.3
+last_updated: 2026-11-20
 triggers:
   - "core dump"
   - "core文件"

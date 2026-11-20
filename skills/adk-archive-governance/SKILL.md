@@ -1,8 +1,8 @@
 ---
 name: adk-archive-governance
 description: "用于只读检查现有归档的元数据、topic、hash 与安全问题，提出修复计划并交接既有实施者；不负责新建知识笔记或代替知识候选的正式审核。"
-version: 1.0.6
-last_updated: 2026-11-17
+version: 1.0.7
+last_updated: 2026-11-20
 triggers:
   - "归档治理"
   - "归档检查"

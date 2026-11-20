@@ -1,8 +1,8 @@
 ---
 name: adk-planning-execution-loop
 description: "用于按已批准多阶段计划实际执行、定向验证、断点恢复与目标收敛；不用于只读计划审查、CI 等待查询或生成 Goal 合同。"
-version: 1.4.5
-last_updated: 2026-11-16
+version: 1.4.6
+last_updated: 2026-11-20
 triggers:
   - "执行计划"
   - "按现有计划继续执行"

@@ -1,8 +1,8 @@
 ---
 name: adk-interface-contract-design
 description: "用于模块 API、协议消息及生命周期状态转换的接口契约设计与迁移评审；不用于需求未收敛时直接写实现或放行设备动作。"
-version: 1.3.8
-last_updated: 2026-11-16
+version: 1.3.9
+last_updated: 2026-11-20
 triggers:
   - "设计接口"
   - "API设计"
