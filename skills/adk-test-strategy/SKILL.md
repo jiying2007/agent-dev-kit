@@ -1,8 +1,8 @@
 ---
 name: adk-test-strategy
 description: "用于跨模块测试策略、独立期望值、检查器校准、风险与行为覆盖；不用于只生成嵌入式局部替身代码或代替真实执行结果。"
-version: 2.2.2
-last_updated: 2026-11-15
+version: 2.2.3
+last_updated: 2026-11-20
 triggers:
   - "测试策略"
   - "TDD"

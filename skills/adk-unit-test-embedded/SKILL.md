@@ -1,8 +1,8 @@
 ---
 name: adk-unit-test-embedded
 description: "用于 MCU/RTOS 及其 host 模型的单元测试断言、性质/状态序列测试与外设替身；非跨模块策略，不用于证明真实 HIL 性能。"
-version: 1.1.8
-last_updated: 2026-11-17
+version: 1.1.9
+last_updated: 2026-11-20
 triggers:
   - "单元测试/单测"
   - "写测试/测试用例"

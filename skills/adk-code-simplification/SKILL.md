@@ -1,8 +1,8 @@
 ---
 name: adk-code-simplification
 description: "用于代码结构冗长且行为已被测试约束时做等价代码简化；不用于未建立行为基线的功能修改、性能调优或根因不明的错误。"
-version: 1.1.2
-last_updated: 2026-11-15
+version: 1.1.3
+last_updated: 2026-11-20
 triggers:
   - "代码太复杂"
   - "简化代码"
