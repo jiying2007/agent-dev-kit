@@ -1,8 +1,8 @@
 ---
 name: adk-context-compress-handoff
 description: "用于长任务上下文压缩、跨会话恢复及交接时保存目标、证据指针和下一动作；不用于替代原始高风险证据或任务执行。"
-version: 1.0.3
-last_updated: 2026-11-17
+version: 1.0.4
+last_updated: 2026-11-20
 triggers:
   - "上下文压缩"
   - "会话接力"

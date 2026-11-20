@@ -1,8 +1,8 @@
 ---
 name: adk-requirements-triage
 description: "用于需求不清时澄清目标、范围边界和可验证验收标准；已明确的开发任务无需重复访谈，也不用于代替实际实现。"
-version: 1.4.0
-last_updated: 2026-11-13
+version: 1.4.1
+last_updated: 2026-11-20
 triggers:
   - "需求不清楚"
   - "需求模糊"

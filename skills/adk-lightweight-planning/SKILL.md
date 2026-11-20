@@ -1,8 +1,8 @@
 ---
 name: adk-lightweight-planning
 description: "用于用户明确要求先给计划、尚不修改文件的只读编码方案；不用于已批准的长任务执行或自动开启外部写入。"
-version: 1.1.0
-last_updated: 2026-11-13
+version: 1.1.1
+last_updated: 2026-11-20
 triggers:
   - "给我一个计划"
   - "制定计划"

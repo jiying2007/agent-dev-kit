@@ -1,8 +1,8 @@
 ---
 name: adk-skill-deep-analysis
 description: "用于只读发现并对标公开优质 Skills，或分析指定 Skill 的真实方法、来源风险及对 ADK 的可迁移价值；不用于自动安装外部 Skill、执行外部脚本或授权源码写入。"
-version: 1.0.5
-last_updated: 2026-11-14
+version: 1.0.6
+last_updated: 2026-11-20
 triggers:
   - 深度拆解 skill
   - 分析 skill 设计

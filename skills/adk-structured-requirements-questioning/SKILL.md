@@ -1,8 +1,8 @@
 ---
 name: adk-structured-requirements-questioning
 description: "用于头脑风暴、brainstorming、Grill Me、方案拷问、苏格拉底式追问；以 Explore/Challenge 多轮探索意图、方案和决策依赖。不用于已有明确方案的直接实现、普通验收整理或文档润色。"
-version: 1.2.2
-last_updated: 2026-11-16
+version: 1.2.3
+last_updated: 2026-11-20
 triggers:
   - "头脑风暴"
   - "脑暴"

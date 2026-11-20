@@ -1,8 +1,8 @@
 ---
 name: adk-task-breakdown
 description: "用于复杂任务拆解、公共契约迁移及并行边界；单点小修无需拆包，不替代已批准计划的执行。"
-version: 1.5.1
-last_updated: 2026-11-17
+version: 1.5.2
+last_updated: 2026-11-20
 triggers:
   - "拆解任务"
   - "任务拆分"
