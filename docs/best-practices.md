@@ -1,355 +1,39 @@
-# 最佳实践指南
+# ADK 最佳实践：少流程、真实证据、可恢复
 
-> 📖 **相关文档**: 如需面向具体场景的实战模板与方法论框架，参见 [ADK Practice Cookbook](best-practices-cookbook.md)（作为参考方法论，不作为任何运行时绑定）。
+本页只保留**跨任务适用的工作原则**。不再复制命令手册、完整 Workflow 阶段定义或历史版本演示；场景提示词见[Practice Cookbook](best-practices-cookbook.md)，CLI 参数见[命令参考](commands.md)。
 
-## 概述
+## 按改动风险选择最小路径
 
-本指南总结了使用 agent-dev-kit 的最佳实践，帮助你更高效地使用 adk 进行开发。
+| 任务 | 做什么 | 不做什么 |
+| --- | --- | --- |
+| 单点修复、明确的文档编辑 | 限定修改范围，定向验证并复核 diff | 不强制开 Goal、SDD 文档或多轮访谈 |
+| 不明根因的 Bug | 复现、记录假设、单变量实验、修复与回归 | 不靠重跑至绿、不顺手重构 |
+| API、协议、状态机、跨仓变更 | 复用权威规格，记录行为增删改、正负验收、双向测试 | 不复制第二套 Spec 或并行路由 |
+| 长任务 / Goal | 保留真正完成的检查点、证据指针和可恢复下一动作 | 不把 CI 查询、文档整理当实际开发推进 |
+| 发布 / 设备操作 | 明确权限、不可变源码、目标凭据、回滚与现场证据 | 不拿源码通过冒充 Runtime/产品放行 |
 
-## 变更管理最佳实践
+完整的 [SDD 最小路径](runbooks/spec-driven-delivery.md) 和 [Workflow 适用范围](workflows.md) 是具体做法，不应按本页再制造一套阶段状态机。
 
-### 1. 变更粒度
-**推荐**：每个变更专注于一个独立的问题或功能
+## 验证按层级升级
 
-```bash
-# 好的做法
-bash scripts/workflow.sh propose --change add-modbus-tcp --title "添加Modbus TCP支持"
+- **普通源码小改**：优先定向测试，并检查实际变更范围；风险上升时扩到回归。
+- **ADK 本仓受保护变更**：运行实际环境中的 `bash scripts/devkit.sh validate --strict`、`bash tests/run_all.sh --quick`；合并前以 **最终 HEAD** 的完整 CI、独立审查和保护规则为准。
+- **目标运行时**：单独确认安装、发现、加载、触发、工具副作用和错误恢复；仅有文件或 matcher 命中不能证明原生可用。
+- **模型效果与成本**：记录同任务、同模型/环境、预注册验收与真实 provider usage。缺失计 `not-measured`，不得填充零。
+- **产品与现场**：必须由消费方自己的受信验收与现场回执判定，不继承 ADK Release 状态。
 
-# 避免的做法
-bash scripts/workflow.sh propose --change huge-update --title "大量更新"
-```
+## 版本、撤销与安全
 
-### 2. 变更命名
-**推荐**：使用清晰、一致的命名
+变更前记录精确源码与测试基线；在受保护 PR 中使用受控 SemVer 更新，**不能**把旧示例版本当作当前升级目标。禁止强推、改动已发布的 tag、跳过失败门禁；失败时保留原始日志、影响范围与回滚动作。备份/恢复必须审查受管路径与 receipt，参见[维护与发布](runbooks/workspace-maintenance-guide.md)。
 
-```bash
-# 好的命名
-add-modbus-tcp
-fix-serial-timeout
-refactor-driver-architecture
+外部 Skill、脚本、MCP、参考仓默认视为不受信来源；来源审查、权限和真实可执行结果分开核实。优先使用已有 Asset、Runbook 和测试，不因每次优化新建同义 Skill、治理引擎或定时扫描。
 
-# 避免的命名
-update
-fix
-my-feature
-```
+## 文档维护的唯一事实源
 
-### 3. 状态管理
-**推荐**：按顺序推进状态
+- `manifest.json`：Agent、Skill、Profile、Workflow 及当前源码版本
+- `docs/commands.md`：CLI 命令参数
+- `docs/workflows.md`：Workflow 与普通任务场景的关系
+- `docs/changes/`：变更证据和历史快照，不是普通用户首次上手必读
+- GitHub exact-SHA CI、不可变 Release、消费方凭据：各自证明不同范围
 
-```bash
-# 正确的顺序
-propose -> plan -> implement -> verify -> review -> deliver -> archive
-
-# 避免跳过状态
-bash scripts/workflow.sh advance --change my-feature  # 正确
-bash scripts/workflow.sh set-stage --change my-feature --stage deliver  # 避免
-```
-
-## 产物管理最佳实践
-
-### 1. 产物完整性
-**推荐**：确保产物包含所有必需部分
-
-```markdown
-# 完整的产物示例
-# 产品需求文档
-
-## 元数据
-- 变更名称: xxx
-- 状态: draft
-- 作者: xxx
-- 日期: xxx
-
-## 正文
-...
-
-## 状态
-- [ ] 需求明确
-- [ ] 范围确定
-- [ ] 影响分析
-- [ ] 评审完成
-```
-
-### 2. 产物一致性
-**推荐**：使用标准化模板
-
-```bash
-# 使用模板创建产物
-cp templates/artifacts/prd-template.md docs/changes/my-feature/prd.md
-```
-
-### 3. 产物验证
-**推荐**：定期验证产物完整性
-
-```bash
-# 验证产物
-bash scripts/quality-gate-check.sh check-artifacts
-```
-
-## 工作流最佳实践
-
-### 1. 工作流选择
-**推荐**：根据变更类型选择工作流
-
-- 标准变更：使用标准工作流
-- 紧急修复：使用紧急工作流
-- 大型变更：拆分为多个小变更
-
-### 2. 工作流执行
-**推荐**：按步骤执行工作流
-
-```bash
-# 1. 提议变更
-bash scripts/workflow.sh propose --change my-feature --title "我的功能"
-
-# 2. 计划变更
-bash scripts/workflow.sh advance --change my-feature
-
-# 3. 实现变更
-bash scripts/workflow.sh advance --change my-feature
-
-# 4. 验证变更
-bash scripts/workflow.sh advance --change my-feature
-
-# 5. 评审变更
-bash scripts/workflow.sh advance --change my-feature
-
-# 6. 交付变更
-bash scripts/workflow.sh advance --change my-feature
-
-# 7. 归档变更
-bash scripts/workflow.sh archive --change my-feature
-```
-
-### 3. 工作流监控
-**推荐**：定期检查工作流状态
-
-```bash
-# 查看状态
-bash scripts/workflow.sh status --change my-feature
-
-# 查看所有变更
-bash scripts/workflow.sh list
-```
-
-## 测试最佳实践
-
-### 1. 测试覆盖
-**推荐**：确保测试覆盖关键路径
-
-```bash
-# 运行所有测试
-bash tests/run_all.sh
-
-# 运行特定测试
-bash tests/test_workflow.sh
-```
-
-### 2. 测试频率
-**推荐**：频繁运行测试
-
-```bash
-# 每次修改后运行测试
-git add .
-bash tests/run_all.sh
-git commit -m "描述"
-```
-
-### 3. 测试环境
-**推荐**：使用干净的测试环境
-
-```bash
-# 创建测试目录
-mkdir -p /tmp/adk-test
-cd /tmp/adk-test
-
-# 运行测试
-bash tests/run_all.sh
-```
-
-## 版本管理最佳实践
-
-### 1. 版本锁定
-**推荐**：在稳定版本上锁定
-
-```bash
-# 锁定当前稳定版本
-bash scripts/version-manager.sh lock --version 3.0.0
-```
-
-### 2. 版本升级
-**推荐**：按语义化版本升级
-
-```bash
-# 升级到下一目标版本
-bash scripts/version-manager.sh upgrade --target 3.0.0
-```
-
-### 3. 版本记录
-**推荐**：记录版本变更
-
-```bash
-# 生成变更日志
-bash scripts/version-manager.sh changelog
-```
-
-## 备份最佳实践
-
-### 1. 定期备份
-**推荐**：定期创建备份
-
-```bash
-# 创建备份
-bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
-```
-
-### 2. 备份验证
-**推荐**：定期验证备份完整性
-
-```bash
-# 验证备份
-bash scripts/backup-rollback.sh verify --version 20260505
-```
-
-### 3. 备份恢复
-**推荐**：在恢复前创建备份
-
-```bash
-# 恢复备份
-bash scripts/backup-rollback.sh restore --target /tmp/adk-runtime --version 20260505
-```
-
-## 文档最佳实践
-
-### 1. 文档完整性
-**推荐**：保持文档完整和最新
-
-- 使用指南
-- 命令参考
-- 故障排除
-- 最佳实践
-
-### 2. 文档一致性
-**推荐**：使用标准化格式
-
-- 标题层次
-- 代码块
-- 示例
-- 链接
-
-### 3. 文档维护
-**推荐**：定期更新文档
-
-- 修复错误
-- 添加新功能
-- 更新示例
-- 改进说明
-
-## 团队协作最佳实践
-
-### 1. 沟通规范
-**推荐**：使用标准化的沟通方式
-
-- 变更提案
-- 进度更新
-- 问题报告
-- 评审反馈
-
-### 2. 代码评审
-**推荐**：进行有效的代码评审
-
-- 检查功能
-- 检查测试
-- 检查文档
-- 检查一致性
-
-### 3. 知识共享
-**推荐**：共享知识和经验
-
-- 文档
-- 示例
-- 最佳实践
-- 故障排除
-
-## 性能优化最佳实践
-
-### 1. 脚本优化
-**推荐**：优化脚本性能
-
-- 使用缓存
-- 减少重复操作
-- 并行处理
-- 优化算法
-
-### 2. 资源管理
-**推荐**：合理使用资源
-
-- 监控磁盘空间
-- 清理临时文件
-- 优化存储
-- 压缩备份
-
-### 3. 监控告警
-**推荐**：设置监控和告警
-
-- 健康检查
-- 性能监控
-- 错误告警
-- 资源使用
-
-## 安全最佳实践
-
-### 1. 权限管理
-**推荐**：最小权限原则
-
-- 文件权限
-- 目录权限
-- 脚本权限
-- 访问控制
-
-### 2. 数据保护
-**推荐**：保护敏感数据
-
-- 备份加密
-- 访问控制
-- 审计日志
-- 安全存储
-
-### 3. 安全审计
-**推荐**：定期进行安全审计
-
-- 权限检查
-- 漏洞扫描
-- 安全日志
-- 合规检查
-
-## 持续改进
-
-### 1. 反馈收集
-**推荐**：收集用户反馈
-
-- 问题报告
-- 功能建议
-- 使用体验
-- 改进建议
-
-### 2. 持续优化
-**推荐**：持续优化流程
-
-- 自动化
-- 标准化
-- 简化
-- 改进
-
-### 3. 知识积累
-**推荐**：积累最佳实践
-
-- 文档
-- 示例
-- 模板
-- 工具
-
----
-
-**提示**：最佳实践需要根据实际情况调整，选择适合自己的方法。
+维护时尽量**修改权威文档并链接它**，不要在多个页面重新粘贴同一套执行步骤。历史实验附件不因文件相同就擅自删除，清理前需核对原始证据引用。
