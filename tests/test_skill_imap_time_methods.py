@@ -96,9 +96,9 @@ class ImapTimeMethodTests(unittest.TestCase):
                 env={**os.environ, "LC_ALL": "C", "TZ": "UTC", "PYTHONDONTWRITEBYTECODE": "1"},
             ) as peer:
                 assert peer.stdin is not None and peer.stdout is not None and peer.stderr is not None
-                self.assertEqual(b"* PREAUTH local synthetic fixture\\r\\n", peer.stdout.readline())
+                self.assertEqual(b"* PREAUTH local synthetic fixture\r\n", peer.stdout.readline())
                 peer.stdout.close()
-                peer.stdin.write(b"ZZ1 LOGOUT\\r\\n")
+                peer.stdin.write(b"ZZ1 LOGOUT\r\n")
                 peer.stdin.flush()
                 peer.stdin.close()
                 try:
