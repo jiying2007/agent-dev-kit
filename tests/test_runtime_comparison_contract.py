@@ -7,7 +7,6 @@ import contextlib
 import io
 import json
 import os
-import subprocess
 import sys
 import tempfile
 import unittest
@@ -388,7 +387,6 @@ class RuntimeComparisonContractTests(unittest.TestCase):
             self.assertEqual(measured["value"]["primary_skill"], "new-case")
 
     def test_codex_result_rejects_oversize_and_symlink_without_reading_content(self) -> None:
-        import os
         with tempfile.TemporaryDirectory() as temporary:
             workspace = Path(temporary)
             output = workspace / "codex-result.json"
