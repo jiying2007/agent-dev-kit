@@ -39,6 +39,11 @@ constraints:
 4. `work_item_kind` 与 `implementation_permission/exit_gate` 按 reference 校验；decision/research/prototype 禁止产品写入，prototype 附 `prototype_evidence`；只有已批准 implementation 可写，模型不能补造授权。
 5. 人工计划只需任务、依赖、验收、风险和下一步。估时用历史或不确定范围，**不硬套 0.5–8h**，未知 `not-estimated`；仅资源决策需要时细化，只有独立且收益明确时建议并行。
 
+## Spec-to-slice 追踪
+- 已有 Canonical Change Contract 的非平凡功能，每个 Ready 任务绑定原始 `REQ-NNN/ACC-NNN`、可观察 delta、`VERIFY-NNN` 与失败反例；以一个端到端 tracer bullet 优先验证主要风险，不按文件层或 Agent 角色机械分包。
+- 跨仓共享协议仅允许一个契约 writer；SoC、MCU 的实现可独立切片，但最后一项必须验证双方相同的 protocol/spec digest 与端到端故障路径。未具备设备/工具条件时标明 `not-tested`，不假关闭父验收。
+- 批末对实际可观察行为做 code→spec 反向核对；没有行为变化时不强制生成 Delta Spec。不要派生第二套任务状态机。
+
 ## Quality Gate
 - 每项有 owner、可执行 verify；未知路径/命令标待查。状态、权限和接口来自实际计划。
 - 机器包拒绝缺字段、未知字段及错误类型/权限；未实际校验标未验证，不冒充 ready。

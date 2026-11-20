@@ -19,6 +19,6 @@ bash scripts/devkit.sh review --change <change-id> --result pass --blockers 0 --
 bash scripts/devkit.sh archive --change <change-id>
 ```
 
-旧调用 `bash scripts/quality-gates.sh <change-dir>` 仍可运行，但只会显示弃用提示并转发到 `scripts/check-change-governance.sh`。新自动化应直接调用 canonical checker。
+旧 `scripts/quality-gates.sh` 已不存在，**不可再作为可运行的兼容入口**。需要校验变更工件时直接调用 `bash scripts/check-change-governance.sh`；本目录中的旧模板仅作历史参考，不作为新 change 工作区。
 
 完整工件要求见 [`docs/changes/README.md`](../docs/changes/README.md)，Harness 决策见 [`docs/harness-engineering-analysis.md`](../docs/harness-engineering-analysis.md)。

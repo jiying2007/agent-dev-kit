@@ -58,6 +58,12 @@ constraints:
 `execution-handoff: Goal / Non-goal / Done-when / Required Evidence / Artifact Paths / Blocker Policy / Acceptance`
 `high-risk: Domain Model / Authorization / Recovery / Compatibility / Negative Cases`
 
+## 规格驱动交付（仅涉及行为变化时）
+- 先确认真实需求来源；飞书项目/TAPD/邮件/用户口述可作来源引用，**不要求转成 GitHub Issue**。Git 记录实现，外部需求系统保留其原审批权威。
+- 跨模块、对外行为或核心协议变化，复用 `docs/changes/<change-id>/proposal.md` 的 `Canonical Change Contract`：`REQ-NNN → ADDED/MODIFIED/REMOVED → affected surface → ACC-NNN → TASK-NNN → VERIFY-NNN`；写一个正例和一个失败反例，固定超时、状态、资源或边界条件。
+- 已有规格仅记录 delta，不复制整份旧规格；行为未变化的小修/文档任务直接走定向验证，不强制生成五份空文档或额外访谈。
+- 协议/异步状态类设计交 `adk-interface-contract-design`；部署/调试验收须补可执行的调用方与被调方测试。详细路径见 `docs/runbooks/spec-driven-delivery.md`。
+
 ## Quality Gate
 - 执行交接仍严格要求 done-when、required evidence、artifact paths、blocker policy；设备、权限和不可逆副作用没有批准不得执行。
 - 不因缺少适用于实现的字段而把 brief 判为失败，也不凭空补证据或路径。
