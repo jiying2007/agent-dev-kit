@@ -4,7 +4,7 @@
 
 ## 唯一规格事实源
 
-已有项目若有权威规格，先引用它；当前 ADK 变更复用 `docs/changes/<id>/proposal.md` 下的 `## Canonical Change Contract`，固定 `REQ-NNN → ADDED/MODIFIED/REMOVED → affected surface → ACC-NNN → TASK-NNN → VERIFY-NNN`。必要时在现有 `design.md` 补示意状态/接口，不另复制一份独立真相。实际实现与验证分别由 Git 和可信原始测试回执证明。
+已有项目若有权威规格，先引用它；当前 ADK 变更复用 `docs/changes/<id>/proposal.md` 下的 `## Canonical Change Contract`，固定 `REQ-NNN → ADDED/MODIFIED/REMOVED → affected surface → ACC-NNN → TASK-NNN → VERIFY-NNN`。必要时在现有 `design.md` 补示意状态/接口，不另复制一份独立真相。实际实现与验证分别由 Git 和可信原始测试回执证明。可追溯 `spec → code → test`，从变更的可观察行为反向核对规格；缺依据标 `not-checked`。
 
 需求来源可来自飞书项目、TAPD、用户、现场缺陷和架构讨论；记录外部来源标识但不强制转 GitHub Issue。未正式批准的建议不得伪称 owner 决策。
 
@@ -27,4 +27,4 @@
 
 ## 失败与退出
 
-缺少验收反例、协议来源、必要调用端或真实测试证据时报告 UNKNOWN/needs-fix；无新信息不重复访谈或启动 Goal。中高风险保持授权与恢复门禁。任务完成不等于模型效果改善；对 Skill 改进的增益应走 `docs/evals/interactive-discovery-evaluation.md` 的真实 A/B，源码测试只算 E0/E1。
+缺少验收反例、协议来源、必要调用端或真实测试证据时报告 UNKNOWN/needs-fix；无新信息不重复访谈或启动 Goal。中高风险保持授权与恢复门禁。任务完成不等于模型效果改善；对 Skill 改进的增益应走 `docs/evals/interactive-discovery-evaluation.md` 的真实 A/B，源码测试只算 E0/E1；没有真实模型和受信 Host 时，E2–E4、Token/费用及行为收益均为 `not-measured`。

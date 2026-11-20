@@ -48,23 +48,17 @@ constraints:
 - **high-risk**：接口协议、设备、权限、安全、数据迁移或跨资源状态机。除 execution-handoff 外还需 Domain Model、异常、授权和恢复。不可把高风险任务降为 brief 以绕过门禁。
 
 ## Workflow
-1. 读取用户已确认事实、当前实现及限制；明确读者需求或执行交接意图。
-2. 区分真正阻塞安全和方案的未知项，与可逆、可标注的假设；不重复提问。
-3. 给出最短目标、影响面、非目标、验收示例、优先级依据；无法确认优先级时标待确认，不默认编造 P2。
-4. 仅跨模块、协议、状态或长期生命周期风险才补术语、实体、状态和边界反例；局部小改无需空 Domain Model。
-5. brief 产出可读摘要；execution-handoff 提供原有合同必需字段。关键材料缺失则 `needs-fix`，非阻塞字段注明未知而不是伪造。
-6. 已经批准的任务直接交给执行 Skill；复杂任务才转 `adk-task-breakdown`，本 Skill 不代替实现。
+1. 核用户确认事实、当前代码与真实需求来源（含飞书项目/TAPD），不强制转 GitHub Issue。
+2. 只问影响风险/设计的未知；可逆假设标建议，不默认为确认。
+3. 给目标、范围、非目标及正负验收。行为变化复用 `Canonical Change Contract` 记录 REQ/Delta/ACC，不复制已有规格。
+4. 跨模块/协议才补状态、异常和回退；小修不强制 Domain Model。
+5. brief 简短；执行交接仍须 done-when/证据/路径/blocker policy，缺关键项 `needs-fix`。
+6. 已批准直接实施；复杂任务才交 `adk-task-breakdown`，本 Skill 不代替实现。
 
 ## Output
 `brief: Goal / Scope / Constraints / Open Decisions / Next Step`
 `execution-handoff: Goal / Non-goal / Done-when / Required Evidence / Artifact Paths / Blocker Policy / Acceptance`
 `high-risk: Domain Model / Authorization / Recovery / Compatibility / Negative Cases`
-
-## 规格驱动交付（仅涉及行为变化时）
-- 先确认真实需求来源；飞书项目/TAPD/邮件/用户口述可作来源引用，**不要求转成 GitHub Issue**。Git 记录实现，外部需求系统保留其原审批权威。
-- 跨模块、对外行为或核心协议变化，复用 `docs/changes/<change-id>/proposal.md` 的 `Canonical Change Contract`：`REQ-NNN → ADDED/MODIFIED/REMOVED → affected surface → ACC-NNN → TASK-NNN → VERIFY-NNN`；写一个正例和一个失败反例，固定超时、状态、资源或边界条件。
-- 已有规格仅记录 delta，不复制整份旧规格；行为未变化的小修/文档任务直接走定向验证，不强制生成五份空文档或额外访谈。
-- 协议/异步状态类设计交 `adk-interface-contract-design`；部署/调试验收须补可执行的调用方与被调方测试。详细路径见 `docs/runbooks/spec-driven-delivery.md`。
 
 ## Quality Gate
 - 执行交接仍严格要求 done-when、required evidence、artifact paths、blocker policy；设备、权限和不可逆副作用没有批准不得执行。
