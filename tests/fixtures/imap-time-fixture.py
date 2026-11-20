@@ -12,6 +12,7 @@ from email.parser import BytesParser
 from email.utils import parsedate_to_datetime
 import imaplib
 import json
+import os
 from pathlib import Path
 import re
 import shlex
@@ -119,8 +120,16 @@ def serve(scenario: str, log: Path) -> None:
                 else:
                     raise AssertionError("fixture refuses unsupported or non-PEEK fetch")
             elif command == "LOGOUT":
-                emit(b"* BYE fixture ended\r\n")
-                emit(f"{tag} OK LOGOUT complete\r\n".encode())
+                try:
+                    emit(b"* BYE fixture ended\r\n")
+                    emit(f"{tag} OK LOGOUT complete\r\n".encode())
+                except BrokenPipeError:
+                    # The test client may close its stdout pipe immediately
+                    # after consuming LOGOUT. This is not a protocol failure.
+                    # Redirect the inherited fd so interpreter shutdown does
+                    # not print another BrokenPipeError to stderr.
+                    with open(os.devnull, "wb") as sink:
+                        os.dup2(sink.fileno(), sys.stdout.fileno())
                 break
             else:
                 raise AssertionError(f"fixture refuses command: {command}")
