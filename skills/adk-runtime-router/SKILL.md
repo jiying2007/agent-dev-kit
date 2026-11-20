@@ -94,7 +94,7 @@ bash scripts/devkit.sh validate --strict
 - 自然语言漏匹配：补 trigger/routing intent 与回归语料，不静默跳过。
 
 ## Quality Gate
-- 必须给出 primary、supporting、fallback、verification；不得有两个 primary。
+- 低风险可按最小路由字段交付；无匹配时明确 `no-skill/abstain`，不得假造 primary。中高风险须给 primary、supporting、fallback、verification（可为明确的 none/不适用）；不得有两个 primary。
 - 中高风险必须有 Tool / Skill Evidence Plan；降级、skipped skill、tool failure 要留 evidence。
 - Effort 不改变授权、R2、Review/Release；不适配则 `no-skill/abstain`。
 - 大型目录先 `namespace_summary`，再按需 `deferred_surface`；记录 `loaded_tools` / `schema_review`。
