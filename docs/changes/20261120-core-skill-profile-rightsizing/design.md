@@ -1,8 +1,7 @@
 # 方案与回滚
 
-- 将 Goal Authoring、并行 Agent、Worktree、上下文交接四个条件性 Skill 从默认 core 的 include_skills 移出。
-- 将同四项显式补入已有 personal-core、team-core、embedded-fullstack；经继承解析，其余七个 Profile 的 Skill 集合保持与基线完全一致。
-- `adk-repo-drift-remediation` 和 `adk-after-action-review` 被现役 `runtime-routing` / `adk-delivery-gate` 的 core 工作流直接引用，必须保留默认 core；此项由真实 CI 契约失败暴露并已修正。
-- 保留 Manifest 原有 Skill identity、内容和路由权威，避免破坏已有专用部署；仅默认 core 的发现面由 22 降至 18。
-- 优化 runtime-router 的短路径，context-engineering 的职责界面，optional 组合治理的 KEEP/DEFER/MERGE/RETIRE 判据。保留高风险权限、原文证据、发布门禁。
-- 回滚：整体 revert 该受保护 PR；已有部署不自动变更。需要使用专用能力时选择已存在的 Profile，而非安装全部 Skills。
+1. **保留默认 core 22 项及全部 Profile 身份/顺序**：实测现有 Workflow、Goal、Claude/OpenCode 导出依赖这些已承诺的能力，不再削减数量。
+2. **精简正文而非删功能**：runtime-router 缩短重复流程并复用未变任务路由、先核目标 Profile 的安装清单；context-engineering 明确 Token 预算/交接职责并压缩恢复流程。
+3. **可选组合治理**：只记录 KEEP/DEFER/MERGE/RETIRE 的证据要求，不扩大默认加载和执行权限。
+4. **严格控制字节与效果声明**：使用既有 5600-byte router gate、Profile 全量源码 ratchet、发布回归；不可放大阈值或以静态体积替代真实 Token A/B。
+5. **回滚**：整 PR revert，不触碰用户 live 目录，不改变现有发布签名及 Product M5 授权。

@@ -103,19 +103,6 @@ expected_stats = {
 core = expected_inventory.get("core", {})
 core_agents = set(core.get("resolved_agents", []))
 core_skills = set(core.get("resolved_skills", []))
-# Default discovery stays lean; specialist profiles retain their original resolved behavior.
-deferred_skills = {
-    "adk-goal-authoring", "adk-parallel-agent-governance",
-    "adk-worktree-governance", "adk-context-compress-handoff",
-}
-assert len(core_skills) == 18, core_skills
-assert not (core_skills & deferred_skills), core_skills & deferred_skills
-for workflow_name in ("runtime-routing", "adk-delivery-gate"):
-    workflow = next(row for row in manifest["workflows"] if row["name"] == workflow_name)
-    assert "core" in workflow["profiles"], workflow_name
-    assert set(workflow["skills"]) <= core_skills, (workflow_name, set(workflow["skills"]) - core_skills)
-for specialist_profile in ("personal-core", "team-core", "embedded-fullstack"):
-    assert deferred_skills <= set(expected_inventory[specialist_profile]["resolved_skills"]), specialist_profile
 expected_overlap = {}
 for name, record in expected_inventory.items():
     if name == "core" or record["parents"]:

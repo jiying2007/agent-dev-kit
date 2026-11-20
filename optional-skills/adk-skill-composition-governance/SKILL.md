@@ -36,12 +36,10 @@ constraints:
 - 已列出涉及的 skill、optional skill 和目标 profile。
 - 已有至少一条代表性任务输入。
 
-## 精简决策（先找可复现价值，不按数量裁决）
-- **KEEP**：有独立触发任务、产物或验证门禁，且与邻近 Skill 的边界可测；垂直专业能力即使不通用也允许保留在专用 Profile。
-- **DEFER**：能力有用但只在某类项目/阶段需要，从默认 Profile 移至已有专用 Profile；证明其他 Profile 解析后的能力集合不缩水，避免增加新层级。
-- **MERGE**：两项处理相同触发、相同输出和失败边界，且已有消费者均可无损迁移；更新 manifest/route/refs/tests，并有真实正例和反例支持。仅正文相似或共享模板不足以合并。
-- **RETIRE**：已无可运行消费者/可验收独立价值，或被明确替代；必须核对实际安装、Workflow、route、测试和迁移/回滚后才删，未经真实宿主证据不得把“未观测到调用”当“没有用”。
-- 顺序先精简默认装载和重复 procedure，再考虑资产物理删除；只评估可比的目录字节和静态门禁，不声称未测量的模型效果、Token 或成本节省。
+## Skill 精简决策
+- **KEEP**：独立触发/产物/门禁可复核；**DEFER**：低频但有用则归已有专业 Profile。
+- **MERGE**：触发/产物/失败边界等价且迁移回归通过；**RETIRE**：无消费者且有受测替代。
+- 未观测调用≠无用，专业≠多余；权限及原始证据不降级，Token/效果须真实 A/B。
 
 ## Admission Modes
 - `collision-only`：一次触发冲突、无 Profile/依赖/权限变化时，仅冻结候选和 near-miss，运行现有 matcher/negative/collision case，提出最小修复；不强制 13 阶段和全量矩阵。

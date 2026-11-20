@@ -32,12 +32,7 @@ constraints:
 # adk-context-engineering
 
 ## Goal
-生成最小充分、可恢复、可追溯的 context policy。无上下文边界问题时仅作 supporting capability，不替代计划、编码或测试。
-
-## 与相邻能力的最小边界
-- 本 Skill 决定**哪些上下文应当保留/按需回读**；`adk-token-context-governance` 管预算和证据分层，`adk-context-compress-handoff` 负责明确要求的可移交恢复产物。不因三者都能总结上下文就同时触发、各生成一份重复报告。
-- 已有足够的事实/来源与有效任务状态、没有恢复或隔离问题时直接退出，不要求先制作 Context Policy。普通小任务不建 PROJECT_MAP、checkpoint 或重复索引。
-- 当目标 Profile 未提供 handoff Skill 且确实需要交接时，只交本 Skill 最小 `Objective / State / Blockers / Evidence pointer / Next action`，标注未做专门 handoff 验证；不得冒充已调用未安装能力。
+有上下文边界问题才生成可恢复 context policy；Token 预算和专门交接分别交 `adk-token-context-governance` 与 `adk-context-compress-handoff`，避免重复总结。
 
 ## Prerequisites
 明确 objective、phase、risk 与候选 primary；区分权威事实、假设、历史摘要和按需 reference。
@@ -53,9 +48,9 @@ constraints:
 1. 按当前决策将事实/contract/evidence 标为 `always | phase | on-demand | raw-pointer | exclude`；去重、去过期输出，冲突保留来源与 freshness。
 2. 长任务写 summary-first checkpoint；raw output 留 pointer 与 retention decision。
 3. 记录仍需 Skill 的来源、内容身份（可核版本/hash；未知注明）、必要 refs、正文状态 `intact | summarized | missing | changed`。
-4. 恢复先核目标/权限；仅同来源同内容且正文完整仍在当前上下文时去重。正文被摘要/丢失或来源/内容变化则按需重读；历史“已加载”不证明有效。排除不再适用的 Skill；必要内容不可读记 `needs-evidence`。
-5. 交接默认使用下方模板，不扩大权限；仅在 ADK 源码根已确认且文件可读时，可选 `schemas/agent-handoff-v1.schema.json`；未使用不声称 schema 验证。
-6. 新执行者据摘要和 refs 核对目标、事实、未决问题与下一步；只补缺项，不全量重载。
+4. 恢复核目标/权限/内容身份；仅正文完整且身份一致才复用，summary/missing/changed 则重读；不可读记 `needs-evidence`。
+5. 交接仅传目标、状态、权限、证据指针和下一步；可选 `schemas/agent-handoff-v1.schema.json`，未校验须标明。
+6. 接力核事实、未决项与 refs，只补缺项不重载历史。
 
 ## Failure / Abstain
 - 来源不明记 `needs-evidence`；历史摘要不替代事实。

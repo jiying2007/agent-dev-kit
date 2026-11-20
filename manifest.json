@@ -1226,7 +1226,11 @@
         "adk-requirements-triage",
         "adk-structured-requirements-questioning",
         "adk-lightweight-planning",
+        "adk-goal-authoring",
         "adk-task-breakdown",
+        "adk-parallel-agent-governance",
+        "adk-worktree-governance",
+        "adk-context-compress-handoff",
         "adk-interface-contract-design",
         "adk-adr-writer",
         "adk-component-api-stability",
@@ -1287,11 +1291,7 @@
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",
-        "adk-engineering-growth-review",
-        "adk-goal-authoring",
-        "adk-parallel-agent-governance",
-        "adk-worktree-governance",
-        "adk-context-compress-handoff"
+        "adk-engineering-growth-review"
       ]
     },
     "embedded-fullstack": {
@@ -1333,11 +1333,7 @@
         "adk-release-versioning",
         "adk-production-field-readiness",
         "adk-embedded-release-orchestration",
-        "adk-embedded-storage-layout-migration",
-        "adk-goal-authoring",
-        "adk-parallel-agent-governance",
-        "adk-worktree-governance",
-        "adk-context-compress-handoff"
+        "adk-embedded-storage-layout-migration"
       ]
     },
     "team-core": {
@@ -1356,11 +1352,7 @@
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",
-        "adk-engineering-growth-review",
-        "adk-goal-authoring",
-        "adk-parallel-agent-governance",
-        "adk-worktree-governance",
-        "adk-context-compress-handoff"
+        "adk-engineering-growth-review"
       ]
     },
     "large-refactor": {
