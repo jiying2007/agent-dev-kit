@@ -1,8 +1,8 @@
 ---
 name: adk-runtime-router
 description: "用于任务开始前在可信 Skills 清单中选定唯一 primary、supporting 和回退路径；不用于已有明确任务包时重复路由或隐式授予执行权限。"
-version: 2.1.4
-last_updated: 2026-11-14
+version: 2.1.5
+last_updated: 2026-11-20
 triggers:
   - "技能路由"
   - "选择技能"
