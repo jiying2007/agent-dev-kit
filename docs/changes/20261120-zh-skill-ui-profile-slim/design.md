@@ -6,3 +6,7 @@
 4. `personal-core` 仅增加发布准备；低频记忆/归档/成长仍保留现有团队/研究 Profile，不删除方法或转换为兼容别名。
 5. 通过源 Manifest 全覆盖测试、Profile 契约、导出/打包、完整 CI 及精确发行验证。Codex downstream 仍须经其签名 source-to-live handoff，禁止手改用户目录。
 6. 后续候选身份合并另做生产行为/权限对照；没有真实 E2–E4 证据不将静态重叠等同无价值。
+
+## 精确来源体积
+
+使用当前候选 Git Tree 的各 Asset blob 大小，按现有 `profile_context_footprint` 的 entry/support 边界复算并收紧 8 个 Profile ratchet；不把 `agents/openai.yaml` 当作模型初始上下文。真实 token / Codex UI 显示仍需下游执行证据。所有 65 个已变化 Skill 均递增补丁版本，避免 Codex 导入时出现 changed skill but unchanged version。
