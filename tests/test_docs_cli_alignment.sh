@@ -205,6 +205,51 @@ if "## 3. 面向运行体系的联动策略" in workspace:
         if retired_target in current_runtime_section:
             failures.append(f"retired runtime target in current workspace strategy: {retired_target}")
 
+# Current docs must not silently point to missing local material. Only check
+# active docs, not historical source/evidence snapshots.
+markdown_link = re.compile(r"\]\(([^)\n]+)\)")
+for relative, content in active_text.items():
+    parent = (root / relative).parent
+    for target in markdown_link.findall(content):
+        target = target.strip().split(" ", 1)[0].strip("<>")
+        if not target or target.startswith(("#", "http://", "https://", "mailto:", "data:")):
+            continue
+        if ":" in target.split("/", 1)[0]:
+            continue  # External scheme; no local path verification.
+        pathname = target.split("#", 1)[0].split("?", 1)[0]
+        if not pathname:
+            continue
+        resolved = (parent / pathname).resolve()
+        try:
+            resolved.relative_to(root)
+        except ValueError:
+            failures.append(f"active Markdown link escapes source root: {relative}: {target}")
+            continue
+        if not resolved.exists():
+            failures.append(f"dead active Markdown link: {relative}: {target}")
+
+workflow_text = active_text.get("docs/workflows.md", "")
+workflow_rows = {
+    match.group(1)
+    for match in re.finditer(r"^\| `([^`]+)` \|", workflow_text, flags=re.MULTILINE)
+}
+actual_workflows = {item["name"] for item in manifest.get("workflows", [])}
+if workflow_rows != actual_workflows:
+    failures.append(
+        "Workflow guide diverges from Manifest identity: "
+        f"missing={sorted(actual_workflows - workflow_rows)}, extra={sorted(workflow_rows - actual_workflows)}"
+    )
+
+for page, banned in {
+    "docs/quick-start.md": ("<repository-url>", "scripts/health-check.sh check-all"),
+    "docs/best-practices.md": ("--version 3.0.0", "git add ."),
+    "docs/CONTRIBUTING.md": ("--version 3.0.0", "git add ."),
+    "docs/NAVIGATION.md": ("Current Migration |",),
+}.items():
+    for sentinel in banned:
+        if sentinel in active_text.get(page, ""):
+            failures.append(f"obsolete documentation example: {page}: {sentinel}")
+
 if failures:
     for failure in failures:
         print(f"[FAIL] {failure}", file=sys.stderr)
