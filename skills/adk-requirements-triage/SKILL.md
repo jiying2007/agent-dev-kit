@@ -15,6 +15,8 @@ triggers:
   - "需求梳理"
   - "帮我理清需求"
   - "边界和验收"
+  - "SDD驱动"
+  - "规格驱动开发"
 non_triggers:
   - 头脑风暴
   - brainstorming

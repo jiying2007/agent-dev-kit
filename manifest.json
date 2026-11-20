@@ -1,5 +1,5 @@
 {
-  "version": "11.4.10",
+  "version": "11.4.11",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -2351,6 +2351,19 @@
         "task_mode": "readonly",
         "mutation_permission": "deny",
         "risk": "low"
+      },
+      {
+        "intent": "spec_driven_delivery",
+        "intent_zh": "SDD驱动/规格驱动开发/Spec Driven Development/spec-driven development/规格优先开发/SDD设计",
+        "primary_skill": "adk-requirements-triage",
+        "supporting_skills": [
+          "adk-interface-contract-design",
+          "adk-task-breakdown",
+          "adk-verification-before-completion"
+        ],
+        "task_mode": "readonly",
+        "mutation_permission": "deny",
+        "risk": "medium"
       },
       {
         "intent": "requirements_triage",
