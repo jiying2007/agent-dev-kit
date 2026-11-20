@@ -252,6 +252,14 @@ for page, banned in {
         if sentinel in active_text.get(page, ""):
             failures.append(f"obsolete documentation example: {page}: {sentinel}")
 
+quality_gate = (root / "scripts/quality-gate-check.sh").read_text(encoding="utf-8")
+for retired in ("docs/skill-composition-guide.md", "docs/skill-dependency-graph.md"):
+    if retired in quality_gate:
+        failures.append(f"quality gate references retired Skill doc: {retired}")
+for canonical in ("docs/reference/skill-routing-matrix.md", "manifests/skill_relationship_contracts_v2.json"):
+    if canonical not in quality_gate:
+        failures.append(f"quality gate missing canonical Skill routing source: {canonical}")
+
 nav = active_text.get("docs/NAVIGATION.md", "")
 for link in ("reference/skill-routing-matrix.md", "../manifests/skill_relationship_contracts_v2.json"):
     if f"]({link})" not in nav:
