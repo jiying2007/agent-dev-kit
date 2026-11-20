@@ -55,8 +55,8 @@ constraints:
 冲突/降级时再读 `references/runtime-routing-details.md`。
 
 ## 低开销决策与终止条件
-- **一次路由，按变化重算**：同一任务已有经核实的 primary、权限和验收，且目标/风险/可用资产未变时复用；不要因用户说“继续”再扫描全量清单、重复读取已完整保留的 Skill 或重新发起 intake。新增风险、内容身份变化、明确换任务才重新分类。
-- **普通低风险任务**：完成一次轻量 eligibility 检查后，仅记录 `primary | scope | verification | next action`；无需生成下方完整审查模板或多层 Evidence Plan。若不需要 Skill，记录 `no-skill/abstain` 并直接回答。
+- **一次路由，按变化重算**：同一任务已有经核实且**当前目标 Profile 已安装**的 primary、权限和验收，且目标/风险/可用资产未变时复用；不要因用户说“继续”再扫描全量清单、重复读取已完整保留的 Skill 或重新发起 intake。新增风险、内容身份变化、明确换任务才重新分类。
+- **普通低风险任务**：完成一次轻量 eligibility 检查后，仅记录 `primary | installed-profile | scope | verification | next action`；无需生成下方完整审查模板或多层 Evidence Plan。可用性必须通过真实目标 Profile 的安装清单验证：源码目录/全量 Manifest 的 Matcher 命中不表示该 Profile 已部署。缺失时选择已存在的适用 Profile 或 `no-skill/abstain`，禁止直接执行不存在的 Skill。若不需要 Skill，记录 `no-skill/abstain` 并直接回答。
 - **中高风险/跨 Profile/权限变化**：保留既有 Tool/Skill Evidence Plan、fallback、raw evidence 与独立审批；任何简化不跳过确定性 Gate。
 
 ## Route Decision Template

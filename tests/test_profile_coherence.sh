@@ -107,9 +107,8 @@ core_skills = set(core.get("resolved_skills", []))
 deferred_skills = {
     "adk-goal-authoring", "adk-parallel-agent-governance",
     "adk-worktree-governance", "adk-context-compress-handoff",
-    "adk-repo-drift-remediation", "adk-after-action-review",
 }
-assert len(core_skills) == 16, core_skills
+assert len(core_skills) == 18, core_skills
 assert not (core_skills & deferred_skills), core_skills & deferred_skills
 for specialist_profile in ("personal-core", "team-core", "embedded-fullstack"):
     assert deferred_skills <= set(expected_inventory[specialist_profile]["resolved_skills"]), specialist_profile

@@ -1234,8 +1234,10 @@
         "adk-test-strategy",
         "adk-verification-before-completion",
         "adk-code-review-loop",
+        "adk-repo-drift-remediation",
         "adk-commit-pr-quality-gate",
-        "adk-branch-closeout"
+        "adk-branch-closeout",
+        "adk-after-action-review"
       ]
     },
     "release-hardening": {
@@ -1289,9 +1291,7 @@
         "adk-goal-authoring",
         "adk-parallel-agent-governance",
         "adk-worktree-governance",
-        "adk-context-compress-handoff",
-        "adk-repo-drift-remediation",
-        "adk-after-action-review"
+        "adk-context-compress-handoff"
       ]
     },
     "embedded-fullstack": {
@@ -1337,9 +1337,7 @@
         "adk-goal-authoring",
         "adk-parallel-agent-governance",
         "adk-worktree-governance",
-        "adk-context-compress-handoff",
-        "adk-repo-drift-remediation",
-        "adk-after-action-review"
+        "adk-context-compress-handoff"
       ]
     },
     "team-core": {
@@ -1362,9 +1360,7 @@
         "adk-goal-authoring",
         "adk-parallel-agent-governance",
         "adk-worktree-governance",
-        "adk-context-compress-handoff",
-        "adk-repo-drift-remediation",
-        "adk-after-action-review"
+        "adk-context-compress-handoff"
       ]
     },
     "large-refactor": {
