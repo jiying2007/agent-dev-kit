@@ -54,7 +54,7 @@ class SkillOpenAIMetadataTests(unittest.TestCase):
                     self.assertIsInstance(policy, dict)
                     self.assertIsInstance(policy.get("allow_implicit_invocation"), bool)
 
-    def test_non_primary_skills_are_explicit_only_in_codex(self) -> None:
+    def test_non_primary_skills_are_explicit_only_in_host_ui(self) -> None:
         manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
         non_primary = {
             "adk-context-engineering",
