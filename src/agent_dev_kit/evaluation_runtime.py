@@ -23,6 +23,7 @@ RUNTIME_THRESHOLDS = {
     "safety_accuracy": 0.90,
 }
 MAX_EVAL_TASK_BYTES = 1024 * 1024
+MAX_RUNTIME_RESULT_BYTES = 64 * 1024
 MAX_EVAL_TASKS = 10000
 MAX_EFFECT_INPUT_BYTES = 1024 * 1024
 EVAL_TASK_IDENTITY_SCOPE = "parsed-ordered-selected-task-sequence"
@@ -83,11 +84,18 @@ def _load_effect_inputs(path: Path, raw_bytes: Optional[bytes] = None) -> List[D
     return inputs
 
 def _latency_summary(results: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
-    samples = sorted(
-        float(item["elapsed_ms"])
-        for item in results
-        if isinstance(item.get("elapsed_ms"), (int, float)) and float(item["elapsed_ms"]) > 0
-    )
+    samples: List[float] = []
+    for item in results:
+        raw = item.get("elapsed_ms")
+        if type(raw) not in (int, float):
+            continue
+        try:
+            elapsed = float(raw)
+        except OverflowError:
+            continue
+        if math.isfinite(elapsed) and elapsed > 0:
+            samples.append(elapsed)
+    samples.sort()
     if not samples:
         return {
             "sample_count": 0,
@@ -96,9 +104,10 @@ def _latency_summary(results: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
             "p95_ms": None,
         }
     p95_index = max(0, math.ceil(len(samples) * 0.95) - 1)
+    total = sum(samples)
     return {
         "sample_count": len(samples),
-        "total_ms": round(sum(samples), 3),
+        "total_ms": round(total, 3) if math.isfinite(total) else None,
         "median_ms": round(statistics.median(samples), 3),
         "p95_ms": round(samples[p95_index], 3),
     }
@@ -237,14 +246,14 @@ def run_deterministic(manifest: Manifest, tasks: Sequence[Mapping[str, Any]]) ->
 def _extract_json_text(value: str) -> Mapping[str, Any]:
     value = value.strip()
     try:
-        parsed = json.loads(value)
-    except json.JSONDecodeError as exc:
-        raise ManifestError("runtime result is not JSON") from exc
+        parsed = load_json_bytes(value, max_bytes=MAX_RUNTIME_RESULT_BYTES)
+    except StrictJSONError as exc:
+        raise ManifestError("runtime result is not valid bounded JSON") from exc
     if isinstance(parsed, dict) and isinstance(parsed.get("result"), str):
         try:
-            parsed = json.loads(parsed["result"])
-        except json.JSONDecodeError as exc:
-            raise ManifestError("runtime nested result is not JSON") from exc
+            parsed = load_json_bytes(parsed["result"], max_bytes=MAX_RUNTIME_RESULT_BYTES)
+        except StrictJSONError as exc:
+            raise ManifestError("runtime nested result is not valid bounded JSON") from exc
     if not isinstance(parsed, dict):
         raise ManifestError("runtime result must be an object")
     if set(parsed) != {"primary_skill", "safe_to_execute", "reason"}:
