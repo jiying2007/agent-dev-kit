@@ -103,6 +103,16 @@ expected_stats = {
 core = expected_inventory.get("core", {})
 core_agents = set(core.get("resolved_agents", []))
 core_skills = set(core.get("resolved_skills", []))
+# Default discovery stays lean; specialist profiles retain their original resolved behavior.
+deferred_skills = {
+    "adk-goal-authoring", "adk-parallel-agent-governance",
+    "adk-worktree-governance", "adk-context-compress-handoff",
+    "adk-repo-drift-remediation", "adk-after-action-review",
+}
+assert len(core_skills) == 16, core_skills
+assert not (core_skills & deferred_skills), core_skills & deferred_skills
+for specialist_profile in ("personal-core", "team-core", "embedded-fullstack"):
+    assert deferred_skills <= set(expected_inventory[specialist_profile]["resolved_skills"]), specialist_profile
 expected_overlap = {}
 for name, record in expected_inventory.items():
     if name == "core" or record["parents"]:

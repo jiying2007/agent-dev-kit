@@ -1,5 +1,5 @@
 {
-  "version": "11.4.13",
+  "version": "11.4.14",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1226,11 +1226,7 @@
         "adk-requirements-triage",
         "adk-structured-requirements-questioning",
         "adk-lightweight-planning",
-        "adk-goal-authoring",
         "adk-task-breakdown",
-        "adk-parallel-agent-governance",
-        "adk-worktree-governance",
-        "adk-context-compress-handoff",
         "adk-interface-contract-design",
         "adk-adr-writer",
         "adk-component-api-stability",
@@ -1238,10 +1234,8 @@
         "adk-test-strategy",
         "adk-verification-before-completion",
         "adk-code-review-loop",
-        "adk-repo-drift-remediation",
         "adk-commit-pr-quality-gate",
-        "adk-branch-closeout",
-        "adk-after-action-review"
+        "adk-branch-closeout"
       ]
     },
     "release-hardening": {
@@ -1291,7 +1285,13 @@
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",
-        "adk-engineering-growth-review"
+        "adk-engineering-growth-review",
+        "adk-goal-authoring",
+        "adk-parallel-agent-governance",
+        "adk-worktree-governance",
+        "adk-context-compress-handoff",
+        "adk-repo-drift-remediation",
+        "adk-after-action-review"
       ]
     },
     "embedded-fullstack": {
@@ -1333,7 +1333,13 @@
         "adk-release-versioning",
         "adk-production-field-readiness",
         "adk-embedded-release-orchestration",
-        "adk-embedded-storage-layout-migration"
+        "adk-embedded-storage-layout-migration",
+        "adk-goal-authoring",
+        "adk-parallel-agent-governance",
+        "adk-worktree-governance",
+        "adk-context-compress-handoff",
+        "adk-repo-drift-remediation",
+        "adk-after-action-review"
       ]
     },
     "team-core": {
@@ -1352,7 +1358,13 @@
         "adk-memory-curator",
         "adk-archive-governance",
         "adk-knowledge-archive",
-        "adk-engineering-growth-review"
+        "adk-engineering-growth-review",
+        "adk-goal-authoring",
+        "adk-parallel-agent-governance",
+        "adk-worktree-governance",
+        "adk-context-compress-handoff",
+        "adk-repo-drift-remediation",
+        "adk-after-action-review"
       ]
     },
     "large-refactor": {
