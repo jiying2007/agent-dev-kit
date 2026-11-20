@@ -1,8 +1,8 @@
 ---
 name: adk-pilot-framework
 description: "用于跨仓新能力的有界 Pilot 试跑、证据采集、失败门禁和回退判定；不用于替代正式产品资格认证或自动将试验结果发布。"
-version: 1.0.2
-last_updated: 2026-11-15
+version: 1.0.3
+last_updated: 2026-11-20
 triggers:
   - "试跑"
   - "pilot"

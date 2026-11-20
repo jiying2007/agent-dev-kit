@@ -1,8 +1,8 @@
 ---
 name: adk-static-analysis-c-cpp
 description: "用于 C/C++ 静态分析告警分级、根因追踪与误报确认，并补最小复现；不用于把单次扫描当作完整功能或动态安全验收。"
-version: 1.0.6
-last_updated: 2026-11-15
+version: 1.0.7
+last_updated: 2026-11-20
 triggers:
   - "静态分析"
   - "代码检查"

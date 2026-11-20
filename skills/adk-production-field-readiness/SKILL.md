@@ -1,8 +1,8 @@
 ---
 name: adk-production-field-readiness
 description: "用于嵌入式产测、OTA、诊断及现场维护的量产准备状态和证据审查；不用于仅凭桌面测试宣称量产就绪或直接刷写设备。"
-version: 1.0.5
-last_updated: 2026-11-17
+version: 1.0.6
+last_updated: 2026-11-20
 triggers:
   - "量产"
   - "产测"
