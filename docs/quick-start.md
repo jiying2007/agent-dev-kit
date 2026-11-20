@@ -1,117 +1,41 @@
-# 快速入门指南
+# ADK 快速入门
 
-## 概述
+## 已经部署 Skills：直接使用
 
-本指南帮助你快速上手 agent-dev-kit（adk），了解其核心概念和基本使用方法。
+向目标 Agent 说明**要做的事、已有资料、限制和完成标准**即可。无需记忆 Skill 名称、额外启动 ADK Python 或为单点修复创建完整 SDD/Goal/Workflow。
 
-## 前置条件
+例如：`定位这条 UART 超时的根因，先复现和做定向回归，不修改其他模块`。实际是否发现、加载、触发 Skill，由目标 Runtime 的原生证据决定；**源码中存在 Skill 不等于目标运行时已安装**。
 
-- Bash 4.0+
-- Git
-- 基本的命令行操作知识
+使用方法见[按任务使用](usage.md)，可用资产以根目录 `manifest.json` 和[资产目录](agent-skill-catalog.md)为准。
 
-## 安装
+## 维护 ADK 源码：Python 3.12
 
-### 1. 克隆仓库
+ADK 的**构建、管理、验证、发布控制面**只支持 CPython 3.12.x；纯 Skill 资产部署后不依赖 ADK Python。开发机另需 Git、Bash 和验证脚本所需的工具。
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/jiying2007/agent-dev-kit.git
 cd agent-dev-kit
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[quality]'
+bash scripts/devkit.sh doctor --summary-json
+bash scripts/devkit.sh validate --strict
+bash tests/run_all.sh --quick
 ```
 
-### 2. 验证安装
+上述检查只证明相应源码/环境检查结果，不证明某个外部 Runtime 已通过 native discovery/load/trigger，也不代表真实模型效果或产品现场资格。
 
-```bash
-bash scripts/health-check.sh check-all
-```
+## 需要安装或导出到目标环境
 
-### 3. 运行测试
+先查[安装与导出](usage.md#3-安装和导出)及[命令参考](commands.md#install)。必须先生成并检查 plan，确认受管路径、冲突与可回滚证据，再经目标运行时自己的安装/接入流程执行；不默认写入用户 `HOME` 或自动触发发布。
 
-```bash
-bash tests/run_all.sh
-```
-
-默认输出为紧凑摘要；排查失败时再运行 `bash scripts/devkit.sh test --verbose`。
-
-## 核心概念
-
-### 1. 产物（Artifacts）
-产物是标准化的文档和文件，用于记录开发过程中的各种信息。
-
-### 2. 工作流（Workflows）
-工作流是标准化的开发流程，指导如何进行开发活动。
-
-### 3. Profile
-Profile 是配置文件，定义了工具的行为和规则。
-
-### 4. 质量门禁（Quality Gates）
-质量门禁是检查点，确保开发过程符合质量标准。
-
-## 基本使用
-
-### 1. 创建变更
-
-```bash
-bash scripts/workflow.sh propose --change my-feature --title "我的功能"
-```
-
-### 2. 推进变更
-
-```bash
-bash scripts/workflow.sh advance --change my-feature
-```
-
-### 3. 查看状态
-
-```bash
-bash scripts/workflow.sh status --change my-feature
-```
-
-### 4. 归档变更
-
-```bash
-bash scripts/workflow.sh archive --change my-feature
-```
-
-## 常见任务
-
-### 1. 检查质量
-
-```bash
-bash scripts/quality-gate-check.sh check-all
-```
-
-### 2. 创建备份
-
-```bash
-bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
-```
-
-### 3. 查看版本
-
-```bash
-bash scripts/version-manager.sh current
-```
-
-### 4. 健康检查
-
-```bash
-bash scripts/health-check.sh check-all
-```
+Codex 使用外部 source-to-live 交接链；不要把 ADK 源码仓当成直接写入 `~/.codex` 的安装器。Claude Code/OpenCode 的 direct target 与实际运行时验证要分别判断。
 
 ## 下一步
 
-- 阅读 [使用指南](usage.md) 了解更多功能
-- 查看 [最佳实践](best-practices.md) 了解使用技巧
-- 阅读 [故障排除](troubleshooting.md) 解决常见问题
-- 查看 [贡献指南](CONTRIBUTING.md) 了解如何贡献
+- [Workflow 与普通 Skill 的区别](workflows.md)
+- [SDD：规格驱动交付](runbooks/spec-driven-delivery.md)
+- [维护者贡献指南](CONTRIBUTING.md)
+- [故障排查](troubleshooting.md)
 
-## 获取帮助
-
-- 查看文档目录 `docs/`
-- 运行健康检查 `bash scripts/health-check.sh check-all`
-- 查看故障排除指南 `docs/troubleshooting.md`
-
----
-
-**提示**：建议先运行健康检查，确保环境正常后再开始使用。
+版本、Release、Runtime 与 Product 资格是独立事实，不从一次成功检查自动继承。

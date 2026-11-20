@@ -4,12 +4,13 @@
 
 ## 1. 默认规则
 
-- 修改前读目标目录规则、README 与实现；默认简体中文，技术标识保留英文。
+- 修改前读目标规则、README 和实现；默认简体中文，技术标识保留英文。
+- 文档按 `docs/NAVIGATION.md` 精确读取；历史证据按需引用，禁止整目录加载。
 - 非平凡实现、长任务、失败恢复或 Gate 变更维护 `docs/changes/<id>/{requirements,design,tasks}.md`。
 - 行为变更需确定性、非交互测试；删除/API 变化先检索调用点并记录迁移、回滚。
 - 根因未明时 read-only-first、单变量实验；失败写 `negative-results.md`，无 fresh 验证不声明完成。
 - dirty 变更属于用户，不回退/覆盖/清理无关内容；不自动 commit/push/merge/rebase。
-- Token/上下文默认 `balanced`：progressive disclosure、tool/skill deferred loading、稳定上下文前置、动态上下文后置、摘要带 raw pointer。高风险升级 `audit/L3` 原文；Low Token 仅 runtime overlay。细则见 `manifests/token_context_policy.json` 与 `adk-token-context-governance`。
+- 上下文默认 `balanced` 分级加载，高风险读原文并保留证据指针；Low Token 仅 runtime overlay，详见 `manifests/token_context_policy.json`。
 
 ## 2. 结构与 SSOT
 

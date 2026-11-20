@@ -1,335 +1,42 @@
-# 贡献指南
+# 贡献与维护
 
-## 概述
+本文只说明 ADK **源码维护**；普通 Skill 使用者请先读[快速入门](quick-start.md)。构建/管理工具需要 CPython 3.12，部署后的纯 Skill 不要求 ADK Python。
 
-欢迎贡献到 agent-dev-kit！本指南帮助你了解如何为项目做出贡献。
+## 开发准备
 
-## 贡献方式
-
-### 1. 代码贡献
-- 修复缺陷
-- 添加新功能
-- 改进性能
-- 优化代码
-
-### 2. 文档贡献
-- 改进文档
-- 添加示例
-- 修复错误
-- 翻译文档
-
-### 3. 测试贡献
-- 添加测试用例
-- 改进测试覆盖
-- 修复测试问题
-
-### 4. 反馈贡献
-- 报告问题
-- 提出建议
-- 分享经验
-- 参与讨论
-
-## 贡献流程
-
-### 1. 准备工作
 ```bash
-# 1. Fork项目
-# 2. 克隆仓库
-git clone https://github.com/your-username/agent-dev-kit.git
+git clone https://github.com/jiying2007/agent-dev-kit.git
 cd agent-dev-kit
-
-# 3. 创建分支
-git checkout -b feature/my-feature
+git switch -c fix/your-scope
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[quality]'
 ```
 
-### 2. 开发工作
-```bash
-# 1. 修改代码
-# 2. 运行测试
-bash tests/run_all.sh
-
-# 3. 检查质量
-bash scripts/quality-gate-check.sh check-all
-```
-
-### 3. 提交工作
-```bash
-# 1. 添加文件
-git add .
-
-# 2. 提交更改
-git commit -m "feat: 添加新功能"
-
-# 3. 推送分支
-git push origin feature/my-feature
-```
-
-### 4. 创建Pull Request
-- 访问GitHub
-- 创建Pull Request
-- 填写描述
-- 等待评审
-
-## 代码规范
-
-### 1. 命名规范
-- 文件名：小写字母，连字符分隔
-- 变量名：小写字母，下划线分隔
-- 函数名：小写字母，下划线分隔
-- 常量名：大写字母，下划线分隔
-
-### 2. 格式规范
-- 缩进：2个空格
-- 行宽：80字符
-- 换行：LF
-- 编码：UTF-8
-
-### 3. 注释规范
-- 文件头：说明文件用途
-- 函数注释：说明功能、参数、返回值
-- 代码注释：解释复杂逻辑
-- 示例注释：提供使用示例
-
-### 4. 提交规范
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-类型：
-- feat: 新功能
-- fix: 修复缺陷
-- docs: 文档更新
-- style: 代码格式
-- refactor: 重构
-- test: 测试相关
-- chore: 构建/工具
-
-## 测试规范
-
-### 1. 测试覆盖
-- 关键路径：必须测试
-- 边界条件：必须测试
-- 错误路径：必须测试
-- 性能测试：可选
-
-### 2. 测试命名
-```bash
-# 测试文件
-test_<module>.sh
-
-# 测试函数
-test_<function>_<scenario>
-```
-
-### 3. 测试结构
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-# 测试函数
-test_my_function() {
-    # 准备
-    local input="test"
-    
-    # 执行
-    local result
-    result=$(my_function "$input")
-    
-    # 验证
-    assert_equal "$result" "expected"
-}
-
-# 运行测试
-run_tests() {
-    test_my_function
-}
-
-# 主函数
-main() {
-    run_tests
-}
-
-main "$@"
-```
-
-## 文档规范
-
-### 1. 文档结构
-- 标题：清晰明确
-- 概述：简要说明
-- 正文：详细内容
-- 示例：使用示例
-- 参考：相关链接
-
-### 2. 文档格式
-- Markdown格式
-- 代码块：带语言标识
-- 链接：使用相对路径
-- 图片：使用相对路径
-
-### 3. 文档维护
-- 定期更新
-- 修复错误
-- 添加示例
-- 改进说明
-
-## 问题报告
-
-### 1. 问题描述
-- 清晰明确
-- 提供上下文
-- 包含错误信息
-- 提供重现步骤
-
-### 2. 环境信息
-- 操作系统
-- Bash版本
-- Git版本
-- 相关工具版本
-
-### 3. 重现步骤
-```bash
-# 1. 执行命令
-bash scripts/health-check.sh check-all
-
-# 2. 观察结果
-[ERROR] 健康检查失败
-
-# 3. 期望结果
-[SUCCESS] 所有健康检查通过
-```
-
-## 功能建议
-
-### 1. 建议描述
-- 清晰明确
-- 提供背景
-- 说明需求
-- 提供示例
-
-### 2. 需求分析
-- 问题描述
-- 解决方案
-- 影响范围
-- 优先级
-
-### 3. 实现建议
-- 技术方案
-- 实现步骤
-- 测试计划
-- 文档更新
-
-## 评审流程
-
-### 1. 评审标准
-- 代码质量
-- 测试覆盖
-- 文档完整性
-- 性能影响
-
-### 2. 评审步骤
-```bash
-# 1. 检查代码
-bash scripts/quality-gate-check.sh check-all
-
-# 2. 运行测试
-bash tests/run_all.sh
-
-# 3. 检查文档
-bash scripts/health-check.sh check-structure
-
-# 4. 检查质量
-bash scripts/health-check.sh check-quality
-```
-
-### 3. 评审反馈
-- 具体明确
-- 提供建议
-- 尊重他人
-- 保持专业
-
-## 发布流程
-
-### 1. 版本规划
-- 功能规划
-- 时间规划
-- 资源规划
-- 风险规划
-
-### 2. 发布准备
-```bash
-# 1. 运行测试
-bash tests/run_all.sh
-
-# 2. 检查质量
-bash scripts/quality-gate-check.sh check-all
-
-# 3. 创建备份
-bash scripts/backup-rollback.sh backup --target /tmp/adk-runtime
-
-# 4. 升级到下一目标版本
-bash scripts/version-manager.sh upgrade --target 3.0.0
-```
-
-### 3. 发布执行
-```bash
-# 1. 锁定当前稳定版本
-bash scripts/version-manager.sh lock --version 3.0.0
-
-# 2. 生成变更日志
-bash scripts/version-manager.sh changelog
-
-# 3. 创建发布报告
-# 4. 发布版本
-```
-
-## 社区规范
-
-### 1. 行为准则
-- 尊重他人
-- 保持专业
-- 积极参与
-- 建设性反馈
-
-### 2. 沟通规范
-- 清晰明确
-- 尊重他人
-- 保持专业
-- 积极参与
-
-### 3. 冲突解决
-- 理解对方
-- 寻求共识
-- 尊重决定
-- 保持专业
-
-## 获取帮助
-
-### 1. 文档资源
-- 使用指南：`docs/usage.md`
-- 命令参考：`docs/commands.md`
-- 故障排除：`docs/troubleshooting.md`
-- 最佳实践：`docs/best-practices.md`
-
-### 2. 社区资源
-- GitHub Issues
-- 讨论区
-- 邮件列表
-- 文档
-
-### 3. 联系方式
-- 维护团队
-- 社区讨论
-- 邮件联系
-
-## 贡献者列表
-
-感谢所有贡献者的付出！
-
----
-
-**提示**：贡献是开源项目的生命线，感谢你的参与！
+无仓库写入权限的贡献者先 Fork，并将仓库地址替换成自己的 Fork；不要假设维护仓库允许直接推送 main。依赖、受支持 Python 范围以 `pyproject.toml` 为准。
+
+## 一次改动的最小流程
+
+1. **确认范围**：读取已有 Skill/Contract/Schema/Runbook 与相关负例；已经有权威位置就修改该位置。避免添加同义 Skill、第二个 Manifest 或运行时执行引擎。
+2. **实施**：只改必要文件、复用现有代码风格；涉及 API/协议或行为变化时按 [SDD 路径](runbooks/spec-driven-delivery.md) 保留行为 delta 和验收映射。文档改动需核实链接、命令可执行及正文与源码一致。
+3. **定向验证**：先跑所改范围的测试；控制面常用入口为：
+   ```bash
+   bash scripts/devkit.sh validate --strict
+   bash tests/run_all.sh --quick
+   git diff --check
+   git status --short
+   ```
+4. **提交**：审阅 `git diff`，仅暂存本次范围，提交后通过受保护 PR。代码质量、Shell、类型、契约、全量回归、安全与 Release 结果，以 CI 的**最终提交 SHA**为准。
+5. **版本与发布**：每个合入主线的变更必须满足当前受控 SemVer 前移与版本投影一致性；参见[版本与发布命令](commands.md#release)。不可修改旧 tag，不可因为 PR 全绿宣称主线发布完成；合并后核对 fresh-main CI、不可变 Release、消费方精确来源。
+6. **结论**：明确哪些验证已经执行，哪些因工具、设备、模型或现场证据缺失而未执行。不得把 `not-measured` 伪装为 PASS。
+
+## 评审重点
+
+- 直接的任务价值与**最小必要 diff**；是否存在旧分支、兼容层、重复路径或文档镜像
+- 正常/失败/取消/恢复路径及可复现回归；生产或设备动作不由测试自行授权
+- 权限、来源、凭据、文件路径、资源预算与隐私日志
+- 模型效果、Token/成本、Runtime 原生触发、产品资格分别列出可核验和不可核验部分
+
+文档只有一份权威解释：用户入口[Usage](usage.md)、CLI [Commands](commands.md)、[Workflow 与任务分层](workflows.md)、维护操作[Runbook](runbooks/workspace-maintenance-guide.md)。历史变更证据保留在 `docs/changes/`，禁止为了缩减目录而破坏可追溯性。
+
+问题报告请附环境、精确 SHA、命令、退出码、最小重现和脱敏日志。敏感信息不要写入 PR、Issue 或公开测试 Fixture。
