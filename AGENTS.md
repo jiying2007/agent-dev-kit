@@ -5,6 +5,7 @@
 ## 1. 默认规则
 
 - 修改前读目标目录规则、README 与实现；默认简体中文，技术标识保留英文。
+- 文档先按 `docs/NAVIGATION.md` 选择单一入口；日常任务**不递归加载** `docs/changes/`、`docs/migrations/`、`docs/analysis/`、`docs/evals/`、`docs/pilots/` 或历史证据附件。需要审计时按精确文件/证据指针展开，并保留原文以供复核。
 - 非平凡实现、长任务、失败恢复或 Gate 变更维护 `docs/changes/<id>/{requirements,design,tasks}.md`。
 - 行为变更需确定性、非交互测试；删除/API 变化先检索调用点并记录迁移、回滚。
 - 根因未明时 read-only-first、单变量实验；失败写 `negative-results.md`，无 fresh 验证不声明完成。
@@ -29,7 +30,7 @@
 ## 4. 验证
 
 ```bash
-rtk scripts/devkit.sh validate --quick
+rtk tests/run_all.sh --quick
 rtk scripts/devkit.sh validate --strict
 rtk scripts/devkit.sh export --target claude-code --profile core --out dist --clean
 rtk scripts/devkit.sh release check
