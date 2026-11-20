@@ -245,6 +245,7 @@ for page, banned in {
     "docs/best-practices.md": ("--version 3.0.0", "git add ."),
     "docs/CONTRIBUTING.md": ("--version 3.0.0", "git add ."),
     "docs/NAVIGATION.md": ("Current Migration |",),
+    "AGENTS.md": ("devkit.sh validate --quick",),
 }.items():
     for sentinel in banned:
         if sentinel in active_text.get(page, ""):
