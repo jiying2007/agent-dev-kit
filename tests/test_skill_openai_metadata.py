@@ -1,30 +1,69 @@
-"""Validate OpenAI Skill UI metadata against the documented interface contract."""
+"""Require complete, localized OpenAI UI metadata for each declared Skill.
+
+Source validation only: it does not certify installed Codex or model behavior.
+"""
 from __future__ import annotations
 
+import json
+import re
 import unittest
 from pathlib import Path
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+HAN = re.compile(r"[\u3400-\u9fff]")
 
 
 class SkillOpenAIMetadataTests(unittest.TestCase):
-    def test_all_present_openai_metadata_use_interface(self) -> None:
-        files = sorted(ROOT.glob("skills/*/agents/openai.yaml"))
-        self.assertTrue(files, "metadata inventory must not be empty")
-        for path in files:
-            with self.subTest(path=path.relative_to(ROOT)):
-                data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    def test_manifest_skills_have_unique_chinese_openai_metadata(self) -> None:
+        manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
+        records = manifest["skills"] + manifest["optional_skills"]
+        expected = {ROOT / row["path"].replace("SKILL.md", "agents/openai.yaml") for row in records}
+        found = set((ROOT / "skills").glob("*/agents/openai.yaml"))
+        found.update((ROOT / "optional-skills").rglob("agents/openai.yaml"))
+        self.assertEqual(found, expected, f"missing={expected-found}, unexpected={found-expected}")
+        names: set[str] = set()
+        for row in records:
+            path = ROOT / row["path"].replace("SKILL.md", "agents/openai.yaml")
+            with self.subTest(skill=row["name"]):
+                raw = path.read_text(encoding="utf-8")
+                data = yaml.safe_load(raw)
                 self.assertIsInstance(data, dict)
                 self.assertNotIn("display_name", data)
                 self.assertNotIn("short_description", data)
                 interface = data.get("interface")
                 self.assertIsInstance(interface, dict)
-                for key in ("display_name", "short_description"):
-                    self.assertIsInstance(interface.get(key), str)
-                    self.assertTrue(interface[key].strip())
+                title = interface.get("display_name")
+                desc = interface.get("short_description")
+                self.assertIsInstance(title, str)
+                self.assertIsInstance(desc, str)
+                self.assertRegex(title, HAN)
+                self.assertRegex(desc, HAN)
+                self.assertTrue(25 <= len(desc) <= 64, (row["name"], len(desc)))
+                self.assertNotIn(title, names)
+                names.add(title)
+                self.assertRegex(raw, r'(?m)^  display_name: "')
+                self.assertRegex(raw, r'(?m)^  short_description: "')
+                prompt = interface.get("default_prompt")
+                if prompt is not None:
+                    self.assertIsInstance(prompt, str)
+                    self.assertIn("$" + row["name"], prompt)
+                policy = data.get("policy")
+                if policy is not None:
+                    self.assertIsInstance(policy, dict)
+                    self.assertIsInstance(policy.get("allow_implicit_invocation"), bool)
+
+    def test_optional_policy_is_preserved(self) -> None:
+        path = ROOT / "optional-skills/adk-external-practice-absorption/agents/openai.yaml"
+        meta = yaml.safe_load(path.read_text(encoding="utf-8"))
+        self.assertIs(meta["policy"]["allow_implicit_invocation"], True)
+        self.assertIn("$adk-external-practice-absorption", meta["interface"]["default_prompt"])
 
     def test_missing_interface_is_rejected(self) -> None:
         invalid = yaml.safe_load("display_name: Old layout\nshort_description: Not nested\n")
         self.assertNotIn("interface", invalid)
+
+
+if __name__ == "__main__":
+    unittest.main()

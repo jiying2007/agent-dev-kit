@@ -1,5 +1,5 @@
 {
-  "version": "11.4.15",
+  "version": "11.4.16",
   "locale": "zh-CN",
   "platforms": [
     "linux-embedded",
@@ -1280,18 +1280,14 @@
       ]
     },
     "personal-core": {
-      "description": "个人通用 ADK 资产配置（核心功能 + 发布检查）",
+      "description": "个人通用开发（core + 发布检查；低频记忆、归档与成长复盘按需选择）",
       "trigger_examples": [
         "个人项目开发",
         "快速原型验证"
       ],
       "extends": "core",
       "include_skills": [
-        "adk-release-versioning",
-        "adk-memory-curator",
-        "adk-archive-governance",
-        "adk-knowledge-archive",
-        "adk-engineering-growth-review"
+        "adk-release-versioning"
       ]
     },
     "embedded-fullstack": {
@@ -1356,14 +1352,15 @@
       ]
     },
     "large-refactor": {
-      "description": "大型重构配置（API 稳定性 + 代码简化）",
+      "description": "通用大型重构（core + 长任务执行 + 代码简化；嵌入式专项需显式叠加）",
       "trigger_examples": [
         "大型代码重构",
         "API 重构",
         "架构调整"
       ],
-      "extends": "embedded-fullstack",
+      "extends": "core",
       "include_skills": [
+        "adk-planning-execution-loop",
         "adk-code-simplification"
       ]
     },

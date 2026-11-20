@@ -163,9 +163,9 @@
 |---|---|---|---|
 | `core` | 通用 ADK 核心配置（需求、架构、实现、验证与评审） | false | - |
 | `release-hardening` | 发布加固配置（安全审查、性能优化、合规检查） | false | - |
-| `personal-core` | 个人通用 ADK 资产配置（核心功能 + 发布检查） | false | core |
+| `personal-core` | 个人通用开发（core + 发布检查；低频记忆、归档与成长复盘按需选择） | false | core |
 | `embedded-fullstack` | 嵌入式全栈开发配置（芯片/板级、启动链、BSP、驱动、组件、应用、工具、验证、量产和现场维护） | false | core |
 | `team-core` | 团队协作配置（交接/验证/评审） | false | core |
-| `large-refactor` | 大型重构配置（API 稳定性 + 代码简化） | false | embedded-fullstack |
+| `large-refactor` | 通用大型重构（core + 长任务执行 + 代码简化；嵌入式专项需显式叠加） | false | core |
 | `incident-response` | 线上事故响应配置（根因/复盘/恢复） | false | - |
 | `research-intake` | 多来源外部实践吸收配置（只读候选审查与独立决策 handoff） | false | - |
