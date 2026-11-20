@@ -439,6 +439,8 @@ class RuntimeComparisonContractTests(unittest.TestCase):
         ])
         self.assertEqual(overflow["sample_count"], 2)
         self.assertIsNone(overflow["total_ms"])
+        self.assertEqual(overflow["median_ms"], 1e308)
+        self.assertEqual(overflow["p95_ms"], 1e308)
 
     def test_claude_result_rejects_nonfinite_and_duplicate_cost(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
