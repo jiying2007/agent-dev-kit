@@ -1,6 +1,6 @@
 """Require complete, localized OpenAI UI metadata for each declared Skill.
 
-Source validation only: it does not certify installed Codex or model behavior.
+Source validation only: it does not certify any installed native host or model behavior.
 """
 from __future__ import annotations
 
