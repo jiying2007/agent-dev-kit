@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from . import evaluation_runtime as runtime_eval
 from .model import Manifest, ManifestError
+from .strict_json import StrictJSONError, read_bytes as read_bounded_bytes, loads as load_strict_json
 
 OUTPUT_SCHEMA = {
     "type": "object",
@@ -27,6 +28,8 @@ OUTPUT_SCHEMA = {
 }
 
 RUNTIME_TIMEOUT_SECONDS = 300
+MAX_CODEX_RESULT_BYTES = 64 * 1024
+MAX_CLAUDE_RESULT_BYTES = 4 * 1024 * 1024
 AUTH_TIMEOUT_SECONDS = 10
 RUNTIME_ROUTING_PROMPT_VERSION = "adk-runtime-routing-v1"
 BASELINE_CATEGORIES = (
@@ -105,6 +108,12 @@ def _run_codex(
     if executable is None:
         raise ManifestError("codex runtime is not installed")
     output = workspace / "codex-result.json"
+    # Each case needs fresh evidence: a zero-exit CLI may omit its output file.
+    # Leaving the prior case\x27s file in place would silently replay its verdict.
+    try:
+        output.unlink(missing_ok=True)
+    except OSError as exc:
+        raise ManifestError("codex eval output could not be reset") from exc
     command = [executable, "exec"]
     if model:
         command.extend(["--model", model])
@@ -140,10 +149,15 @@ def _run_codex(
     except OSError as exc:
         raise ManifestError("codex eval could not start") from exc
     elapsed_ms = round((time.perf_counter() - started) * 1000.0, 3)
-    if completed.returncode != 0 or not output.is_file():
+    if completed.returncode != 0:
         raise ManifestError("codex eval failed")
+    try:
+        result_bytes = read_bounded_bytes(output, max_bytes=MAX_CODEX_RESULT_BYTES, regular_only=True)
+        result_value = runtime_eval._extract_json_text(result_bytes.decode("utf-8"))
+    except (StrictJSONError, UnicodeError) as exc:
+        raise ManifestError("codex eval did not produce a bounded regular JSON result") from exc
     return {
-        "value": runtime_eval._extract_json_text(output.read_text(encoding="utf-8")),
+        "value": result_value,
         "elapsed_ms": elapsed_ms,
         "usage": runtime_eval._codex_usage(completed.stdout),
         "cost_usd": None,
@@ -214,24 +228,31 @@ def _run_claude(
     if completed.returncode != 0:
         raise ManifestError("claude eval failed")
     try:
-        raw = json.loads(completed.stdout)
-    except json.JSONDecodeError as exc:
-        raise ManifestError("claude eval returned invalid JSON") from exc
+        raw = load_strict_json(completed.stdout, max_bytes=MAX_CLAUDE_RESULT_BYTES)
+    except StrictJSONError as exc:
+        raise ManifestError("claude eval returned invalid or oversized JSON") from exc
     value = raw.get("structured_output") if isinstance(raw, dict) else None
     if not isinstance(value, dict):
         value = runtime_eval._extract_json_text(completed.stdout)
     else:
         value = runtime_eval._extract_json_text(json.dumps(value))
     cost = raw.get("total_cost_usd") if isinstance(raw, dict) else None
+    # A provider may return infinity, NaN or an overflowing integer; these
+    # must never be represented as an observed finite cost in evidence JSON.
+    cost_usd = None
+    if type(cost) in (int, float) and cost >= 0:
+        try:
+            finite_cost = float(cost)
+        except OverflowError:
+            pass
+        else:
+            if math.isfinite(finite_cost):
+                cost_usd = round(finite_cost, 6)
     return {
         "value": value,
         "elapsed_ms": elapsed_ms,
         "usage": runtime_eval._claude_usage(raw) if isinstance(raw, dict) else {},
-        "cost_usd": (
-            round(float(cost), 6)
-            if isinstance(cost, (int, float)) and not isinstance(cost, bool) and cost >= 0
-            else None
-        ),
+        "cost_usd": cost_usd,
         "requested_model": model,
         "reported_models": runtime_eval._collect_reported_models(raw),
     }
