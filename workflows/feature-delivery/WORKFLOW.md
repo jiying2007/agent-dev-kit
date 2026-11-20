@@ -72,7 +72,7 @@ rtk bash scripts/devkit.sh validate --strict
 - shared contract 变更未列出影响面时升级架构评审。
 - 回归失败时返回 `apply`，不得弱化测试或删除失败证据。
 
-## SDD 最小路径（不新增平行 Workflow）
+## SDD Workflow Guidance
 - **开始之前**：用户的明确方案可直接进入受许可的实现；需求未决且决策代价高时才使用只读 Explore/Challenge，不将头脑风暴设为所有需求的固定前置。
 - **propose**：将变更的行为差异写入已有 `docs/changes/<change-id>/proposal.md` 的 Canonical Change Contract；每个 `REQ-NNN` 关联 `ADDED/MODIFIED/REMOVED`、影响面、`ACC-NNN` 和可证伪的负例。对原有规格只写 delta；小修或非行为变更不强迫创建空 spec 文件。
 - **apply**：复杂接口/跨仓协议先完成 owner、状态、超时、错误、兼容和恢复设计；实施者按 `TASK-NNN` 逐切片提交代码和测试，跨仓契约仅一处写入，单仓不能自证双端联调完成。
