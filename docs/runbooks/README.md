@@ -1,15 +1,17 @@
-# Runbooks
+# Runbooks：按需阅读
 
-| Runbook | Purpose |
-|---|---|
-| `runtime-routing.md` | 通用运行时路由与边界 |
-| `mcp-governance.md` | MCP 声明、审计与启用门禁 |
-| `contract-fixture-authoring.md` | 合同 fixture 作者指南与正负样例门禁 |
-| `production-deployment.md` | 通用生产部署门禁 |
-| `workspace-maintenance-guide.md` | 工作区维护闭环 |
-| `security-supply-chain.md` | 外部资产与供应链审查 |
-| `local-ci-parity.md` | 远端 CI 暂时不可用时的受限 Docker 本地替代验证 |
-| `evidence-graph.md` | 脱敏、内容寻址的 source-to-retirement Evidence Graph 合同与验证 |
-| `trace-summary-emitter.md` | 显式 per-run typed trace emitter、缺证据语义与 runtime 集成边界 |
-| `run-evidence-composition.md` | 将一次 test run 组合为同源 Trace、asset receipts 与不可 promotion 的 value measurement |
-| `effect-comparator.md` | 对完整 baseline/candidate task population 做 test-only effect 对比并保留缺指标 coverage |
+本索引只提供高频入口，不复制所有 Runbook、正式 Workflow 或当前版本的第二份目录。通常先读 [Usage](../usage.md)；只有任务需要相应深度时再读下列专题。
+
+| 场景 | Runbook | 主要边界 |
+| --- | --- | --- |
+| 规格驱动与跨 SoC/MCU 变更 | [SDD 最小路径](spec-driven-delivery.md) | 唯一规格、双向验收，不为小修过度设计 |
+| Goal / 长任务恢复 | [计划执行](planning-execution-loop.md) | 保留完成证据、恢复点和用户授权 |
+| 问题修复与回归 | [Bugfix](bugfix-delivery.md) | 复现、根因、定向修复 |
+| 目标运行时验证 | [Native Campaign](native-campaign.md) | static / smoke / native / certified 不混淆 |
+| 发布与日常仓库维护 | [维护指南](workspace-maintenance-guide.md) | 精确 HEAD、CI、回滚和不可变 Release |
+| 外部 Skill / 方法引入 | [Skill 策展](skill-curation-delivery.md) | 真实方法、来源风险、触发效果与归属 |
+| 安装、密钥与依赖安全 | [供应链审查](security-supply-chain.md) | 不自动扩大权限 |
+| 外部 MCP 工具 | [MCP 治理](mcp-governance.md) | 来源、最小权限和启用证据 |
+| 真实交付证据 | [Task Evidence](task-evidence.md) | 原始结果指针与不完整/失败语义 |
+
+全部已有资产身份看根目录 `manifest.json`、[Skill 目录](../agent-skill-catalog.md)和[命令参考](../commands.md)。旧 `docs/changes/` 的实验、报告和原始日志只供追溯，不能自动提升当前运行时和产品资格。
