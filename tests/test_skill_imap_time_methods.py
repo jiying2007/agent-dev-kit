@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 import unittest
 
 
@@ -82,6 +83,34 @@ class ImapTimeMethodTests(unittest.TestCase):
                 self.assertEqual([201, 202], result["candidates"])
                 self.assertEqual("pass", result["filter_status"])
                 self.assertTrue(any("UID SEARCH UID 201:202" in command for command in result["commands"]))
+
+    def test_local_peer_logout_after_closed_read_pipe_is_quiet(self):
+        # Deterministic regression for a real fresh-main failure: imaplib's
+        # read end can close while the fixture peer is replying to LOGOUT.
+        # A test-owned peer must not emit a BrokenPipe traceback on stderr.
+        with tempfile.TemporaryDirectory(prefix="adk-imap-peer-close-") as directory:
+            log = Path(directory) / "commands.txt"
+            with subprocess.Popen(
+                [sys.executable, "-B", str(FIXTURE), "basis", "--server-log", str(log)],
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                env={**os.environ, "LC_ALL": "C", "TZ": "UTC", "PYTHONDONTWRITEBYTECODE": "1"},
+            ) as peer:
+                assert peer.stdin is not None and peer.stdout is not None and peer.stderr is not None
+                self.assertEqual(b"* PREAUTH local synthetic fixture\\r\\n", peer.stdout.readline())
+                peer.stdout.close()
+                peer.stdin.write(b"ZZ1 LOGOUT\\r\\n")
+                peer.stdin.flush()
+                peer.stdin.close()
+                try:
+                    status = peer.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    peer.kill()
+                    peer.wait()
+                    self.fail("IMAP peer did not finish its LOGOUT cleanup")
+                error_text = peer.stderr.read().decode("utf-8", errors="replace")
+                self.assertEqual(0, status, error_text)
+                self.assertEqual("", error_text)
+            self.assertIn("ZZ1 LOGOUT", log.read_text(encoding="ascii"))
 
     def test_missing_invalid_and_unknown_zone_stay_undecided_without_fallback(self):
         for scenario, basis, first in (("internal-errors", "received", 301),
