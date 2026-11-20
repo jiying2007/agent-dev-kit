@@ -49,7 +49,7 @@ constraints:
 2. 长任务写 summary-first checkpoint；raw output 留 pointer 与 retention decision。
 3. 记录仍需 Skill 的来源、内容身份（可核版本/hash；未知注明）、必要 refs、正文状态 `intact | summarized | missing | changed`。
 4. 恢复核目标/权限/内容身份；仅正文完整且身份一致才复用，summary/missing/changed 则重读；不可读记 `needs-evidence`。
-5. 交接仅传目标、状态、权限、证据指针和下一步；仅在 ADK 源码根已确认且文件可读时可选 `schemas/agent-handoff-v1.schema.json`，未校验须标明。
+5. 交接默认使用下方模板，保留目标、状态、权限、证据和下一步，不扩大权限；仅在 ADK 源码根已确认且文件可读时可选 `schemas/agent-handoff-v1.schema.json`，未校验须标明。
 6. 接力核事实、未决项与 refs，只补缺项不重载历史。
 
 ## Failure / Abstain
