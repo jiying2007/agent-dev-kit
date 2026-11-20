@@ -10,7 +10,6 @@ from __future__ import annotations
 import json
 import os
 import shlex
-import subprocess
 import tempfile
 import time
 from datetime import datetime, timezone
@@ -20,6 +19,8 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 from jsonschema import Draft202012Validator, FormatChecker
 
 from .model import Manifest, ManifestError, canonical_json_bytes, sha256_bytes
+from .process_execution import OutputBudgetExceeded, execute_bounded
+from .strict_json import StrictJSONError, read as read_strict_json
 from .safe_yaml import safe_load
 from .target_contracts import load_target_contract
 from .targets import render_selection
@@ -27,6 +28,7 @@ from .targets import render_selection
 CONTRACT_PATH = "manifests/agent_platform_contracts.json"
 TRACE_SCHEMA_PATH = "schemas/adk-agent-trace-v1.schema.json"
 VERIFIER_SCHEMA_PATH = "schemas/independent-verifier-receipt-v1.schema.json"
+MAX_CONFORMANCE_STAGE_OUTPUT_BYTES = 4 * 1024 * 1024
 CONFORMANCE_STAGES = (
     "render",
     "install",
@@ -48,9 +50,9 @@ def load_json(path: Path, label: str) -> Mapping[str, Any]:
     if path.is_symlink() or not path.is_file():
         raise ManifestError(f"{label} missing or unsafe: {path}")
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ManifestError(f"{label} invalid JSON: {path}") from exc
+        value = read_strict_json(path, regular_only=os.name == "posix")
+    except StrictJSONError as exc:
+        raise ManifestError(f"{label} invalid or unsafe bounded JSON: {path}") from exc
     if not isinstance(value, dict):
         raise ManifestError(f"{label} must be a JSON object: {path}")
     return value
@@ -401,40 +403,53 @@ def target_conformance_plan(
 
 
 def _run_stage(command: Sequence[str], stage: str, env: Mapping[str, str], timeout: int) -> Dict[str, Any]:
+    """Caller smoke cannot claim native certification; execution must be resource bounded."""
     started_at = datetime.now(timezone.utc).replace(microsecond=0)
     started = time.monotonic()
+    error_code: Optional[str] = None
+    output_complete = False
+    stdout = stderr = b""
     try:
-        completed = subprocess.run(
-            list(command),
-            check=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            env=dict(env),
-            timeout=timeout,
+        observed = execute_bounded(
+            command,
+            cwd=Path.cwd(),
+            env=env,
+            timeout_seconds=timeout,
+            output_limit=MAX_CONFORMANCE_STAGE_OUTPUT_BYTES,
         )
-        exit_code = completed.returncode
+        exit_code = observed["exit_code"]
+        stdout = observed["stdout"]
+        stderr = observed["stderr"]
+        output_complete = True
         timed_out = False
-        stdout = completed.stdout
-        stderr = completed.stderr
-    except subprocess.TimeoutExpired as exc:
+    except TimeoutError:
         exit_code = 124
         timed_out = True
-        stdout = exc.stdout or b""
-        stderr = exc.stderr or b""
+        error_code = "native_stage_timeout"
+    except OutputBudgetExceeded:
+        exit_code = 125
+        timed_out = False
+        error_code = "native_stage_output_budget_exceeded"
+    except (OSError, ValueError, RuntimeError):
+        exit_code = 126
+        timed_out = False
+        error_code = "native_stage_process_error"
     completed_at = datetime.now(timezone.utc).replace(microsecond=0)
     return {
         "stage": stage,
-        "status": "pass" if exit_code == 0 and not timed_out else "fail",
+        "status": "pass" if exit_code == 0 and output_complete else "fail",
         "exit_code": exit_code,
         "timed_out": timed_out,
         "started_at": started_at.isoformat().replace("+00:00", "Z"),
         "completed_at": completed_at.isoformat().replace("+00:00", "Z"),
         "duration_ms": round((time.monotonic() - started) * 1000.0, 3),
         "command_sha256": sha256_bytes(canonical_json_bytes(list(command))),
-        "stdout_sha256": sha256_bytes(stdout),
-        "stderr_sha256": sha256_bytes(stderr),
-        "stdout_bytes": len(stdout),
-        "stderr_bytes": len(stderr),
+        "output_complete": output_complete,
+        "error_code": error_code,
+        "stdout_sha256": sha256_bytes(stdout) if output_complete else None,
+        "stderr_sha256": sha256_bytes(stderr) if output_complete else None,
+        "stdout_bytes": len(stdout) if output_complete else None,
+        "stderr_bytes": len(stderr) if output_complete else None,
     }
 
 
@@ -447,6 +462,8 @@ def run_target_conformance(
     timeout_seconds: int,
 ) -> Dict[str, Any]:
     plan = target_conformance_plan(manifest, contract, target, profile)
+    if type(timeout_seconds) is not int or timeout_seconds < 1:
+        raise ManifestError("native conformance timeout must be a positive integer")
     commands = load_json(command_file, "native conformance command map").get("commands")
     if not isinstance(commands, dict):
         raise ManifestError("native conformance command map requires commands object")
