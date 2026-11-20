@@ -54,10 +54,33 @@ class SkillOpenAIMetadataTests(unittest.TestCase):
                     self.assertIsInstance(policy, dict)
                     self.assertIsInstance(policy.get("allow_implicit_invocation"), bool)
 
-    def test_optional_policy_is_preserved(self) -> None:
+    def test_non_primary_skills_are_explicit_only_in_codex(self) -> None:
+        manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
+        non_primary = {
+            "adk-context-engineering",
+            "adk-artifact-gating",
+            "adk-cross-team-handoff",
+            "adk-data-fetch",
+            "adk-email-imap-fetch",
+            "adk-fetch-url-content",
+            "adk-incident-rca-report",
+        }
+        expected = set()
+        for row in manifest["skills"] + manifest["optional_skills"]:
+            path = ROOT / row["path"].replace("SKILL.md", "agents/openai.yaml")
+            meta = yaml.safe_load(path.read_text(encoding="utf-8"))
+            policy = meta.get("policy", {})
+            if row["name"] in non_primary:
+                self.assertIs(policy.get("allow_implicit_invocation"), False, row["name"])
+                expected.add(row["name"])
+            else:
+                self.assertNotIn("allow_implicit_invocation", policy, row["name"])
+        self.assertEqual(non_primary, expected)
+
+    def test_explicit_only_metadata_does_not_erase_chinese_prompt(self) -> None:
         path = ROOT / "optional-skills/adk-external-practice-absorption/agents/openai.yaml"
         meta = yaml.safe_load(path.read_text(encoding="utf-8"))
-        self.assertIs(meta["policy"]["allow_implicit_invocation"], True)
+        self.assertNotIn("policy", meta)
         self.assertIn("$adk-external-practice-absorption", meta["interface"]["default_prompt"])
 
     def test_missing_interface_is_rejected(self) -> None:
