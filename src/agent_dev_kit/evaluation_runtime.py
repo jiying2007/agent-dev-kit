@@ -6,7 +6,6 @@ import hashlib
 import json
 import math
 import shutil
-import statistics
 import subprocess
 import time
 from pathlib import Path
@@ -104,11 +103,16 @@ def _latency_summary(results: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
             "p95_ms": None,
         }
     p95_index = max(0, math.ceil(len(samples) * 0.95) - 1)
+    # statistics.median averages two floats before dividing; 1e308 + 1e308
+    # overflows to Infinity even though the correct median is finite.
+    midpoint = len(samples) // 2
+    median = (samples[midpoint] if len(samples) % 2 else
+              samples[midpoint - 1] + (samples[midpoint] - samples[midpoint - 1]) / 2)
     total = sum(samples)
     return {
         "sample_count": len(samples),
         "total_ms": round(total, 3) if math.isfinite(total) else None,
-        "median_ms": round(statistics.median(samples), 3),
+        "median_ms": round(median, 3),
         "p95_ms": round(samples[p95_index], 3),
     }
 
