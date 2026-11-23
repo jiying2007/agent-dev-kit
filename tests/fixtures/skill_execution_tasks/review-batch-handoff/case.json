@@ -1,0 +1,16 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "review-batch-handoff",
+  "family": "review-to-implementation",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {"name": "original-review-preserved", "kind": "unchanged", "path": "work/review.json", "source": "review.json"},
+    {
+      "name": "batch-with-explicit-early-gate",
+      "kind": "json-equals",
+      "path": "work/handoff.json",
+      "expected": {"criterion_id": "ACC-001", "batch": ["R1", "R2"], "excluded": ["R3"], "early_gate": ["R4"], "batch_verification_runs": 1}
+    }
+  ]
+}

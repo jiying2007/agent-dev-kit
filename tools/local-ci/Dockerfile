@@ -15,9 +15,15 @@ ARG TYPES_JSONSCHEMA_VERSION=4.26.0.20261006
 ARG TYPES_PYYAML_VERSION=6.0.12.20261113
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        binutils \
         bash \
+        build-essential \
         ca-certificates \
+        cmake \
+        file \
         git \
+        jq \
+        ninja-build \
         ripgrep \
         shellcheck \
     && rm -rf /var/lib/apt/lists/*

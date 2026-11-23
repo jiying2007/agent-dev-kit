@@ -3,7 +3,7 @@
   "status": "active",
   "semantics": "source-growth-review-ratchet-not-runtime-context-budget",
   "measured_from": "source-file-bytes",
-  "measured_at": "2026-11-20",
+  "measured_at": "2026-11-23",
   "policy": {
     "fail_on_entry_file_growth": true,
     "fail_on_potential_full_source_growth": true,
@@ -15,33 +15,33 @@
   "profiles": {
     "core": {
       "assets": 27,
-      "entry_file_bytes": 95832,
-      "potential_full_source_bytes": 172304
+      "entry_file_bytes": 96061,
+      "potential_full_source_bytes": 177633
     },
     "release-hardening": {
       "assets": 23,
-      "entry_file_bytes": 80918,
-      "potential_full_source_bytes": 155921
+      "entry_file_bytes": 81147,
+      "potential_full_source_bytes": 161250
     },
     "personal-core": {
       "assets": 28,
-      "entry_file_bytes": 98608,
-      "potential_full_source_bytes": 177551
+      "entry_file_bytes": 98837,
+      "potential_full_source_bytes": 182880
     },
     "embedded-fullstack": {
       "assets": 55,
-      "entry_file_bytes": 208076,
-      "potential_full_source_bytes": 315578
+      "entry_file_bytes": 208241,
+      "potential_full_source_bytes": 320843
     },
     "team-core": {
       "assets": 35,
-      "entry_file_bytes": 121798,
-      "potential_full_source_bytes": 210398
+      "entry_file_bytes": 121963,
+      "potential_full_source_bytes": 215663
     },
     "large-refactor": {
       "assets": 29,
-      "entry_file_bytes": 103272,
-      "potential_full_source_bytes": 188488
+      "entry_file_bytes": 103437,
+      "potential_full_source_bytes": 193753
     },
     "incident-response": {
       "assets": 9,
@@ -50,8 +50,8 @@
     },
     "research-intake": {
       "assets": 20,
-      "entry_file_bytes": 64730,
-      "potential_full_source_bytes": 117140
+      "entry_file_bytes": 64959,
+      "potential_full_source_bytes": 122469
     }
   },
   "baseline_source": {

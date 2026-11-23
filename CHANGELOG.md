@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### 11.4.17 — 来源续审与批量审查试点准备
+
+- 逐条续审 33 项外部来源，更新已迁移的官方链接，记录 Codex MCP server 撤除及通用 runner 的迁移边界。
+- 为高风险试点组增加整批首轮审查、覆盖记录和修后归因。配对回放、效果和采用仍按原试点验收。
+- 明确同验收批量改动和提前验证边界，补齐工厂就绪与整批审查交接的确定性夹具。
+- 增加 `devkit.sh --check-python`，补齐本地 CI 镜像的编译和 JSON 工具及启动检查。
+
 ### 11.4.16 — 全 Skill 中文展示与默认 Profile 收敛
 
 - 为全部 65 项 Skill 建立或规范 `agents/openai.yaml`：`interface.display_name` 和 `short_description` 统一中文、保留主技能身份及既有调用策略；新增静态覆盖、唯一性、长度和非目标负例。

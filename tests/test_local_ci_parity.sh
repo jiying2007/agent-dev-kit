@@ -17,6 +17,14 @@ for required in "$RUNNER" "$DOCKERFILE" "$ENTRYPOINT" "$HOSTED_CI" "$WAIVER" "$R
   }
 done
 
+for package in binutils build-essential cmake file jq ninja-build; do
+  rg -q "^[[:space:]]+${package}[[:space:]]" "$DOCKERFILE" || {
+    echo "[FAIL] local CI image omits validation dependency: $package" >&2
+    exit 1
+  }
+done
+rg -Fq -- 'for tool in cc make cmake ctest ninja file size objdump python3 mktemp jq; do' "$ENTRYPOINT"
+
 plan="$(bash "$RUNNER" --python 3.12 --mode full --dry-run)"
 for token in \
   'transport=docker' \

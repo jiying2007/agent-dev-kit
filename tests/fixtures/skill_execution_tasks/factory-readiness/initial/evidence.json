@@ -1,0 +1,7 @@
+{
+  "candidate": "firmware-current",
+  "diagnostics": {"target": "host", "status": "passed", "checks": ["station-connection", "calibration-format"]},
+  "board_receipts": [{"firmware": "firmware-prior", "status": "passed"}],
+  "calibration_store": {"factory-calibration": "unknown"},
+  "release_owner_decision": null
+}

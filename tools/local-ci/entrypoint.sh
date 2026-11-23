@@ -51,6 +51,13 @@ if [[ "$PHASE" == "audit" ]]; then
   exit 0
 fi
 
+for tool in cc make cmake ctest ninja file size objdump python3 mktemp jq; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "[FAIL] local CI image is missing $tool; rebuild it with --prepare" >&2
+    exit 2
+  fi
+done
+
 python -m pip install --disable-pip-version-check --no-build-isolation --no-deps .
 bash scripts/devkit.sh doctor --summary-json
 bash scripts/devkit.sh validate --strict

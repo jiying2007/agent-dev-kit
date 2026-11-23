@@ -73,6 +73,9 @@ env -u ADK_PYTHON_BIN -u VIRTUAL_ENV PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/auto.out" 2>"$TMP_DIR/auto.err"
 rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/auto.out"
 env -u ADK_PYTHON_BIN -u VIRTUAL_ENV PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/devkit.sh" --check-python >"$TMP_DIR/python-check.out"
+grep -Fx -- '[PASS] CPython 3.12.9 (auto): python3.12' "$TMP_DIR/python-check.out"
+env -u ADK_PYTHON_BIN -u VIRTUAL_ENV PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/version-manager.sh" current >"$TMP_DIR/version-auto.out" 2>&1
 rg -q --fixed-strings -- "auto-selected-python3.12" "$TMP_DIR/version-auto.out"
 
@@ -92,6 +95,9 @@ chmod +x "$TMP_DIR/venv/bin/python"
 env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/venv" PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/devkit.sh" help >"$TMP_DIR/venv.out" 2>"$TMP_DIR/venv.err"
 rg -q --fixed-strings -- "venv-selected-python3.12" "$TMP_DIR/venv.out"
+env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/venv" PATH="$auto_bin:$PATH" \
+  bash "$ROOT_DIR/scripts/devkit.sh" --check-python >"$TMP_DIR/venv-check.out"
+grep -Fx -- "[PASS] CPython 3.12.14 (venv): $TMP_DIR/venv/bin/python" "$TMP_DIR/venv-check.out"
 env -u ADK_PYTHON_BIN VIRTUAL_ENV="$TMP_DIR/venv" PATH="$auto_bin:$PATH" \
   bash "$ROOT_DIR/scripts/version-manager.sh" current >"$TMP_DIR/version-venv.out" 2>&1
 rg -q --fixed-strings -- "venv-selected-python3.12" "$TMP_DIR/version-venv.out"
