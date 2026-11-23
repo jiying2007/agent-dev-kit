@@ -22,7 +22,7 @@ classifiers = [
 
 [project.optional-dependencies]
 quality = [
-  "ruff==0.17.5",
+  "ruff==0.17.6",
   "pip-audit==2.10.1",
   "mypy==2.4.1",
   "types-jsonschema==4.26.0.20261006",
