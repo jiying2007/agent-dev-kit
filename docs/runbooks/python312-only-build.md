@@ -8,12 +8,16 @@
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[quality]'
-python -c 'import sys; assert sys.version_info[:2] == (3, 12)'
+bash scripts/devkit.sh --check-python
 bash scripts/devkit.sh validate --strict
 bash tests/run_all.sh
 ```
 
-旧 3.11 venv 不可原地转换或复用，必须用真正的 3.12 解释器重新创建。GitHub Actions 每个 Job 使用 pinned `actions/setup-python` 选择 3.12，不必再套一个短时 venv；本地隔离使用 `.venv` 或已有的受审查 Docker parity。
+旧 3.11 venv 必须用真正的 3.12 解释器重新创建。GitHub Actions 每个 Job 使用固定 `actions/setup-python` 选择 3.12，本地可使用 `.venv`。Docker parity 入口同样需要宿主 CPython 3.12 来计算快照和回执，具体门禁在容器内执行。
+
+`--check-python` 与正式构建共用解释器选择器，在加载 Python 包或依赖前报告所选来源和版本。可从仓外按绝对路径调用。显式 `ADK_PYTHON_BIN` 优先于已激活的 venv，自动选择时优先查找 `python3.12`。不兼容的显式解释器或 venv 会直接退出。需要 Docker 时，先用 `bash scripts/run-local-ci-parity.sh --mode full --dry-run` 核对计划。
+
+本地 CI 镜像包含 Skill 命令样例实际使用的 C 编译器、GNU make、CMake/CTest、Ninja、`file`、`size` 和 `objdump`，以及父仓完整性检查使用的 `jq`。gates 入口在加载源码测试前检查必需工具，缺失时给出重建提示。
 
 ## 一次性迁移主分支 Required Check Ruleset
 

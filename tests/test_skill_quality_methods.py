@@ -61,6 +61,54 @@ class SkillQualityMethodsTests(unittest.TestCase):
         self.assertIn("授权隔离环境", test)
         self.assertIn("Patch Validation", template)
 
+    def test_first_round_review_delivers_all_confirmed_severities_with_coverage(self) -> None:
+        skill = source("skills/adk-code-review-loop/SKILL.md")
+        details = source("skills/adk-code-review-loop/references/review-governance-details.md")
+        template = source("skills/adk-code-review-loop/references/review-evidence-template.md")
+        self.assertIn("高风险试点启用组按", skill)
+        self.assertIn("一次性交付各级已确认问题与缺口", skill)
+        self.assertIn("references/review-governance-details.md#首轮整批审查", skill)
+        for marker in ("预列必查场景", "请求方可见的状态标记暂缓提交", "包括拟延期项",
+                       "各反例保留自身场景 ID", "所有必查项有检查证据",
+                       "未查状态及其他门禁独立保留",
+                       "对照组、未启用试点及低风险审查沿用现行流程", "候选漂移",
+                       "在覆盖账本中登记入口或状态、预期结果和取证方式"):
+            self.assertIn(marker, details)
+        for field in ("Repository Candidates", "Round End", "Required Coverage", "Submit Decision",
+                      "Hold Notice", "Required Scenario"):
+            self.assertIn("- " + field, template)
+        findings = template.split("- Findings:\n", 1)[1].splitlines()[:2]
+        self.assertEqual(len(findings), 2)
+        self.assertEqual(findings[0].count("|"), findings[1].count("|"))
+        self.assertEqual(findings[0].strip(), "| ID | Severity | File | Evidence | Required Action | Status |")
+        pilot_heading = "- Findings (试点启用组首轮，替换上方通用表):\n"
+        pilot_findings = template.split(pilot_heading, 1)[1].splitlines()[:2]
+        self.assertIn("| Original Severity |", pilot_findings[0])
+        self.assertIn("| Scenario / Trigger |", pilot_findings[0])
+        self.assertEqual(pilot_findings[0].count("|"), pilot_findings[1].count("|"))
+        repositories = next(line for line in template.splitlines() if line.startswith("- Repository Candidates"))
+        self.assertIn("逐仓 Review Target", repositories)
+        self.assertIn("适用 base/merge-base", repositories)
+
+    def test_late_finding_requires_evidence_to_attribute_or_count_as_missed(self) -> None:
+        details = source("skills/adk-code-review-loop/references/review-governance-details.md")
+        fixtures = source("skills/adk-code-review-loop/references/review-feedback-fixtures.md")
+        template = source("skills/adk-code-review-loop/references/review-evidence-template.md")
+        for marker in ("同一违约", "等价因果证据", "当时材料和权限", "首轮已提示、后续确证",
+                       "原候选对同一断言有通过证据", "单变更对照", "来源未定",
+                       "保留冻结的首轮分母", "在可比环境中于修复前后运行同一断言",
+                       "复跑相邻异常与正常路径"):
+            self.assertIn(marker, details)
+        self.assertIn("失败签名对应不同违约时，不能计为同一问题的首轮漏报", fixtures)
+        self.assertIn("Late Finding Attribution", template)
+
+    def test_trial_pause_includes_simulated_and_real_admission(self) -> None:
+        design = source("docs/changes/20261123-batched-precommit-review/design.md")
+        for marker in ("任一阶段", "模拟或真实准入", "暂停新分配、受影响的放行结论和升级",
+                       "现行门禁重判在途候选", "通知项目负责人跟进已放行候选",
+                       "修正经独立复核后，由试点负责人裁决恢复"):
+            self.assertIn(marker, design)
+
     def test_embedded_tools_bind_target_and_missing_evidence(self) -> None:
         static = source("skills/adk-static-analysis-c-cpp/SKILL.md")
         bsp = source("skills/adk-bsp-analysis/SKILL.md")

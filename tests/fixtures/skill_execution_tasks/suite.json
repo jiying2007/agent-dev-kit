@@ -51,6 +51,18 @@
       "family": "optional-availability",
       "case": "optional-availability-negation/case.json",
       "prompt": "optional-availability-negation/task.md"
+    },
+    {
+      "task_id": "review-batch-handoff",
+      "family": "review-to-implementation",
+      "case": "review-batch-handoff/case.json",
+      "prompt": "review-batch-handoff/task.md"
+    },
+    {
+      "task_id": "factory-readiness",
+      "family": "factory-qualification-boundary",
+      "case": "factory-readiness/case.json",
+      "prompt": "factory-readiness/task.md"
     }
   ]
 }

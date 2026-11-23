@@ -1,0 +1,16 @@
+{
+  "schema_version": "adk-development-task/v1",
+  "task_id": "factory-readiness",
+  "family": "factory-qualification-boundary",
+  "evidence_scope": "test-only",
+  "initial_dir": "initial",
+  "checks": [
+    {"name": "evidence-preserved", "kind": "unchanged", "path": "work/evidence.json", "source": "evidence.json"},
+    {
+      "name": "qualification-matches-current-candidate",
+      "kind": "json-equals",
+      "path": "work/readiness.json",
+      "expected": {"candidate": "firmware-current", "host_diagnostics": "passed", "current_board_verification": "missing", "factory_calibration": "unknown", "release_authorized": false, "missing_evidence": ["matching-board-receipt", "verified-calibration", "owner-decision"]}
+    }
+  ]
+}

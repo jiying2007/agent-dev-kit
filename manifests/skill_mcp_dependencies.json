@@ -353,9 +353,9 @@
         "namespace_verification": "official-domain-reviewed",
         "package_version": "provider-managed-remote-service",
         "artifact_digest": "not-applicable:remote-read-only-service",
-        "retrieved_at": "2026-08-24",
+        "retrieved_at": "2026-11-23",
         "review_status": "adopted",
-        "expires_at": "2026-11-22",
+        "expires_at": "2027-01-22",
         "trust_decision": "allowed-read-only-optional"
       }
     },

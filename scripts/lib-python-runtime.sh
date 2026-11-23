@@ -40,7 +40,8 @@ adk_select_python() {
 
   if [[ "${PYTHON_SUPPORTED}" != "1" ]]; then
     echo "[FAIL] ADK requires CPython 3.12.x; ${PYTHON_SELECTION}-selected ${PYTHON_BIN}=${PYTHON_VERSION}" >&2
-    echo "[INFO] use Python 3.12 .venv or set ADK_PYTHON_BIN to a reviewed Python 3.12 interpreter" >&2
+    echo "[INFO] activate a CPython 3.12 venv or set ADK_PYTHON_BIN=/absolute/path/to/python3.12" >&2
+    echo "[INFO] for isolated validation see docs/runbooks/python312-only-build.md (local venv or reviewed Docker parity)" >&2
     exit 2
   fi
 }

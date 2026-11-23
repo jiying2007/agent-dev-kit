@@ -1,0 +1,11 @@
+{
+  "prior_scope": "readonly",
+  "criterion_id": "ACC-001",
+  "handoff": {"approved": true, "requirements_changed": false},
+  "findings": [
+    {"id": "R1", "status": "confirmed", "path": "src/reader.c", "shared_contract": false, "reversible": true},
+    {"id": "R2", "status": "confirmed", "path": "src/writer.c", "shared_contract": false, "reversible": true},
+    {"id": "R3", "status": "false-positive", "path": "src/clock.c", "shared_contract": false, "reversible": true},
+    {"id": "R4", "status": "confirmed", "path": "include/wire.h", "shared_contract": true, "reversible": true}
+  ]
+}

@@ -4,7 +4,15 @@
 
 This note records the official OpenAI Developers content that is safe to use as an `agent-dev-kit` reference source. It is not an instruction to rewrite adk around the Agents SDK. The current strategy is to absorb stable governance patterns into existing adk assets, keep OpenAI-specific implementation details behind freshness gates, and require local validation before promotion. Product names that remain in source IDs, titles or URLs are citation metadata only; promoted ADK contracts must stay platform-neutral and must not carry compatibility bindings.
 
-## Source Inventory
+## Current source decisions
+
+The [freshness manifest](../../manifests/official_docs_freshness_gates.json) contains current source decisions and review dates. The [November source review](../changes/20261123-source-freshness-review/source-review.md) records the updated sources and migration boundaries.
+
+The [Codex MCP server removal notice](https://learn.chatgpt.com/docs/mcp-server) is tracked as `watch` for both the legacy server and multi-agent examples that depended on it. The experimental App Server uses its own JSON-RPC protocol. Generic runner and thread correlation follow the existing ADK contracts.
+
+## Historical Source Inventory
+
+The following records preserve the earlier review dates and decisions. Use the current freshness manifest for adoption decisions.
 
 | ID | Source | Retrieved | Expires | Scope | Decision |
 |---|---|---:|---:|---|---|
@@ -27,7 +35,7 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-codex-hooks | https://developers.openai.com/codex/hooks | 2026-05-25 | 2026-08-23 | P1 | Adopt lifecycle hook audit, trust, matcher and side-effect classification. |
 | openai-codex-hooks-common-output-fields | https://developers.openai.com/codex/hooks#common-output-fields | 2026-05-25 | 2026-08-23 | P1 | Adopt event-specific hook output field validation. |
 | openai-codex-slash-commands | https://developers.openai.com/codex/cli/slash-commands#built-in-slash-commands | 2026-05-25 | 2026-08-23 | P1 | Adopt slash command control-plane classification and runtime evidence capture. |
-| openai-codex-as-mcp-server | https://developers.openai.com/codex/guides/agents-sdk#running-codex-as-an-mcp-server | 2026-05-25 | 2026-08-23 | P1 | Adopt generic ADK runner/reply contracts and thread continuation audit. |
+| openai-codex-as-mcp-server | https://developers.openai.com/codex/guides/agents-sdk#running-codex-as-an-mcp-server | 2026-05-25 | 2026-08-23 | P1 | Historical adoption for generic runner/reply contracts and thread continuation audit. The current decision is `watch` after removal. |
 | openai-codex-plugin-build | https://developers.openai.com/codex/plugins/build#create-a-plugin-manually | 2026-05-25 | 2026-08-23 | P2 | Adopt optional adk plugin packaging contracts after assets are stable. |
 | openai-codex-plugin-marketplace | https://developers.openai.com/codex/plugins/build#marketplace-metadata | 2026-05-25 | 2026-08-23 | P2 | Adopt marketplace metadata, install policy, auth policy and source path containment. |
 | openai-codex-best-practices | https://developers.openai.com/codex/learn/best-practices | 2026-05-25 | 2026-08-23 | P0 | Adopt task framing, planning, AGENTS.md, test/review, MCP, skills, automations and session controls. |
@@ -47,7 +55,7 @@ This note records the official OpenAI Developers content that is safe to use as 
 | openai-codex-code-review-sdk | https://developers.openai.com/cookbook/examples/codex/build_code_review_with_codex_sdk | 2026-08-30 | 2026-11-28 | P1 | Adopt PR diff inputs, structured review findings, SCM review publishing and inline anchoring validation. |
 | openai-skills-api-operational-practices | https://developers.openai.com/cookbook/examples/skills_in_api#operational-best-practices | 2026-08-30 | 2026-11-28 | P1 | Adopt skill discoverability, negative examples, version pinning, deterministic stdout and network allowlist governance. |
 | openai-optimizing-llm-accuracy | https://developers.openai.com/api/docs/guides/optimizing-llm-accuracy | 2026-08-30 | 2026-11-28 | P2 | Watch for prompt/RAG/fine-tuning optimization decisions; require eval baseline before promotion. |
-| openai-codex-agents-sdk-multi-agent-workflows | https://developers.openai.com/codex/guides/agents-sdk#creating-multi-agent-workflows | 2026-08-30 | 2026-11-28 | P2 | Watch the legacy multi-agent ownership pattern only; `codex mcp-server` is deprecated, so new adapters prefer App Server and existing adk-first governance remains until a local pilot. |
+| openai-codex-agents-sdk-multi-agent-workflows | https://developers.openai.com/codex/guides/agents-sdk#creating-multi-agent-workflows | 2026-08-30 | 2026-11-28 | P2 | Historical watch on the multi-agent ownership pattern during deprecation. The server has since been removed. |
 | openai-latest-model-gpt-5-5 | https://developers.openai.com/api/docs/models | 2026-06-27 | 2026-07-27 | P2 | Watch as a volatile model-selection source; do not hardcode current-model claims into durable ADK rules. |
 | openai-prompt-caching | https://developers.openai.com/api/docs/guides/prompt-caching | 2026-08-30 | 2026-11-28 | P1 | Adopt stable-prefix and dynamic-tail prompt layout, cache-key discipline and cached-token observability for API-backed runners. |
 | openai-agents-orchestration-handoffs | https://developers.openai.com/api/docs/guides/agents/orchestration | 2026-08-30 | 2026-11-28 | P1 | Adopt handoff vs agents-as-tools ownership vocabulary for ADK orchestration contracts. |

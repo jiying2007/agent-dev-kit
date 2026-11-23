@@ -20,7 +20,7 @@ FIXTURES = ROOT / "tests/fixtures/skill_execution_tasks"
 TASKS = (
     "deadline-repair", "review-false-positive", "goal-resume", "kws-asset-reuse",
     "crosscompile-applicability", "targeted-document-edit", "intent-distinction",
-    "optional-availability-negation",
+    "optional-availability-negation", "review-batch-handoff", "factory-readiness",
 )
 
 
@@ -122,6 +122,24 @@ class SkillExecutionTaskTests(unittest.TestCase):
                 routes.append({"request_id": request["request_id"], "state": state, "selected": selected,
                                "load": [selected] if selected else [], "install": False})
             write_json(work / "routes.json", routes)
+        elif task == "review-batch-handoff":
+            review = read_json(work / "review.json")
+            confirmed = [row for row in review["findings"] if row["status"] == "confirmed"]
+            write_json(work / "handoff.json", {
+                "criterion_id": review["criterion_id"],
+                "batch": [row["id"] for row in confirmed if row["reversible"] and not row["shared_contract"]],
+                "excluded": [row["id"] for row in review["findings"] if row["status"] == "false-positive"],
+                "early_gate": [row["id"] for row in confirmed if row["shared_contract"]],
+                "batch_verification_runs": 1,
+            })
+        elif task == "factory-readiness":
+            evidence = read_json(work / "evidence.json")
+            write_json(work / "readiness.json", {
+                "candidate": evidence["candidate"], "host_diagnostics": evidence["diagnostics"]["status"],
+                "current_board_verification": "missing", "factory_calibration": evidence["calibration_store"]["factory-calibration"],
+                "release_authorized": False,
+                "missing_evidence": ["matching-board-receipt", "verified-calibration", "owner-decision"],
+            })
         else:
             self.fail("unknown development fixture")
 
@@ -159,23 +177,33 @@ class SkillExecutionTaskTests(unittest.TestCase):
             data[0]["mode"] = "explore"
             data[0]["questions"] = [{"id": "confirm-plan", "options": ["yes", "no"]}]
             write_json(path, data)
+        elif task == "review-batch-handoff":
+            path = work / "handoff.json"
+            data = read_json(path)
+            data["batch_verification_runs"] = 2
+            write_json(path, data)
+        elif task == "factory-readiness":
+            path = work / "readiness.json"
+            data = read_json(path)
+            data["release_authorized"] = True
+            write_json(path, data)
         else:
             path = work / "routes.json"
             data = read_json(path)
             data[1].update(selected="adk-prose-revision", load=["adk-prose-revision"])
             write_json(path, data)
 
-    def test_suite_is_eight_development_tasks_with_real_inputs(self):
+    def test_suite_indexes_development_tasks_with_real_inputs(self):
         suite = read_json(FIXTURES / "suite.json")
         self.assertEqual(suite["split"], "development")
         self.assertEqual(suite["evaluation_status"], "not-measured")
         self.assertEqual({case["task_id"] for case in suite["cases"]}, set(TASKS))
-        self.assertEqual(len({case["family"] for case in suite["cases"]}), 8)
+        self.assertEqual(len({case["family"] for case in suite["cases"]}), len(TASKS))
         for row in suite["cases"]:
             self.assertTrue((FIXTURES / row["prompt"]).is_file())
             self.assertTrue(any((FIXTURES / row["task_id"] / "initial").rglob("*")))
 
-    def test_all_eight_correct_outputs_produce_digest_bound_acceptance(self):
+    def test_correct_outputs_produce_digest_bound_acceptance(self):
         for task in TASKS:
             with self.subTest(task=task):
                 package = self.prepare(task)

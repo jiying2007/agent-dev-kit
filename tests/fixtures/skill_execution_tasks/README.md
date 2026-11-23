@@ -1,6 +1,6 @@
 # Skills execution development tasks
 
-这 8 类是公开的 **development** 任务，不是 holdout，也不是模型执行记录。`suite.json` 仍标 `evaluation_status: not-measured`。每个目录含 `task.md`、可复制的 `initial/` 输入和独立验收者使用的 `case.json`。任务要求的文件是实际产物；验收不以路由命中、某句成功声明或文件名存在代替内容正确。
+这 10 类是公开的 **development** 任务，`suite.json` 标为 `evaluation_status: not-measured`。每个目录含 `task.md`、可复制的 `initial/` 输入和独立验收者使用的 `case.json`。任务要求的文件是实际产物；验收不以路由命中、某句成功声明或文件名存在代替内容正确。
 
 ## 任务与验收
 
@@ -14,6 +14,8 @@
 | `targeted-document-edit` | 含 250 ms、250 mA、proposed/pending 与否定授权的 ADR | 唯一授权句改为 500 ms，其余完整字节相同 | 顺手改保护阈值、其他字段或状态 |
 | `intent-distinction` | 一个已批准继续执行请求、一个尚缺目标平台的探索请求 | 明确请求直接继续；模糊请求只问改变实施路径的 target-platform | 把已批准工作退回 Explore 并重复确认 |
 | `optional-availability-negation` | 安装清单、未安装/显式否定/已安装可选三个请求 | 缺失或被否定均不拟加载/安装；已安装且被允许才 eligible | 因为已安装而加载被否定 Skill；数字 0 冒充布尔 false |
+| `review-batch-handoff` | 已授权实施、局部 finding、误报和共享契约变更 | 保留原审查与验收 ID；局部项批末验证一次，共享契约独立提前门禁 | 误报进入写集、重复验证、共享契约延期 |
+| `factory-readiness` | Host 诊断通过、只有旧固件板测、校准状态未知 | 区分 Host 诊断与当前板测，保留未知，缺真实 owner 决定时拒绝放行 | 旧制品板测或 Host 通过被当作当前放行 |
 
 所有任务同时验收整个 `work/` 文件集合；缺文件、额外文件、链接与特殊文件均不通过。JSON 比较检查完整结构和值，区分布尔与数字并拒绝重复键/NaN/过深或超大输入。文本修改验证整个文件与唯一替换的结果，保留区逐字比较。受限合同只接受本套规定的产物格式和修复跨度，不宣称覆盖所有语义等价的解法。
 
