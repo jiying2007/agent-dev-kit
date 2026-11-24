@@ -12,6 +12,7 @@ from typing import Any, Sequence
 DEFAULT_MAX_BYTES = 4 * 1024 * 1024
 DEFAULT_MAX_DEPTH = 64
 _SURROGATE_ESCAPE = re.compile(rb"\\u[dD][89aAbBcCdDeEfF][0-9a-fA-F]{2}")
+_DEPTH_TOKENS = re.compile(r'["\\\[\]{}]')
 
 
 class StrictJSONError(ValueError):
@@ -40,13 +41,15 @@ def _reject_constant(_text: str) -> Any:
 
 def _depth_guard(text: str, maximum: int) -> None:
     depth = 0
-    quoted = escaped = False
-    for character in text:
+    quoted = False
+    escaped_position = -1
+    for token in _DEPTH_TOKENS.finditer(text):
+        character = token.group()
         if quoted:
-            if escaped:
-                escaped = False
-            elif character == "\\":
-                escaped = True
+            if token.start() == escaped_position:
+                continue
+            if character == "\\":
+                escaped_position = token.end()
             elif character == '"':
                 quoted = False
         elif character == '"':

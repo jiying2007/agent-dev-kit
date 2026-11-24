@@ -440,7 +440,8 @@ class ReleaseGitInputTest(unittest.TestCase):
                      if item.isfile() and item.name.startswith("bundles/claude-code/")
                      and item.name.endswith("/SKILL.md"))
         replacement = b"# modified compiled skill\n"
-        with tarfile.open(artifact, "w:gz") as archive:
+        # Contract variants exercise member content and metadata, independent of compression level.
+        with tarfile.open(artifact, "w:gz", compresslevel=1) as archive:
             for item, payload in members:
                 if mutation == "missing-all" and (item.name == "bundles" or item.name.startswith("bundles/")):
                     continue

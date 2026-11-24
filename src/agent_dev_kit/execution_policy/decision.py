@@ -122,6 +122,8 @@ def evaluate(
     started_at = _timestamp(goal["started_at"], "goal.started_at") if goal.get("started_at") else None
     time_elapsed = (now - started_at).total_seconds() if started_at else 0.0
     time_budget = goal.get("time_budget_seconds")
+    token_exhausted = token_ratio is not None and token_ratio >= normalized_policy["token"]["stop_ratio"]
+    time_exhausted = bool(time_budget and time_elapsed >= time_budget)
     heartbeat_at = _timestamp(progress["heartbeat_at"], "progress.heartbeat_at") if progress.get("heartbeat_at") else None
     heartbeat_age = (now - heartbeat_at).total_seconds() if heartbeat_at else None
     if heartbeat_age is not None and heartbeat_age < 0:
@@ -152,14 +154,17 @@ def evaluate(
     if goal.get("status") == "aborted":
         action = "blocked"
         reasons.append("goal-aborted")
+    elif gate_event == "commit" and goal.get("status") == "completed" and (token_exhausted or time_exhausted):
+        action = "stop"
+        completion_valid = False
     elif goal.get("status") == "completed":
         action = "pass" if completion_valid else "replan"
     elif goal.get("status") != "active":
         action = "continue"
-    elif token_ratio is not None and token_ratio >= normalized_policy["token"]["stop_ratio"]:
+    elif token_exhausted:
         action = "stop"
         reasons.append("token-budget-exhausted")
-    elif time_budget and time_elapsed >= time_budget:
+    elif time_exhausted:
         action = "stop"
         reasons.append("time-budget-exhausted")
     elif heartbeat_age is None or heartbeat_age > normalized_policy["progress"]["staleness_seconds"]:
@@ -200,6 +205,31 @@ def evaluate(
     gate_allowed = gate_event == "steady" and gate_applicable
     if not gate_applicable:
         gate_allowed = False
+    elif gate_event == "commit":
+        if token_exhausted:
+            reasons.append("token-budget-exhausted")
+        if time_exhausted:
+            reasons.append("time-budget-exhausted")
+        if goal.get("status") == "active":
+            if normalized_artifact_mode == "readonly" or not mode_authority_managed:
+                reasons.append("commit-authority-unverified")
+            if not usage.get("observed_at"):
+                reasons.append("commit-usage-unobserved")
+            if not checkpoint.get("verified"):
+                reasons.append("checkpoint-not-verified")
+            elif checkpoint["revision"] != progress["revision"]:
+                reasons.append("checkpoint-stale")
+            elif checkpoint_missing or any(
+                artifacts[item] not in checkpoint["evidence_ids"]
+                for item in required_artifacts if item in artifacts
+            ):
+                reasons.append("commit-checkpoint-evidence-missing")
+            gate_allowed = (
+                action == "continue" and not reasons
+                and not missing_artifacts and not artifact_evidence_missing
+            )
+        else:
+            gate_allowed = goal.get("status") == "completed" and completion_valid
     elif gate_event == "apply":
         gate_allowed = (
             goal.get("status") in {"active", "completed"}
@@ -215,7 +245,7 @@ def evaluate(
             reasons.append("gate-not-applicable")
         if missing_artifacts or artifact_evidence_missing:
             reasons.append("required-artifact-missing")
-        if gate_event != "apply" and goal.get("status") != "completed":
+        if gate_event not in {"apply", "commit"} and goal.get("status") != "completed":
             reasons.append("goal-not-completed")
         if action == "continue":
             action = "replan"
@@ -250,12 +280,11 @@ def evaluate(
         "budget_status": {
             "scope": "current-snapshot",
             "status": (
-                "exceeded" if (token_ratio is not None and token_ratio >= normalized_policy["token"]["stop_ratio"])
-                or (time_budget and time_elapsed >= time_budget)
+                "exceeded" if token_exhausted or time_exhausted
                 else "within" if usage.get("observed_at") else "unknown"
             ),
-            "token_exhausted": bool(token_ratio is not None and token_ratio >= normalized_policy["token"]["stop_ratio"]),
-            "time_exhausted": bool(time_budget and time_elapsed >= time_budget),
+            "token_exhausted": token_exhausted,
+            "time_exhausted": time_exhausted,
             "historical_compliance_verified": False,
         },
         "context_ratio": round(context_ratio, 6),

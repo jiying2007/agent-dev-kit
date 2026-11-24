@@ -9,7 +9,7 @@
     "source_sha": "7aed1d2545babce16c41dc021ead01c8c324ce07"
   },
   "candidate": {
-    "planned_release": "v11.4.17",
+    "planned_release": "v11.4.18",
     "source_sha": null
   },
   "case_groups": {
@@ -67,6 +67,12 @@
   },
   "holdout_qualification": "development-fixture-only-after-author-exposure",
   "unexecuted_candidate_history": [
+    {
+      "planned_release": "v11.4.17",
+      "merged_main_sha": "3ab45d2d4d7607f1d6c46c7c6726b8551603a017",
+      "model_runs": 0,
+      "reason": "The 11.4.17 source candidate merged without executing this development fixture. Preserve the merged source identity and unmeasured result when advancing the preregistration."
+    },
     {
       "planned_release": "v11.4.16",
       "merged_main_sha": "c41f7c933f653dd702b0d8042ae9df38807430dc",

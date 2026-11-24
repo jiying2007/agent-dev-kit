@@ -21,6 +21,7 @@ from agent_dev_kit import installation_contract as contract
 from agent_dev_kit import compiler
 from agent_dev_kit import target_contracts
 from agent_dev_kit.compiler import export_assets
+from agent_dev_kit.distribution.release_artifacts import _copy_source_distribution
 from agent_dev_kit.installation_plan import create_plan, write_plan
 from agent_dev_kit.installation_transaction import apply_plan, rollback
 from agent_dev_kit.model import Manifest, ManifestError, sha256_file
@@ -143,11 +144,15 @@ class SourceFixture(unittest.TestCase):
         cls.candidate = cls.make_source("candidate", candidate_version, b"candidate", 0o755, 30)
 
     @classmethod
-    def make_source(cls, name, version, label, mode, valid_days):
-        source = Path(cls.sources.name) / name
+    def copy_source(cls, source):
         shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns(
             ".git", "__pycache__", "*.pyc", "*.egg-info", ".mypy_cache", ".ruff_cache", "dist"
         ))
+
+    @classmethod
+    def make_source(cls, name, version, label, mode, valid_days):
+        source = Path(cls.sources.name) / name
+        cls.copy_source(source)
         sync_version_identity(source, version, "isolated-install-test-fixture")
         for path in (source / "manifests/target-contracts").glob("*.json"):
             value = json.loads(path.read_text(encoding="utf-8"))
@@ -614,6 +619,10 @@ class InstallUpgradeTest(SourceFixture):
 
 
 class ReleaseUpgradeRehearsalTest(SourceFixture):
+    @classmethod
+    def copy_source(cls, source):
+        _copy_source_distribution(Manifest.load(ROOT), source)
+
     def test_real_artifacts_and_cli_complete_different_version_rehearsal(self):
         artifacts = []
         for manifest in (self.previous, self.candidate):

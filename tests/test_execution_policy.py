@@ -211,6 +211,86 @@ def completed_events_without_artifacts(
 
 
 class ExecutionPolicyTest(unittest.TestCase):
+    def test_managed_commit_uses_current_stage_evidence_without_completing_goal(self) -> None:
+        events = active_events_v2("implementation", "implementation")
+        for index, artifact in enumerate(("repo", "build", "review"), start=5):
+            events.extend([
+                event(index, "evidence.added", {"evidence_id": artifact, "sha256": str(index) * 64}, minute=5),
+                event(index + 10, "artifact.verified", {"artifact_type": artifact, "evidence_id": artifact}, minute=5),
+            ])
+        events.append(event(20, "checkpoint.verified", {
+            "revision": 1, "evidence_ids": ["repo", "build", "review"],
+        }, minute=6))
+
+        def decision(history, gate="commit", verifier=managed_mode_verifier, as_of=AS_OF):
+            return evaluate(
+                reduce_events(history), policy_v2(), gate_event=gate,
+                mode_authority_verifier=verifier, as_of=as_of,
+            )
+
+        commit = decision(events)
+        self.assertTrue(commit["gate_allowed"], commit)
+        self.assertFalse(commit["completion_allowed"])
+        self.assertEqual("active", commit["goal_status"])
+        self.assertFalse(decision(events, "final")["gate_allowed"])
+
+        cases = [
+            (events, None, "commit-authority-unverified"),
+            (events[:3] + events[4:], managed_mode_verifier, "commit-usage-unobserved"),
+            (events[:-1], managed_mode_verifier, "checkpoint-not-verified"),
+            (events + [event(21, "progress.advanced", {"revision": 2}, minute=7)],
+             managed_mode_verifier, "checkpoint-stale"),
+            (events[:-2] + [events[-1]], managed_mode_verifier, "required-artifact-missing"),
+            (events + [
+                event(21, "evidence.added", {"evidence_id": "new-review", "sha256": "a" * 64}, minute=7),
+                event(22, "artifact.verified", {"artifact_type": "review", "evidence_id": "new-review"}, minute=7),
+             ], managed_mode_verifier, "commit-checkpoint-evidence-missing"),
+            (events + [usage(9, 1100)], managed_mode_verifier, "token-budget-exhausted"),
+        ]
+        for history, verifier, reason in cases:
+            with self.subTest(reason=reason):
+                blocked = decision(history, verifier=verifier)
+                self.assertFalse(blocked["gate_allowed"], blocked)
+                self.assertIn(reason, blocked["reasons"])
+        timed_out = decision(events, as_of=datetime.fromisoformat("2026-08-24T03:01:00+00:00"))
+        self.assertFalse(timed_out["gate_allowed"])
+        self.assertIn("time-budget-exhausted", timed_out["reasons"])
+
+        future_evidence = events[:4] + [
+            event(20, "checkpoint.verified", {
+                "revision": 1, "evidence_ids": ["repo", "build", "review"],
+            }, minute=4),
+        ] + events[4:-1]
+        self.assertFalse(reduce_events(future_evidence)["checkpoint"]["verified"])
+        self.assertFalse(decision(future_evidence)["gate_allowed"])
+        self.assertTrue(decision(future_evidence + [event(21, "checkpoint.verified", {
+            "revision": 1, "evidence_ids": ["repo", "build", "review"],
+        }, minute=6)])["gate_allowed"])
+
+    def test_completed_commit_stops_when_current_budget_is_exhausted(self) -> None:
+        events = completed_events_without_artifacts("implementation", "implementation")[:-1]
+        for index, artifact in enumerate(("repo", "build", "review"), start=10):
+            evidence_id = "artifact-" + artifact
+            events.extend([
+                event(index, "evidence.added", {"evidence_id": evidence_id, "sha256": "f" * 64}),
+                event(index + 10, "artifact.verified", {"artifact_type": artifact, "evidence_id": evidence_id},
+                      minute=index),
+            ])
+        for total, as_of, reason in (
+            (500, AS_OF, None),
+            (1100, AS_OF, "token-budget-exhausted"),
+            (500, datetime.fromisoformat("2026-08-24T03:01:00+00:00"), "time-budget-exhausted"),
+        ):
+            with self.subTest(reason=reason):
+                decision = evaluate(reduce_events(events + [usage(13, total)]), policy_v2(),
+                                    gate_event="commit", mode_authority_verifier=managed_mode_verifier, as_of=as_of)
+                self.assertEqual(reason is None, decision["gate_allowed"], decision)
+                self.assertEqual(reason is None, decision["completion_allowed"], decision)
+                self.assertEqual("stop" if reason else "pass", decision["recommended_action"], decision)
+                self.assertEqual("fail" if reason else "pass", decision["status"], decision)
+                if reason:
+                    self.assertIn(reason, decision["reasons"])
+
     def test_active_actions_use_one_priority_chain(self) -> None:
         cases = [
             (500, 100, "continue"),

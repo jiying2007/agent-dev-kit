@@ -256,7 +256,16 @@ SUITE_MODE="full"
 [[ "$QUICK" -eq 1 ]] && SUITE_MODE="quick"
 
 TMP_DIR="$(mktemp -d)"
+declare -A TEST_PIDS=()
 cleanup() {
+  local pid
+  for pid in "${TEST_PIDS[@]}"; do
+    # The asynchronous tests each have their own process group.
+    kill -TERM -- "-$pid" 2>/dev/null || true
+  done
+  for pid in "${TEST_PIDS[@]}"; do
+    wait "$pid" || true
+  done
   rm -rf "$TMP_DIR"
 }
 trap cleanup EXIT
@@ -329,52 +338,54 @@ print_bounded_log() {
   fi
 }
 
-run_test() {
+execute_test() {
   local script="$1"
   local path="$SCRIPT_DIR/$script"
   local name="${script%.sh}"
   local stdout_file="$TMP_DIR/${name}.stdout"
   local stderr_file="$TMP_DIR/${name}.stderr"
-  local start_ns end_ns elapsed_ms
+  local start_ns end_ns status=0
 
-  TOTAL=$((TOTAL + 1))
   start_ns="$(date +%s%N)"
-
   if [[ "$VERBOSE" -eq 1 ]]; then
     echo "=== RUN ${name} ==="
-    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path"; then
-      end_ns="$(date +%s%N)"
-      elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
-      echo "[PASS] ${name}"
-      PASS_COUNT=$((PASS_COUNT + 1))
-      RESULT_NAMES+=("$name")
-      RESULT_STATUS+=("pass")
-      RESULT_MS+=("$elapsed_ms")
-      return 0
-    fi
+    ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path" || status=$?
   else
-    if ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path" >"$stdout_file" 2>"$stderr_file"; then
-      end_ns="$(date +%s%N)"
-      elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
-      echo "[PASS] ${name}"
-      PASS_COUNT=$((PASS_COUNT + 1))
-      RESULT_NAMES+=("$name")
-      RESULT_STATUS+=("pass")
-      RESULT_MS+=("$elapsed_ms")
-      return 0
-    fi
+    ADK_TEST_SUITE_DIR="$TMP_DIR" ADK_TEST_SUITE_MODE="$SUITE_MODE" bash "$path" >"$stdout_file" 2>"$stderr_file" || status=$?
   fi
-
   end_ns="$(date +%s%N)"
-  elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
+  printf '%s\n' "$(( (end_ns - start_ns) / 1000000 ))" >"$TMP_DIR/${name}.elapsed" || return 1
+  return "$status"
+}
+
+run_test() {
+  local script="$1" name="${1%.sh}" status=0 elapsed_ms=0
+  local timing_file="$TMP_DIR/${name}.elapsed"
+
+  TOTAL=$((TOTAL + 1))
+  if [[ -n "${TEST_PIDS[$script]:-}" ]]; then
+    wait "${TEST_PIDS[$script]}" || status=$?
+    unset 'TEST_PIDS[$script]'
+  else
+    execute_test "$script" || status=$?
+  fi
+  if [[ -s "$timing_file" ]]; then
+    elapsed_ms=$(<"$timing_file")
+  fi
+  RESULT_NAMES+=("$name")
+  RESULT_MS+=("$elapsed_ms")
+  if [[ "$status" -eq 0 ]]; then
+    echo "[PASS] ${name}"
+    PASS_COUNT=$((PASS_COUNT + 1))
+    RESULT_STATUS+=("pass")
+    return 0
+  fi
   echo "[FAIL] ${name}" >&2
   FAIL_COUNT=$((FAIL_COUNT + 1))
-  RESULT_NAMES+=("$name")
   RESULT_STATUS+=("fail")
-  RESULT_MS+=("$elapsed_ms")
   if [[ "$VERBOSE" -eq 0 ]]; then
-    print_bounded_log "stderr" "$stderr_file" >&2
-    print_bounded_log "stdout" "$stdout_file" >&2
+    print_bounded_log "stderr" "$TMP_DIR/${name}.stderr" >&2
+    print_bounded_log "stdout" "$TMP_DIR/${name}.stdout" >&2
   fi
 
   if [[ "$FAIL_FAST" -eq 1 ]]; then
@@ -382,6 +393,19 @@ run_test() {
     exit 1
   fi
 }
+
+# These suites use private fixture directories and do not consume suite results.
+# Keep the other tests ordered, including those that reuse validation output.
+if [[ "$QUICK" -eq 0 && "$VERBOSE" -eq 0 && "$FAIL_FAST" -eq 0 ]]; then
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+  set -m
+  for test_script in test_release_manifest_contract.sh test_run_evidence.sh; do
+    execute_test "$test_script" &
+    TEST_PIDS[$test_script]=$!
+  done
+  set +m
+fi
 
 for test_script in "${TESTS[@]}"; do
   run_test "$test_script"
