@@ -725,6 +725,13 @@ class StrictJSONTests(unittest.TestCase):
         self.assertEqual({"name": "[\\\"]", "x": [1, 2.5]}, loads('{"name":"[\\\\\\\"]","x":[1,2.5]}'))
         self.assertEqual([1, True, None], loads(b"[1,true,null]"))
 
+    def test_depth_guard_counts_delimiters_only_outside_strings(self):
+        values = ['[' * 64, '\\"' + '{' * 64, '\\' * 3, '\n"\\[']
+        self.assertEqual(values, loads(json.dumps(values), max_depth=1))
+        for value in values:
+            with self.subTest(value=value), self.assertRaisesRegex(StrictJSONError, "nesting budget"):
+                loads(json.dumps([value, [{}]]), max_depth=2)
+
     def test_unicode_scalar_values_reject_lone_surrogates(self):
         for raw in (
             r'"\ud800"', r'"\udc00"', r'"\ud800\ud800"',

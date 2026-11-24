@@ -365,7 +365,9 @@ def reduce_events(events: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
             if revision > state["progress"]["revision"]:
                 raise ExecutionPolicyError("checkpoint revision cannot exceed progress revision")
             evidence_ids = _ids(payload.get("evidence_ids"), "checkpoint.evidence_ids", non_empty=True)
-            state["checkpoint"] = {"revision": revision, "verified": True, "evidence_ids": evidence_ids}
+            # Replay older journals without allowing later evidence to verify an earlier checkpoint.
+            verified = all(evidence_id in state["evidence"] for evidence_id in evidence_ids)
+            state["checkpoint"] = {"revision": revision, "verified": verified, "evidence_ids": evidence_ids}
         elif kind == "artifact.verified":
             if set(payload) != {"artifact_type", "evidence_id"}:
                 raise ExecutionPolicyError("artifact.verified payload fields are invalid")
